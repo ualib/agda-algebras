@@ -1,4 +1,4 @@
----
+n---
 layout: default
 file: "src/FLRP/Enforceable.lagda.md"
 title: "FLRP.Enforceable module (The Agda Universal Algebra Library)"
@@ -10,37 +10,39 @@ author: "the agda-algebras development team"
 
 This is the [FLRP.Enforceable][] module of the [Agda Universal Algebra Library][].
 
-This module opens work package WP-4 of the FLRP research program: the formalization
-of *interval enforceable* group properties, after the note *Interval enforceable
-properties of finite groups* (arXiv:1205.1927, vendored at
-`docs/papers/flrp/ieprops/`; see `docs/notes/flrp-research-roadmap.md` § 4).  A group
-property `P` is **interval enforceable (IE) via a lattice `𝑳`** when every group
-whose subgroup lattice has an upper interval isomorphic to `𝑳` must satisfy `P`;
-it is **core-free interval enforceable (cf-IE)** when the same is only required of
-representations over a *core-free* subgroup.  The note's program is to combine
-enforceable properties into a contradiction, which by Pálfy–Pudlák would answer the
-Finite Lattice Representation Problem negatively.
+This module opens work on an exploratory research program to solve the FLRP — namely,
+the formalization of *interval enforceable* group properties — modeled after the note
+*Interval enforceable properties of finite groups*, hereinafter "the note."[^1]
 
-The contents, keyed to the note:
+A group property `P` is **interval-enforceable** (IE) if there exists a lattice `𝑳`
+such that every group whose subgroup lattice has an upper interval isomorphic to `𝑳`
+must satisfy `P`; it is **core-free interval enforceable** (cf-IE) when the same is
+true of representations over a *core-free* subgroup.
 
-+  `GroupRepresentable`{.AgdaRecord} — the lattice occurs as an upper interval
-   `[H , G]` in the subgroup lattice of a group, with all witnesses carried
-   explicitly;
-+  `IE`{.AgdaFunction}, `cfIE`{.AgdaFunction}, `minIE`{.AgdaFunction} — the note's
-   § 2 definitions, with core-freeness expressed through WP-2's normal core;
-+  the **fattening isomorphism** `[H × K , G × K] ≅ [H , G]`
-   (`Fatten`{.AgdaModule}), in both coordinates;
+The note's program is to combine interval-enforceable properties into a
+contradiction, which, by Pálfy–Pudlák, would answer the Finite Lattice Representation
+Problem negatively.
+
+#### Summary of the <span class="AgdaModule">FLRP.Enforceable</span> module
+
+The module contents, keyed to the note, are as follows:
+
++  `GroupRepresentable`{.AgdaRecord} — the lattice occurs as an upper interval `[H , G]`
+   in the subgroup lattice of a group, with all witnesses carried explicitly;
++  `IE`{.AgdaFunction}, `cfIE`{.AgdaFunction}, `minIE`{.AgdaFunction} — § 2
+   definitions in the note, with core-freeness expressed through the normal core;[^wp-2]
++  the **fattening isomorphism** `[H × K , G × K] ≅ [H , G]` (`Fatten`{.AgdaModule}),
+   in both coordinates;
 +  **Lemma 3.2** (`lemma:ie-prop-and-neg`): a property and its negation cannot both
    be IE via group representable lattices (`no-contradictory-IE`{.AgdaFunction}),
-   with the note's fattening remark as the companion
-   `IE-fattens`{.AgdaFunction};
-+  **Lemma 3.1** (`lemma-wjd-2`) and the parachute meta-theorem
-   (`thm-wjd-1`) as *statements only*, their proofs deferred to RP-1 behind named
-   hypothesis records in the `FLRP.Assumptions` style.
+   with the note's fattening remark as the companion `IE-fattens`{.AgdaFunction};
++  **Lemma 3.1** (`lemma-wjd-2`) and the parachute meta-theorem (`thm-wjd-1`) as
+   *statements only*, their proofs deferred to RP-1 behind named hypothesis records
+   in the `FLRP.Assumptions` style.
 
 Two disciplines from the roadmap govern the definitions.
 
-+  **Representability tracking (vacuity discipline)**.  If no group realizes `𝑳` as
++  **Representability tracking** (vacuity discipline).  If no group realizes `𝑳` as
    an upper interval then *every* property is vacuously enforceable via `𝑳`, and
    deciding that emptiness is the original problem.  So `IE`{.AgdaFunction} and
    `cfIE`{.AgdaFunction} are the bare universally quantified notions, and group
@@ -52,9 +54,7 @@ Two disciplines from the roadmap govern the definitions.
    groups and predicates, and Agda cannot quantify existentially over universe
    levels, so the levels must be pinned; `0ℓ` suffices for every finite (indeed
    every set-sized) instance.  Group *properties* appear only in universally
-   quantified positions, so they keep a polymorphic level `ℓP`.  Note that
-   properties are *not* required to be isomorphism-invariant: the note's Lemma 3.2
-   proof never uses invariance, and no definition below needs it.
+   quantified positions, so they keep a polymorphic level `ℓP`.[^2]
 
 <!--
 ```agda
@@ -65,142 +65,146 @@ module FLRP.Enforceable where
 open import Agda.Primitive using () renaming ( Set to Type )
 
 -- Imports from the Agda Standard Library ---------------------------------------
-open import Data.Empty                    using ( ⊥ )
-open import Data.Fin.Base                 using ( Fin )
-open import Data.Nat.Base                 using ( ℕ ; _+_ )
-                                          renaming ( _≤_ to _≤ⁿ_ )
-open import Data.Product                  using ( _,_ ; _×_ ; Σ-syntax ; proj₁ ; proj₂ )
-open import Data.Unit.Base                using ( tt )
-open import Level                         using ( Level ; 0ℓ ; _⊔_ ; Lift ; lift )
-                                          renaming ( suc to lsuc )
-open import Relation.Binary               using ( Setoid )
-open import Relation.Binary.Definitions   using ( _Respects_ )
-open import Relation.Binary.PropositionalEquality using ( _≡_ )
-open import Relation.Nullary              using ( ¬_ )
-open import Relation.Unary                using ( Pred ; _∈_ ; _⊆_ )
+open import Data.Empty                              using  ( ⊥ )
+open import Data.Fin.Base                           using  ( Fin )
+open import Data.Nat.Base renaming ( _≤_ to _≤ⁿ_ )  using  ( ℕ ; _+_ )
+open import Data.Product                            using  ( _,_ ; _×_ ; Σ-syntax
+                                                           ; proj₁ ; proj₂ )
+open import Data.Unit.Base                          using  ( tt )
+open import Level         renaming ( suc to lsuc )  using  ( Level ; 0ℓ ; _⊔_
+                                                           ; Lift ; lift )
+open import Relation.Binary                         using  ( Setoid )
+open import Relation.Binary.Definitions             using  ( _Respects_ )
+open import Relation.Binary.PropositionalEquality   using  ( _≡_ )
+open import Relation.Nullary                        using  ( ¬_ )
+open import Relation.Unary                          using  ( Pred ; _∈_ ; _⊆_ )
 
 -- Imports from the Agda Universal Algebra Library ------------------------------
-open import Classical.Properties.Lattice          using ( module Lattice-Order )
-open import Classical.Small.Structures.Lattice    using ( Lattice )
-open import Classical.Structures.Group.Basic      using ( Group )
-open import Classical.Structures.Group.NormalCore using ( module Core )
-open import Classical.Structures.Group.Product    using ( module GroupProduct
-                                                        ; _×ᵍ_ ; _×ᶠ_ ; _ᶠ×_ )
-open import Classical.Structures.Group.SubgroupLattice
-                                                  using ( module GroupSublattice )
-open import Classical.Structures.Group.Subgroups  using ( IsSubgroup ; trivialSubgroup )
-open import FLRP.Problem                          using ( OrderIso ; FiniteLattice
-                                                        ; toLattice )
-open import Setoid.Algebras.Basic                 using ( 𝔻[_] ; 𝕌[_] )
-open import Setoid.Algebras.Finite                using ( FiniteAlgebra )
-open import Setoid.Homomorphisms.HomomorphicImages using ( _IsHomImageOf_ )
-open import Setoid.Subalgebras.Subuniverses       using ( Subuniverses )
+open import Classical.Properties.Lattice  using  ( module Lattice-Order )
+open import Classical.Small.Structures    using  ( Lattice )
+open import Classical.Structures.Group    using  ( module Core ; Group ; _×ᵍ_ ; _×ᶠ_
+                                                 ; module GroupProduct ; _ᶠ×_
+                                                 ; module GroupSublattice
+                                                 ; IsSubgroup ; trivialSubgroup )
+open import FLRP.Problem                  using  ( OrderIso ; FiniteLattice ; toLattice )
+open import Setoid.Algebras               using  ( 𝔻[_] ; 𝕌[_] ; FiniteAlgebra )
+open import Setoid.Homomorphisms          using  ( _IsHomImageOf_ )
+open import Setoid.Subalgebras            using  ( Subuniverses )
+open import Order.Interval                        using ( module IntervalLattice )
+-- open import Setoid.Subalgebras.CompleteLattice using (module Sublattice)
+
+
+
+
+
 ```
 -->
 
 #### Upper intervals of respecting subgroups
 
-The group side of a representation is an upper interval `[H , G]` in the subgroup
-lattice, presented through WP-2's machinery: `H` enters as a `Subᴸ`{.AgdaFunction}
-element of the subuniverse lattice of [Setoid.Subalgebras.CompleteLattice][]
-(packaged for groups by [Classical.Structures.Group.SubgroupLattice][]), and the
-interval `[H , full]` is the `SubInterval`{.AgdaModule} instance of the generic
-[Order.Interval][] construction.
+A group representation is an upper interval `[H , G]` in the subgroup lattice,
+presented through the group-action infrastructure:[^wp-2] `H` enters as a
+`Subᴸ`{.AgdaFunction} element of the subuniverse lattice of
+[Setoid.Subalgebras.CompleteLattice][] (packaged for groups by
+[Classical.Structures.Group.SubgroupLattice][]), and the interval `[H , G]` is the
+`SubInterval`{.AgdaModule} instance of the generic [Order.Interval][] construction.
 
-One refinement is needed.  The elements of `SubInterval`{.AgdaModule} are *bare*
+One refinement is needed.  The elements of `SubInterval`{.AgdaModule} are bare
 subuniverses, with no compatibility between the predicate and the setoid equality of
 the carrier.  Over a setoid-presented group that is too permissive: a subgroup is a
 sub*set* of the carrier, i.e. an `≈`-saturated predicate, and bare subuniverses can
 distinguish `≈`-equal elements.  The distinction is not cosmetic — over a carrier
 with a redundant representative the bare interval `[H × K , G × K]` can be strictly
 larger than `[H , G]`, so the fattening isomorphism below is *false* at the bare
-level.[^1]  We therefore take as interval elements the bare interval elements
-*paired with a proof that the predicate respects `≈`* — exactly the
-`respects`{.AgdaField} field of `IsSubgroup`{.AgdaRecord}.  Over a group presented
-on a propositional-equality setoid (the `eqsToGroup`{.AgdaFunction} builders, and
-every finite Cayley-table group) the extra field is inhabited by `subst`, so nothing
-is lost in the concrete cases the FLRP cares about.
+level.[^3]
 
-`UpperInterval 𝒢 H H-sg`{.AgdaModule} packages the respecting upper interval
-`[H , full]` for a fixed subgroup: the carrier `Interval≈`{.AgdaFunction}, its
+We therefore take as interval elements the bare interval elements
+*paired with a proof that the predicate respects `≈`* — exactly the
+`respects`{.AgdaField} field of `IsSubgroup`{.AgdaRecord}.
+Over a group presented on a propositional-equality setoid (the
+`eqsToGroup`{.AgdaFunction} builders, and every finite Cayley-table group) the extra
+field is inhabited by `subst`, so nothing is lost in the concrete cases the FLRP
+cares about.
+
+`UpperInterval`{.AgdaModule} `𝒢` `H` `H-sg` packages the respecting upper interval
+`[H , G]` for a fixed subgroup: the carrier `Interval≈`{.AgdaFunction}, its
 equality and order (those of the bare interval, which ignore all proof components),
 accessors, and the smart constructor `mk`{.AgdaFunction}.
 
 ```agda
 module UpperInterval
-  (𝒢 : Group 0ℓ 0ℓ) (H : Pred 𝕌[ proj₁ 𝒢 ] 0ℓ) (H-sg : IsSubgroup 𝒢 H)
+  (𝒢     : Group 0ℓ 0ℓ)
+  (H     : Pred 𝕌[ proj₁ 𝒢 ] 0ℓ)
+  (H-sg  : IsSubgroup 𝒢 H)
   where
 
   open Setoid 𝔻[ proj₁ 𝒢 ] using ( _≈_ )
-  open GroupSublattice 𝒢 0ℓ using ( Subᴸ ; 1ˢ ; 1ˢ-maximum ; subgroup→Subᴸ
-                                  ; module SubInterval )
+  open GroupSublattice 𝒢 0ℓ  using  ( Subᴸ ; 1ˢ ; 1ˢ-maximum ; subgroup→Subᴸ
+                                    ; module SubInterval ; Sub-Lattice )
 
   -- The bottom of the interval: H as an element of the subuniverse lattice.
   H↑ : Subᴸ
   H↑ = subgroup→Subᴸ H H-sg
 
-  -- The bare interval [H , full], by the generic construction.
-  module Bare = SubInterval H↑ 1ˢ (1ˢ-maximum H↑)
+  -- The bare interval [H , G], by the generic construction.
+  open IntervalLattice Sub-Lattice H↑ 1ˢ (1ˢ-maximum H↑)
+    renaming (_≈_ to _≈↑_ ; _≤_ to _≤↑_)
 
   -- An interval element: a bare element whose predicate respects ≈.
   Interval≈ : Type (lsuc 0ℓ)
-  Interval≈ = Σ[ M ∈ Bare.Interval ] (proj₁ (proj₁ M) Respects _≈_)
+  Interval≈ = Σ[ ((M , _) , _) ∈ Interval ] (M Respects _≈_)
 
   -- Accessors: the underlying predicate and its three certificates.
   pred : Interval≈ → Pred 𝕌[ proj₁ 𝒢 ] 0ℓ
-  pred M = proj₁ (proj₁ (proj₁ M))
+  pred (((M , _) , _) , _) = M
 
   pred-isSubuniverse : (M : Interval≈) → pred M ∈ Subuniverses (proj₁ 𝒢)
-  pred-isSubuniverse M = proj₂ (proj₁ (proj₁ M))
+  pred-isSubuniverse (((_ , Mp) , _) , _) = Mp
 
   pred-respects : (M : Interval≈) → pred M Respects _≈_
-  pred-respects M = proj₂ M
+  pred-respects (_ , Mresp) = Mresp
 
   above : (M : Interval≈) → H ⊆ pred M
-  above M = proj₁ (proj₂ (proj₁ M))
+  above ((_ , H⊆ , _) , _) = H⊆
 
+  open IsSubgroup
   -- An interval element is a respecting subgroup.
   element-isSubgroup : (M : Interval≈) → IsSubgroup 𝒢 (pred M)
-  element-isSubgroup M = record  { respects       = pred-respects M
-                                 ; isSubuniverse  = pred-isSubuniverse M }
+  element-isSubgroup M .respects       = pred-respects M
+  element-isSubgroup M .isSubuniverse  = pred-isSubuniverse M
 
   -- Conversely, a respecting subgroup above H is an interval element
   -- (the top bound against the full subuniverse is trivial).
   mk : (M : Pred 𝕌[ proj₁ 𝒢 ] 0ℓ) → IsSubgroup 𝒢 M → H ⊆ M → Interval≈
-  mk M M-sg H⊆M =
-    ((M , IsSubgroup.isSubuniverse M-sg) , H⊆M , (λ _ → lift tt))
-    , IsSubgroup.respects M-sg
+  mk M M-sg H⊆M = ((M , M-sg .isSubuniverse) , H⊆M , (λ _ → lift tt)) , M-sg .respects
 
-  -- Equality and order come from the bare interval (they compare the
-  -- underlying predicates and ignore the respects proof).
+  -- Equality and order come from the bare interval
+  -- (they compare the underlying predicates and ignore the respects proof).
   infix 4 _≈ᵢ_ _≤ᵢ_
 
   _≈ᵢ_ : Interval≈ → Interval≈ → Type 0ℓ
-  M ≈ᵢ N = Bare._≈_ (proj₁ M) (proj₁ N)
+  (M , _) ≈ᵢ (N , _) = M ≈↑ N
 
   _≤ᵢ_ : Interval≈ → Interval≈ → Type 0ℓ
-  M ≤ᵢ N = Bare._≤_ (proj₁ M) (proj₁ N)
+  (M , _) ≤ᵢ (N , _) =  M ≤↑ N
 ```
 
 #### Interval isomorphism with a classical lattice
 
-`IntervalIso 𝒢 H H-sg 𝑳`{.AgdaFunction} is the group-side analog of
-`ConIso`{.AgdaFunction} of [FLRP.Problem][], and deliberately the *same
-presentation*: an `OrderIso`{.AgdaRecord} between the respecting upper interval
-`[H , full]` of `Sub(𝒢)` and the meet order of the classical lattice
-`𝑳`{.AgdaBound} of [Classical.Small.Structures.Lattice][].  Order isomorphisms
-transport meets and joins, so this is exactly "`[H , G] ≅ 𝑳` as lattices" with no
-redundant clauses.  (`OrderIso`{.AgdaRecord} still lives in [FLRP.Problem][]; its
-planned migration to the `Order/` tree, foreseen there, is left to a dedicated
-change.)
+`IntervalIso`{.AgdaFunction} `𝒢` `H` `H-sg` `𝑳` is the group-side analog of
+`ConIso`{.AgdaFunction} of [FLRP.Problem][], and deliberately the *same presentation*:
+an `OrderIso`{.AgdaRecord} between the respecting upper interval `[H , G]` of
+`Sub(𝒢)` and the meet order of the classical lattice `𝑳`{.AgdaBound} of
+[Classical.Small.Structures.Lattice][].
+
+Order isomorphisms transport meets and joins, so this is exactly
+"`[H , G] ≅ 𝑳` as lattices" with no redundant clauses.[^4]
 
 ```agda
-IntervalIso :
-  (𝒢 : Group 0ℓ 0ℓ) (H : Pred 𝕌[ proj₁ 𝒢 ] 0ℓ) (H-sg : IsSubgroup 𝒢 H)
+IntervalIso : (𝒢 : Group 0ℓ 0ℓ) (H : Pred 𝕌[ proj₁ 𝒢 ] 0ℓ) (H-sg : IsSubgroup 𝒢 H)
   → Lattice → Type (lsuc 0ℓ)
-IntervalIso 𝒢 H H-sg 𝑳 =
-  OrderIso  (UpperInterval._≈ᵢ_ 𝒢 H H-sg) (UpperInterval._≤ᵢ_ 𝒢 H H-sg)
-            (Setoid._≈_ 𝔻[ proj₁ 𝑳 ]) (Lattice-Order._≤_ 𝑳)
+IntervalIso 𝒢 H H-sg 𝑳 = OrderIso _≈ᵢ_ _≤ᵢ_ (Setoid._≈_ 𝔻[ proj₁ 𝑳 ]) (Lattice-Order._≤_ 𝑳)
+  where open UpperInterval 𝒢 H H-sg
 ```
 
 Interval isomorphisms compose with order isomorphisms *between* two intervals: the
@@ -275,36 +279,36 @@ GroupProperty ℓP = Pred (Group 0ℓ 0ℓ) ℓP
 
 ```agda
 IE : {ℓP : Level} → GroupProperty ℓP → Lattice → Type (lsuc 0ℓ ⊔ ℓP)
-IE P 𝑳 =
-  ∀ (𝒢 : Group 0ℓ 0ℓ) (H : Pred 𝕌[ proj₁ 𝒢 ] 0ℓ) (H-sg : IsSubgroup 𝒢 H)
-  → IntervalIso 𝒢 H H-sg 𝑳
-  → P 𝒢
+IE P 𝑳 = ∀ 𝒢 H H-sg → IntervalIso 𝒢 H H-sg 𝑳 → P 𝒢
+-- ^ here (𝒢 : Group 0ℓ 0ℓ) (H : Pred 𝕌[ proj₁ 𝒢 ] 0ℓ) (H-sg : IsSubgroup 𝒢 H)
 ```
 
-Core-freeness of a subgroup is expressed through WP-2's normal core: the core of
+Core-freeness of a subgroup is expressed through the normal core:[^wp-2] the core of
 `H` — the greatest normal subgroup below `H`, constructed in
 [Classical.Structures.Group.NormalCore][] as the meet of all conjugates — is
-contained in the trivial subgroup (the `≈`-class of the identity).  The converse
-containment always holds (the core is a subgroup, hence contains the identity's
-class), so this inclusion says exactly "the core *is* trivial".
+contained in the trivial subgroup (the `≈`-class of the identity).
+
+The converse containment always holds (the core is a subgroup, hence contains the
+identity's class), so this inclusion says exactly "the core *is* trivial."
+
+This notion "core-free" is represented by the following type
 
 ```agda
-CoreFree :
-  (𝒢 : Group 0ℓ 0ℓ) (H : Pred 𝕌[ proj₁ 𝒢 ] 0ℓ) → IsSubgroup 𝒢 H → Type 0ℓ
+CoreFree : ∀ 𝒢 H → IsSubgroup 𝒢 H → Type 0ℓ
 CoreFree 𝒢 H H-sg = proj₁ (Core.core 𝒢 H H-sg) ⊆ proj₁ (trivialSubgroup 𝒢)
 ```
 
+where `𝒢` and `H` range over `Group 0ℓ 0ℓ` and `Pred 𝕌[ proj₁ 𝒢 ] 0ℓ`, respectively.
+
 `cfIE P 𝑳` weakens `IE` by demanding the conclusion only for representations over a
-core-free subgroup; consequently every IE property is cf-IE (the note's "clearly").
+core-free subgroup; consequently every IE property is cf-IE.
 
 ```agda
 cfIE : {ℓP : Level} → GroupProperty ℓP → Lattice → Type (lsuc 0ℓ ⊔ ℓP)
-cfIE P 𝑳 =
-  ∀ (𝒢 : Group 0ℓ 0ℓ) (H : Pred 𝕌[ proj₁ 𝒢 ] 0ℓ) (H-sg : IsSubgroup 𝒢 H)
-  → CoreFree 𝒢 H H-sg
-  → IntervalIso 𝒢 H H-sg 𝑳
-  → P 𝒢
+cfIE P 𝑳 = ∀ 𝒢 H H-sg → CoreFree 𝒢 H H-sg → IntervalIso 𝒢 H H-sg 𝑳 → P 𝒢
+```
 
+```agda
 -- Interval enforceable implies core-free interval enforceable.
 IE→cfIE : {ℓP : Level} {P : GroupProperty ℓP} {𝑳 : Lattice} → IE P 𝑳 → cfIE P 𝑳
 IE→cfIE ie 𝒢 H H-sg _ iso = ie 𝒢 H H-sg iso
@@ -313,44 +317,46 @@ IE→cfIE ie 𝒢 H H-sg _ iso = ie 𝒢 H H-sg iso
 `minIE P 𝑳` asks for `P` only of *minimal* representations.  Minimality is measured
 through the `card`{.AgdaField} field of the `FiniteAlgebra`{.AgdaRecord} interface
 on the group's underlying algebra: the given representation's certified cardinality
-is at most that of every other finite representation of `𝑳`.  Since
-`card`{.AgdaField} bounds the carrier from above (the enumeration is surjective, not
-bijective), this is minimality of *certified* cardinalities; with exact enumerations
-it is the note's `|G|`-minimality.  The note has little to say about min-IE and
-neither do we — the definition is recorded because such properties arise in the
-literature (Lucchini's intervals, Pálfy's analysis of Feit's examples) and the
-catalog of RP-2 will want to state them.
+is at most that of every other finite representation of `𝑳`.
+
+Since `card`{.AgdaField} bounds the carrier from above (the enumeration is
+surjective, not bijective), this is minimality of *certified* cardinalities; with
+exact enumerations it is the `|G|`-minimality of the note.  The note has little to
+say about min-IE and neither do we — the definition is recorded because such
+properties arise in the literature (Lucchini's intervals, Pálfy's analysis of Feit's
+examples) and the catalog of RP-2 will want to state them.
+
 
 ```agda
+open FiniteAlgebra using (card)
+
 minIE : {ℓP : Level} → GroupProperty ℓP → Lattice → Type (lsuc 0ℓ ⊔ ℓP)
-minIE P 𝑳 =
-  ∀ (𝒢 : Group 0ℓ 0ℓ) (H : Pred 𝕌[ proj₁ 𝒢 ] 0ℓ) (H-sg : IsSubgroup 𝒢 H)
-    (fin : FiniteAlgebra (proj₁ 𝒢))
-  → IntervalIso 𝒢 H H-sg 𝑳
-  → ( ∀ (𝒬 : Group 0ℓ 0ℓ) (J : Pred 𝕌[ proj₁ 𝒬 ] 0ℓ) (J-sg : IsSubgroup 𝒬 J)
-        (fin' : FiniteAlgebra (proj₁ 𝒬))
-      → IntervalIso 𝒬 J J-sg 𝑳
-      → FiniteAlgebra.card fin ≤ⁿ FiniteAlgebra.card fin' )
-  → P 𝒢
+minIE P 𝑳 = ∀ 𝒢 𝒬 H J H-sg J-sg
+  → (fin : FiniteAlgebra (proj₁ 𝒢)) → IntervalIso 𝒢 H H-sg 𝑳
+  → (fin' : FiniteAlgebra (proj₁ 𝒬)) → IntervalIso 𝒬 J J-sg 𝑳
+  → fin .card ≤ⁿ fin' .card → P 𝒢
 ```
 
 #### The fattening isomorphism
 
 The heart of this slice: for a subgroup `H` of `𝒢` and any group `𝒦`, the upper
-interval over the fattened subgroup `H ×ᶠ 𝒦` in `Sub(𝒢 ×ᵍ 𝒦)` is order-isomorphic
-to the upper interval over `H` in `Sub(𝒢)` — the note's `[H × K , G × K] ≅ [H , G]`.
+interval over the fattened subgroup `H ×ᶠ 𝒦` in `Sub(𝒢 ×ᵍ 𝒦)` is order-isomorphic to
+the upper interval over `H` in `Sub(𝒢)`; that is, `[H × K , G × K] ≅ [H , G]`.
+
 The two maps are restriction to the first coordinate, `M ↦ (λ g → M (g , ε))`, and
-pullback along the projection, `A ↦ (A ∘ proj₁)`; that they are well-defined,
-monotone, and mutually inverse is the content of the `Slice₁`{.AgdaModule} toolkit
-of [Classical.Structures.Group.Product][] — the pivot being that a respecting
-subgroup `M ⊇ H ×ᶠ 𝒦` satisfies `M (g , k) ⟺ M (g , ε)`, since
-`(g , k) ≈ (g , ε) ∙ (ε , k)` and `(ε , k)` lies in `H ×ᶠ 𝒦 ⊆ M`.  One round trip
-is even definitional: restricting a pulled-back subgroup gives back exactly the
-predicate one started from.
+pullback along the projection, `A ↦ (A ∘ proj₁)`.
+
+That they are well-defined, monotone, and mutually inverse is the content of the
+`Slice₁`{.AgdaModule} toolkit of [Classical.Structures.Group.Product][] — the pivot
+being that a respecting subgroup `M ⊇ H ×ᶠ 𝒦` satisfies `M (g , k) ⟺ M (g , ε)`,
+since `(g , k) ≈ (g , ε) ∙ (ε , k)` and `(ε , k)` lies in `H ×ᶠ 𝒦 ⊆ M`.
+
+One round trip is even definitional: restricting a pulled-back subgroup gives back
+exactly the predicate one started from.
 
 `FattenSnd`{.AgdaModule} fattens by a full *second* factor (the note's displayed
-form); `FattenFst`{.AgdaModule} is the mirror with a full *first* factor.  Lemma 3.2
-needs both, one per witness.
+form); `FattenFst`{.AgdaModule} is the mirror with a full *first* factor.
+Lemma 3.2 needs both, one per witness.
 
 ```agda
 module Fatten (𝒢 𝒦 : Group 0ℓ 0ℓ) where
@@ -359,8 +365,8 @@ module Fatten (𝒢 𝒦 : Group 0ℓ 0ℓ) where
     𝒫 : Group 0ℓ 0ℓ
     𝒫 = 𝒢 ×ᵍ 𝒦
 
-  open GroupProduct 𝒢 𝒦 using ( module Slice₁ ; module Slice₂
-                              ; ×ᶠ-isSubgroup ; ᶠ×-isSubgroup )
+  open GroupProduct 𝒢 𝒦 using  ( module Slice₁ ; module Slice₂
+                               ; ×ᶠ-isSubgroup ; ᶠ×-isSubgroup )
 
   module FattenSnd (H : Pred 𝕌[ proj₁ 𝒢 ] 0ℓ) (H-sg : IsSubgroup 𝒢 H) where
 
@@ -695,7 +701,19 @@ builds on top of the definitions of this module.
 
 ---
 
-[^1]: Sketch: take `𝒦` presented on a two-element carrier `{a , b}` with `a ≈ b`
+[^1]: arXiv:1205.1927 ("the note") vendored at
+      [`docs/papers/flrp/ieprops/IEProps-1205.1927v4.pdf`](docs/papers/flrp/ieprops/IEProps-1205.1927v4.pdf);
+      see also [`docs/notes/flrp-research-roadmap.md`](docs/notes/flrp-research-roadmap.md) § 7
+      for the roadmap's description of **Work Product 4** (WP-4): *the core-free reduction*
+      (IE/cf-IE/min-IE with group-representability tracking, core-free reduction,
+      fattening, and the note's Lemmas 3.1 and 3.2 (the plain-IE "no-go").
+
+[^wp-2]: See [`docs/notes/flrp-research-roadmap.md`](docs/notes/flrp-research-roadmap.md) § 7
+         for the roadmap's description of **Work Product 2** (WP-2): *the group-action infrastructure*
+         (cosets, conjugation, normal core, G-sets as unary algebras, `Sub(G)` as a
+         complete lattice, and intervals `[H, G]` as bounded lattices).
+
+[^2]: Sketch: take `𝒦` presented on a two-element carrier `{a , b}` with `a ≈ b`
       and all operations returning `a` (a one-element group presented redundantly),
       and `𝒢 = ℤ₂` on a propositional-equality carrier with `H` trivial.  The bare
       predicate `{(e , a) , (e , b) , (g , a)}` is closed under the product
@@ -704,3 +722,10 @@ builds on top of the definitions of this module.
       bare interval `[H ×ᶠ 𝒦 , full]` has three elements while `[H , full]` in
       `Sub(ℤ₂)` has two.  Requiring `respects`{.AgdaField} removes exactly this
       presentation junk.
+
+[^3]: Note that properties are not explicitly required to be isomorphism-invariant —
+      the note's Lemma 3.2 proof never uses invariance, and no definition below needs
+      it — however, by a "group property" we typically mean one that is invariant under
+      isomorphism; that is, if `𝑮 ≅ 𝑮'`, then `𝑮` has property `P` iff `𝑮'` does.
+[^4]: `OrderIso`{.AgdaRecord} still lives in [FLRP.Problem][]; its planned migration
+      to the `Order/` tree, foreseen there, is left to a dedicated change.

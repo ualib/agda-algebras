@@ -11,20 +11,20 @@ author: "the agda-algebras development team"
 This is the [Classical.Structures.Group.Product][] module of the [Agda Universal Algebra Library][].
 
 For groups `𝒢`{.AgdaBound} and `𝒦`{.AgdaBound} presented as Σ-typed structures over
-[`Sig-Group`][Classical.Signatures.Group], this module constructs the **binary direct
-product** `𝒢 ×ᵍ 𝒦`{.AgdaFunction}: the algebra on the product setoid whose operations
-act componentwise, together with componentwise proofs of the five group laws.  The
-library's indexed product `⨅`{.AgdaFunction} of [Setoid.Algebras.Products][] would
-give a product with a *function-typed* carrier `∀ i → 𝕌[ 𝒜 i ]`; the binary product
-here instead has the pair carrier `G × K`, which is the form the fattening arguments
-of the FLRP program consume (a fattened subgroup is literally a predicate composed
-with `proj₁`{.AgdaFunction}).  The construction is level-general
-(`Group α ρ → Group β σ → Group (α ⊔ β) (ρ ⊔ σ)`), since full generality costs
-nothing here.
+[`Sig-Group`][Classical.Signatures.Group], this module constructs the
+**binary direct product** `𝒢 ×ᵍ 𝒦`{.AgdaFunction}: the algebra on the product setoid
+whose operations act componentwise, together with componentwise proofs of the five
+group laws.  The library's indexed product `⨅`{.AgdaFunction} of
+[Setoid.Algebras.Products][] would give a product with a *function-typed* carrier
+`∀ i → 𝕌[ 𝒜 i ]`; the binary product here instead has the pair carrier `G × K`, which
+is the form the fattening arguments of the FLRP program consume (a fattened subgroup
+is literally a predicate composed with `proj₁`{.AgdaFunction}).  The construction is
+level-general (`Group α ρ → Group β σ → Group (α ⊔ β) (ρ ⊔ σ)`), since full
+generality costs nothing here.
 
-Besides the product itself, the module provides the ingredients of the *fattening
-lemma* `[H × K, G × K] ≅ [H, G]` (the remark following Lemma `lemma:ie-prop-and-neg`
-in the note vendored at `docs/papers/flrp/ieprops/`; see
+Besides the product itself, the module provides the ingredients of the
+*fattening lemma* `[H × K, G × K] ≅ [H, G]` (the remark following Lemma
+`lemma:ie-prop-and-neg` in the note vendored at `docs/papers/flrp/ieprops/`; see
 `docs/notes/flrp-research-roadmap.md` § 4):
 
 +  the **fattened subgroup predicates** `H ×ᶠ 𝒦`{.AgdaFunction} (subgroup in the
@@ -42,7 +42,7 @@ which consumes exactly these lemmas; everything here is plain group theory, kept
 the `Classical/` tree per the roadmap's placement discipline.
 
 Following the Cubical-port discipline, the underlying equivalence of the product is
-isolated in `×ᵍ-setoid`{.AgdaFunction} — the pointwise pair of the component
+isolated in `G×K`{.AgdaFunction} — the pointwise pair of the component
 equivalences — so it can be mechanically substituted on the eventual port.
 
 <!--
@@ -103,32 +103,32 @@ ranges over all of `𝒦` (the *fattened*, full factor, marked by `ᶠ`).  The m
 infix 7 _×ᶠ_ _ᶠ×_
 
 -- The subgroup H of the first factor, fattened by the full group 𝒦.
-_×ᶠ_ : {G : Type α} (H : Pred G ℓ) (𝒦 : Group β σ) → Pred (G × 𝕌[ proj₁ 𝒦 ]) ℓ
-(H ×ᶠ 𝒦) p = H (proj₁ p)
+_×ᶠ_ : {G : Type α} (H : Pred G ℓ) ((𝑲 , _) : Group β σ) → Pred (G × 𝕌[ 𝑲 ]) ℓ
+(H ×ᶠ 𝒦) (g , _) = H g
 
 -- The subgroup J of the second factor, fattened by the full group 𝒢.
-_ᶠ×_ : (𝒢 : Group α ρ) {K : Type β} (J : Pred K ℓ) → Pred (𝕌[ proj₁ 𝒢 ] × K) ℓ
-(𝒢 ᶠ× J) p = J (proj₂ p)
+_ᶠ×_ : ((𝑮 , _) : Group α ρ) {K : Type β} (J : Pred K ℓ) → Pred (𝕌[ 𝑮 ] × K) ℓ
+(𝒢 ᶠ× J) (_ , k) = J k
 ```
 
 #### The product construction
 
-`GroupProduct 𝒢 𝒦`{.AgdaModule} packages the whole development for a fixed pair of
-groups; opening it provides the product algebra, the product group, the pointwise
+`GroupProduct`{.AgdaModule} `𝒢` `𝒦` packages the whole development for a fixed pair
+of groups; opening it provides the product algebra, the product group, the pointwise
 descriptions of its curried operations, the subgroup lemmas for the fattened
 predicates, and the slice toolkit.
 
 ```agda
 module GroupProduct (𝒢 : Group α ρ) (𝒦 : Group β σ) where
   private
-    𝑨 = proj₁ 𝒢
-    𝑩 = proj₁ 𝒦
-    G = 𝕌[ 𝑨 ]
-    K = 𝕌[ 𝑩 ]
+    𝑮 = proj₁ 𝒢
+    𝑲 = proj₁ 𝒦
+    G = 𝕌[ 𝑮 ]
+    K = 𝕌[ 𝑲 ]
 
-  open Setoid 𝔻[ 𝑨 ] using ()
+  open Setoid 𝔻[ 𝑮 ] using ()
     renaming ( _≈_ to _≈₁_ ; refl to refl₁ ; sym to sym₁ ; trans to trans₁ )
-  open Setoid 𝔻[ 𝑩 ] using ()
+  open Setoid 𝔻[ 𝑲 ] using ()
     renaming ( _≈_ to _≈₂_ ; refl to refl₂ ; sym to sym₂ ; trans to trans₂ )
 ```
 
@@ -137,18 +137,18 @@ pointwise pair of the component equivalences — this is the isolated-equality l
 for the Cubical port.
 
 ```agda
-  ×ᵍ-setoid : Setoid (α ⊔ β) (ρ ⊔ σ)
-  ×ᵍ-setoid = record
+  G×K : Setoid (α ⊔ β) (ρ ⊔ σ)
+  G×K = record
     { Carrier        = G × K
     ; _≈_            = λ p q → (proj₁ p ≈₁ proj₁ q) × (proj₂ p ≈₂ proj₂ q)
     ; isEquivalence  = record
         { refl   = refl₁ , refl₂
         ; sym    = λ e → sym₁ (proj₁ e) , sym₂ (proj₂ e)
-        ; trans  = λ d e → trans₁ (proj₁ d) (proj₁ e) , trans₂ (proj₂ d) (proj₂ e)
+        ; trans  = λ (d₁ , d₂) (e₁ , e₂) → trans₁ d₁ e₁ , trans₂ d₂ e₂
         }
     }
 
-  open Setoid ×ᵍ-setoid using ()
+  open Setoid G×K using ()
     renaming ( _≈_ to _≈ₓ_ ; refl to reflₓ ; sym to symₓ ; trans to transₓ )
 ```
 
@@ -158,16 +158,16 @@ congruence proof is the pair of the component congruences, via the shared
 `interp-cong`{.AgdaFunction} primitive.
 
 ```agda
-  ×ᵍ-Algebra : Algebra (α ⊔ β) (ρ ⊔ σ)
-  ×ᵍ-Algebra = mkAlgebra ×ᵍ-setoid interp interp-congruence
+  𝑮×𝑲 : Algebra (α ⊔ β) (ρ ⊔ σ)
+  𝑮×𝑲 = mkAlgebra G×K interp interp-congruence
     where
     interp : (o : OperationSymbolsOf Sig-Group) → Op (ArityOf Sig-Group o) (G × K)
-    interp o a = (o ^ 𝑨) (proj₁ ∘ a) , (o ^ 𝑩) (proj₂ ∘ a)
+    interp o a = (o ^ 𝑮) (proj₁ ∘ a) , (o ^ 𝑲) (proj₂ ∘ a)
 
     interp-congruence : ∀ o {u v : ArityOf Sig-Group o → G × K}
       → (∀ i → u i ≈ₓ v i) → interp o u ≈ₓ interp o v
     interp-congruence o e =
-      interp-cong 𝑨 o (λ i → proj₁ (e i)) , interp-cong 𝑩 o (λ i → proj₂ (e i))
+      interp-cong 𝑮 o (λ i → proj₁ (e i)) , interp-cong 𝑲 o (λ i → proj₂ (e i))
 ```
 
 #### Componentwise term interpretation
@@ -179,17 +179,16 @@ environments.  The variable case is definitional; the node case pairs the compon
 congruences applied to the induction hypotheses.
 
 ```agda
-  private
-    module EnvP = Environment ×ᵍ-Algebra
-    module EnvG = Environment 𝑨
-    module EnvK = Environment 𝑩
-
+  open Environment 𝑮×𝑲  using () renaming ( ⟦_⟧ to ⟦_⟧G×K )
+  open Environment 𝑮    using () renaming ( ⟦_⟧ to ⟦_⟧G )
+  open Environment 𝑲    using () renaming ( ⟦_⟧ to ⟦_⟧K )
   interp-factor : {X : Type χ} (t : Term X) (η : X → G × K)
-    → (EnvP.⟦ t ⟧ ⟨$⟩ η) ≈ₓ (EnvG.⟦ t ⟧ ⟨$⟩ (proj₁ ∘ η) , EnvK.⟦ t ⟧ ⟨$⟩ (proj₂ ∘ η))
+    → ⟦ t ⟧G×K ⟨$⟩ η ≈ₓ (⟦ t ⟧G ⟨$⟩ (proj₁ ∘ η) , ⟦ t ⟧K ⟨$⟩ (proj₂ ∘ η))
+
   interp-factor (ℊ x) η = refl₁ , refl₂
   interp-factor (node f args) η =
-      interp-cong 𝑨 f (λ i → proj₁ (interp-factor (args i) η))
-    , interp-cong 𝑩 f (λ i → proj₂ (interp-factor (args i) η))
+      interp-cong 𝑮 f (λ i → proj₁ (interp-factor (args i) η))
+    , interp-cong 𝑲 f (λ i → proj₂ (interp-factor (args i) η))
 ```
 
 Every group equation now holds in the product by one uniform argument: factor the
@@ -197,7 +196,7 @@ two sides into components, apply the component groups' satisfaction proofs, and
 refold.  No case analysis on the equation is needed.
 
 ```agda
-  ×ᵍ-⊨ : ×ᵍ-Algebra ⊨ᵍᵖ Th-Group
+  ×ᵍ-⊨ : 𝑮×𝑲 ⊨ᵍᵖ Th-Group
   ×ᵍ-⊨ i η =
       trans₁  (proj₁ (interp-factor lhs η))
               (trans₁ (proj₂ 𝒢 i (proj₁ ∘ η)) (sym₁ (proj₁ (interp-factor rhs η))))
@@ -210,7 +209,7 @@ refold.  No case analysis on the equation is needed.
 
   -- The direct product group.
   ×ᵍ-Group : Group (α ⊔ β) (ρ ⊔ σ)
-  ×ᵍ-Group = ×ᵍ-Algebra , ×ᵍ-⊨
+  ×ᵍ-Group = 𝑮×𝑲 , ×ᵍ-⊨
 ```
 
 #### Pointwise descriptions of the curried operations
@@ -237,18 +236,18 @@ indexed tuples lack η under `--cubical-compatible`; each bridge is one
   -- The product multiplication is componentwise.
   ∙ₓ-pointwise : ∀ x y → (x ∙ₓ y) ≈ₓ (proj₁ x ∙₁ proj₁ y , proj₂ x ∙₂ proj₂ y)
   ∙ₓ-pointwise x y =
-      interp-cong 𝑨 ∙-Op (λ { 0F → refl₁ ; 1F → refl₁ })
-    , interp-cong 𝑩 ∙-Op (λ { 0F → refl₂ ; 1F → refl₂ })
+      interp-cong 𝑮 ∙-Op (λ { 0F → refl₁ ; 1F → refl₁ })
+    , interp-cong 𝑲 ∙-Op (λ { 0F → refl₂ ; 1F → refl₂ })
 
   -- The product identity is the pair of identities.
   εₓ-pointwise : εₓ ≈ₓ (ε₁ , ε₂)
-  εₓ-pointwise = interp-cong 𝑨 ε-Op (λ ()) , interp-cong 𝑩 ε-Op (λ ())
+  εₓ-pointwise = interp-cong 𝑮 ε-Op (λ ()) , interp-cong 𝑲 ε-Op (λ ())
 
   -- The product inverse is componentwise.
   ⁻¹ₓ-pointwise : ∀ x → (x ⁻¹ₓ) ≈ₓ (proj₁ x ⁻¹₁ , proj₂ x ⁻¹₂)
   ⁻¹ₓ-pointwise x =
-      interp-cong 𝑨 ⁻¹-Op (λ { 0F → refl₁ })
-    , interp-cong 𝑩 ⁻¹-Op (λ { 0F → refl₂ })
+      interp-cong 𝑮 ⁻¹-Op (λ { 0F → refl₁ })
+    , interp-cong 𝑲 ⁻¹-Op (λ { 0F → refl₂ })
 ```
 
 #### The fattened predicates are subgroups
@@ -267,7 +266,7 @@ factor.
     ×ᶠ-respects resp e h = resp (proj₁ e) h
 
     -- H ×ᶠ 𝒦 is closed under the product operations whenever H is closed (definitional).
-    ×ᶠ-isSubuniverse : H ∈ Subuniverses 𝑨 → (H ×ᶠ 𝒦) ∈ Subuniverses ×ᵍ-Algebra
+    ×ᶠ-isSubuniverse : H ∈ Subuniverses 𝑮 → (H ×ᶠ 𝒦) ∈ Subuniverses 𝑮×𝑲
     ×ᶠ-isSubuniverse H-sub f a im = H-sub f (proj₁ ∘ a) im
 
     -- Fattening a subgroup of 𝒢 by the full 𝒦 yields a subgroup of the product.
@@ -284,7 +283,7 @@ factor.
     ᶠ×-respects resp e j = resp (proj₂ e) j
 
     -- 𝒢 ᶠ× J is closed under the product operations whenever J is closed (definitional).
-    ᶠ×-isSubuniverse : J ∈ Subuniverses 𝑩 → (𝒢 ᶠ× J) ∈ Subuniverses ×ᵍ-Algebra
+    ᶠ×-isSubuniverse : J ∈ Subuniverses 𝑲 → (𝒢 ᶠ× J) ∈ Subuniverses 𝑮×𝑲
     ᶠ×-isSubuniverse J-sub f a im = J-sub f (proj₂ ∘ a) im
 
     -- Fattening a subgroup of 𝒦 by the full 𝒢 yields a subgroup of the product.
@@ -311,7 +310,7 @@ inverse maps of the fattening lemma.
 ```agda
   module Slice₁ (H : Pred G ℓ) (H-sg : IsSubgroup 𝒢 H)
     (M : Pred (G × K) ℓᴹ)
-    (M-sub : M ∈ Subuniverses ×ᵍ-Algebra)
+    (M-sub : M ∈ Subuniverses 𝑮×𝑲)
     (M-resp : M Respects _≈ₓ_)
     (HK⊆M : (H ×ᶠ 𝒦) ⊆ M)
     where
@@ -379,7 +378,7 @@ above.
 ```agda
   module Slice₂ (J : Pred K ℓ) (J-sg : IsSubgroup 𝒦 J)
     (M : Pred (G × K) ℓᴹ)
-    (M-sub : M ∈ Subuniverses ×ᵍ-Algebra)
+    (M-sub : M ∈ Subuniverses 𝑮×𝑲)
     (M-resp : M Respects _≈ₓ_)
     (GJ⊆M : (𝒢 ᶠ× J) ⊆ M)
     where
