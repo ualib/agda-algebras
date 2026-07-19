@@ -1,7 +1,7 @@
 ---
 layout: default
-file: "src/Demos/HSP.lagda.md"
-title: "Demos.HSP module"
+file: "src/Examples/Demos/HSP.lagda.md"
+title: "Examples.Demos.HSP module"
 date: "2022-04-27"
 author: "the agda-algebras development team"
 ---
@@ -77,7 +77,7 @@ We also make use of the following definitions from [Agda][]'s standard library (
 ```agda
 -- Import universe levels and Signature type (described below) from the agda-algebras library.
 open import Overture using ( 𝓞 ; 𝓥 ; Signature )
-module Demos.HSP {𝑆 : Signature 𝓞 𝓥} where
+module Examples.Demos.HSP {𝑆 : Signature 𝓞 𝓥} where
 
 -- Import 16 definitions from the Agda Standard Library.
 open import Data.Unit.Polymorphic  using  ( ⊤ ; tt )

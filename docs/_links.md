@@ -54,6 +54,8 @@
 [Setoid.Congruences.Lattice]: /Setoid/Congruences/Lattice/
 [Setoid.Congruences.Monolith]: /Setoid/Congruences/Monolith/
 [Setoid.Congruences.Permutability]: /Setoid/Congruences/Permutability/
+[Setoid.Congruences.Presented]: /Setoid/Congruences/Presented/
+[Setoid.Congruences.Presented.Decidable]: /Setoid/Congruences/Presented/Decidable/
 [Setoid.Congruences.Properties]: /Setoid/Congruences/Properties/
 [Setoid.Functions]: /Setoid/Functions/
 [Setoid.Functions.Basic]: /Setoid/Functions/Basic/
@@ -78,6 +80,7 @@
 [Setoid.Relations.Properties]: /Setoid/Relations/Properties/
 [Setoid.Relations.Quotients]: /Setoid/Relations/Quotients/
 [Setoid.Signatures]: /Setoid/Signatures/
+[Setoid.Signatures.Finite]: /Setoid/Signatures/Finite/
 [Setoid.Signatures.Functor]: /Setoid/Signatures/Functor/
 [Setoid.Subalgebras]: /Setoid/Subalgebras/
 [Setoid.Subalgebras.Basic]: /Setoid/Subalgebras/Basic/
@@ -139,11 +142,13 @@
 [Classical.Properties]: /Classical/Properties/
 [Classical.Properties.Lattice]: /Classical/Properties/Lattice/
 [Classical.Signatures]: /Classical/Signatures/
+[Classical.Signatures.Finite]: /Classical/Signatures/Finite/
 [Classical.Signatures.Group]: /Classical/Signatures/Group/
 [Classical.Signatures.Lattice]: /Classical/Signatures/Lattice/
 [Classical.Signatures.Magma]: /Classical/Signatures/Magma/
 [Classical.Signatures.Monoid]: /Classical/Signatures/Monoid/
 [Classical.Signatures.Ring]: /Classical/Signatures/Ring/
+[Classical.Signatures.Unary]: /Classical/Signatures/Unary/
 [Classical.Small]: /Classical/Small/
 [Classical.Small.Structures]: /Classical/Small/Structures/
 [Classical.Small.Structures.AbelianGroup]: /Classical/Small/Structures/AbelianGroup/
@@ -159,12 +164,21 @@
 [Classical.Small.Structures.Semigroup]: /Classical/Small/Structures/Semigroup/
 [Classical.Small.Structures.Semilattice]: /Classical/Small/Structures/Semilattice/
 [Classical.Structures]: /Classical/Structures/
-[Classical.Structures.AbelianGroup]: /Classical/Structures/AbelianGroup/
 [Classical.Structures.CommutativeMonoid]: /Classical/Structures/CommutativeMonoid/
 [Classical.Structures.CommutativeRing]: /Classical/Structures/CommutativeRing/
 [Classical.Structures.CommutativeSemigroup]: /Classical/Structures/CommutativeSemigroup/
 [Classical.Structures.DistributiveLattice]: /Classical/Structures/DistributiveLattice/
 [Classical.Structures.Group]: /Classical/Structures/Group/
+[Classical.Structures.Group.AbelianGroup]: /Classical/Structures/Group/AbelianGroup/
+[Classical.Structures.Group.Basic]: /Classical/Structures/Group/Basic/
+[Classical.Structures.Group.Complexes]: /Classical/Structures/Group/Complexes/
+[Classical.Structures.Group.Conjugation]: /Classical/Structures/Group/Conjugation/
+[Classical.Structures.Group.Cosets]: /Classical/Structures/Group/Cosets/
+[Classical.Structures.Group.Dedekind]: /Classical/Structures/Group/Dedekind/
+[Classical.Structures.Group.GSet]: /Classical/Structures/Group/GSet/
+[Classical.Structures.Group.NormalCore]: /Classical/Structures/Group/NormalCore/
+[Classical.Structures.Group.SubgroupLattice]: /Classical/Structures/Group/SubgroupLattice/
+[Classical.Structures.Group.Subgroups]: /Classical/Structures/Group/Subgroups/
 [Classical.Structures.Interpret]: /Classical/Structures/Interpret/
 [Classical.Structures.Lattice]: /Classical/Structures/Lattice/
 [Classical.Structures.Magma]: /Classical/Structures/Magma/
@@ -187,6 +201,7 @@
 
 [Order]: /Order/
 [Order.CompleteLattice]: /Order/CompleteLattice/
+[Order.Interval]: /Order/Interval/
 
 [Examples]: /Examples/
 [Examples.Classical]: /Examples/Classical/
@@ -209,6 +224,10 @@
 [Examples.Classical.Monoid]: /Examples/Classical/Monoid/
 [Examples.Classical.Semigroup]: /Examples/Classical/Semigroup/
 [Examples.Classical.Semilattice]: /Examples/Classical/Semilattice/
+[Examples.Demos]: /Examples/Demos/
+[Examples.Demos.ContraX]: /Examples/Demos/ContraX/
+[Examples.Demos.GeneralOperationsAndRelations]: /Examples/Demos/GeneralOperationsAndRelations/
+[Examples.Demos.HSP]: /Examples/Demos/HSP/
 [Examples.FunctionTypeBijections]: /Examples/FunctionTypeBijections/
 [Examples.PolynomialFunctors]: /Examples/PolynomialFunctors/
 [Examples.PolynomialFunctors.Functors]: /Examples/PolynomialFunctors/Functors/
@@ -229,11 +248,6 @@
 [Exercises]: /Exercises/
 [Exercises.Complexity]: /Exercises/Complexity/
 [Exercises.Complexity.FiniteCSP]: /Exercises/Complexity/FiniteCSP/
-
-[Demos]: /Demos/
-[Demos.ContraX]: /Demos/ContraX/
-[Demos.GeneralOperationsAndRelations]: /Demos/GeneralOperationsAndRelations/
-[Demos.HSP]: /Demos/HSP/
 
 [Legacy.Base]: /Legacy/Base/
 [Legacy.Base.Adjunction]: /Legacy/Base/Adjunction/
@@ -306,6 +320,9 @@
 
 [agda-algebras]: /agda-algebras/
 
+[FLRP]: /FLRP/
+[FLRP.Problem]: /FLRP/Problem/
+
 <!-- ===== Module sources on GitHub ===== -->
 [Overture.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Overture.lagda.md
 [Overture/Adjunction.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Overture/Adjunction.lagda.md
@@ -353,6 +370,8 @@
 [Setoid/Congruences/Lattice.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Congruences/Lattice.lagda.md
 [Setoid/Congruences/Monolith.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Congruences/Monolith.lagda.md
 [Setoid/Congruences/Permutability.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Congruences/Permutability.lagda.md
+[Setoid/Congruences/Presented.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Congruences/Presented.lagda.md
+[Setoid/Congruences/Presented/Decidable.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Congruences/Presented/Decidable.lagda.md
 [Setoid/Congruences/Properties.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Congruences/Properties.lagda.md
 [Setoid/Functions.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Functions.lagda.md
 [Setoid/Functions/Basic.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Functions/Basic.lagda.md
@@ -377,6 +396,7 @@
 [Setoid/Relations/Properties.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Relations/Properties.lagda.md
 [Setoid/Relations/Quotients.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Relations/Quotients.lagda.md
 [Setoid/Signatures.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Signatures.lagda.md
+[Setoid/Signatures/Finite.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Signatures/Finite.lagda.md
 [Setoid/Signatures/Functor.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Signatures/Functor.lagda.md
 [Setoid/Subalgebras.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Subalgebras.lagda.md
 [Setoid/Subalgebras/Basic.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Subalgebras/Basic.lagda.md
@@ -438,11 +458,13 @@
 [Classical/Properties.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Properties.lagda.md
 [Classical/Properties/Lattice.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Properties/Lattice.lagda.md
 [Classical/Signatures.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Signatures.lagda.md
+[Classical/Signatures/Finite.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Signatures/Finite.lagda.md
 [Classical/Signatures/Group.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Signatures/Group.lagda.md
 [Classical/Signatures/Lattice.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Signatures/Lattice.lagda.md
 [Classical/Signatures/Magma.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Signatures/Magma.lagda.md
 [Classical/Signatures/Monoid.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Signatures/Monoid.lagda.md
 [Classical/Signatures/Ring.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Signatures/Ring.lagda.md
+[Classical/Signatures/Unary.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Signatures/Unary.lagda.md
 [Classical/Small.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Small.lagda.md
 [Classical/Small/Structures.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Small/Structures.lagda.md
 [Classical/Small/Structures/AbelianGroup.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Small/Structures/AbelianGroup.lagda.md
@@ -458,12 +480,21 @@
 [Classical/Small/Structures/Semigroup.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Small/Structures/Semigroup.lagda.md
 [Classical/Small/Structures/Semilattice.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Small/Structures/Semilattice.lagda.md
 [Classical/Structures.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures.lagda.md
-[Classical/Structures/AbelianGroup.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/AbelianGroup.lagda.md
 [Classical/Structures/CommutativeMonoid.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/CommutativeMonoid.lagda.md
 [Classical/Structures/CommutativeRing.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/CommutativeRing.lagda.md
 [Classical/Structures/CommutativeSemigroup.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/CommutativeSemigroup.lagda.md
 [Classical/Structures/DistributiveLattice.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/DistributiveLattice.lagda.md
 [Classical/Structures/Group.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Group.lagda.md
+[Classical/Structures/Group/AbelianGroup.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Group/AbelianGroup.lagda.md
+[Classical/Structures/Group/Basic.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Group/Basic.lagda.md
+[Classical/Structures/Group/Complexes.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Group/Complexes.lagda.md
+[Classical/Structures/Group/Conjugation.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Group/Conjugation.lagda.md
+[Classical/Structures/Group/Cosets.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Group/Cosets.lagda.md
+[Classical/Structures/Group/Dedekind.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Group/Dedekind.lagda.md
+[Classical/Structures/Group/GSet.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Group/GSet.lagda.md
+[Classical/Structures/Group/NormalCore.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Group/NormalCore.lagda.md
+[Classical/Structures/Group/SubgroupLattice.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Group/SubgroupLattice.lagda.md
+[Classical/Structures/Group/Subgroups.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Group/Subgroups.lagda.md
 [Classical/Structures/Interpret.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Interpret.lagda.md
 [Classical/Structures/Lattice.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Lattice.lagda.md
 [Classical/Structures/Magma.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Magma.lagda.md
@@ -486,6 +517,7 @@
 
 [Order.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Order.lagda.md
 [Order/CompleteLattice.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Order/CompleteLattice.lagda.md
+[Order/Interval.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Order/Interval.lagda.md
 
 [Examples.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Examples.lagda.md
 [Examples/Classical.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Examples/Classical.lagda.md
@@ -508,6 +540,10 @@
 [Examples/Classical/Monoid.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Examples/Classical/Monoid.lagda.md
 [Examples/Classical/Semigroup.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Examples/Classical/Semigroup.lagda.md
 [Examples/Classical/Semilattice.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Examples/Classical/Semilattice.lagda.md
+[Examples/Demos.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Examples/Demos.lagda.md
+[Examples/Demos/ContraX.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Examples/Demos/ContraX.lagda.md
+[Examples/Demos/GeneralOperationsAndRelations.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Examples/Demos/GeneralOperationsAndRelations.lagda.md
+[Examples/Demos/HSP.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Examples/Demos/HSP.lagda.md
 [Examples/FunctionTypeBijections.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Examples/FunctionTypeBijections.lagda.md
 [Examples/PolynomialFunctors.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Examples/PolynomialFunctors.lagda.md
 [Examples/PolynomialFunctors/Functors.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Examples/PolynomialFunctors/Functors.lagda.md
@@ -528,11 +564,6 @@
 [Exercises.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Exercises.lagda.md
 [Exercises/Complexity.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Exercises/Complexity.lagda.md
 [Exercises/Complexity/FiniteCSP.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Exercises/Complexity/FiniteCSP.lagda.md
-
-[Demos.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Demos.lagda.md
-[Demos/ContraX.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Demos/ContraX.lagda.md
-[Demos/GeneralOperationsAndRelations.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Demos/GeneralOperationsAndRelations.lagda.md
-[Demos/HSP.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Demos/HSP.lagda.md
 
 [Legacy/Base.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Legacy/Base.lagda.md
 [Legacy/Base/Adjunction.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Legacy/Base/Adjunction.lagda.md
@@ -604,6 +635,9 @@
 [Legacy/Base/Varieties/Properties.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Legacy/Base/Varieties/Properties.lagda.md
 
 [agda-algebras.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/agda-algebras.lagda.md
+
+[FLRP.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP.lagda.md
+[FLRP/Problem.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/Problem.lagda.md
 
 <!-- ===== External links ===== -->
 [A Machine-checked proof of Birkhoff's Variety Theorem in Martin-Löf Type Theory]: https://arxiv.org/abs/2101.10166

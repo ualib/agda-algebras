@@ -15,7 +15,7 @@ the universe level of both the carrier and the equivalence is `0ℓ` (i.e., Set-
 carriers with propositional or set-truncated equivalence).  The motivation matches
 the corresponding magma veneer in [`Classical.Small.Structures.Magma`][Classical.Small.Structures.Magma]:
 finite-template CSP, finite cases relevant to FLRP intuition, and tutorial contexts
-in [`Examples/`][Examples] and [`Demos/`][Demos] live in this small case, and pulling
+in [`Examples/`][Examples], including [`Examples/Demos/`][Examples.Demos], live in this small case, and pulling
 the level-fixed specialization out keeps the polymorphic core unencumbered.
 
 <!--

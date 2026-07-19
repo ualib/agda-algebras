@@ -72,7 +72,7 @@ The library is a working substrate for active mathematical research, not only a 
 
 Readers approaching the library for the first time will typically want one of a few entry points.
 
-+  For the headline result, see the [Proof of the HSP Theorem](https://agda-algebras.universalalgebra.org/Setoid/Varieties/HSP/#proof-of-the-hsp-theorem) in [Setoid.Varieties.HSP][], or the single-file [Demos.HSP][] rendition written to accompany the TYPES 2021 paper.
++  For the headline result, see the [Proof of the HSP Theorem](https://agda-algebras.universalalgebra.org/Setoid/Varieties/HSP/#proof-of-the-hsp-theorem) in [Setoid.Varieties.HSP][], or the single-file [Examples.Demos.HSP][] rendition written to accompany the TYPES 2021 paper.
 +  For the core definitions, see [Setoid.Algebras.Basic][], [Setoid.Homomorphisms][], [Setoid.Subalgebras][], and [Setoid.Varieties][].
 +  For the library's layered structure, the milestone plan, and the roadmap, see [`docs/GITHUB_PROJECT.md`](https://github.com/ualib/agda-algebras/blob/master/docs/GITHUB_PROJECT.md).
 +  For the style guide and contribution conventions, see [`docs/STYLE_GUIDE.md`](https://github.com/ualib/agda-algebras/blob/master/docs/STYLE_GUIDE.md) and [`CONTRIBUTING.md`](https://github.com/ualib/agda-algebras/blob/master/CONTRIBUTING.md).

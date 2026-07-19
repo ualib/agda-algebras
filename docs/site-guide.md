@@ -55,10 +55,10 @@ The wrapper must be an HTML comment rather than any indenting construct: Agda re
 
 Two kinds of module are deliberate exceptions:
 
-+  **Pedagogical modules** whose scaffolding is the subject of the surrounding prose stay fully unwrapped: `Overture.Basic` (which explains the `OPTIONS` pragma, modules, and imports) and `Demos.HSP` (the TYPES 2021 paper, which discusses its imports in the text).
++  **Pedagogical modules** whose scaffolding is the subject of the surrounding prose stay fully unwrapped: `Overture.Basic` (which explains the `OPTIONS` pragma, modules, and imports) and `Examples.Demos.HSP` (the TYPES 2021 paper, which discusses its imports in the text).
 +  **Barrel modules** stay unwrapped too: a barrel's annotated `open import … public` list is the page's content, and hiding its only block would leave a blank page that reads as unfinished.
 
-As a tripwire against accidentally wrapping a barrel, the build logs a `⚠ <Module>: every code block on this page is hidden` line for any page that would render code-free.  Three prose-first pages hide their lone `OPTIONS`/module block by design and are exempt from that check: `Overture.Preface`, `Demos.GeneralOperationsAndRelations`, and `Setoid.Complexity.Basic` (`PROSE_ONLY_MODULES` in `mkdocs_gen_library.py`).
+As a tripwire against accidentally wrapping a barrel, the build logs a `⚠ <Module>: every code block on this page is hidden` line for any page that would render code-free.  Three prose-first pages hide their lone `OPTIONS`/module block by design and are exempt from that check: `Overture.Preface`, `Examples.Demos.GeneralOperationsAndRelations`, and `Setoid.Complexity.Basic` (`PROSE_ONLY_MODULES` in `mkdocs_gen_library.py`).
 
 ### Build commands
 

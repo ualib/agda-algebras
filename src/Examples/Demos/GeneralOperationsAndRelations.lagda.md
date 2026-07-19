@@ -1,6 +1,6 @@
 ---
 layout: default
-title : "Demos.GeneralOperationsAndRelations module"
+title : "Examples.Demos.GeneralOperationsAndRelations module"
 date : "2022-04-27"
 author: "the agda-algebras development team"
 ---
@@ -25,6 +25,6 @@ author: "the agda-algebras development team"
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
-module Demos.GeneralOperationsAndRelations where
+module Examples.Demos.GeneralOperationsAndRelations where
 ```
 -->

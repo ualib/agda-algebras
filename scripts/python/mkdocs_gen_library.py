@@ -51,7 +51,7 @@ CLASSIC_DIR = Path("html")              # agda --html (classic full-page) output
 
 TOP_LEVEL_ORDER: list[str] = [
     "Overture", "Setoid", "Classical", "Order",
-    "Examples", "Exercises", "Demos", "Legacy",
+    "Examples", "Exercises", "Legacy",
 ]
 EVERYTHING_MODULE = "agda-algebras"
 
@@ -74,7 +74,7 @@ ANY_FENCE_RE = re.compile(r"^```agda[ \t]*$", re.MULTILINE)
 # belong here — a barrel's annotated import list is its content, so barrels
 # are left unwrapped in the source (see site-guide.md).
 PROSE_ONLY_MODULES = {
-    "Demos.GeneralOperationsAndRelations",
+    "Examples.Demos.GeneralOperationsAndRelations",
     "Overture.Preface",
     "Setoid.Complexity.Basic",
 }

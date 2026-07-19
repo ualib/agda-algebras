@@ -66,12 +66,13 @@ top-level aggregator below imports each layer in turn.
 +  `Cubical/` *(planned, M5; canonical for 4.0)* — cubical-Agda counterparts
    of the `Setoid/` and `Classical/` developments, using the structure
    identity principle in place of setoid equivalence.
-+  [`Demos/`][Demos] — self-contained pedagogical presentations of marquee
-   results.  [`Demos.HSP`][Demos.HSP] is a single-file rendition of
++  [`Examples/`][Examples] — worked examples of the library in use.  Its
+   [`Examples/Demos/`][Examples.Demos] subtree holds self-contained
+   pedagogical presentations of marquee results:
+   [`Examples.Demos.HSP`][Examples.Demos.HSP] is a single-file rendition of
    Birkhoff's theorem suitable for teaching; the canonical proof of record
    lives in [`Setoid.Varieties.HSP`][Setoid.HSP], factored across the
    broader `Setoid.Varieties.*` development.
-+  [`Examples/`][Examples] — worked examples of the library in use.
 
 <!--
 ```agda
@@ -101,10 +102,9 @@ open import Classical
 -- New work does not land in Legacy.Base.
 open import Legacy.Base
 
--- Self-contained pedagogical presentations of marquee results.
-open import Demos
-
--- Worked examples built against the canonical tree.
+-- Worked examples built against the canonical tree.  Includes the
+-- Examples.Demos subtree of self-contained pedagogical presentations of
+-- marquee results (Examples.Demos.HSP, the single-file Birkhoff rendition).
 open import Examples
 ```
 
@@ -112,7 +112,7 @@ open import Examples
 
 ## Birkhoff's HSP theorem
 
-The [`Demos.HSP`][Demos.HSP] module presents a fairly self-contained formal
+The [`Examples.Demos.HSP`][Examples.Demos.HSP] module presents a fairly self-contained formal
 proof of Birkhoff's theorem in a single Agda module — the version most
 often discussed in the project's expository writing.  The canonical proof
 of record lives in [`Setoid.Varieties.HSP`][Setoid.HSP], factored across the
