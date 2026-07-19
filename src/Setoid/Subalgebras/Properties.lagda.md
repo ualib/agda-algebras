@@ -86,7 +86,7 @@ module _ {𝑨 : Algebra {𝑆 = 𝑆} α ρᵃ}{𝑩 : Algebra {𝑆 = 𝑆} β
 
 module _ {𝓞 𝓥 : Level}{𝑆 : Signature 𝓞 𝓥}{α ρᵃ ρ : Level} where
 
-  open RelStructs {a = ov {𝑆 = 𝑆} (α ⊔ ρᵃ)} {ℓ = 𝓞 ⊔ 𝓥 ⊔ α ⊔ ρᵃ} (_≅_ {α}{ρᵃ})
+  open RelStructs {a = ov {𝑆 = 𝑆} (α ⊔ ρᵃ)} {ℓ = 𝓞 ⊔ 𝓥 ⊔ α ⊔ ρᵃ} (_≅_ {α = α}{ρᵃ = ρᵃ}{𝑆 = 𝑆})
   open IsPreorder
 
   ≤-preorder : IsPreorder _≤_
