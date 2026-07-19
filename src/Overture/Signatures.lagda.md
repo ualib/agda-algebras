@@ -92,6 +92,19 @@ Signature : (𝓞 𝓥 : Level) → Type (lsuc (𝓞 ⊔ 𝓥))
 Signature 𝓞 𝓥 = Σ[ F ∈ Type 𝓞 ] (F → Type 𝓥)
 ```
 
+Like `𝓞` and `𝓥`, the signature itself is a *public* generalized variable: a generic
+definition of the `Setoid/` core ranges over an arbitrary signature `𝑆`, which is almost
+always inferred from a signature-carrying argument (an algebra, term, or structure over
+`𝑆`).  Declaring `𝑆` here, co-located with `Signature` and the level variables it depends
+on, lets every downstream module bring it into scope by name
+(`open import Overture using ( 𝓞 ; 𝓥 ; Signature ; 𝑆 )`) instead of re-declaring it, and
+lets the generic core generalize over `𝑆` rather than fixing it as a module parameter.
+See [ADR-009][] for the rationale and the core/`Classical/` split.
+
+```agda
+variable 𝑆 : Signature 𝓞 𝓥
+```
+
 Occasionally it is useful to obtain the universe level of a given signature.
 
 ```agda
