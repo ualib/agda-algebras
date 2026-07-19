@@ -38,6 +38,8 @@ ADRs are **append-only**.  Once accepted, the body text is not edited except to 
 +  [ADR-005 — Scope of the `𝓞` / `𝓥` universe-level variables](005-universe-level-variable-scope.md)
 +  [ADR-006 — Signature morphisms and the self-contained `Sig` category](006-signature-morphism-category.md)
 +  [ADR-007 — MkDocs (Material) as the documentation rendering pipeline](007-mkdocs-rendering-pipeline.md)
++  [ADR-008 — Two-layer congruence discipline for finite algebras](008-two-layer-congruence-discipline.md)
++  [ADR-009 — Signature genericity via generalized variables in the core; module parameters at the Classical layer](009-signature-genericity-generalized-variables.md)
 
 ## When to write an ADR
 
