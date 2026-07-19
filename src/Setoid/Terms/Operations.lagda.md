@@ -67,10 +67,10 @@ module _ {𝑨 : Algebra {𝑆 = 𝑆} α ρᵃ} where
   free-lift-interp η (ℊ x) = refl
   free-lift-interp η (node f t) = cong Interp (≡.refl , (free-lift-interp η) ∘ t)
 
-module _ {X : Type χ} where
-  open Algebra (𝑻 X)      using ( Interp ) renaming (Domain to TX )
+module _ {𝑆 : Signature 𝓞 𝓥}{X : Type χ} where
+  open Algebra (𝑻 {𝑆 = 𝑆} X)      using ( Interp ) renaming (Domain to TX )
   open Setoid TX          using ( _≈_ ; refl )
-  open Environment (𝑻 X)  using ( ⟦_⟧ ; ≐→Equal )
+  open Environment (𝑻 {𝑆 = 𝑆} X)  using ( ⟦_⟧ ; ≐→Equal )
   open SetoidReasoning TX
 
   term-interp :  (f : OperationSymbolsOf 𝑆){s t : ArityOf 𝑆 f → Term {𝑆 = 𝑆} X} → (∀ i → s i ≐ t i)
@@ -105,7 +105,7 @@ used very often in the sequel, asserts that every term commutes with every
 homomorphism.
 
 ```agda
-module _ {𝑨 : Algebra {𝑆 = 𝑆} α ρᵃ}{𝑩 : Algebra {𝑆 = 𝑆} β ρᵇ}(hh : hom 𝑨 𝑩) where
+module _ {𝑆 : Signature 𝓞 𝓥}{𝑨 : Algebra {𝑆 = 𝑆} α ρᵃ}{𝑩 : Algebra {𝑆 = 𝑆} β ρᵇ}(hh : hom 𝑨 𝑩) where
   open Algebra 𝑨      using () renaming (Domain to A )
   open Setoid A       using () renaming ( Carrier to ∣A∣ )
   open Algebra 𝑩      using () renaming (Domain to B ; Interp to Interp₂ )
@@ -149,11 +149,11 @@ not with an element of `X`, but with a term from `Term X`.
 
 ```agda
 -- Substerm X Y, an inhabitant of which replaces each variable symbol in Y with a term from Term X.
-Substerm : (X Y : Type χ) → Type (ov {𝑆 = 𝑆} χ)
-Substerm X Y = (y : Y) → Term {𝑆 = 𝑆} X
+Substerm : {𝑆 : Signature 𝓞 𝓥}(X Y : Type χ) → Type (ov {𝑆 = 𝑆} χ)
+Substerm {𝑆 = 𝑆} X Y = (y : Y) → Term {𝑆 = 𝑆} X
 
 -- Application of a Substerm.
-_[_]t : {X Y : Type χ } → Term {𝑆 = 𝑆} Y → Substerm X Y → Term {𝑆 = 𝑆} X
+_[_]t : {X Y : Type χ } → Term {𝑆 = 𝑆} Y → Substerm {𝑆 = 𝑆} X Y → Term {𝑆 = 𝑆} X
 (ℊ y) [ σ ]t = σ y
 (node f t) [ σ ]t = node f λ z → (t z) [ σ ]t
 ```

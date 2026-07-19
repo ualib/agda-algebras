@@ -87,7 +87,7 @@ _⊧_ : (𝑨 : Algebra {𝑆 = 𝑆} α ρᵃ)(term-identity : Eq{χ}) → Type
 -- instead of unfolding _⊫_ → _⊧_ → Equal → ⟦_⟧ and getting stuck on the term
 -- interpreter.  (See issue #361.  Note _⊧_ and Equal still reduce
 -- definitionally, so the proofs that compute with them are unaffected.)
-record _⊫_ (𝒦 : Pred (Algebra {𝑆 = 𝑆} α ρᵃ) ℓ)(eq : Eq{χ}) : Type (ℓ ⊔ χ ⊔ ov(α ⊔ ρᵃ)) where
+record _⊫_ (𝒦 : Pred (Algebra {𝑆 = 𝑆} α ρᵃ) ℓ)(eq : Eq{χ}) : Type (ℓ ⊔ χ ⊔ ov {𝑆 = 𝑆}(α ⊔ ρᵃ)) where
   constructor ⊫-intro
   field ⊫-proof : ∀ (𝑨 : Algebra {𝑆 = 𝑆} α ρᵃ) → 𝒦 𝑨 → 𝑨 ⊧ eq          -- (type \||= to get ⊫)
 open _⊫_ public

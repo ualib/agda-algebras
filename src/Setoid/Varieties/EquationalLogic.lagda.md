@@ -62,8 +62,8 @@ module _  {X : Type χ} where
     open Environment 𝑨        using ( Env ; ⟦_⟧ )
   infix 10 _⊧_≈_
 
-  _⊫_≈_ : Pred(Algebra {𝑆 = 𝑆} α ρᵃ) ℓ → Term {𝑆 = 𝑆} X → Term {𝑆 = 𝑆} X → Type (χ ⊔ ℓ ⊔ ov(α ⊔ ρᵃ))
-  𝒦 ⊫ p ≈ q = {𝑨 : Algebra {𝑆 = 𝑆} _ _} → 𝒦 𝑨 → 𝑨 ⊧ p ≈ q
+  _⊫_≈_ : Pred(Algebra {𝑆 = 𝑆} α ρᵃ) ℓ → Term {𝑆 = 𝑆} X → Term {𝑆 = 𝑆} X → Type (χ ⊔ ℓ ⊔ ov {𝑆 = 𝑆} (α ⊔ ρᵃ))
+  𝒦 ⊫ p ≈ q = {𝑨 : Algebra _ _} → 𝒦 𝑨 → 𝑨 ⊧ p ≈ q
 ```
 
 (**Unicode tip**. Type \models to get `⊧` ; type \||= to get `⊫`.)
@@ -80,7 +80,7 @@ If 𝒦 denotes a class of structures, then `Th 𝒦` represents the set of iden
 modeled by the members of 𝒦.
 
 ```agda
-  Th' : Pred (Algebra {𝑆 = 𝑆} α ρᵃ) ℓ → Pred(Term {𝑆 = 𝑆} X × Term {𝑆 = 𝑆} X) (χ ⊔ ℓ ⊔ ov(α ⊔ ρᵃ))
+  Th' : Pred (Algebra {𝑆 = 𝑆} α ρᵃ) ℓ → Pred(Term {𝑆 = 𝑆} X × Term {𝑆 = 𝑆} X) (χ ⊔ ℓ ⊔ ov {𝑆 = 𝑆}(α ⊔ ρᵃ))
   Th' 𝒦 = λ (p , q) → 𝒦 ⊫ p ≈ q
 
 Th'' :  {χ α : Level}{X : Type χ} → Pred (Algebra {𝑆 = 𝑆} α α) (ov {𝑆 = 𝑆} α)
@@ -93,7 +93,7 @@ essentially by taking `Th 𝒦` itself to be the index set, as shown below.
 
 ```agda
 module _ {X : Type χ}{𝒦 : Pred (Algebra {𝑆 = 𝑆} α ρᵃ) (ov {𝑆 = 𝑆} α)} where
-  ℐ : Type (ov(α ⊔ ρᵃ ⊔ χ))
+  ℐ : Type (ov {𝑆 = 𝑆}(α ⊔ ρᵃ ⊔ χ))
   ℐ = Σ[ (p , q) ∈ (Term {𝑆 = 𝑆} X × Term {𝑆 = 𝑆} X) ] 𝒦 ⊫ p ≈ q
 
   ℰ : ℐ → Term {𝑆 = 𝑆} X × Term {𝑆 = 𝑆} X
@@ -104,7 +104,7 @@ If `ℰ` denotes a set of identities, then `Mod ℰ` is the class of structures
 satisfying the identities in `ℰ`.
 
 ```agda
-  Mod' : Pred(Term {𝑆 = 𝑆} X × Term {𝑆 = 𝑆} X) (ov {𝑆 = 𝑆} α) → Pred(Algebra {𝑆 = 𝑆} α ρᵃ) (ρᵃ ⊔ ov(α ⊔ χ))
+  Mod' : Pred(Term {𝑆 = 𝑆} X × Term {𝑆 = 𝑆} X) (ov {𝑆 = 𝑆} α) → Pred(Algebra {𝑆 = 𝑆} α ρᵃ) (ρᵃ ⊔ ov {𝑆 = 𝑆}(α ⊔ χ))
   Mod' ℰ = λ 𝑨 → ∀ p q → (p , q) ∈ ℰ → 𝑨 ⊧ p ≈ q
 ```
 

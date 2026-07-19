@@ -62,7 +62,7 @@ module _
 
   private
     ι : Level
-    ι = ov(α ⊔ ρᵃ ⊔ ℓ)
+    ι = ov {𝑆 = 𝑆}(α ⊔ ρᵃ ⊔ ℓ)
 
   open FreeHom (α ⊔ ρᵃ ⊔ ℓ) {α}{ρᵃ}{ℓ}{𝒦}
   open FreeAlgebra {ι = ι}{I = ℐ} ℰ using ( 𝔽[_] )

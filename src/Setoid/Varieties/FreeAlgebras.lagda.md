@@ -63,7 +63,7 @@ module FreeHom (χ : Level){α ρᵃ ℓ : Level}
                {𝒦 : Pred(Algebra {𝑆 = 𝑆} α ρᵃ) (α ⊔ ρᵃ ⊔ ov {𝑆 = 𝑆} ℓ)} where
   private
     ι : Level
-    ι = ov(χ ⊔ α ⊔ ρᵃ ⊔ ℓ)
+    ι = ov {𝑆 = 𝑆}(χ ⊔ α ⊔ ρᵃ ⊔ ℓ)
 
   open Eq
 ```
@@ -142,7 +142,7 @@ Finally, we define an epimorphism from `𝑻 X` onto the relatively free algebra
 ------------------------------------------------------------------------------
 
 module _ {α ρᵃ ℓ : Level} {𝒦 : Pred(Algebra {𝑆 = 𝑆} α ρᵃ) (α ⊔ ρᵃ ⊔ ov {𝑆 = 𝑆} ℓ)} where
-  private ι = ov(α ⊔ ρᵃ ⊔ ℓ)
+  private ι = ov {𝑆 = 𝑆}(α ⊔ ρᵃ ⊔ ℓ)
   open IsEpi ; open IsHom
 
   module lower-universe-version {𝑨 : Algebra {𝑆 = 𝑆} α ρᵃ} where

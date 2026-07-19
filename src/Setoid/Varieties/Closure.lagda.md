@@ -47,7 +47,7 @@ module _ {α ρᵃ β ρᵇ : Level} where
     a b : Level
     a = α ⊔ ρᵃ ; b = β ⊔ ρᵇ
 
-  Level-closure : ∀ ℓ → Pred(Algebra {𝑆 = 𝑆} α ρᵃ) (a ⊔ ov {𝑆 = 𝑆} ℓ) → Pred(Algebra {𝑆 = 𝑆} β ρᵇ) (b ⊔ ov(a ⊔ ℓ))
+  Level-closure : ∀ ℓ → Pred(Algebra {𝑆 = 𝑆} α ρᵃ) (a ⊔ ov {𝑆 = 𝑆} ℓ) → Pred(Algebra {𝑆 = 𝑆} β ρᵇ) (b ⊔ ov {𝑆 = 𝑆}(a ⊔ ℓ))
   Level-closure ℓ 𝒦 𝑩 = Σ[ 𝑨 ∈ Algebra α ρᵃ ] 𝑨 ∈ 𝒦 ∧ 𝑨 ≅ 𝑩
 
 module _ {α ρᵃ β ρᵇ : Level} where
@@ -60,11 +60,11 @@ module _ {α ρᵃ β ρᵇ : Level} where
     a b : Level
     a = α ⊔ ρᵃ ; b = β ⊔ ρᵇ
 
-  H S : ∀ ℓ → Pred(Algebra {𝑆 = 𝑆} α ρᵃ) (a ⊔ ov {𝑆 = 𝑆} ℓ) → Pred(Algebra {𝑆 = 𝑆} β ρᵇ) (b ⊔ ov(a ⊔ ℓ))
+  H S : ∀ ℓ → Pred(Algebra {𝑆 = 𝑆} α ρᵃ) (a ⊔ ov {𝑆 = 𝑆} ℓ) → Pred(Algebra {𝑆 = 𝑆} β ρᵇ) (b ⊔ ov {𝑆 = 𝑆}(a ⊔ ℓ))
   H _ 𝒦 𝑩 = Σ[ 𝑨 ∈ Algebra α ρᵃ ] 𝑨 ∈ 𝒦 ∧ 𝑩 IsHomImageOf 𝑨
   S _ 𝒦 𝑩 = Σ[ 𝑨 ∈ Algebra α ρᵃ ] 𝑨 ∈ 𝒦 ∧ 𝑩 ≤ 𝑨
 
-  P : ∀ ℓ ι → Pred(Algebra {𝑆 = 𝑆} α ρᵃ) (a ⊔ ov {𝑆 = 𝑆} ℓ) → Pred(Algebra {𝑆 = 𝑆} β ρᵇ) (b ⊔ ov(a ⊔ ℓ ⊔ ι))
+  P : ∀ ℓ ι → Pred(Algebra {𝑆 = 𝑆} α ρᵃ) (a ⊔ ov {𝑆 = 𝑆} ℓ) → Pred(Algebra {𝑆 = 𝑆} β ρᵇ) (b ⊔ ov {𝑆 = 𝑆}(a ⊔ ℓ ⊔ ι))
   P ℓ ι 𝒦 𝑩 = Σ[ I ∈ Type ι ] Σ[ 𝒜 ∈ (I → Algebra {𝑆 = 𝑆} α ρᵃ) ] (∀ i → 𝒜 i ∈ 𝒦) ∧ 𝑩 ≅ ⨅ 𝒜
 
 module _ {α ρᵃ β ρᵇ : Level} where
@@ -72,7 +72,7 @@ module _ {α ρᵃ β ρᵇ : Level} where
     a b : Level
     a = α ⊔ ρᵃ ; b = β ⊔ ρᵇ
 
-  SP : ∀ ℓ ι → Pred(Algebra {𝑆 = 𝑆} α ρᵃ) (a ⊔ ov {𝑆 = 𝑆} ℓ) → Pred(Algebra {𝑆 = 𝑆} β ρᵇ) (b ⊔ ov(a ⊔ ℓ ⊔ ι))
+  SP : ∀ ℓ ι → Pred(Algebra {𝑆 = 𝑆} α ρᵃ) (a ⊔ ov {𝑆 = 𝑆} ℓ) → Pred(Algebra {𝑆 = 𝑆} β ρᵇ) (b ⊔ ov {𝑆 = 𝑆}(a ⊔ ℓ ⊔ ι))
   SP ℓ ι 𝒦 = S{α}{ρᵃ} (a ⊔ ℓ ⊔ ι) (P ℓ ι 𝒦)
 
   module _ {γ ρᶜ δ ρᵈ : Level} where
@@ -82,7 +82,7 @@ module _ {α ρᵃ β ρᵇ : Level} where
       c = γ ⊔ ρᶜ ; d = δ ⊔ ρᵈ
 
     V : ∀ ℓ ι
-      → Pred(Algebra {𝑆 = 𝑆} α ρᵃ) (a ⊔ ov {𝑆 = 𝑆} ℓ) →  Pred(Algebra {𝑆 = 𝑆} δ ρᵈ) (d ⊔ ov(a ⊔ b ⊔ c ⊔ ℓ ⊔ ι))
+      → Pred(Algebra {𝑆 = 𝑆} α ρᵃ) (a ⊔ ov {𝑆 = 𝑆} ℓ) →  Pred(Algebra {𝑆 = 𝑆} δ ρᵈ) (d ⊔ ov {𝑆 = 𝑆}(a ⊔ b ⊔ c ⊔ ℓ ⊔ ι))
     V ℓ ι 𝒦 = H{γ}{ρᶜ} (a ⊔ b ⊔ ℓ ⊔ ι) (S{β}{ρᵇ} (a ⊔ ℓ ⊔ ι) (P ℓ ι 𝒦))
 ```
 
@@ -116,7 +116,7 @@ module _ {α ρᵃ : Level} where
     a : Level
     a = α ⊔ ρᵃ
 
-  V′ : ∀ ℓ ι → Pred(Algebra {𝑆 = 𝑆} α ρᵃ)(a ⊔ ov {𝑆 = 𝑆} ℓ) → Pred(Algebra {𝑆 = 𝑆} α ρᵃ) (a ⊔ ov(a ⊔ ℓ ⊔ ι))
+  V′ : ∀ ℓ ι → Pred(Algebra {𝑆 = 𝑆} α ρᵃ)(a ⊔ ov {𝑆 = 𝑆} ℓ) → Pred(Algebra {𝑆 = 𝑆} α ρᵃ) (a ⊔ ov {𝑆 = 𝑆}(a ⊔ ℓ ⊔ ι))
   V′ ℓ ι 𝒦 = V {α}{ρᵃ}{α}{ρᵃ}{α}{ρᵃ} ℓ ι 𝒦
 ```
 
@@ -269,7 +269,7 @@ module _
   (𝒦 : Pred(Algebra {𝑆 = 𝑆} α ρᵃ) (α ⊔ ρᵃ ⊔ ov {𝑆 = 𝑆} ℓ))
   (𝑨 : Algebra {𝑆 = 𝑆} (α ⊔ ρᵃ ⊔ ℓ) (α ⊔ ρᵃ ⊔ ℓ))
   where
-  private ι = ov(α ⊔ ρᵃ ⊔ ℓ)
+  private ι = ov {𝑆 = 𝑆}(α ⊔ ρᵃ ⊔ ℓ)
 
   V-≅-lc : Lift-Alg 𝑨 ι ι ∈ V{β = ι}{ι} ℓ ι 𝒦 → 𝑨 ∈ V{γ = ι}{ι} ℓ ι 𝒦
   V-≅-lc (𝑨' , spA' , lAimgA') = 𝑨' , (spA' , AimgA')
@@ -284,27 +284,27 @@ for reference.
 ```agda
 module _ {α ρᵃ ℓ ι : Level}{𝒦 : Pred (Algebra {𝑆 = 𝑆} α ρᵃ)(α ⊔ ρᵃ ⊔ ov {𝑆 = 𝑆} ℓ)} where
   -- For reference, some useful type levels:
-  classP : Pred (Algebra {𝑆 = 𝑆} α ρᵃ) (ov(α ⊔ ρᵃ ⊔ ℓ ⊔ ι))
+  classP : Pred (Algebra {𝑆 = 𝑆} α ρᵃ) (ov {𝑆 = 𝑆}(α ⊔ ρᵃ ⊔ ℓ ⊔ ι))
   classP = P{β = α}{ρᵃ} ℓ ι 𝒦
 
-  classSP : Pred (Algebra {𝑆 = 𝑆} α ρᵃ) (ov(α ⊔ ρᵃ ⊔ ℓ ⊔ ι))
+  classSP : Pred (Algebra {𝑆 = 𝑆} α ρᵃ) (ov {𝑆 = 𝑆}(α ⊔ ρᵃ ⊔ ℓ ⊔ ι))
   classSP = S{β = α}{ρᵃ} (α ⊔ ρᵃ ⊔ ℓ ⊔ ι) (P{β = α}{ρᵃ} ℓ ι 𝒦)
 
-  classHSP : Pred (Algebra {𝑆 = 𝑆} α ρᵃ) (ov(α ⊔ ρᵃ ⊔ ℓ ⊔ ι))
+  classHSP : Pred (Algebra {𝑆 = 𝑆} α ρᵃ) (ov {𝑆 = 𝑆}(α ⊔ ρᵃ ⊔ ℓ ⊔ ι))
   classHSP = H{β = α}{ρᵃ}(α ⊔ ρᵃ ⊔ ℓ ⊔ ι) (S{β = α}{ρᵃ}(α ⊔ ρᵃ ⊔ ℓ ⊔ ι) (P{β = α}{ρᵃ}ℓ ι 𝒦))
 
-  classS : ∀{β ρᵇ} → Pred (Algebra {𝑆 = 𝑆} β ρᵇ) (β ⊔ ρᵇ ⊔ ov(α ⊔ ρᵃ ⊔ ℓ))
+  classS : ∀{β ρᵇ} → Pred (Algebra {𝑆 = 𝑆} β ρᵇ) (β ⊔ ρᵇ ⊔ ov {𝑆 = 𝑆}(α ⊔ ρᵃ ⊔ ℓ))
   classS = S ℓ 𝒦
-  classK : ∀{β ρᵇ} → Pred (Algebra {𝑆 = 𝑆} β ρᵇ) (β ⊔ ρᵇ ⊔ ov(α ⊔ ρᵃ ⊔ ℓ))
+  classK : ∀{β ρᵇ} → Pred (Algebra {𝑆 = 𝑆} β ρᵇ) (β ⊔ ρᵇ ⊔ ov {𝑆 = 𝑆}(α ⊔ ρᵃ ⊔ ℓ))
   classK = Level-closure{α}{ρᵃ} ℓ 𝒦
 
 module _ {α ρᵃ β ρᵇ γ ρᶜ ℓ : Level}{𝒦 : Pred (Algebra {𝑆 = 𝑆} α ρᵃ)(α ⊔ ρᵃ ⊔ ov {𝑆 = 𝑆} ℓ)} where
   private a = α ⊔ ρᵃ ; b = β ⊔ ρᵇ ; c = γ ⊔ ρᶜ
 
-  LevelClosure-S : Pred (Algebra {𝑆 = 𝑆} (α ⊔ γ) (ρᵃ ⊔ ρᶜ)) (c ⊔ ov(a ⊔ b ⊔ ℓ))
+  LevelClosure-S : Pred (Algebra {𝑆 = 𝑆} (α ⊔ γ) (ρᵃ ⊔ ρᶜ)) (c ⊔ ov {𝑆 = 𝑆}(a ⊔ b ⊔ ℓ))
   LevelClosure-S = Level-closure{β}{ρᵇ} (a ⊔ ℓ) (S ℓ 𝒦)
 
-  S-LevelClosure : Pred (Algebra {𝑆 = 𝑆} (α ⊔ γ) (ρᵃ ⊔ ρᶜ)) (ov(a ⊔ c ⊔ ℓ))
+  S-LevelClosure : Pred (Algebra {𝑆 = 𝑆} (α ⊔ γ) (ρᵃ ⊔ ρᶜ)) (ov {𝑆 = 𝑆}(a ⊔ c ⊔ ℓ))
   S-LevelClosure = S{α ⊔ γ}{ρᵃ ⊔ ρᶜ}(a ⊔ ℓ) (Level-closure ℓ 𝒦)
 
   S-Lift-lemma : LevelClosure-S ⊆ S-LevelClosure

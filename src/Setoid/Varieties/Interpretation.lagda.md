@@ -114,7 +114,7 @@ consumers would want; the interpretability proofs are that consumer.)
 module _ {𝑆 : Signature 𝓞 𝓥} (𝑨 : Algebra {𝑆 = 𝑆} α ρ) where
   open Environment 𝑨 using ( ⟦_⟧ ; ≐→Equal )
   open Setoid 𝔻[ 𝑨 ] using ( _≈_ ) renaming ( refl to ≈refl ; sym to ≈sym ; trans to ≈trans )
-  open EqLogic {𝑆 = 𝑆} using ( _⊧_≈_ )
+  open EqLogic using ( _⊧_≈_ )
 
   ⊧-≐ : {s s′ t t′ : Term {𝑆 = 𝑆} X}
     → s ≐ s′ → t ≐ t′ → 𝑨 ⊧ s ≈ t → 𝑨 ⊧ s′ ≈ t′
@@ -160,8 +160,8 @@ module _
 
     open Environment {𝑆 = 𝑆₁} reductᴵ using () renaming ( ⟦_⟧ to ⟦_⟧₁ )
     open Setoid 𝔻[ 𝑩 ] using ( _≈_ ) renaming ( refl to ≈refl ; sym to ≈sym ; trans to ≈trans )
-    open EqLogic {𝑆 = 𝑆₁} using () renaming ( _⊧_≈_ to _⊧₁_≈_ )
-    open EqLogic {𝑆 = 𝑆₂} using () renaming ( _⊧_≈_ to _⊧₂_≈_ )
+    open EqLogic using () renaming ( _⊧_≈_ to _⊧₁_≈_ )
+    open EqLogic using () renaming ( _⊧_≈_ to _⊧₂_≈_ )
 ```
 
 The interpretation triangle: evaluating an `𝑆₁`-term in the reduct equals evaluating its
@@ -212,10 +212,10 @@ models every equation in `ℰ`.
 
 ```agda
 module _ {𝑆 : Signature 𝓞 𝓥} where
-  open EqLogic {𝑆 = 𝑆} using ( _⊧_≈_ )
+  open EqLogic using ( _⊧_≈_ )
 
   infix 4 _⊨ₑ_
-  _⊨ₑ_ : {Idx : Type ι} → Algebra α ρ → (Idx → Term X × Term X) → Type _
+  _⊨ₑ_ : {Idx : Type ι} → Algebra {𝑆 = 𝑆} α ρ → (Idx → Term {𝑆 = 𝑆} X × Term {𝑆 = 𝑆} X) → Type _
   𝑨 ⊨ₑ ℰ = ∀ k → 𝑨 ⊧ proj₁ (ℰ k) ≈ proj₂ (ℰ k)
 ```
 
@@ -231,7 +231,7 @@ module _
   (J : Interpretation 𝑆₂ 𝑆₃)
   (𝑪 : Algebra {𝑆 = 𝑆₃} α ρ)
   where
-  open EqLogic {𝑆 = 𝑆₁} using ( _⊧_≈_ )
+  open EqLogic using ( _⊧_≈_ )
 
   reductᴵ-∘-⊧ : {s t : Term {𝑆 = 𝑆₁} X}
     → reductᴵ (reductᴵ 𝑪 J) I ⊧ s ≈ t → reductᴵ 𝑪 (J ∘ᴵ I) ⊧ s ≈ t

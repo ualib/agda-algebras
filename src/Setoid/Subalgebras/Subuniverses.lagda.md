@@ -51,7 +51,7 @@ predicate on predicates on `𝕌[ 𝑨 ]`.
 
 
 ```agda
-module _ (𝑨 : Algebra {𝑆 = 𝑆} α ρᵃ) where
+module _ {𝑆 : Signature 𝓞 𝓥}(𝑨 : Algebra {𝑆 = 𝑆} α ρᵃ) where
   private A = 𝕌[ 𝑨 ] -- the forgetful functor
 
   Subuniverses : Pred (Pred A ℓ) (𝓞 ⊔ 𝓥 ⊔ α ⊔ ℓ )
@@ -131,7 +131,7 @@ Agda fills in the proof term `λ i → σ i f a (λ x → ν x i)` automatically
 
 
 ```agda
-module _ {𝑨 : Algebra {𝑆 = 𝑆} α ρᵃ} where
+module _ {𝑆 : Signature 𝓞 𝓥}{𝑨 : Algebra {𝑆 = 𝑆} α ρᵃ} where
   private A = 𝕌[ 𝑨 ]
   open Setoid using ( Carrier )
   open Environment 𝑨
