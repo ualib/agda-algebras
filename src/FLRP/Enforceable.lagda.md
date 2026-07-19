@@ -69,7 +69,7 @@ open import Data.Empty                              using  ( ⊥ )
 open import Data.Fin.Base                           using  ( Fin )
 open import Data.Nat.Base renaming ( _≤_ to _≤ⁿ_ )  using  ( ℕ ; _+_ )
 open import Data.Product                            using  ( _,_ ; _×_ ; Σ-syntax
-                                                           ; proj₁ ; proj₂ )
+                                                           ; ∃-syntax ; proj₁ ; proj₂ )
 open import Data.Unit.Base                          using  ( tt )
 open import Level         renaming ( suc to lsuc )  using  ( Level ; 0ℓ ; _⊔_
                                                            ; Lift ; lift )
@@ -92,11 +92,6 @@ open import Setoid.Homomorphisms          using  ( _IsHomImageOf_ )
 open import Setoid.Subalgebras            using  ( Subuniverses )
 open import Order.Interval                        using ( module IntervalLattice )
 -- open import Setoid.Subalgebras.CompleteLattice using (module Sublattice)
-
-
-
-
-
 ```
 -->
 
@@ -201,8 +196,7 @@ Order isomorphisms transport meets and joins, so this is exactly
 "`[H , G] ≅ 𝑳` as lattices" with no redundant clauses.[^4]
 
 ```agda
-IntervalIso : (𝒢 : Group 0ℓ 0ℓ) (H : Pred 𝕌[ proj₁ 𝒢 ] 0ℓ) (H-sg : IsSubgroup 𝒢 H)
-  → Lattice → Type (lsuc 0ℓ)
+IntervalIso : ∀ 𝒢 H H-sg → Lattice → Type (lsuc 0ℓ)
 IntervalIso 𝒢 H H-sg 𝑳 = OrderIso _≈ᵢ_ _≤ᵢ_ (Setoid._≈_ 𝔻[ proj₁ 𝑳 ]) (Lattice-Order._≤_ 𝑳)
   where open UpperInterval 𝒢 H H-sg
 ```
@@ -280,7 +274,6 @@ GroupProperty ℓP = Pred (Group 0ℓ 0ℓ) ℓP
 ```agda
 IE : {ℓP : Level} → GroupProperty ℓP → Lattice → Type (lsuc 0ℓ ⊔ ℓP)
 IE P 𝑳 = ∀ 𝒢 H H-sg → IntervalIso 𝒢 H H-sg 𝑳 → P 𝒢
--- ^ here (𝒢 : Group 0ℓ 0ℓ) (H : Pred 𝕌[ proj₁ 𝒢 ] 0ℓ) (H-sg : IsSubgroup 𝒢 H)
 ```
 
 Core-freeness of a subgroup is expressed through the normal core:[^wp-2] the core of
@@ -325,7 +318,6 @@ exact enumerations it is the `|G|`-minimality of the note.  The note has little 
 say about min-IE and neither do we — the definition is recorded because such
 properties arise in the literature (Lucchini's intervals, Pálfy's analysis of Feit's
 examples) and the catalog of RP-2 will want to state them.
-
 
 ```agda
 open FiniteAlgebra using (card)
@@ -559,14 +551,10 @@ enters as the hypothesis record `CoreFreeReduction`{.AgdaRecord}, and Lemma 3.1 
 ```agda
 record CoreFreeReduction : Type (lsuc 0ℓ) where
   field
-    reduce :
-      (𝒢 : Group 0ℓ 0ℓ) (H : Pred 𝕌[ proj₁ 𝒢 ] 0ℓ) (H-sg : IsSubgroup 𝒢 H)
-      → Σ[ 𝒬 ∈ Group 0ℓ 0ℓ ]
-        Σ[ J ∈ Pred 𝕌[ proj₁ 𝒬 ] 0ℓ ]
-        Σ[ J-sg ∈ IsSubgroup 𝒬 J ]
-          ( CoreFree 𝒬 J J-sg
-          × ((𝑳 : Lattice) → IntervalIso 𝒢 H H-sg 𝑳 → IntervalIso 𝒬 J J-sg 𝑳)
-          × ((proj₁ 𝒬) IsHomImageOf (proj₁ 𝒢)) )
+    reduce : ∀ 𝒢 H H-sg → ∃[ 𝒬 ] ∃[ J ] ∃[ J-sg ]
+      ( CoreFree 𝒬 J J-sg
+      × (∀ 𝑳 → IntervalIso 𝒢 H H-sg 𝑳 → IntervalIso 𝒬 J J-sg 𝑳)
+      × (𝒬 .proj₁ IsHomImageOf 𝒢 .proj₁) )
 ```
 
 The lemma's other hypothesis, H-closure of the complementary class: homomorphic
@@ -577,8 +565,7 @@ right notion.)
 
 ```agda
 ComplementHClosed : {ℓP : Level} → GroupProperty ℓP → Type (lsuc 0ℓ ⊔ ℓP)
-ComplementHClosed P =
-  ∀ (𝒢 𝒬 : Group 0ℓ 0ℓ) → (proj₁ 𝒬) IsHomImageOf (proj₁ 𝒢) → ¬ P 𝒢 → ¬ P 𝒬
+ComplementHClosed P = ∀ 𝒢 𝒬  → 𝒬 .proj₁ IsHomImageOf 𝒢 .proj₁ → ¬ P 𝒢 → ¬ P 𝒬
 ```
 
 One constructive gloss.  The note's argument is by contradiction: from a
@@ -591,15 +578,13 @@ third named hypothesis rather than silently classicizing; RP-1 will prove the
 
 ```agda
 PropertyStable : {ℓP : Level} → GroupProperty ℓP → Type (lsuc 0ℓ ⊔ ℓP)
-PropertyStable P = ∀ (𝒢 : Group 0ℓ 0ℓ) → ¬ ¬ P 𝒢 → P 𝒢
+PropertyStable P = ∀ 𝒢 → ¬ ¬ P 𝒢 → P 𝒢
 
 -- Lemma 3.1 (lemma-wjd-2 of the note), as a statement: the type is defined,
 -- no inhabitant is claimed here; the proof is RP-1's first target.
 cfIE→IE-Statement : {ℓP : Level} → GroupProperty ℓP → Type (lsuc 0ℓ ⊔ ℓP)
 cfIE→IE-Statement P =
-    CoreFreeReduction
-  → ComplementHClosed P
-  → PropertyStable P
+  CoreFreeReduction → ComplementHClosed P → PropertyStable P
   → (𝑳 : Lattice) → cfIE P 𝑳 → IE P 𝑳
 ```
 
@@ -621,15 +606,13 @@ elements exist), and *at least two members* of the family do.
 
 ```agda
 HasThreeDistinct : Lattice → Type 0ℓ
-HasThreeDistinct 𝑳 =
-  Σ[ x ∈ 𝕌[ proj₁ 𝑳 ] ] Σ[ y ∈ 𝕌[ proj₁ 𝑳 ] ] Σ[ z ∈ 𝕌[ proj₁ 𝑳 ] ]
-    ( (¬ (x ≈ y)) × (¬ (x ≈ z)) × (¬ (y ≈ z)) )
-  where open Setoid 𝔻[ proj₁ 𝑳 ] using ( _≈_ )
+HasThreeDistinct (L , _) = let open Setoid 𝔻[ L ] in
+  ∃[ x ] ∃[ y ] ∃[ z ] ( ¬ (x ≈ y) × ¬ (x ≈ z) × ¬ (y ≈ z) )
 
 TwoBigCanopies : {m : ℕ} → (Fin m → FiniteLattice) → Type 0ℓ
 TwoBigCanopies {m} 𝑳s =
   Σ[ i ∈ Fin m ] Σ[ j ∈ Fin m ]
-    ( (¬ (i ≡ j))
+    ( ¬ (i ≡ j)
     × HasThreeDistinct (toLattice (𝑳s i))
     × HasThreeDistinct (toLattice (𝑳s j)) )
 ```
@@ -647,11 +630,10 @@ Statement-C ℓP =
   ∀ (n : ℕ) (𝑳s : Fin (2 + n) → FiniteLattice) (Ps : Fin (2 + n) → GroupProperty ℓP)
   → TwoBigCanopies 𝑳s
   → (∀ i → cfIE (Ps i) (toLattice (𝑳s i)))
-  → Σ[ 𝒢 ∈ Group 0ℓ 0ℓ ]
-      ( (∀ i → Ps i 𝒢)
-      × (∀ i → Σ[ H ∈ Pred 𝕌[ proj₁ 𝒢 ] 0ℓ ] Σ[ H-sg ∈ IsSubgroup 𝒢 H ]
-                 ( CoreFree 𝒢 H H-sg
-                 × IntervalIso 𝒢 H H-sg (toLattice (𝑳s i)) )) )
+  → ∃[ 𝒢 ] ( (∀ i → Ps i 𝒢)
+              × ( ∀ i →  ∃[ H ] ∃[ H-sg ]
+                         ( CoreFree 𝒢 H H-sg × IntervalIso 𝒢 H H-sg (toLattice (𝑳s i)) ))
+            )
 ```
 
 The proof of (B) → (C) rests on the **parachute construction**
@@ -664,6 +646,8 @@ the named hypothesis record `ParachuteHypotheses`{.AgdaRecord}, and the meta-the
 is stated as a schema conditional on it and on the core-free reduction.
 
 ```agda
+open GroupRepresentable
+
 record ParachuteHypotheses : Type (lsuc 0ℓ) where
   field
     -- The parachute lattice of a finite family of finite lattices.
@@ -675,13 +659,11 @@ record ParachuteHypotheses : Type (lsuc 0ℓ) where
     canopy-intervals :
       (n : ℕ) (𝑳s : Fin (2 + n) → FiniteLattice)
       (r : GroupRepresentable (toLattice (parachute n 𝑳s)))
-      → CoreFree  (GroupRepresentable.grp r) (GroupRepresentable.sub r)
-                  (GroupRepresentable.isSubgroup r)
+      → CoreFree (r .grp) (r .sub) (r .isSubgroup)
       → TwoBigCanopies 𝑳s
-      → ∀ i → Σ[ H ∈ Pred 𝕌[ proj₁ (GroupRepresentable.grp r) ] 0ℓ ]
-              Σ[ H-sg ∈ IsSubgroup (GroupRepresentable.grp r) H ]
-                ( CoreFree (GroupRepresentable.grp r) H H-sg
-                × IntervalIso (GroupRepresentable.grp r) H H-sg (toLattice (𝑳s i)) )
+      → ∀ i → ∃[ H ]    -- ∈ Pred 𝕌[ proj₁ (r .grp) ] 0ℓ
+              ∃[ H-sg ] -- ∈ IsSubgroup (r .grp) H
+                ( CoreFree (r .grp) H H-sg × IntervalIso (r .grp) H H-sg (toLattice (𝑳s i)) )
 
 -- Theorem thm-wjd-1 of the note, as a statement.
 thm-wjd-1-Statement : (ℓP : Level) → Type (lsuc 0ℓ ⊔ lsuc ℓP)
@@ -691,8 +673,7 @@ thm-wjd-1-Statement ℓP =
 -- The schema RP-1 will inhabit: the meta-theorem conditional on the
 -- parachute construction and the core-free reduction.
 thm-wjd-1-Schema : (ℓP : Level) → Type (lsuc 0ℓ ⊔ lsuc ℓP)
-thm-wjd-1-Schema ℓP =
-  ParachuteHypotheses → CoreFreeReduction → thm-wjd-1-Statement ℓP
+thm-wjd-1-Schema ℓP = ParachuteHypotheses → CoreFreeReduction → thm-wjd-1-Statement ℓP
 ```
 
 By statement (C), exhibiting finitely many cf-IE classes with empty intersection
