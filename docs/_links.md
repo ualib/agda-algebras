@@ -640,7 +640,6 @@
 [FLRP/Problem.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/Problem.lagda.md
 
 <!-- ===== External links ===== -->
-[Classical.Structures.AbelianGroup]: /Classical/Structures/AbelianGroup/
 [A Machine-checked proof of Birkhoff's Variety Theorem in Martin-Löf Type Theory]: https://arxiv.org/abs/2101.10166
 [absolute value]: https://en.wikipedia.org/wiki/Absolute_value
 [ADR-001]: https://github.com/ualib/agda-algebras/blob/master/docs/adr/001-setoid-as-canonical.md
