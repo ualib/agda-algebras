@@ -57,7 +57,7 @@ The homomorphism `h : 𝑩 → ⨅ 𝒜` is a **subdirect embedding** when it is
 every coordinate map is surjective.
 
 ```agda
-module _ {I : Type ι}{𝑩 : Algebra {𝑆 = 𝑆} β ρᵇ}(𝒜 : I → Algebra {𝑆 = 𝑆} α ρ) where
+module _ {𝑆 : Signature 𝓞 𝓥}{I : Type ι}{𝑩 : Algebra {𝑆 = 𝑆} β ρᵇ}(𝒜 : I → Algebra {𝑆 = 𝑆} α ρ) where
 
   -- The i-th coordinate map projᵢ ∘ h of a hom into the product.
   coord : hom 𝑩 (⨅ 𝒜) → (i : I) → hom 𝑩 (𝒜 i)
@@ -86,7 +86,7 @@ Now the constructive heart.  Fix an algebra `𝑨` and a family of congruences
 into their product, assembled from the canonical quotient projections `πhom (θ i)`.
 
 ```agda
-module _ {I : Type ι}{𝑨 : Algebra {𝑆 = 𝑆} α ρ}(θ : I → Con 𝑨 ℓ) where
+module _ {𝑆 : Signature 𝓞 𝓥}{I : Type ι}{𝑨 : Algebra {𝑆 = 𝑆} α ρ}(θ : I → Con 𝑨 ℓ) where
   -- the family of quotient algebras and the natural map into their product
   𝑨╱ : I → Algebra {𝑆 = 𝑆} α ℓ
   𝑨╱ i = 𝑨 ╱ θ i
