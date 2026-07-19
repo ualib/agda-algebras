@@ -87,11 +87,11 @@ open import Data.List.Membership.Propositional.Properties
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
 open import Setoid.Algebras.Basic        {𝑆 = 𝑆}  using  ( Algebra ; 𝕌[_] ; 𝔻[_] )
-open import Setoid.Algebras.Finite                 using  ( FiniteAlgebra ; 𝟏
+open import Setoid.Algebras.Finite                using  ( FiniteAlgebra ; 𝟏
                                                          ; 𝟏-FiniteAlgebra )
-open import Setoid.Congruences.Basic     {𝑆 = 𝑆}  using  ( Con ; mkcon ; is-equivalence ; _╱_
+open import Setoid.Congruences.Basic              using  ( Con ; mkcon ; is-equivalence ; _╱_
                                                          ; reflexive ; is-compatible ; 𝟘[_] )
-open import Setoid.Congruences.Finite    {𝑆 = 𝑆}  using  ( clv ; ConRel ; 𝟏-FiniteCongruences
+open import Setoid.Congruences.Finite             using  ( ConRel ; 𝟏-FiniteCongruences
                                                          ; FiniteCongruences ; DecCon )
 
 open import Setoid.Congruences.Generation         using  ( Cg ; Cg-least ; base )
@@ -154,7 +154,7 @@ private
 #### The construction
 
 Fix an algebra `𝑨` equipped with both finiteness witnesses.  We abbreviate the
-working congruence level as `ℓ = clv α ρ` — the absorbing level of
+working congruence level as `ℓ = 𝓞 ⊔ 𝓥 ⊔ α ⊔ ρ` — the absorbing level of
 [Setoid.Congruences.Finite][], at which the generated (principal) congruences used
 for the monolith stay put — and `pairs` is the list of all index pairs of the
 carrier enumeration.
@@ -166,7 +166,7 @@ module _ {𝑨 : Algebra α ρ} (𝑭 : FiniteAlgebra 𝑨) (𝑪 : FiniteCongru
   open Setoid 𝔻[ 𝑨 ] using ( _≈_ ) renaming ( sym to ≈sym )
 
   ℓ : Level
-  ℓ = clv α ρ
+  ℓ = 𝓞 ⊔ 𝓥 ⊔ α ⊔ ρ
 
   pairs : List (Fin card × Fin card)
   pairs = cartesianProduct (allFin card) (allFin card)
@@ -414,7 +414,7 @@ the maximal-congruence search — is the natural next addition.
 
 ```agda
 -- The theorem applied: the one-element algebra is subdirectly representable.
-𝟏-SubdirectlyRepresentable : SubdirectlyRepresentable 𝟏 (clv 0ℓ 0ℓ) 0ℓ
+𝟏-SubdirectlyRepresentable : SubdirectlyRepresentable 𝟏 (𝓞 ⊔ 𝓥) 0ℓ
 𝟏-SubdirectlyRepresentable = finite-Birkhoff 𝟏-FiniteAlgebra 𝟏-FiniteCongruences
 ```
 

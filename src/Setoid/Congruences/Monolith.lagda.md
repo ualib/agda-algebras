@@ -42,7 +42,7 @@ open import Relation.Nullary  using ( ¬_ )
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
 open import Setoid.Algebras.Basic       {𝑆 = 𝑆}  using  ( ov ; Algebra ; 𝕌[_] ; 𝔻[_] )
-open import Setoid.Congruences.Basic    {𝑆 = 𝑆}  using  ( Con ; mkcon ; _∣≈_ ; reflexive
+open import Setoid.Congruences.Basic             using  ( Con ; mkcon ; _∣≈_ ; reflexive
                                                         ; is-equivalence ; is-compatible )
 open import Setoid.Congruences.Lattice  {𝑆 = 𝑆}  using  ( _⊆_ ; _≑_ ; _∧_ )
 

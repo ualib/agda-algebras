@@ -55,7 +55,7 @@ open import Relation.Binary.Lattice      using ( Supremum ; IsLattice
 -- Imports from the Agda Universal Algebras Library ------------------------------
 open import Setoid.Algebras.Basic       {𝑆 = 𝑆}  using  ( ov ; Algebra ; 𝕌[_] ; 𝔻[_] )
 open import Order.CompleteLattice                using  ( CompleteLattice )
-open import Setoid.Congruences.Basic    {𝑆 = 𝑆}  using  ( Con ; mkcon ; _∣≈_ ; reflexive ; 𝟘[_]
+open import Setoid.Congruences.Basic             using  ( Con ; mkcon ; _∣≈_ ; reflexive ; 𝟘[_]
                                                         ; is-equivalence ; is-compatible ; 𝟙[_] )
 open import Setoid.Congruences.Lattice  {𝑆 = 𝑆}  using  ( _≑_ ; _⊆_ ; _∧_ ; ∧-infimum
                                                         ; ⊆-isPartialOrder ; 𝟘-min ; 𝟙-max )

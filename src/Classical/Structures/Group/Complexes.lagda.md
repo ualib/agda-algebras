@@ -28,21 +28,17 @@ predicates.[^1]
 
 module Classical.Structures.Group.Complexes where
 
-open import Agda.Primitive using () renaming ( Set to Type )
-
 -- Imports from the Agda Standard Library ---------------------------------------
-open import Data.Product                  using ( _,_ ; _×_ ; Σ-syntax ; proj₁ ; proj₂ )
+open import Data.Product                  using ( _,_ ; _×_ ; Σ-syntax ; proj₁ )
 open import Level                         using ( Level ; _⊔_ )
 open import Relation.Binary               using ( Setoid )
 open import Relation.Binary.Definitions   using ( _Respects_ )
 open import Relation.Unary                using ( Pred ; _∈_ ; _⊆_ ; _≐_ )
 
 -- Imports from the Agda Universal Algebra Library ------------------------------
-open import Classical.Signatures.Group           using ( Sig-Group )
-open import Classical.Structures.Group.Basic           using ( Group ; module Group-Op )
-open import Classical.Structures.Group.Subgroups using ( IsSubgroup )
-
-open import Setoid.Algebras.Basic {𝑆 = Sig-Group} using ( Algebra ; 𝕌[_] ; 𝔻[_] )
+open import Classical.Structures.Group.Basic      using ( Group ; module Group-Op )
+open import Classical.Structures.Group.Subgroups  using ( IsSubgroup )
+open import Setoid.Algebras.Basic                 using ( 𝕌[_] ; 𝔻[_] )
 
 private variable ℓ ℓ' : Level
 ```

@@ -37,7 +37,7 @@ open import Relation.Binary.Lattice  using ( Infimum ; IsMeetSemilattice ; MeetS
 
 -- Imports from the Agda Universal Algebras Library ------------------------------
 open import Setoid.Algebras.Basic     {𝑆 = 𝑆}  using  ( ov ; Algebra ; 𝕌[_] ; 𝔻[_] )
-open import Setoid.Congruences.Basic  {𝑆 = 𝑆}  using  ( Con ; mkcon ; _∣≈_ ; reflexive
+open import Setoid.Congruences.Basic           using  ( Con ; mkcon ; _∣≈_ ; reflexive
                                                       ; is-equivalence ; is-compatible
                                                       ; 𝟘[_] ; 𝟙[_] )
 private variable α ρ ℓ : Level

@@ -31,22 +31,20 @@ arguments need.  The heart of both proofs is the observation that if `x ≈ h �
 module Classical.Structures.Group.Dedekind where
 
 -- Imports from the Agda Standard Library ---------------------------------------
-open import Data.Product    using ( _,_ ; proj₁ ; proj₂ )
-open import Level           using ( Level )
-open import Relation.Binary using ( Setoid )
-open import Relation.Unary  using ( Pred ; _∈_ ; _⊆_ ; _∩_ ; _≐_ )
+open import Data.Product     using ( _,_ ; proj₁ )
+open import Level            using ( Level )
+open import Relation.Binary  using ( Setoid )
+open import Relation.Unary   using ( Pred ; _∈_ ; _⊆_ ; _∩_ ; _≐_ )
 
 import Algebra.Properties.Group as GroupProperties
 import Relation.Binary.Reasoning.Setoid as SetoidReasoning
 
 -- Imports from the Agda Universal Algebra Library ------------------------------
-open import Classical.Bundles.Group                using ( ⟨_⟩ᵍᵖ )
-open import Classical.Signatures.Group             using ( Sig-Group )
-open import Classical.Structures.Group.Basic       using ( Group ; module Group-Op )
-open import Classical.Structures.Group.Subgroups   using ( IsSubgroup )
-open import Classical.Structures.Group.Complexes   using ( module Complex )
-
-open import Setoid.Algebras.Basic {𝑆 = Sig-Group}  using ( Algebra ; 𝕌[_] ; 𝔻[_] )
+open import Classical.Bundles.Group               using ( ⟨_⟩ᵍᵖ )
+open import Classical.Structures.Group.Basic      using ( Group ; module Group-Op )
+open import Classical.Structures.Group.Subgroups  using ( IsSubgroup )
+open import Classical.Structures.Group.Complexes  using ( module Complex )
+open import Setoid.Algebras.Basic                 using ( Algebra ; 𝕌[_] ; 𝔻[_] )
 
 private variable ℓʰ ℓᶜ ℓᵏ : Level
 ```

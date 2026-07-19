@@ -30,8 +30,6 @@ with `≈`) follows immediately.
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
-open import Overture using ( 𝓞 ; 𝓥 ; Signature )
-
 module Setoid.Signatures.Functor where
 
 -- Imports from Agda and the Agda Standard Library ----------------------------
@@ -47,8 +45,9 @@ open Func using (cong) renaming ( to to _⟨$⟩_ )
 open Setoid using ( Carrier )
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
-open import Overture.Signatures.Morphisms using ( SigMorphism ; ι ; κ ; id-morphism ; _∘ₛ_ )
-open import Setoid.Signatures using ( ⟨_⟩ )
+open import Overture                       using ( 𝓞 ; 𝓥 ; Signature )
+open import Overture.Signatures.Morphisms  using ( SigMorphism ; ι ; κ ; id-morphism ; _∘ₛ_ )
+open import Setoid.Signatures              using ( ⟨_⟩ )
 
 private variable
   α ρ αᵇ ρᵇ αᶜ ρᶜ : Level

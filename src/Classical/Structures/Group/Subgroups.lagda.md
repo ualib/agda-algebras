@@ -48,7 +48,7 @@ open import Agda.Primitive using () renaming ( Set to Type )
 -- Imports from the Agda Standard Library ---------------------------------------
 open import Data.Fin.Base                 using ( Fin )
 open import Data.Fin.Patterns             using ( 0F ; 1F )
-open import Data.Product                  using ( _,_ ; Σ-syntax ; proj₁ ; proj₂ )
+open import Data.Product                  using ( _,_ ; Σ-syntax ; proj₁ )
 open import Data.Unit.Base                using ( ⊤ ; tt )
 open import Level                         using ( Level ; _⊔_ ; suc ; Lift ; lift )
 open import Relation.Binary               using ( Setoid )
@@ -60,12 +60,11 @@ import Algebra.Properties.Group as GroupProperties
 -- Imports from the Agda Universal Algebra Library ------------------------------
 open import Classical.Bundles.Group           using ( ⟨_⟩ᵍᵖ )
 open import Classical.Operations              using ( pair )
-open import Classical.Signatures.Group        using ( Sig-Group ; ∙-Op ; ε-Op ; ⁻¹-Op )
+open import Classical.Signatures.Group        using ( ∙-Op ; ε-Op ; ⁻¹-Op )
 open import Classical.Structures.Group.Basic  using ( Group ; module Group-Op )
 open import Classical.Structures.Interpret    using ( interp-cong )
-
-open import Setoid.Algebras.Basic {𝑆 = Sig-Group}  using ( Algebra ; 𝕌[_] ; 𝔻[_] ; _^_ )
-open import Setoid.Subalgebras.Subuniverses {𝑆 = Sig-Group} using ( Subuniverses )
+open import Setoid.Algebras.Basic             using ( Algebra ; 𝕌[_] ; 𝔻[_] ; _^_ )
+open import Setoid.Subalgebras.Subuniverses   using ( Subuniverses )
 
 private variable α ρ ℓ : Level
 ```
@@ -113,7 +112,6 @@ symbol to a canonical tuple.
 
 ```agda
   module _ (B : Pred A ℓ) (B-sub : B ∈ Subuniverses 𝑨) where
-
     -- A subuniverse is closed under the curried group multiplication.
     sub-∙-closed : ∀ {x y} → x ∈ B → y ∈ B → x ∙ y ∈ B
     sub-∙-closed {x} {y} x∈B y∈B = B-sub ∙-Op (pair x y) im
