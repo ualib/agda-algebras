@@ -33,12 +33,16 @@ Two standing warnings apply to everything under this namespace.
 +  [FLRP.Problem][] — the representability predicate `Representable`, the
    formal statement of the problem, the first worked instance (the one-element
    chain), and the constructive no-go theorem for the two-element chain.
++  [FLRP.Enforceable][] — group representability of a lattice, the
+   interval-enforceability classification (IE, cf-IE, min-IE), the fattening
+   isomorphism `[H × K, G × K] ≅ [H, G]`, the no-contradictory-IE theorem
+   (the note's Lemma 3.2), and hypothesis-parameterized statements of Lemma 3.1
+   and the parachute meta-theorem.
 
 **Planned submodules** (per § 6 of the roadmap).
 
 +  `FLRP.Closure` (closure properties of the representable class);
 +  `FLRP.Intervals` (intervals in subgroup lattices and core-free normalization);
-+  `FLRP.Enforceable` (interval-enforceable properties);
 +  `FLRP.Reductions` (the catalog of reduction theorems);
 +  `FLRP.Certificates` (machine-checked representation certificates);
 +  `FLRP.Assumptions` (the registry of classical theorems imported as explicit
@@ -50,4 +54,5 @@ Two standing warnings apply to everything under this namespace.
 module FLRP where
 
 open import FLRP.Problem public
+open import FLRP.Enforceable public
 ```
