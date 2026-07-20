@@ -44,12 +44,18 @@ elements carry a `Respects`{.AgdaFunction} proof.  Over a redundant presentation
 bare interval can be strictly larger than the respecting one, so the isomorphism is
 *false* at the bare level (see the counterexample in [FLRP.Enforceable][]).
 
-The mathematical content — the correspondence itself — is layer-agnostic (ADR-008);
-the whole `bridge`{.AgdaFunction} is proved constructively with no classical or
-deferred hypotheses.  A representability corollary
-(`interval-Con-representable`{.AgdaFunction}) is stated conditionally on a finiteness
-witness for the coset algebra; the eventual hookup to `Representableᵈ`{.AgdaRecord} of
-the decidable layer is WP-7 slice iii and is deliberately not imported here.
+This is the **Layer S** formulation: `bridge`{.AgdaFunction} relates the *semantic*
+congruence lattice `Con`{.AgdaFunction} to the interval, and the whole isomorphism is
+proved constructively with no classical or deferred hypotheses.  The correspondence
+itself is layer-agnostic (ADR-008), so the **Layer D** restatement called for by the
+updated acceptance criteria of issue #454 — the same isomorphism with the
+decidable-congruence poset `DecCon`{.AgdaFunction} in place of `Con`{.AgdaFunction},
+over the interval's decidable order — is a thin follow-up that this module does *not*
+yet provide; it lands with the decidable coset algebra of WP-7 slice iii.  The
+representability corollary (`interval-Con-representable`{.AgdaFunction}) is likewise
+stated conditionally on a finiteness witness for the coset algebra, whose hookup to
+`Representableᵈ`{.AgdaRecord} of the decidable layer is that same WP-7 work and is
+deliberately not imported here.
 
 <!--
 ```agda

@@ -39,9 +39,11 @@ Two standing warnings apply to everything under this namespace.
    (the note's Lemma 3.2), and hypothesis-parameterized statements of Lemma 3.1
    and the parachute meta-theorem.
 +  [FLRP.Bridge][] — the easy (constructive) direction of the Pálfy–Pudlák
-   correspondence: the order isomorphism `Con (𝒢 ↷ 𝒢/H) ≅ [H, 𝒢]` between the
-   congruence lattice of the transitive coset G-set and the respecting upper
-   interval in the subgroup lattice, with the representability corollary.
+   correspondence at **Layer S**: the order isomorphism `Con (𝒢 ↷ 𝒢/H) ≅ [H, 𝒢]`
+   between the *semantic* congruence lattice of the transitive coset G-set and the
+   respecting upper interval in the subgroup lattice, with the representability
+   corollary.  The Layer D (`DecCon`) restatement required by issue #454's updated
+   criteria lands with the WP-7 decidable layer.
 
 **Planned submodules** (per § 6 of the roadmap).
 
