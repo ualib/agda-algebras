@@ -38,6 +38,10 @@ Two standing warnings apply to everything under this namespace.
    isomorphism `[H × K, G × K] ≅ [H, G]`, the no-contradictory-IE theorem
    (the note's Lemma 3.2), and hypothesis-parameterized statements of Lemma 3.1
    and the parachute meta-theorem.
++  [FLRP.Bridge][] — the easy (constructive) direction of the Pálfy–Pudlák
+   correspondence: the order isomorphism `Con (𝒢 ↷ 𝒢/H) ≅ [H, 𝒢]` between the
+   congruence lattice of the transitive coset G-set and the respecting upper
+   interval in the subgroup lattice, with the representability corollary.
 
 **Planned submodules** (per § 6 of the roadmap).
 
@@ -55,4 +59,5 @@ module FLRP where
 
 open import FLRP.Problem public
 open import FLRP.Enforceable public
+open import FLRP.Bridge public
 ```
