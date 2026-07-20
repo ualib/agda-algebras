@@ -68,9 +68,9 @@ The kit also has a *semantic* face, used by the converse Maltsev conditions:
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
-open import Overture using ( 𝓞 ; 𝓥 ; Signature )
+open import Overture using ( 𝓞 ; 𝓥 ; Signature ; 𝑆 )
 
-module Setoid.Varieties.FreeSubstitution {𝑆 : Signature 𝓞 𝓥} where
+module Setoid.Varieties.FreeSubstitution where
 
 -- Imports from Agda and the Agda Standard Library ----------------------------
 open import Agda.Primitive   using () renaming ( Set to Type )
@@ -83,15 +83,15 @@ open import Relation.Binary  using () renaming ( _⇒_ to _⊆_ )
 import Relation.Binary.PropositionalEquality as ≡
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
-open import Overture.Terms          {𝑆 = 𝑆}  using  ( Term ; ℊ )
-open import Setoid.Algebras.Basic   {𝑆 = 𝑆}  using  ( 𝔻[_] )
+open import Overture.Terms  using  ( Term ; ℊ )
+open import Setoid.Algebras.Basic  using  ( 𝔻[_] )
 open import Setoid.Congruences.Generation    using  ( Gen ; Cg ; base ; symmetric
                                                     ; _∨_ ; _∪ᵣ_ ; module principal )
 open import Setoid.Homomorphisms.Basic       using ( hom ; mkIsHom )
 open import Setoid.Homomorphisms.Kernels     using ( kercon )
 open import Setoid.Homomorphisms.Properties  using ( Cg⊆ker )
-open import Setoid.Terms.Basic      {𝑆 = 𝑆}  using ( _≐_ ; Sub ; _[_] )
-open import Setoid.Varieties.SoundAndComplete {𝑆 = 𝑆}
+open import Setoid.Terms.Basic  using ( _≐_ ; Sub ; _[_] )
+open import Setoid.Varieties.SoundAndComplete
   using ( Eq ; _⊢_▹_≈_ ; module FreeAlgebra )
 
 open _≐_         using ( rfl ; gnl )
@@ -112,7 +112,7 @@ congruence rule `app` applied to the inductive hypotheses at the positions.  No 
 inspects the equation set `E`, so this holds uniformly.
 
 ```agda
-≐→⊢ : {E : I → Eq} {s t : Term Γ} → s ≐ t → E ⊢ Γ ▹ s ≈ t
+≐→⊢ : {E : I → Eq} {s t : Term {𝑆 = 𝑆} Γ} → s ≐ t → E ⊢ Γ ▹ s ≈ t
 ≐→⊢ (rfl ≡.refl)  = refl
 ≐→⊢ (gnl ps)      = app (λ i → ≐→⊢ (ps i))
 ```
@@ -126,8 +126,8 @@ the `_≐_` arguments are the mechanical "rebuild" bridges, and `sub▹` hides t
 `_[ σ ]`-form behind them.
 
 ```agda
-sub▹ : {E : I → Eq} {p q : Term Δ} (d : E ⊢ Δ ▹ p ≈ q) (σ : Sub Γ Δ)
-       {l r : Term Γ} → l ≐ p [ σ ] → q [ σ ] ≐ r → E ⊢ Γ ▹ l ≈ r
+sub▹ : {E : I → Eq} {p q : Term {𝑆 = 𝑆} Δ} (d : E ⊢ Δ ▹ p ≈ q) (σ : Sub {𝑆 = 𝑆} Γ Δ)
+       {l r : Term {𝑆 = 𝑆} Γ} → l ≐ p [ σ ] → q [ σ ] ≐ r → E ⊢ Γ ▹ l ≈ r
 sub▹ d σ l≐pσ qσ≐r = trans (≐→⊢ l≐pσ) (trans (sub d σ) (≐→⊢ qσ≐r))
 ```
 
@@ -141,10 +141,10 @@ square holds by `refl`{.AgdaInductiveConstructor} because `(node f ts) [ σ ]` i
 `node f (λ i → ts i [ σ ])` on the nose.
 
 ```agda
-module _ {Γ Δ : Type χ} {I : Type ι} (E : I → Eq) where
+module _ {𝑆 : Signature 𝓞 𝓥}{Γ Δ : Type χ} {I : Type ι} (E : I → Eq {𝑆 = 𝑆}) where
   open FreeAlgebra E using ( 𝔽[_] )
 
-  subhom : (σ : Sub Γ Δ) → hom 𝔽[ Δ ] 𝔽[ Γ ]
+  subhom : (σ : Sub {𝑆 = 𝑆} Γ Δ) → hom 𝔽[ Δ ] 𝔽[ Γ ]
   subhom σ = subfunc , mkIsHom (λ {f}{a} → refl)
     where
     subfunc : Func 𝔻[ 𝔽[ Δ ] ] 𝔻[ 𝔽[ Γ ] ]
@@ -172,9 +172,9 @@ the free algebra ([Setoid.Varieties.Maltsev.Permutability][],
 ```agda
   open principal 𝔽[ Δ ]
 
-  cg-pair→⊢ : (σ : Sub Γ Δ)(a b : Term Δ)
+  cg-pair→⊢ : (σ : Sub {𝑆 = 𝑆} Γ Δ)(a b : Term {𝑆 = 𝑆} Δ)
     → E ⊢ Γ ▹ a [ σ ] ≈ b [ σ ]
-    → {s t : Term Δ} → Gen ❴ a , b ❵ s t → E ⊢ Γ ▹ s [ σ ] ≈ t [ σ ]
+    → {s t : Term {𝑆 = 𝑆} Δ} → Gen ❴ a , b ❵ s t → E ⊢ Γ ▹ s [ σ ] ≈ t [ σ ]
   cg-pair→⊢ σ a b coll = Cg⊆ker (subhom σ) incl
     where
     incl : ❴ a , b ❵ ⊆ proj₁ (kercon (subhom σ))
@@ -191,10 +191,10 @@ two generating congruences is included in the kernel componentwise, each compone
 `cg-pair→⊢`{.AgdaFunction}.
 
 ```agda
-  cg-pairs→⊢ : (σ : Sub Γ Δ)(a b c d : Term Δ)
+  cg-pairs→⊢ : (σ : Sub {𝑆 = 𝑆} Γ Δ)(a b c d : Term {𝑆 = 𝑆} Δ)
     → E ⊢ Γ ▹ a [ σ ] ≈ b [ σ ]
     → E ⊢ Γ ▹ c [ σ ] ≈ d [ σ ]
-    → {s t : Term Δ} → proj₁ (Cg ❴ a , b ❵ ∨ Cg ❴ c , d ❵) s t
+    → {s t : Term {𝑆 = 𝑆} Δ} → proj₁ (Cg ❴ a , b ❵ ∨ Cg ❴ c , d ❵) s t
     → E ⊢ Γ ▹ s [ σ ] ≈ t [ σ ]
   cg-pairs→⊢ σ a b c d coll-ab coll-cd = Cg⊆ker (subhom σ) incl
     where
@@ -216,13 +216,13 @@ module _
   {Γ : Type χ}
   {I : Type ι}
   (E : I → Eq)
-  (σ : Sub Γ Γ)  (u v : Γ)
+  (σ : Sub {𝑆 = 𝑆} Γ Γ)  (u v : Γ)
   (merge : E ⊢ Γ ▹ σ u ≈ σ v)
   where
   open FreeAlgebra E using ( 𝔽[_] )
   open principal 𝔽[ Γ ]
 
-  recover : {s t : Term Γ} → Gen ❴ ℊ u , ℊ v ❵ s t → E ⊢ Γ ▹ s [ σ ] ≈ t [ σ ]
+  recover : {s t : Term {𝑆 = 𝑆} Γ} → Gen ❴ ℊ u , ℊ v ❵ s t → E ⊢ Γ ▹ s [ σ ] ≈ t [ σ ]
   recover = cg-pair→⊢ E σ (ℊ u) (ℊ v) merge
 
   recover-gen : E ⊢ Γ ▹ σ u ≈ σ v

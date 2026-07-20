@@ -15,9 +15,9 @@ This module is based on [Andreas Abel's Agda formalization of Birkhoff's complet
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
-open import Overture using (𝓞 ; 𝓥 ; Signature)
+open import Overture using (𝓞 ; 𝓥 ; Signature ; 𝑆)
 
-module Setoid.Varieties.SoundAndComplete {𝑆 : Signature 𝓞 𝓥} where
+module Setoid.Varieties.SoundAndComplete where
 
 open import Agda.Primitive   using () renaming ( Set to Type )
 
@@ -34,10 +34,10 @@ import Relation.Binary.Reasoning.Setoid as SetoidReasoning
 
 -- Imports from the Agda Universal Algebra Library -------------------------------
 open import Overture                  using ( proj₁ ; proj₂ ; OperationSymbolsOf )
-open import Overture.Terms   {𝑆 = 𝑆}  using ( Term )
-open import Setoid.Algebras  {𝑆 = 𝑆}  using ( Algebra ; ov ; 𝔻[_] )
+open import Overture.Terms  using ( Term )
+open import Setoid.Algebras  using ( Algebra ; ov ; 𝔻[_] )
 open import Setoid.Signatures         using ( ⟨_⟩ )
-open import Setoid.Terms     {𝑆 = 𝑆}  using ( module Environment ; Sub ; _[_] )
+open import Setoid.Terms  using ( module Environment ; Sub ; _[_] )
 
 open Setoid  using ( Carrier ; _≈_ ; isEquivalence )
 open _⟶_     renaming ( to to _⟨$⟩_ )
@@ -54,12 +54,12 @@ private variable
 ```agda
 -- Equations
 -- An equation is a pair (s , t) of terms in the same context.
-record Eq : Type (ov χ) where
+record Eq {χ : Level} : Type (ov {𝑆 = 𝑆} χ) where
   constructor _≈̇_
   field
     {cxt}  : Type χ
-    lhs    : Term cxt
-    rhs    : Term cxt
+    lhs    : Term {𝑆 = 𝑆} cxt
+    rhs    : Term {𝑆 = 𝑆} cxt
 infix 6 _≈̇_
 open Eq public
 
@@ -71,11 +71,11 @@ open Eq public
 -- there and 𝑨 ⊨ toEq ℰ below coincide definitionally (both unfold to pointwise
 -- equality of the two interpreted terms under all environments).
 toEq : {χ ι : Level}{Idx : Type ι}{X : Type χ}
-  → (Idx → Term X × Term X) → (Idx → Eq {χ = χ})
+  → (Idx → Term {𝑆 = 𝑆} X × Term {𝑆 = 𝑆} X) → (Idx → Eq {χ = χ})
 toEq ℰ i = proj₁ (ℰ i) ≈̇ proj₂ (ℰ i)
 
 -- Equation p ≈̇ q holding in algebra M. (type \~~\^. to get ≈̇; type \models to get ⊧)
-_⊧_ : (𝑨 : Algebra α ρᵃ)(term-identity : Eq{χ}) → Type _
+_⊧_ : (𝑨 : Algebra {𝑆 = 𝑆} α ρᵃ)(term-identity : Eq {χ = χ}) → Type _
 𝑨 ⊧ (p ≈̇ q) = Equal p q where open Environment 𝑨
 
 -- 𝒦 ⊫ (p ≈̇ q) asserts that every algebra in the class 𝒦 models the equation
@@ -87,9 +87,9 @@ _⊧_ : (𝑨 : Algebra α ρᵃ)(term-identity : Eq{χ}) → Type _
 -- instead of unfolding _⊫_ → _⊧_ → Equal → ⟦_⟧ and getting stuck on the term
 -- interpreter.  (See issue #361.  Note _⊧_ and Equal still reduce
 -- definitionally, so the proofs that compute with them are unaffected.)
-record _⊫_ (𝒦 : Pred (Algebra α ρᵃ) ℓ)(eq : Eq{χ}) : Type (ℓ ⊔ χ ⊔ ov(α ⊔ ρᵃ)) where
+record _⊫_ (𝒦 : Pred (Algebra {𝑆 = 𝑆} α ρᵃ) ℓ)(eq : Eq {χ = χ}) : Type (ℓ ⊔ χ ⊔ ov {𝑆 = 𝑆}(α ⊔ ρᵃ)) where
   constructor ⊫-intro
-  field ⊫-proof : ∀ (𝑨 : Algebra α ρᵃ) → 𝒦 𝑨 → 𝑨 ⊧ eq          -- (type \||= to get ⊫)
+  field ⊫-proof : ∀ (𝑨 : Algebra {𝑆 = 𝑆} α ρᵃ) → 𝒦 𝑨 → 𝑨 ⊧ eq          -- (type \||= to get ⊫)
 open _⊫_ public
 infix 5 _⊫_
 
@@ -98,50 +98,50 @@ infix 5 _⊫_
 -- For such `ℰ : I → Eq`...
 
 -- ...`𝑨 ⊨ ℰ` is the assertion that the algebra 𝑨 models every equation in ℰ.
-_⊨_ : (𝑨 : Algebra α ρᵃ) → (I → Eq{χ}) → Type _
+_⊨_ : (𝑨 : Algebra {𝑆 = 𝑆} α ρᵃ) → (I → Eq {χ = χ}) → Type _
 𝑨 ⊨ ℰ = ∀ i → Equal (lhs (ℰ i))(rhs (ℰ i)) where open Environment 𝑨  --   (type \|= to get ⊨)
 
 -- ...`𝒦 ∥≈ ℰ` is the assertion that every algebra in 𝒦 models every equation in ℰ.
-_∥≈_ : Pred (Algebra α ρᵃ) ℓ → (I → Eq{χ}) → Type _
+_∥≈_ : Pred (Algebra {𝑆 = 𝑆} α ρᵃ) ℓ → (I → Eq {χ = χ}) → Type _
 𝒦 ∥≈ ℰ = ∀ i → 𝒦 ⊫ ℰ i
 
 -- ...`Mod ℰ` is the class of algebras that model every equation in ℰ.
-ModTuple : (I → Eq{χ}) → Pred(Algebra α ρᵃ) _
+ModTuple : (I → Eq {χ = χ}) → Pred(Algebra {𝑆 = 𝑆} α ρᵃ) _
 ModTuple ℰ = _⊨ ℰ
 
 module _ {α ρᵃ ℓ χ : Level} {X : Type χ} where
 
-  Mod : Pred(Term X × Term X) ℓ → Pred (Algebra α ρᵃ) _
+  Mod : Pred(Term {𝑆 = 𝑆} X × Term {𝑆 = 𝑆} X) ℓ → Pred (Algebra {𝑆 = 𝑆} α ρᵃ) _
   Mod ℰ 𝑨 = ∀ {p q} → (p , q) ∈ ℰ → Equal p q
     where open Environment 𝑨
 
-  Th : Pred (Algebra α ρᵃ) ℓ → Pred(Term X × Term X) _
+  Th : Pred (Algebra {𝑆 = 𝑆} α ρᵃ) ℓ → Pred(Term {𝑆 = 𝑆} X × Term {𝑆 = 𝑆} X) _
   Th 𝒦 = λ (p , q) → 𝒦 ⊫ (p ≈̇ q)
 
-  ℑTh : Pred(Term X × Term X) (ℓ ⊔ χ ⊔ ov (α ⊔ ρᵃ)) → Type _
+  ℑTh : Pred(Term {𝑆 = 𝑆} X × Term {𝑆 = 𝑆} X) (ℓ ⊔ χ ⊔ ov {𝑆 = 𝑆} (α ⊔ ρᵃ)) → Type _
   ℑTh P = Σ[ p ∈ (Term _ × Term _) ] p ∈ P
 
-  ThTuple : (𝒦 : Pred (Algebra α ρᵃ) ℓ) → ℑTh (Th 𝒦) → Eq{χ}
+  ThTuple : (𝒦 : Pred (Algebra {𝑆 = 𝑆} α ρᵃ) ℓ) → ℑTh (Th 𝒦) → Eq {χ = χ}
   ThTuple 𝒦 = λ i → proj₁ (proj₁ i) ≈̇ proj₂ (proj₁ i)
 
-module _ {α}{ρᵃ}{ι}{I : Type ι} where
+module _ {𝑆 : Signature 𝓞 𝓥}{α}{ρᵃ}{ι}{I : Type ι} where
   -- An entailment E ⊃ eq holds iff it holds in all models of E.
-  _⊃_ : (E : I → Eq{χ}) (eq : Eq{χ}) → Type _
-  E ⊃ eq = (M : Algebra α ρᵃ) → M ⊨ E → M ⊧ eq
+  _⊃_ : (E : I → Eq {𝑆 = 𝑆}{χ = χ}) (eq : Eq {𝑆 = 𝑆}{χ = χ}) → Type _
+  E ⊃ eq = (M : Algebra {𝑆 = 𝑆} α ρᵃ) → M ⊨ E → M ⊧ eq
 ```
 
 ##### Derivations in a context
 
 ```agda
-module _ {χ ι : Level} where
+module _ {𝑆 : Signature 𝓞 𝓥}{χ ι : Level} where
 
-  data _⊢_▹_≈_ {I : Type ι}(E : I → Eq) : (X : Type χ)(p q : Term X) → Type (ι ⊔ ov χ) where
+  data _⊢_▹_≈_ {I : Type ι}(E : I → Eq) : (X : Type χ)(p q : Term {𝑆 = 𝑆} X) → Type (ι ⊔ ov {𝑆 = 𝑆} χ) where
     hyp    : ∀ (i : I)           → let p ≈̇ q = E i in E ⊢ _ ▹ p ≈ q
-    app    : ∀ {ps qs}           → (∀ i → E ⊢ Γ ▹ ps i ≈ qs i) → E ⊢ Γ ▹ node f ps ≈ node f qs
-    sub    : ∀ {p q : Term Δ}    → E ⊢ Δ ▹ p ≈ q → ∀ (σ : Sub Γ Δ) → E ⊢ Γ ▹ p [ σ ] ≈ q [ σ ]
-    refl   : ∀ {p : Term Γ}      → E ⊢ Γ ▹ p ≈ p
-    sym    : ∀ {p q : Term Γ}    → E ⊢ Γ ▹ p ≈ q → E ⊢ Γ ▹ q ≈ p
-    trans  : ∀ {p q r : Term Γ}  → E ⊢ Γ ▹ p ≈ q → E ⊢ Γ ▹ q ≈ r → E ⊢ Γ ▹ p ≈ r
+    app    : ∀ {f : OperationSymbolsOf 𝑆}{ps qs}  → (∀ i → E ⊢ Γ ▹ ps i ≈ qs i) → E ⊢ Γ ▹ node f ps ≈ node f qs
+    sub    : ∀ {p q : Term {𝑆 = 𝑆} Δ}    → E ⊢ Δ ▹ p ≈ q → ∀ (σ : Sub {𝑆 = 𝑆} Γ Δ) → E ⊢ Γ ▹ p [ σ ] ≈ q [ σ ]
+    refl   : ∀ {p : Term {𝑆 = 𝑆} Γ}      → E ⊢ Γ ▹ p ≈ p
+    sym    : ∀ {p q : Term {𝑆 = 𝑆} Γ}    → E ⊢ Γ ▹ p ≈ q → E ⊢ Γ ▹ q ≈ p
+    trans  : ∀ {p q r : Term {𝑆 = 𝑆} Γ}  → E ⊢ Γ ▹ p ≈ q → E ⊢ Γ ▹ q ≈ r → E ⊢ Γ ▹ p ≈ r
   infix 4 _⊢_▹_≈_
 
   ⊢▹≈IsEquiv : {I : Type ι}{E : I → Eq} → IsEquivalence (E ⊢ Γ ▹_≈_)
@@ -152,8 +152,8 @@ module _ {χ ι : Level} where
 
 ```agda
 module Soundness
-  {χ α ι : Level}{I : Type ι} (E : I → Eq{χ})
-  (𝑨 : Algebra α ρᵃ)   -- We assume an algebra 𝑨
+  {χ α ι : Level}{I : Type ι} (E : I → Eq {χ = χ})
+  (𝑨 : Algebra {𝑆 = 𝑆} α ρᵃ)   -- We assume an algebra 𝑨
   (V : 𝑨 ⊨ E)          -- that models all equations in E.
   where
   open Algebra 𝑨 using ( Interp ) --  renaming (Domain to A)
@@ -205,7 +205,7 @@ that it satisfies the following universal property: for each algebra `𝑨`, if 
 then there is a unique homomorphism from `𝔽[ X ]` to `𝑨`.
 
 ```agda
-module FreeAlgebra {χ : Level}{ι : Level}{I : Type ι}(E : I → Eq) where
+module FreeAlgebra {𝑆 : Signature 𝓞 𝓥}{χ : Level}{ι : Level}{I : Type ι}(E : I → Eq {χ = χ}) where
   open Algebra
 
   -- Domain of the relatively free algebra.
@@ -222,16 +222,16 @@ module FreeAlgebra {χ : Level}{ι : Level}{I : Type ι}(E : I → Eq) where
   FreeInterp .cong (refl , h) = app h
 
   -- The relatively free algebra
-  𝔽[_] : Type χ → Algebra (ov χ) (ι ⊔ ov χ)
+  𝔽[_] : Type χ → Algebra {𝑆 = 𝑆} (ov {𝑆 = 𝑆} χ) (ι ⊔ ov {𝑆 = 𝑆} χ)
   Domain 𝔽[ X ] = FreeDomain X
   Interp 𝔽[ X ] = FreeInterp
 
   -- The identity substitution σ₀ maps variables to themselves.
-  σ₀ : {X : Type χ} → Sub X X
+  σ₀ : {X : Type χ} → Sub {𝑆 = 𝑆} X X
   σ₀ x = ℊ x
 
   -- σ₀ acts indeed as identity.
-  identity : (t : Term X) → E ⊢ X ▹ t [ σ₀ ] ≈ t
+  identity : (t : Term {𝑆 = 𝑆} X) → E ⊢ X ▹ t [ σ₀ ] ≈ t
   identity (ℊ x) = refl
   identity (node f ts) = app (identity ∘ ts)
 ```
@@ -246,7 +246,7 @@ type `X` (or `Δ`, or `Γ`), which is an arbitrary inhabitant of `Type χ`.)
 ```agda
   module _ {X : Type χ} where
     open Environment 𝔽[ X ]
-    evaluation : (t : Term Δ) (σ : Sub X Δ) → E ⊢ X ▹ (⟦ t ⟧ ⟨$⟩ σ) ≈ (t [ σ ])
+    evaluation : (t : Term {𝑆 = 𝑆} Δ) (σ : Sub {𝑆 = 𝑆} X Δ) → E ⊢ X ▹ (⟦ t ⟧ ⟨$⟩ σ) ≈ (t [ σ ])
     evaluation (ℊ x) σ = refl
     evaluation (node f ts) σ = app (flip (evaluation ∘ ts) σ)
 

@@ -21,9 +21,9 @@ partially ordered set which, with the meet operation, forms a semilattice.
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
-open import Overture using (𝓞 ; 𝓥 ; Signature)
+open import Overture using (𝓞 ; 𝓥 ; Signature ; 𝑆)
 
-module Setoid.Congruences.Lattice {𝑆 : Signature 𝓞 𝓥} where
+module Setoid.Congruences.Lattice where
 
 -- Imports from the Agda Standard Library ---------------------------------------
 open import Agda.Primitive           using () renaming ( Set to Type )
@@ -36,7 +36,7 @@ open import Relation.Binary.Bundles  using ( Poset )
 open import Relation.Binary.Lattice  using ( Infimum ; IsMeetSemilattice ; MeetSemilattice )
 
 -- Imports from the Agda Universal Algebras Library ------------------------------
-open import Setoid.Algebras.Basic     {𝑆 = 𝑆}  using  ( ov ; Algebra ; 𝕌[_] ; 𝔻[_] )
+open import Setoid.Algebras.Basic  using  ( ov ; Algebra ; 𝕌[_] ; 𝔻[_] )
 open import Setoid.Congruences.Basic           using  ( Con ; mkcon ; _∣≈_ ; reflexive
                                                       ; is-equivalence ; is-compatible
                                                       ; 𝟘[_] ; 𝟙[_] )
@@ -66,7 +66,7 @@ dictates.  Classically `_≑_` collapses to propositional equality via propositi
 extensionality.
 
 ```agda
-module _ {𝑨 : Algebra α ρ} where
+module _ {𝑨 : Algebra {𝑆 = 𝑆} α ρ} where
   -- θ ⊆ φ : the relation of θ is contained in the relation of φ.
   _⊆_ : Con 𝑨 ℓ → Con 𝑨 ℓ → Type (α ⊔ ℓ)
   θ ⊆ φ = proj₁ θ ⇒ proj₁ φ
@@ -221,12 +221,12 @@ with the meet `_∧_`.  (The full lattice and complete lattice, with the join an
 the bounds `⊥`/`⊤`, are built in the subsequent steps of #271.)
 
 ```agda
-module _ (𝑨 : Algebra α ρ) {ℓ : Level} where
-  Con-Poset : Poset (α ⊔ ρ ⊔ ov ℓ) (α ⊔ ℓ) (α ⊔ ℓ)
+module _ (𝑨 : Algebra {𝑆 = 𝑆} α ρ) {ℓ : Level} where
+  Con-Poset : Poset (α ⊔ ρ ⊔ ov {𝑆 = 𝑆} ℓ) (α ⊔ ℓ) (α ⊔ ℓ)
   Con-Poset = record  { Carrier = Con 𝑨 ℓ ; _≈_ = _≑_ ; _≤_ = _⊆_
                       ; isPartialOrder  = ⊆-isPartialOrder }
 
-  Con-MeetSemilattice : MeetSemilattice (α ⊔ ρ ⊔ ov ℓ) (α ⊔ ℓ) (α ⊔ ℓ)
+  Con-MeetSemilattice : MeetSemilattice (α ⊔ ρ ⊔ ov {𝑆 = 𝑆} ℓ) (α ⊔ ℓ) (α ⊔ ℓ)
   Con-MeetSemilattice = record  { Carrier = Con 𝑨 ℓ
                                 ; _≈_ = _≑_
                                 ; _≤_ = _⊆_

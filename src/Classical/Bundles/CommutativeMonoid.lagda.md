@@ -34,7 +34,7 @@ open import Classical.Signatures.Monoid                using  ( Sig-Monoid ; ∙
 open import Classical.Structures.CommutativeMonoid     using  ( CommutativeMonoid
                                                               ; module CommutativeMonoid-Op )
 open import Classical.Theories.CommutativeMonoid       using  ( assoc ; idˡ ; idʳ ; comm )
-open import Setoid.Algebras.Basic {𝑆 = Sig-Monoid}     using  ( Algebra ; 𝕌[_] ; 𝔻[_] )
+open import Setoid.Algebras.Basic     using  ( Algebra ; 𝕌[_] ; 𝔻[_] )
 open import Setoid.Signatures                          using  ( ⟨_⟩ )
 
 private variable α ρ : Level
@@ -74,7 +74,7 @@ private variable α ρ : Level
       renaming ( _∙_ to _·_ ; ε to e ; assoc to M-assoc
                ; identityˡ to M-idˡ ; identityʳ to M-idʳ ; comm to M-comm )
 
-  𝑨 : Algebra _ _
+  𝑨 : Algebra {𝑆 = Sig-Monoid} _ _
   𝑨 = record { Domain = setoid ; Interp = interp }
     where
     interp : Func (⟨ Sig-Monoid ⟩ setoid) setoid

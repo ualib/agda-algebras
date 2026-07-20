@@ -72,7 +72,7 @@ open import Overture.Signatures             using  ( ArityOf ; OperationSymbolsO
 open import Setoid.Algebras.Basic           using  ( Algebra ; _^_ ; 𝔻[_] ; 𝕌[_] )
 open import Setoid.Terms                    using  ( module Environment )
 
-open import Setoid.Varieties.EquationalLogic {𝑆 = Sig-Group} using ( _⊧_≈_ )
+open import Setoid.Varieties.EquationalLogic using ( _⊧_≈_ )
 
 private variable α ρ : Level
 ```
@@ -82,7 +82,7 @@ private variable α ρ : Level
 
 ```agda
 infix 4 _⊨ᵍᵖ_
-_⊨ᵍᵖ_ : (𝑨 : Algebra α ρ) (ℰ : Eq-Group → Term (Fin 3) × Term (Fin 3)) → Type (α ⊔ ρ)
+_⊨ᵍᵖ_ : (𝑨 : Algebra {𝑆 = Sig-Group} α ρ) (ℰ : Eq-Group → Term (Fin 3) × Term (Fin 3)) → Type (α ⊔ ρ)
 𝑨 ⊨ᵍᵖ ℰ = ∀ i → 𝑨 ⊧ proj₁ (ℰ i) ≈ proj₂ (ℰ i)
 ```
 
@@ -90,7 +90,7 @@ _⊨ᵍᵖ_ : (𝑨 : Algebra α ρ) (ℰ : Eq-Group → Term (Fin 3) × Term (F
 
 ```agda
 Group : (α ρ : Level) → Type (suc α ⊔ suc ρ)
-Group α ρ = Σ[ 𝑨 ∈ Algebra α ρ ] 𝑨 ⊨ᵍᵖ Th-Group
+Group α ρ = Σ[ 𝑨 ∈ Algebra {𝑆 = Sig-Group} α ρ ] 𝑨 ⊨ᵍᵖ Th-Group
 ```
 
 #### The reduct to monoids

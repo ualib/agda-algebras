@@ -52,7 +52,7 @@ open import Classical.Theories.DistributiveLattice    using  ( ∧-assoc ; ∧-c
                                                              ; ∨-assoc ; ∨-comm ; ∨-idem
                                                              ; absorbˡ ; absorbʳ
                                                              ; ∧-distribˡ ; ∨-distribˡ )
-open import Setoid.Algebras.Basic {𝑆 = Sig-Lattice}   using  ( Algebra ; 𝕌[_] ; 𝔻[_] )
+open import Setoid.Algebras.Basic   using  ( Algebra ; 𝕌[_] ; 𝔻[_] )
 open import Setoid.Signatures                         using  ( ⟨_⟩ )
 
 private variable α ρ : Level
@@ -120,7 +120,7 @@ private variable α ρ : Level
   absorbʳ-derived : ∀ x y → (x ∧' y) ∨' x ≈ x
   absorbʳ-derived x y = ≈trans (L-∨-comm (x ∧' y) x) (L-∨-absorbs-∧ x y)
 
-  𝑨 : Algebra _ _
+  𝑨 : Algebra {𝑆 = Sig-Lattice} _ _
   𝑨 = record { Domain = setoid ; Interp = interp }
     where
     interp : Func (⟨ Sig-Lattice ⟩ setoid) setoid

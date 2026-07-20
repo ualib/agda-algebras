@@ -17,9 +17,9 @@ Two other presentations of Birkhoff's theorem live in the source tree, and both 
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
-open import Overture using (𝓞 ; 𝓥 ; Signature)
+open import Overture using (𝓞 ; 𝓥 ; Signature ; 𝑆)
 
-module Setoid.Varieties.HSP {𝑆 : Signature 𝓞 𝓥} where
+module Setoid.Varieties.HSP where
 
 -- Imports from Agda and the Agda Standard Library -------------------------------
 open import Agda.Primitive   using () renaming ( Set to Type )
@@ -31,19 +31,19 @@ open import Relation.Unary   using ( Pred ; _∈_ ; _⊆_ )
 
 -- -- Imports from the Agda Universal Algebra Library ----------------------------
 open import Overture                                   using  ( proj₁ ; proj₂ )
-open import Setoid.Algebras {𝑆 = 𝑆}                    using  ( Algebra ; ov ; Lift-Alg ; ⨅ )
-open import Setoid.Homomorphisms {𝑆 = 𝑆}
+open import Setoid.Algebras                    using  ( Algebra ; ov ; Lift-Alg ; ⨅ )
+open import Setoid.Homomorphisms
 open import Setoid.Relations                           using  ( fkerPred )
-open import Setoid.Subalgebras {𝑆 = 𝑆}                 using  ( _≤_ ; mon→≤ )
-open import Setoid.Terms {𝑆 = 𝑆}                       using  ( module Environment ; 𝑻
+open import Setoid.Subalgebras                 using  ( _≤_ ; mon→≤ )
+open import Setoid.Terms                       using  ( module Environment ; 𝑻
                                                               ; lift-hom ; free-lift
                                                               ; free-lift-interp )
-open import Setoid.Varieties.Closure {𝑆 = 𝑆}           using  ( S ; P ; S-idem
+open import Setoid.Varieties.Closure           using  ( S ; P ; S-idem
                                                               ; V ; V′ ; V-≅-lc )
-open import Setoid.Varieties.FreeAlgebras {𝑆 = 𝑆}      using  ( module FreeHom
+open import Setoid.Varieties.FreeAlgebras      using  ( module FreeHom
                                                               ; 𝔽-ModTh-epi-lift )
-open import Setoid.Varieties.Preservation {𝑆 = 𝑆}      using  ( S-id2 ; PS⊆SP )
-open import Setoid.Varieties.SoundAndComplete {𝑆 = 𝑆}  using  ( module FreeAlgebra ; _⊫_ ; ⊫-proof
+open import Setoid.Varieties.Preservation      using  ( S-id2 ; PS⊆SP )
+open import Setoid.Varieties.SoundAndComplete  using  ( module FreeAlgebra ; _⊫_ ; ⊫-proof
                                                               ; _≈̇_ ; _⊢_▹_≈_ ; Mod ; Th )
 
 open _⟶_          using () renaming ( to to _⟨$⟩_ )
@@ -56,13 +56,13 @@ open Environment  using ( Env )
 ```agda
 module _
   {α ρᵃ ℓ : Level}
-  (𝒦 : Pred (Algebra α ρᵃ) (α ⊔ ρᵃ ⊔ ov ℓ))
+  (𝒦 : Pred (Algebra {𝑆 = 𝑆} α ρᵃ) (α ⊔ ρᵃ ⊔ ov {𝑆 = 𝑆} ℓ))
   {X : Type (α ⊔ ρᵃ ⊔ ℓ)}
   where
 
   private
     ι : Level
-    ι = ov(α ⊔ ρᵃ ⊔ ℓ)
+    ι = ov {𝑆 = 𝑆}(α ⊔ ρᵃ ⊔ ℓ)
 
   open FreeHom (α ⊔ ρᵃ ⊔ ℓ) {α}{ρᵃ}{ℓ}{𝒦}
   open FreeAlgebra {ι = ι}{I = ℐ} ℰ using ( 𝔽[_] )
@@ -74,12 +74,12 @@ assignments of values in the domain `𝕌[ 𝑨 ]` to variables in `X`.
 
 ```agda
   ℑ⁺ : Type ι
-  ℑ⁺ = Σ[ 𝑨 ∈ (Algebra α ρᵃ) ] (𝑨 ∈ S ℓ 𝒦) × (Carrier (Env 𝑨 X))
+  ℑ⁺ = Σ[ 𝑨 ∈ (Algebra {𝑆 = 𝑆} α ρᵃ) ] (𝑨 ∈ S ℓ 𝒦) × (Carrier (Env 𝑨 X))
 
-  𝔄⁺ : ℑ⁺ → Algebra α ρᵃ
+  𝔄⁺ : ℑ⁺ → Algebra {𝑆 = 𝑆} α ρᵃ
   𝔄⁺ i = (proj₁ i)
 
-  ℭ : Algebra ι ι
+  ℭ : Algebra {𝑆 = 𝑆} ι ι
   ℭ = ⨅ 𝔄⁺
 ```
 
@@ -204,17 +204,17 @@ refinement of the equivalent
 theorem's content.
 
 ```agda
-module _ {α ρᵃ ℓ : Level}{𝒦 : Pred(Algebra α ρᵃ) (α ⊔ ρᵃ ⊔ ov ℓ)} where
+module _ {α ρᵃ ℓ : Level}{𝒦 : Pred(Algebra {𝑆 = 𝑆} α ρᵃ) (α ⊔ ρᵃ ⊔ ov {𝑆 = 𝑆} ℓ)} where
   private
     a ι : Level
     a = α ⊔ ρᵃ ⊔ ℓ
-    ι = ov a
+    ι = ov {𝑆 = 𝑆} a
 
   open FreeHom (α ⊔ ρᵃ ⊔ ℓ) {α}{ρᵃ}{ℓ}{𝒦}
   open FreeAlgebra {ι = ι}{I = ℐ} ℰ using ( 𝔽[_] )
 
   Birkhoff : {𝑨 : Algebra a a} → 𝑨 ∈ Mod (Th (V ℓ ι 𝒦)) → 𝑨 ∈ V ℓ ι 𝒦
-  Birkhoff {𝑨 = 𝑨} ModThA = V-≅-lc {α} {ρᵃ} {ℓ} 𝒦 𝑨 VlA
+  Birkhoff {𝑨 = 𝑨} ModThA = V-≅-lc {α = α} {ρᵃ = ρᵃ} {ℓ = ℓ} 𝒦 𝑨 VlA
     where
     open Setoid (Domain 𝑨) using () renaming ( Carrier to ∣A∣ )
     sp𝔽A : 𝔽[ ∣A∣ ] ∈ S{ι} ι (P ℓ ι 𝒦)
@@ -235,7 +235,7 @@ fact that `Mod Th` is a closure operator. Nonetheless, completeness demands
 that we formalize this inclusion as well, however trivial the proof.[^1]
 
 ```agda
-  module _ {𝑨 : Algebra α ρᵃ} where
+  module _ {𝑨 : Algebra {𝑆 = 𝑆} α ρᵃ} where
     open Setoid (Domain 𝑨) using () renaming ( Carrier to ∣A∣ )
 
     Birkhoff-converse : 𝑨 ∈ V′ ℓ ι 𝒦 → 𝑨 ∈ Mod{X = ∣A∣} (Th (V ℓ ι 𝒦))

@@ -12,16 +12,16 @@ This is the [Setoid.Homomorphisms][] module of the [Agda Universal Algebra Libra
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
-open import Overture using (𝓞 ; 𝓥 ; Signature)
+open import Overture using (𝓞 ; 𝓥 ; Signature ; 𝑆)
 
-module Setoid.Homomorphisms {𝑆 : Signature 𝓞 𝓥} where
+module Setoid.Homomorphisms where
 
 open import Setoid.Homomorphisms.Basic                       public
 open import Setoid.Homomorphisms.Kernels                     public
 open import Setoid.Homomorphisms.Products                    public
 open import Setoid.Homomorphisms.Noether                     public
 open import Setoid.Homomorphisms.Factor                      public
-open import Setoid.Homomorphisms.Isomorphisms       {𝑆 = 𝑆}  public
-open import Setoid.Homomorphisms.HomomorphicImages  {𝑆 = 𝑆}  public
+open import Setoid.Homomorphisms.Isomorphisms  public
+open import Setoid.Homomorphisms.HomomorphicImages  public
 open import Setoid.Homomorphisms.Properties                  public
 ```

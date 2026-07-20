@@ -141,8 +141,8 @@ module _ {𝑆₁ 𝑆₂ : Signature 𝓞 𝓥} (φ : SigMorphism 𝑆₁ 𝑆�
   open Environment {𝑆 = 𝑆₁} (reduct φ 𝑨) using () renaming ( ⟦_⟧ to ⟦_⟧₁ )
   open Environment {𝑆 = 𝑆₂} 𝑨 using () renaming ( ⟦_⟧ to ⟦_⟧₂ )
   open Setoid 𝔻[ 𝑨 ] using ( _≈_ ) renaming (refl to ≈refl; sym to ≈sym ; trans to ≈trans )
-  open EqLogic {𝑆 = 𝑆₁} using () renaming ( _⊧_≈_ to _⊧₁_≈_ )
-  open EqLogic {𝑆 = 𝑆₂} using () renaming ( _⊧_≈_ to _⊧₂_≈_ )
+  open EqLogic using () renaming ( _⊧_≈_ to _⊧₁_≈_ )
+  open EqLogic using () renaming ( _⊧_≈_ to _⊧₂_≈_ )
 ```
 
 The commuting triangle: interpreting an `𝑆₁`-term in the reduct is interpreting its

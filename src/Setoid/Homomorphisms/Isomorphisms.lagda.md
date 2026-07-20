@@ -13,9 +13,9 @@ This is the [Setoid.Homomorphisms.Factor][] module of the [Agda Universal Algebr
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
-open import Overture using (𝓞 ; 𝓥 ; Signature)
+open import Overture using (𝓞 ; 𝓥 ; Signature ; 𝑆)
 
-module Setoid.Homomorphisms.Isomorphisms {𝑆 : Signature 𝓞 𝓥}  where
+module Setoid.Homomorphisms.Isomorphisms where
 
 -- Imports from Agda (builtin/primitive) and the Agda Standard Library ---------------------
 open import Agda.Primitive              using () renaming ( Set to Type )
@@ -34,7 +34,7 @@ open import Overture.Operations              using  ( Op )
 open import Setoid.Functions                 using  ( eq ; IsInjective
                                                     ; IsSurjective ; SurjInv
                                                     ; SurjInvIsInverseʳ )
-open import Setoid.Algebras {𝑆 = 𝑆}          using  ( Algebra ; Lift-Alg ; _^_ ; 𝔻[_]
+open import Setoid.Algebras          using  ( Algebra ; Lift-Alg ; _^_ ; 𝔻[_]
                                                     ; 𝕌[_] ; mkAlgebra ; Lift-Algˡ
                                                     ; Lift-Algʳ ; ⨅ )
 
@@ -63,7 +63,7 @@ We could define this using Sigma types, as in
 However, with four components, an equivalent record type is easier to work with.
 
 ```agda
-module _ (𝑨 : Algebra α ρᵃ) (𝑩 : Algebra β ρᵇ) where
+module _ {𝑆 : Signature 𝓞 𝓥}(𝑨 : Algebra {𝑆 = 𝑆} α ρᵃ) (𝑩 : Algebra {𝑆 = 𝑆} β ρᵇ) where
   open Setoid 𝔻[ 𝑨 ] using ( sym ; trans ) renaming ( _≈_ to _≈₁_ )
   open Setoid 𝔻[ 𝑩 ] using () renaming ( _≈_ to _≈₂_ ; sym to sym₂ ; trans to trans₂)
 
@@ -107,14 +107,15 @@ and forth between them which compose to the identity map.
 ```agda
 open _≅_
 
-≅-refl : Reflexive (_≅_ {α}{ρᵃ})
-≅-refl {α}{ρᵃ}{𝑨} = mkiso 𝒾𝒹 𝒾𝒹 (λ _ → Setoid.refl 𝔻[ 𝑨 ]) (λ _ → Setoid.refl 𝔻[ 𝑨 ])
+≅-refl : {𝑨 : Algebra {𝑆 = 𝑆} α ρᵃ} → 𝑨 ≅ 𝑨
+≅-refl {𝑨 = 𝑨} = mkiso 𝒾𝒹 𝒾𝒹 (λ _ → Setoid.refl 𝔻[ 𝑨 ]) (λ _ → Setoid.refl 𝔻[ 𝑨 ])
 
-≅-sym : Sym (_≅_{β}{ρᵇ}) (_≅_{α}{ρᵃ})
+≅-sym : {𝑨 : Algebra {𝑆 = 𝑆} α ρᵃ}{𝑩 : Algebra {𝑆 = 𝑆} β ρᵇ} → 𝑨 ≅ 𝑩 → 𝑩 ≅ 𝑨
 ≅-sym φ = mkiso (from φ) (to φ) (from∼to φ) (to∼from φ)
 
-≅-trans : Trans (_≅_ {α}{ρᵃ})(_≅_{β}{ρᵇ})(_≅_{α}{ρᵃ}{γ}{ρᶜ})
-≅-trans {ρᶜ = ρᶜ}{𝑨}{𝑩}{𝑪} ab bc = mkiso f g τ ν
+≅-trans :  {𝑨 : Algebra {𝑆 = 𝑆} α ρᵃ}{𝑩 : Algebra {𝑆 = 𝑆} β ρᵇ}{𝑪 : Algebra {𝑆 = 𝑆} γ ρᶜ}
+  → 𝑨 ≅ 𝑩 → 𝑩 ≅ 𝑪 → 𝑨 ≅ 𝑪
+≅-trans {𝑨 = 𝑨}{𝑩}{𝑪} ab bc = mkiso f g τ ν
   where
   f : hom 𝑨 𝑪
   f = ⊙-hom (to ab) (to bc)
@@ -130,7 +131,7 @@ open _≅_
   ν : ∀ a → g .proj₁ ⟨$⟩ (f .proj₁ ⟨$⟩ a) ≈₁ a
   ν a = trans₁ (cong (from ab .proj₁) (from∼to bc (to ab .proj₁ ⟨$⟩ a))) (from∼to ab a)
 
-module _ {𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ} where
+module _ {𝑨 : Algebra {𝑆 = 𝑆} α ρᵃ}{𝑩 : Algebra {𝑆 = 𝑆} β ρᵇ} where
   -- The "to" map of an isomorphism is injective.
   ≅toInjective : (φ : 𝑨 ≅ 𝑩) → IsInjective (proj₁ (to φ))
   ≅toInjective (mkiso (f , _) (g , _) _ g∼f){a}{b} fafb = Goal
@@ -149,7 +150,7 @@ module _ {𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ} where
     Goal = trans lem1 (trans lem2 lem3)
 
  -- The "from" map of an isomorphism is injective.
-≅fromInjective : {𝑨 : Algebra α ρᵃ} {𝑩 : Algebra β ρᵇ} (φ : 𝑨 ≅ 𝑩)
+≅fromInjective : {𝑨 : Algebra {𝑆 = 𝑆} α ρᵃ} {𝑩 : Algebra {𝑆 = 𝑆} β ρᵇ} (φ : 𝑨 ≅ 𝑩)
   → IsInjective (from φ .proj₁)
 ≅fromInjective φ = ≅toInjective (≅-sym φ)
 ```
@@ -171,7 +172,7 @@ The bespoke `cong-f`{.AgdaBound} demanded by the smart constructor plays no role
 isomorphism — only the operations do — so it is accepted but never inspected.
 
 ```agda
-module _ {𝑨 : Algebra α ρᵃ} where
+module _ {𝑨 : Algebra {𝑆 = 𝑆} α ρᵃ} where
   open Setoid 𝔻[ 𝑨 ] using ( _≈_ ; sym ) renaming (refl to ≈refl)
 
   ≅-mkAlgebra : (f : (o : OperationSymbolsOf 𝑆) → Op (ArityOf 𝑆 o) 𝕌[ 𝑨 ])
@@ -204,7 +205,7 @@ This is the converse of `≅toInjective`/`toIsSurjective` and lets one promote a
 bijective `hom` to an `_≅_` without exhibiting the inverse homomorphism by hand.
 
 ```agda
-module _ {𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ} where
+module _ {𝑨 : Algebra {𝑆 = 𝑆} α ρᵃ}{𝑩 : Algebra {𝑆 = 𝑆} β ρᵇ} where
   open Algebra using ( Interp )
   open IsHom
 
@@ -242,17 +243,17 @@ makes the lift operation a workable solution to the technical problems that aris
 from the noncumulativity of Agda's universe hierarchy.
 
 ```agda
-module _ {𝑨 : Algebra α ρᵃ}{ℓ : Level} where
+module _ {𝑨 : Algebra {𝑆 = 𝑆} α ρᵃ}{ℓ : Level} where
   Lift-≅ˡ : 𝑨 ≅ Lift-Algˡ 𝑨 ℓ
   Lift-≅ˡ = mkiso ToLiftˡ FromLiftˡ (ToFromLiftˡ{𝑨 = 𝑨}) (FromToLiftˡ{𝑨 = 𝑨}{ℓ})
 
   Lift-≅ʳ : 𝑨 ≅ (Lift-Algʳ 𝑨 ℓ)
   Lift-≅ʳ = mkiso ToLiftʳ FromLiftʳ (ToFromLiftʳ{𝑨 = 𝑨}) (FromToLiftʳ{𝑨 = 𝑨}{ℓ})
 
-Lift-≅ : {𝑨 : Algebra α ρᵃ}{ℓ ρ : Level} → 𝑨 ≅ (Lift-Alg 𝑨 ℓ ρ)
+Lift-≅ : {𝑨 : Algebra {𝑆 = 𝑆} α ρᵃ}{ℓ ρ : Level} → 𝑨 ≅ (Lift-Alg 𝑨 ℓ ρ)
 Lift-≅ = ≅-trans Lift-≅ˡ Lift-≅ʳ
 
-module _ {𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ}{ℓᵃ ℓᵇ : Level} where
+module _ {𝑨 : Algebra {𝑆 = 𝑆} α ρᵃ}{𝑩 : Algebra {𝑆 = 𝑆} β ρᵇ}{ℓᵃ ℓᵇ : Level} where
   Lift-Alg-isoˡ : 𝑨 ≅ 𝑩 → Lift-Algˡ 𝑨 ℓᵃ ≅ Lift-Algˡ 𝑩 ℓᵇ
   Lift-Alg-isoˡ A≅B = ≅-trans (≅-trans (≅-sym Lift-≅ˡ ) A≅B) Lift-≅ˡ
 
@@ -260,7 +261,7 @@ module _ {𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ}{ℓᵃ ℓᵇ : Leve
   Lift-Alg-isoʳ A≅B = ≅-trans (≅-trans (≅-sym Lift-≅ʳ ) A≅B) Lift-≅ʳ
 
 
-Lift-Alg-iso : {𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ}{ℓᵃ rᵃ ℓᵇ rᵇ : Level}
+Lift-Alg-iso : {𝑨 : Algebra {𝑆 = 𝑆} α ρᵃ}{𝑩 : Algebra {𝑆 = 𝑆} β ρᵇ}{ℓᵃ rᵃ ℓᵇ rᵇ : Level}
   → 𝑨 ≅ 𝑩 → Lift-Alg 𝑨 ℓᵃ rᵃ ≅ Lift-Alg 𝑩 ℓᵇ rᵇ
 Lift-Alg-iso {ℓᵇ = ℓᵇ} A≅B =
   ≅-trans  (Lift-Alg-isoʳ{ℓᵇ = ℓᵇ}(≅-trans (Lift-Alg-isoˡ{ℓᵇ = ℓᵇ} A≅B) (≅-sym Lift-≅ˡ)))
@@ -270,18 +271,18 @@ Lift-Alg-iso {ℓᵇ = ℓᵇ} A≅B =
 The lift is also associative, up to isomorphism at least.
 
 ```agda
-module _ {𝑨 : Algebra α ρᵃ}{ℓ₁ ℓ₂ : Level} where
+module _ {𝑨 : Algebra {𝑆 = 𝑆} α ρᵃ}{ℓ₁ ℓ₂ : Level} where
   Lift-assocˡ : Lift-Algˡ 𝑨 (ℓ₁ ⊔ ℓ₂) ≅  Lift-Algˡ (Lift-Algˡ 𝑨 ℓ₁) ℓ₂
   Lift-assocˡ = ≅-trans (≅-trans (≅-sym Lift-≅ˡ) Lift-≅ˡ) Lift-≅ˡ
 
   Lift-assocʳ : Lift-Algʳ 𝑨 (ℓ₁ ⊔ ℓ₂) ≅  Lift-Algʳ (Lift-Algʳ 𝑨 ℓ₁) ℓ₂
   Lift-assocʳ = ≅-trans (≅-trans (≅-sym Lift-≅ʳ) Lift-≅ʳ) Lift-≅ʳ
 
-Lift-assoc : {𝑨 : Algebra α ρᵃ}{ℓ ρ : Level}
+Lift-assoc : {𝑨 : Algebra {𝑆 = 𝑆} α ρᵃ}{ℓ ρ : Level}
   → Lift-Alg 𝑨 ℓ ρ ≅  Lift-Algʳ (Lift-Algˡ 𝑨 ℓ) ρ
 Lift-assoc = ≅-trans (≅-sym Lift-≅) (≅-trans Lift-≅ˡ Lift-≅ʳ)
 
-Lift-assoc' : {𝑨 : Algebra α α}{β γ : Level}
+Lift-assoc' : {𝑨 : Algebra {𝑆 = 𝑆} α α}{β γ : Level}
   → Lift-Alg 𝑨 (β ⊔ γ) (β ⊔ γ) ≅ Lift-Alg (Lift-Alg 𝑨 β β) γ γ
 Lift-assoc' = ≅-trans (≅-sym Lift-≅) (≅-trans Lift-≅ Lift-≅)
 ```
@@ -290,7 +291,7 @@ Products of isomorphic families of algebras are themselves isomorphic.  The proo
 looks a bit technical, but it is as straightforward as it ought to be.
 
 ```agda
-module _ {𝓘 : Level}{I : Type 𝓘} {𝒜 : I → Algebra α ρᵃ} {ℬ : I → Algebra β ρᵇ} where
+module _ {𝓘 : Level}{I : Type 𝓘} {𝒜 : I → Algebra {𝑆 = 𝑆} α ρᵃ} {ℬ : I → Algebra {𝑆 = 𝑆} β ρᵇ} where
   ⨅≅ : (∀ (i : I) → 𝒜 i ≅ ℬ i) → ⨅ 𝒜 ≅ ⨅ ℬ
   ⨅≅ AB = mkiso (ϕ , ϕhom) (ψ , ψhom) ϕ∼ψ ψ∼ϕ
     where
@@ -322,8 +323,8 @@ A nearly identical proof goes through for isomorphisms of lifted products.
 ```agda
 module _
   {𝓘 : Level}{I : Type 𝓘}
-  {𝒜 : I → Algebra α ρᵃ}
-  {ℬ : (Lift γ I) → Algebra β ρᵇ} where
+  {𝒜 : I → Algebra {𝑆 = 𝑆} α ρᵃ}
+  {ℬ : (Lift γ I) → Algebra {𝑆 = 𝑆} β ρᵇ} where
 
 
   Lift-Alg-⨅≅ˡ : (∀ i → 𝒜 i ≅ ℬ (lift i)) → Lift-Algˡ (⨅ 𝒜) γ ≅ ⨅ ℬ
@@ -354,12 +355,12 @@ module _
     A≅B : ⨅ 𝒜 ≅ ⨅ ℬ
     A≅B = mkiso (ϕ , ϕhom) (ψ , ψhom) ϕ∼ψ ψ∼ϕ
 
-module _ {𝓘 : Level}{I : Type 𝓘} {𝒜 : I → Algebra α ρᵃ} where
+module _ {𝓘 : Level}{I : Type 𝓘} {𝒜 : I → Algebra {𝑆 = 𝑆} α ρᵃ} where
 
   ⨅≅⨅ℓ : ∀ {ℓ} → ⨅ 𝒜 ≅ ⨅ (λ i → Lift-Alg (𝒜 (lower{ℓ = ℓ} i)) ℓ ℓ)
   ⨅≅⨅ℓ {ℓ} = mkiso (φ , φhom) (ψ , ψhom) φ∼ψ ψ∼φ
     where
-    ⨅ℓ𝒜 : Algebra _ _
+    ⨅ℓ𝒜 : Algebra {𝑆 = 𝑆} _ _
     ⨅ℓ𝒜 = ⨅ (λ i → Lift-Alg (𝒜 (lower{ℓ = ℓ} i)) ℓ ℓ)
 
     φ : 𝔻[ ⨅ 𝒜 ] ⟶ 𝔻[ ⨅ℓ𝒜 ]
@@ -384,7 +385,7 @@ module _ {𝓘 : Level}{I : Type 𝓘} {𝒜 : I → Algebra α ρᵃ} where
     ψ∼φ : ∀ a i → 𝔻[ 𝒜 i ] ._≈_ ((ψ ⟨$⟩ (φ ⟨$⟩ a)) i) (a i)
     ψ∼φ _ = λ i → Setoid.reflexive 𝔻[ 𝒜  i ] refl
 
-module _ {ι : Level}{I : Type ι}{𝒜 : I → Algebra α ρᵃ} where
+module _ {ι : Level}{I : Type ι}{𝒜 : I → Algebra {𝑆 = 𝑆} α ρᵃ} where
 
   ⨅≅⨅ℓρ : ∀ {ℓ ρ} → ⨅ 𝒜 ≅ ⨅ (λ i → Lift-Alg (𝒜 i) ℓ ρ)
   ⨅≅⨅ℓρ {ℓ}{ρ} = mkiso φ ψ φ∼ψ ψ∼φ
@@ -418,7 +419,7 @@ module _ {ι : Level}{I : Type ι}{𝒜 : I → Algebra α ρᵃ} where
     ψ∼φ : ∀ a → ψ .proj₁ ⟨$⟩ (φ .proj₁ ⟨$⟩ a) ≈₁ a
     ψ∼φ _ = reflexive refl
 
-module _ {ℓᵃ : Level}{I : Type ℓᵃ}{𝒜 : I → Algebra α ρᵃ}where
+module _ {ℓᵃ : Level}{I : Type ℓᵃ}{𝒜 : I → Algebra {𝑆 = 𝑆} α ρᵃ}where
   open IsHom
 
   ⨅≅⨅lowerℓρ : ∀ {ℓ ρ} → ⨅ 𝒜 ≅ ⨅ λ i → Lift-Alg (𝒜 (lower{ℓ = α ⊔ ρᵃ} i)) ℓ ρ
@@ -457,9 +458,9 @@ module _ {ℓᵃ : Level}{I : Type ℓᵃ}{𝒜 : I → Algebra α ρᵃ}where
   ℓ⨅≅⨅ℓ : ∀ {ℓ} → Lift-Alg (⨅ 𝒜) ℓ ℓ ≅ ⨅ λ i → Lift-Alg (𝒜 (lower{ℓ = ℓ} i)) ℓ ℓ
   ℓ⨅≅⨅ℓ {ℓ} = mkiso (φ , φhom) (ψ , ψhom) φ∼ψ ψ∼φ
     where
-    ℓ⨅𝒜 : Algebra (α ⊔ ℓᵃ ⊔ ℓ) (ρᵃ ⊔ ℓᵃ ⊔ ℓ)
+    ℓ⨅𝒜 : Algebra {𝑆 = 𝑆} (α ⊔ ℓᵃ ⊔ ℓ) (ρᵃ ⊔ ℓᵃ ⊔ ℓ)
     ℓ⨅𝒜 = Lift-Alg (⨅ 𝒜) ℓ ℓ
-    ⨅ℓ𝒜 : Algebra (α ⊔ ℓ ⊔ ℓᵃ) (ρᵃ ⊔ ℓ ⊔ ℓᵃ)
+    ⨅ℓ𝒜 : Algebra {𝑆 = 𝑆} (α ⊔ ℓ ⊔ ℓᵃ) (ρᵃ ⊔ ℓ ⊔ ℓᵃ)
     ⨅ℓ𝒜 = ⨅ (λ i → Lift-Alg (𝒜 (lower i)) ℓ ℓ)
 
     φ : 𝔻[ ℓ⨅𝒜 ] ⟶ 𝔻[ ⨅ℓ𝒜 ]
@@ -484,7 +485,7 @@ module _ {ℓᵃ : Level}{I : Type ℓᵃ}{𝒜 : I → Algebra α ρᵃ}where
     ψ∼φ : ∀ a → ψ ⟨$⟩ (φ ⟨$⟩ a) ≈′ a
     ψ∼φ _ .lower = λ i → Setoid.reflexive 𝔻[ 𝒜  i ] refl
 
-module _ {ι : Level}{𝑨 : Algebra α ρᵃ} where
+module _ {ι : Level}{𝑨 : Algebra {𝑆 = 𝑆} α ρᵃ} where
   private
     to𝟙 : 𝔻[ 𝑨 ] ⟶ 𝔻[ ⨅ (λ (i : 𝟙{ι}) → 𝑨) ]
     to𝟙 ⟨$⟩ x = λ _ → x
@@ -506,7 +507,7 @@ module _ {ι : Level}{𝑨 : Algebra α ρᵃ} where
   ≅⨅⁺-refl .to∼from = λ _ _ → ≈refl
   ≅⨅⁺-refl .from∼to = λ _ → ≈refl
 
-module _ {𝑨 : Algebra α ρᵃ} where
+module _ {𝑨 : Algebra {𝑆 = 𝑆} α ρᵃ} where
   private
     to⊤ : 𝔻[ 𝑨 ] ⟶ 𝔻[ ⨅ (λ (i : ⊤) → 𝑨) ]
     to⊤ ⟨$⟩ x = λ _ → x

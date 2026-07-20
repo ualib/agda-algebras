@@ -82,7 +82,7 @@ open import Setoid.Algebras.Reduct          using ( reductBy )
 open import Setoid.Homomorphisms.Basic      using ( hom ; IsHom )
 open import Setoid.Terms                    using ( module Environment )
 
-open import Setoid.Varieties.EquationalLogic {𝑆 = Sig-Monoid} using ( _⊧_≈_ )
+open import Setoid.Varieties.EquationalLogic using ( _⊧_≈_ )
 
 private variable α ρ : Level
 ```
@@ -92,7 +92,7 @@ private variable α ρ : Level
 
 ```agda
 infix 4 _⊨ᵐᵒ_
-_⊨ᵐᵒ_ : (𝑨 : Algebra α ρ) (ℰ : Eq-Monoid → Term (Fin 3) × Term (Fin 3)) → Type (α ⊔ ρ)
+_⊨ᵐᵒ_ : (𝑨 : Algebra {𝑆 = Sig-Monoid} α ρ) (ℰ : Eq-Monoid → Term (Fin 3) × Term (Fin 3)) → Type (α ⊔ ρ)
 𝑨 ⊨ᵐᵒ ℰ = ∀ i → 𝑨 ⊧ proj₁ (ℰ i) ≈ proj₂ (ℰ i)
 ```
 
@@ -100,7 +100,7 @@ _⊨ᵐᵒ_ : (𝑨 : Algebra α ρ) (ℰ : Eq-Monoid → Term (Fin 3) × Term (
 
 ```agda
 Monoid : (α ρ : Level) → Type (suc α ⊔ suc ρ)
-Monoid α ρ = Σ[ 𝑨 ∈ Algebra α ρ ] 𝑨 ⊨ᵐᵒ Th-Monoid
+Monoid α ρ = Σ[ 𝑨 ∈ Algebra {𝑆 = Sig-Monoid} α ρ ] 𝑨 ⊨ᵐᵒ Th-Monoid
 ```
 
 #### The reduct to magmas

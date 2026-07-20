@@ -95,7 +95,7 @@ open import Setoid.Algebras.Basic             using  ( Algebra ; _^_ ; 𝔻[_] ;
 open import Setoid.Algebras.Reduct            using  ( reductBy )
 open import Setoid.Signatures                 using  ( ⟨_⟩ )
 open import Setoid.Terms                      using  ( module Environment )
-open import Setoid.Varieties.EquationalLogic {𝑆 = Sig-Lattice} using ( _⊧_≈_ )
+open import Setoid.Varieties.EquationalLogic using ( _⊧_≈_ )
 
 private variable α ρ : Level
 ```
@@ -105,7 +105,7 @@ private variable α ρ : Level
 
 ```agda
 infix 4 _⊨ˡᵃ_
-_⊨ˡᵃ_ : (𝑨 : Algebra α ρ) (ℰ : Eq-Lattice → Term (Fin 3) × Term (Fin 3)) → Type (α ⊔ ρ)
+_⊨ˡᵃ_ : (𝑨 : Algebra {𝑆 = Sig-Lattice} α ρ) (ℰ : Eq-Lattice → Term (Fin 3) × Term (Fin 3)) → Type (α ⊔ ρ)
 𝑨 ⊨ˡᵃ ℰ = ∀ i → 𝑨 ⊧ proj₁ (ℰ i) ≈ proj₂ (ℰ i)
 ```
 
@@ -113,7 +113,7 @@ _⊨ˡᵃ_ : (𝑨 : Algebra α ρ) (ℰ : Eq-Lattice → Term (Fin 3) × Term (
 
 ```agda
 Lattice : (α ρ : Level) → Type (suc α ⊔ suc ρ)
-Lattice α ρ = Σ[ 𝑨 ∈ Algebra α ρ ] 𝑨 ⊨ˡᵃ Th-Lattice
+Lattice α ρ = Σ[ 𝑨 ∈ Algebra {𝑆 = Sig-Lattice} α ρ ] 𝑨 ⊨ˡᵃ Th-Lattice
 ```
 
 #### The meet and join magma reducts

@@ -13,21 +13,21 @@ This is the [Setoid.Varieties][] module of the [Agda Universal Algebra Library][
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
-open import Overture using (𝓞 ; 𝓥 ; Signature)
+open import Overture using (𝓞 ; 𝓥 ; Signature ; 𝑆)
 
-module Setoid.Varieties {𝑆 : Signature 𝓞 𝓥} where
+module Setoid.Varieties where
 
-open import Setoid.Varieties.Closure           {𝑆 = 𝑆}  public
-open import Setoid.Varieties.EquationalLogic   {𝑆 = 𝑆}  public
-open import Setoid.Varieties.FreeAlgebras      {𝑆 = 𝑆}  public
-open import Setoid.Varieties.FreeSubstitution  {𝑆 = 𝑆}  public
-open import Setoid.Varieties.HSP               {𝑆 = 𝑆}  public
+open import Setoid.Varieties.Closure  public
+open import Setoid.Varieties.EquationalLogic  public
+open import Setoid.Varieties.FreeAlgebras  public
+open import Setoid.Varieties.FreeSubstitution  public
+open import Setoid.Varieties.HSP  public
 open import Setoid.Varieties.Interpretation             public
 open import Setoid.Varieties.Invariance                 public
-open import Setoid.Varieties.Invariants        {𝑆 = 𝑆}  public
+open import Setoid.Varieties.Invariants  public
 open import Setoid.Varieties.Maltsev                    public
-open import Setoid.Varieties.Preservation      {𝑆 = 𝑆}  public
-open import Setoid.Varieties.Properties        {𝑆 = 𝑆}  public
+open import Setoid.Varieties.Preservation  public
+open import Setoid.Varieties.Properties  public
 open import Setoid.Varieties.Reducts                    public
-open import Setoid.Varieties.SoundAndComplete  {𝑆 = 𝑆}  public
+open import Setoid.Varieties.SoundAndComplete  public
 ```

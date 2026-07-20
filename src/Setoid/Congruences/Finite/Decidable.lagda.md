@@ -82,9 +82,9 @@ of L2 on the matrix-derived list rather than transport its theorem.[^4]
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
-open import Overture using ( 𝓞 ; 𝓥 ; Signature )
+open import Overture using ( 𝓞 ; 𝓥 ; Signature ; 𝑆 )
 
-module Setoid.Congruences.Finite.Decidable {𝑆 : Signature 𝓞 𝓥} where
+module Setoid.Congruences.Finite.Decidable where
 
 open import Agda.Primitive using () renaming ( Set to Type )
 
@@ -119,12 +119,12 @@ open import Relation.Binary.PropositionalEquality          using  ( cong ; refl 
 open import Relation.Nullary.Decidable                     using  ( Dec ; does ; T? )
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
-open import Setoid.Algebras.Basic            {𝑆 = 𝑆}  using  ( Algebra ; 𝕌[_] ; 𝔻[_] )
+open import Setoid.Algebras.Basic  using  ( Algebra ; 𝕌[_] ; 𝔻[_] )
 open import Setoid.Algebras.Finite                    using  ( FiniteAlgebra )
 open import Setoid.Congruences.Basic                  using  ( Con )
-open import Setoid.Congruences.Finite.Basic  {𝑆 = 𝑆}  using  ( DecCon ; ConRel )
+open import Setoid.Congruences.Finite.Basic  using  ( DecCon ; ConRel )
 open import Setoid.Congruences.Generation             using  ( Cg ; Gen ; base ; Cg-least )
-open import Setoid.Congruences.Lattice       {𝑆 = 𝑆}  using  ( _≑_ )
+open import Setoid.Congruences.Lattice  using  ( _≑_ )
 open import Setoid.Congruences.Presented              using  ( fromPairs ; con-resp-≈
                                                              ; Cg-DecCon ; does-in ; does-out )
 open import Setoid.Signatures.Finite                  using  ( FiniteSignature )
@@ -146,7 +146,7 @@ below.  The `witnessᵈ*`{.AgdaFunction} projections mirror the `witness*` helpe
 the semantic record.
 
 ```agda
-record FiniteCongruencesᵈ (𝑨 : Algebra α ρ) : Type (lsuc (𝓞 ⊔ 𝓥 ⊔ α ⊔ ρ)) where
+record FiniteCongruencesᵈ {𝑆 : Signature 𝓞 𝓥}(𝑨 : Algebra {𝑆 = 𝑆} α ρ) : Type (lsuc (𝓞 ⊔ 𝓥 ⊔ α ⊔ ρ)) where
   field
     -- a finite list of decidable congruences of 𝑨 ...
     consᵈ      : List (DecCon 𝑨 (𝓞 ⊔ 𝓥 ⊔ α ⊔ ρ))
@@ -212,7 +212,7 @@ signature-finiteness data `𝑺`.  Only `card`{.AgdaField}, `enum`{.AgdaField}, 
 all of `𝑺` enter only through `Cg-DecCon`{.AgdaFunction}.
 
 ```agda
-module _ {𝑨 : Algebra α ρ}(𝑭 : FiniteAlgebra 𝑨)(𝑺 : FiniteSignature 𝑆) where
+module _ {𝓞 𝓥 : Level}{𝑆 : Signature 𝓞 𝓥}{𝑨 : Algebra {𝑆 = 𝑆} α ρ}(𝑭 : FiniteAlgebra 𝑨)(𝑺 : FiniteSignature 𝑆) where
   open FiniteAlgebra 𝑭 using ( card ; enum ; enum-sur )
   open Setoid 𝔻[ 𝑨 ] using ( _≈_ ) renaming ( sym to ≈sym )
 
@@ -397,7 +397,7 @@ here.
 -- L3: a finite finitary algebra has a constructively complete list of decidable congruences.
 open FiniteCongruencesᵈ
 
-FiniteAlgebra→FiniteCongruencesᵈ : {𝑨 : Algebra α ρ}
+FiniteAlgebra→FiniteCongruencesᵈ : {𝑨 : Algebra {𝑆 = 𝑆} α ρ}
   →  FiniteAlgebra 𝑨 → FiniteSignature 𝑆 → FiniteCongruencesᵈ 𝑨
 FiniteAlgebra→FiniteCongruencesᵈ 𝑭 𝑺 .consᵈ = allDecCons 𝑭 𝑺
 FiniteAlgebra→FiniteCongruencesᵈ 𝑭 𝑺 .completeᵈ = allDecCons-complete 𝑭 𝑺

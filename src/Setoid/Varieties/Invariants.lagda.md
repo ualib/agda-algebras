@@ -17,9 +17,9 @@ The canonical example available in this library is the modelling relation `𝑨 
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
-open import Overture using ( 𝓞 ; 𝓥 ; Signature )
+open import Overture using ( 𝓞 ; 𝓥 ; Signature ; 𝑆 )
 
-module Setoid.Varieties.Invariants {𝑆 : Signature 𝓞 𝓥} where
+module Setoid.Varieties.Invariants where
 
 -- Imports from Agda and the Agda Standard Library --------------------------------
 open import Agda.Primitive  using () renaming ( Set to Type )
@@ -27,8 +27,8 @@ open import Level           using ( Level )
 open import Relation.Unary  using ( Pred )
 
 -- Imports from the Agda Universal Algebra Library -------------------------------
-open import Setoid.Algebras       {𝑆 = 𝑆}  using ( Algebra )
-open import Setoid.Homomorphisms  {𝑆 = 𝑆}  using ( _≅_ )
+open import Setoid.Algebras  using ( Algebra )
+open import Setoid.Homomorphisms  using ( _≅_ )
 
 private variable α ρᵃ ℓ : Level
 ```
@@ -37,6 +37,6 @@ private variable α ρᵃ ℓ : Level
 A predicate `P : Pred (Algebra α ρᵃ) ℓ` is an *algebraic invariant* when, given any two algebras `𝑨` and `𝑩` at the same universe levels and an isomorphism `𝑨 ≅ 𝑩`, the property `P 𝑨` entails `P 𝑩`.  The same-level restriction is forced by Agda's `Pred` type and matches the legacy `Base.Varieties.Invariants` definition; a level-heterogeneous variant could be obtained by parametrizing over a level-indexed family of predicates, but no current consumer requires it.
 
 ```agda
-AlgebraicInvariant : Pred (Algebra α ρᵃ) ℓ → Type _
+AlgebraicInvariant : Pred (Algebra {𝑆 = 𝑆} α ρᵃ) ℓ → Type _
 AlgebraicInvariant P = ∀ 𝑨 𝑩 → P 𝑨 → 𝑨 ≅ 𝑩 → P 𝑩
 ```

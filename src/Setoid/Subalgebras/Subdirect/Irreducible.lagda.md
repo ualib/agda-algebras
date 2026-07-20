@@ -35,9 +35,9 @@ congruence-lattice statement about separating families, where the monolith argum
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
-open import Overture using ( 𝓞 ; 𝓥 ; Signature )
+open import Overture using ( 𝓞 ; 𝓥 ; Signature ; 𝑆 )
 
-module Setoid.Subalgebras.Subdirect.Irreducible {𝑆 : Signature 𝓞 𝓥} where
+module Setoid.Subalgebras.Subdirect.Irreducible where
 
 -- Imports from Agda and the Agda Standard Library ----------------------------
 open import Agda.Primitive                         using () renaming ( Set to Type )
@@ -53,13 +53,13 @@ open import Relation.Nullary.Decidable             using ( ¬? ; decidable-stabl
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
 open import Setoid.Functions                       using  ( IsInjective ; IsSurjective )
-open import Setoid.Algebras              {𝑆 = 𝑆}   using  ( Algebra ; ⨅ )
-open import Setoid.Congruences           {𝑆 = 𝑆}   using  ( Con )
-open import Setoid.Homomorphisms         {𝑆 = 𝑆}   using  ( hom ; kercon ; _≅_ ; Bijective→≅ )
-open import Setoid.Congruences.Monolith  {𝑆 = 𝑆}   using  ( HasMonolith ; Nonzero ; BelowDiagonal
+open import Setoid.Algebras   using  ( Algebra ; ⨅ )
+open import Setoid.Congruences   using  ( Con )
+open import Setoid.Homomorphisms   using  ( hom ; kercon ; _≅_ ; Bijective→≅ )
+open import Setoid.Congruences.Monolith   using  ( HasMonolith ; Nonzero ; BelowDiagonal
                                                           ; IsSubdirectlyIrreducible
                                                           ; mono-nonzero ; mono-least ; ⋂ )
-open import Setoid.Subalgebras.Subdirect.Basic {𝑆 = 𝑆}
+open import Setoid.Subalgebras.Subdirect.Basic
   using  ( coord ; SubdirectEmbedding ; Separates ; embed-inj ; proj-onto )
 
 private variable α ρ αᵃ ι : Level
@@ -73,7 +73,7 @@ the kernels are `Con 𝑨 ρ`), and a homomorphism `h : 𝑨 → ⨅ 𝒜`.  The
 `h` is the kernel congruence of the `i`-th coordinate map `coord 𝒜 h i = projᵢ ∘ h`.
 
 ```agda
-module _ {I : Type ι}{𝑨 : Algebra α ρ}(𝒜 : I → Algebra αᵃ ρ)(h : hom 𝑨 (⨅ 𝒜)) where
+module _ {𝑆 : Signature 𝓞 𝓥}{I : Type ι}{𝑨 : Algebra {𝑆 = 𝑆} α ρ}(𝒜 : I → Algebra {𝑆 = 𝑆} αᵃ ρ)(h : hom 𝑨 (⨅ 𝒜)) where
 
   -- The kernel of the i-th coordinate map: the congruence on 𝑨 whose quotient is the
   -- image of 𝑨 under projᵢ ∘ h.
@@ -136,7 +136,7 @@ below the diagonal — contradicting that `μ` is nonzero.  This is the construc
 honest, contrapositive reading of "`0ᴬ` is completely meet-irreducible".
 
 ```agda
-module _ {𝑨 : Algebra α ρ} where
+module _ {𝑨 : Algebra {𝑆 = 𝑆} α ρ} where
 
   monolith⇒¬all-nonzero :  HasMonolith 𝑨 → {I : Type ι}(θ : I → Con 𝑨 ρ)
                         →  Separates θ → ¬ (∀ i → Nonzero 𝑨 (θ i))
@@ -167,7 +167,7 @@ coordinate map is an isomorphism.  "`𝑨` has no nontrivial subdirect decomposi
 that *every* subdirect embedding of `𝑨` has such a coordinate.
 
 ```agda
-IsoToFactor : {I : Type ι}(𝑨 : Algebra α ρ)(𝒜 : I → Algebra αᵃ ρ) → Type (𝓞 ⊔ 𝓥 ⊔ α ⊔ αᵃ ⊔ ρ ⊔ ι)
+IsoToFactor : {𝑆 : Signature 𝓞 𝓥}{I : Type ι}(𝑨 : Algebra {𝑆 = 𝑆} α ρ)(𝒜 : I → Algebra {𝑆 = 𝑆} αᵃ ρ) → Type (𝓞 ⊔ 𝓥 ⊔ α ⊔ αᵃ ⊔ ρ ⊔ ι)
 IsoToFactor 𝑨 𝒜 = ∃[ i ] (𝑨 ≅ 𝒜 i)
 ```
 
@@ -176,7 +176,7 @@ kernel family separates points (the embedding's injectivity *is* separation), so
 forward direction the coordinates cannot all be proper quotients.
 
 ```agda
-module _ {I : Type ι}{𝑨 : Algebra α ρ}{𝒜 : I → Algebra αᵃ ρ}
+module _ {I : Type ι}{𝑨 : Algebra {𝑆 = 𝑆} α ρ}{𝒜 : I → Algebra {𝑆 = 𝑆} αᵃ ρ}
          (si : IsSubdirectlyIrreducible 𝑨)(sub : SubdirectEmbedding {𝑩 = 𝑨} 𝒜) where
   private
     h    = proj₁ sub
@@ -214,7 +214,7 @@ characterization, in the spirit of the finite Birkhoff theorem of
 
 ```agda
 module _
-  {n : ℕ} {𝑨 : Algebra α ρ} {𝒜 : Fin n → Algebra αᵃ ρ}
+  {n : ℕ} {𝑨 : Algebra {𝑆 = 𝑆} α ρ} {𝒜 : Fin n → Algebra {𝑆 = 𝑆} αᵃ ρ}
   ((_ , si)         : IsSubdirectlyIrreducible 𝑨)
   ((h , emb)  : SubdirectEmbedding {𝑩 = 𝑨} 𝒜)
   (dec        : (i : Fin n) → Dec (BelowDiagonal 𝑨 (kerfam 𝒜 h i))) where
@@ -247,7 +247,7 @@ decompositions of an SI algebra are exactly those with an isomorphic coordinate.
 
 ```agda
 module _
-  {I : Type ι} {𝑨 : Algebra α ρ} {𝒜 : I → Algebra αᵃ ρ}
+  {𝑆 : Signature 𝓞 𝓥}{I : Type ι} {𝑨 : Algebra {𝑆 = 𝑆} α ρ} {𝒜 : I → Algebra {𝑆 = 𝑆} αᵃ ρ}
   (h : hom 𝑨 (⨅ 𝒜)) where
 
   iso-coord⟹¬all-proper :

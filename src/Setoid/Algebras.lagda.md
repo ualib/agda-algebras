@@ -11,12 +11,12 @@ author: "agda-algebras development team"
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
-open import Overture using (𝓞 ; 𝓥 ; Signature)
+open import Overture using (𝓞 ; 𝓥 ; Signature ; 𝑆)
 
-module Setoid.Algebras {𝑆 : Signature 𝓞 𝓥} where
+module Setoid.Algebras where
 
-open import Setoid.Algebras.Basic {𝑆 = 𝑆} public
+open import Setoid.Algebras.Basic public
 open import Setoid.Algebras.Finite  public
-open import Setoid.Algebras.Products {𝑆 = 𝑆} public
+open import Setoid.Algebras.Products public
 open import Setoid.Algebras.Reduct public
 ```

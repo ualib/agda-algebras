@@ -17,9 +17,9 @@ Fix a signature 𝑆, let 𝒦 be a class of 𝑆-algebras, and define
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
-open import Overture using (𝓞 ; 𝓥 ; Signature)
+open import Overture using (𝓞 ; 𝓥 ; Signature ; 𝑆)
 
-module Setoid.Varieties.Closure {𝑆 : Signature 𝓞 𝓥} where
+module Setoid.Varieties.Closure where
 
 open import Agda.Primitive using () renaming ( Set to Type )
 
@@ -33,9 +33,9 @@ open import Relation.Binary        using ( Setoid )
 open import Relation.Unary         using ( Pred ; _∈_ ; _⊆_ )
 
 -- Imports from the Agda Universal Algebra Library -------------------------------
-open import Setoid.Algebras {𝑆 = 𝑆} using ( Algebra ; ov ; Lift-Alg ; ⨅ )
-open import Setoid.Homomorphisms {𝑆 = 𝑆}
-open import Setoid.Subalgebras {𝑆 = 𝑆}
+open import Setoid.Algebras using ( Algebra ; ov ; Lift-Alg ; ⨅ )
+open import Setoid.Homomorphisms
+open import Setoid.Subalgebras
 open _⟶_ renaming ( to to _⟨$⟩_ )
 ```
 -->
@@ -47,12 +47,12 @@ module _ {α ρᵃ β ρᵇ : Level} where
     a b : Level
     a = α ⊔ ρᵃ ; b = β ⊔ ρᵇ
 
-  Level-closure : ∀ ℓ → Pred(Algebra α ρᵃ) (a ⊔ ov ℓ) → Pred(Algebra β ρᵇ) (b ⊔ ov(a ⊔ ℓ))
+  Level-closure : ∀ ℓ → Pred(Algebra {𝑆 = 𝑆} α ρᵃ) (a ⊔ ov {𝑆 = 𝑆} ℓ) → Pred(Algebra {𝑆 = 𝑆} β ρᵇ) (b ⊔ ov {𝑆 = 𝑆}(a ⊔ ℓ))
   Level-closure ℓ 𝒦 𝑩 = Σ[ 𝑨 ∈ Algebra α ρᵃ ] 𝑨 ∈ 𝒦 ∧ 𝑨 ≅ 𝑩
 
 module _ {α ρᵃ β ρᵇ : Level} where
 
-  Lift-closed : ∀ ℓ → {𝒦 : Pred(Algebra α ρᵃ) _}{𝑨 : Algebra α ρᵃ}
+  Lift-closed : ∀ ℓ → {𝒦 : Pred(Algebra {𝑆 = 𝑆} α ρᵃ) _}{𝑨 : Algebra {𝑆 = 𝑆} α ρᵃ}
     → 𝑨 ∈ 𝒦 → Lift-Alg 𝑨 β ρᵇ ∈ (Level-closure ℓ 𝒦)
   Lift-closed _ {𝑨 = 𝑨} kA = 𝑨 , (kA , Lift-≅)
 
@@ -60,11 +60,11 @@ module _ {α ρᵃ β ρᵇ : Level} where
     a b : Level
     a = α ⊔ ρᵃ ; b = β ⊔ ρᵇ
 
-  H S : ∀ ℓ → Pred(Algebra α ρᵃ) (a ⊔ ov ℓ) → Pred(Algebra β ρᵇ) (b ⊔ ov(a ⊔ ℓ))
+  H S : ∀ ℓ → Pred(Algebra {𝑆 = 𝑆} α ρᵃ) (a ⊔ ov {𝑆 = 𝑆} ℓ) → Pred(Algebra {𝑆 = 𝑆} β ρᵇ) (b ⊔ ov {𝑆 = 𝑆}(a ⊔ ℓ))
   H _ 𝒦 𝑩 = Σ[ 𝑨 ∈ Algebra α ρᵃ ] 𝑨 ∈ 𝒦 ∧ 𝑩 IsHomImageOf 𝑨
   S _ 𝒦 𝑩 = Σ[ 𝑨 ∈ Algebra α ρᵃ ] 𝑨 ∈ 𝒦 ∧ 𝑩 ≤ 𝑨
 
-  P : ∀ ℓ ι → Pred(Algebra α ρᵃ) (a ⊔ ov ℓ) → Pred(Algebra β ρᵇ) (b ⊔ ov(a ⊔ ℓ ⊔ ι))
+  P : ∀ ℓ ι → Pred(Algebra {𝑆 = 𝑆} α ρᵃ) (a ⊔ ov {𝑆 = 𝑆} ℓ) → Pred(Algebra {𝑆 = 𝑆} β ρᵇ) (b ⊔ ov {𝑆 = 𝑆}(a ⊔ ℓ ⊔ ι))
   P ℓ ι 𝒦 𝑩 = Σ[ I ∈ Type ι ] Σ[ 𝒜 ∈ (I → Algebra α ρᵃ) ] (∀ i → 𝒜 i ∈ 𝒦) ∧ 𝑩 ≅ ⨅ 𝒜
 
 module _ {α ρᵃ β ρᵇ : Level} where
@@ -72,7 +72,7 @@ module _ {α ρᵃ β ρᵇ : Level} where
     a b : Level
     a = α ⊔ ρᵃ ; b = β ⊔ ρᵇ
 
-  SP : ∀ ℓ ι → Pred(Algebra α ρᵃ) (a ⊔ ov ℓ) → Pred(Algebra β ρᵇ) (b ⊔ ov(a ⊔ ℓ ⊔ ι))
+  SP : ∀ ℓ ι → Pred(Algebra {𝑆 = 𝑆} α ρᵃ) (a ⊔ ov {𝑆 = 𝑆} ℓ) → Pred(Algebra {𝑆 = 𝑆} β ρᵇ) (b ⊔ ov {𝑆 = 𝑆}(a ⊔ ℓ ⊔ ι))
   SP ℓ ι 𝒦 = S{α}{ρᵃ} (a ⊔ ℓ ⊔ ι) (P ℓ ι 𝒦)
 
   module _ {γ ρᶜ δ ρᵈ : Level} where
@@ -82,7 +82,7 @@ module _ {α ρᵃ β ρᵇ : Level} where
       c = γ ⊔ ρᶜ ; d = δ ⊔ ρᵈ
 
     V : ∀ ℓ ι
-      → Pred(Algebra α ρᵃ) (a ⊔ ov ℓ) →  Pred(Algebra δ ρᵈ) (d ⊔ ov(a ⊔ b ⊔ c ⊔ ℓ ⊔ ι))
+      → Pred(Algebra {𝑆 = 𝑆} α ρᵃ) (a ⊔ ov {𝑆 = 𝑆} ℓ) →  Pred(Algebra {𝑆 = 𝑆} δ ρᵈ) (d ⊔ ov {𝑆 = 𝑆}(a ⊔ b ⊔ c ⊔ ℓ ⊔ ι))
     V ℓ ι 𝒦 = H{γ}{ρᶜ} (a ⊔ b ⊔ ℓ ⊔ ι) (S{β}{ρᵇ} (a ⊔ ℓ ⊔ ι) (P ℓ ι 𝒦))
 ```
 
@@ -116,7 +116,7 @@ module _ {α ρᵃ : Level} where
     a : Level
     a = α ⊔ ρᵃ
 
-  V′ : ∀ ℓ ι → Pred(Algebra α ρᵃ)(a ⊔ ov ℓ) → Pred(Algebra α ρᵃ) (a ⊔ ov(a ⊔ ℓ ⊔ ι))
+  V′ : ∀ ℓ ι → Pred(Algebra {𝑆 = 𝑆} α ρᵃ)(a ⊔ ov {𝑆 = 𝑆} ℓ) → Pred(Algebra {𝑆 = 𝑆} α ρᵃ) (a ⊔ ov {𝑆 = 𝑆}(a ⊔ ℓ ⊔ ι))
   V′ ℓ ι 𝒦 = V {α}{ρᵃ}{α}{ρᵃ}{α}{ρᵃ} ℓ ι 𝒦
 ```
 
@@ -126,11 +126,11 @@ what it means to be a variety of algebras as follows.
 ```agda
 module _ {α ρᵃ ℓ ι : Level} where
 
-  is-variety : Pred (Algebra α ρᵃ) (α ⊔ ρᵃ ⊔ ov ℓ) → Type (ov (α ⊔ ρᵃ ⊔ ℓ ⊔ ι))
+  is-variety : Pred (Algebra {𝑆 = 𝑆} α ρᵃ) (α ⊔ ρᵃ ⊔ ov {𝑆 = 𝑆} ℓ) → Type (ov {𝑆 = 𝑆} (α ⊔ ρᵃ ⊔ ℓ ⊔ ι))
   is-variety 𝒱 = V′ ℓ ι 𝒱 ⊆ 𝒱
 
-  variety : Type (ov (α ⊔ ρᵃ ⊔ ov ℓ ⊔ ι))
-  variety = Σ[ 𝒱 ∈ Pred (Algebra α ρᵃ) (α ⊔ ρᵃ ⊔ ov ℓ) ] is-variety 𝒱
+  variety : Type (ov {𝑆 = 𝑆} (α ⊔ ρᵃ ⊔ ov {𝑆 = 𝑆} ℓ ⊔ ι))
+  variety {𝑆 = 𝑆} = Σ[ 𝒱 ∈ Pred (Algebra {𝑆 = 𝑆} α ρᵃ) (α ⊔ ρᵃ ⊔ ov {𝑆 = 𝑆} ℓ) ] is-variety 𝒱
 ```
 
 #### Closure properties of S
@@ -139,11 +139,11 @@ module _ {α ρᵃ ℓ ι : Level} where
 omit the proof, but we will make use of monotonicity and idempotence of `S`.
 
 ```agda
-module _ {α ρᵃ : Level} where
+module _ {𝑆 : Signature 𝓞 𝓥}{α ρᵃ : Level} where
 
   private a = α ⊔ ρᵃ
 
-  S-mono : ∀{ℓ} → {𝒦 𝒦' : Pred (Algebra α ρᵃ)(a ⊔ ov ℓ)}
+  S-mono : ∀{ℓ} → {𝒦 𝒦' : Pred (Algebra {𝑆 = 𝑆} α ρᵃ)(a ⊔ ov {𝑆 = 𝑆} ℓ)}
     → 𝒦 ⊆ 𝒦' → S{β = α}{ρᵃ} ℓ 𝒦 ⊆ S ℓ 𝒦'
   S-mono kk {𝑩} (𝑨 , (kA , B≤A)) = 𝑨 , ((kk kA) , B≤A)
 ```
@@ -154,7 +154,7 @@ Of course, this is proved by establishing two inclusions, but one of them is tri
 
 
 ```agda
-  S-idem :  ∀{β ρᵇ γ ρᶜ ℓ} → {𝒦 : Pred (Algebra α ρᵃ)(a ⊔ ov ℓ)}
+  S-idem :  ∀{β ρᵇ γ ρᶜ ℓ} → {𝒦 : Pred (Algebra {𝑆 = 𝑆} α ρᵃ)(a ⊔ ov {𝑆 = 𝑆} ℓ)}
     → S{β = γ}{ρᶜ} (a ⊔ ℓ) (S{β = β}{ρᵇ} ℓ 𝒦) ⊆ S{β = γ}{ρᶜ} ℓ 𝒦
   S-idem (𝑨 , (𝑩 , sB , A≤B) , x≤A) = 𝑩 , (sB , ≤-trans x≤A A≤B)
 ```
@@ -167,13 +167,13 @@ Of course, this is proved by establishing two inclusions, but one of them is tri
 
 
 ```agda
-  H-expa : ∀{ℓ} → {𝒦 : Pred (Algebra α ρᵃ)(a ⊔ ov ℓ)} → 𝒦 ⊆ H ℓ 𝒦
+  H-expa : ∀{ℓ} → {𝒦 : Pred (Algebra {𝑆 = 𝑆} α ρᵃ)(a ⊔ ov {𝑆 = 𝑆} ℓ)} → 𝒦 ⊆ H ℓ 𝒦
   H-expa {ℓ} {𝒦}{𝑨} kA = 𝑨 , kA , IdHomImage
 
-  S-expa : ∀{ℓ} → {𝒦 : Pred (Algebra α ρᵃ)(a ⊔ ov ℓ)} → 𝒦 ⊆ S ℓ 𝒦
+  S-expa : ∀{ℓ} → {𝒦 : Pred (Algebra {𝑆 = 𝑆} α ρᵃ)(a ⊔ ov {𝑆 = 𝑆} ℓ)} → 𝒦 ⊆ S ℓ 𝒦
   S-expa {ℓ}{𝒦}{𝑨} kA = 𝑨 , (kA , ≤-reflexive)
 
-  P-mono : ∀{ℓ ι} → {𝒦 𝒦' : Pred (Algebra α ρᵃ)(a ⊔ ov ℓ)}
+  P-mono : ∀{ℓ ι} → {𝒦 𝒦' : Pred (Algebra {𝑆 = 𝑆} α ρᵃ)(a ⊔ ov {𝑆 = 𝑆} ℓ)}
     → 𝒦 ⊆ 𝒦' → P{β = α}{ρᵃ} ℓ ι 𝒦 ⊆ P ℓ ι 𝒦'
 
   P-mono {ℓ}{ι}{𝒦}{𝒦'} kk {𝑩} (I , 𝒜 , (kA , B≅⨅A)) = I , (𝒜 , ((λ i → kk (kA i)) , B≅⨅A))
@@ -181,7 +181,7 @@ Of course, this is proved by establishing two inclusions, but one of them is tri
   open _≅_
   open IsHom
 
-  P-expa : ∀{ℓ ι} → {𝒦 : Pred (Algebra α ρᵃ)(a ⊔ ov ℓ)} → 𝒦 ⊆ P ℓ ι 𝒦
+  P-expa : ∀{ℓ ι} → {𝒦 : Pred (Algebra {𝑆 = 𝑆} α ρᵃ)(a ⊔ ov {𝑆 = 𝑆} ℓ)} → 𝒦 ⊆ P ℓ ι 𝒦
   P-expa {ℓ}{ι}{𝒦}{𝑨} kA = ⊤ , (λ x → 𝑨) , ((λ i → kA) , Goal)
     where
     open Algebra 𝑨 using () renaming (Domain to A)
@@ -208,7 +208,7 @@ Of course, this is proved by establishing two inclusions, but one of them is tri
     from∼to Goal = λ _ → refl
 
 
-  V-expa : ∀ ℓ ι → {𝒦 : Pred (Algebra α ρᵃ)(a ⊔ ov ℓ)} → 𝒦 ⊆ V ℓ ι 𝒦
+  V-expa : ∀ ℓ ι → {𝒦 : Pred (Algebra {𝑆 = 𝑆} α ρᵃ)(a ⊔ ov {𝑆 = 𝑆} ℓ)} → 𝒦 ⊆ V ℓ ι 𝒦
   V-expa ℓ ι {𝒦} {𝑨} x = H-expa {a ⊔ ℓ ⊔ ι} (S-expa {a ⊔ ℓ ⊔ ι} (P-expa {ℓ}{ι} x) )
 ```
 
@@ -224,16 +224,16 @@ statements; these are the ergonomic entry points (`V-expa′`{.AgdaFunction} is 
 exercised by `Examples.Setoid.HSPCommutativeMonoid`{.AgdaModule}).
 
 ```agda
-  H-expa′ : ∀ ℓ (𝒦 : Pred (Algebra α ρᵃ)(a ⊔ ov ℓ)) {𝑨} → 𝑨 ∈ 𝒦 → 𝑨 ∈ H ℓ 𝒦
+  H-expa′ : ∀ ℓ (𝒦 : Pred (Algebra {𝑆 = 𝑆} α ρᵃ)(a ⊔ ov {𝑆 = 𝑆} ℓ)) {𝑨} → 𝑨 ∈ 𝒦 → 𝑨 ∈ H ℓ 𝒦
   H-expa′ ℓ 𝒦 = H-expa {ℓ}{𝒦}
 
-  S-expa′ : ∀ ℓ (𝒦 : Pred (Algebra α ρᵃ)(a ⊔ ov ℓ)) {𝑨} → 𝑨 ∈ 𝒦 → 𝑨 ∈ S ℓ 𝒦
+  S-expa′ : ∀ ℓ (𝒦 : Pred (Algebra {𝑆 = 𝑆} α ρᵃ)(a ⊔ ov {𝑆 = 𝑆} ℓ)) {𝑨} → 𝑨 ∈ 𝒦 → 𝑨 ∈ S ℓ 𝒦
   S-expa′ ℓ 𝒦 = S-expa {ℓ}{𝒦}
 
-  P-expa′ : ∀ ℓ ι (𝒦 : Pred (Algebra α ρᵃ)(a ⊔ ov ℓ)) {𝑨} → 𝑨 ∈ 𝒦 → 𝑨 ∈ P ℓ ι 𝒦
+  P-expa′ : ∀ ℓ ι (𝒦 : Pred (Algebra {𝑆 = 𝑆} α ρᵃ)(a ⊔ ov {𝑆 = 𝑆} ℓ)) {𝑨} → 𝑨 ∈ 𝒦 → 𝑨 ∈ P ℓ ι 𝒦
   P-expa′ ℓ ι 𝒦 = P-expa {ℓ}{ι}{𝒦}
 
-  V-expa′ : ∀ ℓ ι (𝒦 : Pred (Algebra α ρᵃ)(a ⊔ ov ℓ)) {𝑨} → 𝑨 ∈ 𝒦 → 𝑨 ∈ V ℓ ι 𝒦
+  V-expa′ : ∀ ℓ ι (𝒦 : Pred (Algebra {𝑆 = 𝑆} α ρᵃ)(a ⊔ ov {𝑆 = 𝑆} ℓ)) {𝑨} → 𝑨 ∈ 𝒦 → 𝑨 ∈ V ℓ ι 𝒦
   V-expa′ ℓ ι 𝒦 = V-expa ℓ ι {𝒦}
 ```
 
@@ -244,15 +244,15 @@ purpose.
 ```agda
 module _
   {α ρᵃ β ρᵇ ℓ ι : Level}
-  {𝒦 : Pred (Algebra α ρᵃ) (α ⊔ ρᵃ ⊔ ov ℓ)}
-  {𝑨 : Algebra α ρᵃ}
-  {𝑩 : Algebra β ρᵇ}
+  {𝒦 : Pred (Algebra {𝑆 = 𝑆} α ρᵃ) (α ⊔ ρᵃ ⊔ ov {𝑆 = 𝑆} ℓ)}
+  {𝑨 : Algebra {𝑆 = 𝑆} α ρᵃ}
+  {𝑩 : Algebra {𝑆 = 𝑆} β ρᵇ}
   where
 
   S-≅ : 𝑨 ∈ S ℓ 𝒦 → 𝑨 ≅ 𝑩 → 𝑩 ∈ S{α ⊔ β}{ρᵃ ⊔ ρᵇ}(α ⊔ ρᵃ ⊔ ℓ) (Level-closure ℓ 𝒦)
   S-≅ (𝑨' , kA' , A≤A') A≅B = lA' , (lklA' , B≤lA')
     where
-    lA' : Algebra (α ⊔ β) (ρᵃ ⊔ ρᵇ)
+    lA' : Algebra {𝑆 = 𝑆} (α ⊔ β) (ρᵃ ⊔ ρᵇ)
     lA' = Lift-Alg 𝑨' β ρᵇ
     lklA' : lA' ∈ Level-closure ℓ 𝒦
     lklA' = Lift-closed ℓ kA'
@@ -266,10 +266,10 @@ module _
 
 module _
   {α ρᵃ ℓ : Level}
-  (𝒦 : Pred(Algebra α ρᵃ) (α ⊔ ρᵃ ⊔ ov ℓ))
-  (𝑨 : Algebra (α ⊔ ρᵃ ⊔ ℓ) (α ⊔ ρᵃ ⊔ ℓ))
+  (𝒦 : Pred(Algebra {𝑆 = 𝑆} α ρᵃ) (α ⊔ ρᵃ ⊔ ov {𝑆 = 𝑆} ℓ))
+  (𝑨 : Algebra {𝑆 = 𝑆} (α ⊔ ρᵃ ⊔ ℓ) (α ⊔ ρᵃ ⊔ ℓ))
   where
-  private ι = ov(α ⊔ ρᵃ ⊔ ℓ)
+  private ι = ov {𝑆 = 𝑆}(α ⊔ ρᵃ ⊔ ℓ)
 
   V-≅-lc : Lift-Alg 𝑨 ι ι ∈ V{β = ι}{ι} ℓ ι 𝒦 → 𝑨 ∈ V{γ = ι}{ι} ℓ ι 𝒦
   V-≅-lc (𝑨' , spA' , lAimgA') = 𝑨' , (spA' , AimgA')
@@ -282,29 +282,29 @@ The remaining theorems in this file are as yet unused, but may be useful later a
 for reference.
 
 ```agda
-module _ {α ρᵃ ℓ ι : Level}{𝒦 : Pred (Algebra α ρᵃ)(α ⊔ ρᵃ ⊔ ov ℓ)} where
+module _ {α ρᵃ ℓ ι : Level}{𝒦 : Pred (Algebra {𝑆 = 𝑆} α ρᵃ)(α ⊔ ρᵃ ⊔ ov {𝑆 = 𝑆} ℓ)} where
   -- For reference, some useful type levels:
-  classP : Pred (Algebra α ρᵃ) (ov(α ⊔ ρᵃ ⊔ ℓ ⊔ ι))
+  classP : Pred (Algebra {𝑆 = 𝑆} α ρᵃ) (ov {𝑆 = 𝑆}(α ⊔ ρᵃ ⊔ ℓ ⊔ ι))
   classP = P{β = α}{ρᵃ} ℓ ι 𝒦
 
-  classSP : Pred (Algebra α ρᵃ) (ov(α ⊔ ρᵃ ⊔ ℓ ⊔ ι))
+  classSP : Pred (Algebra {𝑆 = 𝑆} α ρᵃ) (ov {𝑆 = 𝑆}(α ⊔ ρᵃ ⊔ ℓ ⊔ ι))
   classSP = S{β = α}{ρᵃ} (α ⊔ ρᵃ ⊔ ℓ ⊔ ι) (P{β = α}{ρᵃ} ℓ ι 𝒦)
 
-  classHSP : Pred (Algebra α ρᵃ) (ov(α ⊔ ρᵃ ⊔ ℓ ⊔ ι))
+  classHSP : Pred (Algebra {𝑆 = 𝑆} α ρᵃ) (ov {𝑆 = 𝑆}(α ⊔ ρᵃ ⊔ ℓ ⊔ ι))
   classHSP = H{β = α}{ρᵃ}(α ⊔ ρᵃ ⊔ ℓ ⊔ ι) (S{β = α}{ρᵃ}(α ⊔ ρᵃ ⊔ ℓ ⊔ ι) (P{β = α}{ρᵃ}ℓ ι 𝒦))
 
-  classS : ∀{β ρᵇ} → Pred (Algebra β ρᵇ) (β ⊔ ρᵇ ⊔ ov(α ⊔ ρᵃ ⊔ ℓ))
+  classS : ∀{β ρᵇ} → Pred (Algebra {𝑆 = 𝑆} β ρᵇ) (β ⊔ ρᵇ ⊔ ov {𝑆 = 𝑆}(α ⊔ ρᵃ ⊔ ℓ))
   classS = S ℓ 𝒦
-  classK : ∀{β ρᵇ} → Pred (Algebra β ρᵇ) (β ⊔ ρᵇ ⊔ ov(α ⊔ ρᵃ ⊔ ℓ))
+  classK : ∀{β ρᵇ} → Pred (Algebra {𝑆 = 𝑆} β ρᵇ) (β ⊔ ρᵇ ⊔ ov {𝑆 = 𝑆}(α ⊔ ρᵃ ⊔ ℓ))
   classK = Level-closure{α}{ρᵃ} ℓ 𝒦
 
-module _ {α ρᵃ β ρᵇ γ ρᶜ ℓ : Level}{𝒦 : Pred (Algebra α ρᵃ)(α ⊔ ρᵃ ⊔ ov ℓ)} where
+module _ {α ρᵃ β ρᵇ γ ρᶜ ℓ : Level}{𝒦 : Pred (Algebra {𝑆 = 𝑆} α ρᵃ)(α ⊔ ρᵃ ⊔ ov {𝑆 = 𝑆} ℓ)} where
   private a = α ⊔ ρᵃ ; b = β ⊔ ρᵇ ; c = γ ⊔ ρᶜ
 
-  LevelClosure-S : Pred (Algebra (α ⊔ γ) (ρᵃ ⊔ ρᶜ)) (c ⊔ ov(a ⊔ b ⊔ ℓ))
+  LevelClosure-S : Pred (Algebra {𝑆 = 𝑆} (α ⊔ γ) (ρᵃ ⊔ ρᶜ)) (c ⊔ ov {𝑆 = 𝑆}(a ⊔ b ⊔ ℓ))
   LevelClosure-S = Level-closure{β}{ρᵇ} (a ⊔ ℓ) (S ℓ 𝒦)
 
-  S-LevelClosure : Pred (Algebra (α ⊔ γ) (ρᵃ ⊔ ρᶜ)) (ov(a ⊔ c ⊔ ℓ))
+  S-LevelClosure : Pred (Algebra {𝑆 = 𝑆} (α ⊔ γ) (ρᵃ ⊔ ρᶜ)) (ov {𝑆 = 𝑆}(a ⊔ c ⊔ ℓ))
   S-LevelClosure = S{α ⊔ γ}{ρᵃ ⊔ ρᶜ}(a ⊔ ℓ) (Level-closure ℓ 𝒦)
 
   S-Lift-lemma : LevelClosure-S ⊆ S-LevelClosure
@@ -318,7 +318,7 @@ module _ {α ρᵃ β ρᵇ γ ρᶜ ℓ : Level}{𝒦 : Pred (Algebra α ρᵃ)
 
 module _ {α ρᵃ : Level} where
 
-  P-Lift-closed :  ∀ ℓ ι → {𝒦 : Pred (Algebra α ρᵃ)(α ⊔ ρᵃ ⊔ ov ℓ)}{𝑨 : Algebra α ρᵃ}
+  P-Lift-closed :  ∀ ℓ ι → {𝒦 : Pred (Algebra {𝑆 = 𝑆} α ρᵃ)(α ⊔ ρᵃ ⊔ ov {𝑆 = 𝑆} ℓ)}{𝑨 : Algebra {𝑆 = 𝑆} α ρᵃ}
     → 𝑨 ∈ P{β = α}{ρᵃ} ℓ ι 𝒦
     → {γ ρᶜ : Level} → Lift-Alg 𝑨 γ ρᶜ ∈ P (α ⊔ ρᵃ ⊔ ℓ) ι (Level-closure ℓ 𝒦)
   P-Lift-closed ℓ ι {𝒦}{𝑨} (I , 𝒜 , kA , A≅⨅𝒜) {γ}{ρᶜ} =

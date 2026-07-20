@@ -282,8 +282,8 @@ nor closed under `S`.
     (ℰ : I → Term {𝑆 = 𝑆₁} X ∧ Term {𝑆 = 𝑆₁} X)
     (𝑨 : Algebra {𝑆 = 𝑆₂} α ρ)
     where
-    open EqLogic {𝑆 = 𝑆₁} using () renaming ( _⊧_≈_ to _⊧₁_≈_ )
-    open EqLogic {𝑆 = 𝑆₂} using () renaming ( _⊧_≈_ to _⊧₂_≈_ )
+    open EqLogic using () renaming ( _⊧_≈_ to _⊧₁_≈_ )
+    open EqLogic using () renaming ( _⊧_≈_ to _⊧₂_≈_ )
 
     reduct-⊧ : (∀ i → 𝑨 ⊧₂ (φ ✶ proj₁ (ℰ i)) ≈ φ ✶ proj₂ (ℰ i))
       → ∀ i → reduct φ 𝑨 ⊧₁ proj₁ (ℰ i) ≈ proj₂ (ℰ i)

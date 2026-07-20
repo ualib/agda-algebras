@@ -21,9 +21,9 @@ We prove some closure and invariance properties of the relation `⊧`.  In parti
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
-open import Overture using (𝓞 ; 𝓥 ; Signature)
+open import Overture using (𝓞 ; 𝓥 ; Signature ; 𝑆)
 
-module Setoid.Varieties.Properties {𝑆 : Signature 𝓞 𝓥} where
+module Setoid.Varieties.Properties where
 
 -- Imports from Agda and the Agda Standard Library -------------------------------------------
 open import Agda.Primitive   using () renaming ( Set to Type )
@@ -38,15 +38,15 @@ import Relation.Binary.Reasoning.Setoid as SetoidReasoning
 -- Imports from the Agda Universal Algebra Library ---------------------------------------------
 open  import Overture                       using  ( proj₁ ; proj₂ )
 open  import Setoid.Functions               using  ( InvIsInverseʳ ; SurjInv )
-open  import Overture.Terms        {𝑆 = 𝑆}  using  ( Term ; ℊ )
-open  import Setoid.Algebras       {𝑆 = 𝑆}
+open  import Overture.Terms  using  ( Term ; ℊ )
+open  import Setoid.Algebras
       using  ( Algebra ; Lift-Algˡ ; ov ; 𝕌[_] ; 𝔻[_] ; ⨅ )
-open  import Setoid.Homomorphisms  {𝑆 = 𝑆}
+open  import Setoid.Homomorphisms
       using  ( hom ; _≅_ ; mkiso ; Lift-≅ˡ ; ≅-sym ; _IsHomImageOf_ )
-open  import Setoid.Terms          {𝑆 = 𝑆}
+open  import Setoid.Terms
       using  ( 𝑻 ; module Environment ; comm-hom-term ; interp-prod ; term-agreement )
-open  import Setoid.Subalgebras    {𝑆 = 𝑆}  using  ( _≤_ ; SubalgebrasOfClass )
-open  import Setoid.Varieties.SoundAndComplete {𝑆 = 𝑆}
+open  import Setoid.Subalgebras  using  ( _≤_ ; SubalgebrasOfClass )
+open  import Setoid.Varieties.SoundAndComplete
       using ( _⊧_ ; _⊫_ ; ⊫-proof ; _≈̇_ ; _⊢_▹_≈_ )
 
 private variable α ρᵃ β ρᵇ χ ℓ : Level
@@ -64,7 +64,7 @@ The binary relation ⊧ would be practically useless if it were not an *algebrai
 
 
 ```agda
-module _ {X : Type χ}{𝑨 : Algebra α ρᵃ}(𝑩 : Algebra β ρᵇ)(p q : Term X) where
+module _ {X : Type χ}{𝑨 : Algebra {𝑆 = 𝑆} α ρᵃ}(𝑩 : Algebra {𝑆 = 𝑆} β ρᵇ)(p q : Term {𝑆 = 𝑆} X) where
   open Environment 𝑨      using () renaming ( ⟦_⟧   to ⟦_⟧₁ )
   open Environment 𝑩      using () renaming ( ⟦_⟧   to ⟦_⟧₂ )
   open Setoid (Domain 𝑩)  using ( _≈_ ; sym ; trans )
@@ -101,12 +101,12 @@ The ⊧ relation is also invariant under the algebraic lift and lower operations
 
 
 ```agda
-module _ {X : Type χ}{𝑨 : Algebra α ρᵃ} where
+module _ {X : Type χ}{𝑨 : Algebra {𝑆 = 𝑆} α ρᵃ} where
 
-  ⊧-Lift-invar : (p q : Term X) → 𝑨 ⊧ (p ≈̇ q) → Lift-Algˡ 𝑨 β ⊧ (p ≈̇ q)
+  ⊧-Lift-invar : (p q : Term {𝑆 = 𝑆} X) → 𝑨 ⊧ (p ≈̇ q) → Lift-Algˡ 𝑨 β ⊧ (p ≈̇ q)
   ⊧-Lift-invar p q Apq = ⊧-I-invar (Lift-Algˡ 𝑨 _) p q Apq Lift-≅ˡ
 
-  ⊧-lower-invar : (p q : Term X) → Lift-Algˡ 𝑨 β ⊧ (p ≈̇ q)  →  𝑨 ⊧ (p ≈̇ q)
+  ⊧-lower-invar : (p q : Term {𝑆 = 𝑆} X) → Lift-Algˡ 𝑨 β ⊧ (p ≈̇ q)  →  𝑨 ⊧ (p ≈̇ q)
   ⊧-lower-invar p q lApq = ⊧-I-invar 𝑨 p q lApq (≅-sym Lift-≅ˡ)
 ```
 
@@ -117,7 +117,7 @@ of `𝑨`, which fact can be formalized as follows.
 
 
 ```agda
-module _ {X : Type χ}{𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ}{p q : Term X} where
+module _ {X : Type χ}{𝑨 : Algebra {𝑆 = 𝑆} α ρᵃ}{𝑩 : Algebra {𝑆 = 𝑆} β ρᵇ}{p q : Term {𝑆 = 𝑆} X} where
 
   ⊧-H-invar : 𝑨 ⊧ (p ≈̇ q) → 𝑩 IsHomImageOf 𝑨 → 𝑩 ⊧ (p ≈̇ q)
   ⊧-H-invar Apq (φh , φE) ρ =
@@ -144,7 +144,7 @@ Identities modeled by an algebra `𝑨` are also modeled by every subalgebra of 
 
 
 ```agda
-module _ {X : Type χ}{p q : Term X}{𝑨 : Algebra α ρᵃ}{𝑩 : Algebra β ρᵇ} where
+module _ {X : Type χ}{p q : Term {𝑆 = 𝑆} X}{𝑨 : Algebra {𝑆 = 𝑆} α ρᵃ}{𝑩 : Algebra {𝑆 = 𝑆} β ρᵇ} where
   open Environment 𝑨      using () renaming ( ⟦_⟧ to ⟦_⟧₁ )
   open Environment 𝑩      using () renaming ( ⟦_⟧ to ⟦_⟧₂ )
   open Setoid (Domain 𝑨)  using ( _≈_ )
@@ -175,9 +175,9 @@ all `𝑨 ∈ 𝒦` is also satisfied by every subalgebra of a member of `𝒦`.
 
 
 ```agda
-module _ {X : Type χ}{p q : Term X} where
+module _ {X : Type χ}{p q : Term {𝑆 = 𝑆} X} where
 
-  ⊧-S-class-invar :  {𝒦 : Pred (Algebra α ρᵃ) ℓ}
+  ⊧-S-class-invar :  {𝒦 : Pred (Algebra {𝑆 = 𝑆} α ρᵃ) ℓ}
    →                 (𝒦 ⊫ (p ≈̇ q)) → ((𝑩 , _) : SubalgebrasOfClass 𝒦 {β}{ρᵇ})
    →                 𝑩 ⊧ (p ≈̇ q)
   ⊧-S-class-invar Kpq (𝑩 , 𝑨 , kA , B≤A) = ⊧-S-invar{p = p}{q} (Kpq .⊫-proof 𝑨 kA) B≤A
@@ -192,7 +192,7 @@ by the product of algebras in that collection.
 
 
 ```agda
-module _ {X : Type χ}{p q : Term X}{I : Type ℓ}(𝒜 : I → Algebra α ρᵃ) where
+module _ {X : Type χ}{p q : Term {𝑆 = 𝑆} X}{I : Type ℓ}(𝒜 : I → Algebra {𝑆 = 𝑆} α ρᵃ) where
 
   ⊧-P-invar : (∀ i → 𝒜 i ⊧ (p ≈̇ q)) → ⨅ 𝒜 ⊧ (p ≈̇ q)
   ⊧-P-invar 𝒜pq a = goal
@@ -219,7 +219,7 @@ of algebras in the class.
 
 
 ```agda
-  ⊧-P-class-invar :  (𝒦 : Pred (Algebra α ρᵃ)(ov α))
+  ⊧-P-class-invar :  (𝒦 : Pred (Algebra {𝑆 = 𝑆} α ρᵃ)(ov {𝑆 = 𝑆} α))
    →                 𝒦 ⊫ (p ≈̇ q) → (∀ i → 𝒜 i ∈ 𝒦) → ⨅ 𝒜 ⊧ (p ≈̇ q)
 
   ⊧-P-class-invar 𝒦 σ K𝒜 = ⊧-P-invar (λ i ρ → σ .⊫-proof (𝒜 i) (K𝒜 i) ρ)
@@ -249,7 +249,7 @@ every homomorphism from 𝑻 X to 𝑨 maps p and q to the same element of 𝑨.
 
  
 ```agda
-module _ {X : Type χ}{p q : Term X}{𝑨 : Algebra α ρᵃ}(φh : hom (𝑻 X) 𝑨) where
+module _ {𝑆 : Signature 𝓞 𝓥}{X : Type χ}{p q : Term {𝑆 = 𝑆} X}{𝑨 : Algebra {𝑆 = 𝑆} α ρᵃ}(φh : hom (𝑻 X) 𝑨) where
   open Setoid (Domain 𝑨) using ( _≈_ )
   private φ = _⟨$⟩_ (proj₁ φh)
 

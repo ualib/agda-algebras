@@ -53,7 +53,7 @@ import Relation.Binary.Reasoning.Setoid as SetoidReasoning
 -- Imports from the Agda Universal Algebra Library --------------------------------
 open import Classical.Signatures.Lattice             using ( Sig-Lattice )
 open import Classical.Structures.Lattice             using ( Lattice ; module Lattice-Op )
-open import Setoid.Algebras.Basic {𝑆 = Sig-Lattice}  using ( 𝔻[_] ; 𝕌[_] )
+open import Setoid.Algebras.Basic  using ( 𝔻[_] ; 𝕌[_] )
 
 private variable α ρ : Level
 ```

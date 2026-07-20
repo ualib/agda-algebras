@@ -13,9 +13,9 @@ This is the [Setoid.Algebras.Basic][] module of the [Agda Universal Algebra Libr
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
-open import Overture using (𝓞 ; 𝓥 ; Signature )
+open import Overture using (𝓞 ; 𝓥 ; Signature ; 𝑆 )
 
-module Setoid.Algebras.Basic {𝑆 : Signature 𝓞 𝓥} where
+module Setoid.Algebras.Basic where
 
 -- Imports from the Agda and the Agda Standard Library --------------------
 open import Agda.Primitive   using ( _⊔_ ; lsuc ) renaming ( Set to Type )
@@ -36,8 +36,8 @@ private variable α ρ ι : Level
 -->
 
 ```agda
-ov : Level → Level
-ov α = 𝓞 ⊔ 𝓥 ⊔ lsuc α
+ov : {𝓞 𝓥 : Level}{𝑆 : Signature 𝓞 𝓥} → Level → Level
+ov {𝓞 = 𝓞}{𝓥 = 𝓥} α = 𝓞 ⊔ 𝓥 ⊔ lsuc α
 ```
 
 
@@ -72,7 +72,7 @@ function (`f`, aka apply, aka `_⟨$⟩_`) with a proof (cong) that the function
 equality.
 
 ```agda
-record Algebra α ρ : Type (𝓞 ⊔ 𝓥 ⊔ lsuc (α ⊔ ρ)) where
+record Algebra {𝑆 : Signature 𝓞 𝓥} α ρ : Type (𝓞 ⊔ 𝓥 ⊔ lsuc (α ⊔ ρ)) where
   field
     Domain : Setoid α ρ
     Interp : Func (⟨ 𝑆 ⟩ Domain) Domain
@@ -92,11 +92,11 @@ The next three definitions are merely syntactic sugar that we sometimes use to m
 the code more readable.
 
 ```agda
-𝔻[_] : Algebra α ρ →  Setoid α ρ
+𝔻[_] : Algebra {𝑆 = 𝑆} α ρ →  Setoid α ρ
 𝔻[ 𝑨 ] = Domain 𝑨
 
 -- Forgetful functor: returns the carrier of (the domain of) 𝑨, forgetting its structure.
-𝕌[_] : Algebra α ρ →  Type α
+𝕌[_] : Algebra {𝑆 = 𝑆} α ρ →  Type α
 𝕌[ 𝑨 ] = Setoid.Carrier 𝔻[ 𝑨 ]
 ```
 
@@ -105,7 +105,7 @@ interpretation in an algebra.[^1]
 
 ```agda
 -- Interpretation of an operation symbol in an algebra.
-_^_ : (f : OperationSymbolsOf 𝑆)(𝑨 : Algebra α ρ) → Op (ArityOf 𝑆 f) 𝕌[ 𝑨 ]
+_^_ : (f : OperationSymbolsOf 𝑆)(𝑨 : Algebra {𝑆 = 𝑆} α ρ) → Op (ArityOf 𝑆 f) 𝕌[ 𝑨 ]
 f ^ 𝑨 = λ a → (Interp 𝑨) ⟨$⟩ (f , a)
 ```
 
@@ -114,7 +114,7 @@ backward compatibility, but its use is deprecated in favor of the ascii version
 above.  See [ADR-002][] §7 for the rationale.
 
 ```agda
-_̂_ : (f : OperationSymbolsOf 𝑆)(𝑨 : Algebra α ρ) → Op (ArityOf 𝑆 f) 𝕌[ 𝑨 ]
+_̂_ : (f : OperationSymbolsOf 𝑆)(𝑨 : Algebra {𝑆 = 𝑆} α ρ) → Op (ArityOf 𝑆 f) 𝕌[ 𝑨 ]
 f ̂ 𝑨 = λ a → (Interp 𝑨) ⟨$⟩ (f , a)
 {-# WARNING_ON_USAGE _̂_
 "The combining-caret notation `_̂_` is deprecated as of v3.0 and will be removed
@@ -151,7 +151,7 @@ module _ (𝐷 : Setoid α ρ) where
   mkAlgebra :
     (f : (o : OperationSymbolsOf 𝑆) → Op (ArityOf 𝑆 o) D)
     → (∀ o  → {u v : ArityOf 𝑆 o → D} → (∀ i → u i ≈ v i) → f o u ≈ f o v)
-    → Algebra α ρ
+    → Algebra {𝑆 = 𝑆} α ρ
   mkAlgebra f cong-f .Domain = 𝐷
   mkAlgebra f cong-f .Interp ⟨$⟩ (o , args) = f o args
   mkAlgebra f cong-f .Interp .≈cong {o , _} {.o , _} (refl , args≈) = cong-f o args≈
@@ -167,7 +167,7 @@ form — e.g. `≡.cong₂` for a binary operation, as in the `ℕ∸`-magma of
 mkAlgebraₚ : (A : Type α)
   (f : (o : OperationSymbolsOf 𝑆) → Op (ArityOf 𝑆 o) A)
   → (∀ o → {u v : ArityOf 𝑆 o → A} → (∀ i → u i ≡ v i) → f o u ≡ f o v)
-  → Algebra α α
+  → Algebra {𝑆 = 𝑆} α α
 mkAlgebraₚ A f cong-f = mkAlgebra (≡.setoid A) f cong-f
 ```
 
@@ -176,11 +176,11 @@ The following functions provide that information.
 
 ```agda
 -- The universe level of an algebra
-Level-of-Alg : {α ρ 𝓞 𝓥 : Level}{𝑆 : Signature 𝓞 𝓥} → Algebra α ρ → Level
+Level-of-Alg : {α ρ 𝓞 𝓥 : Level}{𝑆 : Signature 𝓞 𝓥} → Algebra {𝑆 = 𝑆} α ρ → Level
 Level-of-Alg {α = α}{ρ}{𝓞}{𝓥} _ = 𝓞 ⊔ 𝓥 ⊔ lsuc (α ⊔ ρ)
 
 -- The universe level of the carrier of an algebra
-Level-of-Carrier : {α ρ 𝓞 𝓥  : Level}{𝑆 : Signature 𝓞 𝓥} → Algebra α ρ → Level
+Level-of-Carrier : {α ρ 𝓞 𝓥  : Level}{𝑆 : Signature 𝓞 𝓥} → Algebra {𝑆 = 𝑆} α ρ → Level
 Level-of-Carrier {α = α} _ = α
 ```
 
@@ -188,13 +188,13 @@ Level-of-Carrier {α = α} _ = α
 #### Level lifting setoid algebra types
 
 ```agda
-module _ (𝑨 : Algebra α ρ)(ℓ : Level) where
+module _ {𝑆 : Signature 𝓞 𝓥}(𝑨 : Algebra {𝑆 = 𝑆} α ρ)(ℓ : Level) where
   open Algebra 𝑨  using ()     renaming ( Domain to A )
   open Setoid A   using (sym ; trans )  renaming ( Carrier to ∣A∣ ; _≈_ to _≈₁_ ; refl to refl₁ )
   open Level
 
 
-  Lift-Algˡ : Algebra (α ⊔ ℓ) ρ
+  Lift-Algˡ : Algebra {𝑆 = 𝑆} (α ⊔ ℓ) ρ
   Lift-Algˡ .Domain =
     record  { Carrier = Lift ℓ ∣A∣
             ; _≈_ = λ x y → lower x ≈₁ lower y
@@ -204,7 +204,7 @@ module _ (𝑨 : Algebra α ρ)(ℓ : Level) where
   Lift-Algˡ .Interp .≈cong (refl , la=lb) = ≈cong (Interp 𝑨) (refl , la=lb)
 
 
-  Lift-Algʳ : Algebra α (ρ ⊔ ℓ)
+  Lift-Algʳ : Algebra {𝑆 = 𝑆} α (ρ ⊔ ℓ)
   Lift-Algʳ .Domain =
     record  { Carrier = ∣A∣
             ; _≈_ = (Lift ℓ) ∘₂ _≈₁_
@@ -216,7 +216,7 @@ module _ (𝑨 : Algebra α ρ)(ℓ : Level) where
   Lift-Algʳ .Interp ⟨$⟩ (f , la) = (f ^ 𝑨) la
   Lift-Algʳ .Interp .≈cong (refl , la≡lb) = lift $ ≈cong (Interp 𝑨) (≡.refl , (lower ∘ la≡lb))
 
-Lift-Alg : (𝑨 : Algebra α ρ)(ℓ₀ ℓ₁ : Level) → Algebra (α ⊔ ℓ₀) (ρ ⊔ ℓ₁)
+Lift-Alg : (𝑨 : Algebra {𝑆 = 𝑆} α ρ)(ℓ₀ ℓ₁ : Level) → Algebra {𝑆 = 𝑆} (α ⊔ ℓ₀) (ρ ⊔ ℓ₁)
 Lift-Alg 𝑨 ℓ₀ = Lift-Algʳ (Lift-Algˡ 𝑨 ℓ₀)
 ```
 

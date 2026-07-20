@@ -57,9 +57,9 @@ from a `FiniteCongruences`{.AgdaRecord} witness.
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
-open import Overture using ( 𝓞 ; 𝓥 ; Signature )
+open import Overture using ( 𝓞 ; 𝓥 ; Signature ; 𝑆 )
 
-module Setoid.Congruences.Finite.Basic {𝑆 : Signature 𝓞 𝓥} where
+module Setoid.Congruences.Finite.Basic where
 
 open import Agda.Primitive  using  () renaming ( Set to Type )
 
@@ -79,7 +79,7 @@ open import Relation.Binary.PropositionalEquality  using  ( refl )
 open import Relation.Nullary                       using  ( Dec ; yes ; no )
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
-open import Setoid.Algebras.Basic {𝑆 = 𝑆}  using ( Algebra ; 𝕌[_] ; 𝔻[_] )
+open import Setoid.Algebras.Basic  using ( Algebra ; 𝕌[_] ; 𝔻[_] )
 open import Setoid.Algebras.Finite         using ( 𝟏 )
 open import Setoid.Congruences.Basic       using ( Con ; mkcon ; reflexive ; 𝟘[_] )
 open import Setoid.Congruences.Lattice     using ( _≑_ )
@@ -98,11 +98,11 @@ in the finite Birkhoff construction) stay put — the same level discipline as i
 
 ```agda
 -- A congruence together with a decision procedure for its membership.
-DecCon : (𝑨 : Algebra α ρ)(ℓ : Level) → Type (𝓞 ⊔ 𝓥 ⊔ α ⊔ ρ ⊔ lsuc ℓ)
+DecCon : {𝑆 : Signature 𝓞 𝓥}(𝑨 : Algebra {𝑆 = 𝑆} α ρ)(ℓ : Level) → Type (𝓞 ⊔ 𝓥 ⊔ α ⊔ ρ ⊔ lsuc ℓ)
 DecCon 𝑨 ℓ = Σ[ (_θ_ , _) ∈ Con 𝑨 ℓ ] ∀ x y → Dec (x θ y)
 
 -- The underlying relation of a decidable congruence.
-ConRel : {𝑨 : Algebra α ρ}{ℓ : Level} → DecCon 𝑨 ℓ → BinaryRel 𝕌[ 𝑨 ] ℓ
+ConRel : {𝑨 : Algebra {𝑆 = 𝑆} α ρ}{ℓ : Level} → DecCon 𝑨 ℓ → BinaryRel 𝕌[ 𝑨 ] ℓ
 ConRel ((θ , _) , _) = θ
 ```
 
@@ -114,7 +114,7 @@ proof `complete`{.AgdaField} that the list exhausts the congruence lattice up to
 representative together with the membership and `≑`-equality proofs.[^1]
 
 ```agda
-record FiniteCongruences (𝑨 : Algebra α ρ) : Type (lsuc (𝓞 ⊔ 𝓥 ⊔ α ⊔ ρ)) where
+record FiniteCongruences {𝑆 : Signature 𝓞 𝓥}(𝑨 : Algebra {𝑆 = 𝑆} α ρ) : Type (lsuc (𝓞 ⊔ 𝓥 ⊔ α ⊔ ρ)) where
   field
     -- a finite list of decidable congruences of 𝑨 ...
     cons      : List (DecCon 𝑨 (𝓞 ⊔ 𝓥 ⊔ α ⊔ ρ))
@@ -137,7 +137,7 @@ the diagonal congruence `𝟘[ 𝑨 ]` has a listed representative whose decidab
 membership coincides, up to the two containments of `≑`, with `≈`.
 
 ```agda
-module _ {𝑨 : Algebra α ρ} (𝑪 : FiniteCongruences 𝑨) where
+module _ {𝓞 𝓥 : Level}{𝑆 : Signature 𝓞 𝓥}{𝑨 : Algebra {𝑆 = 𝑆} α ρ} (𝑪 : FiniteCongruences 𝑨) where
   open FiniteCongruences 𝑪
   open Setoid 𝔻[ 𝑨 ] using ( _≈_ )
 
@@ -162,8 +162,8 @@ also the diagonal — so its complete list is a singleton.
 
 ```agda
 -- The sole decidable congruence of 𝟏: the all-relation (= the diagonal on a point).
-𝟏-Δ : DecCon 𝟏 (𝓞 ⊔ 𝓥)
-𝟏-Δ = ((λ _ _ → Lift (𝓞 ⊔ 𝓥) ⊤)
+𝟏-Δ : {𝓞 𝓥 : Level}{𝑆 : Signature 𝓞 𝓥} → DecCon (𝟏 {𝑆 = 𝑆}) (𝓞 ⊔ 𝓥)
+𝟏-Δ {𝓞 = 𝓞}{𝓥 = 𝓥} = ((λ _ _ → Lift (𝓞 ⊔ 𝓥) ⊤)
       , mkcon  (λ _ → lift tt)
                (record { refl = lift tt ; sym = λ _ → lift tt ; trans = λ _ _ → lift tt })
                (λ _ _ → lift tt))
@@ -171,7 +171,7 @@ also the diagonal — so its complete list is a singleton.
 
 -- The congruence lattice of 𝟏 is finitely enumerable.
 open FiniteCongruences
-𝟏-FiniteCongruences : FiniteCongruences 𝟏
+𝟏-FiniteCongruences : FiniteCongruences (𝟏 {𝑆 = 𝑆})
 𝟏-FiniteCongruences .cons = 𝟏-Δ ∷ []
 𝟏-FiniteCongruences .complete ( _ , φcon ) =
   𝟏-Δ , here refl , (λ _ → lift tt) , λ x → reflexive φcon tt

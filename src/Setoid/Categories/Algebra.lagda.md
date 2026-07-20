@@ -27,9 +27,9 @@ definitionally equal — `⊙-hom` is function composition, `𝒾𝒹` the ident
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
-open import Overture using ( 𝓞 ; 𝓥 ; Signature )
+open import Overture using ( 𝓞 ; 𝓥 ; Signature ; 𝑆 )
 
-module Setoid.Categories.Algebra {𝑆 : Signature 𝓞 𝓥} where
+module Setoid.Categories.Algebra where
 
 open import Agda.Primitive using () renaming ( Set to Type )
 
@@ -40,7 +40,7 @@ open import Level            using ( Level ; _⊔_ ) renaming ( suc to lsuc )
 open import Relation.Binary  using ( Setoid ; IsEquivalence )
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
-open import Setoid.Algebras.Basic {𝑆 = 𝑆}    using ( Algebra ; 𝕌[_] ; 𝔻[_] )
+open import Setoid.Algebras.Basic    using ( Algebra ; 𝕌[_] ; 𝔻[_] )
 open import Setoid.Homomorphisms.Basic       using ( hom ; 𝒾𝒹 )
 open import Setoid.Homomorphisms.Properties  using ( ⊙-hom )
 open import Setoid.Categories.Category       using ( Category )
@@ -54,10 +54,10 @@ private variable α ρ : Level
 #### Pointwise equality of homomorphisms
 
 ```agda
-_≋_ : {𝑨 𝑩 : Algebra α ρ} → hom 𝑨 𝑩 → hom 𝑨 𝑩 → Type (α ⊔ ρ)
+_≋_ : {𝑆 : Signature 𝓞 𝓥}{𝑨 𝑩 : Algebra {𝑆 = 𝑆} α ρ} → hom 𝑨 𝑩 → hom 𝑨 𝑩 → Type (α ⊔ ρ)
 _≋_ {𝑨 = 𝑨} {𝑩} f g = ∀ (x : 𝕌[ 𝑨 ]) → Setoid._≈_ 𝔻[ 𝑩 ] (proj₁ f ⟨$⟩ x) (proj₁ g ⟨$⟩ x)
 
-≋-equiv : {𝑨 𝑩 : Algebra α ρ} → IsEquivalence (_≋_ {𝑨 = 𝑨} {𝑩})
+≋-equiv : {𝑆 : Signature 𝓞 𝓥}{𝑨 𝑩 : Algebra {𝑆 = 𝑆} α ρ} → IsEquivalence (_≋_ {𝑨 = 𝑨} {𝑩})
 ≋-equiv {𝑩 = 𝑩} = record
   { refl = λ _ → Setoid.refl 𝔻[ 𝑩 ]
   ; sym = λ f≋g x → Setoid.sym 𝔻[ 𝑩 ] (f≋g x)
@@ -68,9 +68,9 @@ _≋_ {𝑨 = 𝑨} {𝑩} f g = ∀ (x : 𝕌[ 𝑨 ]) → Setoid._≈_ 𝔻[ �
 #### The category
 
 ```agda
-Alg : (α ρ : Level) → Category (𝓞 ⊔ 𝓥 ⊔ lsuc (α ⊔ ρ)) (𝓞 ⊔ 𝓥 ⊔ α ⊔ ρ) (α ⊔ ρ)
-Alg α ρ = record
-  { Obj       = Algebra α ρ
+Alg : {𝑆 : Signature 𝓞 𝓥}(α ρ : Level) → Category (𝓞 ⊔ 𝓥 ⊔ lsuc (α ⊔ ρ)) (𝓞 ⊔ 𝓥 ⊔ α ⊔ ρ) (α ⊔ ρ)
+Alg {𝑆 = 𝑆} α ρ = record
+  { Obj       = Algebra {𝑆 = 𝑆} α ρ
   ; Hom       = hom
   ; _≈_       = _≋_
   ; id        = 𝒾𝒹

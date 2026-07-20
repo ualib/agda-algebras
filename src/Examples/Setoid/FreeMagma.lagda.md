@@ -40,9 +40,9 @@ open import Classical.Signatures.Magma             using ( Sig-Magma ; ∙-Op )
 open import Overture                               using ( proj₁ ; ArityOf )
 open import Overture.Operations                    using ( Op )
 open import Overture.Terms        {𝑆 = Sig-Magma}  using ( Term ; ℊ ; node )
-open import Setoid.Algebras       {𝑆 = Sig-Magma}  using ( Algebra ; mkAlgebraₚ )
-open import Setoid.Homomorphisms  {𝑆 = Sig-Magma}  using ( hom )
-open import Setoid.Terms          {𝑆 = Sig-Magma}  using ( 𝑻 ; free-lift ; lift-hom )
+open import Setoid.Algebras  using ( Algebra ; mkAlgebraₚ )
+open import Setoid.Homomorphisms  using ( hom )
+open import Setoid.Terms  using ( 𝑻 ; free-lift ; lift-hom )
 
 open Func renaming ( to to _⟨$⟩_ )
 ```

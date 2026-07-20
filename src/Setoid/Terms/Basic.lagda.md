@@ -13,9 +13,9 @@ This is the [Setoid.Terms.Basic][] module of the [Agda Universal Algebra Library
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
-open import Overture using (𝓞 ; 𝓥 ; Signature)
+open import Overture using (𝓞 ; 𝓥 ; Signature ; 𝑆)
 
-module Setoid.Terms.Basic {𝑆 : Signature 𝓞 𝓥} where
+module Setoid.Terms.Basic where
 
 -- imports from Agda and the Agda Standard Library -------------------------------
 open import Agda.Primitive         using () renaming ( Set to Type )
@@ -29,8 +29,8 @@ open import Relation.Binary.PropositionalEquality using ( _≡_ ; refl ; sym ; t
 
 -- Imports from the Agda Universal Algebra Library -------------------------------
 open import Overture using ( ArityOf ; OperationSymbolsOf )
-open import Setoid.Algebras  {𝑆 = 𝑆}  using ( Algebra ; ov ; _^_ ; 𝔻[_] ; 𝕌[_] )
-open import Overture.Terms  {𝑆 = 𝑆} using ( Term )
+open import Setoid.Algebras  using ( Algebra ; ov ; _^_ ; 𝔻[_] ; 𝕌[_] )
+open import Overture.Terms using ( Term )
 
 open Func renaming ( to to _⟨$⟩_ )
 open Term
@@ -50,12 +50,12 @@ Ultimately we will use this to define the (absolutely free) term algebra
 as a Algebra whose carrier is the setoid of terms.
 
 ```agda
-module _ {X : Type χ } where
+module _ {𝑆 : Signature 𝓞 𝓥}{X : Type χ } where
 
   -- Equality of terms as an inductive datatype
-  data _≐_ : Term X → Term X → Type (ov χ) where
+  data _≐_ : Term {𝑆 = 𝑆} X → Term {𝑆 = 𝑆} X → Type (ov {𝑆 = 𝑆} χ) where
     rfl :  {x y : X} → x ≡ y → ℊ x ≐ ℊ y
-    gnl :  {f : OperationSymbolsOf 𝑆}{s t : ArityOf 𝑆 f → Term X}
+    gnl :  {f : OperationSymbolsOf 𝑆}{s t : ArityOf 𝑆 f → Term {𝑆 = 𝑆} X}
            → (∀ i → s i ≐ t i) → node f s ≐ node f t
 
   infix 4 _≐_
@@ -76,14 +76,14 @@ module _ {X : Type χ } where
   ≐-isEquiv : IsEquivalence _≐_
   ≐-isEquiv = record { refl = ≐-isRefl ; sym = ≐-isSym ; trans = ≐-isTrans }
 
-TermSetoid : (X : Type χ) → Setoid (ov χ) (ov χ)
-TermSetoid X = record { Carrier = Term X ; _≈_ = _≐_ ; isEquivalence = ≐-isEquiv }
+TermSetoid : {𝑆 : Signature 𝓞 𝓥}(X : Type χ) → Setoid (ov {𝑆 = 𝑆} χ) (ov {𝑆 = 𝑆} χ)
+TermSetoid {𝑆 = 𝑆} X = record { Carrier = Term {𝑆 = 𝑆} X ; _≈_ = _≐_ ; isEquivalence = ≐-isEquiv }
 
 open Algebra
 
 -- The Term Algebra
-𝑻 : (X : Type χ) → Algebra (ov χ) (ov χ)
-Domain (𝑻 X) = TermSetoid X
+𝑻 : {𝑆 : Signature 𝓞 𝓥}(X : Type χ) → Algebra {𝑆 = 𝑆} (ov {𝑆 = 𝑆} χ) (ov {𝑆 = 𝑆} χ)
+Domain (𝑻 {𝑆 = 𝑆} X) = TermSetoid {𝑆 = 𝑆} X
 Interp (𝑻 X) ⟨$⟩ (f , ts) = node f ts
 cong (Interp (𝑻 X)) (refl , ss≐ts) = gnl ss≐ts
 ```
@@ -97,11 +97,11 @@ A substitution from `Δ` to `Γ` associates a term in `Γ` with each variable in
 
 ```agda
 -- Parallel substitutions.
-Sub : Type χ → Type χ → Type (ov χ)
-Sub X Y = (y : Y) → Term X
+Sub : {𝑆 : Signature 𝓞 𝓥} → Type χ → Type χ → Type (ov {𝑆 = 𝑆} χ)
+Sub {𝑆 = 𝑆} X Y = (y : Y) → Term {𝑆 = 𝑆} X
 
 -- Application of a substitution.
-_[_] : (t : Term Y) (σ : Sub X Y) → Term X
+_[_] : (t : Term {𝑆 = 𝑆} Y) (σ : Sub {𝑆 = 𝑆} X Y) → Term {𝑆 = 𝑆} X
 (ℊ x) [ σ ] = σ x
 (node f ts) [ σ ] = node f (λ i → ts i [ σ ])
 
@@ -112,7 +112,7 @@ An environment for `Γ` maps each variable `x : Γ` to an element of `A`, and eq
 of environments is defined pointwise.
 
 ```agda
-module Environment (𝑨 : Algebra α ℓ) where
+module Environment {𝑆 : Signature 𝓞 𝓥}(𝑨 : Algebra {𝑆 = 𝑆} α ℓ) where
   open Algebra 𝑨 using() renaming(Interp  to InterpA )
   open Setoid 𝔻[ 𝑨 ] using ( _≈_ )
     renaming  ( refl to ≈refl ; sym to ≈sym ; trans to ≈trans)
@@ -128,7 +128,7 @@ module Environment (𝑨 : Algebra α ℓ) where
 
   open Algebra using ( Domain ; Interp )
 
-  EnvAlgebra : Type χ → Algebra (α ⊔ χ) (ℓ ⊔ χ)
+  EnvAlgebra : Type χ → Algebra {𝑆 = 𝑆} (α ⊔ χ) (ℓ ⊔ χ)
   Domain (EnvAlgebra X) = Env X
   Interp (EnvAlgebra X) ⟨$⟩ (f , aϕ) = λ x → (f ^ 𝑨) λ i → aϕ i x
   cong (Interp (EnvAlgebra X)) {f , a} {.f , b} (refl , aibi) x = cong InterpA (refl , λ i → aibi i x)
@@ -139,7 +139,7 @@ Interpretation of terms is iteration on the W-type. The standard library offers 
 
 
 ```agda
-  ⟦_⟧ : {X : Type χ}(t : Term X) → Func (Env X) 𝔻[ 𝑨 ]
+  ⟦_⟧ : {X : Type χ}(t : Term {𝑆 = 𝑆} X) → Func (Env X) 𝔻[ 𝑨 ]
   ⟦ ℊ x ⟧          ⟨$⟩ ρ = ρ x
   ⟦ node f args ⟧  ⟨$⟩ ρ = InterpA ⟨$⟩ (f , λ i → ⟦ args i ⟧ ⟨$⟩ ρ)
   cong ⟦ ℊ x ⟧          u≈v = u≈v x
@@ -149,10 +149,10 @@ Interpretation of terms is iteration on the W-type. The standard library offers 
 
   -- An equality between two terms holds in a model if the two terms
   -- are equal under all valuations of their free variables.
-  Equal : ∀ {X : Type χ} (s t : Term X) → Type _
+  Equal : ∀ {X : Type χ} (s t : Term {𝑆 = 𝑆} X) → Type _
   Equal {X = X} s t = ∀ (ρ : Carrier (Env X)) → ⟦ s ⟧ ⟨$⟩ ρ ≈ ⟦ t ⟧ ⟨$⟩ ρ
 
-  ≐→Equal : {X : Type χ}(s t : Term X) → s ≐ t → Equal s t
+  ≐→Equal : {X : Type χ}(s t : Term {𝑆 = 𝑆} X) → s ≐ t → Equal s t
   ≐→Equal .(ℊ _) .(ℊ _) (rfl refl) = λ _ → ≈refl
   ≐→Equal (node _ s) (node _ t) (gnl x) =
     λ ρ → cong InterpA (refl , λ i → ≐→Equal (s i) (t i) (x i) ρ)
@@ -164,11 +164,11 @@ Interpretation of terms is iteration on the W-type. The standard library offers 
   isEquiv .IsEquivalence.trans = λ ij jk ρ → ≈trans (ij ρ) (jk ρ)
 
   -- Evaluation of a substitution gives an environment.
-  ⟦_⟧s : {X Y : Type χ} → Sub X Y → Carrier (Env X) → Carrier (Env Y)
+  ⟦_⟧s : {X Y : Type χ} → Sub {𝑆 = 𝑆} X Y → Carrier (Env X) → Carrier (Env Y)
   ⟦ σ ⟧s ρ x = ⟦ σ x ⟧ ⟨$⟩ ρ
 
   -- Substitution lemma: ⟦t[σ]⟧ρ ≃ ⟦t⟧⟦σ⟧ρ
-  substitution :  {X Y : Type χ} → (t : Term Y) (σ : Sub X Y) (ρ : Carrier (Env X))
+  substitution :  {X Y : Type χ} → (t : Term {𝑆 = 𝑆} Y) (σ : Sub {𝑆 = 𝑆} X Y) (ρ : Carrier (Env X))
     → ⟦ t [ σ ] ⟧ ⟨$⟩ ρ  ≈  ⟦ t ⟧ ⟨$⟩ (⟦ σ ⟧s ρ)
 
   substitution (ℊ x) σ ρ = ≈refl

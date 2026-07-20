@@ -74,7 +74,7 @@ open import Overture.Signatures                     using ( ArityOf ; OperationS
 open import Setoid.Algebras.Basic                   using ( Algebra ; _^_ ; 𝔻[_] ; 𝕌[_] )
 open import Setoid.Terms                            using ( module Environment )
 
-open import Setoid.Varieties.EquationalLogic {𝑆 = Sig-Ring} using ( _⊧_≈_ )
+open import Setoid.Varieties.EquationalLogic using ( _⊧_≈_ )
 
 private variable α ρ : Level
 ```
@@ -84,7 +84,7 @@ private variable α ρ : Level
 
 ```agda
 infix 4 _⊨ʳᵍ_
-_⊨ʳᵍ_ : (𝑨 : Algebra α ρ) (ℰ : Eq-Ring → Term (Fin 3) × Term (Fin 3)) → Type (α ⊔ ρ)
+_⊨ʳᵍ_ : (𝑨 : Algebra {𝑆 = Sig-Ring} α ρ) (ℰ : Eq-Ring → Term (Fin 3) × Term (Fin 3)) → Type (α ⊔ ρ)
 𝑨 ⊨ʳᵍ ℰ = ∀ i → 𝑨 ⊧ proj₁ (ℰ i) ≈ proj₂ (ℰ i)
 ```
 
@@ -92,7 +92,7 @@ _⊨ʳᵍ_ : (𝑨 : Algebra α ρ) (ℰ : Eq-Ring → Term (Fin 3) × Term (Fin
 
 ```agda
 Ring : (α ρ : Level) → Type (suc α ⊔ suc ρ)
-Ring α ρ = Σ[ 𝑨 ∈ Algebra α ρ ] 𝑨 ⊨ʳᵍ Th-Ring
+Ring α ρ = Σ[ 𝑨 ∈ Algebra {𝑆 = Sig-Ring} α ρ ] 𝑨 ⊨ʳᵍ Th-Ring
 ```
 
 #### The additive and multiplicative reduct algebras

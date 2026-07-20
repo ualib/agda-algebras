@@ -103,7 +103,7 @@ open import Relation.Binary  using ( Setoid )
 
 -- Imports from the Agda Universal Algebra Library ------------------------------
 open import Legacy.Base.Relations.Continuous       using ( REL ; REL-syntax )
-open import Setoid.Algebras.Basic  {𝑆 = 𝑆}  using ( Algebra )
+open import Setoid.Algebras.Basic  using ( Algebra )
 ```
 
 
@@ -175,7 +175,7 @@ An instance of a constraint satisfaction problem is a triple 𝑃 = (𝑉, 𝐷,
 ```agda
  open Algebra
  open Setoid
- record CSPInstance (var : Type ν)(𝒜 : var → Algebra α ℓ) : Type (ν ⊔ α ⊔ lsuc ι) where
+ record CSPInstance (var : Type ν)(𝒜 : var → Algebra {𝑆 = 𝑆} α ℓ) : Type (ν ⊔ α ⊔ lsuc ι) where
   field
    ar : Type ι       -- ar indexes the contraints in the instance
    cs : (i : ar) → Constraint var (λ v → Domain (𝒜 v))

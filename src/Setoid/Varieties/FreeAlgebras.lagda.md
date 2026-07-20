@@ -12,9 +12,9 @@ author: "agda-algebras development team"
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
-open import Overture using (𝓞 ; 𝓥 ; Signature)
+open import Overture using (𝓞 ; 𝓥 ; Signature ; 𝑆)
 
-module Setoid.Varieties.FreeAlgebras {𝑆 : Signature 𝓞 𝓥} where
+module Setoid.Varieties.FreeAlgebras where
 
 -- Imports from Agda and the Agda Standard Library -------------------------------
 open import Agda.Primitive   using ()                  renaming ( Set to Type )
@@ -30,18 +30,18 @@ import Relation.Binary.Reasoning.Setoid as SetoidReasoning
 
 -- Imports from the Agda Universal Algebra Library -------------------------------
 open import Overture                                    using  ( proj₁ ; proj₂ )
-open import Overture.Terms                     {𝑆 = 𝑆}  using  ( ℊ )
-open import Setoid.Algebras                    {𝑆 = 𝑆}  using  ( Algebra ; ov ; Lift-Alg ; 𝔻[_] )
+open import Overture.Terms  using  ( ℊ )
+open import Setoid.Algebras  using  ( Algebra ; ov ; Lift-Alg ; 𝔻[_] )
 open import Setoid.Functions                            using  ( eq ; IsSurjective )
-open import Setoid.Homomorphisms               {𝑆 = 𝑆}  using  ( epi ; IsEpi ; IsHom ; hom
+open import Setoid.Homomorphisms  using  ( epi ; IsEpi ; IsHom ; hom
                                                                ; epi→hom ; ⊙-epi ; ToLift-epi )
 open import Setoid.Relations                            using  ( fkerPred )
-open import Setoid.Terms                       {𝑆 = 𝑆}  using  ( 𝑻 ; _≐_ ; module Environment
+open import Setoid.Terms  using  ( 𝑻 ; _≐_ ; module Environment
                                                                ; free-lift ; free-lift-interp )
-open import Setoid.Varieties.Closure           {𝑆 = 𝑆}  using  ( V ; S )
+open import Setoid.Varieties.Closure  using  ( V ; S )
 
-open import Setoid.Varieties.Preservation      {𝑆 = 𝑆}  using  ( classIds-⊆-VIds ; S-id1 )
-open import Setoid.Varieties.SoundAndComplete  {𝑆 = 𝑆}  using  ( Eq ; _⊫_ ; ⊫-proof ; _≈̇_ ; _⊢_▹_≈_
+open import Setoid.Varieties.Preservation  using  ( classIds-⊆-VIds ; S-id1 )
+open import Setoid.Varieties.SoundAndComplete  using  ( Eq ; _⊫_ ; ⊫-proof ; _≈̇_ ; _⊢_▹_≈_
                                                                ; Th ; Mod ; module Soundness
                                                                ; module FreeAlgebra )
 open _⟶_      using ( cong ) renaming ( to to _⟨$⟩_ )
@@ -60,10 +60,10 @@ Alternatively, we could let `X` be the product of all algebras in the class `�
 
 ```agda
 module FreeHom (χ : Level){α ρᵃ ℓ : Level}
-               {𝒦 : Pred(Algebra α ρᵃ) (α ⊔ ρᵃ ⊔ ov ℓ)} where
+               {𝒦 : Pred(Algebra {𝑆 = 𝑆} α ρᵃ) (α ⊔ ρᵃ ⊔ ov {𝑆 = 𝑆} ℓ)} where
   private
     ι : Level
-    ι = ov(χ ⊔ α ⊔ ρᵃ ⊔ ℓ)
+    ι = ov {𝑆 = 𝑆}(χ ⊔ α ⊔ ρᵃ ⊔ ℓ)
 
   open Eq
 ```
@@ -76,7 +76,7 @@ The relatively free algebra (relative to `Th 𝒦`) is called `M` and is derived
 ```agda
  -- ℐ indexes the collection of equations modeled by 𝒦
   ℐ : Type ι
-  ℐ = Σ[ eq ∈ Eq{χ} ] 𝒦 ⊫ ((lhs eq) ≈̇ (rhs eq))
+  ℐ = Σ[ eq ∈ Eq {χ = χ} ] 𝒦 ⊫ ((lhs eq) ≈̇ (rhs eq))
 
   ℰ : ℐ → Eq
   ℰ (eqv , p) = eqv
@@ -131,7 +131,7 @@ Finally, we define an epimorphism from `𝑻 X` onto the relatively free algebra
     classIds-⊆-VIds {ℓ = ℓ} (class-models-kernel pKq)
 
 
-  module _  {X : Type χ} {𝑨 : Algebra α ρᵃ}{sA : 𝑨 ∈ S {β = α}{ρᵃ} ℓ 𝒦} where
+  module _  {X : Type χ} {𝑨 : Algebra {𝑆 = 𝑆} α ρᵃ}{sA : 𝑨 ∈ S {β = α}{ρᵃ} ℓ 𝒦} where
     open Environment 𝑨 using ( Equal )
     ker𝔽⊆Equal : ∀{p q} → (p , q) ∈ fkerPred (proj₁ (hom𝔽[ X ])) → Equal p q
     ker𝔽⊆Equal{p = p}{q} x = S-id1{ℓ = ℓ} (ℰ⊢[ X ]▹Th𝒦 x) .⊫-proof 𝑨 sA
@@ -141,11 +141,11 @@ Finally, we define an epimorphism from `𝑻 X` onto the relatively free algebra
 
 ------------------------------------------------------------------------------
 
-module _ {α ρᵃ ℓ : Level} {𝒦 : Pred(Algebra α ρᵃ) (α ⊔ ρᵃ ⊔ ov ℓ)} where
-  private ι = ov(α ⊔ ρᵃ ⊔ ℓ)
+module _ {α ρᵃ ℓ : Level} {𝒦 : Pred(Algebra {𝑆 = 𝑆} α ρᵃ) (α ⊔ ρᵃ ⊔ ov {𝑆 = 𝑆} ℓ)} where
+  private ι = ov {𝑆 = 𝑆}(α ⊔ ρᵃ ⊔ ℓ)
   open IsEpi ; open IsHom
 
-  module lower-universe-version {𝑨 : Algebra α ρᵃ} where
+  module lower-universe-version {𝑨 : Algebra {𝑆 = 𝑆} α ρᵃ} where
     open FreeHom α {α}{ρᵃ}{ℓ}{𝒦}
     open FreeAlgebra {ι = ι}{I = ℐ} ℰ            using ( 𝔽[_] )
     open Algebra 𝑨  renaming (Domain to A)       using( Interp )
@@ -165,11 +165,11 @@ module _ {α ρᵃ ℓ : Level} {𝒦 : Pred(Algebra α ρᵃ) (α ⊔ ρᵃ ⊔
       isEpi .isSurjective = eq (ℊ _) refl
 
     𝔽-ModTh-epi-lift :
-      𝑨 ∈ Mod (Th (V ℓ ι 𝒦)) → epi 𝔽[ ∣A∣ ] (Lift-Alg 𝑨 (ov α) (ov α))
+      𝑨 ∈ Mod (Th (V ℓ ι 𝒦)) → epi 𝔽[ ∣A∣ ] (Lift-Alg 𝑨 (ov {𝑆 = 𝑆} α) (ov {𝑆 = 𝑆} α))
     𝔽-ModTh-epi-lift A∈ModThK = ⊙-epi (𝔽-ModTh-epi λ {p q} → A∈ModThK{p = p}{q}) ToLift-epi
 
   module _  -- higher-universe-version (needed by HSP theorem)
-    {𝑨 : Algebra (α ⊔ ρᵃ ⊔ ℓ) (α ⊔ ρᵃ ⊔ ℓ)}
+    {𝑨 : Algebra {𝑆 = 𝑆} (α ⊔ ρᵃ ⊔ ℓ) (α ⊔ ρᵃ ⊔ ℓ)}
     where
 
     open FreeHom (α ⊔ ρᵃ ⊔ ℓ) {α}{ρᵃ}{ℓ}{𝒦}

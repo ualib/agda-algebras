@@ -141,9 +141,9 @@ evaluation interacts with this monad structure.  It works as follows:
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
-open import Overture using ( 𝓞 ; 𝓥 ; Signature )
+open import Overture using ( 𝓞 ; 𝓥 ; Signature ; 𝑆 )
 
-module Setoid.Terms.Monad {𝑆 : Signature 𝓞 𝓥} where
+module Setoid.Terms.Monad where
 
 open import Agda.Primitive using () renaming ( Set to Type )
 
@@ -152,9 +152,9 @@ open import Level                                  using ( Level ; suc )
 open import Relation.Binary.PropositionalEquality  using ( _≡_ ; refl ; cong-app )
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
-open import Overture.Terms {𝑆 = 𝑆}      using  ( Term ; ℊ ; node ; ov )
+open import Overture.Terms      using  ( Term ; ℊ ; node ; ov )
 open import Setoid.Categories.Category  using  ( Category )
-open import Setoid.Terms.Basic {𝑆 = 𝑆}  using  ( Sub ; _[_] ; _≐_
+open import Setoid.Terms.Basic  using  ( Sub ; _[_] ; _≐_
                                                ; ≐-isRefl ; ≐-isSym ; ≐-isTrans )
 open _≐_
 
@@ -172,7 +172,7 @@ below flips it into the applicative order of the `_∘_` of the `Category` recor
 as the algebra category does with `⊙-hom`.)
 
 ```agda
-_⊙ˢ_ : Sub X Y → Sub W X → Sub W Y
+_⊙ˢ_ : Sub {𝑆 = 𝑆} X Y → Sub {𝑆 = 𝑆} W X → Sub {𝑆 = 𝑆} W Y
 σ ⊙ˢ τ = λ y → (σ y) [ τ ]
 ```
 
@@ -185,7 +185,7 @@ definitionally equal (function η), so the law is `refl`, with the pointwise cor
 one `cong-app` away.
 
 ```agda
-module _ {X Y : Type χ} {σ : Sub X Y} where
+module _ {X Y : Type χ} {σ : Sub {𝑆 = 𝑆} X Y} where
 
   []-unitˡ : (λ y → (ℊ y) [ σ ]) ≡ σ
   []-unitˡ = refl
@@ -200,7 +200,7 @@ structural recursion the statement suggests; the result is `_≐_`, not `_≡_`,
 at each node the two argument tuples agree only pointwise.
 
 ```agda
-[]-unitʳ : (t : Term X) → t [ ℊ ] ≐ t
+[]-unitʳ : (t : Term {𝑆 = 𝑆} X) → t [ ℊ ] ≐ t
 []-unitʳ (ℊ x) = ≐-isRefl
 []-unitʳ (node f ts) = gnl λ i → []-unitʳ (ts i)
 ```
@@ -210,7 +210,7 @@ This is the law a syntactician would call the *substitution lemma for substituti
 it is what makes towers of changes-of-variables collapse.
 
 ```agda
-[]-assoc : (t : Term Y) (σ : Sub X Y) (τ : Sub W X) → (t [ σ ]) [ τ ] ≐ t [ σ ⊙ˢ τ ]
+[]-assoc : (t : Term {𝑆 = 𝑆} Y) (σ : Sub {𝑆 = 𝑆} X Y) (τ : Sub {𝑆 = 𝑆} W X) → (t [ σ ]) [ τ ] ≐ t [ σ ⊙ˢ τ ]
 []-assoc (ℊ y) σ τ = ≐-isRefl
 []-assoc (node f ts) σ τ = gnl λ i → []-assoc (ts i) σ τ
 ```
@@ -221,7 +221,7 @@ results.  This is what makes `_[_]` a legitimate operation on the term *setoid* 
 it is the `∘-resp-≈` law of the Kleisli category).
 
 ```agda
-[]-cong : {s t : Term Y} {σ τ : Sub X Y}
+[]-cong : {s t : Term {𝑆 = 𝑆} Y} {σ τ : Sub {𝑆 = 𝑆} X Y}
   → s ≐ t → ((y : Y) → σ y ≐ τ y) → s [ σ ] ≐ t [ τ ]
 []-cong (rfl refl) σ≐τ = σ≐τ _
 []-cong (gnl ps)   σ≐τ = gnl (λ i → []-cong (ps i) σ≐τ)
@@ -238,10 +238,10 @@ theorem "`(Term , ℊ , _[_])` is a (relative) monad," stated as the well-formed
 of a category.
 
 ```agda
-TermKleisli : (χ : Level) → Category (suc χ) (ov χ) (ov χ)
-TermKleisli χ = record
+TermKleisli : {𝑆 : Signature 𝓞 𝓥}(χ : Level) → Category (suc χ) (ov {𝑆 = 𝑆} χ) (ov {𝑆 = 𝑆} χ)
+TermKleisli {𝑆 = 𝑆} χ = record
   { Obj        = Type χ
-  ; Hom        = λ X Y → Sub Y X
+  ; Hom        = λ X Y → Sub {𝑆 = 𝑆} Y X
   ; _≈_        = λ σ τ → ∀ x → σ x ≐ τ x
   ; id         = ℊ
   ; _∘_        = λ τ σ → σ ⊙ˢ τ
@@ -267,13 +267,13 @@ domain `Term (Term X)` is inherently heterogeneous — `Term X` lives at `ov χ`
 `χ`.  The direct recursion sidesteps that cleanly.)
 
 ```agda
-join : Term (Term X) → Term X
+join : Term {𝑆 = 𝑆} (Term {𝑆 = 𝑆} X) → Term {𝑆 = 𝑆} X
 join (ℊ t) = t
 join (node f ts) = node f (λ i → join (ts i))
 
 -- The μ-form unit law that is definitional: flattening a trivial
 -- expression-of-expressions yields the expression.
-join-ℊ : {t : Term X} → join (ℊ t) ≡ t
+join-ℊ : {t : Term {𝑆 = 𝑆} X} → join (ℊ t) ≡ t
 join-ℊ = refl
 ```
 

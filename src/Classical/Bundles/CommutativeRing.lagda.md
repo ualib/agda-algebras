@@ -35,7 +35,7 @@ open import Classical.Signatures.Ring             using ( Sig-Ring ; +-Op ; 0-Op
 open import Classical.Structures.CommutativeRing  using ( CommutativeRing ; module CommutativeRing-Op )
 open import Classical.Theories.CommutativeRing    using ( +-assoc ; +-idˡ ; +-idʳ ; +-invˡ ; +-invʳ ; +-comm
                                                         ; ·-assoc ; ·-idˡ ; ·-idʳ ; ·-comm ; distribˡ ; distribʳ )
-open import Setoid.Algebras.Basic {𝑆 = Sig-Ring}  using ( Algebra ; 𝕌[_] ; 𝔻[_] )
+open import Setoid.Algebras.Basic  using ( Algebra ; 𝕌[_] ; 𝔻[_] )
 open import Setoid.Signatures                     using ( ⟨_⟩ )
 
 private variable α ρ : Level
@@ -108,7 +108,7 @@ private variable α ρ : Level
                ; *-assoc to R-*assoc ; *-identityˡ to R-*idˡ ; *-identityʳ to R-*idʳ
                ; *-comm to R-*comm ; distribˡ to R-distribˡ ; distribʳ to R-distribʳ )
 
-  𝑨 : Algebra _ _
+  𝑨 : Algebra {𝑆 = Sig-Ring} _ _
   𝑨 = record { Domain = setoid ; Interp = interp }
     where
     interp : Func (⟨ Sig-Ring ⟩ setoid) setoid

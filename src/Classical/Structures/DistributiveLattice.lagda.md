@@ -63,9 +63,9 @@ open import Classical.Theories.DistributiveLattice
          ; ∨-assoc ; ∨-comm ; ∨-idem ; absorbˡ ; absorbʳ ; ∧-distribˡ ; ∨-distribˡ )
 
 open import Overture.Terms {𝑆 = Sig-Lattice} using ( Term ; ℊ ; node )
-open import Setoid.Algebras.Basic {𝑆 = Sig-Lattice} using ( Algebra ; 𝔻[_] ; 𝕌[_] )
+open import Setoid.Algebras.Basic using ( Algebra ; 𝔻[_] ; 𝕌[_] )
 open import Setoid.Terms using ( module Environment )
-open import Setoid.Varieties.EquationalLogic {𝑆 = Sig-Lattice} using ( _⊧_≈_ )
+open import Setoid.Varieties.EquationalLogic using ( _⊧_≈_ )
 
 private variable α ρ : Level
 ```
@@ -75,13 +75,13 @@ private variable α ρ : Level
 
 ```agda
 infix 4 _⊨ᵈˡ_
-_⊨ᵈˡ_ : (𝑨 : Algebra α ρ) (ℰ : Eq-DistributiveLattice → Term (Fin 3) × Term (Fin 3))
+_⊨ᵈˡ_ : (𝑨 : Algebra {𝑆 = Sig-Lattice} α ρ) (ℰ : Eq-DistributiveLattice → Term (Fin 3) × Term (Fin 3))
   → Type (α ⊔ ρ)
 
 𝑨 ⊨ᵈˡ ℰ = ∀ i → 𝑨 ⊧ proj₁ (ℰ i) ≈ proj₂ (ℰ i)
 
 DistributiveLattice : (α ρ : Level) → Type (suc α ⊔ suc ρ)
-DistributiveLattice α ρ = Σ[ 𝑨 ∈ Algebra α ρ ] 𝑨 ⊨ᵈˡ Th-DistributiveLattice
+DistributiveLattice α ρ = Σ[ 𝑨 ∈ Algebra {𝑆 = Sig-Lattice} α ρ ] 𝑨 ⊨ᵈˡ Th-DistributiveLattice
 ```
 
 #### The forgetful projection to lattices {#forgetful-to-lattice}

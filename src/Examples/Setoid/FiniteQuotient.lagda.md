@@ -43,8 +43,8 @@ open import Relation.Nullary  using ( ¬_ )
 -- Imports from the Agda Universal Algebra Library -----------------------------
 open import Classical.Signatures.Monoid          using ( Sig-Monoid ; ∙-Op ; ε-Op )
 open import Overture                             using ( ArityOf ; Op )
-open import Setoid.Algebras {𝑆 = Sig-Monoid}     using ( Algebra ; 𝔻[_] ; mkAlgebraₚ ; _,_ )
-open import Setoid.Congruences {𝑆 = Sig-Monoid}  using ( Con ; _∣≈_ ; _╱_ )
+open import Setoid.Algebras     using ( Algebra ; 𝔻[_] ; mkAlgebraₚ ; _,_ )
+open import Setoid.Congruences  using ( Con ; _∣≈_ ; _╱_ )
 open import Setoid.Homomorphisms.Isomorphisms    using (_≅_ ; ≅-mkAlgebra)
 open import Setoid.Signatures                    using ( ⟨_⟩ )
 

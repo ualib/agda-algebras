@@ -36,7 +36,7 @@ open import Classical.Structures.Group.AbelianGroup  using  ( AbelianGroup
                                                             ; module AbelianGroup-Op )
 open import Classical.Theories.AbelianGroup          using  ( assoc ; idˡ ; idʳ
                                                             ; invˡ ; invʳ ; comm )
-open import Setoid.Algebras.Basic {𝑆 = Sig-Group}    using  ( Algebra ; 𝕌[_] ; 𝔻[_] )
+open import Setoid.Algebras.Basic    using  ( Algebra ; 𝕌[_] ; 𝔻[_] )
 open import Setoid.Signatures                        using  ( ⟨_⟩ )
 
 private variable α ρ : Level
@@ -84,7 +84,7 @@ private variable α ρ : Level
                ; identityˡ to G-idˡ ; identityʳ to G-idʳ
                ; inverseˡ to G-invˡ ; inverseʳ to G-invʳ ; comm to G-comm )
 
-  𝑨 : Algebra _ _
+  𝑨 : Algebra {𝑆 = Sig-Group} _ _
   𝑨 = record { Domain = setoid ; Interp = interp }
     where
     interp : Func (⟨ Sig-Group ⟩ setoid) setoid

@@ -13,13 +13,13 @@ This is the [Setoid.Subalgebras][] module of the [Agda Universal Algebra Library
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
-open import Overture using (𝓞 ; 𝓥 ; Signature)
+open import Overture using (𝓞 ; 𝓥 ; Signature ; 𝑆)
 
-module Setoid.Subalgebras {𝑆 : Signature 𝓞 𝓥} where
+module Setoid.Subalgebras where
 
-open import Setoid.Subalgebras.Basic {𝑆 = 𝑆} public
-open import Setoid.Subalgebras.CompleteLattice {𝑆 = 𝑆} public
-open import Setoid.Subalgebras.Properties {𝑆 = 𝑆} public
-open import Setoid.Subalgebras.Subuniverses {𝑆 = 𝑆} public
-open import Setoid.Subalgebras.Subdirect {𝑆 = 𝑆} public
+open import Setoid.Subalgebras.Basic public
+open import Setoid.Subalgebras.CompleteLattice public
+open import Setoid.Subalgebras.Properties public
+open import Setoid.Subalgebras.Subuniverses public
+open import Setoid.Subalgebras.Subdirect public
 ```

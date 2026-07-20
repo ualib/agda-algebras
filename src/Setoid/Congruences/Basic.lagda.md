@@ -27,7 +27,7 @@ open import Relation.Binary  using ( Setoid ; IsEquivalence )
 open import Relation.Binary.PropositionalEquality using ( refl )
 
 -- Imports from the Agda Universal Algebras Library ------------------------------
-open import Overture               using ( _|:_ ; Equivalence ; 𝓞 ; 𝓥 ; Signature)
+open import Overture               using ( _|:_ ; Equivalence ; 𝓞 ; 𝓥 ; Signature ; 𝑆 )
 open import Setoid.Relations       using ( ⟪_⟫ ; _/_ ; ⟪_∼_⟫-elim )
 open import Setoid.Algebras.Basic  using ( ov ; Algebra ; 𝔻[_] ; 𝕌[_] ; _^_ )
 
@@ -42,10 +42,9 @@ since all the work is done by the relation `|:`, which we defined above (see
 [Setoid.Relations.Discrete][]).
 
 ```agda
-module _ {𝑆 : Signature 𝓞 𝓥} where
-  -- Algebra compatibility with binary relation
-  _∣≈_ : (𝑨 : Algebra {𝑆 = 𝑆} α ρ) → BinaryRel 𝕌[ 𝑨 ] ℓ → Type _
-  𝑨 ∣≈ R = ∀ 𝑓 → (𝑓 ^ 𝑨) |: R
+-- Algebra compatibility with binary relation
+_∣≈_ : (𝑨 : Algebra {𝑆 = 𝑆} α ρ) → BinaryRel 𝕌[ 𝑨 ] ℓ → Type _
+𝑨 ∣≈ R = ∀ 𝑓 → (𝑓 ^ 𝑨) |: R
 ```
 
 A *congruence relation* of an algebra `𝑨` is defined to be an equivalence relation

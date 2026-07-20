@@ -38,9 +38,9 @@ complete with respect to `ℓ₀`-small families — the usual predicative readi
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
-open import Overture using (𝓞 ; 𝓥 ; Signature)
+open import Overture using (𝓞 ; 𝓥 ; Signature ; 𝑆)
 
-module Setoid.Congruences.CompleteLattice {𝑆 : Signature 𝓞 𝓥} where
+module Setoid.Congruences.CompleteLattice where
 
 -- Imports from the Agda Standard Library ---------------------------------------
 open import Agda.Primitive               using () renaming ( Set to Type )
@@ -53,11 +53,11 @@ open import Relation.Binary.Lattice      using ( Supremum ; IsLattice
                                                ; BoundedLattice )
 
 -- Imports from the Agda Universal Algebras Library ------------------------------
-open import Setoid.Algebras.Basic       {𝑆 = 𝑆}  using  ( ov ; Algebra ; 𝕌[_] ; 𝔻[_] )
+open import Setoid.Algebras.Basic  using  ( ov ; Algebra ; 𝕌[_] ; 𝔻[_] )
 open import Order.CompleteLattice                using  ( CompleteLattice )
 open import Setoid.Congruences.Basic             using  ( Con ; mkcon ; _∣≈_ ; reflexive ; 𝟘[_]
                                                         ; is-equivalence ; is-compatible ; 𝟙[_] )
-open import Setoid.Congruences.Lattice  {𝑆 = 𝑆}  using  ( _≑_ ; _⊆_ ; _∧_ ; ∧-infimum
+open import Setoid.Congruences.Lattice  using  ( _≑_ ; _⊆_ ; _∧_ ; ∧-infimum
                                                         ; ⊆-isPartialOrder ; 𝟘-min ; 𝟙-max )
 open import Setoid.Congruences.Generation        using  ( Cg ; Cg-least ; base ; _∨_
                                                         ; ∨-upperˡ ; ∨-upperʳ ; ∨-least )
@@ -73,12 +73,12 @@ relation level is `L = 𝓞 ⊔ 𝓥 ⊔ α ⊔ ρ ⊔ ℓ₀`.  Because level j
 `Con 𝑨 {L}`, exactly like the meet.
 
 ```agda
-module _ (𝑨 : Algebra α ρ) (ℓ₀ : Level) where
+module _ {𝓞 𝓥 : Level}{𝑆 : Signature 𝓞 𝓥}(𝑨 : Algebra {𝑆 = 𝑆} α ρ) (ℓ₀ : Level) where
   L : Level
   L = 𝓞 ⊔ 𝓥 ⊔ α ⊔ ρ ⊔ ℓ₀
 
   private
-    Conᴸ : Type (α ⊔ ρ ⊔ ov L)
+    Conᴸ : Type (α ⊔ ρ ⊔ ov {𝑆 = 𝑆} L)
     Conᴸ = Con 𝑨 L
 ```
 
@@ -101,7 +101,7 @@ Assembling the partial order, the supremum, and the meet's infimum gives the lat
                           ; infimum         = ∧-infimum
                           }
 
-  Con-Lattice : Lattice (α ⊔ ρ ⊔ ov L) (α ⊔ L) (α ⊔ L)
+  Con-Lattice : Lattice (α ⊔ ρ ⊔ ov {𝑆 = 𝑆} L) (α ⊔ L) (α ⊔ L)
   Con-Lattice = record  { Carrier    = Conᴸ
                         ; _≈_        = _≑_
                         ; _≤_        = _⊆_
@@ -150,7 +150,7 @@ minimum).
                                  ; minimum    = 0ᴬ-minimum
                                  }
 
-  Con-BoundedLattice : BoundedLattice (α ⊔ ρ ⊔ ov L) (α ⊔ L) (α ⊔ L)
+  Con-BoundedLattice : BoundedLattice (α ⊔ ρ ⊔ ov {𝑆 = 𝑆} L) (α ⊔ L) (α ⊔ L)
   Con-BoundedLattice = record  { Carrier           = Conᴸ
                                ; _≈_               = _≑_
                                ; _≤_               = _⊆_
@@ -214,7 +214,7 @@ Packaging the order with the infinitary operations and their universal propertie
 yields the complete lattice of congruences.
 
 ```agda
-  Con-CompleteLattice : CompleteLattice (α ⊔ ρ ⊔ ov L) (α ⊔ L) (α ⊔ L) ℓ₀
+  Con-CompleteLattice : CompleteLattice (α ⊔ ρ ⊔ ov {𝑆 = 𝑆} L) (α ⊔ L) (α ⊔ L) ℓ₀
   Con-CompleteLattice = record
     { Carrier          = Conᴸ
     ; _≈_              = _≑_

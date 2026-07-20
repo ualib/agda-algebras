@@ -33,9 +33,9 @@ This module is pure congruence theory: it depends only on the congruence record 
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
-open import Overture using ( 𝓞 ; 𝓥 ; Signature )
+open import Overture using ( 𝓞 ; 𝓥 ; Signature ; 𝑆 )
 
-module Setoid.Congruences.Permutability {𝑆 : Signature 𝓞 𝓥} where
+module Setoid.Congruences.Permutability where
 
 -- Imports from Agda and the Agda Standard Library ----------------------------
 open import Agda.Primitive   using () renaming ( Set to Type )
@@ -45,7 +45,7 @@ open import Relation.Binary  using ( Setoid ; IsEquivalence )
                              renaming ( Rel to BinaryRel ; _⇒_ to _⊆_ )
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
-open import Setoid.Algebras.Basic     {𝑆 = 𝑆}  using ( ov ; Algebra ; 𝕌[_] )
+open import Setoid.Algebras.Basic  using ( ov ; Algebra ; 𝕌[_] )
 open import Setoid.Congruences.Basic           using ( Con ; is-equivalence )
 
 private variable α ρ ℓ : Level
@@ -62,7 +62,7 @@ existential bumps the relation level from `ℓ` to `α ⊔ ℓ` (the witness ran
 the carrier `𝕌[ 𝑨 ] : Type α`).
 
 ```agda
-module _ {𝑨 : Algebra α ρ} where
+module _ {𝑨 : Algebra {𝑆 = 𝑆} α ρ} where
   _∘_ : Con 𝑨 ℓ → Con 𝑨 ℓ → BinaryRel 𝕌[ 𝑨 ] (α ⊔ ℓ)
   ((_θ_ , _) ∘ (_φ_ , _)) x y = ∃[ z ] x θ z × z φ y
   infixr 7 _∘_
@@ -103,7 +103,7 @@ An algebra is **congruence-permutable** (at relation level `ℓ`) when *every* p
 its congruences permutes.
 
 ```agda
-CongruencePermutable : (𝑨 : Algebra α ρ)(ℓ : Level) → Type (α ⊔ ρ ⊔ ov ℓ)
+CongruencePermutable : (𝑨 : Algebra {𝑆 = 𝑆} α ρ)(ℓ : Level) → Type (α ⊔ ρ ⊔ ov {𝑆 = 𝑆} ℓ)
 CongruencePermutable 𝑨 ℓ = (θ φ : Con 𝑨 ℓ) → Permutes θ φ
 ```
 
@@ -114,7 +114,7 @@ congruences — the conventional statement `θ ∘ φ = φ ∘ θ`, read here as
 containment, the setoid notion of equal relations.
 
 ```agda
-module _ {𝑨 : Algebra α ρ} where
+module _ {𝑨 : Algebra {𝑆 = 𝑆} α ρ} where
 
   -- In a congruence-permutable algebra, every two congruences commute (both
   -- inclusions hold), since CP supplies `Permutes` in either order.

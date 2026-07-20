@@ -14,9 +14,9 @@ This is the [Setoid.Algebras.Products][] module of the [Agda Universal Algebra L
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
-open import Overture using (𝓞 ; 𝓥 ; Signature)
+open import Overture using (𝓞 ; 𝓥 ; Signature ; 𝑆)
 
-module Setoid.Algebras.Products {𝑆 : Signature 𝓞 𝓥} where
+module Setoid.Algebras.Products where
 
 -- Imports from Agda and the Agda Standard Library --------------------------------
 open import Agda.Primitive    using () renaming ( Set to Type )
@@ -36,7 +36,7 @@ open IsEquivalence  using () renaming ( refl to reflE ; sym to symE ; trans to t
 open import Overture  using ( proj₁; proj ; projIsOnto )
                       renaming ( IsSurjective to onto )
 
-open import Setoid.Algebras.Basic {𝑆 = 𝑆}  using ( Algebra ; _^_ ; ov ; 𝔻[_] ; 𝕌[_])
+open import Setoid.Algebras.Basic  using ( Algebra ; _^_ ; ov ; 𝔻[_] ; 𝕌[_])
 
 private variable α ρ ι : Level
 
@@ -45,7 +45,7 @@ open Algebra
 -->
 
 ```agda
-⨅ : {I : Type ι }(𝒜 : I → Algebra α ρ) → Algebra (α ⊔ ι) (ρ ⊔ ι)
+⨅ : {I : Type ι }(𝒜 : I → Algebra {𝑆 = 𝑆} α ρ) → Algebra {𝑆 = 𝑆} (α ⊔ ι) (ρ ⊔ ι)
 
 Domain (⨅ {I} 𝒜) =
   record  { Carrier = ∀ i → 𝕌[ 𝒜 i ]
@@ -66,15 +66,15 @@ cong (Interp (⨅ {I} 𝒜)) (refl , f=g ) = λ i → cong  (Interp (𝒜 i)) (r
 
 
 ```agda
-module _ {𝒦 : Pred (Algebra α ρ) (ov α)} where
+module _ {𝑆 : Signature 𝓞 𝓥}{𝒦 : Pred (Algebra {𝑆 = 𝑆} α ρ) (ov {𝑆 = 𝑆} α)} where
 
-  ℑ : Type (ov (α ⊔ ρ))
-  ℑ = Σ[ 𝑨 ∈ (Algebra α ρ) ] 𝑨 ∈ 𝒦
+  ℑ : Type (ov {𝑆 = 𝑆} (α ⊔ ρ))
+  ℑ = Σ[ 𝑨 ∈ (Algebra {𝑆 = 𝑆} α ρ) ] 𝑨 ∈ 𝒦
 
-  𝔄 : ℑ → Algebra α ρ
+  𝔄 : ℑ → Algebra {𝑆 = 𝑆} α ρ
   𝔄 i = (proj₁ i)
 
-  class-product : Algebra (ov (α ⊔ ρ)) _
+  class-product : Algebra {𝑆 = 𝑆} (ov {𝑆 = 𝑆} (α ⊔ ρ)) _
   class-product = ⨅ 𝔄
 ```
 
@@ -98,7 +98,7 @@ projection of a product of algebras over such an index type is surjective.
 ```agda
 module _  {I : Type ι}                  -- index type
            {_≟_ : Decidable{A = I} _≡_}  -- with decidable equality
-           {𝒜 : I → Algebra α ρ}         -- indexed collection of algebras
+           {𝒜 : I → Algebra {𝑆 = 𝑆} α ρ}         -- indexed collection of algebras
            {𝒜I : ∀ i → 𝕌[ 𝒜 i ] }        -- each of which is nonempty
            where
 

@@ -29,9 +29,9 @@ Birkhoff's subdirect representation theorem — is built on top of this in
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
-open import Overture using ( 𝓞 ; 𝓥 ; Signature )
+open import Overture using ( 𝓞 ; 𝓥 ; Signature ; 𝑆 )
 
-module Setoid.Congruences.Monolith {𝑆 : Signature 𝓞 𝓥} where
+module Setoid.Congruences.Monolith where
 
 -- Imports from Agda and the Agda Standard Library ----------------------------
 open import Agda.Primitive    using () renaming ( Set to Type )
@@ -41,10 +41,10 @@ open import Relation.Binary   using ( Setoid ; IsEquivalence ; _⇒_ )
 open import Relation.Nullary  using ( ¬_ )
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
-open import Setoid.Algebras.Basic       {𝑆 = 𝑆}  using  ( ov ; Algebra ; 𝕌[_] ; 𝔻[_] )
+open import Setoid.Algebras.Basic  using  ( ov ; Algebra ; 𝕌[_] ; 𝔻[_] )
 open import Setoid.Congruences.Basic             using  ( Con ; mkcon ; _∣≈_ ; reflexive
                                                         ; is-equivalence ; is-compatible )
-open import Setoid.Congruences.Lattice  {𝑆 = 𝑆}  using  ( _⊆_ ; _≑_ ; _∧_ )
+open import Setoid.Congruences.Lattice  using  ( _⊆_ ; _≑_ ; _∧_ )
 
 private variable α ρ ℓ : Level
 ```
@@ -57,7 +57,7 @@ setoid equality keeps apart; the degenerate (one-element) algebras are exactly t
 **trivial** ones, on which every two elements are equal.
 
 ```agda
-module _ (𝑨 : Algebra α ρ) where
+module _ (𝑨 : Algebra {𝑆 = 𝑆} α ρ) where
   open Setoid 𝔻[ 𝑨 ]  using ( _≈_ )
 
   -- 𝑨 has two ≈-distinct elements.
@@ -124,14 +124,14 @@ contained in every nonzero congruence.  (Working at the algebra's relation level
 so the diagonal and the monolith are `Con 𝑨 ρ`.)
 
 ```agda
-  record IsMonolith (μ : Con 𝑨 ρ) : Type (α ⊔ ov ρ) where
+  record IsMonolith (μ : Con 𝑨 ρ) : Type (α ⊔ ov {𝑆 = 𝑆} ρ) where
     field
       mono-nonzero : Nonzero μ
       mono-least   : (θ : Con 𝑨 ρ) → Nonzero θ → μ ⊆ θ
 
   open IsMonolith public
 
-  HasMonolith : Type (α ⊔ ov ρ)
+  HasMonolith : Type (α ⊔ ov {𝑆 = 𝑆} ρ)
   HasMonolith = Σ[ μ ∈ Con 𝑨 ρ ] IsMonolith μ
 ```
 
@@ -152,7 +152,7 @@ algebra is a subdirect product of SI algebras — is developed in
 [Setoid.Subalgebras.Subdirect][].)
 
 ```agda
-  IsSubdirectlyIrreducible : Type (α ⊔ ov ρ)
+  IsSubdirectlyIrreducible : Type (α ⊔ ov {𝑆 = 𝑆} ρ)
   IsSubdirectlyIrreducible = Nontrivial × HasMonolith
 
   -- An SI algebra is nontrivial; a trivial algebra is not SI.
@@ -174,7 +174,7 @@ the family ranges over congruences at the algebra's relation level `ρ`.
 
 ```agda
   -- 0ᴬ is completely meet-irreducible (contrapositive form).
-  CompletelyMeetIrreducible : Type (α ⊔ ov ρ)
+  CompletelyMeetIrreducible : Type (α ⊔ ov {𝑆 = 𝑆} ρ)
   CompletelyMeetIrreducible =
     {I : Type ρ}(θ : I → Con 𝑨 ρ) → (∀ i → Nonzero (θ i)) → Nonzero (⋂ θ)
 ```
