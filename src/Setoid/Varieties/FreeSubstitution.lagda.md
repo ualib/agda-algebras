@@ -141,7 +141,7 @@ square holds by `refl`{.AgdaInductiveConstructor} because `(node f ts) [ σ ]` i
 `node f (λ i → ts i [ σ ])` on the nose.
 
 ```agda
-module _ {Γ Δ : Type χ} {I : Type ι} (E : I → Eq) where
+module _ {𝑆 : Signature 𝓞 𝓥}{Γ Δ : Type χ} {I : Type ι} (E : I → Eq {𝑆 = 𝑆}) where
   open FreeAlgebra E using ( 𝔽[_] )
 
   subhom : (σ : Sub {𝑆 = 𝑆} Γ Δ) → hom 𝔽[ Δ ] 𝔽[ Γ ]

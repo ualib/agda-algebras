@@ -33,7 +33,7 @@ open Algebra
 -->
 
 ```agda
-_↠_ : Set → Algebra 0ℓ 0ℓ → _
+_↠_ : Set → Algebra {𝑆 = 𝑆} 0ℓ 0ℓ → _
 X ↠ 𝑨 = Σ[ h ∈ (setoid X ⟶ 𝔻[ 𝑨 ])] IsSurjective h
 
 myA : Setoid 0ℓ 0ℓ
