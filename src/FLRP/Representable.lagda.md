@@ -63,21 +63,23 @@ open import Relation.Binary.PropositionalEquality  using ( _≡_ ; refl ; sym ; 
 open import Relation.Nullary     using ( ¬_ ; Dec ; yes ; no )
 
 -- Imports from the Agda Universal Algebra Library ------------------------------
-open import Overture                             using ( 𝓞 ; 𝓥 ; Signature )
-open import Classical.Small.Structures.Lattice   using ( Lattice )
-open import Classical.Properties.Lattice         using ( module Lattice-Order )
-open import Setoid.Algebras.Basic                using ( Algebra ; 𝔻[_] ; mkAlgebraₚ )
-open import Setoid.Algebras.Finite               using ( FiniteAlgebra )
-open import Setoid.Signatures.Finite             using ( FiniteSignature )
-open import Setoid.Congruences.Basic             using ( Con ; reflexive ; is-equivalence
-                                                       ; 𝟘[_] ; 𝟙[_] )
-open import Setoid.Congruences.Lattice           using ( _⊆_ ; _≑_ ; ≑-sym ; 𝟘-min ; 𝟙-max )
-open import Setoid.Congruences.Finite.Basic      using ( DecCon ; ConRel )
-open import Setoid.Congruences.Finite.Decidable  using ( FiniteCongruencesᵈ
-                                                       ; FiniteAlgebra→FiniteCongruencesᵈ )
-open import Setoid.Congruences.ChainJoin         using ( Finitary )
-open import FLRP.Problem  using ( OrderIso ; FiniteLattice ; toLattice
-                                ; 𝑆∅ ; chain₂ ; chain₂-lattice )
+open import Overture                             using  ( 𝓞 ; 𝓥 ; Signature )
+open import Classical.Small.Structures.Lattice   using  ( Lattice )
+open import Classical.Properties.Lattice         using  ( module Lattice-Order )
+open import Setoid.Algebras.Basic                using  ( Algebra ; 𝔻[_] ; mkAlgebraₚ )
+open import Setoid.Algebras.Finite               using  ( FiniteAlgebra )
+open import Setoid.Signatures.Finite             using  ( FiniteSignature )
+open import Setoid.Congruences.Basic             using  ( Con ; reflexive ; 𝟘[_]
+                                                        ; is-equivalence ; 𝟙[_] )
+open import Setoid.Congruences.Lattice           using  ( _⊆_ ; _≑_ ; ≑-sym
+                                                        ; 𝟘-min ; 𝟙-max )
+open import Setoid.Congruences.Finite.Basic      using  ( DecCon ; ConRel )
+open import Setoid.Congruences.Finite.Decidable  using  ( FiniteCongruencesᵈ
+                                                        ; FiniteAlgebra→FiniteCongruencesᵈ )
+open import Setoid.Congruences.ChainJoin         using  ( Finitary )
+open import FLRP.Problem                         using  ( OrderIso ; FiniteLattice
+                                                        ; toLattice ; 𝑆∅ ; chain₂
+                                                        ; chain₂-lattice )
 
 private variable α ρ ℓ : Level
 ```
@@ -219,10 +221,10 @@ it is recorded to exhibit that the L3 machinery applies to `𝟚`{.AgdaFunction}
 #### The two decidable congruences of `𝟚`
 
 Up to `≑`{.AgdaFunction}, the two-element algebra has exactly two congruences: the
-**diagonal** `𝟘[ 𝟚 ]`{.AgdaFunction} (relate the `≈`-equal pairs) and the **total**
-relation `𝟙[ 𝟚 ]`{.AgdaFunction} (relate everything).  Both are decidable — the
-diagonal because propositional equality on `Fin 2`{.AgdaDatatype} is decidable, the
-total relation trivially — so both upgrade to `DecCon`{.AgdaFunction}s.
+diagonal `𝟘[ 𝟚 ]`{.AgdaFunction} (relate the `≈`-equal pairs) and the total relation
+`𝟙[ 𝟚 ]`{.AgdaFunction} (relate everything).  Both are decidable — the diagonal
+because propositional equality on `Fin 2`{.AgdaDatatype} is decidable, the total
+relation trivially — so both upgrade to `DecCon`{.AgdaFunction}s.
 
 ```agda
 -- The diagonal congruence of 𝟚, as a decidable congruence.
@@ -284,12 +286,16 @@ relates→∇ d r = 𝟙-max (proj₁ d) , λ {x} {y} _ → relates→all d r x 
 
 #### The order isomorphism `DecCon 𝟚 ≅ chain₂`
 
-The maps.  `to`{.AgdaFunction} sends a decidable congruence to its verdict at
-`(0 , 1)`: `1` (the top) if it merges the two points, `0` (the bottom) otherwise —
-computed by running `d`'s own decision procedure.  `from`{.AgdaFunction} sends the top
-to the total congruence and the bottom to the diagonal.  `to`{.AgdaFunction} is a
-single-clause definition through `decToFin`{.AgdaFunction} so that its decision-scrutinee
-stays visible for the `with`-based proofs below.
+**The maps**.
+
++  `to`{.AgdaFunction} sends a decidable congruence to its verdict at
+   `(0 , 1)`: `1` (the top) if it merges the two points, `0` (the bottom) otherwise —
+   computed by running `d`'s own decision procedure.
++  `from`{.AgdaFunction} sends the top to the total congruence and the bottom to the
+   diagonal.
+
+`to`{.AgdaFunction} is a single-clause definition through `decToFin`{.AgdaFunction}
+so that its decision-scrutinee stays visible for the `with`-based proofs below.
 
 ```agda
 private
@@ -411,7 +417,7 @@ poset to the meet order of `chain₂-lattice`{.AgdaFunction}.
   }
 ```
 
-#### The two-element chain is decidably representable — constructively
+#### The two-element chain is decidably and constructively representable
 
 Packaging the finite finitary witnesses of `𝟚`{.AgdaFunction} with the order
 isomorphism gives the headline result: the two-element chain is decidably
