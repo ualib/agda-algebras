@@ -49,15 +49,20 @@ Two standing warnings apply to everything under this namespace.
    `FLRP-Statementᵈ`, and the constructive two-element-chain representation
    `chain₂-Representableᵈ` (the object the no-go theorem forbids at Layer S,
    attained here with no postulate).
++  [FLRP.Assumptions][] — the registry of classical theorems imported as
+   explicit hypotheses (never postulates), keeping the tree honest under
+   `--safe`; its first entry is the congruence-completeness bridge
+   `CongruenceCompleteness`, the single Layer-S→Layer-D assumption of ADR-008.
++  [FLRP.LayerBridge][] — the cross-layer bridge: under the congruence-completeness
+   assumption, the semantic and decidable congruence posets are order-isomorphic
+   (`conDecIso`), whence `Representable 𝑳 ↔ Representableᵈ 𝑳`.
 
 **Planned submodules** (per § 6 of the roadmap).
 
 +  `FLRP.Closure` (closure properties of the representable class);
 +  `FLRP.Intervals` (intervals in subgroup lattices and core-free normalization);
 +  `FLRP.Reductions` (the catalog of reduction theorems);
-+  `FLRP.Certificates` (machine-checked representation certificates);
-+  `FLRP.Assumptions` (the registry of classical theorems imported as explicit
-   hypotheses, keeping the tree honest under `--safe`).
++  `FLRP.Certificates` (machine-checked representation certificates).
 
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
@@ -68,4 +73,6 @@ open import FLRP.Problem public
 open import FLRP.Enforceable public
 open import FLRP.Bridge public
 open import FLRP.Representable public
+open import FLRP.Assumptions public
+open import FLRP.LayerBridge public
 ```
