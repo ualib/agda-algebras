@@ -11,8 +11,6 @@ author: "agda-algebras development team"
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
-open import Overture using (𝓞 ; 𝓥 ; Signature ; 𝑆)
-
 module Setoid.Algebras where
 
 open import Setoid.Algebras.Basic public

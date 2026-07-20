@@ -16,8 +16,6 @@ same identities.
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
-open import Overture using (𝓞 ; 𝓥 ; Signature ; 𝑆)
-
 module Setoid.Varieties.Preservation where
 
 open import Agda.Primitive using () renaming ( Set to Type )
@@ -31,7 +29,7 @@ open import Relation.Binary        using ( Setoid )
 open import Relation.Unary         using ( Pred ; _⊆_ ; _∈_ )
 
 -- Imports from the Agda Universal Algebra Library -------------------------------
-open import Overture                                    using  ( proj₁ ; proj₂ )
+open import Overture                                    using  ( proj₁ ; proj₂ ; 𝓞 ; 𝓥 ; Signature ; 𝑆 )
 
 open import Overture.Terms  using  ( Term )
 open import Setoid.Algebras  using  ( Algebra ; ov ; ⨅ )

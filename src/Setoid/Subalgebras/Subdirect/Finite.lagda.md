@@ -55,8 +55,6 @@ the search go through under `--safe` Agda.
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
-open import Overture using ( 𝓞 ; 𝓥 ; Signature ; 𝑆 )
-
 module Setoid.Subalgebras.Subdirect.Finite where
 
 -- Imports from Agda and the Agda Standard Library ----------------------------
@@ -86,6 +84,7 @@ open import Data.List.Membership.Propositional.Properties
   using ( ∈-filter⁺ ; ∈-filter⁻ ; ∈-cartesianProduct⁺ ; ∈-allFin )
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
+open import Overture using ( 𝓞 ; 𝓥 ; Signature ; 𝑆 )
 open import Setoid.Algebras.Basic  using  ( Algebra ; 𝕌[_] ; 𝔻[_] )
 open import Setoid.Algebras.Finite                using  ( FiniteAlgebra ; 𝟏
                                                          ; 𝟏-FiniteAlgebra )

@@ -16,8 +16,6 @@ Here we define *term operations* which are simply terms interpreted in a particu
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
-open import Overture using (𝓞 ; 𝓥 ; Signature ; 𝑆)
-
 module Setoid.Terms.Operations where
 
 -- Imports from Agda and the Agda Standard Library ---------------------
@@ -33,7 +31,7 @@ open import Relation.Binary.PropositionalEquality as ≡ using ( _≡_ )
 import Relation.Binary.Reasoning.Setoid as SetoidReasoning
 
 -- Imports from Agda Universal Algebra Library -----------------------------------
-open  import Overture                         using ( proj₁ ; proj₂ ; OperationSymbolsOf ; ArityOf )
+open  import Overture                         using ( proj₁ ; proj₂ ; OperationSymbolsOf ; ArityOf ; 𝓞 ; 𝓥 ; Signature ; 𝑆 )
 open  import Overture.Terms using ( Term )
 open  import Setoid.Algebras using ( Algebra ; _^_ ; ov ; ⨅ )
 open  import Setoid.Homomorphisms using ( hom ; IsHom )

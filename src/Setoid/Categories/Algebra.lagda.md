@@ -27,8 +27,6 @@ definitionally equal — `⊙-hom` is function composition, `𝒾𝒹` the ident
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
-open import Overture using ( 𝓞 ; 𝓥 ; Signature ; 𝑆 )
-
 module Setoid.Categories.Algebra where
 
 open import Agda.Primitive using () renaming ( Set to Type )
@@ -40,6 +38,7 @@ open import Level            using ( Level ; _⊔_ ) renaming ( suc to lsuc )
 open import Relation.Binary  using ( Setoid ; IsEquivalence )
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
+open import Overture using ( 𝓞 ; 𝓥 ; Signature ; 𝑆 )
 open import Setoid.Algebras.Basic    using ( Algebra ; 𝕌[_] ; 𝔻[_] )
 open import Setoid.Homomorphisms.Basic       using ( hom ; 𝒾𝒹 )
 open import Setoid.Homomorphisms.Properties  using ( ⊙-hom )

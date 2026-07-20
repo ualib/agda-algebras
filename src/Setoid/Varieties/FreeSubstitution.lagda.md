@@ -68,8 +68,6 @@ The kit also has a *semantic* face, used by the converse Maltsev conditions:
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
-open import Overture using ( 𝓞 ; 𝓥 ; Signature ; 𝑆 )
-
 module Setoid.Varieties.FreeSubstitution where
 
 -- Imports from Agda and the Agda Standard Library ----------------------------
@@ -83,6 +81,7 @@ open import Relation.Binary  using () renaming ( _⇒_ to _⊆_ )
 import Relation.Binary.PropositionalEquality as ≡
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
+open import Overture using ( 𝓞 ; 𝓥 ; Signature ; 𝑆 )
 open import Overture.Terms  using  ( Term ; ℊ )
 open import Setoid.Algebras.Basic  using  ( 𝔻[_] )
 open import Setoid.Congruences.Generation    using  ( Gen ; Cg ; base ; symmetric

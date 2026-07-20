@@ -35,8 +35,6 @@ congruence-lattice statement about separating families, where the monolith argum
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
-open import Overture using ( 𝓞 ; 𝓥 ; Signature ; 𝑆 )
-
 module Setoid.Subalgebras.Subdirect.Irreducible where
 
 -- Imports from Agda and the Agda Standard Library ----------------------------
@@ -52,6 +50,7 @@ open import Relation.Nullary                       using ( ¬_ ; Dec )
 open import Relation.Nullary.Decidable             using ( ¬? ; decidable-stable )
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
+open import Overture using ( 𝓞 ; 𝓥 ; Signature ; 𝑆 )
 open import Setoid.Functions                       using  ( IsInjective ; IsSurjective )
 open import Setoid.Algebras   using  ( Algebra ; ⨅ )
 open import Setoid.Congruences   using  ( Con )

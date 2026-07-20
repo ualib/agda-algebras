@@ -25,8 +25,6 @@ the meet `_∧_`, so both are operations on `Con 𝑨 (𝐋 ℓ₀)` and the equ
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
-open import Overture using ( 𝓞 ; 𝓥 ; Signature ; 𝑆 )
-
 module Setoid.Congruences.Properties where
 
 -- Imports from Agda and the Agda Standard Library ----------------------------
@@ -34,6 +32,7 @@ open import Agda.Primitive  using () renaming ( Set to Type )
 open import Level           using ( Level ; _⊔_ ) renaming (suc to lsuc)
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
+open import Overture using ( 𝓞 ; 𝓥 ; Signature ; 𝑆 )
 open import Setoid.Algebras.Basic  using ( Algebra )
 open import Setoid.Congruences.Basic                using ( Con )
 open import Setoid.Congruences.Lattice  using ( _⊆_ ; _≑_ ; _∧_ )

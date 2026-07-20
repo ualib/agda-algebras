@@ -14,8 +14,6 @@ This is the [Setoid.Terms.Properties][] module of the [Agda Universal Algebra Li
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
-open import Overture using (𝓞 ; 𝓥 ; Signature ; 𝑆)
-
 module Setoid.Terms.Properties where
 
 open import Agda.Primitive   using () renaming ( Set to Type )
@@ -30,7 +28,7 @@ open import Relation.Binary.PropositionalEquality  using ( setoid; cong; refl)
 import Relation.Binary.Reasoning.Setoid as SetoidReasoning
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
-open import Overture                       using ( proj₁ ; proj₂ )
+open import Overture                       using ( proj₁ ; proj₂ ; 𝓞 ; 𝓥 ; Signature ; 𝑆 )
 open import Overture.Terms  using  ( Term )
 open import Setoid.Algebras  using  ( Algebra ; 𝕌[_] ; 𝔻[_] ; _^_ )
 open import Setoid.Functions               using  ( Img_∋_ ; eq ; isSurj ; IsSurjective

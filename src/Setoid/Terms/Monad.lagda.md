@@ -141,8 +141,6 @@ evaluation interacts with this monad structure.  It works as follows:
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
-open import Overture using ( 𝓞 ; 𝓥 ; Signature ; 𝑆 )
-
 module Setoid.Terms.Monad where
 
 open import Agda.Primitive using () renaming ( Set to Type )
@@ -152,6 +150,7 @@ open import Level                                  using ( Level ; suc )
 open import Relation.Binary.PropositionalEquality  using ( _≡_ ; refl ; cong-app )
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
+open import Overture using ( 𝓞 ; 𝓥 ; Signature ; 𝑆 )
 open import Overture.Terms      using  ( Term ; ℊ ; node ; ov )
 open import Setoid.Categories.Category  using  ( Category )
 open import Setoid.Terms.Basic  using  ( Sub ; _[_] ; _≐_

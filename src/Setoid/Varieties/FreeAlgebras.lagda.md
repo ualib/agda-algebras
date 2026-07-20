@@ -12,8 +12,6 @@ author: "agda-algebras development team"
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
-open import Overture using (𝓞 ; 𝓥 ; Signature ; 𝑆)
-
 module Setoid.Varieties.FreeAlgebras where
 
 -- Imports from Agda and the Agda Standard Library -------------------------------
@@ -29,7 +27,7 @@ open import Relation.Binary.PropositionalEquality as ≡ using (_≡_)
 import Relation.Binary.Reasoning.Setoid as SetoidReasoning
 
 -- Imports from the Agda Universal Algebra Library -------------------------------
-open import Overture                                    using  ( proj₁ ; proj₂ )
+open import Overture                                    using  ( proj₁ ; proj₂ ; 𝓞 ; 𝓥 ; Signature ; 𝑆 )
 open import Overture.Terms  using  ( ℊ )
 open import Setoid.Algebras  using  ( Algebra ; ov ; Lift-Alg ; 𝔻[_] )
 open import Setoid.Functions                            using  ( eq ; IsSurjective )

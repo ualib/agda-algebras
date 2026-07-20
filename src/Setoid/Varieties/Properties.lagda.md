@@ -21,8 +21,6 @@ We prove some closure and invariance properties of the relation `⊧`.  In parti
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
-open import Overture using (𝓞 ; 𝓥 ; Signature ; 𝑆)
-
 module Setoid.Varieties.Properties where
 
 -- Imports from Agda and the Agda Standard Library -------------------------------------------
@@ -36,7 +34,7 @@ open import Relation.Unary   using ( Pred ; _∈_ )
 import Relation.Binary.Reasoning.Setoid as SetoidReasoning
 
 -- Imports from the Agda Universal Algebra Library ---------------------------------------------
-open  import Overture                       using  ( proj₁ ; proj₂ )
+open  import Overture                       using  ( proj₁ ; proj₂ ; 𝓞 ; 𝓥 ; Signature ; 𝑆 )
 open  import Setoid.Functions               using  ( InvIsInverseʳ ; SurjInv )
 open  import Overture.Terms  using  ( Term ; ℊ )
 open  import Setoid.Algebras

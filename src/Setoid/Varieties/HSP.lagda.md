@@ -17,8 +17,6 @@ Two other presentations of Birkhoff's theorem live in the source tree, and both 
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
-open import Overture using (𝓞 ; 𝓥 ; Signature ; 𝑆)
-
 module Setoid.Varieties.HSP where
 
 -- Imports from Agda and the Agda Standard Library -------------------------------
@@ -30,7 +28,7 @@ open import Relation.Binary  using ( Setoid )
 open import Relation.Unary   using ( Pred ; _∈_ ; _⊆_ )
 
 -- -- Imports from the Agda Universal Algebra Library ----------------------------
-open import Overture                                   using  ( proj₁ ; proj₂ )
+open import Overture                                   using  ( proj₁ ; proj₂ ; 𝓞 ; 𝓥 ; Signature ; 𝑆 )
 open import Setoid.Algebras                    using  ( Algebra ; ov ; Lift-Alg ; ⨅ )
 open import Setoid.Homomorphisms
 open import Setoid.Relations                           using  ( fkerPred )

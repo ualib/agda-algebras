@@ -17,8 +17,6 @@ Fix a signature 𝑆, let 𝒦 be a class of 𝑆-algebras, and define
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
-open import Overture using (𝓞 ; 𝓥 ; Signature ; 𝑆)
-
 module Setoid.Varieties.Closure where
 
 open import Agda.Primitive using () renaming ( Set to Type )
@@ -33,6 +31,7 @@ open import Relation.Binary        using ( Setoid )
 open import Relation.Unary         using ( Pred ; _∈_ ; _⊆_ )
 
 -- Imports from the Agda Universal Algebra Library -------------------------------
+open import Overture using ( 𝓞 ; 𝓥 ; Signature ; 𝑆 )
 open import Setoid.Algebras using ( Algebra ; ov ; Lift-Alg ; ⨅ )
 open import Setoid.Homomorphisms
 open import Setoid.Subalgebras

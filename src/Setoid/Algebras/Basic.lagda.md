@@ -13,8 +13,6 @@ This is the [Setoid.Algebras.Basic][] module of the [Agda Universal Algebra Libr
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
-open import Overture using (𝓞 ; 𝓥 ; Signature ; 𝑆 )
-
 module Setoid.Algebras.Basic where
 
 -- Imports from the Agda and the Agda Standard Library --------------------
@@ -27,7 +25,7 @@ open import Relation.Binary  using ( Setoid )
 open import Relation.Binary.PropositionalEquality as ≡ using ( _≡_ ; refl )
 
 -- Imports from the Agda Universal Algebra Library ----------------------
-open import Overture             using ( OperationSymbolsOf ; ArityOf )
+open import Overture             using ( OperationSymbolsOf ; ArityOf ; 𝓞 ; 𝓥 ; Signature ; 𝑆 )
 open import Overture.Operations  using ( Op )
 open import Setoid.Signatures    using ( ⟨_⟩ )
 

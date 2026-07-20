@@ -29,8 +29,6 @@ Birkhoff's subdirect representation theorem — is built on top of this in
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
-open import Overture using ( 𝓞 ; 𝓥 ; Signature ; 𝑆 )
-
 module Setoid.Congruences.Monolith where
 
 -- Imports from Agda and the Agda Standard Library ----------------------------
@@ -41,6 +39,7 @@ open import Relation.Binary   using ( Setoid ; IsEquivalence ; _⇒_ )
 open import Relation.Nullary  using ( ¬_ )
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
+open import Overture using ( 𝓞 ; 𝓥 ; Signature ; 𝑆 )
 open import Setoid.Algebras.Basic  using  ( ov ; Algebra ; 𝕌[_] ; 𝔻[_] )
 open import Setoid.Congruences.Basic             using  ( Con ; mkcon ; _∣≈_ ; reflexive
                                                         ; is-equivalence ; is-compatible )

@@ -13,8 +13,6 @@ This is the [Setoid.Subalgebras.Subdirect][] module of the [Agda Universal Algeb
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
-open import Overture using (𝓞 ; 𝓥 ; Signature ; 𝑆)
-
 module Setoid.Subalgebras.Subdirect where
 
 open import Setoid.Subalgebras.Subdirect.Basic public

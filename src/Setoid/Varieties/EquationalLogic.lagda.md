@@ -17,8 +17,6 @@ Because a class of structures has a different type than a single structure, we m
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
-open import Overture using (𝓞 ; 𝓥 ; Signature ; 𝑆)
-
 module Setoid.Varieties.EquationalLogic where
 
 -- Imports from Agda and the Agda Standard Library -------------------------------
@@ -30,6 +28,7 @@ open import Relation.Binary  using ( Setoid )
 open import Relation.Unary   using ( Pred ; _∈_ )
 
 -- Imports from the Agda Universal Algebra Library -------------------------------
+open import Overture using ( 𝓞 ; 𝓥 ; Signature ; 𝑆 )
 open import Setoid.Algebras using ( Algebra ; ov )
 open import Overture.Terms using ( Term )
 open import Setoid.Terms using ( module Environment )

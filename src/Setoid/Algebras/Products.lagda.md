@@ -14,8 +14,6 @@ This is the [Setoid.Algebras.Products][] module of the [Agda Universal Algebra L
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
-open import Overture using (𝓞 ; 𝓥 ; Signature ; 𝑆)
-
 module Setoid.Algebras.Products where
 
 -- Imports from Agda and the Agda Standard Library --------------------------------
@@ -33,7 +31,7 @@ open IsEquivalence  using () renaming ( refl to reflE ; sym to symE ; trans to t
 
 
 -- Imports from agda-algebras -----------------------------------------------------
-open import Overture  using ( proj₁; proj ; projIsOnto )
+open import Overture  using ( proj₁; proj ; projIsOnto ; 𝓞 ; 𝓥 ; Signature ; 𝑆 )
                       renaming ( IsSurjective to onto )
 
 open import Setoid.Algebras.Basic  using ( Algebra ; _^_ ; ov ; 𝔻[_] ; 𝕌[_])

@@ -22,8 +22,6 @@ algebras.
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
-open import Overture using ( 𝓞 ; 𝓥 ; Signature ; 𝑆 )
-
 module Setoid.Subalgebras.Subdirect.Basic where
 
 -- Imports from Agda and the Agda Standard Library ----------------------------
@@ -35,6 +33,7 @@ open import Relation.Binary  using ( Setoid )
 open import Relation.Binary.PropositionalEquality using ( _≡_ ; refl )
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
+open import Overture using ( 𝓞 ; 𝓥 ; Signature ; 𝑆 )
 open import Setoid.Functions                         using  ( IsInjective ; IsSurjective )
 
 open import Setoid.Algebras  using  ( Algebra ; ⨅ ; 𝔻[_] )

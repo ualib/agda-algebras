@@ -31,8 +31,6 @@ a predicate on the carrier and does not mention the setoid equality.)
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
-open import Overture using (𝓞 ; 𝓥 ; Signature ; 𝑆)
-
 module Setoid.Subalgebras.CompleteLattice where
 
 open import Agda.Primitive               using () renaming ( Set to Type )
@@ -51,6 +49,7 @@ open import Relation.Binary.Lattice      using  ( Supremum ; Infimum ; IsLattice
 open import Relation.Unary               using  ( Pred ; _∈_ ; _⊆_ ; _∩_ ; _∪_ ; ⋂ ; ⋃ )
 
 -- Imports from the Agda Universal Algebras Library ------------------------------
+open import Overture using ( 𝓞 ; 𝓥 ; Signature ; 𝑆 )
 open import Setoid.Algebras.Basic             using  ( ov ; Algebra ; 𝕌[_] )
 open import Order.CompleteLattice  using  ( CompleteLattice )
 open import Setoid.Subalgebras.Subuniverses
