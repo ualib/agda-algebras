@@ -113,17 +113,31 @@ Immediately after the pragma (possibly separated by imports required by the modu
 +  `src/Setoid/Algebras/Basic.lagda.md` → `module Setoid.Algebras.Basic where`.
 +  `src/Classical/Structures/Semigroup.lagda.md` → `module Classical.Structures.Semigroup where`.
 
-Parametrized modules declare their parameters in the header:
+The generic `Setoid/` core does *not* fix the signature as a module parameter.  Instead `𝑆` is a public generalized `variable` — declared once in `Overture.Signatures` and imported by name — so a generic definition ranges over an arbitrary signature by mentioning `𝑆` in its type and letting Agda generalize it.  A core module header therefore takes no signature parameter:
 
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
-open import Overture using ( 𝓞 ; 𝓥 ; Signature )
+open import Overture using ( 𝓞 ; 𝓥 ; Signature ; 𝑆 )
 
-module Setoid.Algebras.Basic {𝑆 : Signature 𝓞 𝓥} where
+module Setoid.Algebras.Basic where
 ```
 
-The only imports allowed *before* the module header are those required to state the header's parameters (here, `Overture`'s `𝓞`, `𝓥`, `Signature`).  All other imports go after the header.
+A module that genuinely needs parameters still declares them in the header: a frozen `Legacy/` module keeps its `{𝑆 : Signature 𝓞 𝓥}`, and a `Classical/` module may fix a concrete signature.  This is the ADR-009 convention, detailed in the next subsection.  The only imports allowed *before* the module header are those required to state the header's own parameters (here, `Overture`'s `𝓞`, `𝓥`, `Signature`, and the generalized `𝑆`).  All other imports go after the header.
+
+### Generalizing the signature `𝑆` (ADR-009)
+
+The generic `Setoid/` core generalizes over its signature rather than fixing it as a module parameter.  Following [ADR-009](./adr/009-signature-genericity-generalized-variables.md), `𝑆` is declared once — public, co-located with `Signature` and the level variables it depends on — in `Overture.Signatures`:
+
+```agda
+variable 𝑆 : Signature 𝓞 𝓥
+```
+
+and re-exported through the `Overture` barrel.  A generic module imports it by name (`open import Overture using ( 𝓞 ; 𝓥 ; Signature ; 𝑆 )`) — never re-declaring it — and writes definitions whose type signatures mention `𝑆`; Agda generalizes it, together with its levels `𝓞` and `𝓥`, as an implicit argument.  For the definitions that dominate the API — those taking an algebra or other structure whose type already carries `𝑆` (`Con 𝑨`, `Sub 𝑮`, `hom 𝑨 𝑩`) — `𝑆` is inferred from that argument and never written.
+
+Where a definition is signature-dependent but has no signature-carrying argument, pin `𝑆` explicitly rather than parametrizing the module: anchor it at the use site (`Algebra {𝑆 = 𝑆} α ρ`, `Term {𝑆 = 𝑆} X`, `ov {𝑆 = 𝑆} ℓ`), or, when several definitions in a block share it — or a sort names `𝓞 ⊔ 𝓥` — bind it once on an enclosing anonymous module (`module _ {𝑆 : Signature 𝓞 𝓥} … where`).  Because the generalized `𝑆` is inserted ahead of the level variables in a definition's telescope, a value that was passed by *position* before de-parametrization may need to move to a *named* implicit (`_≅_ {α = α}{ρᵃ = ρᵃ}{𝑆 = 𝑆}`) to keep binding the argument it intends.
+
+The `Classical/` tree is the deliberate exception.  It builds specific theories over concrete signatures (`Sig-Group`, `Sig-Lattice`, …), so it *may* fix a signature — as a module parameter or a concrete value pinned at each use (`Algebra {𝑆 = Sig-Semigroup} …`) — whenever the whole module concerns one signature and saying so improves clarity.  A `Classical/` module that is genuinely generic over signatures follows the core convention instead.  Within any single barrel-and-submodule re-export chain the style is uniform, so `open import Sub public` never applies `{𝑆 = 𝑆}` to an un-parametrized module (or omits it from a parametrized one).
 
 ### Line length
 
@@ -161,14 +175,17 @@ A module whose name has no final segment past the conceptual theme (e.g. `Base.H
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
-open import Overture using ( 𝓞 ; 𝓥 ; Signature )
+open import Overture using ( 𝓞 ; 𝓥 ; Signature ; 𝑆 )
 
-module Setoid.Algebras {𝑆 : Signature 𝓞 𝓥} where
+module Setoid.Algebras where
 
-open import Setoid.Algebras.Basic          {𝑆 = 𝑆} public
-open import Setoid.Algebras.Products       {𝑆 = 𝑆} public
-open import Setoid.Algebras.Congruences    {𝑆 = 𝑆} public
+open import Setoid.Algebras.Basic          public
+open import Setoid.Algebras.Finite         public
+open import Setoid.Algebras.Products       public
+open import Setoid.Algebras.Reduct         public
 ```
+
+Because the core is uniformly generalized over `𝑆` (see [ADR-009](./adr/009-signature-genericity-generalized-variables.md)), the barrel neither parametrizes its own header nor threads `{𝑆 = 𝑆}` into each re-export; `open import Sub public` is uniform across the chain.
 
 Downstream modules `open import Setoid.Algebras` to get the whole theme and `open import Setoid.Algebras.Basic` to get a specific submodule, but we strongly *prefer modules that import precisely what they need* — see [Imports](#imports) below. 
 
@@ -197,9 +214,9 @@ and only then the opening fence:
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
-open import Overture using ( 𝓞 ; 𝓥 ; Signature )
+open import Overture using ( 𝓞 ; 𝓥 ; Signature ; 𝑆 )
 
-module Setoid.Algebras.Basic {𝑆 : Signature 𝓞 𝓥} where
+module Setoid.Algebras.Basic where
 ```
 
 The content of these blocks matters — see [Comments and documentation](#comments-and-documentation) below.
@@ -476,10 +493,10 @@ The core `Algebra` type is a **record**.  It has named projections (`Domain`, `I
 -- File: Classical/Structures/Semigroup.lagda.md
 module Classical.Structures.Semigroup where
 open import Classical.Signatures.Semigroup using ( 𝑆ₛ )
-open import Setoid.Algebras {𝑆 = 𝑆ₛ} using ( Algebra )
+open import Setoid.Algebras using ( Algebra )
 -- ...
 Semigroup : (α ρ : Level) → Type _
-Semigroup α ρ = Σ[ 𝑨 ∈ Algebra α ρ ] 𝑨 ⊨ Eₛ
+Semigroup α ρ = Σ[ 𝑨 ∈ Algebra {𝑆 = 𝑆ₛ} α ρ ] 𝑨 ⊨ Eₛ
 
 -- File: Classical/Bundles/Semigroup.lagda.md
 record SemigroupBundle α ρ : Type _ where ...
