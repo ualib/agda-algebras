@@ -44,6 +44,11 @@ Two standing warnings apply to everything under this namespace.
    respecting upper interval in the subgroup lattice, with the representability
    corollary.  The Layer D (`DecCon`) restatement required by issue #454's updated
    criteria lands with the WP-7 decidable layer.
++  [FLRP.Representable][] — the Layer-D reformulation of the problem:
+   decidable representability `Representableᵈ`, the statement
+   `FLRP-Statementᵈ`, and the constructive two-element-chain representation
+   `chain₂-Representableᵈ` (the object the no-go theorem forbids at Layer S,
+   attained here with no postulate).
 
 **Planned submodules** (per § 6 of the roadmap).
 
@@ -62,4 +67,5 @@ module FLRP where
 open import FLRP.Problem public
 open import FLRP.Enforceable public
 open import FLRP.Bridge public
+open import FLRP.Representable public
 ```
