@@ -71,19 +71,20 @@ open import Relation.Unary                using ( Pred ; _∈_ ; _⊆_ )
 import Algebra.Properties.Group as GroupProperties
 
 -- Imports from the Agda Universal Algebra Library ------------------------------
-open import Classical.Bundles.Group               using ( ⟨_⟩ᵍᵖ )
-open import Classical.Signatures.Unary            using ( Sig-Unary )
-open import Classical.Structures.Group.Basic      using ( Group ; module Group-Op )
-open import Classical.Structures.Group.Subgroups  using ( IsSubgroup ; mkIsSubgroup )
-open import Classical.Structures.Group.Cosets     using ( module Coset )
-open import Classical.Structures.Group.GSet       using ( module CosetAction )
-open import FLRP.Enforceable                       using ( module UpperInterval )
-open import FLRP.Problem                            using ( OrderIso )
-open import Setoid.Algebras.Basic                  using ( Algebra ; 𝕌[_] ; 𝔻[_] ; _^_ )
-open import Setoid.Algebras.Finite                 using ( FiniteAlgebra )
-open import Setoid.Congruences.Basic               using ( Con ; IsCongruence ; mkcon ; _∣≈_
-                                                         ; reflexive ; is-equivalence ; is-compatible )
-open import Setoid.Congruences.Lattice             using ( _≑_ ) renaming ( _⊆_ to _⊑_ )
+open import Classical.Bundles.Group               using  ( ⟨_⟩ᵍᵖ )
+open import Classical.Signatures.Unary            using  ( Sig-Unary )
+open import Classical.Structures.Group.Basic      using  ( Group ; module Group-Op )
+open import Classical.Structures.Group.Subgroups  using  ( IsSubgroup ; mkIsSubgroup )
+open import Classical.Structures.Group.Cosets     using  ( module Coset )
+open import Classical.Structures.Group.GSet       using  ( module CosetAction )
+open import FLRP.Enforceable                      using  ( module UpperInterval )
+open import FLRP.Problem                          using  ( OrderIso )
+open import Setoid.Algebras.Basic                 using  ( Algebra ; 𝕌[_] ; 𝔻[_] ; _^_ )
+open import Setoid.Algebras.Finite                using  ( FiniteAlgebra )
+open import Setoid.Congruences.Basic              using  ( Con ; IsCongruence ; mkcon
+                                                         ; _∣≈_ ; is-compatible
+                                                         ; is-equivalence ; reflexive )
+open import Setoid.Congruences.Lattice            using ( _≑_ ) renaming ( _⊆_ to _⊑_ )
 ```
 -->
 
