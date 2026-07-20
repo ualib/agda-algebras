@@ -249,7 +249,7 @@ every homomorphism from 𝑻 X to 𝑨 maps p and q to the same element of 𝑨.
 
  
 ```agda
-module _ {X : Type χ}{p q : Term {𝑆 = 𝑆} X}{𝑨 : Algebra {𝑆 = 𝑆} α ρᵃ}(φh : hom (𝑻 X) 𝑨) where
+module _ {𝑆 : Signature 𝓞 𝓥}{X : Type χ}{p q : Term {𝑆 = 𝑆} X}{𝑨 : Algebra {𝑆 = 𝑆} α ρᵃ}(φh : hom (𝑻 X) 𝑨) where
   open Setoid (Domain 𝑨) using ( _≈_ )
   private φ = _⟨$⟩_ (proj₁ φh)
 
