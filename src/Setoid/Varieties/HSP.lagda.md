@@ -214,7 +214,7 @@ module _ {α ρᵃ ℓ : Level}{𝒦 : Pred(Algebra {𝑆 = 𝑆} α ρᵃ) (α 
   open FreeAlgebra {ι = ι}{I = ℐ} ℰ using ( 𝔽[_] )
 
   Birkhoff : {𝑨 : Algebra a a} → 𝑨 ∈ Mod (Th (V ℓ ι 𝒦)) → 𝑨 ∈ V ℓ ι 𝒦
-  Birkhoff {𝑨 = 𝑨} ModThA = V-≅-lc {α} {ρᵃ} {ℓ} 𝒦 𝑨 VlA
+  Birkhoff {𝑨 = 𝑨} ModThA = V-≅-lc {α = α} {ρᵃ = ρᵃ} {ℓ = ℓ} 𝒦 𝑨 VlA
     where
     open Setoid (Domain 𝑨) using () renaming ( Carrier to ∣A∣ )
     sp𝔽A : 𝔽[ ∣A∣ ] ∈ S{ι} ι (P ℓ ι 𝒦)
