@@ -13,8 +13,6 @@ This is the [Setoid.Homomorphisms.HomomorphicImages][] module of the [Agda Unive
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
-open import Overture using (𝓞 ; 𝓥 ; Signature ; 𝑆)
-
 module Setoid.Homomorphisms.HomomorphicImages where
 
 open import Agda.Primitive using () renaming ( Set to Type )
@@ -31,7 +29,7 @@ open import Relation.Binary.PropositionalEquality using (refl)
 
 -- Imports from the Agda Universal Algebra Library ---------------------------------------------
 open import Overture                                    using  ( proj₁ ; proj₂
-                                                               ; ArityOf )
+                                                               ; ArityOf ; 𝓞 ; 𝓥 ; Signature ; 𝑆 )
 open import Setoid.Algebras  using  ( Algebra ; ov ; _^_ ; 𝔻[_]
                                                                ; Lift-Algˡ ; Lift-Alg ; 𝕌[_] )
 open import Setoid.Functions using (IsSurjective; Image_∋_ ; Ran ; range ; preimage ; image ; preimage≈image; Inv ; lift∼lower; InvIsInverseʳ; ⊙-IsSurjective)

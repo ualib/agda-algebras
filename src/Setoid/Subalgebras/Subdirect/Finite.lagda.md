@@ -55,8 +55,6 @@ the search go through under `--safe` Agda.
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
-open import Overture using ( 𝓞 ; 𝓥 ; Signature ; 𝑆 )
-
 module Setoid.Subalgebras.Subdirect.Finite where
 
 -- Imports from Agda and the Agda Standard Library ----------------------------
@@ -86,23 +84,23 @@ open import Data.List.Membership.Propositional.Properties
   using ( ∈-filter⁺ ; ∈-filter⁻ ; ∈-cartesianProduct⁺ ; ∈-allFin )
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
-open import Setoid.Algebras.Basic  using  ( Algebra ; 𝕌[_] ; 𝔻[_] )
-open import Setoid.Algebras.Finite                using  ( FiniteAlgebra ; 𝟏
-                                                         ; 𝟏-FiniteAlgebra )
-open import Setoid.Congruences.Basic              using  ( Con ; mkcon ; is-equivalence ; _╱_
-                                                         ; reflexive ; is-compatible ; 𝟘[_] )
-open import Setoid.Congruences.Finite             using  ( ConRel ; 𝟏-FiniteCongruences
-                                                         ; FiniteCongruences ; DecCon )
+open import Overture                       using  ( 𝓞 ; 𝓥 ; Signature ; 𝑆 )
+open import Setoid.Algebras.Basic          using  ( Algebra ; 𝕌[_] ; 𝔻[_] )
+open import Setoid.Algebras.Finite         using  ( FiniteAlgebra ; 𝟏
+                                                  ; 𝟏-FiniteAlgebra )
+open import Setoid.Congruences.Basic       using  ( Con ; mkcon ; is-equivalence ; _╱_
+                                                  ; reflexive ; is-compatible ; 𝟘[_] )
+open import Setoid.Congruences.Finite      using  ( ConRel ; 𝟏-FiniteCongruences
+                                                  ; FiniteCongruences ; DecCon )
+open import Setoid.Congruences.Generation  using  ( Cg ; Cg-least ; base )
+open import Setoid.Congruences.Lattice     using  ( _⊆_ ; ⊆-trans )
+open import Setoid.Congruences.Monolith    using  ( IsSubdirectlyIrreducible ; Nonzero
+                                                  ; mono-nonzero ; mono-least )
 
-open import Setoid.Congruences.Generation         using  ( Cg ; Cg-least ; base )
-open import Setoid.Congruences.Lattice  using  ( _⊆_ ; ⊆-trans )
-open import Setoid.Congruences.Monolith  using  ( IsSubdirectlyIrreducible ; Nonzero
-                                                         ; mono-nonzero ; mono-least )
-
-open import Setoid.Subalgebras.Subdirect.Basic  using ( Separates )
-open import Setoid.Subalgebras.Subdirect.BirkhoffSI
-  using (SubdirectSIRep; SubdirectlyRepresentable ; SIRep→Representable )
-
+open import Setoid.Subalgebras.Subdirect.Basic       using  ( Separates )
+open import Setoid.Subalgebras.Subdirect.BirkhoffSI  using  ( SubdirectSIRep
+                                                            ; SubdirectlyRepresentable
+                                                            ; SIRep→Representable )
 private variable α ρ : Level
 ```
 -->
@@ -118,7 +116,6 @@ whenever some listed element satisfies `Q` but not `P`.
 private variable ℓ₁ ℓ₂ ℓ₃ : Level
 
 private
-
   module _ {X : Type ℓ₁}{P : X → Type ℓ₂}{Q : X → Type ℓ₃}
            (P? : (x : X) → Dec (P x))(Q? : (x : X) → Dec (Q x))
            (sub : ∀ {x} → P x → Q x) where

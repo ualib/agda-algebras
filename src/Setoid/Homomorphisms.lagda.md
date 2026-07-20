@@ -12,8 +12,6 @@ This is the [Setoid.Homomorphisms][] module of the [Agda Universal Algebra Libra
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
-open import Overture using (𝓞 ; 𝓥 ; Signature ; 𝑆)
-
 module Setoid.Homomorphisms where
 
 open import Setoid.Homomorphisms.Basic                       public

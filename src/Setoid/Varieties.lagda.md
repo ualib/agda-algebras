@@ -13,8 +13,6 @@ This is the [Setoid.Varieties][] module of the [Agda Universal Algebra Library][
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
-open import Overture using (𝓞 ; 𝓥 ; Signature ; 𝑆)
-
 module Setoid.Varieties where
 
 open import Setoid.Varieties.Closure  public

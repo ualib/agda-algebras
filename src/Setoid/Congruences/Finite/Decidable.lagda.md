@@ -82,8 +82,6 @@ of L2 on the matrix-derived list rather than transport its theorem.[^4]
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
-open import Overture using ( 𝓞 ; 𝓥 ; Signature ; 𝑆 )
-
 module Setoid.Congruences.Finite.Decidable where
 
 open import Agda.Primitive using () renaming ( Set to Type )
@@ -119,12 +117,13 @@ open import Relation.Binary.PropositionalEquality          using  ( cong ; refl 
 open import Relation.Nullary.Decidable                     using  ( Dec ; does ; T? )
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
-open import Setoid.Algebras.Basic  using  ( Algebra ; 𝕌[_] ; 𝔻[_] )
+open import Overture                                  using ( 𝓞 ; 𝓥 ; Signature ; 𝑆 )
+open import Setoid.Algebras.Basic                     using  ( Algebra ; 𝕌[_] ; 𝔻[_] )
 open import Setoid.Algebras.Finite                    using  ( FiniteAlgebra )
 open import Setoid.Congruences.Basic                  using  ( Con )
-open import Setoid.Congruences.Finite.Basic  using  ( DecCon ; ConRel )
+open import Setoid.Congruences.Finite.Basic           using  ( DecCon ; ConRel )
 open import Setoid.Congruences.Generation             using  ( Cg ; Gen ; base ; Cg-least )
-open import Setoid.Congruences.Lattice  using  ( _≑_ )
+open import Setoid.Congruences.Lattice                using  ( _≑_ )
 open import Setoid.Congruences.Presented              using  ( fromPairs ; con-resp-≈
                                                              ; Cg-DecCon ; does-in ; does-out )
 open import Setoid.Signatures.Finite                  using  ( FiniteSignature )

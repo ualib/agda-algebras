@@ -16,13 +16,11 @@ Here we define *term operations* which are simply terms interpreted in a particu
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
-open import Overture using (𝓞 ; 𝓥 ; Signature ; 𝑆)
-
 module Setoid.Terms.Operations where
 
 -- Imports from Agda and the Agda Standard Library ---------------------
 open import Agda.Primitive    using ()  renaming ( Set to Type )
-open import Data.Product      using ( _,_ )
+open import Data.Product      using ( _,_ ; proj₁ ; proj₂ )
 open import Function.Base     using ( _∘_ )
 open import Function.Bundles  using ()         renaming ( Func to _⟶_ )
 open import Level             using ( Level )
@@ -33,13 +31,13 @@ open import Relation.Binary.PropositionalEquality as ≡ using ( _≡_ )
 import Relation.Binary.Reasoning.Setoid as SetoidReasoning
 
 -- Imports from Agda Universal Algebra Library -----------------------------------
-open  import Overture                         using ( proj₁ ; proj₂ ; OperationSymbolsOf ; ArityOf )
-open  import Overture.Terms using ( Term )
-open  import Setoid.Algebras using ( Algebra ; _^_ ; ov ; ⨅ )
-open  import Setoid.Homomorphisms using ( hom ; IsHom )
-open  import Setoid.Terms.Properties using ( free-lift )
-open  import Setoid.Terms.Basic
-      using ( module Environment ; 𝑻 ; _≐_ ; ≐-isRefl )
+open  import Overture                 using  ( OperationSymbolsOf ; ArityOf
+                                             ; 𝓞 ; 𝓥 ; Signature ; 𝑆 )
+open  import Overture.Terms           using  ( Term )
+open  import Setoid.Algebras          using  ( Algebra ; _^_ ; ov ; ⨅ )
+open  import Setoid.Homomorphisms     using  ( hom ; IsHom )
+open  import Setoid.Terms.Properties  using  ( free-lift )
+open  import Setoid.Terms.Basic       using  ( module Environment ; 𝑻 ; _≐_ ; ≐-isRefl )
 
 open Term
 open _⟶_ using ( cong ) renaming ( to to _⟨$⟩_ )

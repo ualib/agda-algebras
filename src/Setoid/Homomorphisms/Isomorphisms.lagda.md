@@ -13,8 +13,6 @@ This is the [Setoid.Homomorphisms.Factor][] module of the [Agda Universal Algebr
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
-open import Overture using (𝓞 ; 𝓥 ; Signature ; 𝑆)
-
 module Setoid.Homomorphisms.Isomorphisms where
 
 -- Imports from Agda (builtin/primitive) and the Agda Standard Library ---------------------
@@ -29,7 +27,7 @@ open import Relation.Binary             using ( Setoid ; Reflexive ; Sym ; Trans
 open import Relation.Binary.PropositionalEquality using (refl)
 
 -- Imports from the Agda Universal Algebra Library -----------------------------------------
-open import Overture                         using  ( OperationSymbolsOf ; ArityOf )
+open import Overture                         using  ( OperationSymbolsOf ; ArityOf ; 𝓞 ; 𝓥 ; Signature ; 𝑆 )
 open import Overture.Operations              using  ( Op )
 open import Setoid.Functions                 using  ( eq ; IsInjective
                                                     ; IsSurjective ; SurjInv

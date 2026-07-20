@@ -14,8 +14,6 @@ This is the [Setoid.Subalgebras.Subuniverses][] module of the [Agda Universal Al
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
-open import Overture using (𝓞 ; 𝓥 ; Signature ; 𝑆)
-
 module Setoid.Subalgebras.Subuniverses where
 
 -- Imports from Agda and the Agda Standard Library ----------------------------------
@@ -31,7 +29,7 @@ open import Relation.Binary.PropositionalEquality using ( refl )
 
 -- Imports from the Agda Universal Algebra Library ----------------------------------
 open import Overture                       using ( proj₁ ; proj₂ ; ArityOf ; Im_⊆_
-                                                 ; OperationSymbolsOf )
+                                                 ; OperationSymbolsOf ; 𝓞 ; 𝓥 ; Signature ; 𝑆 )
 open import Overture.Terms  using ( Term ; ℊ ; node )
 open import Setoid.Algebras  using ( Algebra ; 𝕌[_] ; _^_ ; ov )
 open import Setoid.Terms  using ( module Environment )

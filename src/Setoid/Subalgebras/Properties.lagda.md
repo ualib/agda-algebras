@@ -13,8 +13,6 @@ This is the [Setoid.Subalgebras.Properties][] module of the [Agda Universal Alge
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
-open import Overture using (𝓞 ; 𝓥 ; Signature ; 𝑆)
-
 module Setoid.Subalgebras.Properties where
 
 open import Agda.Primitive using () renaming ( Set to Type )
@@ -30,7 +28,7 @@ import Relation.Binary.Structures as RelStructs
 import Relation.Binary.Reasoning.Setoid as SetoidReasoning
 
 -- Imports from the Agda Universal Algebra Library ----------------------------------
-open import Overture                          using  ( proj₁ ; proj₂ )
+open import Overture                          using  ( proj₁ ; proj₂ ; 𝓞 ; 𝓥 ; Signature ; 𝑆 )
 open import Setoid.Functions                  using  ( id-is-injective ; IsInjective ; ⊙-injective )
 open import Setoid.Algebras  using  ( Algebra ; Lift-Algˡ ; Lift-Algʳ
                                                      ; Lift-Alg ; ov ; ⨅ ; 𝔻[_] )

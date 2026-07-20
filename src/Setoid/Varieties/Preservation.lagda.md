@@ -16,14 +16,12 @@ same identities.
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
-open import Overture using (𝓞 ; 𝓥 ; Signature ; 𝑆)
-
 module Setoid.Varieties.Preservation where
 
 open import Agda.Primitive using () renaming ( Set to Type )
 
 -- Imports from the Agda Standard Library -------------------------------
-open import Data.Product           using ( _,_ )
+open import Data.Product           using ( _,_ ; proj₁ ; proj₂ )
 open import Data.Unit.Polymorphic  using ( ⊤ )
 open import Function               using ()  renaming ( Func to _⟶_ )
 open import Level                  using ( Level ; _⊔_ )
@@ -31,22 +29,20 @@ open import Relation.Binary        using ( Setoid )
 open import Relation.Unary         using ( Pred ; _⊆_ ; _∈_ )
 
 -- Imports from the Agda Universal Algebra Library -------------------------------
-open import Overture                                    using  ( proj₁ ; proj₂ )
-
-open import Overture.Terms  using  ( Term )
-open import Setoid.Algebras  using  ( Algebra ; ov ; ⨅ )
-open import Setoid.Homomorphisms  using  ( ≅⨅⁺-refl ; ≅-refl
-                                                               ; IdHomImage ; ≅-sym )
-open import Setoid.Subalgebras  using  ( _≤_ ; ⨅-≤ ; ≅-trans-≤
-                                                               ; ≤-reflexive )
-open import Setoid.Terms  using  ( module Environment)
-open import Setoid.Varieties.Closure  using  ( H ; S ; P ; S-expa
-                                                               ; H-expa ; V ; P-expa
-                                                               ; V-expa ;Level-closure )
-open import Setoid.Varieties.Properties  using  ( ⊧-H-invar ; ⊧-S-invar
-                                                               ; ⊧-P-invar ; ⊧-I-invar )
+open import Overture                           using  ( 𝓞 ; 𝓥 ; Signature ; 𝑆 )
+open import Overture.Terms                     using  ( Term )
+open import Setoid.Algebras                    using  ( Algebra ; ov ; ⨅ )
+open import Setoid.Homomorphisms               using  ( ≅⨅⁺-refl ; ≅-refl
+                                                      ; IdHomImage ; ≅-sym )
+open import Setoid.Subalgebras                 using  ( _≤_ ; ⨅-≤ ; ≅-trans-≤
+                                                      ; ≤-reflexive )
+open import Setoid.Terms                       using  ( module Environment)
+open import Setoid.Varieties.Closure           using  ( H ; S ; P ; V ; S-expa ; H-expa
+                                                      ; P-expa ; V-expa ; Level-closure )
+open import Setoid.Varieties.Properties        using  ( ⊧-H-invar ; ⊧-S-invar
+                                                      ; ⊧-P-invar ; ⊧-I-invar )
 open import Setoid.Varieties.SoundAndComplete  using  ( _⊧_ ; _⊫_ ; ⊫-proof
-                                                               ; _≈̇_ ; _⊢_▹_≈_ ; Th)
+                                                      ; _≈̇_ ; _⊢_▹_≈_ ; Th)
 open _⟶_      using () renaming ( to to _⟨$⟩_ )
 open Algebra  using ( Domain )
 ```

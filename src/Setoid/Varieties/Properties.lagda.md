@@ -21,13 +21,11 @@ We prove some closure and invariance properties of the relation `⊧`.  In parti
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
-open import Overture using (𝓞 ; 𝓥 ; Signature ; 𝑆)
-
 module Setoid.Varieties.Properties where
 
 -- Imports from Agda and the Agda Standard Library -------------------------------------------
 open import Agda.Primitive   using () renaming ( Set to Type )
-open import Data.Product     using ( _,_ )
+open import Data.Product     using ( _,_ ; proj₁ ; proj₂ )
 open import Function         using ( _∘_ ; Func ; _$_ )
 open import Level            using ( Level )
 open import Relation.Binary  using ( Setoid )
@@ -36,18 +34,19 @@ open import Relation.Unary   using ( Pred ; _∈_ )
 import Relation.Binary.Reasoning.Setoid as SetoidReasoning
 
 -- Imports from the Agda Universal Algebra Library ---------------------------------------------
-open  import Overture                       using  ( proj₁ ; proj₂ )
-open  import Setoid.Functions               using  ( InvIsInverseʳ ; SurjInv )
-open  import Overture.Terms  using  ( Term ; ℊ )
-open  import Setoid.Algebras
-      using  ( Algebra ; Lift-Algˡ ; ov ; 𝕌[_] ; 𝔻[_] ; ⨅ )
-open  import Setoid.Homomorphisms
-      using  ( hom ; _≅_ ; mkiso ; Lift-≅ˡ ; ≅-sym ; _IsHomImageOf_ )
-open  import Setoid.Terms
-      using  ( 𝑻 ; module Environment ; comm-hom-term ; interp-prod ; term-agreement )
-open  import Setoid.Subalgebras  using  ( _≤_ ; SubalgebrasOfClass )
-open  import Setoid.Varieties.SoundAndComplete
-      using ( _⊧_ ; _⊫_ ; ⊫-proof ; _≈̇_ ; _⊢_▹_≈_ )
+open  import Overture                           using  ( 𝓞 ; 𝓥 ; Signature ; 𝑆 )
+open  import Overture.Terms                     using  ( Term ; ℊ )
+open  import Setoid.Algebras                    using  ( Algebra ; Lift-Algˡ ; ov
+                                                       ; 𝕌[_] ; 𝔻[_] ; ⨅ )
+open  import Setoid.Functions                   using  ( InvIsInverseʳ ; SurjInv )
+open  import Setoid.Homomorphisms               using  ( hom ; _≅_ ; mkiso ; Lift-≅ˡ
+                                                       ; ≅-sym ; _IsHomImageOf_ )
+open  import Setoid.Subalgebras                 using  ( _≤_ ; SubalgebrasOfClass )
+open  import Setoid.Terms                       using  ( 𝑻 ; module Environment
+                                                       ; comm-hom-term ; interp-prod
+                                                       ; term-agreement )
+open  import Setoid.Varieties.SoundAndComplete  using  ( _⊧_ ; _⊫_ ; ⊫-proof ; _≈̇_
+                                                       ; _⊢_▹_≈_ )
 
 private variable α ρᵃ β ρᵇ χ ℓ : Level
 

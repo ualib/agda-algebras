@@ -38,8 +38,6 @@ complete with respect to `ℓ₀`-small families — the usual predicative readi
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
-open import Overture using (𝓞 ; 𝓥 ; Signature ; 𝑆)
-
 module Setoid.Congruences.CompleteLattice where
 
 -- Imports from the Agda Standard Library ---------------------------------------
@@ -53,6 +51,7 @@ open import Relation.Binary.Lattice      using ( Supremum ; IsLattice
                                                ; BoundedLattice )
 
 -- Imports from the Agda Universal Algebras Library ------------------------------
+open import Overture using ( 𝓞 ; 𝓥 ; Signature ; 𝑆 )
 open import Setoid.Algebras.Basic  using  ( ov ; Algebra ; 𝕌[_] ; 𝔻[_] )
 open import Order.CompleteLattice                using  ( CompleteLattice )
 open import Setoid.Congruences.Basic             using  ( Con ; mkcon ; _∣≈_ ; reflexive ; 𝟘[_]

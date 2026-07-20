@@ -68,12 +68,11 @@ The kit also has a *semantic* face, used by the converse Maltsev conditions:
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
-open import Overture using ( 𝓞 ; 𝓥 ; Signature ; 𝑆 )
-
 module Setoid.Varieties.FreeSubstitution where
 
--- Imports from Agda and the Agda Standard Library ----------------------------
-open import Agda.Primitive   using () renaming ( Set to Type )
+open import Agda.Primitive using () renaming ( Set to Type )
+
+-- Imports from the Agda Standard Library -------------------------------------
 open import Data.Product     using ( _,_ ; proj₁ )
 open import Data.Sum.Base    using ( inj₁ ; inj₂ )
 open import Function         using ( Func )
@@ -83,16 +82,17 @@ open import Relation.Binary  using () renaming ( _⇒_ to _⊆_ )
 import Relation.Binary.PropositionalEquality as ≡
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
-open import Overture.Terms  using  ( Term ; ℊ )
-open import Setoid.Algebras.Basic  using  ( 𝔻[_] )
-open import Setoid.Congruences.Generation    using  ( Gen ; Cg ; base ; symmetric
-                                                    ; _∨_ ; _∪ᵣ_ ; module principal )
-open import Setoid.Homomorphisms.Basic       using ( hom ; mkIsHom )
-open import Setoid.Homomorphisms.Kernels     using ( kercon )
-open import Setoid.Homomorphisms.Properties  using ( Cg⊆ker )
-open import Setoid.Terms.Basic  using ( _≐_ ; Sub ; _[_] )
-open import Setoid.Varieties.SoundAndComplete
-  using ( Eq ; _⊢_▹_≈_ ; module FreeAlgebra )
+open import Overture                           using  ( 𝓞 ; 𝓥 ; Signature ; 𝑆 )
+open import Overture.Terms                     using  ( Term ; ℊ )
+open import Setoid.Algebras.Basic              using  ( 𝔻[_] )
+open import Setoid.Congruences.Generation      using  ( Gen ; Cg ; base ; symmetric
+                                                      ; _∨_ ; _∪ᵣ_ ; module principal )
+open import Setoid.Homomorphisms.Basic         using  ( hom ; mkIsHom )
+open import Setoid.Homomorphisms.Kernels       using  ( kercon )
+open import Setoid.Homomorphisms.Properties    using  ( Cg⊆ker )
+open import Setoid.Terms.Basic                 using  ( _≐_ ; Sub ; _[_] )
+open import Setoid.Varieties.SoundAndComplete  using  ( Eq ; _⊢_▹_≈_
+                                                      ; module FreeAlgebra )
 
 open _≐_         using ( rfl ; gnl )
 open _⊢_▹_≈_     using ( app ; sub ; refl ; trans )

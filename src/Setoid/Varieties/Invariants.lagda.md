@@ -17,8 +17,6 @@ The canonical example available in this library is the modelling relation `𝑨 
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
-open import Overture using ( 𝓞 ; 𝓥 ; Signature ; 𝑆 )
-
 module Setoid.Varieties.Invariants where
 
 -- Imports from Agda and the Agda Standard Library --------------------------------
@@ -27,7 +25,8 @@ open import Level           using ( Level )
 open import Relation.Unary  using ( Pred )
 
 -- Imports from the Agda Universal Algebra Library -------------------------------
-open import Setoid.Algebras  using ( Algebra )
+open import Overture              using ( 𝓞 ; 𝓥 ; Signature ; 𝑆 )
+open import Setoid.Algebras       using ( Algebra )
 open import Setoid.Homomorphisms  using ( _≅_ )
 
 private variable α ρᵃ ℓ : Level
