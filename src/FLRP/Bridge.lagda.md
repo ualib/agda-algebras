@@ -44,18 +44,17 @@ elements carry a `Respects`{.AgdaFunction} proof.  Over a redundant presentation
 bare interval can be strictly larger than the respecting one, so the isomorphism is
 *false* at the bare level (see the counterexample in [FLRP.Enforceable][]).
 
-This is the **Layer S** formulation: `bridge`{.AgdaFunction} relates the *semantic*
-congruence lattice `Con`{.AgdaFunction} to the interval, and the whole isomorphism is
-proved constructively with no classical or deferred hypotheses.  The correspondence
-itself is layer-agnostic (ADR-008), so the **Layer D** restatement called for by the
-updated acceptance criteria of issue #454 — the same isomorphism with the
-decidable-congruence poset `DecCon`{.AgdaFunction} in place of `Con`{.AgdaFunction},
-over the interval's decidable order — is a thin follow-up that this module does *not*
-yet provide; it lands with the decidable coset algebra of WP-7 slice iii.  The
-representability corollary (`interval-Con-representable`{.AgdaFunction}) is likewise
-stated conditionally on a finiteness witness for the coset algebra, whose hookup to
-`Representableᵈ`{.AgdaRecord} of the decidable layer is that same WP-7 work and is
-deliberately not imported here.
+The core isomorphism `bridge`{.AgdaFunction} is the **Layer S** formulation: it relates
+the *semantic* congruence lattice `Con`{.AgdaFunction} to the interval, proved
+constructively with no classical or deferred hypotheses.  The correspondence itself is
+layer-agnostic (ADR-008), so the **Layer D** restatement called for by the updated
+acceptance criteria of issue #454 — the same isomorphism with the decidable-congruence
+poset `DecCon`{.AgdaFunction} in place of `Con`{.AgdaFunction} — follows by composing
+`bridge`{.AgdaFunction} with the cross-layer poset isomorphism `Con 𝑨 ≅ DecCon 𝑨` of
+[FLRP.LayerBridge][].  That restatement is now provided at the end of this module
+(`bridgeᵈ`{.AgdaFunction}, `interval-DecCon-representable`{.AgdaFunction}), taking the
+coset algebra's congruence-completeness bridge (`CongruenceCompleteness`{.AgdaFunction}
+of [FLRP.Assumptions][]) and its carrier-finiteness witness as explicit hypotheses.
 
 <!--
 ```agda
@@ -90,7 +89,12 @@ open import Setoid.Algebras.Finite                using  ( FiniteAlgebra )
 open import Setoid.Congruences.Basic              using  ( Con ; IsCongruence ; mkcon
                                                          ; _∣≈_ ; is-compatible
                                                          ; is-equivalence ; reflexive )
-open import Setoid.Congruences.Lattice            using ( _≑_ ) renaming ( _⊆_ to _⊑_ )
+open import Setoid.Congruences.Lattice            using ( _≑_ )
+                                                  renaming ( _⊆_ to _⊑_ )
+open import Setoid.Congruences.Finite.Basic       using ( DecCon )
+open import FLRP.Representable                     using ( _⊆ᵈ_ ; _≑ᵈ_ )
+open import FLRP.Assumptions                       using ( CongruenceCompleteness )
+open import FLRP.LayerBridge                       using ( conDecIso )
 ```
 -->
 
@@ -370,9 +374,9 @@ Finiteness of the coset algebra enters as an explicit hypothesis rather than bei
 derived: constructing `FiniteAlgebra cosetAlgebra`{.AgdaRecord} from finiteness of
 `𝒢`{.AgdaBound} needs a decision procedure for `∼_H`{.AgdaFunction} and a surjective
 enumeration of cosets, which is a separate concern.  This is exactly the datum the
-decidable layer supplies: on the eventual hookup this corollary meets
-`Representableᵈ`{.AgdaRecord} of the two-layer discipline (ADR-008), developed on the
-concurrent WP-7 branch and deliberately *not* imported here.
+decidable layer supplies: the Layer-D restatement below (`bridgeᵈ`{.AgdaFunction}) meets
+`Representableᵈ`{.AgdaRecord} of the two-layer discipline (ADR-008) through this same
+finiteness witness together with the congruence-completeness bridge.
 
 ```agda
   -- Corollary: a finite coset algebra realizes the interval [H , 𝒢] as its Con.
@@ -380,4 +384,74 @@ concurrent WP-7 branch and deliberately *not* imported here.
     FiniteAlgebra cosetAlgebra
     → Σ[ 𝑨 ∈ Algebra {𝑆 = Sig-Unary G} 0ℓ 0ℓ ] ( FiniteAlgebra 𝑨 × RepIso 𝑨 )
   interval-Con-representable fin = cosetAlgebra , fin , bridge⁻¹
+```
+
+#### The Layer-D restatement
+
+The updated acceptance criteria of issue #454 call for the correspondence at **Layer
+D**: the same isomorphism with the *decidable* congruence poset
+`DecCon`{.AgdaFunction} in place of the semantic `Con`{.AgdaFunction}.  The cross-layer
+bridge of [FLRP.LayerBridge][] — the order isomorphism `Con 𝑨 ≅ DecCon 𝑨` under the
+congruence-completeness assumption `CongruenceCompleteness`{.AgdaFunction} of
+[FLRP.Assumptions][] — supplies exactly the missing half: composing it with
+`bridge⁻¹`{.AgdaFunction} turns `[H , 𝒢] ≅ Con (𝒢 ↷ 𝒢/H)` into
+`[H , 𝒢] ≅ DecCon (𝒢 ↷ 𝒢/H)`.
+
+`RepIsoᵈ`{.AgdaFunction} is the decidable-layer analogue of `RepIso`{.AgdaFunction}:
+the interval, order-isomorphic to the `DecCon`{.AgdaFunction} poset.  Its assembly
+needs no antisymmetry: both round trips land in a mutual-inclusion equivalence
+(`≈ᵢ`{.AgdaFunction}, `≑ᵈ`{.AgdaFunction}), so each is built directly from the two
+monotone maps — the same product construction as `compose-IntervalIso`{.AgdaFunction}
+of [FLRP.Enforceable][].
+
+```agda
+  RepIsoᵈ : (𝑨 : Algebra {𝑆 = Sig-Unary G} 0ℓ 0ℓ) → Type (lsuc 0ℓ)
+  RepIsoᵈ 𝑨 = OrderIso _≈ᵢ_ _≤ᵢ_ (_≑ᵈ_ {𝑨 = 𝑨} {ℓ = 0ℓ}) (_⊆ᵈ_ {𝑨 = 𝑨} {ℓ = 0ℓ})
+
+  -- bridge⁻¹ (interval ≅ Con) composed with the cross-layer poset iso
+  -- (Con ≅ DecCon, under the coset algebra's congruence-completeness bridge).
+  -- Endpoint implicits of the monotone maps are forwarded explicitly, and each
+  -- round trip is assembled directly on a related pair — the implicit congruence
+  -- arguments of the named ⊆-trans are not inferable through the non-injective
+  -- containment relations (the discipline of Setoid.Congruences.Lattice).
+  bridgeᵈ : CongruenceCompleteness cosetAlgebra → RepIsoᵈ cosetAlgebra
+  bridgeᵈ cc = record
+    { to         = λ M → CD.to (BI.to M)
+    ; from       = λ d → BI.from (CD.from d)
+    ; to-mono    = λ {M}{N} M≤N →
+        CD.to-mono {BI.to M} {BI.to N} (BI.to-mono {M} {N} M≤N)
+    ; from-mono  = λ {d}{e} d⊆e →
+        BI.from-mono {CD.from d} {CD.from e} (CD.from-mono {d} {e} d⊆e)
+    ; to∘from    = λ d →
+          (λ p → proj₁ (CD.to∘from d)
+                   (CD.to-mono {BI.to (BI.from (CD.from d))} {CD.from d}
+                               (proj₁ (BI.to∘from (CD.from d))) p))
+        , (λ p → CD.to-mono {CD.from d} {BI.to (BI.from (CD.from d))}
+                            (proj₂ (BI.to∘from (CD.from d))) (proj₂ (CD.to∘from d) p))
+    ; from∘to    = λ M →
+          (λ z → proj₁ (BI.from∘to M)
+                   (BI.from-mono {CD.from (CD.to (BI.to M))} {BI.to M}
+                                 (proj₁ (CD.from∘to (BI.to M))) z))
+        , (λ z → BI.from-mono {BI.to M} {CD.from (CD.to (BI.to M))}
+                             (proj₂ (CD.from∘to (BI.to M))) (proj₂ (BI.from∘to M) z))
+    }
+    where
+    module CD = OrderIso (conDecIso cc)
+    module BI = OrderIso bridge⁻¹
+```
+
+**Corollary (Layer D, near-closing #454).**  A finite coset algebra whose semantic
+congruences are all `≑`{.AgdaFunction} to decidable ones (the congruence-completeness
+bridge for the coset algebra) realizes the interval `[H , 𝒢]` as its *decidable*
+congruence poset.  This is the `Representableᵈ`{.AgdaRecord}-side target of the two-layer
+discipline: the algebra, its carrier-finiteness witness, and the decidable-layer
+isomorphism are exactly the data `Representableᵈ`{.AgdaRecord} of [FLRP.Representable][]
+consumes (there over a classical `Lattice`{.AgdaRecord} presentation of the interval).
+
+```agda
+  interval-DecCon-representable :
+    FiniteAlgebra cosetAlgebra
+    → CongruenceCompleteness cosetAlgebra
+    → Σ[ 𝑨 ∈ Algebra {𝑆 = Sig-Unary G} 0ℓ 0ℓ ] ( FiniteAlgebra 𝑨 × RepIsoᵈ 𝑨 )
+  interval-DecCon-representable fin cc = cosetAlgebra , fin , bridgeᵈ cc
 ```
