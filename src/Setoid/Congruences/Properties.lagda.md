@@ -32,11 +32,11 @@ open import Agda.Primitive  using () renaming ( Set to Type )
 open import Level           using ( Level ; _⊔_ ) renaming (suc to lsuc)
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
-open import Overture using ( 𝓞 ; 𝓥 ; Signature ; 𝑆 )
-open import Setoid.Algebras.Basic  using ( Algebra )
-open import Setoid.Congruences.Basic                using ( Con )
-open import Setoid.Congruences.Lattice  using ( _⊆_ ; _≑_ ; _∧_ )
-open import Setoid.Congruences.Generation           using ( _∨_ )
+open import Overture                       using ( 𝓞 ; 𝓥 ; Signature ; 𝑆 )
+open import Setoid.Algebras.Basic          using ( Algebra )
+open import Setoid.Congruences.Basic       using ( Con )
+open import Setoid.Congruences.Lattice     using ( _⊆_ ; _≑_ ; _∧_ )
+open import Setoid.Congruences.Generation  using ( _∨_ )
 ```
 -->
 

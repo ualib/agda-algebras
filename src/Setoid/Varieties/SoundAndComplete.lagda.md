@@ -17,10 +17,10 @@ This module is based on [Andreas Abel's Agda formalization of Birkhoff's complet
 
 module Setoid.Varieties.SoundAndComplete where
 
-open import Agda.Primitive   using () renaming ( Set to Type )
+open import Agda.Primitive using () renaming ( Set to Type )
 
 -- imports from the Agda Standard Library ---------------------------------------
-open import Data.Product     using ( _,_ ; Σ-syntax ; _×_ )
+open import Data.Product     using ( _,_ ; Σ-syntax ; _×_ ; proj₁ ; proj₂ )
 open import Function         using ( _∘_ ; flip ) renaming ( Func to _⟶_ )
 open import Level            using ( Level ; _⊔_ )
 open import Relation.Binary  using ( Setoid ; IsEquivalence )
@@ -31,11 +31,11 @@ open import Relation.Binary.PropositionalEquality using ( refl )
 import Relation.Binary.Reasoning.Setoid as SetoidReasoning
 
 -- Imports from the Agda Universal Algebra Library -------------------------------
-open import Overture                  using ( proj₁ ; proj₂ ; OperationSymbolsOf ; 𝓞 ; 𝓥 ; Signature ; 𝑆 )
-open import Overture.Terms  using ( Term )
-open import Setoid.Algebras  using ( Algebra ; ov ; 𝔻[_] )
-open import Setoid.Signatures         using ( ⟨_⟩ )
-open import Setoid.Terms  using ( module Environment ; Sub ; _[_] )
+open import Overture           using ( OperationSymbolsOf ; 𝓞 ; 𝓥 ; Signature ; 𝑆 )
+open import Overture.Terms     using ( Term )
+open import Setoid.Algebras    using ( Algebra ; ov ; 𝔻[_] )
+open import Setoid.Signatures  using ( ⟨_⟩ )
+open import Setoid.Terms       using ( module Environment ; Sub ; _[_] )
 
 open Setoid  using ( Carrier ; _≈_ ; isEquivalence )
 open _⟶_     renaming ( to to _⟨$⟩_ )

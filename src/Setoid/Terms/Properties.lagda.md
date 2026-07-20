@@ -28,16 +28,16 @@ open import Relation.Binary.PropositionalEquality  using ( setoid; cong; refl)
 import Relation.Binary.Reasoning.Setoid as SetoidReasoning
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
-open import Overture                       using ( proj₁ ; proj₂ ; 𝓞 ; 𝓥 ; Signature ; 𝑆 )
-open import Overture.Terms  using  ( Term )
-open import Setoid.Algebras  using  ( Algebra ; 𝕌[_] ; 𝔻[_] ; _^_ )
-open import Setoid.Functions               using  ( Img_∋_ ; eq ; isSurj ; IsSurjective
-                                                  ; isSurj→IsSurjective )
+open import Overture              using  ( proj₁ ; proj₂ ; 𝓞 ; 𝓥 ; Signature ; 𝑆 )
+open import Overture.Terms        using  ( Term )
+open import Setoid.Algebras       using  ( Algebra ; 𝕌[_] ; 𝔻[_] ; _^_ )
+open import Setoid.Functions      using  ( Img_∋_ ; eq ; isSurj ; IsSurjective
+                                         ; isSurj→IsSurjective )
 open import Setoid.Homomorphisms  using  ( hom ; compatible-map ; IsHom ; ⊙-hom )
-open import Setoid.Terms.Basic  using  ( 𝑻 ; _≐_  ; ≐-isRefl )
+open import Setoid.Terms.Basic    using  ( 𝑻 ; _≐_  ; ≐-isRefl )
 
 open Term
-open _⟶_ using ( ) renaming ( to to _⟨$⟩_ ; cong to ≈cong )
+open _⟶_ using () renaming ( to to _⟨$⟩_ ; cong to ≈cong )
 
 private variable
   α ρᵃ β ρᵇ ρ χ : Level
@@ -57,8 +57,8 @@ on the structure of the given term.
 
 ```agda
 module _ {𝑆 : Signature 𝓞 𝓥}{𝑨 : Algebra {𝑆 = 𝑆} α ρ}(h : X → 𝕌[ 𝑨 ]) where
-  open Algebra 𝑨      using ( Interp ) renaming ( Domain to A )
-  open Setoid A       using ( _≈_ ; reflexive )
+  open Algebra 𝑨              using ( Interp ) renaming ( Domain to A )
+  open Setoid A               using ( _≈_ ; reflexive )
   open Algebra (𝑻 {𝑆 = 𝑆} X)  using () renaming ( Domain to TX )
 
   free-lift : 𝕌[ 𝑻 {𝑆 = 𝑆} X ] → 𝕌[ 𝑨 ]
@@ -122,8 +122,8 @@ we can omit the `swelldef` hypothesis we needed previously to prove `free-unique
 
 ```agda
 module _ {𝑆 : Signature 𝓞 𝓥}{𝑨 : Algebra {𝑆 = 𝑆} α ρ}{gh hh : hom (𝑻 X) 𝑨} where
-  open Algebra 𝑨      using ( Interp )  renaming ( Domain to A )
-  open Setoid A       using ( _≈_ )
+  open Algebra 𝑨              using ( Interp )  renaming ( Domain to A )
+  open Setoid A               using ( _≈_ )
   open Algebra (𝑻 {𝑆 = 𝑆} X)  using ()          renaming ( Domain to TX )
   open SetoidReasoning A
   open _≐_

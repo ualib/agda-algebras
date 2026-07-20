@@ -43,9 +43,9 @@ open import Relation.Binary  using ( Setoid ; IsEquivalence )
                              renaming ( Rel to BinaryRel ; _⇒_ to _⊆_ )
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
-open import Overture using ( 𝓞 ; 𝓥 ; Signature ; 𝑆 )
-open import Setoid.Algebras.Basic  using ( ov ; Algebra ; 𝕌[_] )
-open import Setoid.Congruences.Basic           using ( Con ; is-equivalence )
+open import Overture                  using ( 𝓞 ; 𝓥 ; Signature ; 𝑆 )
+open import Setoid.Algebras.Basic     using ( ov ; Algebra ; 𝕌[_] )
+open import Setoid.Congruences.Basic  using ( Con ; is-equivalence )
 
 private variable α ρ ℓ : Level
 ```

@@ -31,10 +31,11 @@ open import Relation.Binary        using ( Setoid )
 open import Relation.Unary         using ( Pred ; _∈_ ; _⊆_ )
 
 -- Imports from the Agda Universal Algebra Library -------------------------------
-open import Overture using ( 𝓞 ; 𝓥 ; Signature ; 𝑆 )
-open import Setoid.Algebras using ( Algebra ; ov ; Lift-Alg ; ⨅ )
+open import Overture               using  ( 𝓞 ; 𝓥 ; Signature ; 𝑆 )
+open import Setoid.Algebras        using  ( Algebra ; ov ; Lift-Alg ; ⨅ )
 open import Setoid.Homomorphisms
-open import Setoid.Subalgebras
+open import Setoid.Subalgebras     using  ( _≤_ ; ≤-trans ; ≤-reflexive
+                                          ; ≤-trans-≅ ; ≅-trans-≤ ; ≤-Lift )
 open _⟶_ renaming ( to to _⟨$⟩_ )
 ```
 -->

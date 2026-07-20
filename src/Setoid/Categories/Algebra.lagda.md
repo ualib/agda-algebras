@@ -38,8 +38,8 @@ open import Level            using ( Level ; _⊔_ ) renaming ( suc to lsuc )
 open import Relation.Binary  using ( Setoid ; IsEquivalence )
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
-open import Overture using ( 𝓞 ; 𝓥 ; Signature ; 𝑆 )
-open import Setoid.Algebras.Basic    using ( Algebra ; 𝕌[_] ; 𝔻[_] )
+open import Overture                         using ( 𝓞 ; 𝓥 ; Signature ; 𝑆 )
+open import Setoid.Algebras.Basic            using ( Algebra ; 𝕌[_] ; 𝔻[_] )
 open import Setoid.Homomorphisms.Basic       using ( hom ; 𝒾𝒹 )
 open import Setoid.Homomorphisms.Properties  using ( ⊙-hom )
 open import Setoid.Categories.Category       using ( Category )

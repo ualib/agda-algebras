@@ -42,16 +42,16 @@ module Setoid.Subalgebras.Subdirect.BirkhoffSI where
 open import Agda.Primitive using () renaming ( Set to Type )
 
 -- Imports from Agda and the Agda Standard Library ----------------------------
-open import Data.Product     using ( _×_ ; _,_ ; Σ-syntax )
-open import Level            using ( Level ; _⊔_ )  renaming ( suc to lsuc )
+open import Data.Product  using ( _×_ ; _,_ ; Σ-syntax )
+open import Level         using ( Level ; _⊔_ ) renaming ( suc to lsuc )
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
-open import Overture using ( 𝓞 ; 𝓥 ; Signature ; 𝑆 )
-open import Setoid.Algebras  using  ( Algebra )
-open import Setoid.Congruences  using  ( Con ; _╱_ )
-open import Setoid.Congruences.Monolith using ( IsSubdirectlyIrreducible )
-open import Setoid.Subalgebras.Subdirect.Basic
-  using ( SubdirectEmbedding ; Separates ; separating→SubdirectEmbedding )
+open import Overture                            using  ( 𝓞 ; 𝓥 ; Signature ; 𝑆 )
+open import Setoid.Algebras                     using  ( Algebra )
+open import Setoid.Congruences                  using  ( Con ; _╱_ )
+open import Setoid.Congruences.Monolith         using  ( IsSubdirectlyIrreducible )
+open import Setoid.Subalgebras.Subdirect.Basic  using  ( SubdirectEmbedding ; Separates
+                                                       ; separating→SubdirectEmbedding )
 
 private variable α ρ ℓ ι : Level
 ```

@@ -25,8 +25,8 @@ open import Level           using ( Level )
 open import Relation.Unary  using ( Pred )
 
 -- Imports from the Agda Universal Algebra Library -------------------------------
-open import Overture using ( 𝓞 ; 𝓥 ; Signature ; 𝑆 )
-open import Setoid.Algebras  using ( Algebra )
+open import Overture              using ( 𝓞 ; 𝓥 ; Signature ; 𝑆 )
+open import Setoid.Algebras       using ( Algebra )
 open import Setoid.Homomorphisms  using ( _≅_ )
 
 private variable α ρᵃ ℓ : Level

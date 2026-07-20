@@ -24,7 +24,7 @@ open import Relation.Binary                        using ( Setoid )
 open import Relation.Binary.PropositionalEquality  using ( refl)
 
 -- Imports from the Agda Universal Algebra Library ------------------------------------------
-open import Overture using ( 𝓞 ; 𝓥 ; Signature )
+open import Overture                       using  ( 𝓞 ; 𝓥 ; Signature )
 open import Setoid.Algebras                using  ( Algebra ; _^_; Lift-Algˡ ; Lift-Algʳ
                                                   ; Lift-Alg; 𝕌[_] ; 𝔻[_] )
 open import Setoid.Congruences.Generation  using  ( Gen ; Cg-least )

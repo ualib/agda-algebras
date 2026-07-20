@@ -26,9 +26,10 @@ open import Relation.Binary        using ( Setoid ; IsEquivalence )
 open import Relation.Binary.PropositionalEquality using ( _≡_ ; refl ; sym ; trans )
 
 -- Imports from the Agda Universal Algebra Library -------------------------------
-open import Overture using ( ArityOf ; OperationSymbolsOf ; 𝓞 ; 𝓥 ; Signature ; 𝑆 )
+open import Overture         using ( 𝓞 ; 𝓥 ; Signature ; 𝑆
+                                   ; ArityOf ; OperationSymbolsOf )
 open import Setoid.Algebras  using ( Algebra ; ov ; _^_ ; 𝔻[_] ; 𝕌[_] )
-open import Overture.Terms using ( Term )
+open import Overture.Terms   using ( Term )
 
 open Func renaming ( to to _⟨$⟩_ )
 open Term

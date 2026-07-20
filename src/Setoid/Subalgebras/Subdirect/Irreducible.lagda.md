@@ -50,16 +50,17 @@ open import Relation.Nullary                       using ( ¬_ ; Dec )
 open import Relation.Nullary.Decidable             using ( ¬? ; decidable-stable )
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
-open import Overture using ( 𝓞 ; 𝓥 ; Signature ; 𝑆 )
-open import Setoid.Functions                       using  ( IsInjective ; IsSurjective )
-open import Setoid.Algebras   using  ( Algebra ; ⨅ )
-open import Setoid.Congruences   using  ( Con )
-open import Setoid.Homomorphisms   using  ( hom ; kercon ; _≅_ ; Bijective→≅ )
-open import Setoid.Congruences.Monolith   using  ( HasMonolith ; Nonzero ; BelowDiagonal
-                                                          ; IsSubdirectlyIrreducible
-                                                          ; mono-nonzero ; mono-least ; ⋂ )
-open import Setoid.Subalgebras.Subdirect.Basic
-  using  ( coord ; SubdirectEmbedding ; Separates ; embed-inj ; proj-onto )
+open import Overture                            using  ( 𝓞 ; 𝓥 ; Signature ; 𝑆 )
+open import Setoid.Functions                    using  ( IsInjective ; IsSurjective )
+open import Setoid.Algebras                     using  ( Algebra ; ⨅ )
+open import Setoid.Congruences                  using  ( Con )
+open import Setoid.Homomorphisms                using  ( hom ; kercon ; _≅_ ; Bijective→≅ )
+open import Setoid.Congruences.Monolith         using  ( HasMonolith ; Nonzero
+                                                       ; BelowDiagonal ; mono-nonzero
+                                                       ; IsSubdirectlyIrreducible
+                                                       ; mono-least ; ⋂ )
+open import Setoid.Subalgebras.Subdirect.Basic  using  ( coord ; SubdirectEmbedding
+                                                       ; Separates ; embed-inj ; proj-onto )
 
 private variable α ρ αᵃ ι : Level
 ```

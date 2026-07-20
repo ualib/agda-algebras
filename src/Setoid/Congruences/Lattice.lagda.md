@@ -34,11 +34,11 @@ open import Relation.Binary.Bundles  using ( Poset )
 open import Relation.Binary.Lattice  using ( Infimum ; IsMeetSemilattice ; MeetSemilattice )
 
 -- Imports from the Agda Universal Algebras Library ------------------------------
-open import Overture using ( 𝓞 ; 𝓥 ; Signature ; 𝑆 )
-open import Setoid.Algebras.Basic  using  ( ov ; Algebra ; 𝕌[_] ; 𝔻[_] )
-open import Setoid.Congruences.Basic           using  ( Con ; mkcon ; _∣≈_ ; reflexive
-                                                      ; is-equivalence ; is-compatible
-                                                      ; 𝟘[_] ; 𝟙[_] )
+open import Overture                  using  ( 𝓞 ; 𝓥 ; Signature ; 𝑆 )
+open import Setoid.Algebras.Basic     using  ( ov ; Algebra ; 𝕌[_] ; 𝔻[_] )
+open import Setoid.Congruences.Basic  using  ( Con ; mkcon ; _∣≈_ ; reflexive
+                                             ; is-equivalence ; is-compatible
+                                             ; 𝟘[_] ; 𝟙[_] )
 private variable α ρ ℓ : Level
 ```
 -->

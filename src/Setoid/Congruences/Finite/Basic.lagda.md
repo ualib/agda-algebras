@@ -59,7 +59,7 @@ from a `FiniteCongruences`{.AgdaRecord} witness.
 
 module Setoid.Congruences.Finite.Basic where
 
-open import Agda.Primitive  using  () renaming ( Set to Type )
+open import Agda.Primitive using () renaming ( Set to Type )
 
 -- Imports from the Agda Standard Library ----------------------------------------------
 open import Data.List.Base                         using  ( List ; [] ; _∷_ )
@@ -77,8 +77,8 @@ open import Relation.Binary.PropositionalEquality  using  ( refl )
 open import Relation.Nullary                       using  ( Dec ; yes ; no )
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
-open import Overture using ( 𝓞 ; 𝓥 ; Signature ; 𝑆 )
-open import Setoid.Algebras.Basic  using ( Algebra ; 𝕌[_] ; 𝔻[_] )
+open import Overture                       using ( 𝓞 ; 𝓥 ; Signature ; 𝑆 )
+open import Setoid.Algebras.Basic          using ( Algebra ; 𝕌[_] ; 𝔻[_] )
 open import Setoid.Algebras.Finite         using ( 𝟏 )
 open import Setoid.Congruences.Basic       using ( Con ; mkcon ; reflexive ; 𝟘[_] )
 open import Setoid.Congruences.Lattice     using ( _≑_ )

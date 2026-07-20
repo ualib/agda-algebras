@@ -24,23 +24,24 @@ algebras.
 
 module Setoid.Subalgebras.Subdirect.Basic where
 
--- Imports from Agda and the Agda Standard Library ----------------------------
-open import Agda.Primitive   using () renaming ( Set to Type )
-open import Data.Product     using ( _,_ ; Σ-syntax ; proj₁ ; proj₂ )
-open import Function         using ( id )
-open import Level            using ( Level ; _⊔_ )
-open import Relation.Binary  using ( Setoid )
-open import Relation.Binary.PropositionalEquality using ( _≡_ ; refl )
+open import Agda.Primitive using () renaming ( Set to Type )
+
+-- Imports from the Agda Standard Library -------------------------------------
+open import Data.Product                           using  ( _,_ ; Σ-syntax
+                                                          ; proj₁ ; proj₂ )
+open import Function                               using  ( id )
+open import Level                                  using  ( Level ; _⊔_ )
+open import Relation.Binary                        using  ( Setoid )
+open import Relation.Binary.PropositionalEquality  using  ( _≡_ ; refl )
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
-open import Overture using ( 𝓞 ; 𝓥 ; Signature ; 𝑆 )
-open import Setoid.Functions                         using  ( IsInjective ; IsSurjective )
+open import Overture                  using  ( 𝓞 ; 𝓥 ; Signature ; 𝑆 )
+open import Setoid.Algebras           using  ( Algebra ; ⨅ ; 𝔻[_] )
+open import Setoid.Congruences        using  ( Con ; _╱_ )
+open import Setoid.Functions          using  ( IsInjective ; IsSurjective )
 
-open import Setoid.Algebras  using  ( Algebra ; ⨅ ; 𝔻[_] )
-open import Setoid.Congruences  using  ( Con ; _╱_ )
-open import Setoid.Homomorphisms  using  ( hom ; IsEpi
-                                                            ; 𝒾𝒹 ; ⊙-hom ; ⨅-hom-co
-                                                            ; πhom ; πepi ; ⨅-proj )
+open import Setoid.Homomorphisms      using  ( hom ; IsEpi ; 𝒾𝒹 ; ⊙-hom ; ⨅-hom-co
+                                             ; πhom ; πepi ; ⨅-proj )
 open import Setoid.Subalgebras.Basic  using  ( _≤_ )
 
 

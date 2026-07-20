@@ -21,28 +21,27 @@ module Setoid.Varieties.HSP where
 
 -- Imports from Agda and the Agda Standard Library -------------------------------
 open import Agda.Primitive   using () renaming ( Set to Type )
-open import Data.Product     using ( _,_ ; Σ-syntax ; _×_ )
+open import Data.Product     using ( _,_ ; Σ-syntax ; _×_ ; proj₁ ; proj₂ )
 open import Function         using () renaming ( Func to _⟶_ )
 open import Level            using ( Level ; _⊔_ )
 open import Relation.Binary  using ( Setoid )
 open import Relation.Unary   using ( Pred ; _∈_ ; _⊆_ )
 
 -- -- Imports from the Agda Universal Algebra Library ----------------------------
-open import Overture                                   using  ( proj₁ ; proj₂ ; 𝓞 ; 𝓥 ; Signature ; 𝑆 )
+open import Overture                           using  ( 𝓞 ; 𝓥 ; Signature ; 𝑆 )
 open import Setoid.Algebras                    using  ( Algebra ; ov ; Lift-Alg ; ⨅ )
 open import Setoid.Homomorphisms
-open import Setoid.Relations                           using  ( fkerPred )
+open import Setoid.Relations                   using  ( fkerPred )
 open import Setoid.Subalgebras                 using  ( _≤_ ; mon→≤ )
 open import Setoid.Terms                       using  ( module Environment ; 𝑻
-                                                              ; lift-hom ; free-lift
-                                                              ; free-lift-interp )
-open import Setoid.Varieties.Closure           using  ( S ; P ; S-idem
-                                                              ; V ; V′ ; V-≅-lc )
+                                                      ; lift-hom ; free-lift
+                                                      ; free-lift-interp )
+open import Setoid.Varieties.Closure           using  ( S ; P ; S-idem ; V ; V′ ; V-≅-lc )
 open import Setoid.Varieties.FreeAlgebras      using  ( module FreeHom
-                                                              ; 𝔽-ModTh-epi-lift )
+                                                      ; 𝔽-ModTh-epi-lift )
 open import Setoid.Varieties.Preservation      using  ( S-id2 ; PS⊆SP )
 open import Setoid.Varieties.SoundAndComplete  using  ( module FreeAlgebra ; _⊫_ ; ⊫-proof
-                                                              ; _≈̇_ ; _⊢_▹_≈_ ; Mod ; Th )
+                                                      ; _≈̇_ ; _⊢_▹_≈_ ; Mod ; Th )
 
 open _⟶_          using () renaming ( to to _⟨$⟩_ )
 open Setoid       using ( Carrier )
