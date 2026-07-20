@@ -65,7 +65,7 @@ module _ {α ρᵃ β ρᵇ : Level} where
   S _ 𝒦 𝑩 = Σ[ 𝑨 ∈ Algebra α ρᵃ ] 𝑨 ∈ 𝒦 ∧ 𝑩 ≤ 𝑨
 
   P : ∀ ℓ ι → Pred(Algebra {𝑆 = 𝑆} α ρᵃ) (a ⊔ ov {𝑆 = 𝑆} ℓ) → Pred(Algebra {𝑆 = 𝑆} β ρᵇ) (b ⊔ ov {𝑆 = 𝑆}(a ⊔ ℓ ⊔ ι))
-  P ℓ ι 𝒦 𝑩 = Σ[ I ∈ Type ι ] Σ[ 𝒜 ∈ (I → Algebra {𝑆 = 𝑆} α ρᵃ) ] (∀ i → 𝒜 i ∈ 𝒦) ∧ 𝑩 ≅ ⨅ 𝒜
+  P ℓ ι 𝒦 𝑩 = Σ[ I ∈ Type ι ] Σ[ 𝒜 ∈ (I → Algebra α ρᵃ) ] (∀ i → 𝒜 i ∈ 𝒦) ∧ 𝑩 ≅ ⨅ 𝒜
 
 module _ {α ρᵃ β ρᵇ : Level} where
   private
@@ -130,7 +130,7 @@ module _ {α ρᵃ ℓ ι : Level} where
   is-variety 𝒱 = V′ ℓ ι 𝒱 ⊆ 𝒱
 
   variety : Type (ov {𝑆 = 𝑆} (α ⊔ ρᵃ ⊔ ov {𝑆 = 𝑆} ℓ ⊔ ι))
-  variety = Σ[ 𝒱 ∈ Pred (Algebra {𝑆 = 𝑆} α ρᵃ) (α ⊔ ρᵃ ⊔ ov {𝑆 = 𝑆} ℓ) ] is-variety 𝒱
+  variety {𝑆 = 𝑆} = Σ[ 𝒱 ∈ Pred (Algebra {𝑆 = 𝑆} α ρᵃ) (α ⊔ ρᵃ ⊔ ov {𝑆 = 𝑆} ℓ) ] is-variety 𝒱
 ```
 
 #### Closure properties of S
@@ -139,7 +139,7 @@ module _ {α ρᵃ ℓ ι : Level} where
 omit the proof, but we will make use of monotonicity and idempotence of `S`.
 
 ```agda
-module _ {α ρᵃ : Level} where
+module _ {𝑆 : Signature 𝓞 𝓥}{α ρᵃ : Level} where
 
   private a = α ⊔ ρᵃ
 
