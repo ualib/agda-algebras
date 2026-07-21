@@ -63,6 +63,7 @@ module FLRP.LayerBridge where
 
 -- Imports from Agda and the Agda Standard Library -----------------------------
 open import Data.Product          using ( _,_ ; proj₁ ; proj₂ )
+open import Function              using ( _∘_ )
 open import Level                 using ( Level ; 0ℓ ; _⊔_ )
 open import Relation.Binary       using ( Setoid )
 
@@ -119,12 +120,11 @@ containment of the representatives, because each representative is `≑`{.AgdaFu
 its source, so the two `≑`-witnesses bracket the given containment.
 
 ```agda
-  -- wit is monotone for the containment order.  Inlined as a direct ⇒-composition
-  -- (applied to the underlying related pair p): the two ≑-witnesses of wit≑ bracket
-  -- the given containment.  A named ⊆-trans cannot be used here — its implicit
-  -- congruence arguments are not inferable through the non-injective `_⊆_`.
+  -- wit is monotone for the containment order: the two ≑-witnesses of wit≑ bracket
+  -- the given containment.  Composed with `_∘_` rather than a named ⊆-trans, whose
+  -- implicit congruence arguments are not inferable through the non-injective `_⊆_`.
   wit-mono : {θ φ : Con 𝑨 ℓw} → θ ⊆ φ → wit θ ⊆ᵈ wit φ
-  wit-mono {θ}{φ} θ⊆φ p = proj₁ (wit≑ φ) (θ⊆φ (proj₂ (wit≑ θ) p))
+  wit-mono {θ}{φ} θ⊆φ = wit≑ φ .proj₁ ∘ θ⊆φ ∘ wit≑ θ .proj₂
 ```
 
 The order isomorphism: `to`{.AgdaFunction} is `wit`{.AgdaFunction} (the classical step),
@@ -141,8 +141,8 @@ just the `≑`-witness `wit≑`{.AgdaFunction}, read in the appropriate directio
     ; from       = proj₁
     ; to-mono    = λ {θ}{φ} → wit-mono {θ}{φ}
     ; from-mono  = λ p → p
-    ; to∘from    = λ d → proj₂ (wit≑ (proj₁ d)) , proj₁ (wit≑ (proj₁ d))
-    ; from∘to    = λ φ → proj₂ (wit≑ φ) , proj₁ (wit≑ φ)
+    ; to∘from    = λ d → wit≑ (d .proj₁) .proj₂ , wit≑ (d .proj₁) .proj₁
+    ; from∘to    = λ φ → wit≑ φ .proj₂ , wit≑ φ .proj₁
     }
 ```
 
@@ -172,29 +172,27 @@ trip of `P`{.AgdaBound} (through `to-cong`{.AgdaFunction}) with one of `isoᵈ`{
 ```agda
   ConIsoᵈ→ConIso : ConIsoᵈ 𝑨 𝑳 → ConIso 𝑨 𝑳
   ConIsoᵈ→ConIso isoᵈ = record
-    { to         = λ θ → D.to (P.to θ)
-    ; from       = λ u → P.from (D.from u)
-    ; to-mono    = λ {θ}{φ} θ⊆φ → D.to-mono {P.to θ} {P.to φ} (P.to-mono {θ} {φ} θ⊆φ)
-    ; from-mono  = λ {u}{v} u≤v → P.from-mono {D.from u} {D.from v} (D.from-mono {u} {v} u≤v)
+    { to         = D.to ∘ P.to
+    ; from       = P.from ∘ D.from
+    ; to-mono    = λ {θ}{φ} → D.to-mono ∘ P.to-mono {θ} {φ}
+    ; from-mono  = λ {u}{v} → P.from-mono {D.from u} {D.from v} ∘ D.from-mono {u} {v}
     ; to∘from    = tf
     ; from∘to    = ft
     }
     where
     module D = OrderIso isoᵈ
-    -- isoᵈ's forward map respects ≑ᵈ, since the meet order is antisymmetric.
-    -- (Endpoint implicits of the monotone maps are forwarded explicitly: they are
-    -- not inferable through the non-injective containment relations.)
+    -- isoᵈ's forward map respects ≑ᵈ, since the meet order is antisymmetric.  (The
+    -- monotone maps' endpoint implicits are forwarded only where a composition or the
+    -- goal type does not already pin them — the containment relations are non-injective.)
     to-cong : {d e : DecCon 𝑨 0ℓ} → d ≑ᵈ e → D.to d ≈ D.to e
-    to-cong {d}{e} deq = ≤-antisym (D.to-mono {d} {e} (proj₁ deq)) (D.to-mono {e} {d} (proj₂ deq))
-    -- Con → DecCon → Con → 𝑳 collapses to 𝑳 via a P round trip then an isoᵈ one.
+    to-cong {d}{e} deq = ≤-antisym (D.to-mono {d} {e} (deq .proj₁)) (D.to-mono {e} {d} (deq .proj₂))
+    -- Con → DecCon → Con → 𝑳 collapses to 𝑳 via a P round trip (through to-cong) then an isoᵈ one.
     tf : ∀ u → D.to (P.to (P.from (D.from u))) ≈ u
     tf u = ≈trans (to-cong {P.to (P.from (D.from u))} {D.from u} (P.to∘from (D.from u))) (D.to∘from u)
-    -- 𝑳 → DecCon → Con → DecCon collapses via an isoᵈ round trip then a P one.
-    -- The ≑ round trip is assembled directly (≑-trans's congruence implicits are
-    -- likewise uninferable), composing the two ⇒-directions on a related pair p.
+    -- 𝑳 → DecCon → Con → DecCon: the ≑ round trip, composed on each ⇒-direction.
     ft : ∀ φ → P.from (D.from (D.to (P.to φ))) ≑ φ
-    ft φ = (λ p → proj₁ (P.from∘to φ) (proj₁ (D.from∘to (P.to φ)) p))
-         , (λ p → proj₂ (D.from∘to (P.to φ)) (proj₂ (P.from∘to φ) p))
+    ft φ = P.from∘to φ .proj₁ ∘ D.from∘to (P.to φ) .proj₁
+         , D.from∘to (P.to φ) .proj₂ ∘ P.from∘to φ .proj₂
 ```
 
 **Layer S to Layer D**.  Dually, given a semantic-layer isomorphism
@@ -206,10 +204,10 @@ trip of `P`{.AgdaBound} (through `to-cong`{.AgdaFunction}) with one of `isoᵈ`{
 ```agda
   ConIso→ConIsoᵈ : ConIso 𝑨 𝑳 → ConIsoᵈ 𝑨 𝑳
   ConIso→ConIsoᵈ iso = record
-    { to         = λ d → C.to (P.from d)
-    ; from       = λ u → P.to (C.from u)
-    ; to-mono    = λ {d}{e} d⊆ᵈe → C.to-mono {P.from d} {P.from e} (P.from-mono {d} {e} d⊆ᵈe)
-    ; from-mono  = λ {u}{v} u≤v → P.to-mono {C.from u} {C.from v} (C.from-mono {u} {v} u≤v)
+    { to         = C.to ∘ P.from
+    ; from       = P.to ∘ C.from
+    ; to-mono    = λ {d}{e} → C.to-mono ∘ P.from-mono {d} {e}
+    ; from-mono  = λ {u}{v} → P.to-mono {C.from u} {C.from v} ∘ C.from-mono {u} {v}
     ; to∘from    = tf
     ; from∘to    = ft
     }
@@ -217,16 +215,17 @@ trip of `P`{.AgdaBound} (through `to-cong`{.AgdaFunction}) with one of `isoᵈ`{
     module C = OrderIso iso
     -- iso's forward map respects ≑, by antisymmetry of the meet order.
     to-cong : {θ φ : Con 𝑨 0ℓ} → θ ≑ φ → C.to θ ≈ C.to φ
-    to-cong {θ}{φ} eq = ≤-antisym (C.to-mono {θ} {φ} (proj₁ eq)) (C.to-mono {φ} {θ} (proj₂ eq))
+    to-cong {θ}{φ} eq = ≤-antisym (C.to-mono {θ} {φ} (eq .proj₁)) (C.to-mono {φ} {θ} (eq .proj₂))
     -- wit respects ≑ (needed to push an iso round trip through the ≑ᵈ side); it is
-    -- P.to-mono in both directions, endpoints forwarded explicitly.
+    -- P.to-mono in both directions.
     to-congᵈ : {θ φ : Con 𝑨 0ℓ} → θ ≑ φ → P.to θ ≑ᵈ P.to φ
-    to-congᵈ {θ}{φ} eq = P.to-mono {θ} {φ} (proj₁ eq) , P.to-mono {φ} {θ} (proj₂ eq)
+    to-congᵈ {θ}{φ} eq = P.to-mono {θ} {φ} (eq .proj₁) , P.to-mono {φ} {θ} (eq .proj₂)
     tf : ∀ u → C.to (P.from (P.to (C.from u))) ≈ u
     tf u = ≈trans (to-cong {P.from (P.to (C.from u))} {C.from u} (P.from∘to (C.from u))) (C.to∘from u)
+    -- The ≑ᵈ round trip, composed on each ⇒-direction; `cd` names the ≑ᵈ from to-congᵈ.
     ft : ∀ d → P.to (C.from (C.to (P.from d))) ≑ᵈ d
-    ft d = (λ p → proj₁ (P.to∘from d) (proj₁ (to-congᵈ {C.from (C.to (P.from d))} {P.from d} (C.from∘to (P.from d))) p))
-         , (λ p → proj₂ (to-congᵈ {C.from (C.to (P.from d))} {P.from d} (C.from∘to (P.from d))) (proj₂ (P.to∘from d) p))
+    ft d = P.to∘from d .proj₁ ∘ cd .proj₁ , cd .proj₂ ∘ P.to∘from d .proj₂
+      where cd = to-congᵈ {C.from (C.to (P.from d))} {P.from d} (C.from∘to (P.from d))
 ```
 
 #### The representability equivalence

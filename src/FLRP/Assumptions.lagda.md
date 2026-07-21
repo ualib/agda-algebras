@@ -80,7 +80,7 @@ open import Setoid.Algebras.Basic                 using  ( Algebra )
 open import Setoid.Algebras.Finite                using  ( FiniteAlgebra )
 open import Setoid.Signatures.Finite              using  ( FiniteSignature )
 open import Setoid.Congruences.Basic              using  ( Con )
-open import Setoid.Congruences.Lattice            using  ( _≑_ ; ≑-trans )
+open import Setoid.Congruences.Lattice            using  ( _≑_ )
 open import Setoid.Congruences.Finite.Basic       using  ( DecCon ; FiniteCongruences )
 open import Setoid.Congruences.Finite.Decidable   using  ( FiniteCongruencesᵈ
                                                          ; FiniteAlgebra→FiniteCongruencesᵈ )

@@ -45,7 +45,9 @@ Two standing warnings apply to everything under this namespace.
    `Con (𝒢 ↷ 𝒢/H) ≅ [H, 𝒢]` between the *semantic* congruence lattice of the
    transitive G-set of cosets and the respecting upper interval in the subgroup
    lattice, with the representability corollary.  The Layer D (`DecCon`) restatement
-   (required by issue #454's updated criteria) lands with the WP-7 decidable layer.
+   required by issue #454's updated criteria is now provided here as well
+   (`bridgeᵈ` / `interval-DecCon-representable`), by composing with the cross-layer
+   isomorphism of [FLRP.LayerBridge][].
 +  [FLRP.Representable][] — the Layer-D reformulation of the problem:
    decidable representability `Representableᵈ`, the statement
    `FLRP-Statementᵈ`, and the constructive two-element-chain representation
