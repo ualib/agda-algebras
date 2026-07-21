@@ -10,48 +10,52 @@ author: "the agda-algebras development team"
 
 This is the [FLRP.Bridge][] module of the [Agda Universal Algebra Library][].
 
-For a group `𝒢`{.AgdaBound} and a subgroup `H`{.AgdaBound}, the congruence lattice of
-the transitive coset G-set `𝒢 ↷ 𝒢/H` is order-isomorphic to the interval `[H , 𝒢]`
-in the subgroup lattice `Sub(𝒢)`.  This module formalizes the **easy (constructive)
-direction** of the Pálfy–Pudlák correspondence — work package WP-3 of the FLRP
-research program (see `docs/notes/flrp-research-roadmap.md` § 7).  Classical
-references: McKenzie–McNulty–Taylor Lemma 4.20, Dixon–Mortimer Theorem 1.5A, and the
-introduction of the vendored note `docs/papers/flrp/ieprops/IEProps-1205.1927v4.tex`.
+For a group `G`{.AgdaBound} and a subgroup `H`{.AgdaBound}, the congruence lattice of
+the transitive coset G-set `G ↷ G/H` is order-isomorphic to the interval `[H , G]`
+in the subgroup lattice `Sub G`.
+
+This module formalizes the **easy** (constructive) **direction** of the Pálfy–Pudlák
+correspondence.[^1]
 
 The correspondence has two mutually inverse, order-preserving maps.
 
 +  **`θ ↦ K_θ`** (`to`{.AgdaFunction}).  A congruence `θ`{.AgdaBound} of the coset
    algebra — a `G`-invariant equivalence on cosets — maps to the subgroup
-   `K_θ = { g ∈ 𝒢 : H·ε ∼_θ H·g }`, the `θ`-class of the base coset viewed as a
+   `K_θ = { g ∈ G : H·ε ∼_θ H·g }`, the `θ`-class of the base coset viewed as a
    predicate on the carrier.  We prove `K_θ`{.AgdaFunction} is an equality-respecting
    subgroup containing `H`{.AgdaBound}, i.e. an element of the respecting interval
-   `[H , 𝒢]`.
+   `[H , G]`.
+
 +  **`K ↦ θ_K`** (`from`{.AgdaFunction}).  A subgroup `K`{.AgdaBound} with
-   `H ≤ K ≤ 𝒢` maps to the relation `H·x ∼ H·y ⟺ x ⁻¹ ∙ y ∈ K` on cosets — which is
-   exactly the coset relation of `K`{.AgdaBound} from
-   [Classical.Structures.Group.Cosets][].  We prove it is a congruence of the coset
-   algebra (an equivalence, reflexive over `∼_H`, compatible with every unary
-   translate).
+   `H ≤ K ≤ G` maps to the relation `θ_K` on cosets defined by
+   `H·x θ_K H·y ⟺ x ⁻¹ ∙ y ∈ K` — which is exactly the coset relation of
+   `K`{.AgdaBound} from [Classical.Structures.Group.Cosets][].  We prove it is a
+   congruence of the coset algebra (an equivalence, reflexive over `∼_H`, compatible
+   with every unary translate).
 
 The two maps are mutually inverse and monotone, giving the order isomorphism
 `bridge`{.AgdaFunction}.
 
-**On the interval side we use the respecting `UpperInterval`{.AgdaModule} of
-[FLRP.Enforceable][], not the bare `SubInterval`{.AgdaModule}.**  This honors the
-WP-4 finding: the round trip `to (from M) ≈ M`{.AgdaFunction} moves membership
-across the setoid equality `ε ⁻¹ ∙ g ≈ g`, which is sound only because interval
-elements carry a `Respects`{.AgdaFunction} proof.  Over a redundant presentation the
-bare interval can be strictly larger than the respecting one, so the isomorphism is
-*false* at the bare level (see the counterexample in [FLRP.Enforceable][]).
+*On the interval side we use the respecting `UpperInterval`{.AgdaModule} of
+[FLRP.Enforceable][], not the bare `SubInterval`{.AgdaModule}.*
 
-The core isomorphism `bridge`{.AgdaFunction} is the **Layer S** formulation: it relates
+This honors the WP-4 finding: the round trip `to (from M) ≈ M` moves
+membership across the setoid equality `ε ⁻¹ ∙ g ≈ g`, which is sound only because
+interval elements carry a `Respects`{.AgdaFunction} proof.
+
+Over a redundant presentation the bare interval can be strictly larger than the
+respecting one, so the isomorphism is *false* at the bare level (see the
+counterexample in [FLRP.Enforceable][]).
+
+The core isomorphism `bridge`{.AgdaFunction} is the *Layer S* formulation: it relates
 the *semantic* congruence lattice `Con`{.AgdaFunction} to the interval, proved
-constructively with no classical or deferred hypotheses.  The correspondence itself is
-layer-agnostic (ADR-008), so the **Layer D** restatement called for by the updated
-acceptance criteria of issue #454 — the same isomorphism with the decidable-congruence
-poset `DecCon`{.AgdaFunction} in place of `Con`{.AgdaFunction} — follows by composing
-`bridge`{.AgdaFunction} with the cross-layer poset isomorphism `Con 𝑨 ≅ DecCon 𝑨` of
-[FLRP.LayerBridge][].  That restatement is now provided at the end of this module
+constructively with no classical or deferred hypotheses.
+
+The correspondence itself is layer-agnostic, so the *Layer D* restatement follows by
+composing `bridge`{.AgdaFunction} with the cross-layer poset isomorphism `Con 𝑨 ≅
+DecCon 𝑨` of [FLRP.LayerBridge][].[^2]
+
+ That restatement is now provided at the end of this module
 (`bridgeᵈ`{.AgdaFunction}, `interval-DecCon-representable`{.AgdaFunction}), taking the
 coset algebra's congruence-completeness bridge (`CongruenceCompleteness`{.AgdaFunction}
 of [FLRP.Assumptions][]) and its carrier-finiteness witness as explicit hypotheses.
@@ -67,6 +71,7 @@ open import Agda.Primitive using () renaming ( Set to Type )
 -- Imports from the Agda Standard Library ---------------------------------------
 open import Data.Fin.Patterns             using ( 0F )
 open import Data.Product                  using ( _,_ ; _×_ ; Σ-syntax ; proj₁ ; proj₂ )
+open import Function                      using ( _∘_ )
 open import Level                         using ( Level ; 0ℓ ) renaming ( suc to lsuc )
 open import Relation.Binary               using ( Setoid ; IsEquivalence )
                                           renaming ( Rel to BinaryRel )
@@ -80,6 +85,7 @@ open import Classical.Bundles.Group               using  ( ⟨_⟩ᵍᵖ )
 open import Classical.Signatures.Unary            using  ( Sig-Unary )
 open import Classical.Structures.Group.Basic      using  ( Group ; module Group-Op )
 open import Classical.Structures.Group.Subgroups  using  ( IsSubgroup ; mkIsSubgroup )
+open import Classical.Structures.Group.SubgroupLattice using (module GroupSublattice)
 open import Classical.Structures.Group.Cosets     using  ( module Coset )
 open import Classical.Structures.Group.GSet       using  ( module CosetAction )
 open import FLRP.Enforceable                      using  ( module UpperInterval )
@@ -94,7 +100,7 @@ open import Setoid.Congruences.Lattice            using ( _≑_ )
 open import Setoid.Congruences.Finite.Basic       using ( DecCon )
 open import FLRP.Representable                     using ( _⊆ᵈ_ ; _≑ᵈ_ )
 open import FLRP.Assumptions                       using ( CongruenceCompleteness )
-open import FLRP.LayerBridge                       using ( conDecIso )
+open import FLRP.LayerBridge                       using ( conDecIso ; wit )
 ```
 -->
 
@@ -111,9 +117,10 @@ module Bridge (𝒢    : Group 0ℓ 0ℓ)
               (H-sg : IsSubgroup 𝒢 H)
   where
 
-  private
-    𝑮 = proj₁ 𝒢
-    G = 𝕌[ 𝑮 ]
+  𝑮 : Algebra 0ℓ 0ℓ
+  𝑮 = proj₁ 𝒢
+  G : Type 0ℓ
+  G = 𝕌[ 𝑮 ]
 
   open Setoid 𝔻[ 𝑮 ]  using ( _≈_ )
                       renaming ( refl to ≈refl ; sym to ≈sym ; trans to ≈trans )
@@ -128,31 +135,32 @@ module Bridge (𝒢    : Group 0ℓ 0ℓ)
 #### Elementary facts about a congruence of the coset algebra
 
 The coset algebra's setoid equality is the coset relation `_∼_`{.AgdaFunction} of
-`H`{.AgdaBound} (that is `𝔻[ cosetAlgebra ]`'s `_≈_`{.AgdaFunction}), so a congruence
-`θ`{.AgdaBound} is reflexive over `_∼_`{.AgdaFunction}, and — being an equivalence
-compatible with every operation symbol `g`{.AgdaBound} — it is symmetric, transitive,
-and invariant under left translation `x ↦ g ∙ x`{.AgdaFunction} (the action).  These
-four facts are the only structure of `θ`{.AgdaBound} the correspondence consumes.
+`H`{.AgdaBound} (that is `_≈_`{.AgdaFunction} of `𝔻[ cosetAlgebra ]`), so a
+congruence `θ`{.AgdaBound} is reflexive over `_∼_`{.AgdaFunction}, and — being an
+equivalence compatible with every operation symbol `g`{.AgdaBound} — it is symmetric,
+transitive, and invariant under left translation `x ↦ g ∙ x`{.AgdaFunction} (the
+action).  These four facts are the only structure of `θ`{.AgdaBound} the
+correspondence consumes.
 
 ```agda
-  -- A congruence relates ∼-equal (coset-equal) elements: reflexivity over ∼_H.
-  θ-refl : (θ : Con cosetAlgebra 0ℓ) {a b : G} → a ∼ b → proj₁ θ a b
-  θ-refl θ = reflexive (proj₂ θ)
+  module _ ((_θ_ , θcon) : Con cosetAlgebra 0ℓ) where
 
-  -- Symmetry of the congruence.
-  θ-sym : (θ : Con cosetAlgebra 0ℓ) {a b : G} → proj₁ θ a b → proj₁ θ b a
-  θ-sym θ = IsEquivalence.sym (is-equivalence (proj₂ θ))
+    -- A congruence relates ∼-equal (coset-equal) elements: reflexivity over ∼_H.
+    θ-refl : {a b : G} → a ∼ b → a θ b
+    θ-refl = reflexive θcon
 
-  -- Transitivity of the congruence.
-  θ-trans : (θ : Con cosetAlgebra 0ℓ) {a b c : G}
-    → proj₁ θ a b → proj₁ θ b c → proj₁ θ a c
-  θ-trans θ = IsEquivalence.trans (is-equivalence (proj₂ θ))
+    -- Symmetry of the congruence.
+    θ-sym : {a b : G} → a θ b → b θ a
+    θ-sym = IsEquivalence.sym (is-equivalence θcon)
 
-  -- G-invariance: the congruence is preserved by left translation (the action of g).
-  -- This is compatibility of θ with the unary operation symbol g of the coset algebra.
-  θ-transl : (θ : Con cosetAlgebra 0ℓ) (g : G) {a b : G}
-    → proj₁ θ a b → proj₁ θ (g ∙ a) (g ∙ b)
-  θ-transl θ g {a} {b} p = is-compatible (proj₂ θ) g {λ _ → a} {λ _ → b} (λ _ → p)
+    -- Transitivity of the congruence.
+    θ-trans : {a b c : G} → a θ b → b θ c → a θ c
+    θ-trans = IsEquivalence.trans (is-equivalence θcon)
+
+    -- G-invariance: the congruence is preserved by left translation (the action of g).
+    -- This is compatibility of θ with the unary operation symbol g of the coset algebra.
+    θ-transl : (g : G) {a b : G} → a θ b → (g ∙ a) θ (g ∙ b)
+    θ-transl g {a} {b} p = is-compatible θcon g {λ _ → a} {λ _ → b} (λ _ → p)
 
   -- A single group-arithmetic fact used for the interval-side round trip.
   ε⁻¹∙ : (a : G) → ε ⁻¹ ∙ a ≈ a
@@ -163,12 +171,12 @@ four facts are the only structure of `θ`{.AgdaBound} the correspondence consume
 
 `K_θ`{.AgdaFunction} is the `θ`-class of the base coset, read as a predicate on the
 group carrier: `g ∈ K_θ` exactly when the identity coset `H·ε` is `θ`-related to the
-coset `H·g` (in the setoid presentation, `proj₁ θ ε g`).
+coset `H·g` (in the setoid presentation, `ε θ g`).
 
 ```agda
   -- The forward map on predicates: K_θ g  =  H·ε ∼_θ H·g.
   Kθ : (θ : Con cosetAlgebra 0ℓ) → Pred G 0ℓ
-  Kθ θ g = proj₁ θ ε g
+  Kθ (_θ_ , _) g = ε θ g
 ```
 
 `K_θ`{.AgdaFunction} is a subgroup.  Each closure property is one short congruence
@@ -182,23 +190,22 @@ transitivity against a `∼`-step.
   private
     -- ε ∈ K_θ (the identity coset is θ-related to itself).
     Kθ-ε : (θ : Con cosetAlgebra 0ℓ) → ε ∈ Kθ θ
-    Kθ-ε θ = IsEquivalence.refl (is-equivalence (proj₂ θ))
+    Kθ-ε (_ , θcon) = IsEquivalence.refl (is-equivalence θcon)
 
     -- K_θ is closed under the group multiplication.
-    Kθ-∙ : (θ : Con cosetAlgebra 0ℓ) {x y : G}
-      → x ∈ Kθ θ → y ∈ Kθ θ → (x ∙ y) ∈ Kθ θ
+    Kθ-∙ : (θ : Con cosetAlgebra 0ℓ) {x y : G} → x ∈ Kθ θ → y ∈ Kθ θ → x ∙ y ∈ Kθ θ
     Kθ-∙ θ {x} {y} εx εy =
       θ-trans θ εx (θ-trans θ (θ-refl θ (≈⇒∼ (≈sym (idʳ-law x)))) (θ-transl θ x εy))
 
     -- K_θ is closed under inverses.
-    Kθ-⁻¹ : (θ : Con cosetAlgebra 0ℓ) {x : G} → x ∈ Kθ θ → (x ⁻¹) ∈ Kθ θ
+    Kθ-⁻¹ : (θ : Con cosetAlgebra 0ℓ) {x : G} → x ∈ Kθ θ → x ⁻¹ ∈ Kθ θ
     Kθ-⁻¹ θ {x} εx = θ-sym θ
       (θ-trans θ (θ-refl θ (≈⇒∼ (≈sym (idʳ-law (x ⁻¹)))))
                  (θ-trans θ (θ-transl θ (x ⁻¹) εx) (θ-refl θ (≈⇒∼ (invˡ-law x)))))
 
     -- K_θ respects the setoid equality of the group.
     Kθ-resp : (θ : Con cosetAlgebra 0ℓ) → Kθ θ Respects _≈_
-    Kθ-resp θ {x} {y} x≈y εx = θ-trans θ εx (θ-refl θ (≈⇒∼ x≈y))
+    Kθ-resp θ x≈y εx = θ-trans θ εx (θ-refl θ (≈⇒∼ x≈y))
 
   -- Well-definedness of the forward map (part 1): K_θ is a subgroup.
   Kθ-isSubgroup : (θ : Con cosetAlgebra 0ℓ) → IsSubgroup 𝒢 (Kθ θ)
@@ -225,7 +232,7 @@ translation lemmas come for free.
 ```agda
   -- The backward map's relation: the coset relation of K = pred M.
   θK-rel : (M : Interval≈) → BinaryRel G 0ℓ
-  θK-rel M = Coset._∼_ 𝒢 (pred M) (element-isSubgroup M)
+  θK-rel M = Coset._∼_ 𝒢 (set M) (element-isSubgroup M)
 ```
 
 `θ_K`{.AgdaFunction} is a congruence of the coset algebra of `H`{.AgdaBound}.
@@ -237,23 +244,24 @@ translate) are the corresponding `Coset`{.AgdaModule} lemmas at `K`{.AgdaBound}.
 
 ```agda
   -- Well-definedness of the backward map: θ_K is a congruence of the coset algebra.
-  θK-isCongruence : (M : Interval≈) → IsCongruence cosetAlgebra (θK-rel M)
-  θK-isCongruence M = mkcon reflx equivx compatx
+  θK-isCongruence : (𝑴 : Interval≈) → IsCongruence cosetAlgebra (θK-rel 𝑴)
+  θK-isCongruence 𝑴@(((M , _) , H≤M , _) , _) = mkcon reflx equivx compatx
     where
-    K   = pred M
-    Ksg = element-isSubgroup M
+
+    Ksg : IsSubgroup 𝒢 M
+    Ksg = element-isSubgroup 𝑴
 
     -- Reflexivity over ∼_H: ∼_H ⊆ ∼_K pointwise, because H ⊆ K (above M).
-    reflx : {a b : G} → a ∼ b → θK-rel M a b
-    reflx p = above M p
+    reflx : {a b : G} → a ∼ b → θK-rel 𝑴 a b
+    reflx = H≤M
 
     -- θ_K is an equivalence (the Coset equivalence at K).
-    equivx : IsEquivalence (θK-rel M)
-    equivx = Coset.∼-isEquivalence 𝒢 K Ksg
+    equivx : IsEquivalence (θK-rel 𝑴)
+    equivx = Coset.∼-isEquivalence 𝒢 M Ksg
 
     -- θ_K is compatible with every unary translate (left congruence at K).
-    compatx : cosetAlgebra ∣≈ θK-rel M
-    compatx g h = Coset.∼-congˡ 𝒢 K Ksg g (h 0F)
+    compatx : cosetAlgebra ∣≈ θK-rel 𝑴
+    compatx g h = Coset.∼-congˡ 𝒢 M Ksg g (h 0F)
 
   -- The backward map: an interval element goes to the coset congruence θ_K.
   from : Interval≈ → Con cosetAlgebra 0ℓ
@@ -313,12 +321,12 @@ over the bare `SubInterval`{.AgdaModule}.
   to∘from M = fwd , bwd
     where
     -- K_{θ_K} ⊆ K:  ε ⁻¹ ∙ g ∈ K  and  ε ⁻¹ ∙ g ≈ g  give  g ∈ K.
-    fwd : Kθ (from M) ⊆ pred M
-    fwd {g} p = pred-respects M (ε⁻¹∙ g) p
+    fwd : Kθ (from M) ⊆ set M
+    fwd {g} p = set-respects M (ε⁻¹∙ g) p
 
     -- K ⊆ K_{θ_K}:  g ∈ K  and  g ≈ ε ⁻¹ ∙ g  give  ε ⁻¹ ∙ g ∈ K.
-    bwd : pred M ⊆ Kθ (from M)
-    bwd {g} p = pred-respects M (≈sym (ε⁻¹∙ g)) p
+    bwd : set M ⊆ Kθ (from M)
+    bwd {g} p = set-respects M (≈sym (ε⁻¹∙ g)) p
 ```
 
 #### The order isomorphism
@@ -416,37 +424,47 @@ of [FLRP.Enforceable][].
   -- containment relations (the discipline of Setoid.Congruences.Lattice).
   bridgeᵈ : CongruenceCompleteness cosetAlgebra → RepIsoᵈ cosetAlgebra
   bridgeᵈ cc = record
-    { to         = λ M → CD.to (BI.to M)
-    ; from       = λ d → BI.from (CD.from d)
-    ; to-mono    = λ {M}{N} M≤N →
-        CD.to-mono {BI.to M} {BI.to N} (BI.to-mono {M} {N} M≤N)
-    ; from-mono  = λ {d}{e} d⊆e →
-        BI.from-mono {CD.from d} {CD.from e} (CD.from-mono {d} {e} d⊆e)
-    ; to∘from    = λ d →
-          (λ p → proj₁ (CD.to∘from d)
-                   (CD.to-mono {BI.to (BI.from (CD.from d))} {CD.from d}
-                               (proj₁ (BI.to∘from (CD.from d))) p))
-        , (λ p → CD.to-mono {CD.from d} {BI.to (BI.from (CD.from d))}
-                            (proj₂ (BI.to∘from (CD.from d))) (proj₂ (CD.to∘from d) p))
-    ; from∘to    = λ M →
-          (λ z → proj₁ (BI.from∘to M)
-                   (BI.from-mono {CD.from (CD.to (BI.to M))} {BI.to M}
-                                 (proj₁ (CD.from∘to (BI.to M))) z))
-        , (λ z → BI.from-mono {BI.to M} {CD.from (CD.to (BI.to M))}
-                             (proj₂ (CD.from∘to (BI.to M))) (proj₂ (BI.from∘to M) z))
+    { to         = to'
+    ; from       = from'
+    ; to-mono    = λ {M}{N} → CD.to-mono ∘ BI.to-mono {M} {N}
+    ; from-mono  = λ {d}{e} → BI.from-mono {CD.from d} {CD.from e} ∘ CD.from-mono {d} {e}
+    ; to∘from    = λ d → to-from-⊑ d , ⊑-from-to d
+    ; from∘to    = λ 𝑴 → from∘to-≤ 𝑴 , ≤-from∘to 𝑴
     }
     where
+    open GroupSublattice 𝒢 0ℓ
     module CD = OrderIso (conDecIso cc)
     module BI = OrderIso bridge⁻¹
+
+    to' : Interval≈ → DecCon cosetAlgebra 0ℓ
+    to' = CD.to ∘ BI.to
+
+    from' : DecCon cosetAlgebra 0ℓ → Interval≈
+    from' = BI.from ∘ CD.from
+
+    to-from-⊑ : ((d , _) : DecCon cosetAlgebra 0ℓ) → wit cc (from (to d)) .proj₁ ⊑ d
+    to-from-⊑ d = CD.to∘from d .proj₁ ∘ CD.to-mono (BI.to∘from (CD.from d) .proj₁)
+
+    ⊑-from-to : ((d , _) : DecCon cosetAlgebra 0ℓ) →  d ⊑ wit cc (from (to d)) .proj₁
+    ⊑-from-to d = CD.to-mono (BI.to∘from (CD.from d) .proj₂) ∘ CD.to∘from d .proj₂
+
+    from∘to-≤ : (𝑴 : Interval≈) → sublat (from' (to' 𝑴)) ≤ sublat 𝑴
+    from∘to-≤ 𝑴 = BI.from∘to 𝑴 .proj₁ ∘
+                    BI.from-mono {CD.from (to' 𝑴)} {BI.to 𝑴} (CD.from∘to (BI.to 𝑴) .proj₁)
+    ≤-from∘to : (𝑴 : Interval≈) → sublat 𝑴 ≤ sublat (from' (to' 𝑴))
+    ≤-from∘to M = BI.from-mono {BI.to M} {CD.from (to' M)}
+                    (CD.from∘to (BI.to M) .proj₂) ∘ BI.from∘to M .proj₂
+
 ```
 
-**Corollary (Layer D, near-closing #454).**  A finite coset algebra whose semantic
-congruences are all `≑`{.AgdaFunction} to decidable ones (the congruence-completeness
-bridge for the coset algebra) realizes the interval `[H , 𝒢]` as its *decidable*
-congruence poset.  This is the `Representableᵈ`{.AgdaRecord}-side target of the two-layer
-discipline: the algebra, its carrier-finiteness witness, and the decidable-layer
-isomorphism are exactly the data `Representableᵈ`{.AgdaRecord} of [FLRP.Representable][]
-consumes (there over a classical `Lattice`{.AgdaRecord} presentation of the interval).
+**Corollary** (Layer D).[^3]  A finite coset algebra whose semantic congruences are
+all `≑`{.AgdaFunction} to decidable ones (the congruence-completeness bridge for the
+coset algebra) realizes the interval `[H , 𝒢]` as its *decidable* congruence poset.
+
+This is the `Representableᵈ`{.AgdaRecord}-side target of the two-layer discipline:
+the algebra, its carrier-finiteness witness, and the decidable-layer isomorphism are
+exactly the data `Representableᵈ`{.AgdaRecord} of [FLRP.Representable][] consumes
+(there over a classical `Lattice`{.AgdaRecord} presentation of the interval).
 
 ```agda
   interval-DecCon-representable :
@@ -455,3 +473,18 @@ consumes (there over a classical `Lattice`{.AgdaRecord} presentation of the inte
     → Σ[ 𝑨 ∈ Algebra {𝑆 = Sig-Unary G} 0ℓ 0ℓ ] ( FiniteAlgebra 𝑨 × RepIsoᵈ 𝑨 )
   interval-DecCon-representable fin cc = cosetAlgebra , fin , bridgeᵈ cc
 ```
+
+---
+
+[^1]: This is the main deliverable of work package WP-3;
+      see [`docs/notes/flrp-research-roadmap.md`](docs/notes/flrp-research-roadmap.md) § 7.
+      Classical references include McKenzie–McNulty–Taylor Lemma 4.20, Dixon–Mortimer
+      Theorem 1.5A, and the introduction of the research note
+      [`docs/papers/flrp/ieprops/IEProps-1205.1927v4.tex`](docs/papers/flrp/ieprops/IEProps-1205.1927v4.tex).
+
+[^2]: The Layer D restatement referenced here is the one called for by the updated
+      acceptance criteria of Issue #454 — the same isomorphism with the
+      decidable-congruence poset `DecCon`{.AgdaFunction} in place of
+      `Con`{.AgdaFunction}.
+
+[^3]: This Corollary nearly closes [Issue #454](https://github.com/ualib/agda-algebras/issues/454).

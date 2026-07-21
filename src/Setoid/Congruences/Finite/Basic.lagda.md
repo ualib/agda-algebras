@@ -118,7 +118,7 @@ record FiniteCongruences {𝑆 : Signature 𝓞 𝓥}(𝑨 : Algebra {𝑆 = �
     -- a finite list of decidable congruences of 𝑨 ...
     cons      : List (DecCon 𝑨 (𝓞 ⊔ 𝓥 ⊔ α ⊔ ρ))
     -- ... exhausting the congruence lattice of 𝑨, up to ≑
-    complete  : ∀ φ → Σ[ d ∈ DecCon 𝑨 _ ] (d ∈ cons) × (φ ≑ proj₁ d)
+    complete  : ∀ φ → Σ[ d ∈ DecCon 𝑨 _ ] d ∈ cons × φ ≑ proj₁ d
 
   witness : ∀ φ → DecCon 𝑨 (𝓞 ⊔ 𝓥 ⊔ α ⊔ ρ)
   witness = proj₁ ∘ complete

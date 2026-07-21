@@ -17,41 +17,43 @@ through exactly one registered classical assumption, the congruence-completeness
 `CongruenceCompleteness`{.AgdaFunction} of [FLRP.Assumptions][].  This module discharges
 that meeting.
 
-Under the bridge as an *explicit hypothesis* — never a postulate — we prove:
+Under the bridge as an *explicit hypothesis* we prove:
 
-+  `conDecIso`{.AgdaFunction}: the semantic congruence poset `(Con 𝑨, ≑, ⊆)` and the
-   decidable congruence poset `(DecCon 𝑨, ≑ᵈ, ⊆ᵈ)` of an algebra are
-   **order-isomorphic**.  The forgetful map `DecCon → Con` (take the underlying
-   congruence, `proj₁`{.AgdaFunction}) is free; its inverse `Con → DecCon` is where the
-   bridge is spent — it sends a semantic congruence to a decidable representative
++  **`conDecIso`{.AgdaFunction}**.  The semantic congruence poset `(Con 𝑨, ≑, ⊆)` and
+   the decidable congruence poset `(DecCon 𝑨, ≑ᵈ, ⊆ᵈ)` of an algebra are
+   **order-isomorphic**.
+
+   The forgetful map `DecCon → Con` (take the underlying congruence,
+   `proj₁`{.AgdaFunction}) is free; its inverse `Con → DecCon` is where the bridge is
+   spent; it sends a semantic congruence to a decidable representative
    `≑`{.AgdaFunction} to it.
 
-+  `ConIsoᵈ→ConIso`{.AgdaFunction} and `ConIso→ConIsoᵈ`{.AgdaFunction}: transporting a
-   lattice order-isomorphism across the layers, by composing with
-   `conDecIso`{.AgdaFunction}.  The only non-formal ingredient is that a map *into* a
-   classical lattice respects the source `≑`{.AgdaFunction} — because the lattice meet
-   order is antisymmetric (`≤-antisym`{.AgdaFunction} of [Classical.Properties.Lattice][]),
-   the same one-line fact the no-go theorem of [FLRP.Problem][] uses.
++  **`ConIsoᵈ→ConIso`{.AgdaFunction}** / **`ConIso→ConIsoᵈ`{.AgdaFunction}**.
+   A lattice order-isomorphism is transported across the layers, by composing with
+   `conDecIso`{.AgdaFunction}.
 
-+  `Representableᵈ→Representable`{.AgdaFunction} and
-   `Representable→Representableᵈ`{.AgdaFunction}: the representability notions of the two
-   layers are equivalent.  `Representable`{.AgdaRecord} and `Representableᵈ`{.AgdaRecord}
-   differ by exactly `ConIso`{.AgdaFunction} versus `ConIsoᵈ`{.AgdaFunction} plus the
+   The only non-formal ingredient is that a map *into* a
+   classical lattice respects the source `≑`{.AgdaFunction}.[^1]
+
++  **`Representableᵈ→Representable`{.AgdaFunction}** / **`Representable→Representableᵈ`{.AgdaFunction}**.
+   The representability notions of the two layers are equivalent.
+
+   `Representable`{.AgdaRecord} and `Representableᵈ`{.AgdaRecord} differ by exactly
+   `ConIso`{.AgdaFunction} versus `ConIsoᵈ`{.AgdaFunction} plus the
    `finsig : FiniteSignature`{.AgdaField} datum, so each direction is an
    `OrderIso`{.AgdaRecord} transport, and the `Representable → Representableᵈ` direction
    additionally consumes the finite-signature witness (which `Representable`{.AgdaRecord}
-   does not carry).  **Both** directions consume the bridge: passing between the layers
-   in either direction requires the poset isomorphism, whose `Con → DecCon` half is the
+   does not carry).
+
+   *Both* directions consume the bridge: passing between the layers in either
+   direction requires the poset isomorphism, whose `Con → DecCon` half is the
    classical step.
 
 The `OrderIso`{.AgdaRecord} composition here is done by hand at each of the two
-transports rather than through a general transitivity combinator: the round trips need
-the middle lattice map to respect `≑`{.AgdaFunction} (antisymmetry), which a fully
-generic `OrderIso`-transitivity cannot supply without extra hypotheses, so the direct
-assembly from small named lemmas is clearer.
-
-The standing FLRP research-track separation warning of [FLRP.Problem][] applies here
-too.
+transports rather than through a general transitivity combinator: the round trips
+need the middle lattice map to respect `≑`{.AgdaFunction} (antisymmetry), which a
+fully generic `OrderIso`-transitivity cannot supply without extra hypotheses, so the
+direct assembly from small named lemmas is clearer.[^2]
 
 <!--
 ```agda
@@ -65,18 +67,19 @@ open import Level                 using ( Level ; 0ℓ ; _⊔_ )
 open import Relation.Binary       using ( Setoid )
 
 -- Imports from the Agda Universal Algebra Library ------------------------------
-open import Overture                             using ( 𝓞 ; 𝓥 ; Signature )
-open import Classical.Small.Structures.Lattice   using ( Lattice )
-open import Classical.Properties.Lattice         using ( module Lattice-Order )
-open import Setoid.Algebras.Basic                using ( Algebra ; 𝔻[_] )
-open import Setoid.Signatures.Finite             using ( FiniteSignature )
-open import Setoid.Congruences.Basic             using ( Con )
-open import Setoid.Congruences.Lattice           using ( _⊆_ ; _≑_ )
-open import Setoid.Congruences.Finite.Basic      using ( DecCon )
-open import FLRP.Problem                          using ( OrderIso ; Representable ; ConIso )
-open import FLRP.Representable                    using ( Representableᵈ ; ConIsoᵈ
+open import Overture                             using  ( 𝓞 ; 𝓥 ; Signature )
+open import Classical.Small.Structures.Lattice   using  ( Lattice )
+open import Classical.Properties.Lattice         using  ( module Lattice-Order )
+open import Setoid.Algebras.Basic                using  ( Algebra ; 𝔻[_] )
+open import Setoid.Signatures.Finite             using  ( FiniteSignature )
+open import Setoid.Congruences.Basic             using  ( Con )
+open import Setoid.Congruences.Lattice           using  ( _⊆_ ; _≑_ )
+open import Setoid.Congruences.Finite.Basic      using  ( DecCon )
+open import FLRP.Problem                         using  ( OrderIso ; Representable
+                                                        ; ConIso )
+open import FLRP.Representable                   using  ( Representableᵈ ; ConIsoᵈ
                                                         ; _⊆ᵈ_ ; _≑ᵈ_ )
-open import FLRP.Assumptions                      using ( CongruenceCompleteness )
+open import FLRP.Assumptions                     using  ( CongruenceCompleteness )
 
 private variable α ρ : Level
 ```
@@ -92,18 +95,23 @@ for each semantic congruence `φ`{.AgdaBound}, a decidable congruence
 is `≑`{.AgdaFunction} to it.
 
 ```agda
-module _ {𝑆 : Signature 𝓞 𝓥}{𝑨 : Algebra {𝑆 = 𝑆} α ρ}(cc : CongruenceCompleteness 𝑨) where
+module _
+  {𝑆  : Signature 𝓞 𝓥}
+  {𝑨  : Algebra {𝑆 = 𝑆} α ρ}
+  (cc : CongruenceCompleteness 𝑨)
+  where
+
   private
     ℓw : Level
     ℓw = 𝓞 ⊔ 𝓥 ⊔ α ⊔ ρ
 
-    -- The decidable representative of a semantic congruence (the bridge's map) ...
-    wit : Con 𝑨 ℓw → DecCon 𝑨 ℓw
-    wit φ = proj₁ (cc φ)
+  -- The decidable representative of a semantic congruence (the bridge's map) ...
+  wit : Con 𝑨 ℓw → DecCon 𝑨 ℓw
+  wit φ = proj₁ (cc φ)
 
-    -- ... and the ≑-witness that it represents φ.
-    wit≑ : (φ : Con 𝑨 ℓw) → φ ≑ proj₁ (wit φ)
-    wit≑ φ = proj₂ (cc φ)
+  -- ... and the ≑-witness that it represents φ.
+  wit≑ : (φ : Con 𝑨 ℓw) → φ ≑ proj₁ (wit φ)
+  wit≑ φ = proj₂ (cc φ)
 ```
 
 `wit`{.AgdaFunction} is monotone: a containment `θ ⊆ φ`{.AgdaFunction} forwards to a
@@ -154,7 +162,7 @@ module _ {𝑆 : Signature 0ℓ 0ℓ}{𝑨 : Algebra {𝑆 = 𝑆} 0ℓ 0ℓ}
   open Lattice-Order 𝑳       using ( _≤_ ; ≤-antisym )
 ```
 
-**Layer D to Layer S.**  Given a decidable-layer isomorphism `isoᵈ : DecCon 𝑨 ≅ 𝑳`,
+**Layer D to Layer S**.  Given a decidable-layer isomorphism `isoᵈ : DecCon 𝑨 ≅ 𝑳`,
 compose `Con → DecCon` (the `to`{.AgdaFunction} of `P`{.AgdaBound}) with it to land a
 semantic-layer isomorphism `Con 𝑨 ≅ 𝑳`.  `to-cong`{.AgdaFunction} is the fact that
 `isoᵈ`{.AgdaBound}'s forward map respects `≑ᵈ`{.AgdaFunction} (both images sit below one
@@ -189,7 +197,7 @@ trip of `P`{.AgdaBound} (through `to-cong`{.AgdaFunction}) with one of `isoᵈ`{
          , (λ p → proj₂ (D.from∘to (P.to φ)) (proj₂ (P.from∘to φ) p))
 ```
 
-**Layer S to Layer D.**  Dually, given a semantic-layer isomorphism
+**Layer S to Layer D**.  Dually, given a semantic-layer isomorphism
 `iso : Con 𝑨 ≅ 𝑳`, compose the forgetful `DecCon → Con` (the `from`{.AgdaFunction} of
 `P`{.AgdaBound}) with it.  Here `to-congᵈ`{.AgdaFunction} — that `wit`{.AgdaFunction}
 (the `to`{.AgdaFunction} of `P`{.AgdaBound}) respects `≑`{.AgdaFunction} — is what the
@@ -256,3 +264,10 @@ module _ {𝑳 : Lattice} where
 ```
 
 --------------------------------------
+
+[^1]: because the lattice meet order is antisymmetric
+      (`≤-antisym`{.AgdaFunction} of [Classical.Properties.Lattice][]
+      — the same one-line fact the no-go theorem of [FLRP.Problem][] uses).
+
+[^2]: The standing FLRP research-track separation warning of [FLRP.Problem][] applies
+      here too.
