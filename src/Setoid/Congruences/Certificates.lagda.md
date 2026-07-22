@@ -20,5 +20,6 @@ in `docs/notes/flrp-wp6-freese-certificates.md`.
 
 module Setoid.Congruences.Certificates where
 
-open import Setoid.Congruences.Certificates.Schema  public
+open import Setoid.Congruences.Certificates.Schema      public
+open import Setoid.Congruences.Certificates.Congruence  public
 ```
