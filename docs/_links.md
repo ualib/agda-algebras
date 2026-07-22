@@ -322,6 +322,11 @@
 
 [FLRP]: /FLRP/
 [FLRP.Problem]: /FLRP/Problem/
+[FLRP.Enforceable]: /FLRP/Enforceable/
+[FLRP.Bridge]: /FLRP/Bridge/
+[FLRP.Representable]: /FLRP/Representable/
+[FLRP.Assumptions]: /FLRP/Assumptions/
+[FLRP.LayerBridge]: /FLRP/LayerBridge/
 
 <!-- ===== Module sources on GitHub ===== -->
 [Overture.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Overture.lagda.md
@@ -638,6 +643,11 @@
 
 [FLRP.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP.lagda.md
 [FLRP/Problem.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/Problem.lagda.md
+[FLRP/Enforceable.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/Enforceable.lagda.md
+[FLRP/Bridge.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/Bridge.lagda.md
+[FLRP/Representable.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/Representable.lagda.md
+[FLRP/Assumptions.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/Assumptions.lagda.md
+[FLRP/LayerBridge.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/LayerBridge.lagda.md
 
 <!-- ===== External links ===== -->
 [A Machine-checked proof of Birkhoff's Variety Theorem in Martin-Löf Type Theory]: https://arxiv.org/abs/2101.10166

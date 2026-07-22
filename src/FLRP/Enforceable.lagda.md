@@ -71,8 +71,9 @@ open import Data.Nat.Base renaming ( _≤_ to _≤ⁿ_ )  using  ( ℕ ; _+_ )
 open import Data.Product                            using  ( _,_ ; _×_ ; Σ-syntax
                                                            ; ∃-syntax ; proj₁ ; proj₂ )
 open import Data.Unit.Base                          using  ( tt )
+open import Function                                using  ( _∘_ )
 open import Level         renaming ( suc to lsuc )  using  ( Level ; 0ℓ ; _⊔_
-                                                           ; Lift ; lift )
+                                                           ; lift )
 open import Relation.Binary                         using  ( Setoid )
 open import Relation.Binary.Definitions             using  ( _Respects_ )
 open import Relation.Binary.PropositionalEquality   using  ( _≡_ )
@@ -90,8 +91,8 @@ open import FLRP.Problem                  using  ( OrderIso ; FiniteLattice ; to
 open import Setoid.Algebras               using  ( 𝔻[_] ; 𝕌[_] ; FiniteAlgebra )
 open import Setoid.Homomorphisms          using  ( _IsHomImageOf_ )
 open import Setoid.Subalgebras            using  ( Subuniverses )
-open import Order.Interval                        using ( module IntervalLattice )
--- open import Setoid.Subalgebras.CompleteLattice using (module Sublattice)
+open import Order.Interval                using  ( module IntervalLattice )
+-- open import Setoid.Subalgebras.CompleteLattice using
 ```
 -->
 
@@ -135,7 +136,7 @@ module UpperInterval
 
   open Setoid 𝔻[ proj₁ 𝒢 ] using ( _≈_ )
   open GroupSublattice 𝒢 0ℓ  using  ( Subᴸ ; 1ˢ ; 1ˢ-maximum ; subgroup→Subᴸ
-                                    ; module SubInterval ; Sub-Lattice )
+                                    ; Sub-Lattice )
 
   -- The bottom of the interval: H as an element of the subuniverse lattice.
   H↑ : Subᴸ
@@ -147,26 +148,29 @@ module UpperInterval
 
   -- An interval element: a bare element whose predicate respects ≈.
   Interval≈ : Type (lsuc 0ℓ)
-  Interval≈ = Σ[ ((M , _) , _) ∈ Interval ] (M Respects _≈_)
+  Interval≈ = Σ[ ((M , M∈Subs) , H≤M , M≤G) ∈ Interval ] (M Respects _≈_)
 
-  -- Accessors: the underlying predicate and its three certificates.
-  pred : Interval≈ → Pred 𝕌[ proj₁ 𝒢 ] 0ℓ
-  pred (((M , _) , _) , _) = M
+  -- Accessors: the underlying predicate and its four certificates.
+  sublat : Interval≈ → Subᴸ
+  sublat (((M , M∈Subs) , H≤M , M≤G) , Mresp≈ ) = (M , M∈Subs)
 
-  pred-isSubuniverse : (M : Interval≈) → pred M ∈ Subuniverses (proj₁ 𝒢)
-  pred-isSubuniverse (((_ , Mp) , _) , _) = Mp
+  set : Interval≈ → Pred 𝕌[ proj₁ 𝒢 ] 0ℓ
+  set = proj₁ ∘ sublat
 
-  pred-respects : (M : Interval≈) → pred M Respects _≈_
-  pred-respects (_ , Mresp) = Mresp
+  set-isSubuniverse : (𝑴 : Interval≈) → set 𝑴 ∈ Subuniverses (proj₁ 𝒢)
+  set-isSubuniverse = proj₂ ∘ sublat
 
-  above : (M : Interval≈) → H ⊆ pred M
-  above ((_ , H⊆ , _) , _) = H⊆
+  set-respects : (𝑴 : Interval≈) → set 𝑴 Respects _≈_
+  set-respects (((M , M∈Subs) , H≤M , M≤G) , Mresp≈ ) = Mresp≈
+
+  above : (𝑴 : Interval≈) → H ⊆ set 𝑴
+  above (((M , M∈Subs) , H≤M , M≤G) , Mresp≈ ) = H≤M
 
   open IsSubgroup
   -- An interval element is a respecting subgroup.
-  element-isSubgroup : (M : Interval≈) → IsSubgroup 𝒢 (pred M)
-  element-isSubgroup M .respects       = pred-respects M
-  element-isSubgroup M .isSubuniverse  = pred-isSubuniverse M
+  element-isSubgroup : (M : Interval≈) → IsSubgroup 𝒢 (set M)
+  element-isSubgroup M .respects       = set-respects M
+  element-isSubgroup M .isSubuniverse  = set-isSubuniverse M
 
   -- Conversely, a respecting subgroup above H is an interval element
   -- (the top bound against the full subuniverse is trivial).
@@ -373,12 +377,12 @@ module Fatten (𝒢 𝒦 : Group 0ℓ 0ℓ) where
     to-fatten : IP.Interval≈ → IG.Interval≈
     to-fatten M = IG.mk S.restrict₁ S.restrict₁-isSubgroup S.restrict₁-⊇H
       where
-      module S = Slice₁ H H-sg (IP.pred M) (IP.pred-isSubuniverse M)
-                        (IP.pred-respects M) (IP.above M)
+      module S = Slice₁ H H-sg (IP.set M) (IP.set-isSubuniverse M)
+                        (IP.set-respects M) (IP.above M)
 
     -- Pullback: an interval element over H fattens to one over H ×ᶠ 𝒦.
     from-fatten : IG.Interval≈ → IP.Interval≈
-    from-fatten A = IP.mk  (IG.pred A ×ᶠ 𝒦)
+    from-fatten A = IP.mk  (IG.set A ×ᶠ 𝒦)
                            (×ᶠ-isSubgroup (IG.element-isSubgroup A))
                            (λ h → IG.above A h)
 
@@ -399,8 +403,8 @@ module Fatten (𝒢 𝒦 : Group 0ℓ 0ℓ) where
     from∘to-fatten : (M : IP.Interval≈) → IP._≈ᵢ_ (from-fatten (to-fatten M)) M
     from∘to-fatten M = (λ z → S.slice-in z) , (λ z → S.slice-out z)
       where
-      module S = Slice₁ H H-sg (IP.pred M) (IP.pred-isSubuniverse M)
-                        (IP.pred-respects M) (IP.above M)
+      module S = Slice₁ H H-sg (IP.set M) (IP.set-isSubuniverse M)
+                        (IP.set-respects M) (IP.above M)
 
     -- The fattening isomorphism  [H ×ᶠ 𝒦 , full] ≅ [H , full].
     -- (In from-mono the inclusion's element p is passed explicitly: the
@@ -435,12 +439,12 @@ module Fatten (𝒢 𝒦 : Group 0ℓ 0ℓ) where
     to-fatten : IP.Interval≈ → IK.Interval≈
     to-fatten M = IK.mk S.restrict₂ S.restrict₂-isSubgroup S.restrict₂-⊇J
       where
-      module S = Slice₂ J J-sg (IP.pred M) (IP.pred-isSubuniverse M)
-                        (IP.pred-respects M) (IP.above M)
+      module S = Slice₂ J J-sg (IP.set M) (IP.set-isSubuniverse M)
+                        (IP.set-respects M) (IP.above M)
 
     -- Pullback along the second projection.
     from-fatten : IK.Interval≈ → IP.Interval≈
-    from-fatten A = IP.mk  (𝒢 ᶠ× IK.pred A)
+    from-fatten A = IP.mk  (𝒢 ᶠ× IK.set A)
                            (ᶠ×-isSubgroup (IK.element-isSubgroup A))
                            (λ j → IK.above A j)
 
@@ -458,8 +462,8 @@ module Fatten (𝒢 𝒦 : Group 0ℓ 0ℓ) where
     from∘to-fatten : (M : IP.Interval≈) → IP._≈ᵢ_ (from-fatten (to-fatten M)) M
     from∘to-fatten M = (λ z → S.slice-in z) , (λ z → S.slice-out z)
       where
-      module S = Slice₂ J J-sg (IP.pred M) (IP.pred-isSubuniverse M)
-                        (IP.pred-respects M) (IP.above M)
+      module S = Slice₂ J J-sg (IP.set M) (IP.set-isSubuniverse M)
+                        (IP.set-respects M) (IP.above M)
 
     -- The mirrored fattening isomorphism  [𝒢 ᶠ× J , full] ≅ [J , full].
     -- (Same explicit-p idiom as in FattenSnd, now factoring through proj₂.)

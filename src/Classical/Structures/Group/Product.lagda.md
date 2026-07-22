@@ -66,23 +66,20 @@ open import Relation.Unary                using ( Pred ; _∈_ ; _⊆_ )
 import Algebra.Properties.Group as GroupProperties
 
 -- Imports from the Agda Universal Algebra Library ------------------------------
-open import Classical.Bundles.Group           using ( ⟨_⟩ᵍᵖ )
-open import Classical.Signatures.Group        using ( Sig-Group ; ∙-Op ; ε-Op ; ⁻¹-Op )
-open import Classical.Structures.Group.Basic  using ( Group ; module Group-Op ; _⊨ᵍᵖ_ )
-open import Classical.Structures.Group.Subgroups
-                                              using ( IsSubgroup ; mkIsSubgroup
-                                                    ; sub-∙-closed ; sub-⁻¹-closed )
-open import Classical.Structures.Interpret    using ( interp-cong )
-open import Classical.Theories.Group          using ( Th-Group )
-open import Overture.Signatures               using ( OperationSymbolsOf ; ArityOf )
-open import Overture.Operations               using ( Op )
-open import Overture.Terms                    using ( Term ; ℊ ; node )
-
-open import Setoid.Algebras.Basic
-                                              using ( Algebra ; 𝕌[_] ; 𝔻[_] ; _^_
-                                                    ; mkAlgebra )
-open import Setoid.Subalgebras.Subuniverses using ( Subuniverses )
-open import Setoid.Terms                      using ( module Environment )
+open import Classical.Bundles.Group               using  ( ⟨_⟩ᵍᵖ )
+open import Classical.Signatures.Group            using  ( Sig-Group ; ∙-Op ; ε-Op ; ⁻¹-Op )
+open import Classical.Structures.Group.Basic      using  ( Group ; module Group-Op ; _⊨ᵍᵖ_ )
+open import Classical.Structures.Group.Subgroups  using  ( IsSubgroup ; mkIsSubgroup
+                                                         ; sub-∙-closed ; sub-⁻¹-closed )
+open import Classical.Structures.Interpret        using  ( interp-cong )
+open import Classical.Theories.Group              using  ( Th-Group )
+open import Overture.Signatures                   using  ( OperationSymbolsOf ; ArityOf )
+open import Overture.Operations                   using  ( Op )
+open import Overture.Terms                        using  ( Term ; ℊ ; node )
+open import Setoid.Algebras.Basic                 using  ( Algebra ; 𝕌[_] ; 𝔻[_] ; _^_
+                                                         ; mkAlgebra )
+open import Setoid.Subalgebras.Subuniverses       using  ( Subuniverses )
+open import Setoid.Terms                          using  ( module Environment )
 
 open Func renaming ( to to _⟨$⟩_ )
 
@@ -149,7 +146,7 @@ for the Cubical port.
     }
 
   open Setoid G×K using ()
-    renaming ( _≈_ to _≈ₓ_ ; refl to reflₓ ; sym to symₓ ; trans to transₓ )
+    renaming ( _≈_ to _≈ₓ_ ; trans to transₓ )
 ```
 
 Each operation symbol acts componentwise: the interpretation of `f` at a tuple of
@@ -223,7 +220,7 @@ indexed tuples lack η under `--cubical-compatible`; each bridge is one
 ```agda
   open Group-Op 𝒢 using ()
     renaming ( _∙_ to _∙₁_ ; ε to ε₁ ; _⁻¹ to _⁻¹₁
-             ; idˡ-law to idˡ-law₁ ; idʳ-law to idʳ-law₁ ; invʳ-law to invʳ-law₁ )
+             ; idʳ-law to idʳ-law₁ ; invʳ-law to invʳ-law₁ )
   open Group-Op 𝒦 using ()
     renaming ( _∙_ to _∙₂_ ; ε to ε₂ ; _⁻¹ to _⁻¹₂
              ; idˡ-law to idˡ-law₂ ; idʳ-law to idʳ-law₂ ; invʳ-law to invʳ-law₂ )

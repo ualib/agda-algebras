@@ -22,20 +22,20 @@ open import Data.Unit.Polymorphic.Base  using ()      renaming ( ⊤ to 𝟙 ; t
 open import Data.Unit.Base              using ( ⊤ ; tt )
 open import Function                    using ()  renaming ( Func to _⟶_ )
 open import Level                       using ( Level ; Lift ; lift ; lower ; _⊔_ )
-open import Relation.Binary             using ( Setoid ; Reflexive ; Sym ; Trans )
+open import Relation.Binary             using ( Setoid )
 
 open import Relation.Binary.PropositionalEquality using (refl)
 
 -- Imports from the Agda Universal Algebra Library -----------------------------------------
-open import Overture                         using  ( OperationSymbolsOf ; ArityOf ; 𝓞 ; 𝓥 ; Signature ; 𝑆 )
+open import Overture                         using  ( OperationSymbolsOf ; ArityOf
+                                                    ; 𝓞 ; 𝓥 ; Signature ; 𝑆 )
 open import Overture.Operations              using  ( Op )
-open import Setoid.Functions                 using  ( eq ; IsInjective
-                                                    ; IsSurjective ; SurjInv
-                                                    ; SurjInvIsInverseʳ )
-open import Setoid.Algebras          using  ( Algebra ; Lift-Alg ; _^_ ; 𝔻[_]
+open import Setoid.Algebras                  using  ( Algebra ; Lift-Alg ; _^_ ; 𝔻[_]
                                                     ; 𝕌[_] ; mkAlgebra ; Lift-Algˡ
                                                     ; Lift-Algʳ ; ⨅ )
 
+open import Setoid.Functions                 using  ( eq ; IsInjective ; IsSurjective
+                                                    ; SurjInv ; SurjInvIsInverseʳ )
 open import Setoid.Homomorphisms.Basic       using  ( hom ; IsHom ; 𝒾𝒹 ; mkIsHom )
 open import Setoid.Homomorphisms.Properties  using  ( ⊙-hom ; ToLiftˡ ; FromLiftˡ
                                                     ; ToFromLiftˡ ; FromToLiftˡ

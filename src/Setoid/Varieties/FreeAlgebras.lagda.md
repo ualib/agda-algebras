@@ -15,9 +15,9 @@ author: "agda-algebras development team"
 module Setoid.Varieties.FreeAlgebras where
 
 -- Imports from Agda and the Agda Standard Library -------------------------------
-open import Agda.Primitive   using ()                  renaming ( Set to Type )
+open import Agda.Primitive   using () renaming ( Set to Type )
 open import Data.Product     using ( Σ-syntax ; _,_ ; proj₁ ; proj₂ )
-open import Function         using ( _∘_ ; id )        renaming ( Func to _⟶_ )
+open import Function         using ( _∘_ ; id ) renaming ( Func to _⟶_ )
 open import Level            using ( Level ; _⊔_)
 open import Relation.Binary  using ( Setoid )
 open import Relation.Unary   using ( Pred ; _∈_ ; _⊆_ )
@@ -27,7 +27,7 @@ open import Relation.Binary.PropositionalEquality as ≡ using (_≡_)
 import Relation.Binary.Reasoning.Setoid as SetoidReasoning
 
 -- Imports from the Agda Universal Algebra Library -------------------------------
-open import Overture                           using  ( 𝓞 ; 𝓥 ; Signature ; 𝑆 )
+open import Overture                           using  ( 𝑆 )
 open import Overture.Terms                     using  ( ℊ )
 open import Setoid.Algebras                    using  ( Algebra ; ov ; Lift-Alg ; 𝔻[_] )
 open import Setoid.Functions                   using  ( eq ; IsSurjective )

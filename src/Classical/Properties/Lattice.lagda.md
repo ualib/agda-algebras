@@ -51,9 +51,8 @@ open import Relation.Nullary.Decidable.Core          using ( Dec ; ¬? ; _×-dec
 import Relation.Binary.Reasoning.Setoid as SetoidReasoning
 
 -- Imports from the Agda Universal Algebra Library --------------------------------
-open import Classical.Signatures.Lattice             using ( Sig-Lattice )
-open import Classical.Structures.Lattice             using ( Lattice ; module Lattice-Op )
-open import Setoid.Algebras.Basic  using ( 𝔻[_] ; 𝕌[_] )
+open import Classical.Structures.Lattice   using ( Lattice ; module Lattice-Op )
+open import Setoid.Algebras.Basic          using ( 𝔻[_] ; 𝕌[_] )
 
 private variable α ρ : Level
 ```

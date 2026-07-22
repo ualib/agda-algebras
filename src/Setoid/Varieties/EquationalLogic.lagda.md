@@ -28,9 +28,9 @@ open import Relation.Binary  using ( Setoid )
 open import Relation.Unary   using ( Pred ; _∈_ )
 
 -- Imports from the Agda Universal Algebra Library -------------------------------
-open import Overture         using ( 𝓞 ; 𝓥 ; Signature ; 𝑆 )
-open import Setoid.Algebras  using ( Algebra ; ov )
+open import Overture         using ( 𝑆 )
 open import Overture.Terms   using ( Term )
+open import Setoid.Algebras  using ( Algebra ; ov )
 open import Setoid.Terms     using ( module Environment )
 
 private variable χ α ρᵃ ℓ ι : Level

@@ -58,28 +58,25 @@ open import Data.Unit.Base       using ( tt )
 open import Level                using ( Level ; 0ℓ ; _⊔_ ; Lift ; lift ; lower )
                                  renaming ( suc to lsuc )
 open import Relation.Binary      using ( Setoid ; IsEquivalence )
-                                 renaming ( Rel to BinaryRel )
-open import Relation.Binary.PropositionalEquality  using ( _≡_ ; refl ; sym ; subst )
+open import Relation.Binary.PropositionalEquality
+                                 using ( _≡_ ; refl ; sym ; subst )
 open import Relation.Nullary     using ( ¬_ ; Dec ; yes ; no )
 
 -- Imports from the Agda Universal Algebra Library ------------------------------
-open import Overture                             using  ( 𝓞 ; 𝓥 ; Signature )
-open import Classical.Small.Structures.Lattice   using  ( Lattice )
 open import Classical.Properties.Lattice         using  ( module Lattice-Order )
+open import Classical.Small.Structures.Lattice   using  ( Lattice )
+open import FLRP.Problem                         using  ( OrderIso ; FiniteLattice
+                                                        ; toLattice ; 𝑆∅ ; chain₂-lattice )
+open import Overture                             using  ( 𝓞 ; 𝓥 ; Signature )
 open import Setoid.Algebras.Basic                using  ( Algebra ; 𝔻[_] ; mkAlgebraₚ )
 open import Setoid.Algebras.Finite               using  ( FiniteAlgebra )
-open import Setoid.Signatures.Finite             using  ( FiniteSignature )
-open import Setoid.Congruences.Basic             using  ( Con ; reflexive ; 𝟘[_]
+open import Setoid.Congruences.Basic             using  ( reflexive ; 𝟘[_]
                                                         ; is-equivalence ; 𝟙[_] )
-open import Setoid.Congruences.Lattice           using  ( _⊆_ ; _≑_ ; ≑-sym
-                                                        ; 𝟘-min ; 𝟙-max )
 open import Setoid.Congruences.Finite.Basic      using  ( DecCon ; ConRel )
 open import Setoid.Congruences.Finite.Decidable  using  ( FiniteCongruencesᵈ
                                                         ; FiniteAlgebra→FiniteCongruencesᵈ )
-open import Setoid.Congruences.ChainJoin         using  ( Finitary )
-open import FLRP.Problem                         using  ( OrderIso ; FiniteLattice
-                                                        ; toLattice ; 𝑆∅ ; chain₂
-                                                        ; chain₂-lattice )
+open import Setoid.Congruences.Lattice           using  ( _⊆_ ; _≑_ ; 𝟘-min ; 𝟙-max )
+open import Setoid.Signatures.Finite             using  ( FiniteSignature )
 
 private variable α ρ ℓ : Level
 ```
@@ -143,14 +140,27 @@ exact input from which [Setoid.Congruences.Finite.Decidable][] builds a complete
 of decidable congruences — and the isomorphism is over `DecCon`{.AgdaFunction} rather
 than semantic `Con`{.AgdaFunction}.
 
+A note on the field superscripts.  The `ᵈ`{.AgdaBound} on `sigᵈ`{.AgdaField},
+`algᵈ`{.AgdaField}, `finiteᵈ`{.AgdaField}, and `finsigᵈ`{.AgdaField} is *namespacing*,
+not a claim of decidability: those fields hold the very same interfaces
+`Representable`{.AgdaRecord} uses (`Signature`{.AgdaRecord}, `Algebra`{.AgdaRecord},
+`FiniteAlgebra`{.AgdaRecord}, `FiniteSignature`{.AgdaRecord}), and `finiteᵈ`{.AgdaField}
+in particular is carrier-finiteness, which is constructive.  Only
+`con-isoᵈ`{.AgdaField} (`: ConIsoᵈ`{.AgdaFunction}) is a genuinely decidable-layer
+datum.  The superscripts are carried on every field so that `Representable`{.AgdaRecord}
+and `Representableᵈ`{.AgdaRecord} can be `open`ed together without their field names
+clashing — which is what keeps the cross-layer transports of [FLRP.LayerBridge][]
+legible — matching the all-superscripted convention of the sibling record
+`FiniteCongruencesᵈ`{.AgdaRecord}.
+
 ```agda
 record Representableᵈ (𝑳 : Lattice) : Type (lsuc 0ℓ) where
   field
-    sig       : Signature 0ℓ 0ℓ
-    alg       : Algebra {𝑆 = sig} 0ℓ 0ℓ
-    finite    : FiniteAlgebra {𝑆 = sig} alg
-    finsig    : FiniteSignature sig
-    con-isoᵈ  : ConIsoᵈ {𝑆 = sig} alg 𝑳
+    sigᵈ      : Signature 0ℓ 0ℓ
+    algᵈ      : Algebra {𝑆 = sigᵈ} 0ℓ 0ℓ
+    finiteᵈ   : FiniteAlgebra {𝑆 = sigᵈ} algᵈ
+    finsigᵈ   : FiniteSignature sigᵈ
+    con-isoᵈ  : ConIsoᵈ {𝑆 = sigᵈ} algᵈ 𝑳
 ```
 
 The Finite Lattice Representation Problem, reformulated at Layer D: every finite
@@ -427,10 +437,10 @@ unattainable at Layer S is thus attained, constructively, at Layer D.
 ```agda
 chain₂-Representableᵈ : Representableᵈ chain₂-lattice
 chain₂-Representableᵈ = record
-  { sig       = 𝑆∅
-  ; alg       = 𝟚
-  ; finite    = 𝟚-FiniteAlgebra
-  ; finsig    = 𝑆∅-FiniteSignature
+  { sigᵈ       = 𝑆∅
+  ; algᵈ       = 𝟚
+  ; finiteᵈ    = 𝟚-FiniteAlgebra
+  ; finsigᵈ    = 𝑆∅-FiniteSignature
   ; con-isoᵈ  = 𝟚-ConIsoᵈ
   }
 ```

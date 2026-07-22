@@ -28,20 +28,19 @@ open import Relation.Binary  using ( Setoid )
 open import Relation.Unary   using ( Pred ; _∈_ ; _⊆_ )
 
 -- -- Imports from the Agda Universal Algebra Library ----------------------------
-open import Overture                           using  ( 𝓞 ; 𝓥 ; Signature ; 𝑆 )
+open import Overture                           using  ( 𝑆 )
 open import Setoid.Algebras                    using  ( Algebra ; ov ; Lift-Alg ; ⨅ )
 open import Setoid.Homomorphisms
 open import Setoid.Relations                   using  ( fkerPred )
 open import Setoid.Subalgebras                 using  ( _≤_ ; mon→≤ )
-open import Setoid.Terms                       using  ( module Environment ; 𝑻
-                                                      ; lift-hom ; free-lift
-                                                      ; free-lift-interp )
+open import Setoid.Terms                       using  ( module Environment ; lift-hom
+                                                      ; 𝑻 ; free-lift ; free-lift-interp )
 open import Setoid.Varieties.Closure           using  ( S ; P ; S-idem ; V ; V′ ; V-≅-lc )
 open import Setoid.Varieties.FreeAlgebras      using  ( module FreeHom
                                                       ; 𝔽-ModTh-epi-lift )
 open import Setoid.Varieties.Preservation      using  ( S-id2 ; PS⊆SP )
-open import Setoid.Varieties.SoundAndComplete  using  ( module FreeAlgebra ; _⊫_ ; ⊫-proof
-                                                      ; _≈̇_ ; _⊢_▹_≈_ ; Mod ; Th )
+open import Setoid.Varieties.SoundAndComplete  using  ( module FreeAlgebra ; ⊫-proof
+                                                      ; _≈̇_ ; _⊢_▹_≈_ ; Mod ; Th ; _⊫_ )
 
 open _⟶_          using () renaming ( to to _⟨$⟩_ )
 open Setoid       using ( Carrier )
