@@ -77,40 +77,43 @@ module Setoid.Congruences.Certificates.Congruence where
 open import Agda.Primitive using () renaming ( Set to Type )
 
 -- Imports from the Agda Standard Library -----------------------------------
-open import Data.Bool.Base        using  ( if_then_else_ )
-open import Data.Empty            using  ( ⊥ )
-open import Data.Fin.Base         using  ( Fin )
-open import Data.Fin.Properties   using  ( all? ) renaming ( _≟_ to _≟ᶠ_ )
-open import Data.List.Base        using  ( List ; [] ; _∷_ ; map ; filter
-                                         ; allFin ; foldr )
-open import Data.List.Membership.Propositional
-                                  using  ( _∈_ ; lose )
+open import Data.Bool.Base                          using  ( if_then_else_ )
+open import Data.Empty                              using  ( ⊥ )
+open import Data.Fin.Base                           using  ( Fin )
+open import Data.Fin.Properties                     using  ( all? )
+                                                    renaming ( _≟_ to _≟ᶠ_ )
+open import Data.List.Base                          using  ( List ; [] ; _∷_ ; map
+                                                           ; filter ; allFin ; foldr )
+open import Data.List.Membership.Propositional      using  ( _∈_ ; lose )
 open import Data.List.Membership.Propositional.Properties
-                                  using  ( ∈-map⁺ ; ∈-filter⁺ ; ∈-allFin )
-open import Data.List.Relation.Unary.Any
-                                  using  ( here ; there )
-open import Data.List.Relation.Unary.All
-                                  using  ( All ; [] ; _∷_ ; universal )
-                                  renaming ( lookup to all-lookup ; all? to allL? )
-open import Data.List.Relation.Unary.All.Properties
-                                  using  ( map⁺ )
-open import Data.Nat.Base         using  ( ℕ ; zero ; suc )
-open import Data.Product          using  ( _×_ ; _,_ ; proj₁ ; proj₂ )
-open import Data.Unit.Base        using  ( ⊤ ; tt )
-open import Data.Vec.Base         using  ( Vec ; lookup ; tabulate ; _[_]≔_ )
-                                  renaming ( map to mapᵥ )
-open import Data.Vec.Properties   using  ( lookup∘tabulate ; lookup∘update
-                                         ; lookup∘update′ ; []≔-idempotent
-                                         ; []≔-lookup ; lookup-map )
-open import Function              using  ( Func )
-open import Level                 using  ( Level ; _⊔_ ; Lift ; lift ; lower )
-open import Relation.Binary       using  ( Setoid ) renaming ( Rel to BinaryRel )
-open import Relation.Binary.PropositionalEquality
-                                  using  ( _≡_ ; refl ; sym ; trans ; cong
-                                         ; subst ; subst₂ )
-open import Relation.Nullary.Decidable
-                                  using  ( Dec ; yes ; no ; does ; map′
-                                         ; _×-dec_ ; _→-dec_ ; ¬? )
+                                                    using  ( ∈-map⁺ ; ∈-filter⁺
+                                                           ; ∈-allFin )
+
+open import Data.List.Relation.Unary.Any            using  ( here ; there )
+open import Data.List.Relation.Unary.All            using  ( All ; [] ; _∷_ ; universal )
+                                                    renaming  ( lookup to all-lookup
+                                                              ; all? to allL? )
+
+open import Data.List.Relation.Unary.All.Properties using  ( map⁺ )
+open import Data.Nat.Base                           using  ( ℕ ; zero ; suc )
+open import Data.Product                            using  ( _×_ ; _,_ ; proj₁ ; proj₂ )
+open import Data.Unit.Base                          using  ( ⊤ ; tt )
+open import Data.Vec.Base                           using  ( Vec ; lookup ; tabulate
+                                                           ; _[_]≔_ )
+                                                    renaming ( map to mapᵥ )
+open import Data.Vec.Properties                     using  ( lookup∘tabulate ; lookup∘update
+                                                           ; lookup∘update′ ; []≔-idempotent
+                                                           ; []≔-lookup ; lookup-map )
+open import Function                                using  ( Func )
+open import Level                                   using  ( Level ; _⊔_ ; Lift
+                                                           ; lift ; lower )
+open import Relation.Binary                         using  ( Setoid )
+                                                    renaming ( Rel to BinaryRel )
+
+open import Relation.Binary.PropositionalEquality   using  ( _≡_ ; refl ; sym ; trans
+                                                           ; cong ; subst ; subst₂ )
+open import Relation.Nullary.Decidable              using  ( Dec ; yes ; no ; does ; map′
+                                                           ; _×-dec_ ; _→-dec_ ; ¬? )
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
 open import Overture                                using  ( 𝓞 ; 𝓥 ; Signature

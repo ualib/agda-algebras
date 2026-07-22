@@ -14,10 +14,10 @@ External engines (GAP, UACalc, SAT and model finders) compute congruence lattice
 of finite algebras far faster than any in-Agda decision procedure, but nothing they
 report is believed until Agda has re-checked it.
 
-The certificate discipline that makes this possible is fixed in the design note
-`docs/notes/flrp-wp6-freese-certificates.md`: the engine emits a *linear-size
-witness* of each claim, and a checker verifies the witness with *no fixpoint
-iteration and no search*.
+The certificate discipline that makes this possible is fixed in
+[the design note](docs/notes/flrp-wp6-freese-certificates.md): the engine emits a
+*linear-size witness* of each claim, and a checker verifies the witness with
+*no fixpoint iteration and no search*.
 
 This module defines the witness *data types* — the schema — and nothing else: every
 type below is plain finite index data (`Fin`{.AgdaDatatype}, `Vec`{.AgdaDatatype},
@@ -90,13 +90,14 @@ parent pv i = lookup pv i
 
 A parent vector is in **Freese normal form** when every index points *directly* at
 its root (the vector is idempotent as a function) and every root is the
-`≤`-least element of its block.  Given idempotence, leastness of roots is
-equivalent to the vector being *decreasing* (`parent pv i ≤ i`): the root of a
-block is then a member that lower-bounds all members.  Normal form is what makes
-the representation canonical — two normal-form vectors present the same partition
-exactly when they are equal as vectors — and the checker exploits this to compare
-claimed congruences syntactically.  Both conditions are decidable by a linear
-sweep.
+`≤`-least element of its block.
+
+Given idempotence, leastness of roots is equivalent to the vector being *decreasing*
+(`parent pv i ≤ i`): the root of a block is then a member that lower-bounds all
+members.  Normal form is what makes the representation canonical — two normal-form
+vectors present the same partition exactly when they are equal as vectors — and the
+checker exploits this to compare claimed congruences syntactically.  Both conditions
+are decidable by a linear sweep.
 
 ```agda
 -- Every index points directly at its root.
@@ -104,14 +105,14 @@ IdempotentParent : {n : ℕ} → ParentVec n → Type
 IdempotentParent pv = ∀ i → parent pv (parent pv i) ≡ parent pv i
 
 idempotentParent? : {n : ℕ} (pv : ParentVec n) → Dec (IdempotentParent pv)
-idempotentParent? pv = all? (λ i → parent pv (parent pv i) ≟ parent pv i)
+idempotentParent? pv = all? λ i → parent pv (parent pv i) ≟ parent pv i
 
 -- Every root is the least element of its block (given idempotence).
 DecreasingParent : {n : ℕ} → ParentVec n → Type
 DecreasingParent pv = ∀ i → parent pv i ≤ i
 
 decreasingParent? : {n : ℕ} (pv : ParentVec n) → Dec (DecreasingParent pv)
-decreasingParent? pv = all? (λ i → parent pv i ≤? i)
+decreasingParent? pv = all? λ i → parent pv i ≤? i
 
 -- Freese normal form: idempotent and decreasing.
 NormalForm : {n : ℕ} → ParentVec n → Type
@@ -140,9 +141,9 @@ forestEdges {n} pv =
 
 #### Justified merges and Freese traces
 
-One entry of a Freese trace merges the blocks of two indices
-(`lhs`{.AgdaField}, `rhs`{.AgdaField}) and records *why* the merged pair belongs
-to the congruence being generated:
+One entry of a Freese trace merges the blocks of two indices (`lhs`{.AgdaField},
+`rhs`{.AgdaField}) and records *why* the merged pair belongs to the congruence being
+generated.
 
 +  `seed s`{.AgdaInductiveConstructor} — the pair is (at position `s` of) the seed
    list `P` of the claim `θ ≑ Cg (fromPairs P)`; the checker turns it into the
@@ -155,23 +156,24 @@ to the congruence being generated:
    The entry of `w` at position `c` is dead data (the checker overwrites it with
    the moving argument); emitters write `0F` there by convention.
 
-Reference conventions, fixed here and enforced by the checker's validity
-predicate: a `seed`{.AgdaInductiveConstructor} position is an *absolute* index
-into the seed list, while a `translate`{.AgdaInductiveConstructor} reference is a
-*backward offset* into the list of merges already processed — `0` is the
-immediately preceding merge, `1` the one before it, and so on.  Backward offsets
-are what keep the checker a single structurally recursive fold: the merges
-processed so far accumulate most-recent-first, and a reference is a positional
-lookup into that accumulator.  An out-of-range position simply fails the
-checker's (decidable) validity predicate, so an ill-formed certificate is
-rejected, never mis-read.
+Reference conventions, fixed here and enforced by the checker's validity predicate:
+a `seed`{.AgdaInductiveConstructor} position is an *absolute* index into the seed
+list, while a `translate`{.AgdaInductiveConstructor} reference is a *backward offset*
+into the list of merges already processed — `0` is the immediately preceding merge,
+`1` the one before it, and so on.
+
+Backward offsets are what keep the checker a single structurally recursive fold; the
+merges processed so far accumulate most-recent-first, and a reference is a positional
+lookup into that accumulator.  An out-of-range position simply fails the checker's
+(decidable) validity predicate, so an ill-formed certificate is rejected, never
+mis-read.
 
 ```agda
 -- Why a merged pair belongs to the generated congruence.
 data Justification (n ops : ℕ) (ar : Fin ops → ℕ) : Type where
-  seed       : ℕ → Justification n ops ar
-  translate  : (f : Fin ops) → Fin (ar f) → Vec (Fin n) (ar f) → ℕ
-    →          Justification n ops ar
+  seed       :  ℕ → Justification n ops ar
+  translate  :  (f : Fin ops) → Fin (ar f) → Vec (Fin n) (ar f) → ℕ
+                → Justification n ops ar
 
 -- One justified merge: the pair, and why it is in the congruence.
 record Merge (n ops : ℕ) (ar : Fin ops → ℕ) : Type where
@@ -188,10 +190,14 @@ Trace n ops ar = List (Merge n ops ar)
 
 #### The per-congruence certificate
 
-The certificate for a single claim `θ ≑ Cg (fromPairs P)` (design note § 4): the
-seed list `P` as index pairs, the claimed partition as a normal-form parent
-vector, and the Freese trace whose replay generates that partition.  The three
-checker obligations C1 (trace soundness), C2 (claimed ⊆ generated), and C3
+The certificate for a single claim `θ ≑ Cg (fromPairs P)` consists of the following
+data:[^1]
+
++  the seed list `P` as index pairs,
++  the claimed partition as a normal-form parent vector, and
++  the Freese trace whose replay generates that partition.
+
+The three checker obligations C1 (trace soundness), C2 (claimed ⊆ generated), and C3
 (generated ⊆ claimed) are discharged against exactly these data by
 [Setoid.Congruences.Certificates.Congruence][].
 
@@ -207,36 +213,39 @@ record CgCert (n ops : ℕ) (ar : Fin ops → ℕ) : Type where
 #### The whole-lattice certificate
 
 The certificate for a claim about the *entire* congruence lattice of a finite
-finitary algebra (design note § 4): the list of all claimed congruences as
-normal-form parent vectors, together with the pointer structure that pins the
-list against the lattice operations —
+finitary algebra consists of the following data:[^1]
 
-+  `bot`{.AgdaField} — the position of the claimed least congruence (the
-   `≈`-diagonal), the base case of the checker's principal-join fold;
-+  `prinT`{.AgdaField} — for every carrier index pair `(i , j)`, the position of
-   the claimed principal congruence `Cg(enum i , enum j)`, with its Freese trace
-   in `prinTr`{.AgdaField} (seed list: the one pair);
++  `parts`{.AgdaField} — the list of all claimed congruences as normal-form parent vectors;
+
++  `bot`{.AgdaField} — the position of the claimed least congruence (the `≈`-diagonal),
+   the base case of the checker's principal-join fold;
+
++  `prinT`{.AgdaField} — for every carrier index pair `(i , j)`, the position of the
+   claimed principal congruence `Cg(enum i , enum j)`, with its Freese trace in
+   `prinTr`{.AgdaField} (seed list: the one pair);
+
 +  `meetT`{.AgdaField} — the claimed meet table; meets of partitions are pointwise
-   root-pair intersections, so the checker verifies each entry definitionally,
-   with no trace;
-+  `joinT`{.AgdaField} — the claimed join table, each entry justified by a trace
-   in `joinTr`{.AgdaField} whose seed list is the concatenation of the two
-   arguments' forest edges.
+   root-pair intersections, so the checker verifies each entry definitionally, with
+   no trace;
 
-The engine-side devices that *produce* these tables quickly (the union-find join
-and root-pair-hashing meet of Freese's partition note) never appear here; the
-checker's verification is definitional and per-entry.
++  `joinT`{.AgdaField} — the claimed join table, each entry justified by a trace in
+   `joinTr`{.AgdaField} whose seed list is the concatenation of the two arguments'
+   forest edges.
+
+The engine-side devices that *produce* these tables quickly (the union-find join and
+root-pair-hashing meet of Freese's partition note) never appear here; the checker's
+verification is definitional and per-entry.
 
 ```agda
 record LatticeCert (n ops : ℕ) (ar : Fin ops → ℕ) (m : ℕ) : Type where
   constructor mkLatticeCert
   field
-    parts   : Vec (ParentVec n) m           -- all claimed congruences, normal form
-    bot     : Fin m                         -- position of the claimed diagonal
-    prinT   : Vec (Vec (Fin m) n) n         -- principal-congruence pointers ...
+    parts   : Vec (ParentVec n) m             -- all claimed congruences, normal form
+    bot     : Fin m                           -- position of the claimed diagonal
+    prinT   : Vec (Vec (Fin m) n) n           -- principal-congruence pointers ...
     prinTr  : Vec (Vec (Trace n ops ar) n) n  -- ... and their traces
-    meetT   : Vec (Vec (Fin m) m) m         -- claimed meet table (no traces needed)
-    joinT   : Vec (Vec (Fin m) m) m         -- claimed join table ...
+    meetT   : Vec (Vec (Fin m) m) m           -- claimed meet table (no traces needed)
+    joinT   : Vec (Vec (Fin m) m) m           -- claimed join table ...
     joinTr  : Vec (Vec (Trace n ops ar) m) m  -- ... and its traces
 
   -- The claimed congruence at a list position.
@@ -262,3 +271,5 @@ record LatticeCert (n ops : ℕ) (ar : Fin ops → ℕ) (m : ℕ) : Type where
 ```
 
 --------------------------------------
+
+[^1]: see [the design note](docs/notes/flrp-wp6-freese-certificates.md) § 4.
