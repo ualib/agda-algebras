@@ -1,24 +1,30 @@
 """Freese's cg2 worklist algorithm, instrumented to emit proof traces.
 
-This is the engine of the WP-6 certificate pipeline (issue #457): the
-congruence-generation algorithm of R. Freese, *Computing congruences
-efficiently* (https://math.hawaii.edu/~ralph/Preprints/cg2.pdf), run on a
-finite algebra given by operation tables, recording every block merge together
-with its justification — a seed pair, or a unary polynomial translate applied
-to an earlier merge.  The recorded list is the *Freese trace* that the Agda
-checker ``Setoid.Congruences.Certificates.Congruence`` re-verifies; nothing
-computed here is trusted until that checker accepts it.
+File: scripts/python/flrp/cg2.py
 
-Design constraints, per ``docs/notes/flrp-wp6-freese-certificates.md``:
+Description:
 
-+ deterministic — seeds in list order, a FIFO worklist, operation symbols,
-  coordinates, and frozen tuples in ascending order — so the same input always
-  yields byte-identical certificates;
-+ the trace records *element* pairs (not union-find roots), because the
-  checker justifies each merge as the image of an earlier merged pair;
-+ union-find internals (union by size, path compression) are engine-side
-  devices only and leave no imprint on the certificate beyond the final
-  normal-form parent vector.
+  This is the engine of the WP-6 certificate pipeline (issue #457): the
+  congruence-generation algorithm of R. Freese, *Computing congruences
+  efficiently* (https://math.hawaii.edu/~ralph/Preprints/cg2.pdf), run on a
+  finite algebra given by operation tables, recording every block merge together
+  with its justification — a seed pair, or a unary polynomial translate applied
+  to an earlier merge.  The recorded list is the *Freese trace* that the Agda
+  checker ``Setoid.Congruences.Certificates.Congruence`` re-verifies; nothing
+  computed here is trusted until that checker accepts it.
+
+Design constraints:
+
+  Per ``docs/notes/flrp-wp6-freese-certificates.md``:
+
+  + deterministic — seeds in list order, a FIFO worklist, operation symbols,
+    coordinates, and frozen tuples in ascending order — so the same input always
+    yields byte-identical certificates;
+  + the trace records *element* pairs (not union-find roots), because the
+    checker justifies each merge as the image of an earlier merged pair;
+  + union-find internals (union by size, path compression) are engine-side
+    devices only and leave no imprint on the certificate beyond the final
+    normal-form parent vector.
 """
 
 from __future__ import annotations

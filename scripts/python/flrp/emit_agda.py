@@ -1,24 +1,30 @@
 """Render a whole-lattice certificate as a literate Agda module.
 
-The final stage of the WP-6 pipeline (issue #457): read a claim file (the
-input JSON documented in README.md), run the cg2 engine (``cg2.py``,
-``lattice.py``), and emit
+File: scripts/python/flrp/emit_agda.py
 
-+ a ``.lagda.md`` module under ``src/FLRP/Certificates/Pilot/`` whose
-  type-checking *is* the verification — the emitted literals feed the
-  search-free checkers of ``Setoid.Congruences.Certificates`` and the
-  ``Representableᵈ`` assembly of ``FLRP.Certificates``, so a wrong table or
-  trace fails to compile; and
-+ an audit copy of the raw certificate as JSON (kept outside ``src/``, per
-  roadmap § 6).
+Description:
 
-The v1 renderer targets **unary signatures** (G-sets and their kin — the
-Pálfy–Pudlák frontier); the cg2 engine itself is arity-general.  Emitted
-files are deterministic functions of the input (pin the input's ``date``
-field for byte-stable output) and are never edited by hand: rerun the
-emitter instead.
+  The final stage of the WP-6 pipeline (issue #457): read a claim file (the
+  input JSON documented in README.md), run the cg2 engine (``cg2.py``,
+  ``lattice.py``), and emit
 
-Usage:  python3 scripts/python/flrp/emit_agda.py INPUT.json [--out PATH] [--cert-json PATH]
+  + a ``.lagda.md`` module under ``src/FLRP/Certificates/Pilot/`` whose
+    type-checking *is* the verification — the emitted literals feed the
+    search-free checkers of ``Setoid.Congruences.Certificates`` and the
+    ``Representableᵈ`` assembly of ``FLRP.Certificates``, so a wrong table or
+    trace fails to compile; and
+  + an audit copy of the raw certificate as JSON (kept outside ``src/``, per
+    roadmap § 6).
+
+  The v1 renderer targets **unary signatures** (G-sets and their kin — the
+  Pálfy–Pudlák frontier); the cg2 engine itself is arity-general.  Emitted
+  files are deterministic functions of the input (pin the input's ``date``
+  field for byte-stable output) and are never edited by hand: rerun the
+  emitter instead.
+
+Usage:
+
+   python3 scripts/python/flrp/emit_agda.py INPUT.json [--out PATH] [--cert-json PATH]
 """
 
 from __future__ import annotations

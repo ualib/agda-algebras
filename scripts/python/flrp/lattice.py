@@ -1,23 +1,29 @@
 """Whole congruence lattices with certificates.
 
-Builds, for a finite algebra given by tables, the complete
-``WholeLatticeCertificate`` of the WP-6 pipeline (issue #457): the list of all
-congruences as normal-form parent vectors, the principal-congruence pointer
-table with Freese traces, and the meet and join tables (joins with traces) —
-relabeled to match a claimed target lattice, so that the certificate's meet
-table is *syntactically* the target's, which is what the Agda side's
-``MeetMatches`` check pins.
+File: scripts/python/flrp/lattice.py
 
-Engine-side mathematics (never trusted, always re-checked in Agda):
+Description:
 
-+ every congruence of a finite algebra is a join of principal congruences, so
-  closing the principal congruences under binary join (computed by ``cg2``
-  runs seeded with both arguments' forest edges) enumerates the whole lattice;
-+ the meet of two congruences is their pointwise root-pair intersection, a
-  pure partition operation;
-+ the claimed isomorphism with the target lattice is found by (bounded)
-  search over index bijections and then discharged definitionally by the
-  checker.
+  Builds, for a finite algebra given by tables, the complete
+  ``WholeLatticeCertificate`` of the WP-6 pipeline (issue #457): the list of all
+  congruences as normal-form parent vectors, the principal-congruence pointer
+  table with Freese traces, and the meet and join tables (joins with traces) —
+  relabeled to match a claimed target lattice, so that the certificate's meet
+  table is *syntactically* the target's, which is what the Agda side's
+  ``MeetMatches`` check pins.
+
+Engine-side mathematics:
+
+  Never trusted, always re-checked in Agda.
+
+  + every congruence of a finite algebra is a join of principal congruences, so
+    closing the principal congruences under binary join (computed by ``cg2``
+    runs seeded with both arguments' forest edges) enumerates the whole lattice;
+  + the meet of two congruences is their pointwise root-pair intersection, a
+    pure partition operation;
+  + the claimed isomorphism with the target lattice is found by (bounded)
+    search over index bijections and then discharged definitionally by the
+    checker.
 """
 
 from __future__ import annotations

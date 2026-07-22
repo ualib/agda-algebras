@@ -1,20 +1,24 @@
 """Tests for the WP-6 certificate emitter (`make flrp-test`).
 
-Three layers, mirroring the pipeline's trust story:
+File: scripts/python/flrp/test_flrp.py
 
-+ engine unit tests — cg2 worklist, union-find normal form, lattice
-  construction, target matching, and the renderer's guard rails;
-+ a Python mirror of the Agda checker's obligations (C1 trace soundness,
-  C2 replay coverage, C3 seed containment), run over every trace the pilot
-  certificate contains — an engine-side regression tripwire only, never a
-  substitute for the Agda checker, which remains the sole authority;
-+ golden round-trip tests — re-emitting the committed pilot input must
-  reproduce the committed ``.lagda.md`` module and audit JSON byte for byte
-  (the emitter is a deterministic function of its input).
+Description:
 
-The Agda side needs no harness of its own: the emitted pilot module is part
-of the library, so ``make check`` — the repository's single test gate — is
-exactly the end-to-end verification of the certificate.
+  Three layers, mirroring the pipeline's trust story:
+
+  + engine unit tests — cg2 worklist, union-find normal form, lattice
+    construction, target matching, and the renderer's guard rails;
+  + a Python mirror of the Agda checker's obligations (C1 trace soundness,
+    C2 replay coverage, C3 seed containment), run over every trace the pilot
+    certificate contains — an engine-side regression tripwire only, never a
+    substitute for the Agda checker, which remains the sole authority;
+  + golden round-trip tests — re-emitting the committed pilot input must
+    reproduce the committed ``.lagda.md`` module and audit JSON byte for byte
+    (the emitter is a deterministic function of its input).
+
+  The Agda side needs no harness of its own: the emitted pilot module is part
+  of the library, so ``make check`` — the repository's single test gate — is
+  exactly the end-to-end verification of the certificate.
 """
 
 from __future__ import annotations
