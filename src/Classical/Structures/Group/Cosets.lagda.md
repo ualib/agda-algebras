@@ -38,6 +38,7 @@ open import Agda.Primitive using () renaming ( Set to Type )
 open import Data.Product     using ( _,_ ; proj₁ )
 open import Level            using ( Level )
 open import Relation.Binary  using ( Setoid ; IsEquivalence )
+open import Relation.Nullary using ( Dec )
 open import Relation.Unary   using ( Pred ; _∈_ )
 
 import Algebra.Properties.Group as GroupProperties
@@ -135,6 +136,20 @@ products, since `(x ⁻¹ ∙ y) ∙ (y ⁻¹ ∙ z) ≈ x ⁻¹ ∙ z`.
       x ⁻¹ ∙ g ⁻¹ ∙ (g ∙ y)    ≈⟨ assoc-law (x ⁻¹) (g ⁻¹) (g ∙ y) ⟩
       x ⁻¹ ∙ (g ⁻¹ ∙ (g ∙ y))  ≈⟨ ∙-cong ≈refl (\\-leftDividesʳ g y) ⟩
       x ⁻¹ ∙ y                 ∎
+```
+
+#### Decidability
+
+The coset relation is decidable exactly when membership in `H`{.AgdaBound} is:
+whether `x ∼ y` is, definitionally, whether the single product `x ⁻¹ ∙ y` lies in
+`H`{.AgdaBound}.  This is the Layer-D decision procedure that sits beside the
+semantic relation, per the two-layer discipline (ADR-008; audit A2 of
+`docs/notes/flrp-wp7-audits.md`).
+
+```agda
+  -- With decidable membership in H, the coset relation is decidable.
+  ∼-dec : (∀ x → Dec (x ∈ H)) → ∀ x y → Dec (x ∼ y)
+  ∼-dec H-dec x y = H-dec (x ⁻¹ ∙ y)
 ```
 
 #### The quotient setoid `G/H`

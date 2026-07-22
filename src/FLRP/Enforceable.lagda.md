@@ -77,7 +77,7 @@ open import Level         renaming ( suc to lsuc )  using  ( Level ; 0ℓ ; _⊔
 open import Relation.Binary                         using  ( Setoid )
 open import Relation.Binary.Definitions             using  ( _Respects_ )
 open import Relation.Binary.PropositionalEquality   using  ( _≡_ )
-open import Relation.Nullary                        using  ( ¬_ )
+open import Relation.Nullary                        using  ( ¬_ ; Dec )
 open import Relation.Unary                          using  ( Pred ; _∈_ ; _⊆_ )
 
 -- Imports from the Agda Universal Algebra Library ------------------------------
@@ -186,6 +186,43 @@ module UpperInterval
 
   _≤ᵢ_ : Interval≈ → Interval≈ → Type 0ℓ
   (M , _) ≤ᵢ (N , _) =  M ≤↑ N
+```
+
+#### The decidable interval (Layer D)
+
+The two-layer discipline of [ADR-008][] mandates a decision procedure *alongside*
+each semantic notion, never a restriction of the semantic notion itself.  On the
+congruence side that sibling is `DecCon`{.AgdaFunction} next to `Con`{.AgdaFunction};
+here it is `Intervalᵈ`{.AgdaFunction} next to `Interval≈`{.AgdaFunction}: an interval
+element bundled with a decision procedure for membership in its underlying subgroup —
+the natural Layer-D presentation of a subgroup, by a decidable predicate (audit A2,
+`docs/notes/flrp-wp7-audits.md`).
+
+The bundling is not a formality.  Even over a finite group an interval element can
+encode an arbitrary proposition in its membership predicate,[^5] so decidability of
+interval elements is genuinely *data*, exactly as it is for congruences.
+
+```agda
+  -- An interval element together with a decision procedure for its membership.
+  Intervalᵈ : Type (lsuc 0ℓ)
+  Intervalᵈ = Σ[ M ∈ Interval≈ ] (∀ x → Dec (x ∈ set M))
+```
+
+Equality and order of decidable interval elements are those of the underlying
+interval elements — the decision procedures are computational data that the order
+ignores, mirroring `_≑ᵈ_`{.AgdaFunction} and `_⊆ᵈ_`{.AgdaFunction} of
+[FLRP.Representable][] on the congruence side.
+
+```agda
+  infix 4 _≈ᵢᵈ_ _≤ᵢᵈ_
+
+  -- Equality of decidable interval elements: equality of the underlying elements.
+  _≈ᵢᵈ_ : Intervalᵈ → Intervalᵈ → Type 0ℓ
+  M ≈ᵢᵈ N = M .proj₁ ≈ᵢ N .proj₁
+
+  -- Order of decidable interval elements: order of the underlying elements.
+  _≤ᵢᵈ_ : Intervalᵈ → Intervalᵈ → Type 0ℓ
+  M ≤ᵢᵈ N = M .proj₁ ≤ᵢ N .proj₁
 ```
 
 #### Interval isomorphism with a classical lattice
@@ -714,3 +751,11 @@ builds on top of the definitions of this module.
       isomorphism; that is, if `𝑮 ≅ 𝑮'`, then `𝑮` has property `P` iff `𝑮'` does.
 [^4]: `OrderIso`{.AgdaRecord} still lives in [FLRP.Problem][]; its planned migration
       to the `Order/` tree, foreseen there, is left to a dedicated change.
+
+[^5]: For any proposition `P` the predicate `λ x → (x ≈ ε) ⊎ P` is an
+      equality-respecting subgroup containing the trivial subgroup — each closure
+      property holds by cases — and deciding its membership at any provably
+      non-identity element decides `P`.  This is the interval-side face of the
+      oracle-congruence obstruction of the WP-1 no-go theorem ([FLRP.Problem][]),
+      and it is why the Layer-D correspondence of [FLRP.Bridge][] is stated over
+      `Intervalᵈ`{.AgdaFunction} rather than over `Interval≈`{.AgdaFunction}.
