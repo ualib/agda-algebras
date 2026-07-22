@@ -12,8 +12,8 @@ This is the [Setoid.Operations.Properties][] module of the [Agda Universal Algeb
 The finite law-checkers of [Overture.Operations.Properties][] decide each equational
 law of an operation `Fin n → Fin n → Fin n` by nesting `all?`{.AgdaFunction}
 (`Data.Fin.Properties.all?`) over decidable equality `_≟_`{.AgdaFunction} on
-`Fin n`{.AgdaDatatype}.  Their decidability rests on exactly two facts about the
-carrier, and *neither is special to* `Fin n`{.AgdaDatatype} *or to*
+`Fin`{.AgdaDatatype}` n`.  Their decidability rests on exactly two facts about the
+carrier, and *neither is special to* `Fin`{.AgdaDatatype}` n` *or to*
 `_≡_`{.AgdaDatatype}.
 
 1.  The carrier is **exhaustively searchable** — a pointwise decision procedure
@@ -29,9 +29,9 @@ carrier, writing each law with `_≈_`{.AgdaFunction} in place of `_≡_`{.AgdaD
 
 The operation remains a bare function `Carrier → Carrier → Carrier`; the decision
 never needs it to respect `_≈_`{.AgdaFunction}, exactly as in the concrete versions.
-The finite `Fin n`{.AgdaDatatype} / `_≡_`{.AgdaDatatype} checkers are then recovered
+The finite `Fin`{.AgdaDatatype}` n` / `_≡_`{.AgdaDatatype} checkers are then recovered
 as a single instance: take `S` to be the propositional `DecSetoid`{.AgdaRecord} on
-`Fin n`{.AgdaDatatype} and the search witness to be the `all?`{.AgdaFunction} of
+`Fin`{.AgdaDatatype}` n` and the search witness to be the `all?`{.AgdaFunction} of
 `Fin`.
 
 The final section proves that each concrete checker *equals* its generalized form at
@@ -188,9 +188,9 @@ module _ {c ℓ} (S : DecSetoid c ℓ) (E : Exhaustible (DecSetoid.Carrier S)) w
 
 #### The finite instance
 
-`Fin n`{.AgdaDatatype} is exhaustively searchable: its search functional is precisely
+`Fin`{.AgdaDatatype}` n` is exhaustively searchable: its search functional is precisely
 `Data.Fin.Properties.all?`.  Wrapping it gives the canonical `Exhaustible`{.AgdaRecord}
-witness for `Fin n`{.AgdaDatatype}, the one that recovers the concrete checkers.
+witness for `Fin`{.AgdaDatatype}` n`, the one that recovers the concrete checkers.
 
 ```agda
 -- The exhaustive-search witness for Fin n, given by all? of Fin.
@@ -201,7 +201,7 @@ Fin-Exhaustible = record { all? = FinAll? }
 #### The finite checkers as the propositional instance
 
 Take `S` to be `≡-decSetoid n` — the propositional decidable setoid on
-`Fin n`{.AgdaDatatype}, whose `_≈_`{.AgdaFunction} is `_≡_`{.AgdaDatatype} and whose
+`Fin`{.AgdaDatatype}` n`, whose `_≈_`{.AgdaFunction} is `_≡_`{.AgdaDatatype} and whose
 `_≟_`{.AgdaFunction} is `Data.Fin.Properties._≟_` — and `E` to be
 `Fin-Exhaustible`{.AgdaFunction}.
 
@@ -265,7 +265,7 @@ module _ {n : ℕ} (_∧_ _∨_ : Fin n → Fin n → Fin n) where
 
 #### A non-Fin instance: the two-element Boolean setoid
 
-To exercise the generality on a carrier that is *not* `Fin n`{.AgdaDatatype}, we
+To exercise the generality on a carrier that is *not* `Fin`{.AgdaDatatype}` n`, we
 supply an exhaustive-search witness for `Bool`{.AgdaDatatype} directly and run the
 checkers over the propositional decidable setoid on `Bool`{.AgdaDatatype}.  Searching
 `Bool`{.AgdaDatatype} is immediate: `∀ b → P b` holds iff both `P false` and `P true`

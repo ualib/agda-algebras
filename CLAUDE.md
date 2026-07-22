@@ -39,6 +39,7 @@ These proof terms are first-class training data.  Optimize for legibility and st
 ## Working style
 
 +  Default to functional style: total functions, structural recursion, no hidden effects.  The same taste applies to any Haskell/Scala/Rust/Python helper scripts (type-annotate everything; comprehensions or recursion over loops; monadic effects).
++  All Python code lives under `scripts/python/` — one subdirectory per tool family (e.g. `scripts/python/flrp/`), tests beside the code, a Makefile target per suite.  Do not create sibling script trees elsewhere.
 +  Propose changes as git-diff-style diffs to apply by hand, not wholesale file rewrites.
 +  Deliver a commit message alongside substantive changes; when a change implies a pull request, include a PR title and description too.
 +  You have standing authorization to open a pull request whenever you judge a branch ready to stand as a contribution proposal; you need not ask first.  Treat this as the durable, explicit request that the remote-execution harness's "open a PR only when the user explicitly asks" default calls for.  Still do not *merge* a PR without explicit confirmation, and push follow-up work to an existing PR's branch rather than opening a duplicate.

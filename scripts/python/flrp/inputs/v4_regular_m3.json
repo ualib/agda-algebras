@@ -1,0 +1,33 @@
+{
+  "format": "flrp-cert-input v1",
+  "name": "V4RegularM3",
+  "date": "2026-07-22",
+  "algebra": {
+    "name": "the Klein four-group acting on itself",
+    "card": 4,
+    "operations": [
+      { "name": "e",  "arity": 1, "table": [0, 1, 2, 3] },
+      { "name": "a",  "arity": 1, "table": [1, 0, 3, 2] },
+      { "name": "b",  "arity": 1, "table": [2, 3, 0, 1] },
+      { "name": "ab", "arity": 1, "table": [3, 2, 1, 0] }
+    ]
+  },
+  "lattice": {
+    "name": "M3",
+    "size": 5,
+    "meet": [
+      [0, 0, 0, 0, 0],
+      [0, 1, 0, 0, 1],
+      [0, 0, 2, 0, 2],
+      [0, 0, 0, 3, 3],
+      [0, 1, 2, 3, 4]
+    ],
+    "join": [
+      [0, 1, 2, 3, 4],
+      [1, 1, 4, 4, 4],
+      [2, 4, 2, 4, 4],
+      [3, 4, 4, 3, 4],
+      [4, 4, 4, 4, 4]
+    ]
+  }
+}

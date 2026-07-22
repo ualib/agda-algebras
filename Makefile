@@ -28,7 +28,7 @@
 #      where a path segment happens to contain the substring `agda`.
 # =============================================================================
 
-.PHONY: default all check test clean site serve serve-full html agda-md site-full profile project-plan unused-imports unused-imports-test Everything.agda
+.PHONY: default all check test clean site serve serve-full html agda-md site-full profile project-plan unused-imports unused-imports-test flrp-test Everything.agda
 
 # -- Configuration -----------------------------------------------------------
 SRCDIR    := src
@@ -184,3 +184,12 @@ unused-imports:
 unused-imports-test:
 	@echo "target: $@"
 	python3 scripts/python/test_unused_imports.py
+
+# Test the FLRP certificate emitter (scripts/python/flrp/): engine unit tests, a
+# Python mirror of the Agda checker's obligations as a regression tripwire,
+# and golden round-trip tests re-emitting the committed pilot byte for byte.
+# The Agda side needs no separate harness: the emitted pilot module is part
+# of the library, so `make check` is the end-to-end verification.
+flrp-test:
+	@echo "target: $@"
+	python3 scripts/python/flrp/test_flrp.py

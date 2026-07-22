@@ -61,13 +61,18 @@ Two standing warnings apply to everything under this namespace.
 +  [FLRP.LayerBridge][] — the cross-layer bridge: under the congruence-completeness
    assumption, the semantic and decidable congruence posets are order-isomorphic
    (`conDecIso`), whence `Representable 𝑳 ↔ Representableᵈ 𝑳`.
++  [FLRP.Certificates][] — machine-checked representation certificates: the
+   assembly turning a checked whole-lattice certificate (Freese traces and
+   pointer tables, verified search-free by the
+   `Setoid.Congruences.Certificates` checkers) into a `Representableᵈ` witness
+   for the target lattice, so external searches (GAP, UACalc, SAT) enter the
+   corpus only through the checker.
 
 **Planned submodules** (per § 6 of the roadmap).
 
 +  `FLRP.Closure` (closure properties of the representable class);
 +  `FLRP.Intervals` (intervals in subgroup lattices and core-free normalization);
-+  `FLRP.Reductions` (the catalog of reduction theorems);
-+  `FLRP.Certificates` (machine-checked representation certificates).
++  `FLRP.Reductions` (the catalog of reduction theorems).
 
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
@@ -80,4 +85,5 @@ open import FLRP.Bridge public
 open import FLRP.Representable public
 open import FLRP.Assumptions public
 open import FLRP.LayerBridge public
+open import FLRP.Certificates public
 ```

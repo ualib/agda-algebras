@@ -23,4 +23,5 @@ open import Setoid.Congruences.ChainJoin                public
 open import Setoid.Congruences.Generation               public
 open import Setoid.Congruences.Finite                   public
 open import Setoid.Congruences.Presented                public
+open import Setoid.Congruences.Certificates             public
 ```

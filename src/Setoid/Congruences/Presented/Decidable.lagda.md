@@ -332,9 +332,13 @@ or presented.
   baseHit? : ∀ i j → Dec (BaseHit i j)
   baseHit? i j = (enum i ≟ enum j) ⊎-dec R? (enum i) (enum j)
 
-  -- The seed matrix.
-  seed : Matrix
-  seed i j = does (baseHit? i j)
+  -- The seed matrix.  (Private: it is internal machinery of the closure
+  -- computation, and the name `seed` is the certificate-schema vocabulary of
+  -- Setoid.Congruences.Certificates.Schema, with which it would clash in the
+  -- Setoid.Congruences barrel.)
+  private
+    seed : Matrix
+    seed i j = does (baseHit? i j)
 
   -- Reading a seed bit back as its proposition, and conversely.
   seed-out : ∀ {i j} → T (seed i j) → BaseHit i j

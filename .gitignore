@@ -34,6 +34,7 @@ src/EverythingLegacy.agda
 # -- Script artifacts --------------------------------------------------------------
 scripts/python/__pycache__/
 scripts/python/_utils/__pycache__/
+scripts/python/flrp/__pycache__/
 
 # -- LaTeX build artifacts ---------------------------------------------------------
 *.aux

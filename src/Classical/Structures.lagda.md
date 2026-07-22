@@ -51,4 +51,5 @@ open import Classical.Structures.Monoid public
 open import Classical.Structures.Ring public
 open import Classical.Structures.Semigroup public
 open import Classical.Structures.Semilattice public
+open import Classical.Structures.Unary public
 ```
