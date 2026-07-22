@@ -22,26 +22,26 @@ One structural fact does real work below: `L7` is **simple** — collapsing any 
 
 By Pudlák–Tůma every finite lattice embeds in `Eq(X)` for some finite set `X`; the session determined the minimal `X` for `L7` and all embeddings up to symmetry.  Two normalizations cost nothing in a minimum-size representation: the bottom must be the diagonal `Δ` (otherwise quotient by it — the interval above it in `Eq(X)` is a smaller partition lattice), and the top must be the total relation `∇` (otherwise the representation lives in a direct product of smaller partition lattices, and simplicity of `L7` forces a faithful projection to one factor).  These are also exactly the bounds a congruence lattice must have, which is what § 4 exploits.
 
-Exhaustive search shows `Eq(4)` and `Eq(5)` contain no copy of `L7`, while `Eq(6)` does.  An explicit embedding, with partitions of `{0, …, 5}` in bar notation (singleton blocks suppressed):
+Exhaustive search shows `Eq(4)` and `Eq(5)` contain no copy of `L7`, while `Eq(6)` does.  An explicit embedding, with partitions of `{0, …, 5}` in bar notation (singleton blocks suppressed; a fenced block rather than a table, since GitHub and python-markdown disagree about pipes inside table cells):
 
-| element | partition |
-|---|---|
-| `⊤ = 6` | `∇ = \|0,1,2,3,4,5\|` |
-| `(1,1) = 4` | `\|0,1,2\|3,4,5\|` |
-| `(0,2) = 5` | `\|0,1\|2,3\|4,5\|` |
-| `x = 3` | `\|0,4\|1,3\|2,5\|` |
-| `(1,0) = 1` | `\|0,2\|3,4\|` |
-| `(0,1) = 2` | `\|0,1\|4,5\|` |
-| `⊥ = 0` | `Δ = \|0\|1\|2\|3\|4\|5\|` |
+```text
+⊤     = 6      ∇ = |0,1,2,3,4,5|
+(1,1) = 4      |0,1,2|3,4,5|
+(0,2) = 5      |0,1|2,3|4,5|
+x     = 3      |0,4|1,3|2,5|
+(1,0) = 1      |0,2|3,4|
+(0,1) = 2      |0,1|4,5|
+⊥     = 0      Δ = |0|1|2|3|4|5|
+```
 
-The two squares of the grid are visible directly: `\|0,2\|3,4\| ∨ \|0,1\|4,5\| = \|0,1,2\|3,4,5\|` with meet `Δ`, and `\|0,1,2\|3,4,5\| ∧ \|0,1\|2,3\|4,5\| = \|0,1\|4,5\|` with join `∇`; the matching `\|0,4\|1,3\|2,5\|` meets every other nontrivial element at `Δ` and joins it to `∇`.  The full `7 × 7` meet and join tables were machine-verified.
+The two squares of the grid are visible directly: `|0,2|3,4| ∨ |0,1|4,5| = |0,1,2|3,4,5|` with meet `Δ`, and `|0,1,2|3,4,5| ∧ |0,1|2,3|4,5| = |0,1|4,5|` with join `∇`; the matching `|0,4|1,3|2,5|` meets every other nontrivial element at `Δ` and joins it to `∇`.  The full `7 × 7` meet and join tables were machine-verified.
 
 ## 3. Classification of the `Eq(6)` copies
 
 `Eq(6)` contains exactly **1080** labelled copies of `L7` (with bounds at `Δ`/`∇`), and exactly **two** up to relabeling of the six points:
 
 +  the **symmetric class** — the copy above, invariant under the involution `(0 4)(1 5)(2 3)`; orbit size 360;
-+  the **rigid class** — obtained from the same six other partitions by replacing `x ↦ \|0,3\|1,4\|2,5\|`; trivial stabilizer, orbit size 720.
++  the **rigid class** — obtained from the same six other partitions by replacing `x ↦ |0,3|1,4|2,5|`; trivial stabilizer, orbit size 720.
 
 The two representatives share six of their seven partitions, differing only in the matching assigned to `x`; no relabeling of the points carries one class to the other.
 
@@ -51,7 +51,7 @@ A copy of `L7` in `Eq(6)` is the congruence lattice of an algebra on those six p
 
 Neither class is closed, and the failure is emphatic — `M` contains **no non-bijective non-constant map at all** in either class:
 
-| class | preserving group | `\|M\|` | proper maps | `\|Inv(M)\|` | closed |
+| class | preserving group | monoid size | proper maps | size of Inv(M) | closed |
 |---|---|---|---|---|---|
 | symmetric | `⟨(0 4)(1 5)(2 3)⟩`, order 2 | 9 | 0 | 31 | no |
 | rigid | trivial | 7 | 0 | 203 | no |
@@ -60,7 +60,7 @@ For the symmetric class `Inv(M)` is the lattice of all partitions invariant unde
 
 ## 5. Seven points
 
-The same sweep one size up: `Eq(7)` contains **55,440** labelled copies of `L7` in **12** classes up to relabeling — two with a stabilizer of order 2, ten rigid.  Again no class admits any non-bijective non-constant preserving map; `\|Inv(M)\|` is 59 for the two symmetric classes (the involution-invariant partitions of a seven-set) and 877 (all of `Eq(7)`) for the ten rigid ones.  No class is closed, so **no algebra on at most seven elements has congruence lattice isomorphic to `L7`**.
+The same sweep one size up: `Eq(7)` contains **55,440** labelled copies of `L7` in **12** classes up to relabeling — two with a stabilizer of order 2, ten rigid.  Again no class admits any non-bijective non-constant preserving map; `|Inv(M)|` is 59 for the two symmetric classes (the involution-invariant partitions of a seven-set) and 877 (all of `Eq(7)`) for the ten rigid ones.  No class is closed, so **no algebra on at most seven elements has congruence lattice isomorphic to `L7`**.
 
 ## 6. Consequences and next steps
 
@@ -84,4 +84,4 @@ or directly, with a target file holding the `L7` meet and join tables:
 python3 scripts/python/flrp/eqsearch.py l7.json 6 --json l7-eq6-report.json
 ```
 
-The report format (`flrp-eqsearch v1`) lists every class with its representative partitions (as Freese normal-form parent vectors), orbit size, preserving-group order, monoid size, `\|Inv(M)\|`, and closure verdict; output is deterministic, so re-runs are byte-identical.
+The report format (`flrp-eqsearch v1`) lists every class with its representative partitions (as Freese normal-form parent vectors), orbit size, preserving-group order, monoid size, `|Inv(M)|`, and closure verdict; output is deterministic, so re-runs are byte-identical.
