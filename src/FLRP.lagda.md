@@ -67,6 +67,12 @@ Two standing warnings apply to everything under this namespace.
    `Setoid.Congruences.Certificates` checkers) into a `Representableᵈ` witness
    for the target lattice, so external searches (GAP, UACalc, SAT) enter the
    corpus only through the checker.
++  [FLRP.L7EqSix][] — the explicit Pudlák–Tůma witness for the distinguished
+   open instance: seven partitions of a six-element set (the minimum possible)
+   forming a sublattice of `Eq(6)` isomorphic to `L7`, with meets, join upper
+   bounds, injectivity, and normal forms decided over the finite carrier and
+   join least-ness proved against arbitrary equivalence relations via bounded
+   alternating chains (issue #484; session note `docs/notes/flrp-l7-eq6.md`).
 
 **Planned submodules** (per § 6 of the roadmap).
 
@@ -86,4 +92,5 @@ open import FLRP.Representable public
 open import FLRP.Assumptions public
 open import FLRP.LayerBridge public
 open import FLRP.Certificates public
+open import FLRP.L7EqSix public
 ```
