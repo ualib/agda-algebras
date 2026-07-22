@@ -1,4 +1,4 @@
-<!-- File: scripts/flrp/README.md -->
+<!-- File: scripts/python/flrp/README.md -->
 
 # FLRP certificate emitters (WP-6)
 
@@ -12,10 +12,10 @@ The engine side of the WP-6 certificate pipeline (issue #457; design fixed in `d
 ## Usage
 
 ```sh
-python3 scripts/flrp/emit_agda.py scripts/flrp/inputs/v4_regular_m3.json
+python3 scripts/python/flrp/emit_agda.py scripts/python/flrp/inputs/v4_regular_m3.json
 ```
 
-This writes `src/FLRP/Certificates/Pilot/<name>.lagda.md` (the only file placement needed — the generated `Everything` aggregator picks it up, so `make check` verifies it with no manual editing) and `scripts/flrp/out/<name>.cert.json` (the raw certificate, kept outside `src/` per roadmap § 6).  Output is a deterministic function of the input; pin the input's `date` field for byte-stable re-emission.
+This writes `src/FLRP/Certificates/Pilot/<name>.lagda.md` (the only file placement needed — the generated `Everything` aggregator picks it up, so `make check` verifies it with no manual editing) and `scripts/python/flrp/out/<name>.cert.json` (the raw certificate, kept outside `src/` per roadmap § 6).  Output is a deterministic function of the input; pin the input's `date` field for byte-stable re-emission.
 
 ## The claim file (`flrp-cert-input v1`)
 

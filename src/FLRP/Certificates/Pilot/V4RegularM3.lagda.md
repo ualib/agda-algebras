@@ -3,15 +3,15 @@ layout: default
 file: "src/FLRP/Certificates/Pilot/V4RegularM3.lagda.md"
 title: "FLRP.Certificates.Pilot.V4RegularM3 module (The Agda Universal Algebra Library)"
 date: "2026-07-22"
-author: "the agda-algebras development team (emitted by scripts/flrp)"
+author: "the agda-algebras development team (emitted by scripts/python/flrp)"
 ---
 
 ### A machine-checked representation: Con(the Klein four-group acting on itself) ≅ M3
 
 This is the [FLRP.Certificates.Pilot.V4RegularM3][] module of the [Agda Universal Algebra Library][].
 
-**This module was emitted by `scripts/flrp/emit_agda.py` from
-`scripts/flrp/inputs/v4_regular_m3.json`.  Do not edit it by hand; rerun the emitter instead.**
+**This module was emitted by `scripts/python/flrp/emit_agda.py` from
+`scripts/python/flrp/inputs/v4_regular_m3.json`.  Do not edit it by hand; rerun the emitter instead.**
 
 It re-verifies, end-to-end through the WP-6 certificate pipeline (#457), the
 claim that the congruence lattice of the algebra "the Klein four-group acting on itself" — carrier size

@@ -18,7 +18,7 @@ files are deterministic functions of the input (pin the input's ``date``
 field for byte-stable output) and are never edited by hand: rerun the
 emitter instead.
 
-Usage:  python3 scripts/flrp/emit_agda.py INPUT.json [--out PATH] [--cert-json PATH]
+Usage:  python3 scripts/python/flrp/emit_agda.py INPUT.json [--out PATH] [--cert-json PATH]
 """
 
 from __future__ import annotations
@@ -35,7 +35,7 @@ from cg2 import (Algebra, CertificateError, Merge, Operation, SeedJust,
 from lattice import (TargetLattice, WholeLatticeCertificate, build_certificate,
                      validate_lattice)
 
-REPO_ROOT = Path(__file__).resolve().parents[2]
+REPO_ROOT = Path(__file__).resolve().parents[3]
 
 
 # ---------------------------------------------------------------------------
@@ -186,14 +186,14 @@ layout: default
 file: "src/FLRP/Certificates/Pilot/{name}.lagda.md"
 title: "FLRP.Certificates.Pilot.{name} module (The Agda Universal Algebra Library)"
 date: "{date}"
-author: "the agda-algebras development team (emitted by scripts/flrp)"
+author: "the agda-algebras development team (emitted by scripts/python/flrp)"
 ---
 
 ### A machine-checked representation: Con({alg.name}) ≅ {target.name}
 
 This is the [FLRP.Certificates.Pilot.{name}][] module of the [Agda Universal Algebra Library][].
 
-**This module was emitted by `scripts/flrp/emit_agda.py` from
+**This module was emitted by `scripts/python/flrp/emit_agda.py` from
 `{input_rel}`.  Do not edit it by hand; rerun the emitter instead.**
 
 It re-verifies, end-to-end through the WP-6 certificate pipeline (#457), the
@@ -409,14 +409,14 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     parser.add_argument("--out", type=Path, default=None,
                         help="output .lagda.md (default: src/FLRP/Certificates/Pilot/<name>.lagda.md)")
     parser.add_argument("--cert-json", type=Path, default=None,
-                        help="audit certificate JSON (default: scripts/flrp/out/<name>.cert.json)")
+                        help="audit certificate JSON (default: scripts/python/flrp/out/<name>.cert.json)")
     args = parser.parse_args(argv)
 
     name, date, algebra, target = parse_input(args.input)
     cert = build_certificate(algebra, target)
 
     out = args.out or REPO_ROOT / "src" / "FLRP" / "Certificates" / "Pilot" / f"{name}.lagda.md"
-    cert_json = args.cert_json or REPO_ROOT / "scripts" / "flrp" / "out" / f"{name}.cert.json"
+    cert_json = args.cert_json or REPO_ROOT / "scripts" / "python" / "flrp" / "out" / f"{name}.cert.json"
 
     input_rel = args.input.resolve().relative_to(REPO_ROOT).as_posix() \
         if args.input.resolve().is_relative_to(REPO_ROOT) else str(args.input)

@@ -32,9 +32,9 @@ from lattice import (TargetLattice, WholeLatticeCertificate, build_certificate,
                      congruence_lattice, match_target, partition_meet,
                      validate_lattice)
 
-PILOT_INPUT = REPO_ROOT / "scripts" / "flrp" / "inputs" / "v4_regular_m3.json"
+PILOT_INPUT = REPO_ROOT / "scripts" / "python" / "flrp" / "inputs" / "v4_regular_m3.json"
 PILOT_MODULE = REPO_ROOT / "src" / "FLRP" / "Certificates" / "Pilot" / "V4RegularM3.lagda.md"
-PILOT_AUDIT = REPO_ROOT / "scripts" / "flrp" / "out" / "V4RegularM3.cert.json"
+PILOT_AUDIT = REPO_ROOT / "scripts" / "python" / "flrp" / "out" / "V4RegularM3.cert.json"
 
 
 def v4() -> Algebra:
@@ -127,12 +127,14 @@ def check_certificate(alg: Algebra, target: TargetLattice,
 class Cg2Tests(unittest.TestCase):
 
     def test_operation_apply(self) -> None:
+        """cg2: operation tables apply positionally and reject bad arity."""
         op = Operation("f", 2, [[0, 1], [1, 0]])
         self.assertEqual(op.apply((1, 0)), 1)
         with self.assertRaises(CertificateError):
             op.apply((1,))
 
     def test_validate_algebra_rejects_bad_tables(self) -> None:
+        """cg2: algebra validation rejects out-of-range entries and wrong shapes."""
         with self.assertRaises(CertificateError):
             validate_algebra(Algebra("bad", 2, (Operation("f", 1, [0, 5]),)))
         with self.assertRaises(CertificateError):
@@ -140,16 +142,19 @@ class Cg2Tests(unittest.TestCase):
         validate_algebra(v4())
 
     def test_normal_form_is_min_rooted(self) -> None:
+        """cg2: union-find normal form points every index at its block's least element."""
         uf = UnionFind(4)
         uf.union(3, 1)
         uf.union(1, 2)
         self.assertEqual(uf.normal_form(4), (0, 1, 1, 1))
 
     def test_forest_edges_order(self) -> None:
+        """cg2: forest edges list non-roots ascending, matching the Agda-side order."""
         self.assertEqual(forest_edges((0, 0, 2, 2)), [(1, 0), (3, 2)])
         self.assertEqual(forest_edges((0, 1, 2, 3)), [])
 
     def test_principal_congruence_of_v4(self) -> None:
+        """cg2: Cg(0,1) on the V4 G-set is a coset partition, one seed plus one translate."""
         run = congruence_generated_by(v4(), [(0, 1)])
         self.assertEqual(run.parent, (0, 0, 2, 2))
         self.assertEqual(len(run.trace), 2)
@@ -158,11 +163,13 @@ class Cg2Tests(unittest.TestCase):
         check_trace(v4(), [(0, 1)], run.trace, run.parent)
 
     def test_diagonal_principal_is_trivial(self) -> None:
+        """cg2: a reflexive seed pair generates the diagonal with an empty trace."""
         run = congruence_generated_by(v4(), [(2, 2)])
         self.assertEqual(run.parent, (0, 1, 2, 3))
         self.assertEqual(run.trace, ())
 
     def test_all_principal_runs_check(self) -> None:
+        """checker mirror: every V4 principal trace passes C1/C2/C3."""
         alg = v4()
         for i in range(alg.card):
             for j in range(alg.card):
@@ -173,10 +180,12 @@ class Cg2Tests(unittest.TestCase):
 class LatticeTests(unittest.TestCase):
 
     def test_partition_meet(self) -> None:
+        """lattice: partition meets are min-labeled root-pair intersections."""
         self.assertEqual(partition_meet((0, 0, 2, 2), (0, 1, 0, 1)), (0, 1, 2, 3))
         self.assertEqual(partition_meet((0, 0, 0, 0), (0, 0, 2, 2)), (0, 0, 2, 2))
 
     def test_con_v4_is_m3(self) -> None:
+        """lattice: Con(V4 acting on itself) has exactly the five M3 congruences."""
         parts, _, _ = congruence_lattice(v4())
         self.assertEqual(len(parts), 5)
         self.assertIn((0, 1, 2, 3), parts)          # the diagonal
@@ -186,15 +195,18 @@ class LatticeTests(unittest.TestCase):
         self.assertIn((0, 1, 1, 0), parts)
 
     def test_match_target_rejects_wrong_lattice(self) -> None:
+        """lattice: matching Con(V4) against a five-element chain fails."""
         parts, index, _ = congruence_lattice(v4())
         with self.assertRaises(CertificateError):
             match_target(v4(), parts, index, chain5())
 
     def test_build_certificate_checks_out(self) -> None:
+        """checker mirror: the full V4/M3 certificate passes every mirrored obligation."""
         cert = build_certificate(v4(), m3())
         check_certificate(v4(), m3(), cert)
 
     def test_false_claim_is_rejected(self) -> None:
+        """lattice: a corrupted join table makes certificate construction fail."""
         broken = TargetLattice(name="M3-broken", size=5,
                                meet=m3().meet,
                                join=tuple(tuple(4 if (k, l) == (1, 1) else v
@@ -208,11 +220,13 @@ class LatticeTests(unittest.TestCase):
 class EmitterTests(unittest.TestCase):
 
     def test_fin_literal_range(self) -> None:
+        """renderer: Fin literals stop at 9F, with a clear error beyond."""
         self.assertEqual(fin(9), "9F")
         with self.assertRaises(CertificateError):
             fin(10)
 
     def test_merge_str_uses_backward_offsets(self) -> None:
+        """renderer: translate references become backward offsets; forward references are rejected."""
         m = Merge(2, 3, TranslateJust(op=1, coord=0, frozen=(0,), ref=0))
         self.assertEqual(merge_str(2, m),
                          "mkMerge 2F 3F (translate 1F 0F (0F ∷ []) 1)")
@@ -220,6 +234,7 @@ class EmitterTests(unittest.TestCase):
             merge_str(0, m)   # a forward reference must be rejected
 
     def test_renderer_rejects_nonunary_signatures(self) -> None:
+        """renderer: non-unary signatures are refused (the engine stays arity-general)."""
         alg = Algebra("binary", 2, (Operation("f", 2, [[0, 1], [1, 0]]),))
         target = TargetLattice("chain2", 2, ((0, 0), (0, 1)), ((0, 1), (1, 1)))
         cert = build_certificate(alg, target)
@@ -227,22 +242,22 @@ class EmitterTests(unittest.TestCase):
             emitted_module("Bad", "2026-01-01", alg, target, cert, "x.json")
 
     def test_parse_input_validates(self) -> None:
+        """emitter: the pilot claim file parses with its pinned name and date."""
         name, date, algebra, target = parse_input(PILOT_INPUT)
         self.assertEqual((name, date), ("V4RegularM3", "2026-07-22"))
         self.assertEqual(algebra.card, 4)
         self.assertEqual(target.size, 5)
 
     def test_golden_module(self) -> None:
-        """Re-emitting the pilot input reproduces the committed module."""
+        """golden: re-emitting the pilot input reproduces the committed module byte for byte."""
         name, date, algebra, target = parse_input(PILOT_INPUT)
         cert = build_certificate(algebra, target)
         rendered = emitted_module(name, date, algebra, target, cert,
-                                  "scripts/flrp/inputs/v4_regular_m3.json")
+                                  "scripts/python/flrp/inputs/v4_regular_m3.json")
         self.assertEqual(rendered, PILOT_MODULE.read_text())
 
     def test_golden_audit_json(self) -> None:
-        """Re-emitting the pilot input reproduces the committed audit JSON,
-        and that JSON is well formed."""
+        """golden: re-emitting the pilot input reproduces the committed audit JSON."""
         name, _, algebra, target = parse_input(PILOT_INPUT)
         cert = build_certificate(algebra, target)
         rendered = certificate_json(name, algebra, target, cert)
@@ -250,5 +265,30 @@ class EmitterTests(unittest.TestCase):
         self.assertEqual(json.loads(rendered)["format"], "flrp-cert v1")
 
 
+# ---------------------------------------------------------------------------
+# A logging runner: one line per test as it executes, ✅ on pass, ❌ on fail.
+
+class LoggingResult(unittest.TextTestResult):
+    """Prints each test's one-line docstring with a pass/fail mark; the
+    inherited machinery still collects tracebacks for the failure summary."""
+
+    @staticmethod
+    def _describe(test: unittest.TestCase) -> str:
+        return test.shortDescription() or test.id().rsplit(".", maxsplit=1)[-1]
+
+    def addSuccess(self, test: unittest.TestCase) -> None:
+        super().addSuccess(test)
+        self.stream.writeln(f"✅ {self._describe(test)}")  # type: ignore[attr-defined]
+
+    def addFailure(self, test: unittest.TestCase, err) -> None:  # type: ignore[no-untyped-def]
+        super().addFailure(test, err)
+        self.stream.writeln(f"❌ {self._describe(test)}")  # type: ignore[attr-defined]
+
+    def addError(self, test: unittest.TestCase, err) -> None:  # type: ignore[no-untyped-def]
+        super().addError(test, err)
+        self.stream.writeln(f"❌ {self._describe(test)} (error)")  # type: ignore[attr-defined]
+
+
 if __name__ == "__main__":
-    unittest.main()
+    unittest.main(
+        testRunner=unittest.TextTestRunner(resultclass=LoggingResult, verbosity=0))

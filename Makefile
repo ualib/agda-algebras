@@ -185,11 +185,11 @@ unused-imports-test:
 	@echo "target: $@"
 	python3 scripts/python/test_unused_imports.py
 
-# Test the FLRP certificate emitter (scripts/flrp/): engine unit tests, a
+# Test the FLRP certificate emitter (scripts/python/flrp/): engine unit tests, a
 # Python mirror of the Agda checker's obligations as a regression tripwire,
 # and golden round-trip tests re-emitting the committed pilot byte for byte.
 # The Agda side needs no separate harness: the emitted pilot module is part
 # of the library, so `make check` is the end-to-end verification.
 flrp-test:
 	@echo "target: $@"
-	python3 scripts/flrp/test_flrp.py
+	python3 scripts/python/flrp/test_flrp.py
