@@ -190,6 +190,10 @@ unused-imports-test:
 # and golden round-trip tests re-emitting the committed pilot byte for byte.
 # The Agda side needs no separate harness: the emitted pilot module is part
 # of the library, so `make check` is the end-to-end verification.
+# Also tests the search side (eqsearch.py): partition kernel against brute
+# force, the L7 session census (issue #484), and the search-to-certificate
+# loop; set FLRP_EQSEARCH_SLOW=1 to include the Eq(7) sweep (~5 minutes).
 flrp-test:
 	@echo "target: $@"
 	python3 scripts/python/flrp/test_flrp.py
+	python3 scripts/python/flrp/test_eqsearch.py
