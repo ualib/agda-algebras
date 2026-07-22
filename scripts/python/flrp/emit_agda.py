@@ -106,13 +106,23 @@ def parse_input(path: Path) -> Claim:
 # ---------------------------------------------------------------------------
 # Agda literal rendering
 
+# Data.Fin.Patterns ships literals 0F–9F; past those the renderer emits its
+# own module-local pattern synonyms (`pattern 10F = suc 9F`, …) in the same
+# style (#485 batch 2, for the catalog's carriers up to 19).  The cap keeps
+# the emitted synonym chains — and the type-checking cost that grows with
+# them — a deliberate decision rather than an accident.
+STDLIB_FIN_PATTERNS = 10
+LITERAL_LIMIT = 32
+
+
 def fin(i: int) -> str:
-    """A Fin literal via Data.Fin.Patterns (0F–9F only, by design: the
-    small-lattice frontier fits, and larger carriers deserve a smarter
-    renderer, not longer lines)."""
-    if not 0 <= i <= 9:
+    """A Fin literal: Data.Fin.Patterns' 0F–9F, or one of the pattern
+    synonyms the renderer emits into the module past those."""
+    if not 0 <= i < LITERAL_LIMIT:
         raise CertificateError(
-            "index ≥ 10: the v1 renderer only emits Data.Fin.Patterns literals 0F–9F")
+            f"index ≥ {LITERAL_LIMIT}: the renderer stops at pattern synonym "
+            f"{LITERAL_LIMIT - 1}F; raise LITERAL_LIMIT deliberately if a larger "
+            "carrier is really wanted")
     return f"{i}F"
 
 
@@ -195,7 +205,18 @@ def emitted_module(claim: Claim, cert: WholeLatticeCertificate,
             "the v1 Agda renderer supports unary signatures only "
             "(the cg2 engine itself is arity-general)")
     max_fin = max(n, k, m) - 1
-    fin_patterns = " ; ".join(f"{i}F" for i in range(max_fin + 1))
+    fin_patterns = " ; ".join(
+        f"{i}F" for i in range(min(max_fin, STDLIB_FIN_PATTERNS - 1) + 1))
+    if max_fin >= STDLIB_FIN_PATTERNS:
+        fin_base_uses = "Fin ; suc"
+        synonyms = "\n".join(f"pattern {i}F = suc {i - 1}F"
+                             for i in range(STDLIB_FIN_PATTERNS, max_fin + 1))
+        pattern_block = ("\n-- Data.Fin.Patterns stops at 9F; the larger literals this\n"
+                         "-- module needs are pattern synonyms in the same style.\n"
+                         + synonyms + "\n")
+    else:
+        fin_base_uses = "Fin"
+        pattern_block = ""
 
     op_rows: Block = glue_vec(
         "opTables = ", [[fin_row(list(op.table))] for op in alg.operations])  # type: ignore[arg-type]
@@ -252,7 +273,7 @@ compilation.
 module {qualified} where
 
 -- Imports from Agda and the Agda Standard Library -----------------------------
-open import Data.Fin.Base       using ( Fin )
+open import Data.Fin.Base       using ( {fin_base_uses} )
 open import Data.Fin.Patterns   using ( {fin_patterns} )
 open import Data.List.Base      using ( [] ; _∷_ )
 open import Data.Vec.Base       using ( Vec ; [] ; _∷_ )
@@ -284,7 +305,7 @@ open import Setoid.Congruences.Certificates.Lattice
 open import Setoid.Congruences.Finite.Decidable
                                          using ( FiniteCongruencesᵈ )
 open import Setoid.Signatures.Finite     using ( FiniteSignature )
-```
+{pattern_block}```
 -->
 
 #### The algebra, from its operation tables
