@@ -2909,11 +2909,25 @@ Apply new style conventions uniformly across the Setoid tree.
 
 ---
 
-### Issue M4-18: Move Demos under Examples (#436)
+### Issue M4-18: Move Demos under Examples (#436, closed)
 
 **Labels**: `milestone-4-style`
 
 _(no description on GitHub)_
+
+---
+
+### Issue M4-19: Clean up imports post-sweep (#477, closed)
+
+**Labels**: 
+
+After the sweep that removed the signature parameter from many module definitions, the line
+
+```agda
+open import Overture using (𝓞 ; 𝓥 ; Signature ; 𝑆 )
+```
+
+still appears outside the start of the module, which is unnecessary when there's no top-level module parameter.  We can now move the import of Overture inside with the other imports, consistent with the repo-wide style convention.
 
 <!-- END GENERATED: milestone-4 -->
 
@@ -3589,7 +3603,7 @@ Per the ratified two-layer congruence discipline (`docs/adr/008-two-layer-congru
 
 ---
 
-### Issue M6-13d: FLRP WP-4: FLRP.Enforceable — IE, cf-IE, min-IE, and the no-go lemmas (#455)
+### Issue M6-13d: FLRP WP-4: FLRP.Enforceable — IE, cf-IE, min-IE, and the no-go lemmas (#455, closed)
 
 **Labels**: `research-exploratory`, `flrp-research`
 
@@ -3755,15 +3769,31 @@ Part of #451.
 
 ## Tasks (three PR-sized slices)
 
-- [ ] Slice (i) — L1 + L2: `Cg` of a finite pair list on a finite finitary algebra has decidable membership (congruence-closure computation), and every `DecCon` is `≑` to `Cg` of its related-pairs list; includes fixing the Agda packaging of finite finitary signatures (audit A3).
-- [ ] Slice (ii) — L3 + audits: constructive completeness for `DecCon` via enumeration of Bool-valued tables; the `FiniteCongruencesᵈ` interface; audit A1 (which m6-8 consumers, in particular finite Birkhoff, survive on `FiniteAlgebra` + `FiniteCongruencesᵈ` alone) and audit A2 (WP-2 group modules are Layer-D ready).
-- [ ] Slice (iii) — L4 + L5: the `FLRP.Assumptions` registry with the classical bridge (`complete` of `FiniteCongruences`) as its first entry, strength documented (between WLEM and LEM at the working level); the `DecCon` poset as a finite lattice with decidable order; `Representableᵈ` and `FLRP-Statementᵈ`; the constructive `chain₂` instance; and, under the bridge, `Representable 𝑳 ↔ Representableᵈ 𝑳`.
+- [x] Slice (i) — L1 + L2: `Cg` of a finite pair list on a finite finitary algebra has decidable membership (congruence-closure computation), and every `DecCon` is `≑` to `Cg` of its related-pairs list; includes fixing the Agda packaging of finite finitary signatures (audit A3).  *(merged #467)*
+- [x] Slice (ii) — L3 + audits: constructive completeness for `DecCon` via enumeration of Bool-valued tables; the `FiniteCongruencesᵈ` interface; audit A1 (which m6-8 consumers, in particular finite Birkhoff, survive on `FiniteAlgebra` + `FiniteCongruencesᵈ` alone) and audit A2 (WP-2 group modules are Layer-D ready).  *(merged #468)*
+- [ ] Slice (iii) — L4 + L5.  **Constructive core merged in #479; the classical-bridge parts remain** — see the status update below.
+  - [x] `Representableᵈ`, `FLRP-Statementᵈ`, the decidable-congruence poset order (`_⊆ᵈ_`, `_≑ᵈ_`, `ConIsoᵈ`), and the constructive `chain₂` instance `chain₂-Representableᵈ`, all `--safe` with no postulates (`src/FLRP/Representable.lagda.md`, #479).
+  - [ ] `FLRP.Assumptions` registry with the classical bridge (`complete` of `FiniteCongruences`) as its first entry, strength documented (between WLEM and LEM at the working level).
+  - [ ] Under that bridge, `Representable 𝑳 ↔ Representableᵈ 𝑳`.
+  - [ ] The `DecCon` poset as a finite lattice with decidable order (meets, joins) — deferred to WP-6 (#457) certificate tooling; #479 provides only the `OrderIso` target that representability needs.
+
+## Status update — 2026-07-20 (slice iii core merged)
+
+Slices (i) and (ii) merged in #467 and #468.  The **constructive core of slice (iii)** merged in #479 (`src/FLRP/Representable.lagda.md`): `Representableᵈ`, `FLRP-Statementᵈ`, the decidable-congruence poset order (`ConIsoᵈ`), and the postulate-free two-element-chain representation `chain₂-Representableᵈ` — the object the WP-1 no-go theorem forbids at Layer S, now attained constructively at Layer D.
+
+Remaining to close this issue (narrowed scope):
+
++  `src/FLRP/Assumptions.lagda.md` — the `--safe` registry naming the classical bridge (`FiniteCongruences.complete : ∀ φ → Σ[ d ∈ DecCon 𝑨 _ ] (d ∈ cons) × (φ ≑ proj₁ d)`) as an explicit hypothesis, never a postulate; strength documented between WLEM and LEM (ADR-008 L4).
++  Under that bridge, the cross-layer equivalence `Representable 𝑳 ↔ Representableᵈ 𝑳` — the `Con` and `DecCon` posets of a finite finitary algebra coincide once `complete` holds; `Representable`/`Representableᵈ` differ exactly by `ConIso` vs `ConIsoᵈ` plus the `finsig` field.
++  Wiring the now-unblocked Layer-D corollary of WP-3 (#454): `FLRP.Bridge.interval-Con-representable` can target `Representableᵈ` (may land here or as a sibling PR).
+
+Coordination: WP-5 (#456) also plans `FLRP.Assumptions` with the Kurzweil–Netter duality as "its first entry."  This issue **creates** the module with the classical `complete` bridge as entry 1; WP-5 appends the duality entry.
 
 ## Acceptance criteria
 
-- [ ] All new modules type-check under `--cubical-compatible --exact-split --safe`; no postulates; the bridge appears only as an explicit hypothesis.
-- [ ] `Representableᵈ (toLattice chain₂)` is inhabited with no classical assumptions.
-- [ ] The m6-8 note gains an addendum recording the A1 audit outcome.
+- [ ] All new modules type-check under `--cubical-compatible --exact-split --safe`; no postulates; the bridge appears only as an explicit hypothesis.  *(FLRP.Representable satisfies this in #479; completes when FLRP.Assumptions lands.)*
+- [x] `Representableᵈ (toLattice chain₂)` is inhabited with no classical assumptions.  *(`chain₂-Representableᵈ`, #479.)*
+- [x] The m6-8 note gains an addendum recording the A1 audit outcome.  *(`docs/notes/m6-8-finite-birkhoff.md` § "Update (WP-7 A1)"; full findings in `docs/notes/flrp-wp7-audits.md`.)*
 
 <!-- END GENERATED: milestone-6 -->
 

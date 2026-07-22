@@ -72,7 +72,7 @@ open import Agda.Primitive using () renaming ( Set to Type )
 open import Data.Fin.Patterns             using ( 0F )
 open import Data.Product                  using ( _,_ ; _×_ ; Σ-syntax ; proj₁ ; proj₂ )
 open import Function                      using ( _∘_ )
-open import Level                         using ( Level ; 0ℓ ) renaming ( suc to lsuc )
+open import Level                         using ( 0ℓ ) renaming ( suc to lsuc )
 open import Relation.Binary               using ( Setoid ; IsEquivalence )
                                           renaming ( Rel to BinaryRel )
 open import Relation.Binary.Definitions   using ( _Respects_ )
@@ -85,22 +85,23 @@ open import Classical.Bundles.Group               using  ( ⟨_⟩ᵍᵖ )
 open import Classical.Signatures.Unary            using  ( Sig-Unary )
 open import Classical.Structures.Group.Basic      using  ( Group ; module Group-Op )
 open import Classical.Structures.Group.Subgroups  using  ( IsSubgroup ; mkIsSubgroup )
-open import Classical.Structures.Group.SubgroupLattice using (module GroupSublattice)
+open import Classical.Structures.Group.SubgroupLattice
+                                                  using  (module GroupSublattice)
 open import Classical.Structures.Group.Cosets     using  ( module Coset )
 open import Classical.Structures.Group.GSet       using  ( module CosetAction )
 open import FLRP.Enforceable                      using  ( module UpperInterval )
 open import FLRP.Problem                          using  ( OrderIso )
-open import Setoid.Algebras.Basic                 using  ( Algebra ; 𝕌[_] ; 𝔻[_] ; _^_ )
+open import Setoid.Algebras.Basic                 using  ( Algebra ; 𝕌[_] ; 𝔻[_] )
 open import Setoid.Algebras.Finite                using  ( FiniteAlgebra )
 open import Setoid.Congruences.Basic              using  ( Con ; IsCongruence ; mkcon
                                                          ; _∣≈_ ; is-compatible
                                                          ; is-equivalence ; reflexive )
-open import Setoid.Congruences.Lattice            using ( _≑_ )
+open import Setoid.Congruences.Lattice            using  ( _≑_ )
                                                   renaming ( _⊆_ to _⊑_ )
-open import Setoid.Congruences.Finite.Basic       using ( DecCon )
-open import FLRP.Representable                     using ( _⊆ᵈ_ ; _≑ᵈ_ )
-open import FLRP.Assumptions                       using ( CongruenceCompleteness )
-open import FLRP.LayerBridge                       using ( conDecIso ; wit )
+open import Setoid.Congruences.Finite.Basic       using  ( DecCon )
+open import FLRP.Representable                    using  ( _⊆ᵈ_ ; _≑ᵈ_ )
+open import FLRP.Assumptions                      using  ( CongruenceCompleteness )
+open import FLRP.LayerBridge                      using  ( conDecIso ; wit )
 ```
 -->
 
@@ -122,13 +123,14 @@ module Bridge (𝒢    : Group 0ℓ 0ℓ)
   G : Type 0ℓ
   G = 𝕌[ 𝑮 ]
 
-  open Setoid 𝔻[ 𝑮 ]  using ( _≈_ )
-                      renaming ( refl to ≈refl ; sym to ≈sym ; trans to ≈trans )
-  open Group-Op 𝒢     using ( _∙_ ; ε ; _⁻¹ ; ∙-cong ; idˡ-law ; idʳ-law ; invˡ-law )
-  open GroupProperties ⟨ 𝒢 ⟩ᵍᵖ  using ( ε⁻¹≈ε ; \\-leftDividesˡ )
-  open IsSubgroup H-sg          using ( respects )
-  open Coset 𝒢 H H-sg           using ( _∼_ ; ≈⇒∼ )
-  open CosetAction 𝒢 H H-sg     using ( cosetAlgebra )
+  open Setoid 𝔻[ 𝑮 ]            renaming ( refl to ≈refl ; sym to ≈sym ; trans to ≈trans )
+                                using ( _≈_ )
+  open Group-Op 𝒢               using  ( _∙_ ; ε ; _⁻¹ ; ∙-cong ; idˡ-law
+                                       ; idʳ-law ; invˡ-law )
+  open GroupProperties ⟨ 𝒢 ⟩ᵍᵖ  using  ( ε⁻¹≈ε ; \\-leftDividesˡ )
+  open IsSubgroup H-sg          using  ( respects )
+  open Coset 𝒢 H H-sg           using  ( _∼_ ; ≈⇒∼ )
+  open CosetAction 𝒢 H H-sg     using  ( cosetAlgebra )
   open UpperInterval 𝒢 H H-sg
 ```
 

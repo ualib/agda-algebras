@@ -68,19 +68,19 @@ open import Level                 using ( Level ; 0ℓ ; _⊔_ )
 open import Relation.Binary       using ( Setoid )
 
 -- Imports from the Agda Universal Algebra Library ------------------------------
-open import Overture                             using  ( 𝓞 ; 𝓥 ; Signature )
-open import Classical.Small.Structures.Lattice   using  ( Lattice )
-open import Classical.Properties.Lattice         using  ( module Lattice-Order )
-open import Setoid.Algebras.Basic                using  ( Algebra ; 𝔻[_] ; 𝕌[_] )
-open import Setoid.Signatures.Finite             using  ( FiniteSignature )
-open import Setoid.Congruences.Basic             using  ( Con )
-open import Setoid.Congruences.Lattice           using  ( _⊆_ ; _≑_ )
-open import Setoid.Congruences.Finite.Basic      using  ( DecCon )
-open import FLRP.Problem                         using  ( OrderIso ; Representable
-                                                        ; ConIso )
-open import FLRP.Representable                   using  ( Representableᵈ ; ConIsoᵈ
-                                                        ; _⊆ᵈ_ ; _≑ᵈ_ )
-open import FLRP.Assumptions                     using  ( CongruenceCompleteness )
+open import Classical.Properties.Lattice        using  ( module Lattice-Order )
+open import Classical.Small.Structures.Lattice  using  ( Lattice )
+open import FLRP.Assumptions                    using  ( CongruenceCompleteness )
+open import FLRP.Problem                        using  ( OrderIso ; Representable
+                                                       ; ConIso )
+open import FLRP.Representable                  using  ( Representableᵈ ; ConIsoᵈ
+                                                       ; _⊆ᵈ_ ; _≑ᵈ_ )
+open import Overture                            using  ( 𝓞 ; 𝓥 ; Signature )
+open import Setoid.Algebras.Basic               using  ( Algebra ; 𝔻[_] ; 𝕌[_] )
+open import Setoid.Congruences.Basic            using  ( Con )
+open import Setoid.Congruences.Finite.Basic     using  ( DecCon )
+open import Setoid.Congruences.Lattice          using  ( _⊆_ ; _≑_ )
+open import Setoid.Signatures.Finite            using  ( FiniteSignature )
 
 private variable α ρ : Level
 ```
@@ -162,8 +162,8 @@ module _
   (cc : CongruenceCompleteness 𝑨)
   where
   private module P = OrderIso (conDecIso cc)
-  open Setoid 𝔻[ proj₁ 𝑳 ]  using ( _≈_ ) renaming ( sym to ≈sym ; trans to ≈trans )
-  open Lattice-Order 𝑳       using ( _≤_ ; ≤-antisym )
+  open Setoid 𝔻[ proj₁ 𝑳 ]  using ( _≈_ ) renaming ( trans to ≈trans )
+  open Lattice-Order 𝑳       using ( ≤-antisym )
 ```
 
 **Layer D to Layer S**.  Given a decidable-layer isomorphism `isoᵈ : DecCon 𝑨 ≅ 𝑳`,

@@ -58,28 +58,25 @@ open import Data.Unit.Base       using ( tt )
 open import Level                using ( Level ; 0ℓ ; _⊔_ ; Lift ; lift ; lower )
                                  renaming ( suc to lsuc )
 open import Relation.Binary      using ( Setoid ; IsEquivalence )
-                                 renaming ( Rel to BinaryRel )
-open import Relation.Binary.PropositionalEquality  using ( _≡_ ; refl ; sym ; subst )
+open import Relation.Binary.PropositionalEquality
+                                 using ( _≡_ ; refl ; sym ; subst )
 open import Relation.Nullary     using ( ¬_ ; Dec ; yes ; no )
 
 -- Imports from the Agda Universal Algebra Library ------------------------------
-open import Overture                             using  ( 𝓞 ; 𝓥 ; Signature )
-open import Classical.Small.Structures.Lattice   using  ( Lattice )
 open import Classical.Properties.Lattice         using  ( module Lattice-Order )
+open import Classical.Small.Structures.Lattice   using  ( Lattice )
+open import FLRP.Problem                         using  ( OrderIso ; FiniteLattice
+                                                        ; toLattice ; 𝑆∅ ; chain₂-lattice )
+open import Overture                             using  ( 𝓞 ; 𝓥 ; Signature )
 open import Setoid.Algebras.Basic                using  ( Algebra ; 𝔻[_] ; mkAlgebraₚ )
 open import Setoid.Algebras.Finite               using  ( FiniteAlgebra )
-open import Setoid.Signatures.Finite             using  ( FiniteSignature )
-open import Setoid.Congruences.Basic             using  ( Con ; reflexive ; 𝟘[_]
+open import Setoid.Congruences.Basic             using  ( reflexive ; 𝟘[_]
                                                         ; is-equivalence ; 𝟙[_] )
-open import Setoid.Congruences.Lattice           using  ( _⊆_ ; _≑_ ; ≑-sym
-                                                        ; 𝟘-min ; 𝟙-max )
 open import Setoid.Congruences.Finite.Basic      using  ( DecCon ; ConRel )
 open import Setoid.Congruences.Finite.Decidable  using  ( FiniteCongruencesᵈ
                                                         ; FiniteAlgebra→FiniteCongruencesᵈ )
-open import Setoid.Congruences.ChainJoin         using  ( Finitary )
-open import FLRP.Problem                         using  ( OrderIso ; FiniteLattice
-                                                        ; toLattice ; 𝑆∅ ; chain₂
-                                                        ; chain₂-lattice )
+open import Setoid.Congruences.Lattice           using  ( _⊆_ ; _≑_ ; 𝟘-min ; 𝟙-max )
+open import Setoid.Signatures.Finite             using  ( FiniteSignature )
 
 private variable α ρ ℓ : Level
 ```

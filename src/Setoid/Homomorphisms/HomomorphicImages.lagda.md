@@ -18,26 +18,26 @@ module Setoid.Homomorphisms.HomomorphicImages where
 open import Agda.Primitive using () renaming ( Set to Type )
 
 -- Imports from the Agda Standard Library ----------------------------------------------------
-open import Data.Product     using ( _,_ ; Σ-syntax )
-                             renaming ( _×_ to _∧_ )
-open import Function         using ( Func ; _∘_ )
-open import Level            using ( Level ; _⊔_ ; suc )
-open import Relation.Binary  using ( Setoid )
-open import Relation.Unary   using ( Pred ; _∈_ )
-
-open import Relation.Binary.PropositionalEquality using (refl)
+open import Data.Product  renaming ( _×_ to _∧_ )  using ( _,_ ; Σ-syntax )
+open import Function                               using ( Func ; _∘_ )
+open import Level                                  using ( Level ; _⊔_ ; suc )
+open import Relation.Binary                        using ( Setoid )
+open import Relation.Unary                         using ( Pred ; _∈_ )
+open import Relation.Binary.PropositionalEquality  using (refl)
 
 -- Imports from the Agda Universal Algebra Library ---------------------------------------------
-open import Overture                                    using  ( proj₁ ; proj₂
-                                                               ; ArityOf ; 𝓞 ; 𝓥 ; Signature ; 𝑆 )
-open import Setoid.Algebras  using  ( Algebra ; ov ; _^_ ; 𝔻[_]
-                                                               ; Lift-Algˡ ; Lift-Alg ; 𝕌[_] )
-open import Setoid.Functions using (IsSurjective; Image_∋_ ; Ran ; range ; preimage ; image ; preimage≈image; Inv ; lift∼lower; InvIsInverseʳ; ⊙-IsSurjective)
-open import Setoid.Signatures                           using  ( ⟨_⟩ )
-open import Setoid.Homomorphisms.Basic                  using  ( hom ; IsHom ; 𝒾𝒹 )
+open import Overture                           using  ( proj₁ ; proj₂ ; ArityOf ; 𝑆 )
+open import Setoid.Algebras                    using  ( Algebra ; ov ; _^_ ; 𝔻[_]
+                                                      ; Lift-Algˡ ; Lift-Alg ; 𝕌[_] )
+open import Setoid.Functions                   using  (IsSurjective; Image_∋_ ; Ran
+                                                      ; range ; preimage ; image ; Inv
+                                                      ; preimage≈image ; lift∼lower
+                                                      ; InvIsInverseʳ ; ⊙-IsSurjective)
+open import Setoid.Homomorphisms.Basic         using  ( hom ; IsHom ; 𝒾𝒹 )
 open import Setoid.Homomorphisms.Isomorphisms  using  ( _≅_ ; Lift-≅ )
-open  import Setoid.Homomorphisms.Properties            using  ( Lift-homˡ ; ToLiftˡ
-                                                               ; lift-hom-lemma ; ⊙-hom )
+open import Setoid.Homomorphisms.Properties    using  ( Lift-homˡ ; ToLiftˡ
+                                                      ; lift-hom-lemma ; ⊙-hom )
+open import Setoid.Signatures                  using  ( ⟨_⟩ )
 
 open Algebra
 

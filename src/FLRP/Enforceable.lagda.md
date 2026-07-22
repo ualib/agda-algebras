@@ -73,7 +73,7 @@ open import Data.Product                            using  ( _,_ ; _×_ ; Σ-syn
 open import Data.Unit.Base                          using  ( tt )
 open import Function                                using  ( _∘_ )
 open import Level         renaming ( suc to lsuc )  using  ( Level ; 0ℓ ; _⊔_
-                                                           ; Lift ; lift )
+                                                           ; lift )
 open import Relation.Binary                         using  ( Setoid )
 open import Relation.Binary.Definitions             using  ( _Respects_ )
 open import Relation.Binary.PropositionalEquality   using  ( _≡_ )
@@ -136,7 +136,7 @@ module UpperInterval
 
   open Setoid 𝔻[ proj₁ 𝒢 ] using ( _≈_ )
   open GroupSublattice 𝒢 0ℓ  using  ( Subᴸ ; 1ˢ ; 1ˢ-maximum ; subgroup→Subᴸ
-                                    ; module SubInterval ; Sub-Lattice )
+                                    ; Sub-Lattice )
 
   -- The bottom of the interval: H as an element of the subuniverse lattice.
   H↑ : Subᴸ
