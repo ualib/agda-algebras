@@ -22,4 +22,5 @@ module Setoid.Congruences.Certificates where
 
 open import Setoid.Congruences.Certificates.Schema      public
 open import Setoid.Congruences.Certificates.Congruence  public
+open import Setoid.Congruences.Certificates.Lattice     public
 ```
