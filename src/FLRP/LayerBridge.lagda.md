@@ -63,7 +63,7 @@ module FLRP.LayerBridge where
 
 -- Imports from Agda and the Agda Standard Library -----------------------------
 open import Data.Product          using ( _,_ ; proj₁ ; proj₂ )
-open import Function              using ( _∘_ )
+open import Function              using ( _∘_ ; id )
 open import Level                 using ( Level ; 0ℓ ; _⊔_ )
 open import Relation.Binary       using ( Setoid )
 
@@ -71,7 +71,7 @@ open import Relation.Binary       using ( Setoid )
 open import Overture                             using  ( 𝓞 ; 𝓥 ; Signature )
 open import Classical.Small.Structures.Lattice   using  ( Lattice )
 open import Classical.Properties.Lattice         using  ( module Lattice-Order )
-open import Setoid.Algebras.Basic                using  ( Algebra ; 𝔻[_] )
+open import Setoid.Algebras.Basic                using  ( Algebra ; 𝔻[_] ; 𝕌[_] )
 open import Setoid.Signatures.Finite             using  ( FiniteSignature )
 open import Setoid.Congruences.Basic             using  ( Con )
 open import Setoid.Congruences.Lattice           using  ( _⊆_ ; _≑_ )
@@ -108,11 +108,11 @@ module _
 
   -- The decidable representative of a semantic congruence (the bridge's map) ...
   wit : Con 𝑨 ℓw → DecCon 𝑨 ℓw
-  wit φ = proj₁ (cc φ)
+  wit φ = cc φ .proj₁
 
   -- ... and the ≑-witness that it represents φ.
   wit≑ : (φ : Con 𝑨 ℓw) → φ ≑ proj₁ (wit φ)
-  wit≑ φ = proj₂ (cc φ)
+  wit≑ φ = cc φ .proj₂
 ```
 
 `wit`{.AgdaFunction} is monotone: a containment `θ ⊆ φ`{.AgdaFunction} forwards to a
@@ -140,8 +140,8 @@ just the `≑`-witness `wit≑`{.AgdaFunction}, read in the appropriate directio
     { to         = wit
     ; from       = proj₁
     ; to-mono    = λ {θ}{φ} → wit-mono {θ}{φ}
-    ; from-mono  = λ p → p
-    ; to∘from    = λ d → wit≑ (d .proj₁) .proj₂ , wit≑ (d .proj₁) .proj₁
+    ; from-mono  = id
+    ; to∘from    = λ (d , _) → wit≑ d .proj₂ , wit≑ d .proj₁
     ; from∘to    = λ φ → wit≑ φ .proj₂ , wit≑ φ .proj₁
     }
 ```
@@ -155,8 +155,12 @@ its meet order, whose antisymmetry `≤-antisym`{.AgdaFunction} discharges the o
 `≑`-congruence obligation of each transport.
 
 ```agda
-module _ {𝑆 : Signature 0ℓ 0ℓ}{𝑨 : Algebra {𝑆 = 𝑆} 0ℓ 0ℓ}
-         (𝑳 : Lattice)(cc : CongruenceCompleteness 𝑨) where
+module _
+  {𝑆 : Signature 0ℓ 0ℓ}
+  {𝑨 : Algebra {𝑆 = 𝑆} 0ℓ 0ℓ}
+  (𝑳 : Lattice)
+  (cc : CongruenceCompleteness 𝑨)
+  where
   private module P = OrderIso (conDecIso cc)
   open Setoid 𝔻[ proj₁ 𝑳 ]  using ( _≈_ ) renaming ( sym to ≈sym ; trans to ≈trans )
   open Lattice-Order 𝑳       using ( _≤_ ; ≤-antisym )
@@ -172,8 +176,8 @@ trip of `P`{.AgdaBound} (through `to-cong`{.AgdaFunction}) with one of `isoᵈ`{
 ```agda
   ConIsoᵈ→ConIso : ConIsoᵈ 𝑨 𝑳 → ConIso 𝑨 𝑳
   ConIsoᵈ→ConIso isoᵈ = record
-    { to         = D.to ∘ P.to
-    ; from       = P.from ∘ D.from
+    { to         = to'
+    ; from       = from'
     ; to-mono    = λ {θ}{φ} → D.to-mono ∘ P.to-mono {θ} {φ}
     ; from-mono  = λ {u}{v} → P.from-mono {D.from u} {D.from v} ∘ D.from-mono {u} {v}
     ; to∘from    = tf
@@ -185,12 +189,20 @@ trip of `P`{.AgdaBound} (through `to-cong`{.AgdaFunction}) with one of `isoᵈ`{
     -- monotone maps' endpoint implicits are forwarded only where a composition or the
     -- goal type does not already pin them — the containment relations are non-injective.)
     to-cong : {d e : DecCon 𝑨 0ℓ} → d ≑ᵈ e → D.to d ≈ D.to e
-    to-cong {d}{e} deq = ≤-antisym (D.to-mono {d} {e} (deq .proj₁)) (D.to-mono {e} {d} (deq .proj₂))
+    to-cong deq = ≤-antisym (D.to-mono (deq .proj₁)) (D.to-mono (deq .proj₂))
+
+    to' : Con 𝑨 0ℓ → 𝕌[ proj₁ 𝑳 ]
+    to' =  D.to ∘ P.to
+
+    from' : 𝕌[ proj₁ 𝑳 ] → Con 𝑨 0ℓ
+    from' = P.from ∘ D.from
+
     -- Con → DecCon → Con → 𝑳 collapses to 𝑳 via a P round trip (through to-cong) then an isoᵈ one.
-    tf : ∀ u → D.to (P.to (P.from (D.from u))) ≈ u
-    tf u = ≈trans (to-cong {P.to (P.from (D.from u))} {D.from u} (P.to∘from (D.from u))) (D.to∘from u)
+    tf : ∀ u → to' (from' u) ≈ u
+    tf u = ≈trans (to-cong (P.to∘from (D.from u))) (D.to∘from u)
+
     -- 𝑳 → DecCon → Con → DecCon: the ≑ round trip, composed on each ⇒-direction.
-    ft : ∀ φ → P.from (D.from (D.to (P.to φ))) ≑ φ
+    ft : ∀ φ → from' (to' φ) ≑ φ
     ft φ = P.from∘to φ .proj₁ ∘ D.from∘to (P.to φ) .proj₁
          , D.from∘to (P.to φ) .proj₂ ∘ P.from∘to φ .proj₂
 ```
@@ -204,8 +216,8 @@ trip of `P`{.AgdaBound} (through `to-cong`{.AgdaFunction}) with one of `isoᵈ`{
 ```agda
   ConIso→ConIsoᵈ : ConIso 𝑨 𝑳 → ConIsoᵈ 𝑨 𝑳
   ConIso→ConIsoᵈ iso = record
-    { to         = C.to ∘ P.from
-    ; from       = P.to ∘ C.from
+    { to         = to'
+    ; from       = from'
     ; to-mono    = λ {d}{e} → C.to-mono ∘ P.from-mono {d} {e}
     ; from-mono  = λ {u}{v} → P.to-mono {C.from u} {C.from v} ∘ C.from-mono {u} {v}
     ; to∘from    = tf
@@ -215,51 +227,64 @@ trip of `P`{.AgdaBound} (through `to-cong`{.AgdaFunction}) with one of `isoᵈ`{
     module C = OrderIso iso
     -- iso's forward map respects ≑, by antisymmetry of the meet order.
     to-cong : {θ φ : Con 𝑨 0ℓ} → θ ≑ φ → C.to θ ≈ C.to φ
-    to-cong {θ}{φ} eq = ≤-antisym (C.to-mono {θ} {φ} (eq .proj₁)) (C.to-mono {φ} {θ} (eq .proj₂))
+    to-cong eq = ≤-antisym (C.to-mono (eq .proj₁)) (C.to-mono (eq .proj₂))
+
     -- wit respects ≑ (needed to push an iso round trip through the ≑ᵈ side); it is
     -- P.to-mono in both directions.
     to-congᵈ : {θ φ : Con 𝑨 0ℓ} → θ ≑ φ → P.to θ ≑ᵈ P.to φ
-    to-congᵈ {θ}{φ} eq = P.to-mono {θ} {φ} (eq .proj₁) , P.to-mono {φ} {θ} (eq .proj₂)
-    tf : ∀ u → C.to (P.from (P.to (C.from u))) ≈ u
-    tf u = ≈trans (to-cong {P.from (P.to (C.from u))} {C.from u} (P.from∘to (C.from u))) (C.to∘from u)
+    to-congᵈ eq = P.to-mono (eq .proj₁) , P.to-mono (eq .proj₂)
+
+    to' : DecCon 𝑨 0ℓ → 𝕌[ proj₁ 𝑳 ]
+    to' = C.to ∘ P.from
+
+    from' : 𝕌[ proj₁ 𝑳 ] → DecCon 𝑨 0ℓ
+    from' = P.to ∘ C.from
+
+    tf : ∀ u → to' (from' u) ≈ u
+    tf u = ≈trans (to-cong (P.from∘to (C.from u))) (C.to∘from u)
+
     -- The ≑ᵈ round trip, composed on each ⇒-direction; `cd` names the ≑ᵈ from to-congᵈ.
-    ft : ∀ d → P.to (C.from (C.to (P.from d))) ≑ᵈ d
+    ft : ∀ d → from' (to' d) ≑ᵈ d
     ft d = P.to∘from d .proj₁ ∘ cd .proj₁ , cd .proj₂ ∘ P.to∘from d .proj₂
-      where cd = to-congᵈ {C.from (C.to (P.from d))} {P.from d} (C.from∘to (P.from d))
+      where
+      cd : from' (to' d) ≑ᵈ P.to (P.from d)
+      cd = to-congᵈ (C.from∘to (P.from d))
 ```
 
 #### The representability equivalence
 
-The two layer-transports assemble the equivalence of the representability notions.  The
-finiteness and carrier data carry over unchanged; only the isomorphism field is
-transported, and `Representable → Representableᵈ`{.AgdaFunction} additionally supplies the
-finite-signature witness that `Representableᵈ`{.AgdaRecord} carries and
+The two layer-transports assemble the equivalence of the representability notions.
+The finiteness and carrier data carry over unchanged; only the isomorphism field is
+transported, and `Representable → Representableᵈ`{.AgdaFunction} additionally
+supplies the finite-signature witness that `Representableᵈ`{.AgdaRecord} carries and
 `Representable`{.AgdaRecord} does not.
 
 ```agda
 module _ {𝑳 : Lattice} where
-
+  open Representableᵈ
+  open Representable
   -- Layer D ⇒ Layer S: transport the ConIsoᵈ to a ConIso.
   Representableᵈ→Representable : (r : Representableᵈ 𝑳)
-    → CongruenceCompleteness (Representableᵈ.alg r) → Representable 𝑳
-  Representableᵈ→Representable r cc = record
-    { sig      = Representableᵈ.sig r
-    ; alg      = Representableᵈ.alg r
-    ; finite   = Representableᵈ.finite r
-    ; con-iso  = ConIsoᵈ→ConIso 𝑳 cc (Representableᵈ.con-isoᵈ r)
-    }
+    → CongruenceCompleteness (r .algᵈ) → Representable 𝑳
+  Representableᵈ→Representable r cc =
+    record
+      { sig      = r .sigᵈ
+      ; alg      = r .algᵈ
+      ; finite   = r .finiteᵈ
+      ; con-iso  = ConIsoᵈ→ConIso 𝑳 cc (r .con-isoᵈ)
+      }
 
   -- Layer S ⇒ Layer D: transport the ConIso to a ConIsoᵈ, given a FiniteSignature.
   Representable→Representableᵈ : (r : Representable 𝑳)
-    → FiniteSignature (Representable.sig r)
-    → CongruenceCompleteness (Representable.alg r) → Representableᵈ 𝑳
-  Representable→Representableᵈ r fs cc = record
-    { sig       = Representable.sig r
-    ; alg       = Representable.alg r
-    ; finite    = Representable.finite r
-    ; finsig    = fs
-    ; con-isoᵈ  = ConIso→ConIsoᵈ 𝑳 cc (Representable.con-iso r)
-    }
+    → FiniteSignature (r .sig) → CongruenceCompleteness (r .alg) → Representableᵈ 𝑳
+  Representable→Representableᵈ r fs cc =
+    record
+      { sigᵈ       = r .sig
+      ; algᵈ       = r .alg
+      ; finiteᵈ    = r .finite
+      ; finsigᵈ    = fs
+      ; con-isoᵈ  = ConIso→ConIsoᵈ 𝑳 cc (r .con-iso)
+      }
 ```
 
 --------------------------------------

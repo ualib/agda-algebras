@@ -146,11 +146,11 @@ than semantic `Con`{.AgdaFunction}.
 ```agda
 record Representableᵈ (𝑳 : Lattice) : Type (lsuc 0ℓ) where
   field
-    sig       : Signature 0ℓ 0ℓ
-    alg       : Algebra {𝑆 = sig} 0ℓ 0ℓ
-    finite    : FiniteAlgebra {𝑆 = sig} alg
-    finsig    : FiniteSignature sig
-    con-isoᵈ  : ConIsoᵈ {𝑆 = sig} alg 𝑳
+    sigᵈ      : Signature 0ℓ 0ℓ
+    algᵈ      : Algebra {𝑆 = sigᵈ} 0ℓ 0ℓ
+    finiteᵈ   : FiniteAlgebra {𝑆 = sigᵈ} algᵈ
+    finsigᵈ   : FiniteSignature sigᵈ
+    con-isoᵈ  : ConIsoᵈ {𝑆 = sigᵈ} algᵈ 𝑳
 ```
 
 The Finite Lattice Representation Problem, reformulated at Layer D: every finite
@@ -427,10 +427,10 @@ unattainable at Layer S is thus attained, constructively, at Layer D.
 ```agda
 chain₂-Representableᵈ : Representableᵈ chain₂-lattice
 chain₂-Representableᵈ = record
-  { sig       = 𝑆∅
-  ; alg       = 𝟚
-  ; finite    = 𝟚-FiniteAlgebra
-  ; finsig    = 𝑆∅-FiniteSignature
+  { sigᵈ       = 𝑆∅
+  ; algᵈ       = 𝟚
+  ; finiteᵈ    = 𝟚-FiniteAlgebra
+  ; finsigᵈ    = 𝑆∅-FiniteSignature
   ; con-isoᵈ  = 𝟚-ConIsoᵈ
   }
 ```
