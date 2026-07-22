@@ -10,8 +10,8 @@ author: "the agda-algebras development team"
 
 This is the [Classical.Structures.Unary][] module of the [Agda Universal Algebra Library][].
 
-A finite unary algebra — a carrier `Fin n`{.AgdaDatatype} with one unary
-operation per symbol of `Fin k`{.AgdaDatatype} — is completely specified by a
+A finite unary algebra — a carrier `Fin`{.AgdaDatatype}` n` with one unary
+operation per symbol of `Fin`{.AgdaDatatype}` k` — is completely specified by a
 `k × n` table of values, in exactly the way a binary operation is specified by
 a Cayley table ([Overture.Cayley][]).  This module fixes that presentation and
 its finiteness witnesses once, so that concrete unary algebras (G-sets given by
@@ -20,15 +20,15 @@ algebras — [Setoid.Congruences.Certificates][]) are literals plus one
 constructor call, with no per-example boilerplate:
 
 +  `tablesToUnaryAlgebra`{.AgdaFunction} — the algebra over
-   `Sig-Unary (Fin k)`{.AgdaFunction} ([Classical.Signatures.Unary][]) whose
+   `Sig-Unary (Fin k)` ([Classical.Signatures.Unary][]) whose
    `f`-th operation is row `f` of the table, built by
    `mkAlgebraₚ`{.AgdaFunction} over the propositional-equality carrier;
 +  `tablesToUnaryAlgebra-FiniteAlgebra`{.AgdaFunction} — the carrier-finiteness
    witness ([Setoid.Algebras.Finite][]): decidable equality and the identity
-   enumeration of `Fin n`{.AgdaDatatype};
+   enumeration of `Fin`{.AgdaDatatype}` n`;
 +  `Sig-Unary-Fin-FiniteSignature`{.AgdaFunction} — the signature-finiteness
    witness ([Setoid.Signatures.Finite][]): the identity enumeration of the
-   symbol type `Fin k`{.AgdaDatatype}, through the general
+   symbol type `Fin`{.AgdaDatatype}` k`, through the general
    `Sig-Unary-FiniteSignature`{.AgdaFunction} of [Classical.Signatures.Finite][].
 
 <!--
@@ -79,9 +79,9 @@ module _ (n k : ℕ) (tables : Vec (Vec (Fin n) n) k) where
 
 #### The finiteness witnesses
 
-The carrier is `Fin n`{.AgdaDatatype} on the nose, so decidable equality and a
+The carrier is `Fin`{.AgdaDatatype}` n` on the nose, so decidable equality and a
 surjective enumeration are the identity story; likewise for the symbol type
-`Fin k`{.AgdaDatatype} on the signature side.
+`Fin`{.AgdaDatatype}` k` on the signature side.
 
 ```agda
   -- The table algebra is a finite algebra.

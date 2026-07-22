@@ -15,16 +15,20 @@ Fix a finite finitary algebra — an algebra `𝑨` with carrier-finiteness data
 ([Setoid.Signatures.Finite][]).  A per-congruence certificate
 (`CgCert`{.AgdaRecord} of [Setoid.Congruences.Certificates.Schema][]) claims
 
-    the partition presented by the parent vector  ≑  Cg (fromPairs P)
+> the partition presented by the parent vector  `≑  Cg (fromPairs P)`
 
-for its seed list `P`.  This module is the checker for that claim.  The
-**claimed congruence** is the *table relation* of the parent vector: two carrier
-elements are related when their enumeration indices have the same parent — two
-constant-time lookups and one `Fin`{.AgdaDatatype} equality, so the relation is
-decidable with no appeal to the specification-grade decision procedure
-`Cg-dec`{.AgdaFunction} (#467), which never appears here.  The checker
-obligations of the design note (`docs/notes/flrp-wp6-freese-certificates.md`
-§ 4), each search-free and linear in the trace and table size:
+for its seed list `P`.
+
+This module is the checker for that claim.  The *claimed congruence* is the *table
+relation* of the parent vector: two carrier elements are related when their
+enumeration indices have the same parent — two constant-time lookups and one
+`Fin`{.AgdaDatatype} equality, so the relation is decidable with no appeal to the
+specification-grade decision procedure `Cg-dec`{.AgdaFunction},[^1]
+which never appears here.
+
+The checker obligations of
+[the design note](docs/notes/flrp-wp6-freese-certificates.md),
+each search-free and linear in the trace and table size, are as follows:
 
 +  **C1 (trace soundness)**.  Every merge of the Freese trace is derivable:
    seed entries point into `P`, and translate entries apply one
@@ -59,6 +63,7 @@ The headline theorems `table≑Cg`{.AgdaFunction} (with a trace) and
 `table≑CgEdges`{.AgdaFunction} (the trace-free special case where the seeds are
 the vector's own forest edges, used for whole-lattice congruence lists) deliver
 the claim as an honest `_≑_`{.AgdaFunction} at the working congruence level.
+
 Every hypothesis is decidable, and each decider is a bounded sweep of
 `Fin`{.AgdaDatatype} comparisons; the whole-lattice checker
 ([Setoid.Congruences.Certificates.Lattice][]) instantiates them wholesale.
@@ -213,11 +218,11 @@ module CertCheck {𝑆 : Signature 𝓞 𝓥} {𝑨 : Algebra {𝑆 = 𝑆} α �
 
   -- Reading an index-pair list back into the carrier.
   carrierPairs : List IdxPair → List (𝕌[ 𝑨 ] × 𝕌[ 𝑨 ])
-  carrierPairs = map (λ p → enum (proj₁ p) , enum (proj₂ p))
+  carrierPairs = map (λ (p₁ , p₂) → enum p₁ , enum p₂)
 
   -- The carrier tuple encoded by a tuple of carrier indices.
   tupleOf : (fi : Fin opCard)
-    →       Vec (Fin card) (arOf fi) → (ArityOf 𝑆 (opEnum fi) → 𝕌[ 𝑨 ])
+    → Vec (Fin card) (arOf fi) → (ArityOf 𝑆 (opEnum fi) → 𝕌[ 𝑨 ])
   tupleOf fi t a = enum (lookup t (arIdx (opEnum fi) a))
 
   -- One basic-operation application, at the index level.
@@ -245,6 +250,7 @@ completeness `∈-allVecs`{.AgdaFunction} converts the swept
 `SameBlock`{.AgdaFunction} is the index-level reading of a parent vector — two
 indices related when their parents agree — and `TableRel`{.AgdaFunction} its
 carrier-level reading through `idx`, lifted to the working congruence level.
+
 For `TableRel`{.AgdaFunction} to be well defined on the *setoid* carrier the
 vector must not distinguish `≈`-equal enumerated elements; that is the
 (decidable) `Coherent`{.AgdaFunction} condition, from which respect for `≈`
@@ -285,7 +291,7 @@ follows in general (`tableResp-≈`{.AgdaFunction}).
   -- ... and respects ≈-replacement of related elements.
   tableResp-≈ : (pv : ParentVec card) → Coherent pv
     →  ∀ {x y a b} → x ≈ a → y ≈ b → TableRel pv a b → TableRel pv x y
-  tableResp-≈ pv coh {x} {y} {a} {b} x≈a y≈b (lift ab) =
+  tableResp-≈ pv coh x≈a y≈b (lift ab) =
     lift (trans (sameBlock-resp-≈ pv coh x≈a)
                 (trans ab (sym (sameBlock-resp-≈ pv coh y≈b))))
 ```
@@ -914,3 +920,5 @@ certificate), and the soundness theorem consuming it.
 ```
 
 --------------------------------------
+
+[^1]: [PR #467](https://github.com/ualib/agda-algebras/pull/467)

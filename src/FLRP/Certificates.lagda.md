@@ -10,14 +10,15 @@ author: "the agda-algebras development team"
 
 This is the [FLRP.Certificates][] module of the [Agda Universal Algebra Library][].
 
-The FLRP program's computational campaigns (roadmap § 5, avenue A) produce
-claims of the form "`Con 𝑨 ≅ 𝑳` for this finite algebra `𝑨` and this finite
-lattice `𝑳`" from external engines — GAP, UACalc, SAT and model finders.  Per
-the certificate discipline of roadmap § 6 and the WP-6 design note
-(`docs/notes/flrp-wp6-freese-certificates.md`), nothing enters the corpus on
-the authority of an external tool: the engine emits a whole-lattice
-certificate (normal-form parent vectors, Freese traces, and pointer tables —
-[Setoid.Congruences.Certificates.Schema][]), the generic checkers verify it
+The FLRP program's computational campaigns[^1] produce claims of the form "`Con 𝑨 ≅
+𝑳` for this finite algebra `𝑨` and this finite lattice `𝑳`" from external engines —
+GAP, UACalc, SAT and model finders.
+
+Per the certificate discipline of [the roadmap](docs/notes/flrp-research-roadmap.md)
+§ 6 and [the WP-6 design note](docs/notes/flrp-wp6-freese-certificates.md), nothing
+enters the corpus on the authority of an external tool: the engine emits a
+whole-lattice certificate (normal-form parent vectors, Freese traces, and pointer
+tables — [Setoid.Congruences.Certificates.Schema][]), the generic checkers verify it
 with no search and no `Cg-dec`{.AgdaFunction}
 ([Setoid.Congruences.Certificates.Congruence][],
 [Setoid.Congruences.Certificates.Lattice][]), and *this* module turns the
@@ -25,11 +26,15 @@ checked certificate into the FLRP-facing theorem: a
 `Representableᵈ`{.AgdaRecord} witness ([FLRP.Representable][]) for the target
 lattice.
 
-Concretely, given a finite finitary algebra (`𝑭`, `𝑺`, everything at level
-`0ℓ`, as `ConIsoᵈ`{.AgdaFunction} demands), a target `FiniteLattice`{.AgdaRecord}
-`𝑳` ([FLRP.Problem][]), and a whole-lattice certificate `lc` whose entry list
-is indexed by `𝑳`'s carrier, two checked hypotheses produce the order
-isomorphism:
+Concretely, we are given
+
++  a finite finitary algebra (`𝑭`, `𝑺`, everything at level `0ℓ`, as
+   `ConIsoᵈ`{.AgdaFunction} demands),
++  a target `FiniteLattice`{.AgdaRecord} `𝑳` ([FLRP.Problem][]), and
++  a whole-lattice certificate `lc` whose entry list is indexed by `𝑳`'s carrier.
+
+Then two checked hypotheses produce the order isomorphism; the hypotheses are
+as follows:
 
 +  `LatticeCertOK lc`{.AgdaRecord} — the whole-lattice checker's bundle
    (decided by one `latticeCertOK?`{.AgdaFunction});
@@ -38,17 +43,18 @@ isomorphism:
    `meetMatches?`{.AgdaFunction}).
 
 The isomorphism's two maps are the whole-lattice checker's completeness fold
-`indexOf`{.AgdaFunction} (which executes only the given congruence's own
-decision procedure and table lookups) and the certificate's entry decoder
-`entryDec`{.AgdaFunction}; the four order-isomorphism laws are exactly the
-exported fold lemmas, with the meet-table match translating containment of
-entries into the lattice's meet order `x ≤ y := x ∧ y ≈ x`
-([Classical.Properties.Lattice][]).  Since `toLattice`{.AgdaFunction} builds
-its carrier setoid on propositional equality, the translation is definitional.
+`indexOf`{.AgdaFunction} (which executes only the given congruence's own decision
+procedure and table lookups) and the certificate's entry decoder
+`entryDec`{.AgdaFunction}; the four order-isomorphism laws are exactly the exported
+fold lemmas, with the meet-table match translating containment of entries into the
+lattice's meet order `x ≤ y := x ∧ y ≈ x` ([Classical.Properties.Lattice][]).
 
-The standing FLRP research-track separation warning applies: this is
-problem-specific wiring; all reusable mathematics lives in the
-`Setoid.Congruences.Certificates` tree.
+Since `toLattice`{.AgdaFunction} builds its carrier setoid on propositional equality,
+the translation is definitional.
+
+The standing FLRP research-track separation warning applies: this is problem-specific
+wiring; all reusable mathematics lives under the `Setoid` tree; in this case, under
+`Setoid.Congruences.Certificates`.
 
 <!--
 ```agda
@@ -69,21 +75,19 @@ open import Relation.Binary.PropositionalEquality  using  ( _≡_ ; sym ; trans 
 open import Relation.Nullary.Decidable             using  ( Dec )
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
-open import FLRP.Problem                                 using  ( FiniteLattice
-                                                                ; toLattice
-                                                                ; OrderIso )
-open import FLRP.Representable                           using  ( Representableᵈ
-                                                                ; ConIsoᵈ
-                                                                ; _⊆ᵈ_ ; _≑ᵈ_ )
-open import Overture                                     using  ( Signature )
-open import Setoid.Algebras.Basic                        using  ( Algebra )
-open import Setoid.Algebras.Finite                       using  ( FiniteAlgebra )
-open import Setoid.Congruences.Finite.Basic              using  ( DecCon )
-open import Setoid.Congruences.Lattice                   using  ( ≑-sym )
-open import Setoid.Congruences.Certificates.Schema       using  ( LatticeCert )
-open import Setoid.Congruences.Certificates.Congruence   using  ( module CertCheck )
-open import Setoid.Congruences.Certificates.Lattice      using  ( module LatticeCheck )
-open import Setoid.Signatures.Finite                     using  ( FiniteSignature )
+open import FLRP.Problem                                using  ( FiniteLattice
+                                                               ; toLattice ; OrderIso )
+open import FLRP.Representable                          using  ( Representableᵈ ; _⊆ᵈ_
+                                                               ; ConIsoᵈ ; _≑ᵈ_ )
+open import Overture                                    using  ( Signature )
+open import Setoid.Algebras.Basic                       using  ( Algebra )
+open import Setoid.Algebras.Finite                      using  ( FiniteAlgebra )
+open import Setoid.Congruences.Finite.Basic             using  ( DecCon )
+open import Setoid.Congruences.Lattice                  using  ( ≑-sym )
+open import Setoid.Congruences.Certificates.Schema      using  ( LatticeCert )
+open import Setoid.Congruences.Certificates.Congruence  using  ( module CertCheck )
+open import Setoid.Congruences.Certificates.Lattice     using  ( module LatticeCheck )
+open import Setoid.Signatures.Finite                    using  ( FiniteSignature )
 ```
 -->
 
@@ -115,10 +119,10 @@ to the intended lattice, and it is decided by an `m ²` sweep of
 ```agda
     -- The certificate's meet table is the target lattice's ∧ table.
     MeetMatches : Type
-    MeetMatches = ∀ k l → meet k l ≡ (k ∧ l)
+    MeetMatches = ∀ k l → meet k l ≡ k ∧ l
 
     meetMatches? : Dec MeetMatches
-    meetMatches? = all? (λ k → all? (λ l → meet k l ≟ᶠ (k ∧ l)))
+    meetMatches? = all? (λ k → all? (λ l → meet k l ≟ᶠ k ∧ l))
 ```
 
 Given the two checked hypotheses, the order isomorphism between the decidable
@@ -176,3 +180,6 @@ representation, on no authority but the checker's.
 ```
 
 --------------------------------------
+
+
+[^1]: See [the roadmap](docs/notes/flrp-research-roadmap.md) § 5, Avenue A.
