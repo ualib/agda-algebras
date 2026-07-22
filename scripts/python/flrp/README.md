@@ -7,6 +7,7 @@ The engine side of the WP-6 certificate pipeline (issue #457; design fixed in `d
 +  `cg2.py` — the instrumented `cg2` worklist (arity-general): union-find, justified merges, normal-form parent vectors.
 +  `lattice.py` — whole lattices: principal congruences for every carrier pair, closure under joins, meet and join tables, and the (bounded, engine-side) isomorphism match against the claimed target lattice.
 +  `emit_agda.py` — the CLI: claim file in, `.lagda.md` module and audit JSON out.
++  `eqsearch.py` — the search side (issue #486), converse in direction to the emitters: given a target lattice, find its sublattice copies in `Eq(n)` with bounds at the diagonal and the total relation, classify them up to relabeling, and run the Snow closure test on each class; a closed class yields the witness algebra `⟨X, M⟩` and a ready-made claim file for the emitter.
 +  `inputs/` — claim files; `out/` — audit copies of emitted certificates.
 
 ## Usage
@@ -52,6 +53,17 @@ The tool-interchange format any future emitter (instrumented UACalc, GAP, SAT de
 +  `meet`, `join`, `joinTraces` — the tables; each join entry's trace comes from a `cg2` run seeded with both arguments' forest edges (each non-root index ascending, paired with its root — this must match the Agda-side `forestEdges` order).
 +  A trace entry is `{"lhs": u, "rhs": v, "seed": s}` (position `s` of the seed list) or `{"lhs": u, "rhs": v, "op": f, "coord": c, "frozen": [...], "ref": r}` — the pair is the image of trace entry `r` (an **absolute** 0-based position; the Agda renderer converts to the schema's backward offsets) under operation `f` with coordinate `c` moving and the remaining coordinates frozen (`frozen` has full arity length; the entry at `coord` is dead data, written as 0).
 
+## The search side (`eqsearch.py`)
+
+```sh
+python3 scripts/python/flrp/eqsearch.py TARGET.json N [--json REPORT.json]
+python3 scripts/python/flrp/eqsearch.py scripts/python/flrp/inputs/l7_lattice.json 6
+```
+
+`TARGET.json` is either a bare lattice stanza (`name`/`size`/`meet`/`join`, exactly the `lattice` field of a claim file) or a full claim file, and `N` is the ground-set size; `inputs/l7_lattice.json` ships the `L7` tables, so the second line reproduces the `Eq(6)` census of `docs/notes/flrp-l7-eq6.md` directly.  The tool prints, and optionally writes as deterministic JSON (`flrp-eqsearch v1`), the census of sublattice copies of the target in `Eq(N)` with bounds pinned at the diagonal and the total relation — the only copies that can be congruence lattices — classified up to relabeling of the points, each class with its Snow closure verdict: the order of the preserving group, the size of the full preserving monoid `M`, and `|Inv(M)|`.  A class is **closed** when `Inv(M)` is exactly the copy; the congruence lattice of an arbitrary algebra is determined by its unary polynomials, so a closed class means the unary algebra `⟨X, M⟩` has the target as its congruence lattice — `closed_class_algebra` and `claim_input` package that witness as a claim file, closing the loop *lattice ⇒ search ⇒ algebra ⇒ certificate*.  Conversely, if no class on `n` points is closed, no algebra on `n` points represents the target.
+
+Provenance: this generalizes the 2026-07-22 `L7` session (issue #484) — minimal sublattice representation of `L7` in `Eq(6)`, two classes up to relabeling, and closure failing on 6 and on 7 points, so any representation of `L7` as a congruence lattice needs at least 8 points.  Those numbers are pinned as regression tests.
+
 ## Testing
 
 ```sh
@@ -59,6 +71,8 @@ make flrp-test          # from the repo root
 ```
 
 `test_flrp.py` runs three layers of tests: engine unit tests (worklist, normal forms, lattice construction, target matching, renderer guard rails), a Python **mirror of the Agda checker's obligations** (C1 trace soundness, C2 replay coverage, C3 seed containment) over every trace of the pilot certificate — an engine-side regression tripwire only, never a substitute for the checker — and **golden round-trip tests**: re-emitting the committed pilot input must reproduce the committed `.lagda.md` module and audit JSON byte for byte.  Negative tests confirm that a false claim (wrong lattice, corrupted join table) raises a `CertificateError` and that the renderer rejects out-of-scope inputs.
+
+`test_eqsearch.py` covers the search side: the partition kernel cross-validated against brute force (the backtracking monoid enumeration versus a full `n^n` scan), the `M3`-on-4-points census with its closed matchings class flowing all the way to a checked certificate, and the pinned `L7` session results.  The `Eq(7)` sweep (about five minutes) runs only with `FLRP_EQSEARCH_SLOW=1`.
 
 The Agda side needs no separate harness: the emitted pilot module is part of the library, so `make check` — the repository's single test gate, exactly what CI runs — *is* the end-to-end verification of the certificate.  To see the falsification story in action, flip any table entry or trace index in the emitted module and re-run `agda src/FLRP/Certificates/Pilot/V4RegularM3.lagda.md`: the corresponding `from-yes` decision computes to `no` and compilation fails.
 
