@@ -44,8 +44,9 @@ open import Agda.Primitive using () renaming ( Set to Type )
 
 -- Imports from the Agda Standard Library ---------------------------------------
 open import Data.Fin.Patterns  using ( 0F )
-open import Data.Product       using ( _,_ ; Σ-syntax ; proj₁ )
+open import Data.Product       using ( _,_ ; Σ-syntax ; proj₁ ; proj₂ )
 open import Level              using ( Level ; _⊔_ ; suc )
+open import Relation.Nullary   using ( Dec )
 open import Relation.Unary     using ( Pred )
 
 import Algebra.Properties.Group as GroupProperties
@@ -58,6 +59,7 @@ open import Classical.Structures.Group.Subgroups  using ( IsSubgroup )
 open import Classical.Structures.Group.Cosets     using ( module Coset )
 open import Setoid.Congruences.Basic              using ( Con )
 open import Setoid.Algebras.Basic                 using ( 𝕌[_]; Algebra ; mkAlgebra)
+open import Setoid.Algebras.Finite                using ( FiniteAlgebra )
 ```
 -->
 
@@ -97,6 +99,31 @@ module CosetAction {α ρ : Level} (𝒢 : Group α ρ) {ℓ : Level}
   -- The action is transitive: y ∙ x ⁻¹ carries the coset of x to the coset of y.
   act-transitive : (x y : G) → Σ[ g ∈ G ] (g ∙ x) ∼ y
   act-transitive x y = y ∙ x ⁻¹ , ≈⇒∼ (//-rightDividesˡ x y)
+```
+
+#### Finiteness of the coset algebra
+
+Carrier finiteness of the coset algebra is inherited from the group.  The coset
+space is the *same* carrier under the coarser equality `_∼_`{.AgdaFunction}, so the
+group's surjective enumeration still hits every element (the finer `_≈_`{.AgdaFunction}
+refines `_∼_`{.AgdaFunction} by `≈⇒∼`{.AgdaFunction}), and decidable coset equality
+is exactly the decidability of `_∼_`{.AgdaFunction} — supplied by
+`∼-dec`{.AgdaFunction} of [Classical.Structures.Group.Cosets][] whenever membership
+in `H`{.AgdaBound} is decidable.  This discharges, constructively, the finiteness
+hypothesis of the Pálfy–Pudlák corollaries of [FLRP.Bridge][] (audit A2 of
+`docs/notes/flrp-wp7-audits.md` sketches precisely this argument).
+
+```agda
+  open FiniteAlgebra
+
+  -- A finite group with decidable coset equality has a finite coset algebra.
+  cosetAlgebra-FiniteAlgebra :
+    FiniteAlgebra 𝑮 → (∀ x y → Dec (x ∼ y)) → FiniteAlgebra cosetAlgebra
+  cosetAlgebra-FiniteAlgebra fin dec ._≟_         = dec
+  cosetAlgebra-FiniteAlgebra fin dec .card        = fin .card
+  cosetAlgebra-FiniteAlgebra fin dec .enum        = fin .enum
+  cosetAlgebra-FiniteAlgebra fin dec .enum-sur x  =
+    fin .enum-sur x .proj₁ , ≈⇒∼ (fin .enum-sur x .proj₂)
 ```
 
 #### The congruence machinery applies verbatim

@@ -41,13 +41,14 @@ Two standing warnings apply to everything under this namespace.
    (the research note's Lemma 3.2), and hypothesis-parameterized statements of
    Lemma 3.1 and the parachute meta-theorem.
 +  [FLRP.Bridge][] — the easy (constructive) direction of the Pálfy–Pudlák
-   correspondence at the semantic layer (*Layer S*): the order isomorphism
-   `Con (𝒢 ↷ 𝒢/H) ≅ [H, 𝒢]` between the *semantic* congruence lattice of the
+   correspondence, at both layers: the Layer-S order isomorphism
+   `Con (𝒢 ↷ 𝒢/H) ≅ [H, 𝒢]` between the semantic congruence lattice of the
    transitive G-set of cosets and the respecting upper interval in the subgroup
-   lattice, with the representability corollary.  The Layer D (`DecCon`) restatement
-   required by issue #454's updated criteria is now provided here as well
-   (`bridgeᵈ` / `interval-DecCon-representable`), by composing with the cross-layer
-   isomorphism of [FLRP.LayerBridge][].
+   lattice, and its Layer-D counterpart `DecCon (𝒢 ↷ 𝒢/H) ≅ [H, 𝒢]ᵈ` over the
+   decidably presented interval (`bridgeᵈ`), proved directly with no classical
+   assumption, together with the representability corollaries — in particular
+   `GroupRepresentable→Representableᵈ`: every group-representable lattice is
+   decidably representable (issue #454).
 +  [FLRP.Representable][] — the Layer-D reformulation of the problem:
    decidable representability `Representableᵈ`, the statement
    `FLRP-Statementᵈ`, and the constructive two-element-chain representation
