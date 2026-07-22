@@ -43,7 +43,7 @@ import sys
 from dataclasses import dataclass
 from itertools import permutations
 from pathlib import Path
-from typing import Dict, Iterator, List, Optional, Sequence, Set, Tuple
+from typing import Dict, FrozenSet, Iterator, List, Optional, Sequence, Set, Tuple
 
 from cg2 import (Algebra, CertificateError, Operation, UnionFind,
                  forest_edges)
@@ -285,10 +285,18 @@ class ClassReport:
 
 
 def classify(copies: Sequence[Copy], eq: EqTables) -> List[Tuple[Copy, int]]:
-    """Group the copies into orbits under relabeling of the points; returns
-    (first-found representative, orbit size) per class, in the order the
-    representatives occur in the sorted copy list."""
-    seen: Dict[frozenset, int] = {}
+    """Group the copies into orbits under relabeling of the points.
+
+    Copies are identified by their *unordered* relation sets (frozensets of
+    partition indices): two embeddings differing only by an automorphism of
+    the target lattice present the same sublattice of Eq(n), and the closure
+    test of ``closure_report`` depends only on that relation set.  So this
+    classifies sublattices rather than embeddings — orbit sizes count
+    distinct relation sets, and the copy census may exceed the class-size
+    total when the target has automorphisms.  Returns one (first-found
+    representative, orbit size) per class, in the order the representatives
+    occur in the sorted copy list."""
+    seen: Dict[FrozenSet[int], int] = {}
     classes: List[Tuple[Copy, int]] = []
     for copy in copies:
         key = frozenset(copy)
@@ -463,7 +471,7 @@ def parse_target(path: Path) -> TargetLattice:
 
 
 def main(argv: Sequence[str]) -> int:
-    if not 3 <= len(argv) <= 5:
+    if len(argv) not in (3, 5) or (len(argv) == 5 and argv[3] != "--json"):
         print("usage: eqsearch.py TARGET.json N [--json REPORT.json]",
               file=sys.stderr)
         return 2

@@ -25,11 +25,15 @@ import unittest
 from itertools import product
 from typing import List, Sequence, Tuple
 
+import contextlib
+import io
+
 from cg2 import CertificateError
 from eqsearch import (EqTables, Part, all_partitions, claim_input, classify,
                       closed_class_algebra, closure_report, invariant_partitions,
-                      partition_join, preserving_maps, relabel, sublattice_copies,
-                      survey, survey_json, tables_from_leq, validate_target)
+                      main, partition_join, preserving_maps, relabel,
+                      sublattice_copies, survey, survey_json, tables_from_leq,
+                      validate_target)
 from lattice import TargetLattice, build_certificate, partition_meet
 from test_flrp import check_certificate, m3
 
@@ -74,11 +78,13 @@ class PartitionKernelTests(unittest.TestCase):
         self.assertEqual(partition_meet((0, 0, 0, 3), (0, 0, 2, 2)), (0, 0, 2, 3))
 
     def test_relabel_is_an_action(self) -> None:
-        """kernel: relabeling by a permutation acts blockwise and is invertible."""
-        p = (0, 0, 2, 2, 4, 4)
-        perm = (5, 4, 3, 2, 1, 0)
-        self.assertEqual(relabel(relabel(p, perm), perm), p)
-        self.assertEqual(relabel(p, perm), (0, 0, 2, 2, 4, 4))
+        """kernel: relabeling acts blockwise, moves asymmetric partitions, and is invertible."""
+        p = (0, 0, 0, 3, 3, 5)                    # |0,1,2|3,4|5|
+        rev = (5, 4, 3, 2, 1, 0)
+        self.assertEqual(relabel(p, rev), (0, 1, 1, 3, 3, 3))    # |0|1,2|3,4,5|
+        self.assertEqual(relabel(relabel(p, rev), rev), p)
+        cyc = (1, 2, 0, 3, 4, 5)                  # the 3-cycle 0 -> 1 -> 2 -> 0
+        self.assertEqual(relabel((0, 0, 2, 2, 4, 4), cyc), (0, 1, 1, 0, 4, 4))
 
     def test_preserving_maps_match_brute_force(self) -> None:
         """kernel: backtracking monoid enumeration agrees with the n^n scan."""
@@ -105,6 +111,15 @@ class TargetLatticeTests(unittest.TestCase):
         """targets: validation returns the bounds of a well-formed lattice."""
         self.assertEqual(validate_target(m3()), (0, 4))
         self.assertEqual(validate_target(l7()), (0, 6))
+
+    def test_cli_rejects_malformed_arguments(self) -> None:
+        """cli: wrong argument shapes are usage errors, never silent successes."""
+        for argv in (["eqsearch.py"],
+                     ["eqsearch.py", "t.json", "4", "--json"],
+                     ["eqsearch.py", "t.json", "4", "--report", "x.json"],
+                     ["eqsearch.py", "t.json", "4", "--json", "x.json", "y"]):
+            with contextlib.redirect_stderr(io.StringIO()):
+                self.assertEqual(main(argv), 2)
 
     def test_validate_target_rejects_broken_tables(self) -> None:
         """targets: a corrupted meet table fails lattice validation."""
