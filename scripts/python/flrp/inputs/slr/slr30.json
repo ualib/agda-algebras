@@ -1,0 +1,37 @@
+{
+  "format": "flrp-cert-input v1",
+  "name": "SLR30",
+  "date": "2026-07-22",
+  "module": "FLRP.Certificates.SmallLatticeReps",
+  "provenance": "`B30`/`L30` in the numbering of the DeMeo–Freese–Jipsen manuscript *Representing Finite Lattices as Congruence Lattices of Finite Algebras* (§ 6 of the 2016-06-10 draft, `docs/papers/fin-lat-rep/SmallLatticeReps.tex`).  The dictionary between the manuscript's lattice numbering and this library's names is `docs/notes/flrp-slr-naming.md`.",
+  "algebra": {
+    "name": "B30",
+    "card": 5,
+    "operations": [
+      { "name": "f", "arity": 1, "table": [0, 3, 4, 3, 4] },
+      { "name": "g", "arity": 1, "table": [2, 2, 1, 4, 3] }
+    ]
+  },
+  "lattice": {
+    "name": "manuscript L30",
+    "size": 7,
+    "meet": [
+      [0, 0, 0, 0, 0, 0, 0],
+      [0, 1, 0, 1, 0, 1, 1],
+      [0, 0, 2, 0, 2, 2, 2],
+      [0, 1, 0, 3, 0, 3, 3],
+      [0, 0, 2, 0, 4, 2, 4],
+      [0, 1, 2, 3, 2, 5, 5],
+      [0, 1, 2, 3, 4, 5, 6]
+    ],
+    "join": [
+      [0, 1, 2, 3, 4, 5, 6],
+      [1, 1, 5, 3, 6, 5, 6],
+      [2, 5, 2, 5, 4, 5, 6],
+      [3, 3, 5, 3, 6, 5, 6],
+      [4, 6, 4, 6, 4, 6, 6],
+      [5, 5, 5, 5, 6, 5, 6],
+      [6, 6, 6, 6, 6, 6, 6]
+    ]
+  }
+}

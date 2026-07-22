@@ -1,0 +1,38 @@
+{
+  "format": "flrp-cert-input v1",
+  "name": "SLR21",
+  "date": "2026-07-22",
+  "module": "FLRP.Certificates.SmallLatticeReps",
+  "provenance": "`B21`/`L21` in the numbering of the DeMeo–Freese–Jipsen manuscript *Representing Finite Lattices as Congruence Lattices of Finite Algebras* (§ 6 of the 2016-06-10 draft, `docs/papers/fin-lat-rep/SmallLatticeReps.tex`).  The dictionary between the manuscript's lattice numbering and this library's names is `docs/notes/flrp-slr-naming.md`.",
+  "algebra": {
+    "name": "B21",
+    "card": 9,
+    "operations": [
+      { "name": "f", "arity": 1, "table": [3, 3, 4, 8, 8, 2, 2, 3, 4] },
+      { "name": "g", "arity": 1, "table": [0, 0, 6, 1, 1, 0, 0, 5, 6] },
+      { "name": "h", "arity": 1, "table": [4, 5, 5, 7, 8, 8, 7, 4, 4] }
+    ]
+  },
+  "lattice": {
+    "name": "manuscript L21",
+    "size": 7,
+    "meet": [
+      [0, 0, 0, 0, 0, 0, 0],
+      [0, 1, 0, 0, 1, 1, 1],
+      [0, 0, 2, 0, 0, 2, 2],
+      [0, 0, 0, 3, 0, 0, 3],
+      [0, 1, 0, 0, 4, 4, 4],
+      [0, 1, 2, 0, 4, 5, 5],
+      [0, 1, 2, 3, 4, 5, 6]
+    ],
+    "join": [
+      [0, 1, 2, 3, 4, 5, 6],
+      [1, 1, 5, 6, 4, 5, 6],
+      [2, 5, 2, 6, 5, 5, 6],
+      [3, 6, 6, 3, 6, 6, 6],
+      [4, 4, 5, 6, 4, 5, 6],
+      [5, 5, 5, 6, 5, 5, 6],
+      [6, 6, 6, 6, 6, 6, 6]
+    ]
+  }
+}

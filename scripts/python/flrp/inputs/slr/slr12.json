@@ -1,0 +1,40 @@
+{
+  "format": "flrp-cert-input v1",
+  "name": "SLR12",
+  "date": "2026-07-22",
+  "module": "FLRP.Certificates.SmallLatticeReps",
+  "provenance": "`B12`/`L12` in the numbering of the DeMeo–Freese–Jipsen manuscript *Representing Finite Lattices as Congruence Lattices of Finite Algebras* (§ 6 of the 2016-06-10 draft, `docs/papers/fin-lat-rep/SmallLatticeReps.tex`).  The dictionary between the manuscript's lattice numbering and this library's names is `docs/notes/flrp-slr-naming.md`.",
+  "algebra": {
+    "name": "B12",
+    "card": 9,
+    "operations": [
+      { "name": "f", "arity": 1, "table": [0, 0, 3, 3, 3, 6, 6, 6, 0] },
+      { "name": "g", "arity": 1, "table": [0, 0, 8, 8, 8, 1, 1, 1, 0] },
+      { "name": "h", "arity": 1, "table": [0, 5, 5, 4, 0, 0, 5, 4, 4] },
+      { "name": "k", "arity": 1, "table": [4, 2, 2, 3, 4, 4, 2, 3, 3] },
+      { "name": "l", "arity": 1, "table": [5, 5, 7, 7, 7, 6, 6, 6, 5] }
+    ]
+  },
+  "lattice": {
+    "name": "manuscript L12",
+    "size": 7,
+    "meet": [
+      [0, 0, 0, 0, 0, 0, 0],
+      [0, 1, 0, 0, 1, 0, 1],
+      [0, 0, 2, 0, 0, 2, 2],
+      [0, 0, 0, 3, 0, 0, 3],
+      [0, 1, 0, 0, 4, 0, 4],
+      [0, 0, 2, 0, 0, 5, 5],
+      [0, 1, 2, 3, 4, 5, 6]
+    ],
+    "join": [
+      [0, 1, 2, 3, 4, 5, 6],
+      [1, 1, 6, 6, 4, 6, 6],
+      [2, 6, 2, 6, 6, 5, 6],
+      [3, 6, 6, 3, 6, 6, 6],
+      [4, 4, 6, 6, 4, 6, 6],
+      [5, 6, 5, 6, 6, 5, 6],
+      [6, 6, 6, 6, 6, 6, 6]
+    ]
+  }
+}

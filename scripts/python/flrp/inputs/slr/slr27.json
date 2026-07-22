@@ -1,0 +1,41 @@
+{
+  "format": "flrp-cert-input v1",
+  "name": "SLR27",
+  "date": "2026-07-22",
+  "module": "FLRP.Certificates.SmallLatticeReps",
+  "provenance": "`B27`/`L27` in the numbering of the DeMeo–Freese–Jipsen manuscript *Representing Finite Lattices as Congruence Lattices of Finite Algebras* (§ 6 of the 2016-06-10 draft, `docs/papers/fin-lat-rep/SmallLatticeReps.tex`).  The dictionary between the manuscript's lattice numbering and this library's names is `docs/notes/flrp-slr-naming.md`.",
+  "algebra": {
+    "name": "B27",
+    "card": 16,
+    "operations": [
+      { "name": "f", "arity": 1, "table": [0, 1, 2, 3, 4, 5, 0, 0, 0, 0, 0, 2, 2, 2, 2, 2] },
+      { "name": "g", "arity": 1, "table": [4, 5, 3, 4, 5, 3, 5, 3, 4, 5, 3, 4, 5, 4, 5, 3] },
+      { "name": "h", "arity": 1, "table": [2, 2, 1, 5, 5, 4, 2, 1, 5, 5, 4, 2, 2, 5, 5, 4] },
+      { "name": "k", "arity": 1, "table": [3, 4, 4, 0, 1, 1, 4, 4, 0, 1, 1, 3, 4, 0, 1, 1] },
+      { "name": "l", "arity": 1, "table": [0, 6, 7, 8, 9, 10, 6, 7, 8, 9, 10, 0, 6, 8, 9, 10] },
+      { "name": "m", "arity": 1, "table": [11, 12, 2, 13, 14, 15, 12, 2, 13, 14, 15, 11, 12, 13, 14, 15] }
+    ]
+  },
+  "lattice": {
+    "name": "manuscript L27",
+    "size": 7,
+    "meet": [
+      [0, 0, 0, 0, 0, 0, 0],
+      [0, 1, 0, 1, 0, 1, 1],
+      [0, 0, 2, 0, 2, 0, 2],
+      [0, 1, 0, 3, 0, 3, 3],
+      [0, 0, 2, 0, 4, 0, 4],
+      [0, 1, 0, 3, 0, 5, 5],
+      [0, 1, 2, 3, 4, 5, 6]
+    ],
+    "join": [
+      [0, 1, 2, 3, 4, 5, 6],
+      [1, 1, 6, 3, 6, 5, 6],
+      [2, 6, 2, 6, 4, 6, 6],
+      [3, 3, 6, 3, 6, 5, 6],
+      [4, 6, 4, 6, 4, 6, 6],
+      [5, 5, 6, 5, 6, 5, 6],
+      [6, 6, 6, 6, 6, 6, 6]
+    ]
+  }
+}
