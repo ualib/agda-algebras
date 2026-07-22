@@ -52,12 +52,13 @@ CARDS: Dict[int, int] = {
     29: 5, 30: 5, 31: 5, 32: 5, 33: 16, 34: 4, 35: 4,
 }
 
-# Batch 1 of #485: unary, carrier ≤ 10, within the v1 renderer's 0F–9F range.
+# Batch 1 of #485: unary, carrier ≤ 10, within stdlib's 0F–9F literal range.
 BATCH_1 = {1, 2, 3, 4, 6, 7, 8, 12, 15, 19, 21, 23, 24, 25, 26,
            29, 30, 31, 32, 34, 35}
 
-# Batch 2 of #485: explicit tables past the 0F–9F range (B28 fell out of the
-# original list as a candidate erratum).
+# Batch 2 of #485: explicit tables past the 0F–9F range, emitted once the
+# renderer grew pattern synonyms (B28 fell out of the original list as a
+# candidate erratum).
 BATCH_2 = {5, 9, 13, 17, 27, 33}
 
 
@@ -86,13 +87,10 @@ class CatalogShapeTests(unittest.TestCase):
             self.assertEqual(entry.lattice.size, expected, f"L{entry.number}")
 
     def test_renderable_split(self) -> None:
-        """catalog: the renderable/deferred split is exactly the #485 batch-1/batch-2 split."""
-        certified = {entry.number for entry in CATALOG
-                     if certifiable(entry) and renderable(entry)}
-        deferred = {entry.number for entry in CATALOG
-                    if certifiable(entry) and not renderable(entry)}
-        self.assertEqual(certified, BATCH_1)
-        self.assertEqual(deferred, BATCH_2)
+        """catalog: with the batch-2 pattern synonyms every certifiable entry is renderable."""
+        renderable_numbers = {entry.number for entry in CATALOG
+                              if certifiable(entry) and renderable(entry)}
+        self.assertEqual(renderable_numbers, BATCH_1 | BATCH_2)
 
 
 class IdentificationTests(unittest.TestCase):

@@ -66,10 +66,10 @@ NAMING_NOTE = "docs/notes/flrp-slr-naming.md"
 # catalog was transcribed, not the date the tool happens to run).
 DATE = "2026-07-22"
 
-# The v1 renderer emits Data.Fin.Patterns literals 0F–9F only: an entry is
-# renderable iff every index — carrier, operation symbol, lattice element —
-# stays below 10 (#485 batch 2 lifts this).
-RENDER_LIMIT = 10
+# An entry is renderable iff every index — carrier, operation symbol,
+# lattice element — stays within the renderer's literal range (Data.Fin
+# .Patterns 0F–9F plus the emitted pattern synonyms of #485 batch 2).
+RENDER_LIMIT = emit_agda.LITERAL_LIMIT
 
 # Names this library (or the general literature) already has for some catalog
 # lattices; the full dictionary is docs/notes/flrp-slr-naming.md.
