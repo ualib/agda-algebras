@@ -143,6 +143,19 @@ exact input from which [Setoid.Congruences.Finite.Decidable][] builds a complete
 of decidable congruences — and the isomorphism is over `DecCon`{.AgdaFunction} rather
 than semantic `Con`{.AgdaFunction}.
 
+A note on the field superscripts.  The `ᵈ`{.AgdaBound} on `sigᵈ`{.AgdaField},
+`algᵈ`{.AgdaField}, `finiteᵈ`{.AgdaField}, and `finsigᵈ`{.AgdaField} is *namespacing*,
+not a claim of decidability: those fields hold the very same interfaces
+`Representable`{.AgdaRecord} uses (`Signature`{.AgdaRecord}, `Algebra`{.AgdaRecord},
+`FiniteAlgebra`{.AgdaRecord}, `FiniteSignature`{.AgdaRecord}), and `finiteᵈ`{.AgdaField}
+in particular is carrier-finiteness, which is constructive.  Only
+`con-isoᵈ`{.AgdaField} (`: ConIsoᵈ`{.AgdaFunction}) is a genuinely decidable-layer
+datum.  The superscripts are carried on every field so that `Representable`{.AgdaRecord}
+and `Representableᵈ`{.AgdaRecord} can be `open`ed together without their field names
+clashing — which is what keeps the cross-layer transports of [FLRP.LayerBridge][]
+legible — matching the all-superscripted convention of the sibling record
+`FiniteCongruencesᵈ`{.AgdaRecord}.
+
 ```agda
 record Representableᵈ (𝑳 : Lattice) : Type (lsuc 0ℓ) where
   field
