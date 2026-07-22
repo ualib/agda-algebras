@@ -84,9 +84,11 @@ open import Data.List.Membership.Propositional.Properties
                                          ; ∈-cartesianProduct⁺ )
 open import Data.List.Properties  using  ( map-++ )
 open import Data.List.Relation.Unary.All
-                                  using  ( All ; lookupAny )
+                                  using  ( All ; [] ; _∷_ )
 open import Data.List.Relation.Unary.All.Properties
-                                  using  ( map⁺ ; all-filter )
+                                  using  ( all-filter )
+open import Data.List.Relation.Unary.Any
+                                  using  ( here ; there )
 open import Data.List.Relation.Unary.Any.Properties
                                   using  ( ++⁺ˡ ; ++⁺ʳ ; ++⁻ )
 open import Data.Nat.Base         using  ( ℕ )
@@ -458,15 +460,21 @@ choice, for the same filter/map-fusion reason, as in
       relatedIdx-sound d =
         all-filter (λ p → proj₂ d (enum (proj₁ p)) (enum (proj₂ p))) idxPairsAll
 
-      -- Hence the presented relation of the kept pairs is contained in d ...
+      -- Hence the presented relation of the kept pairs is contained in d:
+      -- walk any list of d-related pairs to the presenting one and absorb
+      -- the ≈-steps.
+      private
+        fromAll⊆d : (d : DecCon 𝑨 (𝓞 ⊔ 𝓥 ⊔ α ⊔ ρ)) (qs : List IdxPair)
+          →  All (λ p → ConRel d (enum (proj₁ p)) (enum (proj₂ p))) qs
+          →  ∀ {x y} → fromPairs {𝑨 = 𝑨} (carrierPairs qs) x y → ConRel d x y
+        fromAll⊆d d []        []            ()
+        fromAll⊆d d (q ∷ qs)  (rel ∷ _)     (here (x≈ , y≈)) =
+          con-resp-≈ (proj₁ d) x≈ y≈ rel
+        fromAll⊆d d (q ∷ qs)  (_ ∷ rall)    (there mem) = fromAll⊆d d qs rall mem
+
       fromRelated⊆d : ∀ d {x y}
         →  fromPairs {𝑨 = 𝑨} (carrierPairs (relatedIdx d)) x y → ConRel d x y
-      fromRelated⊆d d mem =
-        let (rel , x≈a , y≈b) = lookupAny
-              (map⁺ {P = λ q → ConRel d (proj₁ q) (proj₂ q)}
-                    {f = λ p → enum (proj₁ p) , enum (proj₂ p)}
-                    (relatedIdx-sound d)) mem
-        in  con-resp-≈ (proj₁ d) x≈a y≈b rel
+      fromRelated⊆d d = fromAll⊆d d (relatedIdx d) (relatedIdx-sound d)
 
       -- ... and conversely d is contained in what they generate.
       d⊆CgRelated : ∀ d {x y} → ConRel d x y

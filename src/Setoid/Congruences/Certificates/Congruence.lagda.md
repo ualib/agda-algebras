@@ -90,9 +90,8 @@ open import Data.List.Membership.Propositional.Properties
 open import Data.List.Relation.Unary.Any
                                   using  ( here ; there )
 open import Data.List.Relation.Unary.All
-                                  using  ( All ; [] ; _∷_ ; lookupAny ; universal )
-                                  renaming ( map to all-map ; lookup to all-lookup
-                                           ; all? to allL? )
+                                  using  ( All ; [] ; _∷_ ; universal )
+                                  renaming ( lookup to all-lookup ; all? to allL? )
 open import Data.List.Relation.Unary.All.Properties
                                   using  ( map⁺ )
 open import Data.Nat.Base         using  ( ℕ ; zero ; suc )
@@ -306,6 +305,13 @@ exactly Freese's unary polynomial translates applied to the forest edges
 sweep is linear in the operation-table size.  Everything else about
 compatibility is *derived*, not checked.
 
+A simpler design exists and was deliberately rejected: sweeping compatibility
+over all *pairs* of pointwise-related tuples would shrink the derivation below
+to a few lines, but its decider costs `O(‖A‖²)` where this one is Freese's
+`O(r · ‖A‖)` — and linear-cost checking is an acceptance criterion of the
+pipeline (#457), not a nicety.  The coordinate walk that follows is the price
+of the bound.
+
 ```agda
   -- One root-replacement translate step per symbol, coordinate, and tuple.
   EdgeCompat : ParentVec card → Type
@@ -385,10 +391,7 @@ reaches `s` pointwise.
     -- the invariant survives the update
     bw′ : Blockwise pv (t [ c ]≔ lookup s c) s
     bw′ q with q ≟ᶠ c
-    ... | yes q≡c =
-      subst (λ z → SameBlock pv (lookup (t [ c ]≔ lookup s c) z) (lookup s z))
-            (sym q≡c)
-            (cong (parent pv) (lookup∘update c t (lookup s c)))
+    ... | yes refl = cong (parent pv) (lookup∘update c t (lookup s c))
     ... | no q≢c =
       subst (λ w → SameBlock pv w (lookup s q))
             (sym (lookup∘update′ q≢c t (lookup s c)))
@@ -400,20 +403,16 @@ reaches `s` pointwise.
     →  lookup (overwrite t cs s) q ≡ lookup s q
   overwrite-stable t s []        q eq = eq
   overwrite-stable t s (c ∷ cs)  q eq with q ≟ᶠ c
-  ... | yes q≡c =
-    overwrite-stable _ s cs q
-      (subst (λ z → lookup (t [ c ]≔ lookup s c) z ≡ lookup s z)
-             (sym q≡c) (lookup∘update c t (lookup s c)))
+  ... | yes refl =
+    overwrite-stable _ s cs c (lookup∘update c t (lookup s c))
   ... | no q≢c =
     overwrite-stable _ s cs q (trans (lookup∘update′ q≢c t (lookup s c)) eq)
 
   -- Overwriting at a listed coordinate lands that coordinate on s.
   overwrite-∈ : {k : ℕ} (t s : Vec (Fin card) k) (cs : List (Fin k)) (q : Fin k)
     →  q ∈ cs → lookup (overwrite t cs s) q ≡ lookup s q
-  overwrite-∈ t s (c ∷ cs) q (here q≡c) =
-    overwrite-stable _ s cs q
-      (subst (λ z → lookup (t [ c ]≔ lookup s c) z ≡ lookup s z)
-             (sym q≡c) (lookup∘update c t (lookup s c)))
+  overwrite-∈ t s (c ∷ cs) .c (here refl) =
+    overwrite-stable _ s cs c (lookup∘update c t (lookup s c))
   overwrite-∈ t s (c ∷ cs) q (there w) =
     overwrite-∈ _ s cs q w
 ```
@@ -434,17 +433,35 @@ device as in [Setoid.Congruences.Presented.Decidable][]).
     →  (∀ a → TableRel pv (u a) (v a))
     →  TableRel pv ((opEnum fi ^ 𝑨) u) ((opEnum fi ^ 𝑨) v)
   tableCompatAt pv coh ec fi {u} {v} h =
-    lift (trans (sym su) (trans chain (trans sbOw sv)))
+    lift (trans (sym (encodeSB u)) (trans chain (trans sbOw (encodeSB v))))
     where
     f : OperationSymbolsOf 𝑆
     f = opEnum fi
 
-    -- the index tuples encoding u and v
-    tu tv : Vec (Fin card) (arOf fi)
-    tu = tabulate (λ p → idx (u (arEnum f p)))
-    tv = tabulate (λ p → idx (v (arEnum f p)))
+    -- the index tuple encoding a carrier tuple
+    encode : (ArityOf 𝑆 (opEnum fi) → 𝕌[ 𝑨 ]) → Vec (Fin card) (arOf fi)
+    encode u′ = tabulate (λ p → idx (u′ (arEnum f p)))
 
-    -- they are blockwise related, by the hypothesis
+    -- encoding is block-transparent: an encoded tuple is pointwise ≈ its
+    -- original (tabulate round trip plus the arity round trip), so their
+    -- applications land in the same claimed block
+    encodeSB : (u′ : ArityOf 𝑆 (opEnum fi) → 𝕌[ 𝑨 ])
+      →  SameBlock pv (appIdx fi (encode u′)) (idx ((f ^ 𝑨) u′))
+    encodeSB u′ =
+      sameBlock-resp-≈ pv coh (Func.cong (Algebra.Interp 𝑨) (refl , enc≈))
+      where
+      enc≈ : ∀ a → tupleOf fi (encode u′) a ≈ u′ a
+      enc≈ a = ≈trans
+        (≈reflexive (cong enum
+          (trans (lookup∘tabulate (λ q → idx (u′ (arEnum f q))) (arIdx f a))
+                 (cong (λ b → idx (u′ b)) (arEnum-arIdx f a)))))
+        (idx-≈ (u′ a))
+
+    tu tv : Vec (Fin card) (arOf fi)
+    tu = encode u
+    tv = encode v
+
+    -- the encodings are blockwise related, by the hypothesis
     bw : Blockwise pv tu tv
     bw p = subst₂ (SameBlock pv)
                   (sym (lookup∘tabulate (λ q → idx (u (arEnum f q))) p))
@@ -457,36 +474,12 @@ device as in [Setoid.Congruences.Presented.Decidable][]).
     chain = overwrite-chain pv ec fi (allFin (arOf fi)) tu tv bw
 
     -- the fully overwritten tuple is pointwise tv
-    ow≡tv : ∀ q → lookup (overwrite tu (allFin (arOf fi)) tv) q ≡ lookup tv q
-    ow≡tv q = overwrite-∈ tu tv (allFin (arOf fi)) q (∈-allFin q)
-
     sbOw : SameBlock pv (appIdx fi (overwrite tu (allFin (arOf fi)) tv))
                         (appIdx fi tv)
     sbOw = sameBlock-resp-≈ pv coh
       (Func.cong (Algebra.Interp 𝑨)
-        (refl , λ a → ≈reflexive (cong enum (ow≡tv (arIdx f a)))))
-
-    -- an encoded tuple is pointwise ≈ its original ...
-    tu≈u : ∀ a → tupleOf fi tu a ≈ u a
-    tu≈u a = ≈trans
-      (≈reflexive (cong enum
-        (trans (lookup∘tabulate (λ q → idx (u (arEnum f q))) (arIdx f a))
-               (cong (λ b → idx (u b)) (arEnum-arIdx f a)))))
-      (idx-≈ (u a))
-
-    tv≈v : ∀ a → tupleOf fi tv a ≈ v a
-    tv≈v a = ≈trans
-      (≈reflexive (cong enum
-        (trans (lookup∘tabulate (λ q → idx (v (arEnum f q))) (arIdx f a))
-               (cong (λ b → idx (v b)) (arEnum-arIdx f a)))))
-      (idx-≈ (v a))
-
-    -- ... so its application is same-block with the original's
-    su : SameBlock pv (appIdx fi tu) (idx ((f ^ 𝑨) u))
-    su = sameBlock-resp-≈ pv coh (Func.cong (Algebra.Interp 𝑨) (refl , tu≈u))
-
-    sv : SameBlock pv (appIdx fi tv) (idx ((f ^ 𝑨) v))
-    sv = sameBlock-resp-≈ pv coh (Func.cong (Algebra.Interp 𝑨) (refl , tv≈v))
+        (refl , λ a → ≈reflexive (cong enum
+          (overwrite-∈ tu tv (allFin (arOf fi)) (arIdx f a) (∈-allFin (arIdx f a))))))
 
   -- ... hence with every operation symbol, by surjectivity of the enumeration.
   private
@@ -538,26 +531,22 @@ the whole generated congruence in the table congruence.
   respects? : (pv : ParentVec card) (ps : List IdxPair) → Dec (Respects pv ps)
   respects? pv ps = allL? (λ p → parent pv (proj₁ p) ≟ᶠ parent pv (proj₂ p)) ps
 
-  -- Respected index pairs read back as table-related carrier pairs.
-  private
-    respected-carrier : (pv : ParentVec card) (ps : List IdxPair)
-      →  Coherent pv → Respects pv ps
-      →  All (λ q → TableRel pv (proj₁ q) (proj₂ q)) (carrierPairs ps)
-    respected-carrier pv ps coh rsp = map⁺ (all-map step rsp)
-      where
-      step : {p : IdxPair} → SameBlock pv (proj₁ p) (proj₂ p)
-        →   TableRel pv (enum (proj₁ p)) (enum (proj₂ p))
-      step {p} sb = lift
-        (trans (coh (idx (enum (proj₁ p))) (proj₁ p) (idx-≈ (enum (proj₁ p))))
-               (trans sb (sym (coh (idx (enum (proj₂ p))) (proj₂ p) (idx-≈ (enum (proj₂ p)))))))
-
-  -- The presented relation of a respected seed list is contained in the claim.
+  -- The presented relation of a respected seed list is contained in the
+  -- claim: walk the list to the presenting pair; its endpoints' chosen
+  -- indices share the listed pair's blocks by coherence.
   fromPairs-table-⊆ : (pv : ParentVec card) (ps : List IdxPair)
     →  Coherent pv → Respects pv ps
     →  ∀ {x y} → fromPairs {𝑨 = 𝑨} (carrierPairs ps) x y → TableRel pv x y
-  fromPairs-table-⊆ pv ps coh rsp mem =
-    let (tab , x≈a , y≈b) = lookupAny (respected-carrier pv ps coh rsp) mem
-    in  tableResp-≈ pv coh x≈a y≈b tab
+  fromPairs-table-⊆ pv []       coh []          ()
+  fromPairs-table-⊆ pv (p ∷ ps) coh (sb ∷ _)    (here (x≈ , y≈)) =
+    tableResp-≈ pv coh x≈ y≈
+      (lift (trans (bridge (proj₁ p)) (trans sb (sym (bridge (proj₂ p))))))
+    where
+    -- the chosen index of an enumerated element shares its block
+    bridge : (i : Fin card) → parent pv (idx (enum i)) ≡ parent pv i
+    bridge i = coh (idx (enum i)) i (idx-≈ (enum i))
+  fromPairs-table-⊆ pv (p ∷ ps) coh (_ ∷ rsp)   (there mem) =
+    fromPairs-table-⊆ pv ps coh rsp mem
 
   -- C3: the generated congruence of a respected seed list is contained in
   -- the claimed congruence (by the congruence generation theorem).
@@ -759,6 +748,22 @@ the re-pointed indices reach their new root through the merged pair.
   ReplaySound : List IdxPair → Vec (Fin card) card → Type (𝓞 ⊔ 𝓥 ⊔ α ⊔ ρ)
   ReplaySound ps st = ∀ i → GenPair ps (i , lookup st i)
 
+  -- Both containments of the claim in a generated congruence have the same
+  -- shape: pass from the carrier pair to its chosen indices, walk each index
+  -- (generated-relatedly) to a representative, and cross the gap with the
+  -- given equality of representatives.  Stated once, used for the replay
+  -- roots below and for the parent pointers in the trace-free case.
+  private
+    viaReps : (ps : List IdxPair) (f : Fin card → Fin card)
+      →  (walk : ∀ i → GenPair ps (i , f i))
+      →  ∀ {x y} → f (idx x) ≡ f (idx y)
+      →  Gen {𝑨 = 𝑨} (fromPairs {𝑨 = 𝑨} (carrierPairs ps)) x y
+    viaReps ps f walk {x} {y} eq =
+      transitive (symmetric (rfl (idx-≈ x)))
+        (transitive (walk (idx x))
+          (transitive (rfl (≈reflexive (cong enum eq)))
+            (transitive (symmetric (walk (idx y))) (rfl (idx-≈ y)))))
+
   private
     -- one re-pointed entry, with the decision exposed as an argument
     repoint-gen : (ps : List IdxPair) {ru rv : Fin card} (r : Fin card)
@@ -817,16 +822,10 @@ merely make the two checks jointly unsatisfiable, never unsound.)
     →  ∀ {x y} → TableRel pv x y
     →  Gen {𝑨 = 𝑨} (fromPairs {𝑨 = 𝑨} (carrierPairs ps)) x y
   table⊑Cg pv ps tr tv cov {x} {y} (lift same) =
-    transitive (symmetric (rfl (idx-≈ x)))
-      (transitive (snd (idx x))
-        (transitive (rfl (≈reflexive (cong enum key)))
-          (transitive (symmetric (snd (idx y))) (rfl (idx-≈ y)))))
+    viaReps ps (lookup rr) (replay-sound ps (merges tr) (traceGen ps tr tv)) key
     where
     rr : Vec (Fin card) card
     rr = replayRoots (merges tr)
-
-    snd : ReplaySound ps (replayRoots (merges tr))
-    snd = replay-sound ps (merges tr) (traceGen ps tr tv)
 
     -- same claimed parent forces same replayed root
     key : lookup rr (idx x) ≡ lookup rr (idx y)
@@ -859,11 +858,8 @@ whole-lattice checker uses for every listed congruence.
   table⊑CgEdges : (pv : ParentVec card)
     →  ∀ {x y} → TableRel pv x y
     →  Gen {𝑨 = 𝑨} (fromPairs {𝑨 = 𝑨} (carrierPairs (forestEdges pv))) x y
-  table⊑CgEdges pv {x} {y} (lift same) =
-    transitive (symmetric (rfl (idx-≈ x)))
-      (transitive (toRootGen pv (idx x))
-        (transitive (rfl (≈reflexive (cong enum same)))
-          (transitive (symmetric (toRootGen pv (idx y))) (rfl (idx-≈ y)))))
+  table⊑CgEdges pv (lift same) =
+    viaReps (forestEdges pv) (parent pv) (toRootGen pv) same
 ```
 
 #### The headline theorems
