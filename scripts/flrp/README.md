@@ -52,6 +52,16 @@ The tool-interchange format any future emitter (instrumented UACalc, GAP, SAT de
 +  `meet`, `join`, `joinTraces` — the tables; each join entry's trace comes from a `cg2` run seeded with both arguments' forest edges (each non-root index ascending, paired with its root — this must match the Agda-side `forestEdges` order).
 +  A trace entry is `{"lhs": u, "rhs": v, "seed": s}` (position `s` of the seed list) or `{"lhs": u, "rhs": v, "op": f, "coord": c, "frozen": [...], "ref": r}` — the pair is the image of trace entry `r` (an **absolute** 0-based position; the Agda renderer converts to the schema's backward offsets) under operation `f` with coordinate `c` moving and the remaining coordinates frozen (`frozen` has full arity length; the entry at `coord` is dead data, written as 0).
 
+## Testing
+
+```sh
+make flrp-test          # from the repo root
+```
+
+`test_flrp.py` runs three layers of tests: engine unit tests (worklist, normal forms, lattice construction, target matching, renderer guard rails), a Python **mirror of the Agda checker's obligations** (C1 trace soundness, C2 replay coverage, C3 seed containment) over every trace of the pilot certificate — an engine-side regression tripwire only, never a substitute for the checker — and **golden round-trip tests**: re-emitting the committed pilot input must reproduce the committed `.lagda.md` module and audit JSON byte for byte.  Negative tests confirm that a false claim (wrong lattice, corrupted join table) raises a `CertificateError` and that the renderer rejects out-of-scope inputs.
+
+The Agda side needs no separate harness: the emitted pilot module is part of the library, so `make check` — the repository's single test gate, exactly what CI runs — *is* the end-to-end verification of the certificate.  To see the falsification story in action, flip any table entry or trace index in the emitted module and re-run `agda src/FLRP/Certificates/Pilot/V4RegularM3.lagda.md`: the corresponding `from-yes` decision computes to `no` and compilation fails.
+
 ## Scope notes
 
 +  The `cg2` engine is arity-general; the v1 Agda renderer targets **unary signatures** (`Sig-Unary`, i.e. G-sets and their kin — the Pálfy–Pudlák frontier) and `Fin` literals `0F`–`9F` (carriers, symbol counts, and lattices of size ≤ 10).  Both limits are checked and produce clear errors; lifting them is renderer work only.
