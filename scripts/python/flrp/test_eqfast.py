@@ -62,7 +62,7 @@ class FastBackendTests(unittest.TestCase):
                          [59, 59] + [877] * 10)
 
     @unittest.skipUnless(os.environ.get("FLRP_EQSEARCH_SLOW") == "1",
-                         "set FLRP_EQSEARCH_SLOW=1 for the Eq(8) sweep")
+                         "set FLRP_EQSEARCH_SLOW=1 for the Eq(8) sweep (hours)")
     def test_l7_eq8_census_and_committed_report(self) -> None:
         """fast: Eq(8) — 4,112,640 copies, 108 classes, none closed — and the
         committed report is exactly this run's output."""

@@ -100,4 +100,4 @@ The eight-point sweep used a numpy-vectorized engine (partitions as an `int8` pa
 python3 scripts/python/flrp/eqsearch.py scripts/python/flrp/inputs/l7_lattice.json 8 --fast --json report.json
 ```
 
-(minutes with numpy installed; the `Eq(8)` figures have now been produced by two independent implementations — the session's schedule-specific engine and the repository's generic one — agreeing exactly, on top of both reproducing every smaller census).
+(about three hours with numpy installed — the generic engine trades the session engine's schedule-specific constraint order for generality, and a constraint-density-guided order is follow-up on #486; the `Eq(8)` figures have now been produced by two independent implementations — the session's schedule-specific engine and the repository's generic one — agreeing exactly, on top of both reproducing every smaller census).

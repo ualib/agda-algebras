@@ -9,11 +9,15 @@ tables are built by vectorized kernels (first-occurrence normal forms for
 meets, alternating block-min label propagation for joins), candidate
 filtering in the embedding search is mask arithmetic over whole partition
 tables, and orbit generation relabels a class under every point permutation
-at once.  This is what makes ``Eq(8)`` (``Bell(8) = 4140``) a minutes-scale
-sweep; the 2026-07-22 ``L7`` run that settled the eight-point frontier
-(4,112,640 copies, 108 classes, none closed — see
-``docs/notes/flrp-l7-eq6.md`` § 5 and ``out/l7_eq8_report.json``) used
-exactly this engine.
+at once.  This is what brings ``Eq(8)`` (``Bell(8) = 4140``) within reach at
+all: the committed ``out/l7_eq8_report.json`` — the eight-point frontier
+result for ``L7`` (4,112,640 copies, 108 classes, none closed; see
+``docs/notes/flrp-l7-eq6.md`` § 5) — is this engine's output,
+cross-validated figure for figure against an independent schedule-specific
+implementation.  The run took about three hours on one core, not minutes:
+the generic height-ordered assignment plan defers join constraints, so
+intermediate prefix counts balloon; the known fix is a
+constraint-density-guided assignment order (follow-up on #486).
 
 numpy is deliberately NOT a dependency of ``eqsearch.py`` and is not in the
 nix dev shell; this module is imported only by the ``--fast`` CLI path and
