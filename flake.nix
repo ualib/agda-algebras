@@ -68,16 +68,29 @@
       # agdaPackages.standard-library is built against pkgs.agda.
       mkAgdaEnv = pkgs: pkgs.agda.withPackages (p: [ p.standard-library ]);
 
-      # ---- MkDocs documentation toolchain ---------------------------------
-      # The rendering pipeline (ADR-007).  `make site` / `make serve` build
-      # the documentation site directly from the `.lagda.md` sources — no
-      # `agda --html` step — relying on kramdown attribute spans + custom CSS
-      # for inline Agda highlighting.  Pinning the whole MkDocs stack here (in
-      # one Python environment) makes `nix develop --command make site`
-      # reproduce CI's site build exactly, the same way the Agda env reproduces
-      # `make check`.  mkdocs-material transitively supplies pymdown-extensions
-      # (attr_list / snippets), but we list it explicitly to document intent.
-      mkDocsEnv = pkgs: pkgs.python3.withPackages (p: [
+      # ---- Python environment (docs pipeline + script tooling) ------------
+      # ONE python3.withPackages environment serves the whole repo, and it
+      # must stay one: two withPackages interpreters on the same PATH shadow
+      # each other rather than merge, so every Python dependency of the repo
+      # belongs in this list.
+      #
+      # Group 1 — the MkDocs rendering pipeline (ADR-007).  `make site` /
+      # `make serve` build the documentation site directly from the
+      # `.lagda.md` sources — no `agda --html` step — relying on kramdown
+      # attribute spans + custom CSS for inline Agda highlighting.  Pinning
+      # the whole stack here makes `nix develop --command make site`
+      # reproduce CI's site build exactly, the same way the Agda env
+      # reproduces `make check`.  mkdocs-material transitively supplies
+      # pymdown-extensions (attr_list / snippets), but we list it explicitly
+      # to document intent.
+      #
+      # Group 2 — the script tooling under scripts/python/ (`make flrp-test`
+      # and exploratory research runs).  The pure engines are stdlib-only by
+      # design; numpy powers the optional vectorized search backend
+      # (`eqsearch.py --fast`, issue #486), which otherwise degrades to a
+      # clear error and whose tests skip.
+      mkPythonEnv = pkgs: pkgs.python3.withPackages (p: [
+        # -- documentation site (ADR-007) --
         p.mkdocs                  # static-site generator
         p.mkdocs-material         # Material theme
         p.mkdocs-macros           # {{ vars }} / Jinja2 site variables
@@ -86,6 +99,8 @@
         p.mkdocs-literate-nav     # library nav from a generated SUMMARY.md
         p.mkdocs-section-index    # clickable section-landing pages
         p.pymdown-extensions      # attr_list companions + snippets auto_append
+        # -- script tooling (scripts/python/) --
+        p.numpy                   # eqsearch.py --fast vectorized backend (#486)
       ]);
 
       # ---- Project-local AGDA_DIR + agda() wrapper ------------------------
@@ -142,18 +157,19 @@ EOF
       devShells = forAllSystems ({ pkgs }:
         let
           agdaEnv = mkAgdaEnv pkgs;
-          docsEnv = mkDocsEnv pkgs;
+          pythonEnv = mkPythonEnv pkgs;
           stdlibVer = pkgs.agdaPackages.standard-library.version;
           agdaVer = pkgs.agda.version;
           mkdocsVer = pkgs.python3Packages.mkdocs.version;
           materialVer = pkgs.python3Packages.mkdocs-material.version;
+          numpyVer = pkgs.python3Packages.numpy.version;
         in {
           default = pkgs.mkShell {
             name = "agda-algebras-dev";
 
             packages = [
               agdaEnv
-              docsEnv
+              pythonEnv
               pkgs.gnumake
               pkgs.git
             ];
@@ -169,6 +185,7 @@ EOF
               echo "   Agda     : ${agdaVer}    ($(agda --version 2>/dev/null | head -n1))"
               echo "   stdlib   : ${stdlibVer}"
               echo "   MkDocs   : ${mkdocsVer} + Material ${materialVer}  (make site / make serve)"
+              echo "   numpy    : ${numpyVer}  (eqsearch.py --fast)"
               echo "   AGDA_DIR : $AGDA_DIR"
               echo "   repo     : $ROOT"
               echo ""

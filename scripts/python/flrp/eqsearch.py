@@ -483,8 +483,9 @@ def main(argv: Sequence[str]) -> int:
         try:
             from eqfast import survey_fast
         except ImportError:
-            print("--fast needs numpy, which is not installed "
-                  "(see the README's fast-backend note)", file=sys.stderr)
+            print("--fast needs numpy, which is not installed; the nix dev "
+                  "shell ships it (`nix develop`), or see the README's "
+                  "fast-backend note for other routes", file=sys.stderr)
             return 2
         reports, copies = survey_fast(lat, n)
     else:

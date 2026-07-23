@@ -195,7 +195,8 @@ unused-imports-test:
 # loop; set FLRP_EQSEARCH_SLOW=1 to include the Eq(7) sweep (~5 minutes).
 # The numpy backend's tests (eqfast.py: table/report parity with the pure
 # engine, the Eq(7) census, and — behind the same slow flag — the Eq(8)
-# sweep against the committed report) skip cleanly when numpy is absent.
+# sweep against the committed report) skip cleanly when numpy is absent;
+# the nix dev shell ships numpy (flake.nix), so under `nix develop` they run.
 flrp-test:
 	@echo "target: $@"
 	python3 scripts/python/flrp/test_flrp.py

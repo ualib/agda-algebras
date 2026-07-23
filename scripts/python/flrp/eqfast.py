@@ -30,14 +30,25 @@ Description:
   assignment plan defers join constraints, so intermediate prefix counts balloon; the
   known fix is a constraint-density-guided assignment order (follow-up on #486).
 
-  numpy is deliberately NOT a dependency of ``eqsearch.py`` and is not in the
-  nix dev shell; this module is imported only by the ``--fast`` CLI path and
-  by its own (skippable) tests.  Install numpy in any convenient way (for
-  instance ``python3 -m venv .venv && .venv/bin/pip install numpy``) to use it.
+  numpy is deliberately NOT a dependency of the pure tools: this module is
+  imported only by the ``--fast`` CLI path and by its own tests, both of which
+  degrade gracefully without it (a clear error, clean skips).  The repository's
+  nix dev shell ships numpy (``flake.nix``), so under ``nix develop`` the fast
+  path works out of the box; outside the shell, install numpy in any
+  convenient way (for instance
+  ``python3 -m venv .venv && .venv/bin/pip install numpy``).
 
 Usage:
 
-  TODO: add usage notes and examples.
+  There is no separate CLI; ``--fast`` on ``eqsearch.py`` routes the survey
+  through this backend, with reports byte-identical to the pure engine's:
+
+    python3 scripts/python/flrp/eqsearch.py TARGET.json N --fast [--json REPORT.json]
+    python3 scripts/python/flrp/eqsearch.py scripts/python/flrp/inputs/l7_lattice.json 7 --fast
+
+  Measured scale on one core: ``Eq(6)`` in about 2 s, ``Eq(7)`` in about 30 s,
+  ``Eq(8)`` in about three hours (the committed ``out/l7_eq8_report.json``;
+  see the README's fast-backend note for why, and for the planned fix).
 """
 
 from __future__ import annotations
