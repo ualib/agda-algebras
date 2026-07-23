@@ -53,7 +53,7 @@ Neither class is closed, and the failure is emphatic — `M` contains **no non-b
 
 | class | preserving group | monoid size | proper maps | size of Inv(M) | closed |
 |---|---|---|---|---|---|
-| symmetric | `⟨(0 4)(1 5)(2 3)⟩`, order 2 | 9 | 0 | 31 | no |
+| symmetric | `⟨(0 4)(1 5)(2 3)⟩`, order 2 | 8 | 0 | 31 | no |
 | rigid | trivial | 7 | 0 | 203 | no |
 
 For the symmetric class `Inv(M)` is the lattice of all partitions invariant under the involution (31 of the 203 partitions of a six-set); for the rigid class it is all of `Eq(6)`.  Consequently **no algebra on six elements has congruence lattice isomorphic to `L7`** — through either class, and there are no other classes.
