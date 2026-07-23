@@ -1,28 +1,43 @@
 """numpy-accelerated backend for the Eq(n) search (issue #486).
 
-Same semantics as the pure-Python functions of ``eqsearch.py`` — the same
-partition enumeration order, the same assignment plan, the same
-classification-by-relation-set, the same closure verdicts — so
-``survey_fast`` produces reports byte-identical to ``survey`` wherever both
-run; the test suite pins that parity.  What changes is scale: meet and join
-tables are built by vectorized kernels (first-occurrence normal forms for
-meets, alternating block-min label propagation for joins), candidate
-filtering in the embedding search is mask arithmetic over whole partition
-tables, and orbit generation relabels a class under every point permutation
-at once.  This is what brings ``Eq(8)`` (``Bell(8) = 4140``) within reach at
-all: the committed ``out/l7_eq8_report.json`` — the eight-point frontier
-result for ``L7`` (4,112,640 copies, 108 classes, none closed; see
-``docs/notes/flrp-l7-eq6.md`` § 5) — is this engine's output,
-cross-validated figure for figure against an independent schedule-specific
-implementation.  The run took about three hours on one core, not minutes:
-the generic height-ordered assignment plan defers join constraints, so
-intermediate prefix counts balloon; the known fix is a
-constraint-density-guided assignment order (follow-up on #486).
+File: scripts/python/flrp/eqfast.py
 
-numpy is deliberately NOT a dependency of ``eqsearch.py`` and is not in the
-nix dev shell; this module is imported only by the ``--fast`` CLI path and
-by its own (skippable) tests.  Install numpy in any convenient way (for
-instance ``python3 -m venv .venv && .venv/bin/pip install numpy``) to use it.
+Description:
+
+  Same semantics as the pure-Python functions of ``eqsearch.py`` — the same
+  partition enumeration order, the same assignment plan, the same
+  classification-by-relation-set, the same closure verdicts — so
+  ``survey_fast`` produces reports byte-identical to ``survey`` wherever both
+  run; the test suite pins that parity.
+
+  What changes is scale:
+
+  +  meet and join tables are built by vectorized kernels (first-occurrence normal
+     forms for meets, alternating block-min label propagation for joins),
+
+  +  candidate filtering in the embedding search is mask arithmetic over whole
+     partition tables, and
+
+  +  orbit generation relabels a class under every point permutation at once.
+
+  This is what brings ``Eq(8)`` (``Bell(8) = 4140``) within reach at all: the
+  committed ``out/l7_eq8_report.json`` — the eight-point frontier result for ``L7``
+  (4,112,640 copies, 108 classes, none closed; see ``docs/notes/flrp-l7-eq6.md`` § 5)
+  — is this engine's output, cross-validated figure for figure against an independent
+  schedule-specific implementation.
+
+  The run took about three hours on one core, not minutes: the generic height-ordered
+  assignment plan defers join constraints, so intermediate prefix counts balloon; the
+  known fix is a constraint-density-guided assignment order (follow-up on #486).
+
+  numpy is deliberately NOT a dependency of ``eqsearch.py`` and is not in the
+  nix dev shell; this module is imported only by the ``--fast`` CLI path and
+  by its own (skippable) tests.  Install numpy in any convenient way (for
+  instance ``python3 -m venv .venv && .venv/bin/pip install numpy``) to use it.
+
+Usage:
+
+  TODO: add usage notes and examples.
 """
 
 from __future__ import annotations

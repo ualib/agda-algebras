@@ -1,12 +1,23 @@
 """Tests for the numpy backend (`make flrp-test`; skipped without numpy).
 
-The contract under test is parity: the fast backend must produce the same
-partitions, the same tables, the same copies, the same classes, and — the
-strongest form — byte-identical survey reports wherever both backends run.
-On top of parity, the fast backend re-verifies the large censuses: the
-`Eq(7)` figures in seconds, and (behind ``FLRP_EQSEARCH_SLOW=1``) the
-`Eq(8)` sweep that settled the eight-point frontier for `L7`, whose report
-is committed at ``out/l7_eq8_report.json``.
+File: scripts/python/flrp/test_eqfast.py
+
+Description:
+
+  The contract under test is parity: the fast backend must produce the same
+  partitions, the same tables, the same copies, the same classes, and — the
+  strongest form — byte-identical survey reports wherever both backends run.
+
+  On top of parity, the fast backend re-verifies the large censuses: the
+  `Eq(7)` figures in seconds, and (behind ``FLRP_EQSEARCH_SLOW=1``) the
+  `Eq(8)` sweep that settled the eight-point frontier for `L7`, whose report
+  is committed at ``out/l7_eq8_report.json``.
+
+Usage:
+
+  python3 -m unittest scripts.python.flrp.test_eqfast
+
+  Or run ``make flrp-test`` from the top-level repo directory.
 """
 
 from __future__ import annotations
