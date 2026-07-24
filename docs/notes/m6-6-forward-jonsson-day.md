@@ -167,7 +167,7 @@ Freese–McKenzie's *Commutator Theory for Congruence Modular Varieties*, Thm. 2
 Lemma 2.3.  The construction that works, as formalized in
 `Setoid.Varieties.Maltsev.Modularity` (`Day⇒chainModular`), has two parts:
 
-+  **The collector (FM Lemma 2.3).**  For *any* congruence `μ` and any pair `b μ d`: if
++  **The collector (FM Lemma 2.3)**.  For *any* congruence `μ` and any pair `b μ d`: if
    the two ladder columns `mᵢ(a,a,c,c)` and `mᵢ(a,b,d,c)` are μ-related at every rung,
    then `a μ c` (`m-collect`).  The climb alternates by fork parity: even forks advance
    the first column directly (the `(x,x,u,u)` identity at `(a,c)`); odd forks cross to
@@ -177,7 +177,7 @@ Lemma 2.3.  The construction that works, as formalized in
    hypothesis pair, which is the two-dimensional aspect of Day's construction (the pair
    `(b, d)` walks `A²` between the diagonal and the relation).
 
-+  **The chain induction, measured by φ-count.**  The modular inclusion
++  **The chain induction, measured by φ-count**.  The modular inclusion
    `(θ ∨ φ) ∧ ψ ⊆ θ ∨ (φ ∧ ψ)` (for `θ ⊆ ψ`) is proved along every θ/φ-chain by an
    outer induction on the number of φ-steps with an inner structural recursion that
    normalizes the head of the chain by transitivity-merging (θ-steps absorb; consecutive
@@ -204,16 +204,16 @@ track-hygiene paragraph), so Day's theorem is the bridge of most downstream inte
 
 ## Findings
 
-+  **`<-weakInduction` is the staircase.**  The fork indexing (`inject₁ i` ↔ `fsuc i` over
++  **`<-weakInduction` is the staircase**.  The fork indexing (`inject₁ i` ↔ `fsuc i` over
    `Fin n`, parity by `even? (toℕ i)`) lines up exactly with the standard-library weak
    induction over `Fin (suc n)`; the vertical half is then four short clauses.
 
-+  **Carrier non-injectivity dictates explicit-algebra parameters.**  `𝕌[ 𝑩 ]` is a
++  **Carrier non-injectivity dictates explicit-algebra parameters**.  `𝕌[ 𝑩 ]` is a
    projection, so neither the new `Chain` nor the library's `Gen` can infer their algebra
    from a `BinRel`-typed argument; `Chain` takes `𝑩` explicitly and `Gen` is pinned with
    `{𝑨 = 𝑩}` (cf. `Chain⊆Gen`, `JoinIsChain`).
 
-+  **The obstruction is a feature, named once — then discharged.**  Rather than silently
++  **The obstruction is a feature, named once — then discharged**.  Rather than silently
    assume finitary arities, the development proves the general chain statement and surfaces
    `JoinIsChain` as the lone finitary lever — keeping the theorem honest about exactly what
    the infinitary `compatible` costs — and then pays that cost explicitly for finitary signatures
@@ -221,14 +221,14 @@ track-hygiene paragraph), so Day's theorem is the bridge of most downstream inte
    and the unconditional finitary theorem coexist: nothing is assumed that is not either
    proved or quantified away.
 
-+  **The finitary side condition is a one-liner for the user.**  `Finitary 𝑆` asks only for
++  **The finitary side condition is a one-liner for the user**.  `Finitary 𝑆` asks only for
    a finite arity per operation symbol; for every `Fin`-arity signature in the library the
    witness is `↔-id _`, so `jonsson-finitary⇒CongruenceDistributiveVariety fin jt` applies
    to a finitary algebra without threading any finiteness proof by hand.  This is the
    "universal algebra means finitary algebra" reading made convenient, demonstrated in
    `Examples.Setoid.FinitarySignatures`.
 
-+  **The right measure for Day is the φ-count, and the decrease is a fusion.**  The forward
++  **The right measure for Day is the φ-count, and the decrease is a fusion**.  The forward
    Day induction terminates because one simultaneous two-slot `m-compat` move eats *two*
    φ-steps of the original chain while contributing only *one* to the crossing chain; no
    single-slot bookkeeping exhibits a decrease.  Structuring the Agda proof as an outer

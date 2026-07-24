@@ -86,27 +86,27 @@ bridge:
 
 ## Findings
 
-+  **Parity normalization wants a swap, not a flag.**  The naive normal form indexes the
++  **Parity normalization wants a swap, not a flag**.  The naive normal form indexes the
    step relation by a Boolean phase, which costs a `not`-shuffling lemma at every cons.
    Parameterizing `ParityChain` by the ordered pair `(P , Q)` and letting `pcons` demand
    a tail with the pair *swapped* makes the parity arithmetic silent: `even? (suc k)` is
    definitionally `not (even? k)` (the M6-3 `even?` was defined by `not`-recursion,
    which pays off here), so the shifted step field transports by a two-case Boolean
    split with no numeric lemmas.
-+  **The exact head / derivable tail asymmetry is forced and harmless.**  `pcons`
++  **The exact head / derivable tail asymmetry is forced and harmless**.  `pcons`
    cannot maintain a `≈`-head without demanding that `P` respect `≈` (a generic
    `BinRel` does not), but the head of every cons *is* the new element, so `elt-fst` can
    be propositional equality.  Consumers lose nothing: `Setoid.reflexive` upgrades the
    head to a setoid equation (`t₀≈x`), which in the free algebra is a *derivation*, so
    both endpoint identities feed the `sub` inference rule uniformly.
-+  **The crux was already paid for.**  The "extract `n` and the terms from the join
++  **The crux was already paid for**.  The "extract `n` and the terms from the join
    membership" step that #413 flags as the part with no off-the-shelf analogue is
    `finitary⇒JoinIsChain` (M6-6) plus the parity normalization above; nothing else in
    the converse is more than the M6-5 bridge pattern instantiated three more times.
    The `Finitary` hypothesis is inherited from the chain collapse, mirroring the forward
    finitary theorem — both directions of `jonsson-theorem` carry the same one-liner
    witness.
-+  **`θ`-tying is a rung induction, not part of the chain.**  The fact that every chain
++  **`θ`-tying is a rung induction, not part of the chain**.  The fact that every chain
    element is θ-related to `x` is *not* stored in `ParityChain` (which is generic in two
    raw relations); it is recovered afterwards by the generic `head-linked` — any
    congruence above both step relations links the head to every element — instantiated
@@ -114,7 +114,7 @@ bridge:
    This keeps the normalization reusable for the eventual Day converse, whose chain
    lives in different congruences.  (It did: `CM⇒Day` consumes `head-linked` at `μ = ψ`
    with `proj₂` and `θ ⊆ ψ`.)
-+  **The extracted chain must be `abstract`, or conversion drowns.**  The witness `pc`
++  **The extracted chain must be `abstract`, or conversion drowns**.  The witness `pc`
    is built by running the whole extraction pipeline (`chain→parity` over
    `finitary⇒JoinIsChain` over the distributivity instance), and the proof of `red`
    mentions its fields inside every goal.  With `pc` transparent, the `with`-abstraction

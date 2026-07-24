@@ -63,14 +63,14 @@ assumes only finiteness *data* and runs an algorithm to build that family.
 
 ## The construction
 
-+  **Quotient congruences are congruences above `Θ`.**  For `Q = 𝑨 ╱ Θ`, a `Con Q`
++  **Quotient congruences are congruences above `Θ`**.  For `Q = 𝑨 ╱ Θ`, a `Con Q`
    *is* a `Con 𝑨` containing `Θ`: the relation, equivalence proof, and operation
    compatibility transfer verbatim (the quotient's operations are `𝑨`'s, so
    `f ^ Q = f ^ 𝑨` definitionally), and a `Q`-congruence's reflexivity over the
    quotient equality `Θ` *is* the containment `Θ ⊆ ·`.  `Q→A` records this almost
    for free — no heavy correspondence theorem.
 
-+  **The maximal congruence by counting.**  For a pair `a ≢ b`, filter `cons` to
++  **The maximal congruence by counting**.  For a pair `a ≢ b`, filter `cons` to
    the congruences not relating `a , b` (non-empty: the diagonal's representative
    is one) and take a member of maximum `count`, where `count d` is the number of
    enumerated index pairs `d` relates.  Counting turns the partial order into ℕ:
@@ -80,13 +80,13 @@ assumes only finiteness *data* and runs an algorithm to build that family.
    deciding carrier-containment and, on failure, extracting a witnessing pair via
    `¬∀⟶∃¬` to invoke strict monotonicity.
 
-+  **The monolith is the principal congruence of `(a , b)`.**  `μ = Cg_Q (a , b)`
++  **The monolith is the principal congruence of `(a , b)`**.  `μ = Cg_Q (a , b)`
    is nonzero (it relates the `Q`-distinct `a , b`) and least nonzero: any nonzero
    `ψ` corresponds to `φ ⊇ Θ`; its representative `d ∈ cons`, were it not to relate
    `a , b`, would be forced `⊆ Θ` by maximality, making `ψ` zero — so `ψ` relates
    `a , b`, i.e. contains `μ`.  This gives `IsSubdirectlyIrreducible Q`.
 
-+  **Separation closes the `¬¬`-gap.**  The family separates points because, for
++  **Separation closes the `¬¬`-gap**.  The family separates points because, for
    `x , y` not already `≈`-equal — *decidable*, by the interface — the chosen `Θ`
    for `(x , y)` keeps them apart.  Decidable `≈` is exactly what removes the
    double-negation the M6-2 note flags, so the meet is *exactly* the diagonal.

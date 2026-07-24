@@ -43,7 +43,7 @@ A barrel and the submodules it re-exports must end up in one style (ADR-009's no
 
 The ~52 sites of the form `open import Setoid.Algebras {𝑆 = Sig-Group}` (and `Sig-Magma`, `Sig-Lattice`, `Sig-Monoid`, `Sig-Ring`) exist so a `Classical/` or `Examples/` module can work over one fixed signature with unqualified names (`Algebra`, `Con`, …) defaulting to it.  When the target `Setoid` module generalizes, the application is rejected (`ModuleArityMismatch`), so it must go — but dropping it means `𝑆` is no longer pinned for that scope.  Resolution, in order of preference:
 
-+  **Let inference resolve it.**  Most uses have a concrete algebra/structure over `Sig-Foo` in hand, from which `𝑆` is inferred; dropping the application then just works.  Try this first and lean on `make check`.
++  **Let inference resolve it**.  Most uses have a concrete algebra/structure over `Sig-Foo` in hand, from which `𝑆` is inferred; dropping the application then just works.  Try this first and lean on `make check`.
 +  **Supply `{Sig-Foo}` at the rare type-level use** that has no inferable `𝑆` (e.g. a bare `Con` in a signature).  Local, explicit, minimal.
 +  **Keep the fix-once ergonomics deliberately, at the Classical layer** — ADR-009 explicitly permits `Classical/` modules to fix a signature.  If a module is genuinely about one signature throughout and inference makes it noisy, wrap the signature-fixing in that module rather than reintroducing a parameter on the generic `Setoid` module.  Prefer the first two options; use this only where it earns its keep.
 
