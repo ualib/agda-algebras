@@ -57,8 +57,13 @@ DOCS_EXCLUDE_FILES = {"_links.md", "GITHUB_PROJECT.md"}
 DEF = re.compile(r"^ {0,3}\[([^\]^][^\]]*)\]:\s+\S")
 # A reference usage:  [text][ref]  or collapsed  [text][]
 USE = re.compile(r"\[([^\]\n]+)\]\[([^\]\n]*)\]")
-# Inline code span (single backtick run); its contents render verbatim.
-CODESPAN = re.compile(r"`[^`]*`")
+# Inline code span; its contents render verbatim.  A span is a run of N
+# backticks closed by the next run of exactly N (CommonMark), so a multi-backtick
+# span — used when the code itself contains a backtick, e.g. the kramdown
+# ``` ``Algebra`{.AgdaRecord}`` ``` idiom in the corpus — is matched whole.  A
+# plain `[^`]*` would see only single-backtick spans and check reference-like
+# text that is really inside a longer code span.
+CODESPAN = re.compile(r"(`+)(.+?)\1")
 FENCE = re.compile(r"^\s*(```|~~~)")
 
 

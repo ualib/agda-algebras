@@ -73,6 +73,14 @@ def test_skips_inline_code_span() -> None:
     assert refs("To make `[Some Name][]` resolve, add a definition.") == []
 
 
+def test_skips_multi_backtick_code_span() -> None:
+    # A run of N backticks closes on the next run of N, so a double-backtick span
+    # (the kramdown ``` ``x`{.AgdaRecord}`` ``` idiom) is skipped whole, and its
+    # inner single backticks do not leak reference-like text out of the span.
+    assert refs("prose ``literal [Foo][] text`` after") == []
+    assert refs("span ``a `Algebra`{.x} b`` then [ADR-008][]") == ["adr-008"]
+
+
 def test_evaluates_backticked_text_in_a_collapsed_ref() -> None:
     # Backticks INSIDE the link text (not wrapping the whole thing) do not make
     # it a code span: [`X`][] is still a (broken, if undefined) collapsed ref.
