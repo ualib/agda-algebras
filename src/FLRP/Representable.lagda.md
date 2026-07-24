@@ -52,8 +52,10 @@ open import Agda.Primitive       using () renaming ( Set to Type )
 open import Data.Empty           using ( ⊥-elim )
 open import Data.Fin.Base        using ( Fin )
 open import Data.Fin.Patterns    using ( 0F ; 1F )
-open import Data.Fin.Properties  using () renaming ( _≟_ to _≟ᶠ_ )
-open import Data.Product         using ( _,_ ; proj₁ ; proj₂ )
+open import Data.Fin.Properties  using ( ¬Fin0 ) renaming ( _≟_ to _≟ᶠ_ )
+open import Data.Nat.Base        using ( zero ; suc )
+open import Data.Product         using ( _,_ ; proj₁ ; proj₂ ; Σ-syntax )
+open import Data.Sum.Base        using ( _⊎_ ; inj₁ ; inj₂ )
 open import Data.Unit.Base       using ( tt )
 open import Level                using ( Level ; 0ℓ ; _⊔_ ; Lift ; lift ; lower )
                                  renaming ( suc to lsuc )
@@ -63,13 +65,16 @@ open import Relation.Binary.PropositionalEquality
 open import Relation.Nullary     using ( ¬_ ; Dec ; yes ; no )
 
 -- Imports from the Agda Universal Algebra Library ------------------------------
-open import Classical.Properties.Lattice         using  ( module Lattice-Order )
+open import Classical.Properties.Lattice         using  ( module Lattice-Order
+                                                        ; TopOf ; BotOf )
 open import Classical.Small.Structures.Lattice   using  ( Lattice )
 open import FLRP.Problem                         using  ( OrderIso ; FiniteLattice
                                                         ; toLattice ; 𝑆∅ ; chain₂-lattice )
 open import Overture                             using  ( 𝓞 ; 𝓥 ; Signature )
-open import Setoid.Algebras.Basic                using  ( Algebra ; 𝔻[_] ; mkAlgebraₚ )
-open import Setoid.Algebras.Finite               using  ( FiniteAlgebra )
+open import Setoid.Algebras.Basic                using  ( Algebra ; 𝔻[_] ; 𝕌[_]
+                                                        ; mkAlgebraₚ )
+open import Setoid.Algebras.Finite               using  ( FiniteAlgebra ; 𝟏
+                                                        ; 𝟏-FiniteAlgebra )
 open import Setoid.Congruences.Basic             using  ( reflexive ; 𝟘[_]
                                                         ; is-equivalence ; 𝟙[_] )
 open import Setoid.Congruences.Finite.Basic      using  ( DecCon ; ConRel )
@@ -443,6 +448,180 @@ chain₂-Representableᵈ = record
   ; finsigᵈ    = 𝑆∅-FiniteSignature
   ; con-isoᵈ  = 𝟚-ConIsoᵈ
   }
+```
+
+#### The extreme decidable congruences
+
+Every algebra has a least and a greatest decidable congruence.  The total
+congruence `𝟙[ 𝑨 ]`{.AgdaFunction} is decidable outright; the diagonal
+`𝟘[ 𝑨 ]`{.AgdaFunction} upgrades to a `DecCon`{.AgdaFunction} exactly when the
+setoid equality is decidable — the datum the `_≟_`{.AgdaField} field of
+`FiniteAlgebra`{.AgdaRecord} supplies.  (These generalize the two-element-specific
+`Δᵈ`{.AgdaFunction} and `∇ᵈ`{.AgdaFunction} above; the closure constructions of
+[FLRP.Closure][] use them at their composite witness algebras.)
+
+```agda
+module _ {𝑆 : Signature 𝓞 𝓥} {𝑨 : Algebra {𝑆 = 𝑆} α ρ} where
+  open Setoid 𝔻[ 𝑨 ] using ( _≈_ )
+
+  -- The diagonal congruence, as a DecCon, given a decision procedure for ≈.
+  𝟘ᵈ : (∀ x y → Dec (x ≈ y)) → DecCon 𝑨 (ρ ⊔ ℓ)
+  𝟘ᵈ {ℓ} _≟_ = 𝟘[ 𝑨 ] {ℓ} , dec
+    where
+    dec : ∀ x y → Dec (Lift ℓ (x ≈ y))
+    dec x y with x ≟ y
+    ... | yes p  = yes (lift p)
+    ... | no ¬p  = no λ q → ¬p (lower q)
+
+  -- The total congruence, as a DecCon.
+  𝟙ᵈ : DecCon 𝑨 ℓ
+  𝟙ᵈ {ℓ} = 𝟙[ 𝑨 ] {ℓ} , λ _ _ → yes (lift tt)
+```
+
+#### Congruence-trivial algebras
+
+`ConTrivialᵈ`{.AgdaFunction} says the decidable-congruence poset of
+`𝑨`{.AgdaBound} is trivial: any two decidable congruences are mutually contained.
+Two sources matter downstream: an algebra with *empty* carrier (there are no pairs
+to relate) and the one-element algebra `𝟏`{.AgdaFunction} (every pair is related
+by reflexivity, since the setoid equality of `𝟏`{.AgdaFunction} is total).  A
+decidable-layer isomorphism transports across congruence-trivial algebras
+(`trivial-ConIsoᵈ-transport`{.AgdaFunction} below), which is how the closure
+constructions replace a possibly-empty witness algebra by `𝟏`{.AgdaFunction}.
+
+```agda
+  -- All decidable congruences of 𝑨 are ≑ᵈ-equal.
+  ConTrivialᵈ : (ℓ : Level) → Type (𝓞 ⊔ 𝓥 ⊔ α ⊔ ρ ⊔ lsuc ℓ)
+  ConTrivialᵈ ℓ = (d e : DecCon 𝑨 ℓ) → d ≑ᵈ e
+
+  -- An algebra with empty carrier is congruence-trivial: no pairs exist to relate.
+  empty→ConTrivialᵈ : ¬ 𝕌[ 𝑨 ] → ConTrivialᵈ ℓ
+  empty→ConTrivialᵈ ¬x d e = (λ {x} _ → ⊥-elim (¬x x)) , (λ {x} _ → ⊥-elim (¬x x))
+
+-- The one-element algebra is congruence-trivial: its setoid equality is total,
+-- so reflexivity of any congruence relates every pair.
+𝟏-ConTrivialᵈ : {𝑆 : Signature 𝓞 𝓥} → ConTrivialᵈ {𝑨 = 𝟏 {𝑆 = 𝑆}} ℓ
+𝟏-ConTrivialᵈ d e =
+  (λ _ → reflexive (proj₂ (proj₁ e)) tt) , (λ _ → reflexive (proj₂ (proj₁ d)) tt)
+```
+
+#### Consequences of a decidable-layer isomorphism
+
+An order isomorphism transports more than the order: it respects
+`≑ᵈ`{.AgdaFunction} (monotonicity in both directions plus antisymmetry of the
+lattice's meet order), it respects `≈`{.AgdaFunction} in the reverse direction
+(via `≤-reflexive`{.AgdaFunction}), and it sends the extreme congruences to
+extrema of the target lattice.  The last point equips every decidably
+representable lattice with *chosen* extrema — the `TopOf`{.AgdaFunction} /
+`BotOf`{.AgdaFunction} data of [Classical.Properties.Lattice][] that the
+ordinal-sum construction consumes.
+
+```agda
+module ConIsoᵈ-Consequences {𝑆 : Signature 0ℓ 0ℓ} {𝑨 : Algebra {𝑆 = 𝑆} 0ℓ 0ℓ}
+                            {𝑳 : Lattice} (iso : ConIsoᵈ 𝑨 𝑳) where
+  -- The isomorphism's own maps are renamed ᴸ-side to keep them distinct from the
+  -- 𝟚-specific `to`/`from` defined above.
+  open OrderIso iso
+    renaming ( to to toᴸ ; from to fromᴸ ; to-mono to to-monoᴸ ; from-mono to from-monoᴸ
+             ; to∘from to to∘fromᴸ ; from∘to to from∘toᴸ )
+  open Setoid 𝔻[ proj₁ 𝑳 ] using ( _≈_ ) renaming ( sym to ≈sym ; trans to ≈trans )
+  open Lattice-Order 𝑳 using ( _≤_ ; ≤-antisym ; ≤-reflexive ; ≤-respˡ-≈ ; ≤-respʳ-≈
+                             ; IsTop ; IsBot )
+
+  -- ≑ᵈ-equal congruences have ≈-equal images.
+  to-cong≑ : {d e : DecCon 𝑨 0ℓ} → d ≑ᵈ e → toᴸ d ≈ toᴸ e
+  to-cong≑ (d⊆e , e⊆d) = ≤-antisym (to-monoᴸ d⊆e) (to-monoᴸ e⊆d)
+
+  -- ≈-equal lattice elements have ≑ᵈ-equal preimages.
+  from-cong≈ : {u v : 𝕌[ proj₁ 𝑳 ]} → u ≈ v → fromᴸ u ≑ᵈ fromᴸ v
+  from-cong≈ e = from-monoᴸ (≤-reflexive e) , from-monoᴸ (≤-reflexive (≈sym e))
+
+  -- The image of the total congruence is a top of the target lattice ...
+  to-𝟙-top : IsTop (toᴸ (𝟙ᵈ {ℓ = 0ℓ}))
+  to-𝟙-top u = ≤-respˡ-≈ (to∘fromᴸ u) (to-monoᴸ λ _ → lift tt)
+
+  -- ... and the image of the diagonal is a bottom.
+  to-𝟘-bot : (≈dec : ∀ x y → Dec (Setoid._≈_ 𝔻[ 𝑨 ] x y)) → IsBot (toᴸ (𝟘ᵈ ≈dec))
+  to-𝟘-bot ≈dec u = ≤-respʳ-≈ (to∘fromᴸ u) (to-monoᴸ (𝟘-min (proj₁ (fromᴸ u))))
+
+-- Chosen extrema for any decidably representable lattice.
+module _ {𝑳 : Lattice} (r : Representableᵈ 𝑳) where
+  open Representableᵈ r
+  open OrderIso con-isoᵈ using () renaming ( to to toᴸ )
+  -- ConIsoᵈ is not injective in its lattice argument, so the module's implicit
+  -- parameters are supplied explicitly.
+  open ConIsoᵈ-Consequences {𝑆 = sigᵈ} {𝑨 = algᵈ} {𝑳 = 𝑳} con-isoᵈ
+
+  Representableᵈ-TopOf : TopOf 𝑳
+  Representableᵈ-TopOf = toᴸ (𝟙ᵈ {ℓ = 0ℓ}) , to-𝟙-top
+
+  Representableᵈ-BotOf : BotOf 𝑳
+  Representableᵈ-BotOf = toᴸ (𝟘ᵈ (finiteᵈ ._≟_)) , to-𝟘-bot (finiteᵈ ._≟_)
+```
+
+#### Inhabited witnesses
+
+A decidable-layer isomorphism transports across congruence-trivial algebras: both
+sides have exactly one congruence up to `≑ᵈ`{.AgdaFunction}, so constant maps do
+the job, with the round trips supplied by triviality and the original round trip.
+
+```agda
+module _ {𝑆₁ 𝑆₂ : Signature 0ℓ 0ℓ} {𝑨 : Algebra {𝑆 = 𝑆₁} 0ℓ 0ℓ}
+         {𝑩 : Algebra {𝑆 = 𝑆₂} 0ℓ 0ℓ} {𝑳 : Lattice} where
+
+  trivial-ConIsoᵈ-transport : ConTrivialᵈ {𝑨 = 𝑨} 0ℓ → ConTrivialᵈ {𝑨 = 𝑩} 0ℓ
+    → ConIsoᵈ 𝑨 𝑳 → ConIsoᵈ 𝑩 𝑳
+  trivial-ConIsoᵈ-transport trivA trivB iso = record
+    { to         = λ _ → toᴸ (𝟙ᵈ {ℓ = 0ℓ})
+    ; from       = λ _ → 𝟙ᵈ {ℓ = 0ℓ}
+    ; to-mono    = λ _ → ≤-refl
+    ; from-mono  = λ _ p → p
+    ; to∘from    = λ u → ≈trans (to-cong≑ (trivA (𝟙ᵈ {ℓ = 0ℓ}) (fromᴸ u))) (to∘fromᴸ u)
+    ; from∘to    = λ d → trivB (𝟙ᵈ {ℓ = 0ℓ}) d
+    }
+    where
+    open OrderIso iso
+      renaming ( to to toᴸ ; from to fromᴸ ; to-mono to to-monoᴸ ; from-mono to from-monoᴸ
+               ; to∘from to to∘fromᴸ ; from∘to to from∘toᴸ )
+    open ConIsoᵈ-Consequences {𝑆 = 𝑆₁} {𝑨 = 𝑨} {𝑳 = 𝑳} iso using ( to-cong≑ )
+    open Setoid 𝔻[ proj₁ 𝑳 ] using () renaming ( trans to ≈trans )
+    open Lattice-Order 𝑳 using ( ≤-refl )
+```
+
+The carrier of a finite algebra is inhabited or provably empty — run the
+enumeration.  Hence every decidably representable lattice has a witness with
+*inhabited* carrier: either the given one, or — when its carrier is empty, which
+forces the decidable-congruence poset trivial — the one-element algebra
+`𝟏`{.AgdaFunction} over the empty signature, with the isomorphism transported
+across the two trivial posets.  The closure constructions of [FLRP.Closure][]
+normalize their inputs through this lemma, so their basepoint-hungry composite
+algebras never meet an empty summand.
+
+```agda
+-- Decide inhabitation of a finite algebra's carrier from its enumeration.
+carrier-inhabited? : {𝑆 : Signature 𝓞 𝓥} {𝑨 : Algebra {𝑆 = 𝑆} α ρ}
+  → FiniteAlgebra 𝑨 → 𝕌[ 𝑨 ] ⊎ ¬ 𝕌[ 𝑨 ]
+carrier-inhabited? 𝑭 with 𝑭 .card | 𝑭 .enum | 𝑭 .enum-sur
+... | zero   | e | sur = inj₂ (λ x → ¬Fin0 (proj₁ (sur x)))
+... | suc k  | e | sur = inj₁ (e 0F)
+
+-- Every decidably representable lattice has a witness with inhabited carrier.
+inhabited-witness : {𝑳 : Lattice} (r : Representableᵈ 𝑳)
+  → Σ[ r' ∈ Representableᵈ 𝑳 ] 𝕌[ Representableᵈ.algᵈ r' ]
+inhabited-witness {𝑳} r with carrier-inhabited? (Representableᵈ.finiteᵈ r)
+... | inj₁ x   = r , x
+... | inj₂ ¬x  = record
+    { sigᵈ      = 𝑆∅
+    ; algᵈ      = 𝟏
+    ; finiteᵈ   = 𝟏-FiniteAlgebra
+    ; finsigᵈ   = 𝑆∅-FiniteSignature
+    ; con-isoᵈ  = trivial-ConIsoᵈ-transport
+                    {𝑆₁ = Representableᵈ.sigᵈ r} {𝑆₂ = 𝑆∅}
+                    {𝑨 = Representableᵈ.algᵈ r} {𝑩 = 𝟏} {𝑳 = 𝑳}
+                    (empty→ConTrivialᵈ {𝑨 = Representableᵈ.algᵈ r} ¬x)
+                    (𝟏-ConTrivialᵈ {𝑆 = 𝑆∅})
+                    (Representableᵈ.con-isoᵈ r)
+    } , tt
 ```
 
 --------------------------------------
