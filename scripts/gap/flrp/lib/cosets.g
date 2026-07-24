@@ -20,7 +20,9 @@
 ##  small generating set of G, as a 0-based value table on the [G:H] cosets.
 ##  The point numbering is GAP's own; the congruence lattice is invariant
 ##  under it, so no canonicalization is needed.  `directCertifiable` flags
-##  whether the carrier fits the emitter's Fin-literal cap (LITERAL_LIMIT = 32).
+##  whether the carrier fits the emitter's Fin-literal cap: n points use the
+##  literals 0F..(n-1)F, so the module renders directly iff n - 1 < LITERAL_LIMIT
+##  (= 32 in emit_agda.py), i.e. n ≤ 32.
 BindGlobal("FLRP_CosetAction", function(G, H)
   local hom, n, gens, ops, i, perm, table;
   hom := FactorCosetAction(G, H);

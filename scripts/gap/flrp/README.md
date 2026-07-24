@@ -68,7 +68,7 @@ Two deterministic, version-stamped JSON formats, echoing the `flrp-eqsearch v1` 
                 "meet": [[…]], "join": [[…]] },       // canonical, via tables_from_leq
   "match":    { "target": "N5", "isomorphic": true, "witness": [0,1,2,3,4] },
   "cosetAction": {                                    // present when computed
-    "points": 36, "directCertifiable": false,         // directCertifiable = index ≤ 31
+    "points": 36, "directCertifiable": false,         // true iff points ≤ 32 (emitter Fin-literal cap)
     "generators": [ { "name": "a", "table": [ … ] }, … ] }   // unary maps on the cosets
 }
 ```
