@@ -334,6 +334,7 @@
 [FLRP.Assumptions]: /FLRP/Assumptions/
 [FLRP.Bridge]: /FLRP/Bridge/
 [FLRP.Certificates]: /FLRP/Certificates/
+[FLRP.Certificates.Group.TG9x4TwoByTwo]: /FLRP/Certificates/Group/TG9x4TwoByTwo/
 [FLRP.Certificates.Pilot.V4RegularM3]: /FLRP/Certificates/Pilot/V4RegularM3/
 [FLRP.Certificates.SmallLatticeReps.SLR01]: /FLRP/Certificates/SmallLatticeReps/SLR01/
 [FLRP.Certificates.SmallLatticeReps.SLR02]: /FLRP/Certificates/SmallLatticeReps/SLR02/
@@ -694,6 +695,7 @@
 [FLRP/Assumptions.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/Assumptions.lagda.md
 [FLRP/Bridge.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/Bridge.lagda.md
 [FLRP/Certificates.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/Certificates.lagda.md
+[FLRP/Certificates/Group/TG9x4TwoByTwo.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/Certificates/Group/TG9x4TwoByTwo.lagda.md
 [FLRP/Certificates/Pilot/V4RegularM3.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/Certificates/Pilot/V4RegularM3.lagda.md
 [FLRP/Certificates/SmallLatticeReps/SLR01.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/Certificates/SmallLatticeReps/SLR01.lagda.md
 [FLRP/Certificates/SmallLatticeReps/SLR02.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/Certificates/SmallLatticeReps/SLR02.lagda.md
