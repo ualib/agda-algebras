@@ -224,10 +224,26 @@ class LatticeTests(unittest.TestCase):
 class EmitterTests(unittest.TestCase):
 
     def test_fin_literal_range(self) -> None:
-        """renderer: Fin literals stop at 9F, with a clear error beyond."""
+        """renderer: Fin literals run 0F to the synonym cap, with a clear error beyond."""
         self.assertEqual(fin(9), "9F")
+        self.assertEqual(fin(19), "19F")
         with self.assertRaises(CertificateError):
-            fin(10)
+            fin(32)
+
+    def test_pattern_synonyms_past_9f(self) -> None:
+        """renderer: a carrier past 10 gets local pattern synonyms and a capped Patterns import."""
+        shift = Algebra("Z11 shift", 11,
+                        (Operation("s", 1, [(i + 1) % 11 for i in range(11)]),))
+        two_chain = TargetLattice("chain2", 2, ((0, 0), (0, 1)), ((0, 1), (1, 1)))
+        cert = build_certificate(shift, two_chain)
+        claim = Claim("Z11Chain2", "2026-07-22", "FLRP.Certificates.Pilot", "",
+                      shift, two_chain)
+        rendered = emitted_module(claim, cert, "x.json")
+        self.assertIn("open import Data.Fin.Base       using ( Fin ; suc )", rendered)
+        self.assertIn("open import Data.Fin.Patterns   using "
+                      "( 0F ; 1F ; 2F ; 3F ; 4F ; 5F ; 6F ; 7F ; 8F ; 9F )", rendered)
+        self.assertIn("pattern 10F = suc 9F", rendered)
+        self.assertNotIn("pattern 11F", rendered)   # max index is 10
 
     def test_merge_str_uses_backward_offsets(self) -> None:
         """renderer: translate references become backward offsets; forward references are rejected."""

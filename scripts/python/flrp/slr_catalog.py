@@ -19,18 +19,15 @@ Description:
   + each value table is parsed from its ``array`` block exactly as printed
     (transcription fidelity is the point: parsing the source the paper is
     typeset from *is* exact transcription, and it is re-runnable);
-  + each entry with an algebra becomes a claim file (``flrp-cert-input v1``)
-    under ``inputs/slr/``, and each entry without one becomes a bare lattice
-    stanza (an ``eqsearch.py`` target) for the follow-up searches.
+  + a printed claim the engine refutes is a candidate manuscript erratum: it
+    is recorded in ``ERRATA`` and the census note's erratum log, and the
+    manuscript's data is never altered to make an entry pass (``B28`` is the
+    standing example).
 
-  Nothing parsed here is trusted.  ``--emit`` runs every claim through
-  ``lattice.build_certificate`` — which fails loudly on any false claim, so a
-  misread diagram or table cannot survive silently — and renders certificate
-  modules under ``src/FLRP/Certificates/SmallLatticeReps/`` for the entries
-  within the v1 renderer's ``0F``–``9F`` literal range; the modules re-verify
-  everything in Agda during ``make check``.  Entries past that range are
-  engine-audited only, with their audit JSONs written to ``out/slr/``, until
-  the renderer extension of #485 batch 2 lands.
+  Nothing parsed here is trusted: the emitted modules re-verify every table
+  and trace in Agda during ``make check``, and the committed artifacts must
+  re-derive from the manuscript byte for byte (``--check``, run by
+  ``make flrp-test``).
 
 Usage:
 
@@ -38,6 +35,46 @@ Usage:
   python3 scripts/python/flrp/slr_catalog.py --check
   python3 scripts/python/flrp/slr_catalog.py --dictionary
   python3 scripts/python/flrp/slr_catalog.py --census
+  python3 scripts/python/flrp/slr_catalog.py --diagnose 28
+
+  Flags:
+
+  +  ``--census`` prints the per-entry status rows (markdown) of the census
+     table in ``docs/notes/flrp-slr-census.md``: certified when the entry's
+     certificate module exists, otherwise the parked route (group
+     representation, dual, open case) or the erratum verdict.
+
+  +  ``--check`` re-derives every committed artifact from the manuscript —
+     claim files and lattice stanzas under ``inputs/slr/``, audit JSONs under
+     ``out/slr/``, certificate modules under
+     ``src/FLRP/Certificates/SmallLatticeReps/`` — and compares byte for
+     byte, printing one ✅/❌ line per catalog entry; any missing or stale
+     file fails the run.  ``make flrp-test`` runs this as its golden sweep.
+
+  +  ``--diagnose N`` prints ``Con(B_N)`` of entry ``N``'s printed algebra:
+     every congruence in bar notation, re-verified against the value tables
+     independently of the cg2 machinery, plus the covers of the inclusion
+     order — the reproducible core of the census note's erratum log.
+
+  +  ``--dictionary`` prints the naming-dictionary rows (markdown) of the
+     table in ``docs/notes/flrp-slr-naming.md``: per entry, the lattice size,
+     the cover relation in the manuscript's own element labels, any standard
+     alias (``N5``, ``M3``, the hexagon, …), and the printed algebra's shape.
+
+  +  ``--emit`` audits every unrefuted claim through
+     ``lattice.build_certificate`` — which fails loudly on any false claim,
+     so a misread diagram or table cannot survive silently — writes the audit
+     JSON to ``out/slr/``, and renders the certificate module for every entry
+     within the renderer's literal range (since the batch-2 pattern-synonym
+     extension, that is all of them).
+
+  +  ``--write-inputs`` writes the transcription itself to ``inputs/slr/``: a
+     claim file (``flrp-cert-input v1``, date pinned for byte-stable
+     re-emission) for each entry with an unrefuted printed algebra, and a
+     bare lattice stanza (a ready-made ``eqsearch.py`` target) for each entry
+     without one — the parked entries and the ``B28`` erratum.
+
+  ``make flrp-slr`` is ``--write-inputs --emit``.
 """
 
 from __future__ import annotations
@@ -66,10 +103,10 @@ NAMING_NOTE = "docs/notes/flrp-slr-naming.md"
 # catalog was transcribed, not the date the tool happens to run).
 DATE = "2026-07-22"
 
-# The v1 renderer emits Data.Fin.Patterns literals 0F–9F only: an entry is
-# renderable iff every index — carrier, operation symbol, lattice element —
-# stays below 10 (#485 batch 2 lifts this).
-RENDER_LIMIT = 10
+# An entry is renderable iff every index — carrier, operation symbol,
+# lattice element — stays within the renderer's literal range (Data.Fin
+# .Patterns 0F–9F plus the emitted pattern synonyms of #485 batch 2).
+RENDER_LIMIT = emit_agda.LITERAL_LIMIT
 
 # Names this library (or the general literature) already has for some catalog
 # lattices; the full dictionary is docs/notes/flrp-slr-naming.md.
@@ -399,9 +436,8 @@ def emit_all(entries: Sequence[CatalogEntry]) -> None:
                   "(module deferred: carrier past the 0F–9F renderer, #485 batch 2)")
 
 
-def check_committed(entries: Sequence[CatalogEntry]) -> List[str]:
-    """Re-derive every committed artifact from the manuscript and report any
-    file that is missing or stale; [] means everything is current."""
+def entry_problems(entry: CatalogEntry) -> List[str]:
+    """One entry's missing or stale committed artifacts; [] means current."""
     problems: List[str] = []
 
     def compare(path: Path, expected: str) -> None:
@@ -411,19 +447,46 @@ def check_committed(entries: Sequence[CatalogEntry]) -> List[str]:
         elif path.read_text() != expected:
             problems.append(f"stale: {rel}")
 
-    for entry in entries:
-        compare(input_path(entry), input_text(entry))
-        if not certifiable(entry):
-            continue
-        claim = emit_agda.parse_input(input_path(entry))
-        cert = build_certificate(claim.algebra, claim.lattice)
-        compare(audit_path(entry),
-                emit_agda.certificate_json(claim.name, claim.algebra,
-                                           claim.lattice, cert))
-        if renderable(entry):
-            rel = input_path(entry).relative_to(REPO_ROOT).as_posix()
-            compare(module_path(entry), emit_agda.emitted_module(claim, cert, rel))
+    compare(input_path(entry), input_text(entry))
+    if not certifiable(entry) or not input_path(entry).exists():
+        return problems
+    claim = emit_agda.parse_input(input_path(entry))
+    cert = build_certificate(claim.algebra, claim.lattice)
+    compare(audit_path(entry),
+            emit_agda.certificate_json(claim.name, claim.algebra,
+                                       claim.lattice, cert))
+    if renderable(entry):
+        rel = input_path(entry).relative_to(REPO_ROOT).as_posix()
+        compare(module_path(entry), emit_agda.emitted_module(claim, cert, rel))
     return problems
+
+
+def entry_verified(entry: CatalogEntry) -> str:
+    """The verified-artifacts clause of an entry's ✅ line."""
+    if not certifiable(entry):
+        return "lattice stanza re-derives byte for byte"
+    if renderable(entry):
+        return "claim file, audit JSON, and module re-derive byte for byte"
+    return "claim file and audit JSON re-derive byte for byte (module past the literal cap)"
+
+
+def check_committed(entries: Sequence[CatalogEntry],
+                    verbose: bool = False) -> List[str]:
+    """Re-derive every committed artifact from the manuscript and report any
+    file that is missing or stale; [] means everything is current.  With
+    ``verbose``, print one ✅/❌ line per catalog entry as it is checked
+    (the style of the repository's test runners)."""
+    all_problems: List[str] = []
+    for entry in entries:
+        problems = entry_problems(entry)
+        all_problems.extend(problems)
+        if verbose:
+            label = f"L{entry.number}".ljust(4)
+            if problems:
+                print(f"❌ {label} " + "; ".join(problems))
+            else:
+                print(f"✅ {label} {entry_verified(entry)}")
+    return all_problems
 
 
 # ---------------------------------------------------------------------------
@@ -529,7 +592,8 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     parser.add_argument("--emit", action="store_true",
                         help="audit every claim and render the in-range certificate modules")
     parser.add_argument("--check", action="store_true",
-                        help="verify every committed artifact re-derives byte for byte")
+                        help="verify every committed artifact re-derives byte for byte, "
+                             "one ✅/❌ line per entry")
     parser.add_argument("--dictionary", action="store_true",
                         help="print the naming-dictionary table rows (markdown)")
     parser.add_argument("--census", action="store_true",
@@ -547,10 +611,9 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     if args.emit:
         emit_all(entries)
     if args.check:
-        problems = check_committed(entries)
-        for problem in problems:
-            print(problem)
+        problems = check_committed(entries, verbose=True)
         if problems:
+            print(f"{len(problems)} committed artifact(s) missing or stale")
             return 1
         print(f"all {len(entries)} catalog entries re-derive byte for byte")
     if args.dictionary:
