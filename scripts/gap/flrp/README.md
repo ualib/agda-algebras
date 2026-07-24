@@ -34,15 +34,18 @@ scripts/gap/flrp/
   lib/search.g          # scan drivers: transitive point-stabilizer, SmallGroups subgroup hunt
   bin/smoke.g           # deliverable 1: the shell smoke test
   bin/pentagon216.g     # deliverable 3: the SmallGroup(216,153) pentagon interval
-  bin/demo_tg9x4.g      # deliverable 6: the 2×2 direct-certificate demonstrator
+  bin/sweep_pentagon.g  # deliverable 3: the N5 minimality sweep over SmallGroups
   bin/scan_transitive.g # deliverable 4: the degree-n L7 transitive scan
+  bin/find_interval.g   # deliverable 5: parametric interval finder in a constructed group
+  bin/filter_ideal_216.g# deliverable 5: the L11 filter-ideal construction
+  bin/demo_tg9x4.g      # deliverable 6: the 2×2 direct-certificate demonstrator
   inputs/               # target lattice stanzas (shared format with the python side)
   out/                  # committed JSON artifacts only (raw *.raw.json is git-ignored)
 ```
 
 The Python side lives in `scripts/python/flrp/`: `gap_interval.py` (interval → lattice bridge, canonical artifact, direct-certificate claim) and `gap_search.py` (search-report confirmation and verdict), both exercised by `test_gap_interval.py` (GAP-free, part of `make flrp-test`).
 
-Still forthcoming on this branch (issue #487): a SmallGroups subgroup-interval hunt CLI over `lib/search.g`'s `FLRP_ScanSmallGroups` (deliverable 3's full minimality sweep and deliverable 5's L11/L14/L16/L20 interval data).
+A third JSON format, `flrp-gap-filter-ideal v1`, records the manuscript's filter-ideal constructions (a filter `[H, G]` glued to an ideal `[1, K]` in `Sub(G)`; `bin/filter_ideal_216.g` for `L11`), for the entries that are not plain upper intervals.
 
 ## Artifact schema
 
