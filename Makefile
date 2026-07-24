@@ -28,7 +28,7 @@
 #      where a path segment happens to contain the substring `agda`.
 # =============================================================================
 
-.PHONY: default all check test clean site serve serve-full html agda-md site-full profile project-plan unused-imports unused-imports-test check-links check-links-test gen-links flrp-test flrp-slr Everything.agda
+.PHONY: default all check test clean site serve serve-full html agda-md site-full profile project-plan unused-imports unused-imports-test check-links check-links-test gen-links flrp-test flrp-slr gap-smoke Everything.agda
 
 # -- Configuration -----------------------------------------------------------
 SRCDIR    := src
@@ -233,3 +233,13 @@ flrp-test:
 flrp-slr:
 	@echo "target: $@"
 	python3 scripts/python/flrp/slr_catalog.py --write-inputs --emit
+
+# Smoke-test the GAP subgroup-interval engine (scripts/gap/flrp/, issue #487):
+# confirm the group libraries it depends on load (SmallGroup(216,153) and
+# TransitiveGroup(8,1)) and the JSON/provenance helpers work.  Requires the
+# dedicated GAP devshell (`nix develop .#gap`); GAP is an untrusted engine, so
+# this is deliberately NOT a dependency of `check` or `flrp-test`, which stay
+# GAP-free.  Run from the repo root.
+gap-smoke:
+	@echo "target: $@"
+	gap -A -q -b scripts/gap/flrp/bin/smoke.g

@@ -1,0 +1,3 @@
+# Raw engine output (deterministic but redundant with the committed
+# canonical *.interval.json artifacts).  Kept out of git per roadmap § 6.
+*.raw.json
