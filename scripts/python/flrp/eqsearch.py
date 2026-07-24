@@ -40,10 +40,12 @@ from __future__ import annotations
 
 import json
 import sys
+from collections import Counter
 from dataclasses import dataclass
-from itertools import permutations
+from itertools import combinations, permutations
 from pathlib import Path
-from typing import Dict, FrozenSet, Iterator, List, Optional, Sequence, Set, Tuple
+from typing import (Dict, FrozenSet, Iterator, List, Optional, Sequence, Set,
+                    Tuple, Union)
 
 from cg2 import (Algebra, CertificateError, Operation, UnionFind,
                  forest_edges)
@@ -77,6 +79,53 @@ def all_partitions(n: int) -> Tuple[Part, ...]:
         return tuple(leader[label] for label in rgs)
 
     return tuple(to_parent(rgs) for rgs in extend([], 0))
+
+
+def is_uniform(p: Sequence[int]) -> bool:
+    """Whether every block of the partition has the same size — there is a
+    ``k`` (necessarily dividing ``n``) with every block of exactly ``k``
+    elements.  Congruences of a transitive G-set are its systems of
+    imprimitivity, whose blocks are cosets of a subgroup and hence all of
+    one size; these are the only partitions the ``--group-rep`` sweep of
+    issue #494 admits.  In a parent vector every index points at its block's
+    least element, so the multiset of parent counts is the block-size
+    profile."""
+    return len(set(Counter(p).values())) == 1
+
+
+def uniform_partitions(n: int) -> Tuple[Part, ...]:
+    """Every uniform partition of ``range(n)`` — for each divisor ``k`` of
+    ``n``, all partitions into blocks of exactly ``k`` elements, the bounds
+    included (``k = 1`` is the diagonal, ``k = n`` the total relation) — in
+    the canonical order of ``all_partitions``, without enumerating the full
+    Bell(``n``) census.
+
+    Each divisor's partitions are built directly as min-rooted parent
+    vectors: the least unassigned element roots the next block, and its
+    ``k − 1`` companions are drawn by ``combinations`` in lexicographic
+    order.  Merging the divisors by sorting parent vectors lexicographically
+    recovers exactly the enumeration order of ``all_partitions``: a
+    restricted-growth string ranks blocks by first occurrence, i.e. by block
+    minimum, so the lexicographic orders on restricted-growth strings and on
+    normal-form parent vectors agree."""
+    pool: List[Part] = []
+    parent = [0] * n
+
+    def blocks(remaining: Tuple[int, ...], k: int) -> Iterator[Part]:
+        if not remaining:
+            yield tuple(parent)
+            return
+        root, rest = remaining[0], remaining[1:]
+        parent[root] = root
+        for companions in combinations(rest, k - 1):
+            for c in companions:
+                parent[c] = root
+            chosen = set(companions)
+            yield from blocks(tuple(x for x in rest if x not in chosen), k)
+
+    for k in (k for k in range(1, n + 1) if n % k == 0):
+        pool.extend(blocks(tuple(range(n)), k))
+    return tuple(sorted(pool))
 
 
 def partition_join(p: Sequence[int], q: Sequence[int]) -> Part:

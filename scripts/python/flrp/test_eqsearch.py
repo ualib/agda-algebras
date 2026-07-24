@@ -22,6 +22,7 @@ from __future__ import annotations
 import json
 import os
 import unittest
+from collections import Counter
 from itertools import product
 from typing import List, Sequence, Tuple
 
@@ -30,9 +31,10 @@ import io
 
 from cg2 import CertificateError
 from eqsearch import (EqTables, Part, all_partitions, claim_input, classify,
-                      closed_class_algebra, closure_report, invariant_partitions,
-                      main, partition_join, preserving_maps, relabel,
-                      sublattice_copies, survey, survey_json, tables_from_leq,
+                      closed_class_algebra, closure_report,
+                      invariant_partitions, is_uniform, main, partition_join,
+                      preserving_maps, relabel, sublattice_copies, survey,
+                      survey_json, tables_from_leq, uniform_partitions,
                       validate_target)
 from lattice import TargetLattice, build_certificate, partition_meet
 from test_flrp import check_certificate, m3
@@ -96,6 +98,38 @@ class PartitionKernelTests(unittest.TestCase):
         self.assertEqual(sorted(preserving_maps(mixed, 4)),
                          brute_force_maps(mixed, 4))
         self.assertEqual(len(invariant_partitions([(0, 1, 2, 3)], eq)), 15)
+
+
+class UniformPoolTests(unittest.TestCase):
+    """The uniform (coset-block) pool enumerator of issue #494."""
+
+    def test_uniform_pool_counts(self) -> None:
+        """pool: nontrivial uniform counts and block-size shapes match #494's table."""
+        expected = {6: {2: 15, 3: 10}, 7: {}, 8: {2: 105, 4: 35},
+                    9: {3: 280}, 10: {2: 945, 5: 126}}
+        for n, shapes in expected.items():
+            pool = uniform_partitions(n)
+            self.assertEqual(pool[0], (0,) * n)              # ∇ sorts first
+            self.assertEqual(pool[-1], tuple(range(n)))      # Δ sorts last
+            nontrivial = [p for p in pool
+                          if p not in ((0,) * n, tuple(range(n)))]
+            self.assertEqual(len(nontrivial), sum(shapes.values()))
+            by_size = Counter(n // len(set(p)) for p in nontrivial)
+            self.assertEqual(dict(by_size), shapes)
+
+    def test_uniform_pool_is_canonical_subsequence(self) -> None:
+        """pool: the per-divisor enumerator equals the Bell filter, order included (n ≤ 8)."""
+        for n in range(1, 9):
+            self.assertEqual(uniform_partitions(n),
+                             tuple(p for p in all_partitions(n)
+                                   if is_uniform(p)))
+
+    def test_is_uniform_spot_checks(self) -> None:
+        """pool: the bounds are uniform; the L7 grid element |0,2|3,4| on six points is not."""
+        self.assertTrue(is_uniform(tuple(range(6))))
+        self.assertTrue(is_uniform((0,) * 6))
+        self.assertTrue(is_uniform((0, 1, 0, 3, 3, 1)))      # |0,2|1,5|3,4|
+        self.assertFalse(is_uniform((0, 1, 0, 3, 3, 5)))     # |0,2|3,4| + singletons
 
 
 class TargetLatticeTests(unittest.TestCase):
