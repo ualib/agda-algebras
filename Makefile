@@ -224,6 +224,7 @@ flrp-test:
 	python3 scripts/python/flrp/test_eqsearch.py
 	python3 scripts/python/flrp/test_slr_catalog.py
 	python3 scripts/python/flrp/test_eqfast.py
+	python3 scripts/python/flrp/test_gap_interval.py
 
 # Regenerate the SmallLatticeReps catalog artifacts (issue #485) from the
 # manuscript source: claim files under scripts/python/flrp/inputs/slr/, audit
