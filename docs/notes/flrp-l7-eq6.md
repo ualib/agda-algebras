@@ -135,25 +135,30 @@ python3 scripts/python/flrp/eqsearch.py scripts/python/flrp/inputs/l7_lattice.js
 
 ## 9. Group-side cross-check: the transitive-degree scan (#487)
 
-The algebra-side sweeps above rule out a representation of `L7` on eight *points*.  The manuscript's § 5 transitivity theorem gives the complementary group-side test: a minimal representation of `L7`, if one exists, is a transitive `G`-set, and a transitive `G`-set of degree `n` is `G` acting on the cosets of a point stabilizer `H` of index `n`, with `Con(G ↷ G/H) ≅ [H, G]`.  So scanning every transitive group of degree 8 and testing `[H, G] ≅ L7` settles existence of a degree-8 minimal representation independently of the closure sweep.  The GAP engine of #487 (`scripts/gap/flrp/`, A. Hulpke's `IntermediateSubgroups`) carries this out.
+The uniform sweeps of § 8 are the algebra side of the transitivity reduction; the group side is #487's degree-by-degree scan.  By the manuscript's § 5 theorem a minimal representation of `L7` is a transitive `G`-set, and a transitive `G`-set of degree `n` is `G` acting on the cosets of a point stabilizer `H` of index `n`, with `Con(G ↷ G/H) ≅ [H, G]`.  So testing `[H, G] ≅ L7` over every `TransitiveGroup(n, k)` is exactly the group-realizable half of the `Eq(n)` uniform question — and, being over actual groups, it needs no closure test.  The GAP engine (`scripts/gap/flrp/`, A. Hulpke's `IntermediateSubgroups`) carries it out; prime degrees are free negatives (transitive ⇒ primitive ⇒ two-element interval) and are skipped.
 
-The verdict is **negative, and emphatically so**.  Across all **50** transitive groups of degree 8, the point-stabilizer interval `[H, G]` never even has seven elements: the interval-size histogram is
+Every degree through twelve comes back **negative**:
 
-```text
-size  |  2   3   4   6   8  10  16
-count |  7  14  18   7   2   1   1
-```
+| degree | transitive groups | size-7 point-stabilizer intervals | ≅ L7 |
+|---|---|---|---|
+| 8 | 50 | 0 | — |
+| 9 | 34 | 0 | — |
+| 10 | 45 | 0 | — |
+| 11 | prime | primitive: two-element interval | — |
+| 12 | 301 | 18 | 0 |
 
-so there is no size-5 or size-7 interval at all, and in particular none isomorphic to `L7` (0 candidates before any isomorphism test is needed).  This **cross-validates the `Eq(8)` closure sweep** of § 5: both engines — the algebra side (no 8-point algebra has `Con ≅ L7`) and the group side (no degree-8 transitive `G`-set has `Con ≅ L7`) — independently agree that eight points do not suffice.  Degrees of prime order are skipped as free negatives (transitive ⇒ primitive ⇒ two-element interval); degree 8 is composite, a genuine scan.
+Degrees 8, 9, 10 have no size-7 interval at all (at degree 8 the interval sizes are `{2, 3, 4, 6, 8, 10, 16}`); degree 12 is the first with size-7 intervals — 18 of them — but none is `L7`.  Degree 8 **cross-validates the `Eq(8)` closure sweep** of § 5, and the scan matches the § 8 uniform sweeps degree for degree.
 
-Reproduction (inside `nix develop .#gap`, GAP 4.15.1, transgrp 3.6.5; the committed report is `scripts/gap/flrp/out/l7_transitive_deg8.search.json`, format `flrp-gap-search v1`):
+The degree-12 verdict *sharpens* the § 8 frontier.  Section 8 leaves the `Eq(12)` uniform sweep as the decisive open computation; the group side settles its minimality-relevant part directly.  Chaining the transitivity theorem: § 8 rules out a representation on nine, ten, or eleven points, so a **twelve**-point representation would be of minimal size, hence transitive, hence a degree-12 interval `≅ L7` — and the scan finds none among all 301.  Therefore **no algebra represents `L7` on twelve points either, and a minimal representation, if one exists, has at least thirteen elements** — one past the § 8 bound.  (The full `Eq(12)` uniform closure sweep of #494 would confirm this on the algebra side; degree twelve is where the two methods first meet genuinely new ground, and they agree.)
+
+Reproduction (inside `nix develop .#gap`, GAP 4.15.1, transgrp 3.6.5; committed reports `scripts/gap/flrp/out/l7_transitive_deg{8,9,10,12}.search.json`, format `flrp-gap-search v1`):
 
 ```sh
-gap -A -q -b scripts/gap/flrp/bin/scan_transitive.g
-python3 scripts/python/flrp/gap_search.py \
-    scripts/gap/flrp/out/l7_transitive_deg8.raw.json \
-    --target scripts/python/flrp/inputs/l7_lattice.json \
-    --out scripts/gap/flrp/out/l7_transitive_deg8.search.json --date 2026-07-24
+for d in 8 9 10 12; do
+  gap -A -q -c "FLRP_DEGREE := $d;;" -b scripts/gap/flrp/bin/scan_transitive.g
+  python3 scripts/python/flrp/gap_search.py \
+      scripts/gap/flrp/out/l7_transitive_deg$d.raw.json \
+      --target scripts/python/flrp/inputs/l7_lattice.json \
+      --out scripts/gap/flrp/out/l7_transitive_deg$d.search.json --date 2026-07-24
+done
 ```
-
-The higher degrees § 8 flags for the group side — nine, ten, and twelve (eleven is prime, a free negative) — continue this same scan; that is #487's contribution to the twelve-point frontier.
