@@ -54,6 +54,7 @@ import sys
 from collections import Counter
 from dataclasses import dataclass
 from itertools import combinations, permutations
+from math import factorial
 from pathlib import Path
 from typing import (Dict, FrozenSet, Iterator, List, Optional, Sequence, Set,
                     Tuple, Union)
@@ -288,6 +289,12 @@ class EqTables:
                 self.meet[i][j] = self.meet[j][i] = m
                 self.join[i][j] = self.join[j][i] = v
 
+    def meet_at(self, a: int, b: int) -> int:
+        return self.meet[a][b]
+
+    def join_at(self, a: int, b: int) -> int:
+        return self.join[a][b]
+
 
 class UniformTables:
     """Meet and join tables over the uniform pool only — the ``--group-rep``
@@ -319,10 +326,76 @@ class UniformTables:
                 self.meet[i][j] = self.meet[j][i] = m
                 self.join[i][j] = self.join[j][i] = v
 
+    def meet_at(self, a: int, b: int) -> int:
+        return self.meet[a][b]
 
-# The sweep's table interface: the full Eq(n) tables or a restricted pool
-# whose meet/join entries may be the out-of-pool sentinel -1.
-Tables = Union[EqTables, UniformTables]
+    def join_at(self, a: int, b: int) -> int:
+        return self.join[a][b]
+
+
+class LazyUniformTables:
+    """The uniform pool tables of ``UniformTables`` computed on the fly and
+    memoized, for pools too large to tabulate eagerly.  At ``n = 12`` the pool
+    has 32,034 members, so the eager pool² meet and join tables would be
+    ~4.1 GB at ``int16`` (and far more as Python lists); this class never
+    builds them.  ``meet_at``/``join_at`` compute one meet or join with the
+    pure kernels, resolve it against the pool (``-1`` when it leaves the pool,
+    the same out-of-pool sentinel ``UniformTables`` uses), and cache it by the
+    unordered index pair, so the search pays only for the pairs it visits.
+
+    ``parts``/``index``/``bot``/``top``/``n`` match ``UniformTables`` exactly,
+    so the search and closure test read it identically and the reports are
+    byte-for-byte the same.  The closure universe — all of Eq(n) — is built
+    lazily and cached on first use, so an empty census never pays for it."""
+
+    def __init__(self, n: int) -> None:
+        self.n = n
+        self.parts = uniform_partitions(n)
+        self.index: Dict[Part, int] = {p: i for i, p in enumerate(self.parts)}
+        self.bot = self.index[tuple(range(n))]
+        self.top = self.index[(0,) * n]
+        self._meet: Dict[Tuple[int, int], int] = {}
+        self._join: Dict[Tuple[int, int], int] = {}
+        self._universe: Optional[Tuple[Part, ...]] = None
+
+    @property
+    def universe(self) -> Tuple[Part, ...]:
+        """All of Eq(n) — the closure test's candidate lattice — built once on
+        demand.  ``Bell(12) = 4,213,597``, ~0.8 GB as parent-vector tuples, so
+        it is deferred until a class actually needs closure-testing."""
+        if self._universe is None:
+            self._universe = all_partitions(self.n)
+        return self._universe
+
+    def meet_at(self, a: int, b: int) -> int:
+        key = (a, b) if a <= b else (b, a)
+        hit = self._meet.get(key)
+        if hit is None:
+            hit = self.index.get(
+                partition_meet(self.parts[a], self.parts[b]), -1)
+            self._meet[key] = hit
+        return hit
+
+    def join_at(self, a: int, b: int) -> int:
+        key = (a, b) if a <= b else (b, a)
+        hit = self._join.get(key)
+        if hit is None:
+            hit = self.index.get(
+                partition_join(self.parts[a], self.parts[b]), -1)
+            self._join[key] = hit
+        return hit
+
+
+# The sweep's table interface: the full Eq(n) tables, the eager uniform pool,
+# or the lazy uniform pool — all sharing meet_at/join_at, and meet/join
+# entries that may be the out-of-pool sentinel -1 for the uniform variants.
+Tables = Union[EqTables, UniformTables, "LazyUniformTables"]
+
+# Tabulate the uniform pool eagerly while it has at most this many members;
+# above it (n = 12 has 32,034) the pool² tables are too large, so the survey
+# switches to the on-the-fly LazyUniformTables.  Anywhere both are feasible
+# they return identical meets and joins, so the choice never moves a report.
+_EAGER_POOL_LIMIT = 2048
 
 
 def sublattice_copies(lat: TargetLattice, eq: Tables) -> List[Copy]:
@@ -337,7 +410,7 @@ def sublattice_copies(lat: TargetLattice, eq: Tables) -> List[Copy]:
     found: List[Copy] = []
 
     def ok(step: Step) -> bool:
-        return all((eq.meet if is_meet else eq.join)[phi[u]][phi[v]] == phi[r]
+        return all((eq.meet_at if is_meet else eq.join_at)(phi[u], phi[v]) == phi[r]
                    for u, v, r, is_meet in step.checks)
 
     def extend(s: int) -> None:
@@ -347,7 +420,7 @@ def sublattice_copies(lat: TargetLattice, eq: Tables) -> List[Copy]:
         step = plan[s]
         if step.forced is not None:
             kind, u, v = step.forced
-            value = (eq.meet if kind == "meet" else eq.join)[phi[u]][phi[v]]
+            value = (eq.meet_at if kind == "meet" else eq.join_at)(phi[u], phi[v])
             # -1 is the restricted tables' out-of-pool sentinel: the forced
             # value exists in Eq(n) but not in the sweep pool, so the
             # placement fails; full tables never produce it.
@@ -384,8 +457,147 @@ class ClassReport:
     closed: bool                        # Inv(M) is exactly the copy
 
 
-def classify(copies: Sequence[Copy], eq: Tables) -> List[Tuple[Copy, int]]:
-    """Group the copies into orbits under relabeling of the points.
+def _block_sizes(p: Sequence[int]) -> Tuple[int, ...]:
+    """The block-size multiset of a partition, as a sorted tuple.  This is an
+    invariant of the point relabeling action — two partitions in the same
+    ``S_n`` orbit have the same block sizes — so it and anything built from it
+    can be used to tell orbits apart without ever moving a point."""
+    return tuple(sorted(Counter(p).values()))
+
+
+def _relation_set_key(rels: Sequence[Part]) -> Tuple[object, ...]:
+    """A relabeling-invariant, relation-order-independent key for the set of
+    partitions ``rels``: the sorted block-size profiles of the members,
+    paired with the sorted multiset of pairwise meet/join block-size profiles
+    (each tagged by the endpoints' own profiles).  Every ingredient is an
+    ``S_n`` invariant, so two relation sets in the same orbit always receive
+    the same key — the key can never *split* an orbit.  Distinct orbits that
+    happen to collide on it are not merged silently: the stabilizer
+    conservation check in ``classify`` compares ``n!/|stab|`` against the
+    number of relation sets bucketed here and fails loudly on a collision."""
+    singles = sorted(_block_sizes(p) for p in rels)
+    pairs = []
+    for i in range(len(rels)):
+        for j in range(i + 1, len(rels)):
+            endpoints = tuple(sorted((_block_sizes(rels[i]), _block_sizes(rels[j]))))
+            pairs.append((endpoints,
+                          _block_sizes(partition_meet(rels[i], rels[j])),
+                          _block_sizes(partition_join(rels[i], rels[j]))))
+    return (tuple(singles), tuple(sorted(pairs)))
+
+
+def _realizing(sources: Sequence[Part], targets: Sequence[Part], n: int,
+               first_only: bool = False) -> int:
+    """The number of point permutations ``π`` of ``range(n)`` that carry each
+    ``sources[t]`` exactly onto ``targets[t]`` as ordered tuples of
+    partitions — ``relabel(sources[t], π) == targets[t]`` for every ``t``
+    (with ``first_only`` the search stops at the first such ``π``, returning
+    ``0`` or ``1``, which is all an existence test needs).
+
+    Found by backtracking over ``π(0), π(1), …``: assigning ``π(x) = y``
+    forces, in every relation ``t``, the block of ``x`` in ``sources[t]`` to
+    map to the block of ``y`` in ``targets[t]``, so the search maintains that
+    partial block bijection (``fwd``) and its inverse (``bwd``) and prunes the
+    instant a point's image would contradict an established correspondence or
+    match blocks of different sizes."""
+    m = len(sources)
+    src_size = [Counter(s) for s in sources]
+    tgt_size = [Counter(t) for t in targets]
+    fwd: List[Dict[int, int]] = [dict() for _ in range(m)]
+    bwd: List[Dict[int, int]] = [dict() for _ in range(m)]
+    used = [False] * n
+    count = 0
+    stop = False
+
+    def rec(x: int) -> None:
+        nonlocal count, stop
+        if x == n:
+            count += 1
+            stop = first_only
+            return
+        for y in range(n):
+            if used[y]:
+                continue
+            touched: List[int] = []
+            ok = True
+            for t in range(m):
+                sr, tr = sources[t][x], targets[t][y]
+                if src_size[t][sr] != tgt_size[t][tr]:
+                    ok = False
+                    break
+                mapped = fwd[t].get(sr)
+                if mapped is not None:
+                    if mapped != tr:
+                        ok = False
+                        break
+                elif tr in bwd[t]:
+                    ok = False
+                    break
+                else:
+                    fwd[t][sr] = tr
+                    bwd[t][tr] = sr
+                    touched.append(t)
+            if ok:
+                used[y] = True
+                rec(x + 1)
+                used[y] = False
+            for t in touched:
+                del fwd[t][sources[t][x]]
+                del bwd[t][targets[t][y]]
+            if stop:
+                return
+
+    rec(0)
+    return count
+
+
+def _profile_perms(source_profiles: Sequence[Tuple[int, ...]],
+                   target_profiles: Sequence[Tuple[int, ...]]
+                   ) -> Iterator[Tuple[int, ...]]:
+    """Every bijection ``σ`` of the relations that could match block-size
+    profiles — ``source_profiles[i] == target_profiles[σ(i)]`` — the only
+    ``σ`` a point permutation can realize.  Yields ``σ`` as an image tuple."""
+    m = len(source_profiles)
+    for perm in permutations(range(m)):
+        if all(source_profiles[i] == target_profiles[perm[i]] for i in range(m)):
+            yield perm
+
+
+def _setwise_stabilizer_order(rels: Sequence[Part], n: int) -> int:
+    """The order of the setwise stabilizer ``{π ∈ S_n : π·R = R}`` of the
+    relation set ``R = set(rels)``.  A stabilizing permutation permutes the
+    members of ``R`` among themselves, inducing a bijection ``σ`` of the
+    relations; the stabilizer is the disjoint union, over every ``σ``, of the
+    permutations that realize ``σ`` pointwise, so its order is the sum of
+    those counts.  Only ``σ`` matching block-size profiles can contribute, so
+    for a rigid copy only the identity does (the pointwise stabilizer), while
+    for a copy with interchangeable relations (the three matchings of ``M3``)
+    the relation-permuting ``σ`` contribute too — exactly the group whose
+    index in ``S_n`` is the materialized orbit size."""
+    profile = [_block_sizes(p) for p in rels]
+    return sum(_realizing(rels, [rels[s[i]] for i in range(len(rels))], n)
+               for s in _profile_perms(profile, profile))
+
+
+def _setwise_iso(rels: Sequence[Part], other: Sequence[Part], n: int) -> bool:
+    """Whether some point permutation carries the relation set ``set(rels)``
+    onto ``set(other)`` — i.e. the two sublattices lie in one ``S_n`` orbit.
+    Decomposes over the profile-compatible relation bijections ``σ`` exactly
+    as the stabilizer does, asking only for existence of a realizing ``π``."""
+    if len(rels) != len(other):
+        return False
+    pr = [_block_sizes(p) for p in rels]
+    po = [_block_sizes(p) for p in other]
+    return any(_realizing(rels, [other[s[i]] for i in range(len(rels))], n,
+                          first_only=True)
+               for s in _profile_perms(pr, po))
+
+
+def _classify_orbit_stabilizer(copies: Sequence[Copy],
+                               eq: Tables) -> List[Tuple[Copy, int]]:
+    """Group the copies into orbits under relabeling of the points, by
+    orbit–stabilizer rather than by materializing all ``n!`` relabelings
+    (``12! ≈ 4.8 × 10⁸`` makes the materialized sweep hours per class).
 
     Copies are identified by their *unordered* relation sets (frozensets of
     partition indices): two embeddings differing only by an automorphism of
@@ -393,9 +605,77 @@ def classify(copies: Sequence[Copy], eq: Tables) -> List[Tuple[Copy, int]]:
     test of ``closure_report`` depends only on that relation set.  So this
     classifies sublattices rather than embeddings — orbit sizes count
     distinct relation sets, and the copy census may exceed the class-size
-    total when the target has automorphisms.  Returns one (first-found
-    representative, orbit size) per class, in the order the representatives
-    occur in the sorted copy list."""
+    total when the target has automorphisms.  Relabeling carries copies to
+    copies and fixes the bounds, so the whole ``S_n`` orbit of any copy's
+    relation set is itself present among the copies.
+
+    Each distinct relation set is placed into a class by first hashing it to
+    its relabeling-invariant key (the bounds are fixed by every permutation
+    and carry no orbit information) and then, among the classes sharing that
+    key, matching it against a representative by an explicit setwise
+    isomorphism test — the invariant only narrows the isomorphism search, so
+    distinct orbits that collide on it are still separated correctly.  The
+    representative is the first copy reaching a class in the sorted copy
+    order.  The orbit size is reported as ``n!/|stab|`` from a stabilizer
+    backtrack, guarded by two cross-checks: per class ``n!/|stab|`` must equal
+    the number of relation sets placed there, and globally the orbit sizes
+    must sum to the number of distinct relation sets.  Returns one
+    (first-found representative, orbit size) per class, in first-found order —
+    byte-identical to the materialized classifier wherever both run."""
+    bounds = (eq.bot, eq.top)
+    first_copy: Dict[FrozenSet[int], Copy] = {}
+    order: List[FrozenSet[int]] = []
+    for copy in copies:
+        key = frozenset(copy)
+        if key not in first_copy:
+            first_copy[key] = copy
+            order.append(key)
+
+    by_key: Dict[Tuple[object, ...], List[int]] = {}    # invariant key -> class indices
+    reps: List[Copy] = []
+    rep_rels: List[Tuple[Part, ...]] = []
+    members: List[int] = []                             # distinct relation sets per class
+    stabs: List[int] = []
+    for key in order:
+        rels = tuple(eq.parts[i] for i in sorted(key) if i not in bounds)
+        siblings = by_key.setdefault(_relation_set_key(rels), [])
+        idx = next((c for c in siblings if _setwise_iso(rels, rep_rels[c], eq.n)),
+                   None)
+        if idx is None:
+            idx = len(reps)
+            reps.append(first_copy[key])
+            rep_rels.append(rels)
+            members.append(0)
+            stabs.append(_setwise_stabilizer_order(rels, eq.n))
+            siblings.append(idx)
+        members[idx] += 1
+
+    fact = factorial(eq.n)
+    classes: List[Tuple[Copy, int]] = []
+    for idx, copy in enumerate(reps):
+        stab = stabs[idx]
+        if stab <= 0 or fact % stab != 0:
+            raise CertificateError("stabilizer order does not divide n!")
+        orbit = fact // stab
+        if orbit != members[idx]:
+            raise CertificateError(
+                "orbit size n!/|stab| disagrees with the distinct relation "
+                "sets in its class (stabilizer or isomorphism bug)")
+        classes.append((copy, orbit))
+    if sum(orbit for _, orbit in classes) != len(order):
+        raise CertificateError("orbit sweep lost copies (relabeling bug)")
+    return classes
+
+
+def _classify_materialized(copies: Sequence[Copy],
+                           eq: Tables) -> List[Tuple[Copy, int]]:
+    """The reference classifier: for each new relation set, materialize its
+    whole orbit by relabeling under every one of the ``n!`` point
+    permutations and mark the images seen.  Simple and fast while ``n!`` is
+    small; ``_classify_orbit_stabilizer`` is pinned byte-identical to it on
+    every census where both run and takes over once ``n!`` makes this
+    infeasible.  Same contract: one (first-found representative, orbit size)
+    per class, in first-found order."""
     seen: Dict[FrozenSet[int], int] = {}
     classes: List[Tuple[Copy, int]] = []
     for copy in copies:
@@ -410,6 +690,26 @@ def classify(copies: Sequence[Copy], eq: Tables) -> List[Tuple[Copy, int]]:
     if sum(size for _, size in classes) != len({frozenset(c) for c in copies}):
         raise CertificateError("orbit sweep lost copies (relabeling bug)")
     return classes
+
+
+# Materialize the orbit while n! is at most this (10! = 3,628,800), so the
+# reference classifier runs for every committed census (n ≤ 8, and the empty
+# uniform sweeps at 9 and 10); switch to orbit–stabilizer once n! makes
+# materialization prohibitive — n ≥ 11, in particular the Eq(12) sweep.
+_MATERIALIZE_LIMIT = factorial(10)
+
+
+def classify(copies: Sequence[Copy], eq: Tables) -> List[Tuple[Copy, int]]:
+    """Group the copies into orbits under relabeling of the points, returning
+    one (first-found representative, orbit size) per class in first-found
+    order.  Dispatches to the materialized-orbit reference while ``n!`` is
+    small enough to enumerate and to the orbit–stabilizer classifier once it
+    is not (``n ≥ 11``, i.e. the Eq(12) sweep) — the two are pinned
+    byte-identical wherever both run, so the choice is invisible in the
+    reports."""
+    if factorial(eq.n) <= _MATERIALIZE_LIMIT:
+        return _classify_materialized(copies, eq)
+    return _classify_orbit_stabilizer(copies, eq)
 
 
 # ---------------------------------------------------------------------------
@@ -448,7 +748,15 @@ def invariant_partitions(maps: Sequence[Tuple[int, ...]],
     are skipped.  The candidates are ``eq.universe``, all of Eq(n) even when
     the sweep pool is restricted: an algebra's congruence lattice is
     ``Inv`` of its unary polynomials over the *whole* partition lattice, so
-    anything less would let a spurious closure verdict through."""
+    anything less would let a spurious closure verdict through.
+
+    A table object may carry a vectorized ``invariant_filter`` (the numpy
+    backend packs the universe as an ``int8`` matrix — 50 MB at ``n = 12``
+    versus ~0.8 GB of tuples — and filters it with mask arithmetic); when
+    present it is used, and it must return exactly this set."""
+    fast = getattr(eq, "invariant_filter", None)
+    if fast is not None:
+        return fast(maps)
     identity = tuple(range(eq.n))
     candidates: List[Part] = list(eq.universe)
     for f in maps:
@@ -468,6 +776,12 @@ def closure_report(copy: Copy, orbit_size: int, eq: Tables) -> ClassReport:
     bijections = sum(1 for f in monoid if len(set(f)) == eq.n)
     constants = sum(1 for f in monoid if len(set(f)) == 1)
     invariants = invariant_partitions(monoid, eq)
+    # A class is closed iff Inv(M) is exactly the copy.  The copy always sits
+    # inside Inv(M), so the sizes decide it and the set comparison — which at
+    # n = 12 would materialize a set of up to Bell(12) partitions for a rigid
+    # class — is only reached when the sizes already match.
+    closed = (len(invariants) == len(parts)
+              and set(invariants) == set(parts))
     return ClassReport(
         representative=parts,
         orbit_size=orbit_size,
@@ -475,7 +789,7 @@ def closure_report(copy: Copy, orbit_size: int, eq: Tables) -> ClassReport:
         monoid_size=len(monoid),
         proper_maps=len(monoid) - bijections - constants,
         invariants=len(invariants),
-        closed=set(invariants) == set(parts))
+        closed=closed)
 
 
 # ---------------------------------------------------------------------------
@@ -534,8 +848,16 @@ def survey(lat: TargetLattice, n: int,
     returns the class reports and the total number of labelled copies.
     With ``uniform`` the sweep is restricted to copies all of whose members
     are uniform partitions (the ``--group-rep`` restriction of issue #494);
-    closure verdicts keep their unrestricted meaning."""
-    eq: Tables = UniformTables(n) if uniform else EqTables(n)
+    closure verdicts keep their unrestricted meaning.  A uniform pool larger
+    than ``_EAGER_POOL_LIMIT`` (the Eq(12) pool is) is served by the
+    on-the-fly ``LazyUniformTables`` instead of the eager pool² tables."""
+    eq: Tables
+    if uniform:
+        eq = (LazyUniformTables(n)
+              if len(uniform_partitions(n)) > _EAGER_POOL_LIMIT
+              else UniformTables(n))
+    else:
+        eq = EqTables(n)
     copies = sublattice_copies(lat, eq)
     return ([closure_report(copy, size, eq)
              for copy, size in classify(copies, eq)], len(copies))
