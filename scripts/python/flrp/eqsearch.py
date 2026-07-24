@@ -289,6 +289,12 @@ class EqTables:
                 self.meet[i][j] = self.meet[j][i] = m
                 self.join[i][j] = self.join[j][i] = v
 
+    def meet_at(self, a: int, b: int) -> int:
+        return self.meet[a][b]
+
+    def join_at(self, a: int, b: int) -> int:
+        return self.join[a][b]
+
 
 class UniformTables:
     """Meet and join tables over the uniform pool only — the ``--group-rep``
@@ -320,10 +326,76 @@ class UniformTables:
                 self.meet[i][j] = self.meet[j][i] = m
                 self.join[i][j] = self.join[j][i] = v
 
+    def meet_at(self, a: int, b: int) -> int:
+        return self.meet[a][b]
 
-# The sweep's table interface: the full Eq(n) tables or a restricted pool
-# whose meet/join entries may be the out-of-pool sentinel -1.
-Tables = Union[EqTables, UniformTables]
+    def join_at(self, a: int, b: int) -> int:
+        return self.join[a][b]
+
+
+class LazyUniformTables:
+    """The uniform pool tables of ``UniformTables`` computed on the fly and
+    memoized, for pools too large to tabulate eagerly.  At ``n = 12`` the pool
+    has 32,034 members, so the eager pool² meet and join tables would be
+    ~4.1 GB at ``int16`` (and far more as Python lists); this class never
+    builds them.  ``meet_at``/``join_at`` compute one meet or join with the
+    pure kernels, resolve it against the pool (``-1`` when it leaves the pool,
+    the same out-of-pool sentinel ``UniformTables`` uses), and cache it by the
+    unordered index pair, so the search pays only for the pairs it visits.
+
+    ``parts``/``index``/``bot``/``top``/``n`` match ``UniformTables`` exactly,
+    so the search and closure test read it identically and the reports are
+    byte-for-byte the same.  The closure universe — all of Eq(n) — is built
+    lazily and cached on first use, so an empty census never pays for it."""
+
+    def __init__(self, n: int) -> None:
+        self.n = n
+        self.parts = uniform_partitions(n)
+        self.index: Dict[Part, int] = {p: i for i, p in enumerate(self.parts)}
+        self.bot = self.index[tuple(range(n))]
+        self.top = self.index[(0,) * n]
+        self._meet: Dict[Tuple[int, int], int] = {}
+        self._join: Dict[Tuple[int, int], int] = {}
+        self._universe: Optional[Tuple[Part, ...]] = None
+
+    @property
+    def universe(self) -> Tuple[Part, ...]:
+        """All of Eq(n) — the closure test's candidate lattice — built once on
+        demand.  ``Bell(12) = 4,213,597``, ~0.8 GB as parent-vector tuples, so
+        it is deferred until a class actually needs closure-testing."""
+        if self._universe is None:
+            self._universe = all_partitions(self.n)
+        return self._universe
+
+    def meet_at(self, a: int, b: int) -> int:
+        key = (a, b) if a <= b else (b, a)
+        hit = self._meet.get(key)
+        if hit is None:
+            hit = self.index.get(
+                partition_meet(self.parts[a], self.parts[b]), -1)
+            self._meet[key] = hit
+        return hit
+
+    def join_at(self, a: int, b: int) -> int:
+        key = (a, b) if a <= b else (b, a)
+        hit = self._join.get(key)
+        if hit is None:
+            hit = self.index.get(
+                partition_join(self.parts[a], self.parts[b]), -1)
+            self._join[key] = hit
+        return hit
+
+
+# The sweep's table interface: the full Eq(n) tables, the eager uniform pool,
+# or the lazy uniform pool — all sharing meet_at/join_at, and meet/join
+# entries that may be the out-of-pool sentinel -1 for the uniform variants.
+Tables = Union[EqTables, UniformTables, "LazyUniformTables"]
+
+# Tabulate the uniform pool eagerly while it has at most this many members;
+# above it (n = 12 has 32,034) the pool² tables are too large, so the survey
+# switches to the on-the-fly LazyUniformTables.  Anywhere both are feasible
+# they return identical meets and joins, so the choice never moves a report.
+_EAGER_POOL_LIMIT = 2048
 
 
 def sublattice_copies(lat: TargetLattice, eq: Tables) -> List[Copy]:
@@ -338,7 +410,7 @@ def sublattice_copies(lat: TargetLattice, eq: Tables) -> List[Copy]:
     found: List[Copy] = []
 
     def ok(step: Step) -> bool:
-        return all((eq.meet if is_meet else eq.join)[phi[u]][phi[v]] == phi[r]
+        return all((eq.meet_at if is_meet else eq.join_at)(phi[u], phi[v]) == phi[r]
                    for u, v, r, is_meet in step.checks)
 
     def extend(s: int) -> None:
@@ -348,7 +420,7 @@ def sublattice_copies(lat: TargetLattice, eq: Tables) -> List[Copy]:
         step = plan[s]
         if step.forced is not None:
             kind, u, v = step.forced
-            value = (eq.meet if kind == "meet" else eq.join)[phi[u]][phi[v]]
+            value = (eq.meet_at if kind == "meet" else eq.join_at)(phi[u], phi[v])
             # -1 is the restricted tables' out-of-pool sentinel: the forced
             # value exists in Eq(n) but not in the sweep pool, so the
             # placement fails; full tables never produce it.
@@ -676,7 +748,15 @@ def invariant_partitions(maps: Sequence[Tuple[int, ...]],
     are skipped.  The candidates are ``eq.universe``, all of Eq(n) even when
     the sweep pool is restricted: an algebra's congruence lattice is
     ``Inv`` of its unary polynomials over the *whole* partition lattice, so
-    anything less would let a spurious closure verdict through."""
+    anything less would let a spurious closure verdict through.
+
+    A table object may carry a vectorized ``invariant_filter`` (the numpy
+    backend packs the universe as an ``int8`` matrix — 50 MB at ``n = 12``
+    versus ~0.8 GB of tuples — and filters it with mask arithmetic); when
+    present it is used, and it must return exactly this set."""
+    fast = getattr(eq, "invariant_filter", None)
+    if fast is not None:
+        return fast(maps)
     identity = tuple(range(eq.n))
     candidates: List[Part] = list(eq.universe)
     for f in maps:
@@ -696,6 +776,12 @@ def closure_report(copy: Copy, orbit_size: int, eq: Tables) -> ClassReport:
     bijections = sum(1 for f in monoid if len(set(f)) == eq.n)
     constants = sum(1 for f in monoid if len(set(f)) == 1)
     invariants = invariant_partitions(monoid, eq)
+    # A class is closed iff Inv(M) is exactly the copy.  The copy always sits
+    # inside Inv(M), so the sizes decide it and the set comparison — which at
+    # n = 12 would materialize a set of up to Bell(12) partitions for a rigid
+    # class — is only reached when the sizes already match.
+    closed = (len(invariants) == len(parts)
+              and set(invariants) == set(parts))
     return ClassReport(
         representative=parts,
         orbit_size=orbit_size,
@@ -703,7 +789,7 @@ def closure_report(copy: Copy, orbit_size: int, eq: Tables) -> ClassReport:
         monoid_size=len(monoid),
         proper_maps=len(monoid) - bijections - constants,
         invariants=len(invariants),
-        closed=set(invariants) == set(parts))
+        closed=closed)
 
 
 # ---------------------------------------------------------------------------
@@ -762,8 +848,16 @@ def survey(lat: TargetLattice, n: int,
     returns the class reports and the total number of labelled copies.
     With ``uniform`` the sweep is restricted to copies all of whose members
     are uniform partitions (the ``--group-rep`` restriction of issue #494);
-    closure verdicts keep their unrestricted meaning."""
-    eq: Tables = UniformTables(n) if uniform else EqTables(n)
+    closure verdicts keep their unrestricted meaning.  A uniform pool larger
+    than ``_EAGER_POOL_LIMIT`` (the Eq(12) pool is) is served by the
+    on-the-fly ``LazyUniformTables`` instead of the eager pool² tables."""
+    eq: Tables
+    if uniform:
+        eq = (LazyUniformTables(n)
+              if len(uniform_partitions(n)) > _EAGER_POOL_LIMIT
+              else UniformTables(n))
+    else:
+        eq = EqTables(n)
     copies = sublattice_copies(lat, eq)
     return ([closure_report(copy, size, eq)
              for copy, size in classify(copies, eq)], len(copies))

@@ -27,15 +27,18 @@ from collections import Counter
 from itertools import product
 from pathlib import Path
 from typing import List, Sequence, Tuple
+from unittest import mock
 
 import contextlib
 import io
 
+import eqsearch
 from cg2 import CertificateError
-from eqsearch import (ClassReport, EqTables, Part, UniformTables,
-                      _classify_materialized, _classify_orbit_stabilizer,
-                      _setwise_stabilizer_order, all_partitions, claim_input,
-                      classify, closed_class_algebra, closure_report,
+from eqsearch import (ClassReport, EqTables, LazyUniformTables, Part,
+                      UniformTables, _classify_materialized,
+                      _classify_orbit_stabilizer, _setwise_stabilizer_order,
+                      all_partitions, claim_input, classify,
+                      closed_class_algebra, closure_report,
                       invariant_partitions, is_uniform, main, partition_join,
                       preserving_maps, relabel, sublattice_copies, survey,
                       survey_json, tables_from_leq, uniform_partitions,
@@ -357,6 +360,39 @@ class L7SessionTests(unittest.TestCase):
         # empty --group-rep census (UniformSweepTests degeneration test)
         self.assertFalse(any(all(is_uniform(p) for p in r.representative)
                              for r in reports))
+
+
+class LazyUniformTablesTests(unittest.TestCase):
+    """The on-the-fly uniform tables (issue #499) that replace the eager pool²
+    build once the pool is too large to tabulate (32,034 members at twelve),
+    pinned to the eager tables where both run: identical meets and joins, and
+    a byte-identical survey report through the search and the closure test."""
+
+    def test_lazy_meet_join_match_eager(self) -> None:
+        """lazy: meet_at/join_at agree with the eager pool tables on every pool pair (n = 8), out-of-pool -1 sentinels included."""
+        ut, lz = UniformTables(8), LazyUniformTables(8)
+        self.assertEqual(lz.parts, ut.parts)
+        self.assertEqual((lz.bot, lz.top), (ut.bot, ut.top))
+        for a in range(len(ut.parts)):
+            for b in range(len(ut.parts)):
+                self.assertEqual(lz.meet_at(a, b), ut.meet[a][b])
+                self.assertEqual(lz.join_at(a, b), ut.join[a][b])
+
+    def test_lazy_universe_is_all_of_eq_n(self) -> None:
+        """lazy: the closure universe is built on demand and is all of Eq(n)."""
+        lz = LazyUniformTables(6)
+        self.assertEqual(lz.universe, all_partitions(6))
+        self.assertEqual(len(invariant_partitions([], lz)), 203)
+
+    def test_lazy_survey_is_byte_identical(self) -> None:
+        """lazy: forcing the on-the-fly tables reproduces the eager M3/Eq(6)
+        uniform report byte for byte — search and closure both unchanged."""
+        eager = survey_json(m3(), 6, *survey(m3(), 6, uniform=True),
+                            restriction="uniform")
+        with mock.patch.object(eqsearch, "_EAGER_POOL_LIMIT", 0):  # force lazy
+            lazy = survey_json(m3(), 6, *survey(m3(), 6, uniform=True),
+                               restriction="uniform")
+        self.assertEqual(lazy, eager)
 
 
 class OrbitStabilizerClassifierTests(unittest.TestCase):
