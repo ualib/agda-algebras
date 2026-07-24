@@ -26,6 +26,17 @@ Provenance: generalizes the 2026-07-22 ``L7`` session (issue #484), which
 found the minimal ``Eq(6)`` representation of ``L7`` and proved by these
 closure tests that no algebra on at most 7 points has ``Con ≅ L7``.
 
+The ``--group-rep`` flag (issue #494) restricts the sweep to copies all of
+whose members are *uniform* partitions — every block of one size — the only
+congruence lattices a transitive permutation group can produce (blocks of a
+system of imprimitivity are cosets), mechanizing remark iv of the
+SmallLatticeReps closure-algorithm discussion (§ 6.1).  Closure verdicts
+keep their unrestricted meaning: the preserving monoid ranges over all
+unary maps and ``Inv(M)`` over all of ``Eq(n)``, so a closed class still
+yields an honest witness algebra; only the *negative* verdict weakens, to
+"no algebra whose congruence lattice consists of uniform partitions" — see
+the README's uniform-restriction note.
+
 Design constraints, matching ``cg2.py``:
 
 + partitions are parent vectors in Freese normal form (every index points
@@ -266,6 +277,7 @@ class EqTables:
         self.index: Dict[Part, int] = {p: i for i, p in enumerate(self.parts)}
         self.bot = self.index[tuple(range(n))]
         self.top = self.index[(0,) * n]
+        self.universe = self.parts      # Inv(M) ranges over all of Eq(n)
         size = len(self.parts)
         self.meet: List[List[int]] = [[0] * size for _ in range(size)]
         self.join: List[List[int]] = [[0] * size for _ in range(size)]
@@ -277,7 +289,43 @@ class EqTables:
                 self.join[i][j] = self.join[j][i] = v
 
 
-def sublattice_copies(lat: TargetLattice, eq: EqTables) -> List[Copy]:
+class UniformTables:
+    """Meet and join tables over the uniform pool only — the ``--group-rep``
+    sweep of issue #494.  ``parts`` is ``uniform_partitions(n)``, bounds
+    included, and a table entry is ``-1`` when the true meet or join in
+    Eq(n) falls outside the pool; the embedding search reads that sentinel
+    as a failed placement, which *is* the restriction's membership test (a
+    meet or join of two uniform partitions need not be uniform).  The Snow
+    closure test is NOT restricted: ``universe`` carries all of Eq(n), so
+    preserving monoids, ``Inv(M)``, and closure verdicts mean exactly what
+    they mean in the unrestricted sweep."""
+
+    def __init__(self, n: int) -> None:
+        self.n = n
+        self.parts = uniform_partitions(n)
+        self.index: Dict[Part, int] = {p: i for i, p in enumerate(self.parts)}
+        self.bot = self.index[tuple(range(n))]
+        self.top = self.index[(0,) * n]
+        self.universe = all_partitions(n)
+        size = len(self.parts)
+        self.meet: List[List[int]] = [[0] * size for _ in range(size)]
+        self.join: List[List[int]] = [[0] * size for _ in range(size)]
+        for i in range(size):
+            for j in range(i, size):
+                m = self.index.get(
+                    partition_meet(self.parts[i], self.parts[j]), -1)
+                v = self.index.get(
+                    partition_join(self.parts[i], self.parts[j]), -1)
+                self.meet[i][j] = self.meet[j][i] = m
+                self.join[i][j] = self.join[j][i] = v
+
+
+# The sweep's table interface: the full Eq(n) tables or a restricted pool
+# whose meet/join entries may be the out-of-pool sentinel -1.
+Tables = Union[EqTables, UniformTables]
+
+
+def sublattice_copies(lat: TargetLattice, eq: Tables) -> List[Copy]:
     """Every embedding of the target into Eq(n) sending bottom to the
     diagonal and top to the total relation, as tuples of partition indices
     per lattice element, in lexicographic order of those tuples."""
@@ -299,8 +347,11 @@ def sublattice_copies(lat: TargetLattice, eq: EqTables) -> List[Copy]:
         step = plan[s]
         if step.forced is not None:
             kind, u, v = step.forced
-            candidates: Sequence[int] = \
-                ((eq.meet if kind == "meet" else eq.join)[phi[u]][phi[v]],)
+            value = (eq.meet if kind == "meet" else eq.join)[phi[u]][phi[v]]
+            # -1 is the restricted tables' out-of-pool sentinel: the forced
+            # value exists in Eq(n) but not in the sweep pool, so the
+            # placement fails; full tables never produce it.
+            candidates: Sequence[int] = (value,) if value >= 0 else ()
         else:
             candidates = range(len(eq.parts))
         for value in candidates:
@@ -333,7 +384,7 @@ class ClassReport:
     closed: bool                        # Inv(M) is exactly the copy
 
 
-def classify(copies: Sequence[Copy], eq: EqTables) -> List[Tuple[Copy, int]]:
+def classify(copies: Sequence[Copy], eq: Tables) -> List[Tuple[Copy, int]]:
     """Group the copies into orbits under relabeling of the points.
 
     Copies are identified by their *unordered* relation sets (frozensets of
@@ -391,12 +442,15 @@ def preserving_maps(relations: Sequence[Part], n: int) -> List[Tuple[int, ...]]:
 
 
 def invariant_partitions(maps: Sequence[Tuple[int, ...]],
-                         eq: EqTables) -> List[Part]:
+                         eq: Tables) -> List[Part]:
     """The partitions preserved by every listed map — ``Inv(M)`` — filtered
     progressively; the identity and the constants preserve everything and
-    are skipped."""
+    are skipped.  The candidates are ``eq.universe``, all of Eq(n) even when
+    the sweep pool is restricted: an algebra's congruence lattice is
+    ``Inv`` of its unary polynomials over the *whole* partition lattice, so
+    anything less would let a spurious closure verdict through."""
     identity = tuple(range(eq.n))
-    candidates: List[Part] = list(eq.parts)
+    candidates: List[Part] = list(eq.universe)
     for f in maps:
         if f == identity or len(set(f)) == 1:
             continue
@@ -405,7 +459,7 @@ def invariant_partitions(maps: Sequence[Tuple[int, ...]],
     return candidates
 
 
-def closure_report(copy: Copy, orbit_size: int, eq: EqTables) -> ClassReport:
+def closure_report(copy: Copy, orbit_size: int, eq: Tables) -> ClassReport:
     """The Snow closure verdict for one copy: enumerate the preserving
     monoid of its nontrivial relations, compute ``Inv(M)``, and compare."""
     parts = tuple(eq.parts[i] for i in copy)
@@ -474,22 +528,31 @@ def claim_input(module_name: str, date: str, alg: Algebra,
 # ---------------------------------------------------------------------------
 # The survey: one target, one ground-set size, full report
 
-def survey(lat: TargetLattice, n: int) -> Tuple[List[ClassReport], int]:
+def survey(lat: TargetLattice, n: int,
+           uniform: bool = False) -> Tuple[List[ClassReport], int]:
     """Search Eq(n) for the target, classify, and closure-test every class;
-    returns the class reports and the total number of labelled copies."""
-    eq = EqTables(n)
+    returns the class reports and the total number of labelled copies.
+    With ``uniform`` the sweep is restricted to copies all of whose members
+    are uniform partitions (the ``--group-rep`` restriction of issue #494);
+    closure verdicts keep their unrestricted meaning."""
+    eq: Tables = UniformTables(n) if uniform else EqTables(n)
     copies = sublattice_copies(lat, eq)
     return ([closure_report(copy, size, eq)
              for copy, size in classify(copies, eq)], len(copies))
 
 
 def survey_json(lat: TargetLattice, n: int, reports: Sequence[ClassReport],
-                copies: int) -> str:
-    """The deterministic JSON report of one survey."""
+                copies: int, restriction: Optional[str] = None) -> str:
+    """The deterministic JSON report of one survey.  ``restriction``
+    (``"uniform"`` for a ``--group-rep`` sweep) is recorded between
+    ``points`` and ``copies`` so a restricted census can never be mistaken
+    for a full one; with the default ``None`` the payload is byte-for-byte
+    the unrestricted ``flrp-eqsearch v1`` format."""
     payload = {
         "format": "flrp-eqsearch v1",
         "target": lat.name,
         "points": n,
+        **({} if restriction is None else {"restriction": restriction}),
         "copies": copies,
         "classes": [
             {
@@ -520,11 +583,12 @@ def parse_target(path: Path) -> TargetLattice:
 
 
 def main(argv: Sequence[str]) -> int:
-    args = [a for a in argv if a != "--fast"]
-    fast = len(args) != len(argv)
+    args = [a for a in argv if a not in ("--fast", "--group-rep")]
+    fast = "--fast" in argv
+    uniform = "--group-rep" in argv
     if len(args) not in (3, 5) or (len(args) == 5 and args[3] != "--json"):
-        print("usage: eqsearch.py TARGET.json N [--fast] [--json REPORT.json]",
-              file=sys.stderr)
+        print("usage: eqsearch.py TARGET.json N [--fast] [--group-rep] "
+              "[--json REPORT.json]", file=sys.stderr)
         return 2
     lat = parse_target(Path(args[1]))
     n = int(args[2])
@@ -536,18 +600,20 @@ def main(argv: Sequence[str]) -> int:
                   "shell ships it (`nix develop`), or see the README's "
                   "fast-backend note for other routes", file=sys.stderr)
             return 2
-        reports, copies = survey_fast(lat, n)
+        reports, copies = survey_fast(lat, n, uniform=uniform)
     else:
-        reports, copies = survey(lat, n)
+        reports, copies = survey(lat, n, uniform=uniform)
     closed = [r for r in reports if r.closed]
-    print(f"{lat.name} in Eq({n}): {copies} labelled copies, "
+    scope = " (uniform copies only)" if uniform else ""
+    print(f"{lat.name} in Eq({n}){scope}: {copies} labelled copies, "
           f"{len(reports)} classes, {len(closed)} closed")
     for k, r in enumerate(reports):
         verdict = "CLOSED" if r.closed else f"Inv(M) = {r.invariants}"
         print(f"  class {k}: orbit {r.orbit_size}, |G| = {r.group_order}, "
               f"|M| = {r.monoid_size} ({r.proper_maps} proper), {verdict}")
     if len(args) == 5:
-        Path(args[4]).write_text(survey_json(lat, n, reports, copies))
+        Path(args[4]).write_text(survey_json(
+            lat, n, reports, copies, "uniform" if uniform else None))
         print(f"report written to {args[4]}")
     return 0
 
