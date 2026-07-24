@@ -62,14 +62,45 @@ BindGlobal("FLRP_ScanTransitive", function(degree, targetSize)
   return rec( groupsScanned := nr, sizeHistogram := hist, candidates := cands );
 end);
 
-##  Subgroup-interval hunt over a list of SmallGroups orders.  For each group,
-##  enumerate conjugacy-class representatives of subgroups H (only core-free
-##  ones when `coreFreeOnly`), and collect the intervals [H, G] with exactly
-##  `targetSize` elements.  Orders whose NumberSmallGroups exceeds `idCap` are
-##  skipped and reported, so a bounded run never silently blows up on a
-##  pathological order (512, 1024, ...).
-BindGlobal("FLRP_ScanSmallGroups", function(orders, targetSize, coreFreeOnly, idCap)
-  local cands, hist, skipped, o, n, id, G, ccsg, c, H, poset;
+##  Subgroup-interval hunt within a single group G.  Enumerate conjugacy-class
+##  representatives of subgroups H (only core-free ones when `coreFreeOnly`,
+##  and only those of index `indexFilter` when it is positive — the manuscript
+##  pins the index for its group-representation entries, which also avoids the
+##  blow-up of computing [1, G] for a tiny H), and collect the intervals
+##  [H, G] of exactly `targetSize` elements.  `source` (rec(source, id)) is
+##  echoed into each candidate's artifact.
+BindGlobal("FLRP_ScanGroup", function(source, G, targetSize, coreFreeOnly, indexFilter)
+  local cands, hist, ccsg, c, H, poset;
+  cands := [];
+  hist := rec();
+  ccsg := ConjugacyClassesSubgroups(G);
+  for c in ccsg do
+    H := Representative(c);
+    if H = G then
+      continue;
+    fi;
+    if indexFilter > 0 and Index(G, H) <> indexFilter then
+      continue;
+    fi;
+    if coreFreeOnly and Order(Core(G, H)) <> 1 then
+      continue;
+    fi;
+    poset := FLRP_IntervalPoset(G, H);
+    FLRP_BumpHistogram(hist, poset.size);
+    if poset.size = targetSize then
+      Add(cands, FLRP_IntervalRecord(source, G, H));
+    fi;
+  od;
+  return rec( sizeHistogram := hist, candidates := cands );
+end);
+
+##  Subgroup-interval hunt over a list of SmallGroups orders, layering
+##  FLRP_ScanGroup over each SmallGroup(o, id).  Orders whose NumberSmallGroups
+##  exceeds `idCap` are skipped and reported, so a bounded run never silently
+##  blows up on a pathological order (512, 1024, ...).  `indexFilter` is 0 for
+##  an unrestricted hunt (e.g. the N5 minimality sweep).
+BindGlobal("FLRP_ScanSmallGroups", function(orders, targetSize, coreFreeOnly, indexFilter, idCap)
+  local cands, hist, skipped, o, n, id, one, key;
   cands := [];
   hist := rec();
   skipped := [];
@@ -80,17 +111,14 @@ BindGlobal("FLRP_ScanSmallGroups", function(orders, targetSize, coreFreeOnly, id
       continue;
     fi;
     for id in [1 .. n] do
-      G := SmallGroup(o, id);
-      ccsg := ConjugacyClassesSubgroups(G);
-      for c in ccsg do
-        H := Representative(c);
-        if H <> G and (not coreFreeOnly or Order(Core(G, H)) = 1) then
-          poset := FLRP_IntervalPoset(G, H);
-          FLRP_BumpHistogram(hist, poset.size);
-          if poset.size = targetSize then
-            Add(cands, FLRP_IntervalRecord(
-              rec( source := "SmallGroup", id := [ o, id ] ), G, H));
-          fi;
+      one := FLRP_ScanGroup(rec( source := "SmallGroup", id := [ o, id ] ),
+                            SmallGroup(o, id), targetSize, coreFreeOnly, indexFilter);
+      Append(cands, one.candidates);
+      for key in RecNames(one.sizeHistogram) do
+        if IsBound(hist.(key)) then
+          hist.(key) := hist.(key) + one.sizeHistogram.(key);
+        else
+          hist.(key) := one.sizeHistogram.(key);
         fi;
       od;
     od;
