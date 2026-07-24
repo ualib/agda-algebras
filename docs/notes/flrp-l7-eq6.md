@@ -72,7 +72,7 @@ No class is closed, so **no algebra on at most eight elements has congruence lat
 ## 6. Consequences and next steps
 
 +  Combined with the manuscript's § 5 theorem that a minimal representation of `L10 = L7` cannot come from an intransitive permutation group: a minimal representation, if one exists, is the congruence lattice of a **transitive G-set on at least nine points**.
-+  The nine-point frontier: the algebra side is an `Eq(9)` closure sweep (`Bell(9) = 21,147`; the tables alone are ~1.8 GB at `int16`, so the vectorized engine needs blocking before this is comfortable), while the group side — the transitive-degree scan of #487 (`TransitiveGroup(n, k)` with point stabilizer `H`, testing `[H, G] ≅ L7`) — becomes the cheaper attack from here out, with degrees 8 and below now serving only as cross-validation of the sweeps.
++  The nine-point frontier: the algebra side is an `Eq(9)` closure sweep (`Bell(9) = 21,147`; the tables alone are ~1.8 GB at `int16`, so the vectorized engine needs blocking before this is comfortable), while the group side — the transitive-degree scan of #487 (`TransitiveGroup(n, k)` with point stabilizer `H`, testing `[H, G] ≅ L7`) — becomes the cheaper attack from here out, with degrees 8 and below now serving only as cross-validation of the sweeps.  (Settled 2026-07-24: under this transitivity reduction only the *uniform* copies matter, the tables shrink to nothing, and § 8's sweeps find no copy on nine or ten points — the frontier now stands at twelve.)
 +  The proper-maps phenomenon at eight points suggests a heuristic for larger carriers: classes whose monoids acquire non-bijective maps are the ones to watch, and the gap `|Inv(M)| − 7` is a measure of how far a class is from closure; tracking its minimum across sizes gives the campaign a progress metric.
 +  A closed class at any size yields a finite algebra with `Con ≅ L7` and flows directly into the certificate pipeline of PR #482 for an Agda-checked `Representableᵈ` witness — the headline outcome, if it exists.
 +  The positive fact of § 2 is formalized in `FLRP.L7EqSix`: the seven listed partitions, as normal-form parent vectors, with decided meets, decided join upper bounds, and join least-ness over arbitrary equivalence relations via bounded alternating chains (fuel four suffices, and the module's decisions re-verify it).  How much of the *negative* sweeps is worth certifying in Agda — the per-class `Inv(M)` computations are plain finite checks, the exhaustiveness of the embedding census is the hard part — is an open task on #484; the decision will be recorded here.
@@ -101,3 +101,34 @@ python3 scripts/python/flrp/eqsearch.py scripts/python/flrp/inputs/l7_lattice.js
 ```
 
 (about three hours with numpy installed — the generic engine trades the session engine's schedule-specific constraint order for generality, and a constraint-density-guided order is follow-up on #486; the `Eq(8)` figures have now been produced by two independent implementations — the session's schedule-specific engine and the repository's generic one — agreeing exactly, on top of both reproducing every smaller census).
+
+## 8. Addendum (2026-07-24): nine, ten, and eleven points fall to the uniform sweep
+
+The `--group-rep` restriction of issue #494 (`eqsearch.py`, either engine) sweeps only **uniform** copies — every member partition with all blocks of one size — mechanizing remark iv of the manuscript's closure-algorithm discussion (§ 6.1): the congruences of a transitive permutation group action are its systems of imprimitivity, whose blocks are cosets of intermediate subgroups and hence all of equal size.  By § 6's reduction (the manuscript's § 5: `L10` = library `L7` satisfies conditions (A) and (B″), so a minimal representation, if one exists, must be by a transitive permutation group) and with §§ 4–5 placing the minimal size at nine or beyond, the nine-point question *is* the uniform question, and the restriction's weakened negative verdict ("no algebra whose congruence lattice consists of uniform partitions" — README, uniform-restriction note) costs nothing here.
+
+The machine answer is emphatic: on nine and on ten points there is **no uniform copy of `L7` at all** — not merely no closed class, but an empty census.
+
++  **`Eq(9)`: zero uniform copies**, from a nontrivial pool of 280 (all of shape `3³`).  Fast engine 0.65 s, pure engine 1.87 s, byte-identical reports; committed as `scripts/python/flrp/out/l7_eq9_uniform_report.json` and re-derived by `make flrp-test` on every run.
++  **`Eq(10)`: zero uniform copies**, from a nontrivial pool of 1,071 (shapes `2⁵` and `5²`).  Pure engine 6 m 59 s, fast engine 24 m 12 s — at a pool this narrow the constant per-prefix cost of mask arithmetic outweighs the vectorization, so the pure engine wins — byte-identical reports; committed as `out/l7_eq10_uniform_report.json`, re-derived under `FLRP_EQSEARCH_SLOW=1`.
+
+The emptiness is structural, and the sweeps verify it exhaustively.  Any copy of `L7` embeds the cover `(0,1) ≺ (1,1)` of the grid, so it needs two *comparable* nontrivial uniform partitions, and comparability of uniform partitions forces block sizes `1 < a < b < n` with `a | b` (each larger block is a disjoint union of smaller ones) and `b | n`.  No such divisor chain exists at `n = 9` (the only nontrivial size is 3, so the 280 pool members form an antichain) or at `n = 10` (sizes 2 and 5, and `2 ∤ 5`); at `n = 11` the pool is empty outright — a transitive action of prime degree is primitive.  The first ground-set size where a uniform copy of `L7` is even conceivable is `n = 12`, whose pool (32,032 nontrivial members of shapes `2⁶`, `3⁴`, `4³`, `6²`) has genuine chains `2 | 4`, `2 | 6`, `3 | 6`.
+
+Chaining the manuscript's transitivity theorem through the sizes:
+
++  a nine-point representation would be minimal (§§ 4–5), hence transitive, hence a uniform copy of `L7` in `Eq(9)` — and there is none: **no algebra on nine points has `Con ≅ L7`**;
++  a ten-point representation would then be minimal, hence transitive — and `Eq(10)` has no uniform copy: **none on ten points**;
++  an eleven-point representation would then be minimal, hence transitive of prime degree, hence primitive with the two-element congruence lattice: **none on eleven points**.
+
+**The minimal representation of library `L7` (manuscript `L10`), if one exists, has at least twelve elements.**  The machine-checked steps are the two empty censuses, each produced independently by the pure and the vectorized engine with byte-identical reports; the reduction to the transitive case is the manuscript's § 5 theorem, cited here, not re-proved; the step at eleven is the empty prime pool itself.
+
+Next steps, sharpened by this addendum:
+
++  The decisive computation is now the `Eq(12)` uniform sweep — the first size with candidate copies.  The current engines need real work there: pool² tables reach ~4.1 GB at `int16`, `12! ≈ 4.8 × 10⁸` makes materialized per-class orbits hours apiece, and the `Eq(10)` timings above calibrate the per-prefix costs.  Orbit–stabilizer classification (count the stabilizer, divide `12!`) and blocked or on-the-fly meet/join membership are the known fixes — follow-up on #494/#486.
++  The cross-validating attack is #487's transitive-degree scan (`scripts/gap/flrp/`): degrees 9–11 must come back empty for `L7` intervals by the divisor argument above, and degree 12 is where the two methods first probe genuinely new ground together; disagreement in either direction is a bug or a discovery.
+
+Reproduction (the `--fast` flag is optional; at these pool widths the pure engine is competitive or faster, and reports are byte-identical either way):
+
+```sh
+python3 scripts/python/flrp/eqsearch.py scripts/python/flrp/inputs/l7_lattice.json 9 --group-rep --json l7-eq9u.json
+python3 scripts/python/flrp/eqsearch.py scripts/python/flrp/inputs/l7_lattice.json 10 --group-rep --json l7-eq10u.json
+```

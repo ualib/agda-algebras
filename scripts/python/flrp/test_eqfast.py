@@ -91,6 +91,15 @@ class FastBackendTests(unittest.TestCase):
                 survey_json(lat, n, *survey_fast(lat, n, uniform=True),
                             restriction="uniform"))
 
+    def test_l7_eq9_uniform_committed_report(self) -> None:
+        """fast: the Eq(9) --group-rep sweep re-derives the committed nine-point report — zero uniform copies — byte for byte."""
+        reports, copies = survey_fast(l7(), 9, uniform=True)
+        self.assertEqual((reports, copies), ([], 0))
+        self.assertEqual(
+            survey_json(l7(), 9, reports, copies, restriction="uniform"),
+            (Path(__file__).parent / "out"
+             / "l7_eq9_uniform_report.json").read_text())
+
     def test_orbit_chunking_is_boundary_independent(self) -> None:
         """fast: classification is unchanged when orbit relabeling runs in tiny chunks (the 10! memory path)."""
         reports, copies = survey_fast(m3(), 4)

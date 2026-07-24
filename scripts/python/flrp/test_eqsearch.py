@@ -209,6 +209,18 @@ class UniformSweepTests(unittest.TestCase):
                                         "restriction", "copies", "classes"])
         self.assertEqual(marked["restriction"], "uniform")
 
+    @unittest.skipUnless(os.environ.get("FLRP_EQSEARCH_SLOW") == "1",
+                         "set FLRP_EQSEARCH_SLOW=1 for the Eq(10) uniform "
+                         "sweep (about seven minutes)")
+    def test_l7_eq10_uniform_committed_report(self) -> None:
+        """uniform: the pure Eq(10) --group-rep sweep re-derives the committed ten-point report — zero uniform copies — byte for byte.  The committed file is the fast engine's 2026-07-24 output, so this pin is also a cross-engine parity check at ten points."""
+        reports, copies = survey(l7(), 10, uniform=True)
+        self.assertEqual((reports, copies), ([], 0))
+        self.assertEqual(
+            survey_json(l7(), 10, reports, copies, restriction="uniform"),
+            (Path(__file__).parent / "out"
+             / "l7_eq10_uniform_report.json").read_text())
+
     def test_cli_group_rep_end_to_end(self) -> None:
         """cli: --group-rep runs the M3 pilot claim on four points, marks stdout, and writes a report carrying the restriction field."""
         target = Path(__file__).parent / "inputs" / "v4_regular_m3.json"
