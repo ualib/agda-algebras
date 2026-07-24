@@ -471,13 +471,25 @@ def parse_target(path: Path) -> TargetLattice:
 
 
 def main(argv: Sequence[str]) -> int:
-    if len(argv) not in (3, 5) or (len(argv) == 5 and argv[3] != "--json"):
-        print("usage: eqsearch.py TARGET.json N [--json REPORT.json]",
+    args = [a for a in argv if a != "--fast"]
+    fast = len(args) != len(argv)
+    if len(args) not in (3, 5) or (len(args) == 5 and args[3] != "--json"):
+        print("usage: eqsearch.py TARGET.json N [--fast] [--json REPORT.json]",
               file=sys.stderr)
         return 2
-    lat = parse_target(Path(argv[1]))
-    n = int(argv[2])
-    reports, copies = survey(lat, n)
+    lat = parse_target(Path(args[1]))
+    n = int(args[2])
+    if fast:
+        try:
+            from eqfast import survey_fast
+        except ImportError:
+            print("--fast needs numpy, which is not installed; the nix dev "
+                  "shell ships it (`nix develop`), or see the README's "
+                  "fast-backend note for other routes", file=sys.stderr)
+            return 2
+        reports, copies = survey_fast(lat, n)
+    else:
+        reports, copies = survey(lat, n)
     closed = [r for r in reports if r.closed]
     print(f"{lat.name} in Eq({n}): {copies} labelled copies, "
           f"{len(reports)} classes, {len(closed)} closed")
@@ -485,9 +497,9 @@ def main(argv: Sequence[str]) -> int:
         verdict = "CLOSED" if r.closed else f"Inv(M) = {r.invariants}"
         print(f"  class {k}: orbit {r.orbit_size}, |G| = {r.group_order}, "
               f"|M| = {r.monoid_size} ({r.proper_maps} proper), {verdict}")
-    if len(argv) == 5 and argv[3] == "--json":
-        Path(argv[4]).write_text(survey_json(lat, n, reports, copies))
-        print(f"report written to {argv[4]}")
+    if len(args) == 5:
+        Path(args[4]).write_text(survey_json(lat, n, reports, copies))
+        print(f"report written to {args[4]}")
     return 0
 
 

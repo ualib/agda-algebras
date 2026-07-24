@@ -53,7 +53,7 @@ Neither class is closed, and the failure is emphatic — `M` contains **no non-b
 
 | class | preserving group | monoid size | proper maps | size of Inv(M) | closed |
 |---|---|---|---|---|---|
-| symmetric | `⟨(0 4)(1 5)(2 3)⟩`, order 2 | 9 | 0 | 31 | no |
+| symmetric | `⟨(0 4)(1 5)(2 3)⟩`, order 2 | 8 | 0 | 31 | no |
 | rigid | trivial | 7 | 0 | 203 | no |
 
 For the symmetric class `Inv(M)` is the lattice of all partitions invariant under the involution (31 of the 203 partitions of a six-set); for the rigid class it is all of `Eq(6)`.  Consequently **no algebra on six elements has congruence lattice isomorphic to `L7`** — through either class, and there are no other classes.
@@ -94,4 +94,10 @@ python3 scripts/python/flrp/eqsearch.py l7.json 6 --json l7-eq6-report.json
 
 The report format (`flrp-eqsearch v1`) lists every class with its representative partitions (as Freese normal-form parent vectors), orbit size, preserving-group order, monoid size, `|Inv(M)|`, and closure verdict; output is deterministic, so re-runs are byte-identical.
 
-The eight-point sweep used a numpy-vectorized engine (partitions as an `int8` parent-vector matrix, first-occurrence normal forms for meets, alternating block-min label propagation for joins, and per-class vectorized orbit generation), which reproduces the pure-Python `Eq(6)` and `Eq(7)` censuses in seconds before touching `Eq(8)`; folding that backend into `eqsearch.py` is follow-up work on #486, and until it lands the `Eq(8)` figures above carry the session's own cross-validation (two independent implementations agreeing on every smaller census).
+The eight-point sweep used a numpy-vectorized engine (partitions as an `int8` parent-vector matrix, first-occurrence normal forms for meets, alternating block-min label propagation for joins, and per-class vectorized orbit generation).  That backend is now in the repository as `scripts/python/flrp/eqfast.py` (`--fast` on the `eqsearch.py` CLI), pinned byte-identical to the pure engine where both run, and the `Eq(8)` result is committed as the citable report `scripts/python/flrp/out/l7_eq8_report.json`, reproducible with
+
+```sh
+python3 scripts/python/flrp/eqsearch.py scripts/python/flrp/inputs/l7_lattice.json 8 --fast --json report.json
+```
+
+(about three hours with numpy installed — the generic engine trades the session engine's schedule-specific constraint order for generality, and a constraint-density-guided order is follow-up on #486; the `Eq(8)` figures have now been produced by two independent implementations — the session's schedule-specific engine and the repository's generic one — agreeing exactly, on top of both reproducing every smaller census).

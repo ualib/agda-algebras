@@ -193,11 +193,16 @@ unused-imports-test:
 # Also tests the search side (eqsearch.py): partition kernel against brute
 # force, the L7 session census (issue #484), and the search-to-certificate
 # loop; set FLRP_EQSEARCH_SLOW=1 to include the Eq(7) sweep (~5 minutes).
+# The numpy backend's tests (eqfast.py: table/report parity with the pure
+# engine, the Eq(7) census, and — behind the same slow flag — the Eq(8)
+# sweep against the committed report) skip cleanly when numpy is absent;
+# the nix dev shell ships numpy (flake.nix), so under `nix develop` they run.
 flrp-test:
 	@echo "target: $@"
 	python3 scripts/python/flrp/test_flrp.py
 	python3 scripts/python/flrp/test_eqsearch.py
 	python3 scripts/python/flrp/test_slr_catalog.py
+	python3 scripts/python/flrp/test_eqfast.py
 
 # Regenerate the SmallLatticeReps catalog artifacts (issue #485) from the
 # manuscript source: claim files under scripts/python/flrp/inputs/slr/, audit
