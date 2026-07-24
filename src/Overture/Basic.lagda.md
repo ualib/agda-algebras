@@ -45,7 +45,7 @@ Each module in the library begins with a pragma line of the form
 #### Agda modules
 
 The `OPTIONS` pragma is usually followed by the start of a module.  For example,
-the [Legacy.Base.Functions.Basic][] module begins with the following line, and then a
+the [Overture.Basic][] module begins with the following line, and then a
 list of imports of things used in the module.
 
 ```agda

@@ -28,7 +28,7 @@
 #      where a path segment happens to contain the substring `agda`.
 # =============================================================================
 
-.PHONY: default all check test clean site serve serve-full html agda-md site-full profile project-plan unused-imports unused-imports-test flrp-test flrp-slr Everything.agda
+.PHONY: default all check test clean site serve serve-full html agda-md site-full profile project-plan unused-imports unused-imports-test check-links check-links-test gen-links flrp-test flrp-slr Everything.agda
 
 # -- Configuration -----------------------------------------------------------
 SRCDIR    := src
@@ -184,6 +184,27 @@ unused-imports:
 unused-imports-test:
 	@echo "target: $@"
 	python3 scripts/python/test_unused_imports.py
+
+# Guard the site's reference-style cross-links (ADR-007), the recurring
+# broken-link failure mode: undefined `[label][]` references render as literal
+# text and slip past `mkdocs build --strict`.  Two pure-Python checks, no Agda or
+# MkDocs needed, so CI runs them cheaply and they point at the offending source:
+#   1. gen_links.py --check — docs/_links.md's generated module + ADR sections
+#      are exactly what the src/ and docs/adr/ trees imply (no hand-drift);
+#   2. check_links.py — every reference used in the rendered corpus resolves.
+# Run `make gen-links` to regenerate _links.md after adding a module or an ADR.
+check-links:
+	@echo "target: $@"
+	python3 scripts/python/gen_links.py --check
+	python3 scripts/python/check_links.py
+
+check-links-test:
+	@echo "target: $@"
+	python3 scripts/python/test_check_links.py
+
+gen-links:
+	@echo "target: $@"
+	python3 scripts/python/gen_links.py
 
 # Test the FLRP certificate emitter (scripts/python/flrp/): engine unit tests, a
 # Python mirror of the Agda checker's obligations as a regression tripwire,

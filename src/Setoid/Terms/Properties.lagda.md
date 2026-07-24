@@ -116,7 +116,7 @@ then the homomorphisms constructed with `free-lift` and `lift-hom` are
 ```
 
 Finally, we prove that the homomorphism is unique.  Recall, when we proved this in the module
-[Basic.Terms.Properties][], we needed function extensionality. Here, by using setoid equality,
+[Legacy.Base.Terms.Properties][], we needed function extensionality. Here, by using setoid equality,
 we can omit the `swelldef` hypothesis we needed previously to prove `free-unique`.
 
 
