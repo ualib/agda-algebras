@@ -1,0 +1,4116 @@
+%% FILE: SmallLatticesReps.tex
+%% AUTHORS: William DeMeo, Ralph Freese, Peter Jipsen
+%% DATE: 10 June 2015
+%% COPYRIGHT: (C) 2015 William DeMeo, Ralph Freese, Peter Jipsen
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%                         BIBLIOGRAPHY FILE                                 %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% The `filecontents` command will crete a file in the inputs directory called 
+%% refs.bib containing the references in the document, in case this file does 
+%% not exist already.
+%% If you want to add a BibTeX entry, please don't add it directly to the
+%% refs.bib file.  Instead, add it in this file between the
+%% \begin{filecontents*}{refs.bib} and \end{filecontents*} lines
+%% then delete the existing refs.bib file so it will be automatically generated 
+%% again with your new entry the next time you run pdfaltex.
+\begin{filecontents*}{inputs/refs.bib}
+ @manual{GAP4,
+    key          = "GAP",
+    organization = "The GAP~Group",
+    title        = "{GAP -- Groups, Algorithms, and Programming,
+                    Version 4.8.3}",
+    year         = 2016,
+    url          = "\verb+(http://www.gap-system.org)+",
+    }
+@book{Bergman2012,
+    Author = {Bergman, Clifford},
+    Date-Modified = {2013-11-04 19:21:01 +0000},
+    Isbn = {978-1-4398-5129-6},
+    Mrclass = {08-02 (06-02 08A40 08B05 08B10 08B26)},
+    Mrnumber = {2839398 (2012k:08001)},
+    Mrreviewer = {Konrad P. Pi{\'o}ro},
+    Pages = {xii+308},
+    Publisher = {CRC Press, Boca Raton, FL},
+    Series = {Pure and Applied Mathematics},
+    Title = {Universal algebra. {F}undamentals and selected topics},
+    Volume = {301},
+    Year = {2012}
+}
+@article {MR2026829,
+    AUTHOR = {Snow, John W.},
+     TITLE = {Every finite lattice in {$\mathcal{V}(\bold M_3)$} is
+              representable},
+   JOURNAL = {Algebra Universalis},
+  FJOURNAL = {Algebra Universalis},
+    VOLUME = {50},
+      YEAR = {2003},
+    NUMBER = {1},
+     PAGES = {75--81},
+      ISSN = {0002-5240},
+     CODEN = {AGUVA3},
+   MRCLASS = {08A30 (06B20)},
+  MRNUMBER = {2026829},
+       DOI = {10.1007/s00012-003-1821-5},
+       URL = {http://dx.doi.org/10.1007/s00012-003-1821-5},
+}
+@article {MR1774743,
+    AUTHOR = {Snow, John W.},
+     TITLE = {A constructive approach to the finite congruence lattice
+              representation problem},
+   JOURNAL = {Algebra Universalis},
+  FJOURNAL = {Algebra Universalis},
+    VOLUME = {43},
+      YEAR = {2000},
+    NUMBER = {2-3},
+     PAGES = {279--293},
+      ISSN = {0002-5240},
+     CODEN = {AGUVA3},
+   MRCLASS = {06B15 (08A30)},
+  MRNUMBER = {1774743},
+MRREVIEWER = {Clifford H. Bergman},
+       DOI = {10.1007/s000120050159},
+       URL = {http://dx.doi.org/10.1007/s000120050159},
+}
+  @article{Aschbacher2008,
+    AUTHOR = {Aschbacher, Michael},
+     TITLE = {On intervals in subgroup lattices of finite groups},
+   JOURNAL = {J. Amer. Math. Soc.},
+  FJOURNAL = {Journal of the American Mathematical Society},
+    VOLUME = {21},
+      YEAR = {2008},
+    NUMBER = {3},
+     PAGES = {809--830},
+      ISSN = {0894-0347},
+   MRCLASS = {20D30 (06B05 46L37)},
+  MRNUMBER = {2393428 (2008m:20036)},
+MRREVIEWER = {Andrea Lucchini},
+       DOI = {10.1090/S0894-0347-08-00602-4},
+       URL = {http://dx.doi.org/10.1090/S0894-0347-08-00602-4},
+  }
+  @article{Aschbacher2013,
+    AUTHOR = {Aschbacher, Michael},
+     TITLE = {Overgroup lattices in finite groups of {L}ie type containing a
+              parabolic},
+   JOURNAL = {J. Algebra},
+  FJOURNAL = {Journal of Algebra},
+    VOLUME = {382},
+      YEAR = {2013},
+     PAGES = {71--99},
+      ISSN = {0021-8693},
+     CODEN = {JALGA4},
+   MRCLASS = {20D06 (20D30)},
+  MRNUMBER = {3034474},
+MRREVIEWER = {Nadia P. Mazza},
+       DOI = {10.1016/j.jalgebra.2013.01.034},
+       URL = {http://dx.doi.org/10.1016/j.jalgebra.2013.01.034},
+  }
+  @PhdThesis{Berman:1970,
+    author = 	 {Joel Berman},
+    title = 	 {Congruence lattices of finite universal algebras},
+    school = 	 {University of Washington},
+    year = 	 {1970},
+    url={http://db.tt/mXUVTzSr}
+  }
+  @article{DeMeo2013,
+    AUTHOR = {DeMeo, William},
+     TITLE = {Expansions of finite algebras and their congruence lattices},
+   JOURNAL = {Algebra Universalis},
+  FJOURNAL = {Algebra Universalis},
+    VOLUME = {69},
+      YEAR = {2013},
+    NUMBER = {3},
+     PAGES = {257--278},
+      ISSN = {0002-5240},
+   MRCLASS = {08A30 (06B10 08A60)},
+  MRNUMBER = {3041715},
+MRREVIEWER = {E. W. Kiss},
+       DOI = {10.1007/s00012-013-0226-3},
+       URL = {http://dx.doi.org/10.1007/s00012-013-0226-3},
+  }
+  @book{Dixon:1996,
+    AUTHOR = {Dixon, John D. and Mortimer, Brian},
+    TITLE = {Permutation groups},
+    SERIES = {Graduate Texts in Mathematics},
+    VOLUME = {163},
+    PUBLISHER = {Springer-Verlag},
+    ADDRESS = {New York},
+    YEAR = {1996},
+    PAGES = {xii+346},
+    ISBN = {0-387-94599-7},
+    MRCLASS = {20B05 (20-01 20B07)},
+    MRNUMBER = {1409812 (98m:20003)},
+    MRREVIEWER = {Martin W. Liebeck},
+  }
+  @book{Jonsson:1972,
+    AUTHOR = {J{\'o}nsson, Bjarni},
+    TITLE = {Topics in universal algebra},
+    SERIES = {Lecture Notes in Mathematics, Vol. 250},
+    PUBLISHER = {Springer-Verlag},
+    ADDRESS = {Berlin},
+    YEAR = {1972},
+    PAGES = {vi+220},
+    MRCLASS = {08A25},
+    MRNUMBER = {0345895 (49 \#10625)},
+    MRREVIEWER = {Joel Berman},
+  }
+  @article {Kurzweil:1985,
+    AUTHOR = {Kurzweil, Hans},
+    TITLE = {Endliche {G}ruppen mit vielen {U}ntergruppen},
+    JOURNAL = {J. Reine Angew. Math.},
+    FJOURNAL = {Journal f\"ur die Reine und Angewandte Mathematik},
+    VOLUME = {356},
+    YEAR = {1985},
+    PAGES = {140--160},
+    ISSN = {0075-4102},
+    CODEN = {JRMAA8},
+    MRCLASS = {20E15 (20D30)},
+    MRNUMBER = {779379 (86f:20024)},
+    MRREVIEWER = {Bernd Baumann},
+    URL = {http://dx.doi.org/10.1515/crll.1985.356.140}
+  }
+  @COMMENT url={http://bit.ly/HZhGWU}
+  @COMMENT DOI = {10.1515/crll.1985.356.140},
+
+  @INCOLLECTION{McKenzie1983,
+    AUTHOR = 	{R. McKenzie},
+    KEY =      	{Ralph McKenzie},
+    TITLE = 	{Finite forbidden lattices},
+    EDITOR = 	{R. Freese and O. Garcia},
+    PAGES = 	{176--205},
+    BOOKTITLE = 	{Universal Algebra and Lattice Theory},
+    PUBLISHER = 	{Springer-Ver\-lag},
+    ADDRESS = 	{New York},
+    YEAR = 	{1983},
+    NOTE = 	{Lecture notes in Mathematics, vol. {\bf 1004}},
+  }
+
+  @article {McKenzie:1984,
+    AUTHOR = {McKenzie, Ralph},
+    TITLE = {A new product of algebras and a type reduction theorem},
+    JOURNAL = {Algebra Universalis},
+    FJOURNAL = {Algebra Universalis},
+    VOLUME = {18},
+    YEAR = {1984},
+    NUMBER = {1},
+    PAGES = {29--69},
+    ISSN = {0002-5240},
+    CODEN = {AGUVA3},
+    MRCLASS = {08B25 (03C05 08B05)},
+    MRNUMBER = {743456 (86h:08011)},
+    MRREVIEWER = {Walter Taylor},
+    URL = {http://dx.doi.org/10.1007/BF01182247}
+  }
+  @COMMENT       DOI = {10.1007/BF01182247},
+  @BOOK{alvi:1987,
+    AUTHOR = {McKenzie, Ralph N. and McNulty, George F. and Taylor, Walter F.},
+    TITLE = {Algebras, lattices, varieties. {V}ol. {I}},
+    PUBLISHER = {Wadsworth \& Brooks/Cole},
+    ADDRESS = {Monterey, CA},
+    YEAR = {1987},
+    PAGES = {xvi+361},
+    ISBN = {0-534-07651-3},
+    MRCLASS = {08-01 (06-01)},
+    MRNUMBER = {883644 (88e:08001)},
+    MRREVIEWER = {Gudrun Kalmbach},
+  }
+  @Unpublished{Netter:1986,
+    author = 	 {Netter, R.},
+    title = 	 {Eine {B}emerkung zu {K}ongruenzverb{\"a}nden},
+    note = 	 {preprint},
+    OPTkey = 	 {},
+    OPTmonth = 	 {},
+    year = 	 {1986},
+    OPTannote = 	 {}
+  }
+  @ARTICLE{Palfy1988,
+  AUTHOR = 	{P. P. P\'alfy},
+  TITLE = 	{On {F}eit's examples of intervals in subgroup lattices},
+  JOURNAL = 	{J. Algebra},
+  VOLUME = 	{116},
+  YEAR = 	{1988},
+  PAGES = 	{471--479},
+  }
+  @Misc{Palfy:2009,
+    OPTkey = 	 {},
+    author = 	 {P{\'a}lfy, P{\'e}ter P{\'a}l},
+    title = 	 {The finite congruence lattice problem},
+    OPThowpublished = {},
+    month = 	 {September},
+    year = 	 {2009},
+    note = 	 {Summer School on General Algebra and Ordered Sets Star{\'a} Lesn{\'a},  6, 2009},
+    url={http://db.tt/DydVmisY}
+  }
+  @COMMENT url={http://db.tt/TjlPzYqu,http://db.tt/JMa1iksw,http://db.tt/DydVmisY}
+  @article {PalfyPudlak1980,
+    AUTHOR = 	{P. P. P\'alfy and P. Pudl\'ak},
+    TITLE = 	{Congruence lattices of finite algebras and
+  intervals in subgroup lattices of finite groups},
+    JOURNAL = 	{Algebra Universalis},
+    VOLUME = 	{11},
+    YEAR = 	{1980},
+    PAGES = 	{22--27},
+  }
+  @article {Pudlak:1980,
+    AUTHOR = {Pudl{\'a}k, Pavel and T{\.u}ma, Ji{\v{r}}{\'{\i}}},
+    TITLE = {Every finite lattice can be embedded in a finite partition
+      lattice},
+    JOURNAL = {Algebra Universalis},
+    FJOURNAL = {Algebra Universalis},
+    VOLUME = {10},
+    YEAR = {1980},
+    NUMBER = {1},
+    PAGES = {74--95},
+    ISSN = {0002-5240},
+    MRCLASS = {06B15 (05C99)},
+    MRNUMBER = {552159 (81e:06013)},
+    MRREVIEWER = {James W. Lea, Jr.},
+    URL = {http://dx.doi.org/10.1007/BF02482893}
+  }
+  @COMMENT       DOI = {10.1007/BF02482893},
+  @article {Quack:1971,
+    AUTHOR = {Quackenbush, R. and Wolk, B.},
+    TITLE = {Strong representation of congruence lattices},
+    JOURNAL = {Algebra Universalis},
+    FJOURNAL = {Algebra Universalis},
+    VOLUME = {1},
+    YEAR = {1971/72},
+    PAGES = {165--166},
+    ISSN = {0002-5240},
+    MRCLASS = {06A35},
+    MRNUMBER = {0295980 (45 \#5041)},
+    MRREVIEWER = {R. Balbes},
+  }
+  @article{Shareshian2003,
+    AUTHOR = {Shareshian, John},
+     TITLE = {Topology of order complexes of intervals in subgroup lattices},
+   JOURNAL = {J. Algebra},
+  FJOURNAL = {Journal of Algebra},
+    VOLUME = {268},
+      YEAR = {2003},
+    NUMBER = {2},
+     PAGES = {677--686},
+      ISSN = {0021-8693},
+     CODEN = {JALGA4},
+   MRCLASS = {20D30},
+  MRNUMBER = {2009327 (2004h:20032)},
+MRREVIEWER = {Andrea Lucchini},
+       DOI = {10.1016/S0021-8693(03)00274-6},
+       URL = {http://dx.doi.org/10.1016/S0021-8693(03)00274-6},
+}
+  @article {Snow:2000,
+    AUTHOR = {Snow, John W.},
+    TITLE = {A constructive approach to the finite congruence lattice
+      representation problem},
+    JOURNAL = {Algebra Universalis},
+    FJOURNAL = {Algebra Universalis},
+    VOLUME = {43},
+    YEAR = {2000},
+    NUMBER = {2-3},
+    PAGES = {279--293},
+    ISSN = {0002-5240},
+    CODEN = {AGUVA3},
+    MRCLASS = {06B15 (08A30)},
+    MRNUMBER = {1774743 (2001f:06015)},
+    MRREVIEWER = {Clifford H. Bergman},
+    DOI = {10.1007/s000120050159}
+  }
+  @COMMENT       
+  @Comment URL = {http://dx.doi.org/10.1007/s000120050159}
+
+  @book {Suzuki:1982,
+    AUTHOR = {Suzuki, Michio},
+    TITLE = {Group theory. {I}},
+    SERIES = {{G}rundlehren der {M}athematischen {W}issenschaften [{F}undamental
+        {P}rinciples of {M}athematical {S}ciences]},
+    VOLUME = {247},
+    NOTE = {Translated from the Japanese by the author},
+    PUBLISHER = {Springer-Verlag},
+    ADDRESS = {Berlin},
+    YEAR = {1982},
+    PAGES = {xiv+434},
+    ISBN = {3-540-10915-3},
+    MRCLASS = {20-01},
+    MRNUMBER = {648772 (82k:20001c)},
+    MRREVIEWER = {B. Chang}
+  }
+  @article {Tuma:1986,
+    AUTHOR = {\Tuma, \Jiri},
+    TITLE = {Some finite congruence lattices. {I}},
+    JOURNAL = {Czechoslovak Math. J.},
+    FJOURNAL = {Czechoslovak Mathematical Journal},
+    VOLUME = {36(111)},
+    YEAR = {1986},
+    NUMBER = {2},
+    PAGES = {298--330},
+    ISSN = {0011-4642},
+    CODEN = {CZMJAE},
+    MRCLASS = {08A30 (20D30)},
+    MRNUMBER = {831317 (87i:08006)},
+    MRREVIEWER = {Charles S. Holmes},
+  }
+@misc{william_demeo_2016_53936,
+  author       = {William DeMeo and
+                  Ralph Freese},
+  title        = {AlgebraFiles v1.0.1},
+  month        = May,
+  year         = 2016,
+  doi          = {10.5281/zenodo.53936},
+  url          = {http://dx.doi.org/10.5281/zenodo.53936}
+}
+@article {HeitzigReinhold2002,
+    AUTHOR = {Heitzig, Jobst and Reinhold, J\"urgen},
+     TITLE = {Counting finite lattices},
+   JOURNAL = {Algebra Universalis},
+  FJOURNAL = {Algebra Universalis},
+    VOLUME = {48},
+      YEAR = {2002},
+    NUMBER = {1},
+     PAGES = {43--53},
+      ISSN = {0002-5240},
+   MRCLASS = {05A15 (06A07)},
+  MRNUMBER = {1930032},
+MRREVIEWER = {Mikl\~A${}^3$s B\~A${}^3$na},
+       DOI = {10.1007/PL00013837},
+       URL = {http://dx.doi.org/10.1007/PL00013837},
+}
+@article {JipsenLawless2015,
+    AUTHOR = {Jipsen, Peter and Lawless, Nathan},
+     TITLE = {Generating all finite modular lattices of a given size},
+   JOURNAL = {Algebra Universalis},
+  FJOURNAL = {Algebra Universalis},
+    VOLUME = {74},
+      YEAR = {2015},
+    NUMBER = {3-4},
+     PAGES = {253--264},
+      ISSN = {0002-5240},
+   MRCLASS = {06C05 (05A15 06C10)},
+  MRNUMBER = {3397437},
+MRREVIEWER = {Andrzej Walendziak},
+       DOI = {10.1007/s00012-015-0348-x},
+       URL = {http://dx.doi.org/10.1007/s00012-015-0348-x},
+}
+\end{filecontents*}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%                                     PREAMBLE                                   %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\documentclass{au}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% For completion by editorial office:
+ \presentedby{\dots}
+ \received{\dots}{\dots}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+%///////////////////////////////////////////////////////////////////////////////////
+%% PACKAGES
+\usepackage{amsmath,amssymb,url,mathrsfs,enumerate,ifthen,xspace,comment}
+\usepackage{latexsym,amscd,amsthm,stmaryrd,scalefnt,color}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usetikzlibrary{calc}
+%% The following will probably be removed by the journal editors:
+\usepackage[colorlinks=true,urlcolor=black,linkcolor=black,citecolor=black]{hyperref}
+%% ...but it's handy to have hyperrefs when browsing the electronic draft.
+
+%% wjd: I wanted nicer script letters, so I'm changing all \mathscr letters to
+%%      mathcal, with the following modification to mathcal fonts.
+%\usepackage[mathcal]{euscript}  
+
+%% showkeys: just comment out in the final version
+\usepackage[notref,notcite]{showkeys}
+
+%%////////////////////////////////////////////////////////////////////////////////
+%% Theorem styles
+\numberwithin{equation}{section}
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{notation}[theorem]{Notation}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{example}[theorem]{Example}
+\newtheorem*{remarks}{Remarks}
+
+
+%%///////////////////////////////////////////////////////////////////////////////////
+%% Extra macros
+\usepackage{inputs/macros}
+\usepackage[mathcal]{euscript} 
+%%///////////////////////////////////////////////////////////////////////////////////
+%% tikz notes:
+%% For Hasse diagrams, instead of hard-coding the size of the circle representing
+%% points in a lattice, please use \dotsize.  For example,
+%%     \node (bottom) at (0,0) [draw, circle,inner sep=\dotsize] {};
+%% or
+%%     \node[lat] (bottom) at (0,0) {};  (see comment on the "lat" style below)
+\newcommand{\dotsize}{1.4pt}
+%%
+%% To create nodes of lattices in a uniform and consistent way, we define
+\tikzstyle{lat} = [circle,draw,inner sep=\dotsize]
+%% To put a lattice node named "mynode" at the point (x,y)=(1,2) in the figure,
+%% put the following inside your tikzpicture block:
+%%     \node[lat] (mynode) at (1,2) {};
+
+
+%%///////////////////////////////////////////////////////////////////////////////////
+%% How should we typeset definitions?
+%% Let's use a macro so we are consistent and can easily change our convention.
+\newcommand{\defn}[1]{\emph{#1}}
+%% So, when defining a new term, please use \defn{the term}.
+
+
+%%///////////////////////////////////////////////////////////////////////////////////
+%% Acronyms 
+%% ---------
+%% Below is a brief description of how the acronym package works, but 
+%% see the user manual for more details:
+%%      ftp://ftp.tex.ac.uk/tex-archive/macros/latex/contrib/acronym/acronym.pdf
+%%
+%% Some useful tips appear in this forum post:
+%%      http://tex.stackexchange.com/questions/25520/
+%%
+%% \acs{CSP} -- short version of the acronym\\
+%% \acl{CSP} -- expanded acronym without mentioning the acronym.\\
+%% \acp{CSP} -- plurals.\\
+%% \acfp{CSP} -- long forms into plurals.\\
+%% \acsp{CSP} -- short form into a plural.\\
+%% \aclp{CSP} -- long form into a plural.\\
+%% \acfi{CSP} -- Full Name acronym in italics and abbreviated form in upshape.\\
+%% \acsu{CSP} -- short form of the acronym and marks it as used.\\
+%% \aclu{CSP} -- Prints the long form of the acronym and marks it as used.\\
+%% \acresetall -- to reset all acronyms so they act like they haven't been used
+
+\usepackage[smaller,nolist,nohyperlinks]{acronym}
+
+%% To define an acronym, the syntax is
+%%   \acrodef{handle}[abreviation]{expanded version}
+%% for example,
+%%   \acrodef{np}[NP]{nondeterministic polynomial time}
+%% (this acronym would be used inside a latex document with a command like \ac{np})
+
+%% Define some acronyms
+\acrodef{flrp}[FLRP]{finite lattice representation problem}
+\acrodef{gap}[GAP]{GAP}
+\acrodef{xgap}[XGAP]{XGAP}
+
+%% To make frequently used acronyms easier to type:
+\newcommand{\flrp}{\ac{flrp}\xspace}
+\newcommand{\gap}{\acs{gap}\xspace}
+\newcommand{\gaps}{\acsp{gap}\xspace}
+\newcommand{\xgap}{\acs{xgap}\xspace}
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%                      TODO items                              %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Use the \todo command to make notes of things to fix. 
+%% Apply italics or bold or caps for emphasis as needed, e.g.,
+%%
+%%     \todo{(wjd) FIX THE NEXT LINE!}
+%%     \todo{(wjd) \emph{Revise the paragraph above}}
+%%
+   \newboolean{todos}
+   \setboolean{todos}{true}  % set to true to include TODO statements
+%%
+%% INCLUDE TODO ITEMS by commenting out `\setboolean{todos}{false}`
+%% OMIT TODO ITEMS by uncommenting `\setboolean{todos}{false}`:
+%%   \setboolean{todos}{false}
+%%
+   \newcommand{\todo}[1]{\ifthenelse{\boolean{todos}}{%
+       \vskip2mm{\bf TODO:} #1\vskip2mm}{}}
+%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\begin{document}
+
+%% \linenumbers
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%                        FRONT MATTER                              %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\title[Representing Finite Lattices]{Representing Finite Lattices as \\Congruence
+  Lattices of Finite Algebras} 
+
+
+%///////////////////////////////////////////////////////////////////////////////////////
+%% AUTHORS
+\author[W. DeMeo]{William DeMeo}
+\email{williamdemeo@gmail.com}
+\urladdr{http://williamdemeo.github.io}
+\address{Department of Mathematics\\Iowa State University\\Ames 50010\\USA}
+\author[R. Freese]{Ralph Freese}
+\email{ralph@math.hawaii.edu}
+\urladdr{http://www.math.hawaii.edu/~ralph/}
+\address{Department of Mathematics\\University of Hawaii\\Honolulu 96822\\USA}
+\author[P. Jipsen]{Peter Jipsen}
+\email{jipsen@chapman.edu}
+\urladdr{http://www1.chapman.edu/~jipsen/}
+\address{School of Computational Sciences\\Chapman University\\Orange 92866\\USA}
+
+%%%%% thanks to NSF
+\thanks{This research was supported by the National Science 
+Foundation under Grant No. 1500235.
+}
+
+%///////////////////////////////////////////////////////////////////////////////////////
+%% Date
+\date{10 Aug 2015 (draft 2)}
+
+%///////////////////////////////////////////////////////////////////////////////////////
+%% AMS SUBJECT CLASSIFICATION
+%% see http://www.ams.org/msc Only one Primary. Possibly several Secondary. 
+\subjclass[2010]{%
+  Primary:       %
+    08A30;       % Subalgebras, congruence relations
+  Secondary:     %
+    06B15,       % Lattices: representation theory
+    08A60,       %
+    06B10,       %
+    20D30.       % Abstract finite groups: series and lattices of subgroups
+}
+
+%///////////////////////////////////////////////////////////////////////////////////////
+%% KEYWORDS
+\keywords{%
+  congruence lattice, 
+  subgroup lattice, 
+  finite algebra, 
+  finite lattice representations
+}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%                           Main Matter                                        %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%/////////////////////////////////////////////////////////
+\begin{abstract}
+This article explores various aspects of the problem of representing a finite lattice as the 
+congruence lattice of a finite algebra or an interval in the subgroup lattice of a 
+finite group. We describes various methods for representing a
+finite lattice in these ways, or for proving
+that such a representation exists.
+Minimal representations are 
+discussed including computer programs to find them. A catalog of representations 
+of small lattices is given. It is shown that every lattice with at most seven elements, 
+with only one possible exception, is isomorphic to
+the congruence lattice of a finite algebra.
+\end{abstract}
+
+
+\maketitle
+
+
+%/////////////////////////////////////////////////////////
+\section{Introduction}
+\label{sec:intro}
+%the problem
+%we investigate methods of showing that certain lattices are representable
+%we show every lattice with 7 or less elements is representable with one
+%possible exception.
+%minimal, group (P^5), etc. 
+%also we have extend P^5 and McKenzie results on conditions that
+%force the min rep to be a group action. Also we have conditions
+%guaranteeing a group action represents must be transitive.
+
+
+
+
+By the Gratz\"er-Schmidt Theorem every algebraic, and hence
+every finite, lattice is the congruence lattice of an algebra. 
+But the algebras in this construction are always infinite
+even when the lattice is finite. This leaves open questions
+about representing finite lattices as congruence lattices of
+finite algebras.
+As is shown in most books on general algebra, 
+$\Con(\bA) = \Con(\langle A, \operatorname{Pol}_1(\bA) \rangle)$. 
+\textcolor{purple}{(ref?)}
+Consequently, unless stated otherwise, all algebras are assumed
+to be unary.
+
+
+Let $L$ be a finite lattice. We consider four representation
+properties $L$ might have
+\begin{enumerate}
+\item[(P1)]
+$L$ is isomorphic to the congruence
+lattice of some finite algebra $\langle A,F \rangle$.
+\item[(P2)]
+$L$ is isomorphic to the congruence
+lattice of some finite algebra $\langle A,F \rangle$
+where the all nonconstant operations are permutations.
+\item[(P3)]
+$L$ is isomorphic to the congruence
+lattice of some finite algebra $\langle A,F \rangle$
+where the nonconstant operations generate a transitive
+permuatation group.
+\item[(P4)]
+$L$ is
+isomorphic to an interval in the lattice of subgroups of a finite 
+group.
+\end{enumerate}
+
+It is shown in~\cite[Lemma~4.20]{alvi:1987} (see 
+also~\cite[Theorem 1.5A]{Dixon:1996}) 
+that (P3) and(P4) are equivalent; that is, a lattice satisfies~(P3)
+if and only if it satisfies~(P4). Obviously, (P3) implies (P2) which 
+implies~(P1).
+
+By the celebrated theorem of \Palfy and P.~\Pudlak \cite{PalfyPudlak1980}, (P1)
+holds for \emph{all} lattices if and only if (P4) holds
+for \emph{all} lattices. Nevertheless, we do not know, for example,
+if (P1) and (P4) are equivalent.
+
+%For a lattice $L$ that has a representation specified
+%by (1)--(4), one can ask the size of a minimal representation.
+
+ 
+ 
+\begin{comment}
+\textcolor{red}{Move the next two paragraphs further back.}
+
+\textcolor{purple}{
+If $L$ is isomorphic to the lattice of subgroups of $G$
+containing a subgroup $H$, then $L$ is isomorphic to the congruence
+lattice of the algebra whose elements are the left cosets of $H$
+and whose operations are left multiplication by elements of~$G$;
+that is, the group action of $G$ on the left cosets of~$H$;
+see~\cite{Bergman2012,alvi:1987}. Conversely, if 
+$\bA = \langle A,F \rangle$  is a finite algebra with each element
+of $F$ a permutation on $A$, then the congruence lattice 
+$\Con(\bA)$ of~$\bA$ is isomorphic to the lattice of all 
+subgroups of $G$ containing $H$ (the overgroups of $H$ in $G$),
+where $G$ is the group generated by $F$ and $H = G_a$ is the stabilizer of a point.}
+
+
+\textcolor{purple}{
+On the other hand, the
+\Palfy-\Pudlak theorem does not prove that if 
+a particular lattice $L$
+is a congruence lattice of a finite algebra then it 
+is (isomorphic to) an interval of a subgroup lattice of a finite
+group so
+it is possible that there is a congruence lattice $L$ of a finite
+algebra that is not an interval sublattice of a finite group. }
+\end{comment}
+
+In this paper we review some of the well known methods, as well as 
+some more recently developed methods, for constructing a finite
+algebra whose congruence lattice is isomorphic to a given finite
+lattice. 
+Using these methods combined with programs we have developed using
+GAP, UACalc, \textcolor{red}{others, give refs},
+we make a catalog of representations of small
+lattices. We show that with one possible
+exception ($\bL_{10}$ in the last section) every 
+lattice with at most 7 elements is (isomorphic to) the 
+congruence lattice of a finite lattice. 
+
+For a representation of $L = \Con(\langle A,F \rangle)$, we call
+$|A|$ the \emph{size} of the representation. In the equivalence of
+(P3) and (P4), the algebra constructed from $H \le G$ (subgroup) has
+as its elements, the left cosets of $H$ (its operations are
+the elements of $G$ acting by left multiplication). So in the case of~(P4),
+the \emph{size} is $[G:H] = |G|/|H|$. 
+In most, but not all,
+cases we are able to show that the algebra we construct is 
+of minimal size. 
+
+%(Section~\ref{sec:minim-repr} below explains what
+%we mean by \emph{size} of a representation.)
+
+%% \todo{define group representation of a lattice. Is transitivity required?}
+
+\begin{comment}
+We call a (finite) lattice \defn{group representable} if 
+it is isomorphic to an interval in the subgroup lattice of a (finite) group.
+That is, $L$ is group representable if there exist groups $H \leq G$
+such that $L$ is isomorphic to the interval
+\begin{equation}
+  \label{eq:1}
+\lb H, G\rb := \{K \mid H \leq K \leq G\}.
+\end{equation}
+In this case, we call $\lb H, G\rb$ a \defn{group representation of} $L$.
+We take the \defn{size} of a group representation to be
+the index $[G:H]$, since this is the size of the algebra $\bA = \<G/H, G\>$ that has
+congruence lattice $\Con(\bA) \cong L$.
+\end{comment}
+
+Not surprisingly many lattices with a group representation
+can also be represented as a congruence lattice of a much smaller
+algebra. For example, the hexagon lattice, denoted $\bL_6$ in
+Section~\ref{sec:small-unary-algebras} below, is the congruence lattice
+of an algebra with 6 elements. Palfy~\cite{Palfy1988} and
+Aschbacher~\cite{Aschbacher2008} have found groups
+$H < G$ such that the interval from $H$ to $G$ is $\bL_6$, but 
+the sizes of these representations, 
+$[G : H]$, are considerably larger. 
+Palfy's algebra has size $9! = 362880$.
+
+Another interesting example is the pentagon, which is typically denoted by
+$N_5$, but in our table in Section~\ref{sec:small-unary-algebras} we
+label it $\bL_1$.  A search of \gaps Small Groups Library~\cite{GAP4}
+reveals that the smallest group $G$ in whose subgroup lattice
+$N_5$ appears as an upper interval is \code{SmallGroup(216,153)}, 
+a group with 216 elements. It is easy
+to verify that there is a six-element subgroup $H\leq G$ such that
+$\lb H, G\rb \cong N_5$, so the size is $[G:H]= 36$. Therefore,
+the algebra given by this group representation has 36 elements.
+(We do not know if this is the smallest possible group representation of $N_5$.)
+%% There may be a representation of $N_5$ that uses a larger group but 
+%% a smaller index.
+On the other hand, the smallest algebra that represents $N_5$ has just four elements.
+(See Section~\ref{sec:small-unary-algebras}.)
+
+%% \todo{can we say that Group(216,153) is the smallest group
+%% with $N_5$ as an interval?}
+%% Answer: yes.
+
+\todo{Add appendix section that includes \gap code for finding upper intervals
+  so the reader can verify that SmallGroup(216,153) is the smallest group with pentagonal upper
+  interval.} 
+
+For some lattices it can be shown that in a minimal 
+representation every nonconstant operation must be a 
+permutation, that is, the representation is of type~(P2),
+or~(P3) if the nonconstant operations generate a transitive permutation group.
+Finding a representation is typically harder in such lattices,
+and finding a minimal representation can be especially hard.
+
+In Section~\ref{sec:congr-latt-group} we investigate when
+a lattice can be represented as in (P2) where the 
+nonconstant operations generate an \emph{intransitive}
+permutation group.
+We show that most lattices
+can never be so represented. For such lattices, group 
+representations must use transitive groups and so the
+action is isomorphic to a group acting on the cosets
+of a subgroup by left multiplication. For example,
+we willshow that
+$\bL_6$ is in this category.
+
+
+For the 7-element lattice not known to be representable, 
+$\bL_{10}$, we show that a minimal size representation 
+must be via a transitive permutation group action.
+ 
+%% note we could easily show there is no H < G of index 4,
+%% representing N_5
+%% even though finding the minimal such index would
+%% be hard to find. Thus the minimal representation
+%% of N_5 cannot be via a group.
+
+
+
+
+
+\todo{check the gg statement \\
+  (wjd: I don't know what the ``gg statement'' is.)}
+
+
+%\todo{Expand the introduction.}
+
+%%%% \input{inputs/intro.tex}  (include all major inputs in one file)
+%% -- Begin intro.tex file insertion -------------------------------
+
+
+%%%%%%%%%%%%%%%%%  NOTATION %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Notation}
+A lattice is denoted by $\bL = \<L, \meet, \join\>$, where $L$
+is the universe of elements of the lattice.  However, unless the context
+calls for emphasizing that this is an algebraic structure, we often
+refer to a lattice by the name of its universe. (Notable exceptions to
+this convention are lattices with special names like those appearing in the list in
+Section~\label{sec:small-unary-algebras}. These are always typeset in bold font.)
+
+We use $\sL_{fin}$ to denote the class of all finite lattices, and 
+$\sL_{con}$ to denote the class of finite lattices that are isomorphic to congruence
+lattices of finite algebras, that is, all lattices that satisfy property~(P1). 
+The notation 
+$\sL_{grp}$ will stand for the class of finite lattices that
+are isomorphic to intervals in subgroup lattices of finite groups, that is,
+all lattices that satisfy~(P4). 
+A lattice that belongs to $\sL_{con}$ (resp., $\sL_{grp}$) is called \emph{representable} (resp., 
+\emph{group representable}).
+Since we use these special notations so often in the sequel, let us repeat them here for easy reference:
+\begin{align*}
+  \sL_{fin} & = \text{ all finite lattices }\\
+  \sL_{con} %& = \text{ representable lattices }\\
+  &=\{L \in \sL_{fin} \mid \exists \text{ finite algebra $\bA$ such that $L \cong \Con(\bA)$}\}\\
+  \sL_{grp} %& = \text{ all group representable lattices }\\
+  &=\{L \in \sL_{fin} \mid \exists \text{ finite groups $H \leq G$ such that $L \cong \lb H, G\rb$}\}
+\end{align*}
+
+\textcolor{purple}{Maybe add $\sL_{\text{intrans}}$ for intransitive reps.}
+
+Let $L$ be a lattice and suppose $\alpha$ and $\beta$ are members of $L$.  
+We denote by $\lb \alpha, \beta \rb$ the sublattice of $L$ consisting of all
+elements in $L$ that lie above $\alpha$ and below $\beta$.  
+That is, 
+$\lb \alpha, \beta \rb = 
+\{\theta \in L \mid \alpha \leq \theta \leq \beta\}$.
+(If $\alpha \nleq \beta$, then $\lb \alpha, \beta \rb = \emptyset$.)
+
+For a lattice (or, more generally, a partially ordered set) 
+$L$, the \emph{dual} of $L$, denoted
+$L'$, is the lattice (poset) with the inverse order. That is, 
+$x \leq y$ holds in $L$ if and only if $y \leq x$ holds in $L'$. 
+The dual of $L$ can be depicted by flipping the Hasse diagram
+for $L$ upside down. 
+In a broader sense, two lattices (posets) are also said to be duals if they are
+dually isomorphic.
+%% wjd: the next sentence isn't needed since we're not using the \partial notation anywhere.
+%% Although we often denote the dual of $L$ by $L'$, on some occasions it is more
+%% convenient to use an operator notation, such as $\partial L$, to denote the dual of
+%% $L$. 
+
+\subsection{Minimal Representations}
+\label{sec:minim-repr}
+We defined the size of a representation above and, of course, a representation is
+\defn{minimal} if its size is.
+
+%% There is, however, another notion of ``size'' of a representation that might be
+%% worth considering.  
+%% Suppose we know that $L$ is a group representable lattice.
+Suppose $L\in \sL_{grp}$. Recall that the size of this representation
+is defined as $[G : H]=|G|/|H|$, which, as noted, is the size of the 
+corresponding algebra in the equivalence of properties (P3) and~(P4). 
+
+Besides finding what the minimal size of a representation is, we could ask
+what the minimum size of $G$ is.
+
+
+
+Now, suppose $G$ is a group of minimal order among those in whose
+subgroup lattices $L$ appears as an upper interval, say $L \cong \lb H, G\rb$.
+It's possible that there is a larger group $G^+$ in whose subgroup lattice $L$
+appears as n upper interval, but with a smaller index. That is, we might have
+\[\lb H, G \rb \cong L \cong \lb H^+, G^+\rb, \quad |G| < |G^+|,
+\quad [G^+:H^+] < [G:H].\]
+We now give an example of this phenomenon. 
+
+In Figure~\ref{fig:10} there appears the lattice $\two\times \two$.
+On the left, this lattice is presented as the upper interval
+$\lb C_2, C_3 \times S_3\rb$. On the right, it is the upper interval 
+$\lb \<e\>, C_{10}\rb$. Of course, the groups $C_{10}$ and
+$C_3 \times S_3$ have orders 10 and 18, but the respective indices are
+$[C_{10}:\<e\>] = 10$ and $[C_3 \times S_3:C_2]=9$. 
+\begin{figure}
+\caption{Transitive G-set congruence lattices in Eq(10)}
+\label{fig:10}
+\begin{center}
+\begin{tikzpicture}[scale=.8]
+\node (0) at (0,0) [draw, circle,inner sep=1.5pt] {};
+\node (1) at (0.75,1) [draw, circle, inner sep=1.5pt] {};
+\node (2) at (-0.75,1) [draw, circle, inner sep=1.5pt] {};
+\node (3) at (-0,2) [draw, circle, inner sep=1.5pt] {};
+\draw[font=\scriptsize] (0,-.5) node {$\lb C_2, C_3 \times S_3\rb$};
+\draw[font=\scriptsize] (0,-1) node {TransitiveGroup(9,4) };
+\draw[semithick]
+(0) to (1)
+(0) to (2)
+(1) to (3)
+(2) to (3);
+\end{tikzpicture}
+\begin{tikzpicture}[scale=.8]
+\node (0) at (0,0) [draw, circle,inner sep=1.5pt] {};
+\node (1) at (0.75,1) [draw, circle, inner sep=1.5pt] {};
+\node (2) at (-0.75,1) [draw, circle, inner sep=1.5pt] {};
+\node (3) at (-0,2) [draw, circle, inner sep=1.5pt] {};
+\draw[font=\scriptsize] (0,-.5) node {$\lb \<e\>, C_{10}\rb$};
+\draw[font=\scriptsize] (0,-1) node {TransitiveGroup(10,1) };
+\draw[semithick]
+(0) to (1)
+(0) to (2)
+(1) to (3)
+(2) to (3);
+\end{tikzpicture}
+\end{center}
+\end{figure}
+
+%%%%%%%%%%%%%%%%%  METHODSOVERVIEW %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Closure properties of the class of representable lattices}
+\label{sec:clos-prop-class}
+This section describes some
+\emph{closure properties}
+of the class $\sL_{con}$ of representable lattices. 
+By closure properties, we mean the following: if $\sansO$ is an operation that can
+be applied to a lattice or collection of lattices, we say that $\sL_{con}$ is
+\emph{closed under $\sansO$} provided $\sansO(\sK) \subseteq \sL_{con}$ for all 
+$\sK\subseteq \sL_{con}$. For example, if 
+$\sansS(\sK)$ is all sublattices of lattices in $\sK$, 
+it is unknown whether $\sL_{con}$ is closed under $\sansS$.  
+If this were known to be true, then the 
+\emph{finite lattice representation problem} would be solved.
+The congruence lattice of the algebra consisting of a
+set $X$ with no operations is the lattice of all equivalence relations on $X$,
+which we denote by $\EqX$.
+By a celebrated theorem of \Pudlak and \Tuma~\cite{Pudlak:1980}, for every finite
+lattice $L$ there is a finite set $X$ such that $L\leq \EqX$.  Therefore, $\sL_{con}$
+would contain all finite lattices if it were closed under $\sansS$.
+
+Before we begin, we note that every finite distributive lattice
+is representable.
+
+\begin{theorem}
+$\sL_{con}$ contains every finite distributive lattice. 
+\end{theorem}
+
+\begin{proof}
+Let $L$ be a finite distributive lattice. By the result of 
+\Pudlak and \Tuma cited above, $L \le \EqX$ for some finite~$X$.
+It is shown by Stanley Burris, Henry Crapo, Alan Day, 
+Dennis Higgs, Bjarni J\'onsson, Warren Nickols,
+R.~Quackenbush and B.~Wolk, see~\cite{Jonsson:1972}, pages 174--175, 
+that if $F$ is the set of all unary operations on $X$ which respect
+all the equivalence relations that lie in $L$, then
+$\operatorname{Con}(\langle X,F \rangle) = L$. 
+\end{proof}
+
+The following is a list of operations under which $\sL_{con}$ is 
+known to be closed,
+along with the names of those who first (or independently) proved them.  
+We discuss some of these results in greater detail later in this section.
+The class $\sL_{con}$ of lattices isomorphic to congruence lattices 
+of finite algebras is closed under the following operations:
+\begin{enumerate} %[label=$\circ$]
+\setcounter{enumi}{-1}
+\item\label{item:0} principal filters: all elements above a 
+given element (the correspondence theorem~\cite{Bergman2012}),
+\item\label{item:1} lattice duals (Hans Kurzweil~\cite{Kurzweil:1985} 
+and Raimund Netter~\cite{Netter:1986}, 1986),
+\item\label{item:2} interval sublattices (follows from~(\ref{item:1}), see Remark a.~below),
+\item  direct products (\Jiri \Tuma~\cite{Tuma:1986}, 1986), 
+\item  ordinal sums 
+  (Ralph McKenzie~\cite{McKenzie:1984}, 1984; John Snow~\cite{Snow:2000}, 2000),
+\item  parallel sums (John Snow~\cite{Snow:2000}, 2000), 
+\item\label{item:6} certain sublattices of lattices in $\sL_{con}$ -- namely, those which
+  are obtained as a union of a filter and an ideal of a lattice in
+  $\sL_{con}$ (John Snow~\cite{Snow:2000}, 2000). 
+\end{enumerate}
+\begin{center}
+  \begin{figure}[h!]
+    \centering
+    \begin{tikzpicture}[scale=0.4]
+      \input{inputs/tikz/ordinal-sum.tex}
+      \draw (0,-2) node {$L_1$};
+      \draw (0,2) node {$L_2$};
+    \end{tikzpicture}
+    \hskip5mm
+    \begin{tikzpicture}[scale=0.4]
+      \input{inputs/tikz/parallel-sum.tex}
+      \draw (-2,0) node {$L_1$};
+      \draw (2,0) node {$L_2$};
+    \end{tikzpicture}
+    \hskip5mm
+    \begin{tikzpicture}[scale=0.3]
+      \input{inputs/tikz/filter-ideal.tex}
+      \draw (alpha) node [left] {$\alpha$};
+      \draw (beta) node [right] {$\beta$};
+    \end{tikzpicture}
+    \caption{The adjoined ordinal sum (left) and parallel sum (middle) 
+      of the lattices $L_1$ and $L_2$; a union of an order filter
+      $\alpha^\uparrow$ and order ideal $\beta^\downarrow$ (right).}
+    \label{fig:ord_par_fil-uni}
+  \end{figure}
+\end{center}
+
+\begin{remarks}\
+  \begin{enumerate}[a.]
+  \item 
+  The first two items combine to show that $\sL_{con}$ is closed under
+  principal ideals and this fact, together with~\eqref{item:1}, 
+  proves~\eqref{item:2}.
+  
+  
+  %The first item in the list above says that if $L$ is representable then so is
+  %the dual of $L$. It follows from this that every interval sublattice of a
+  %representable lattice is also representable.  
+  %Indeed, suppose $L$ is representable, say, $L\cong \bar{L} =\Con\bA$.
+  %Let $\lb \alpha, \beta \rb$ be an interval sublattice of $L$,
+  %and $\lb \bar{\alpha}, \bar{\beta} \rb$ the corresponding  
+ % interval of $\bar{L}$.
+  %For ease of notation, let's rename $\bar{\alpha}$ and $\bar{\beta}$, dropping
+  %the bars.  Thus $\lb \alpha, \beta \rb$ is the interval of interest and we
+  %assume $\lb \alpha, \beta \rb\leq \Con(\bA)$.
+  %The filter $\alpha^\uparrow =\lb \alpha, 1_A \rb$ 
+  %s isomorphic to $\Con (\bA/\alpha)$, hence representable, so
+  %by~(1) the dual $\partial (\alpha^\uparrow)=\lb 1_A', \alpha'\rb$ is also
+  %representable. (Here $x'$ denotes the image of $x$ under dualization.)
+ % Another quotient (this time by $\beta'$) gives a representation of
+  %the interval $\lb \beta', \alpha'\rb$ above $\beta'$ in 
+  %$\partial (\alpha^\uparrow)$. 
+  %Since $\lb \beta', \alpha' \rb$  is the dual of $\lb \alpha, \beta \rb$, 
+ % we apply~(1) once more to obtain the desired representation of 
+ % $\lb \alpha, \beta\rb$.  Thus~(2) follows from~(1).
+
+  \item By the ordinal sum of two lattices $L_1$, $L_2$, we mean the lattice
+  on the left of Figure~\ref{fig:ord_par_fil-uni}.
+  By the parallel sum of two lattices $L_1$, $L_2$, we mean the lattice
+  in the middle of Figure~\ref{fig:ord_par_fil-uni}.
+
+\item Item~\eqref{item:6} above is a very useful result which we will discuss further in
+  Section~\ref{sec:union-filter-ideal} below, where we present a short proof of
+  this fact.
+
+\item Whether the class $\sL_{con}$ is closed under homomorphic images is open. 
+  \end{enumerate}
+\end{remarks}
+
+%%%%%%%%%%%%%%%%%%  METHODSINDETAIL  %%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Lattice duals: the theorem of Kurzweil and Netter}
+\label{sec:duals-interv-subl-detail}
+As mentioned above, 
+the class $\sL_{con}$ -- the lattices isomorphic to congruence lattices of finite
+algebras -- is closed under
+dualization.
+That is, if $L$ is representable, then so is the dual of $L$. This was proved in
+1986 by Raimund Netter~\cite{Netter:1986}, generalizing the idea of his advisor,
+Hans Kurzweil~\cite{Kurzweil:1985}. 
+Though Kurzweil's article did appear,
+%(in German), 
+it is unclear whether Netter's
+article was ever published.
+In this section we present a proof of their result.
+The argument requires a fair bit of machinery, but it is a nice idea and
+well worth the effort.\footnote{We learned 
+  of the main argument used in the proof from slides of a series of three
+  lectures given by P{\'e}ter \Palfy in 2009~\cite{Palfy:2009}.
+  \Palfy gives credit for the argument to Kurzweil and Netter.} 
+
+If $G$ is a group and $X$ a set, then the set $\{f \mid f:X\rightarrow G\}$ of 
+functions from $X$ into $G$ is denoted by $G^X$.  This is a group with binary
+operation $(f,g) \mapsto f\cdot g$, where,  
+for each $x\in X$, $(f\cdot g)(x)= f(x)g(x)$ is simply multiplication
+in the group $G$.  The identity of the group $G^X$ is of course the constant map $f(x) =
+1_G$ for all $x\in X$.
+
+Let $X$ be a finite totally ordered set, with order relation $\leq$,
+and consider the set $X^X$ of functions mapping $X$ into itself.  
+The subset of $X^X$ consisting of unary
+\emph{idempotent contractions}, that is, for all $x\in X$,
+$f(f(x)) = f(x)$ and $f(x) \leq x$ for all $x\in X$. 
+We denote this set by $\IC(X)$, so
+\[
+\IC(X) = \{f\in X^X \mid f^2 = f \text{ and }\; \forall x\; f(x) \leq x\}.
+\]
+Define the binary relation $\sqsubseteq$ on the set $\IC(X)$ by
+\begin{equation}
+  \label{eq:MID111}
+   f\sqsubseteq g \quad \Leftrightarrow \quad \ker f \leq \ker g,
+\end{equation}
+where $\ker f = \{(x,y) \in X^2 \mid f(x) = f(y)\}$.
+It is easy to see that $f\sqsubseteq g$ holds if and only if $gf = g$, and that
+$\sqsubseteq$ is a partial ordering of $\IC(X)$.  
+In fact, under this ordering, $\IC(X)$ is a lattice that is
+isomorphic to $\EqX$. Indeed, a lattice isomorphism from $\EqX$ to $\IC(X)$
+is given by the function $\Theta$ defined for $\alpha\in \EqX$ and
+$x\in X$ by $\Theta(\alpha)(x) = \Meet x/\alpha$; that is,
+the least element in the $\alpha$-class containing $x$.
+It is easy to check that $\Theta$ preserves all meets and joins of
+$\EqX$. The inverse isomorphism is $\ker: \IC(X) \to \EqX$.
+That is, $\ker$ preserves all meets and joins of $\IC(X)$ (with lattice order
+$\sqsubseteq$), $\ker \Theta$ is the identity on $\EqX$, and $\Theta \ker$
+is the identity on $\IC(X)$.
+
+Suppose $S$ is a finite nonabelian simple group, and consider the direct power $S^n$.
+An element of $S^n$ may be viewed either as a function, $\bx : \nn \to S$,
+from the set $\nn = \{0, 1, \dots, n-1\}$ to $S$, or as the tuple 
+of its values, that is,
+%
+%% wjd: for the symbol denoting a tuple (x(0), x(1), ...), should we simply use
+%% $x = (x(0), x(1),...)$ or should we use bold x? (currently using bold)
+%
+    $\bx = (x(0), x(1), \dots, x(n-1))$.
+%
+As a function, $\bx$ has kernel
+\[
+\ker \bx = \{(i,j) \in \nn^2 \mid x(i) = x(j)\}.
+\]
+The set of constant functions in $S^n$ is a subgroup $D < S^n$, sometimes called the
+\defn{diagonal subgroup}; that is,
+\[
+D = \{(s, s, \dots, s) \mid s\in S\} \leq S^n.
+\]
+For each $f \in \IC(\nn)$, define $\hat{f}: S^n \to S^n$ as follows:\footnote{Here,
+  $\widehat{\phantom{X}}$ is the functor that lifts $f: \nn \to \nn$ to
+  $\hat{f} : S^n \to S^n$ by way of composition. That is, $\hat{f}\bx$ is
+  the usual function composition of $f: \nn \to \nn$ followed by $\bx: \nn \to S$.}
+for $\bx \in S^n$,
+\[
+%%
+%% K_f = \{(x_{f(0)}, x_{f(1)}, \dots, x_{f(n-1)}) \mid x_{f(i)}\in S, \; i = 0, 1,\dots, n-1\}.
+%% wjd: Why not call this S^n f?  Or simply Xf?  I don't remember my original
+%%      motivation for calling it K_f.  I'm changing it.
+%%      Complaints? (feel free to change it back or open an issue)
+%% wjd: I now recall my original motivation.  I was using K to denote a generic
+%%      subgroup in [D, S^n], and to each f in IC(X) there corresponds a K_f
+%%      which will be such a subgroup in [D, S^n].  Anyway, I think Xf, or even
+%%      \hat{f}[S^n] is perfectly good notation for the set of all xf with x in S^n.
+\hat{f}\bx = \bx f
+= (x(f(0)), x(f(1)), \dots, x(f(n-1))).
+\]
+Then, 
+\[
+\hat{f}[S^n] = \{\bx f \mid \bx \in S^n\} =
+\{(xf(0), xf(1), \dots, xf(n-1)) \mid \bx \in S^n\}.
+\]
+This is the set of all compositions consisting of
+$f$ followed by $\bx\in S^n$.
+\marginpar{Should we insert proof of equivalence of expression with
+$\ker f \leq \ker \by$?}
+Equivalently, $\hat{f}[S^n] = \{ \by\in S^n \mid \ker f \leq \ker \by \}$,
+which is easily verified.
+
+For example, 
+if $f = (0, 0, 2, 3, 2)\in \IC(\underline{5})$, then 
+$\ker f$ is the equivalence relation corresponding to
+the partition $|0,1|2,4|3|$, and 
+$\hat{f}[S^n]$ is the subgroup of all
+$\by = (y(0), y(1), y(2), y(3), y(4))\in S^5$ satisfying $y(0) = y(1)$ and
+$y(2) = y(4)$. That is,
+%% \[\hat{f}[S^n] = \{(x(0), x(0), x(2), x(3), x(2)) \mid \bx\in S^5\}
+%% =\{\by\in S^5 \mid \ker f \leq \ker \by\}.\]
+\begin{align*}
+\hat{f}[S^n] &= \{(y(0), y(1), y(2), y(3), y(4)) \in S^5 \mid y(1) = y(0) \text{ and } y(2) = y(4)\}\\
+&=\{\by\in S^5 \mid \ker f \leq \ker \by\}.
+\end{align*}
+It's not hard to see that $D \leq \hat{f}[S^n] \leq S^n$, for all $f\in \IC(\nn)$.
+\marginpar{Should we insert proof that $\hat{f}[S^n]$ is a subgroup above $D$?}
+
+\begin{lemma}
+  \label{lem:latt-duals}
+  The map $f \mapsto \hat{f}[S^n]$ is a dual lattice isomorphism from $\Eq(\nn)$
+  to the interval sublattice $\lb D, S^n\rb \leq \Sub(S^n)$.
+\end{lemma}
+\begin{proof}
+  This is clear since $\IC(\nn)$ is ordered by (\ref{eq:MID111}), and 
+  we have 
+  $f\sqsubseteq h$ if and only if
+  $\hat{h}[S^n] = \{\by \in S^n \mid \ker h \leq \ker \by \}
+  \leq \{\by \in S^n \mid \ker f \leq \ker \by \} =  \hat{f}[S^n]$.
+\end{proof}
+
+\begin{theorem}[Kurzweil~\cite{Kurzweil:1985}, Netter~\cite{Netter:1986}]\
+  \label{thm:duals-interv-subl}
+  If the finite lattice $L$ is representable as the congruence lattice of a
+  finite algebra, then so is the dual lattice $L'$.
+\end{theorem}
+\begin{proof}
+  Without loss of generality, we assume that $L$ is represented
+  as $L = \Con \<\nn, F\>$.
+  Also, by \cite[Theorem~4.18]{alvi:1987}, we can assume
+  that $F$ consists of unary operations: $F \subseteq \nn^{\nn}$.  
+  As above, let $S$ be a nonabelian simple group
+  and let $D$ be the diagonal subgroup of $S^n$.
+  Then the unary algebra $\<S^n/D, S^n\>$  is a transitive $S^n$-set which
+  has congruence lattice isomorphic to the interval $\lb D, S^n\rb$.
+  (See, for example,~\cite[Lemma~4.20]{alvi:1987}.)
+  By Lemma~\ref{lem:latt-duals}, this is the dual
+  of the lattice $\Eq(\nn)$.  That is, 
+  $\Con \<S^n/D, S^n\> \cong (\Eq(\nn))'$.
+  
+  Now, each operation $\phi \in F$ gives rise to an operation on $S^n$
+  by composition:
+  \[
+  \hat{\phi}(\bx) =  \bx \phi = %\hat{\phi}(x(0), x(1)  \dots, x(n-1)) =
+  (x(\phi(0)), x(\phi(1)),\dots, x(\phi(n-1))). 
+  \]
+  Thus, $\phi$ induces an operation on $S^n/D$ since, for 
+  $\bd = (s, s, \dots, s) \in D$ and for $\bx \in S^n$, we have
+  %$(\bx \bd)(i) = x(i)d(i) = x(i)s$, so
+  \begin{align*}
+  \bx \bd &= (x(0)d(0), x(1)d(1), \dots , x(n-1)d(n-1))\\
+  &= (x(0)s, x(1)s, \dots , x(n-1)s).
+  \end{align*}
+  Therefore,
+  \[\hat{\phi}(\bx \bd) =(x (\phi(0)) s, x(\phi(1))s, \dots , x(\phi(n-1))s)=
+  \hat{\phi}(\bx) \bd,\]
+  so $\hat{\phi}(\bx D)  = \hat{\phi}(\bx) D$.  Finally, add the set of operations 
+  $\hat{F} = \{\hat{\phi} \mid \phi \in F\}$ to $\<S^n/D, S^n\>$, yielding the
+  new algebra  $\<S^n/D, S^n \cup \hat{F}\>$, and observe
+  that a congruence $\theta \in \Con\<S^n/D, S^n\>$ remains a congruence of
+  $\<S^n/D, S^n \cup \hat{F}\>$ if and only if it corresponds to a partition on
+  $n$ that is invariant under $F$.
+\end{proof}
+
+\begin{remarks}\
+  \begin{enumerate}
+  \item
+    %% From the proof of Theorem~\ref{thm:duals-interv-subl} we can see how
+    %% large the algebra representing the dual of a lattice with be (assuming we
+    %% use the method described in the proof).  
+    If the original lattice $L$ is representable as the congruence lattice of
+    an algebra with $n$ elements, then the method described in the proof of
+    Theorem~\ref{thm:duals-interv-subl} above gives a representation of the dual
+    $L'$ as the congruence lattice of the algebra
+    $\<S^n/D, S^n \cup \hat{F}\>$, which has $|S^n/D| = |S|^{n-1}$ elements.
+    Since the smallest simple nonabelian group is $A_5$, which has 60 elements,
+    the resulting algebra with have at least $60^{n-1}$ elements.
+  \item 
+    Elaborating on the last sentence of the proof of Theorem~\ref{thm:duals-interv-subl}, 
+    %% for each $\theta \in \Con \< S^{n}/D, S^{n}\> \cong \lb D, S^n \rb$,
+    %% there corresponds a subgroup $\hat{f}[S^n] \in \lb D, S^n\rb$ such that 
+    %% $\bx\mathrel{\theta} \by$ iff $\bx^{-1}\by = \bz\in \hat{f}[S^n]$.
+    %% Now if $\hat{\phi}\in \hat{F}$, then $(\hat{\phi}\bx, \hat{\phi}\by) \in \theta$ iff 
+    %% \[ (x({\phi(0)})^{-1}y(\phi(0)), \dots,  x(\phi(n-1))^{-1} y(\phi(n-1))) =
+    %% (z(\phi(0)),z(\phi(1)),\dots, z(\phi(n-1)))\in \hat{f}[S^n]. \]
+    %% Better:
+    take $\bz\in \hat{f}[S^n]$ with $\ker \bz = \ker f$, so $f(i)=f(j)$ iff
+    $z(i) = z(j)$.
+    Now suppose $\phi\in F$ does not respect $\ker f$, so there exists
+    $(i,j) \in \ker f$ such that $(\phi(i), \phi(j)) \notin \ker f$.
+    Then $\phi \bz \notin \hat{f}[S^n]$, since $z(\phi(i)) \neq z(\phi(j))$.
+  \end{enumerate}
+\end{remarks}
+
+\subsection{Union of a filter and ideal}
+\label{sec:union-filter-ideal}
+The lemma in this section (Lemma~\ref{lemma:union-filter-ideal})
+was originally proved by John Snow (see \cite{MR1774743} and \cite{MR2026829}),
+using primitive positive formulas.  We provide an alternative 
+proof that more directly produces the algebra that represents
+the lattice.
+
+
+%for two reasons.
+%First, the lemma is a useful tool for proving that certain 
+%finite lattices 
+%are representable as congruence lattices, and providing a 
+%proof helps to keep the
+%paper self-contained. More importantly, however, our proof is 
+%more direct than
+%the proof via primitive positive fomulas in that we construct the 
+%algebras that the lemma claims exist.  For our purposes this 
+%is preferable
+%since, when trying to prove that a given lattice is representable, 
+%whenever possible we 
+%construct an algebra that represents it. 
+
+%\textcolor{red}{The above paragraph needs to be shortened.}
+
+Before stating the lemma, we need a couple of definitions.  (These will be
+discussed in greater detail in Section~\ref{sec:closure-method}.)
+Given a relation $\theta \subseteq X\times X$, we say that the map 
+$f: X^n\rightarrow X$ \emph{respects} $\theta$ and we write 
+$f(\theta) \subseteq \theta$ provided $(x_i, y_i)\in \theta$ implies
+$(f(x_1, \dots, x_n), f(y_1, \dots, y_n))\in \theta$.
+For a set $L\subseteq \EqX$ of equivalence relations we define
+\[
+\lambda(L) = \{f\in X^X: (\forall \theta \in L) \; f(\theta) \subseteq \theta \},
+\]
+which is the set of all unary maps on $X$ which respect all relations in $L$.
+\begin{lemma} 
+  \label{lemma:union-filter-ideal}
+  Let $X$ be a finite set.
+  If $L \leq \EqX$ is representable and $L_0\leq L$ is a sublattice with universe
+  $\upalpha\cup \downbeta$ where $\upalpha=\{x\in L \mid \alpha \leq x\}$ and 
+  $\downbeta=\{x\in L \mid x\leq \beta\}$ for some $\alpha, \beta \in L$, then $L_0$ is representable.
+\end{lemma}
+
+\vskip3mm
+
+\begin{figure}[htp]
+\begin{center}
+  \begin{tikzpicture}[scale=.35]
+    \input{inputs/tikz/filter-ideal.tex}
+    %\draw (0,-1.5) node {$L_0 \leq  L$};
+    \draw (alpha) node [left]{$\alpha$};
+    \draw (beta) node [right]{$\beta$};
+    \node (theta) at (1.6,5)  [draw,circle,inner sep=\dotsize] {};
+    %\draw (-.3,3.5) node {$\theta$};
+    \draw (theta) node [left]{$\theta$};
+  \end{tikzpicture}
+\end{center}
+\caption{$L_0 \le L_1$}
+\end{figure}
+
+\vskip3mm
+
+\begin{proof}
+  Assume $L_0 \ncong \two$, otherwise the result holds trivially. 
+  Since $L\leq \EqX$ is representable, we have $L = \Con
+  \<X, \lambda(L)\>$ (cf.~Section~\ref{sec:closure-method}).  Take an arbitrary
+  $\theta \in L \setminus L_0$. Since $\theta \notin \upalpha$, 
+  % -- that is, $\alpha$ is not below $\theta$ --  
+  there is a pair 
+  $(a,b) \in \alpha \setminus \theta$.  Since $\theta \notin \downbeta$, there is
+  a pair $(u,v)\in \theta\setminus \beta$. Define $h\in X^X$ as follows:
+  \begin{equation}
+    \label{eq:h}
+    h(x) = \begin{cases}
+      a,& \quad x\in u/\beta,\\
+      b,& \quad \text{ otherwise.}
+    \end{cases}
+  \end{equation}
+  Then, $\beta \leq \ker h = (u/\beta)^2 \cup ((u/\beta)^c)^2$, where $(u/\beta)^c$ denotes the
+  complement of the $\beta$ class containing $u$.  Therefore, $h$ respects every
+  $\gamma \leq \beta$.  Furthermore, $(a, b) \in \gamma$ for all $\gamma \geq \alpha$,
+  so $h$ respects every $\gamma$ above $\alpha$.  This proves that $h\in \lambda(L_0)$.
+  Now, $\theta$ was arbitrary, so we have proved that for every $\theta \in L
+  \setminus L_0$ there exists a function in $\lambda(L_0)$ which respects every
+  $\gamma \in \upalpha\cup \downbeta = L_0$, but violates $\theta$.  Finally,
+  since 
+  $L_0 \leq L$, we have $\lambda(L)\subseteq \lambda(L_0)$.  Combining these
+  observations, we see that every $\theta \in \EqX \setminus L_0$ is
+  violated by some function in $\lambda(L_0)$. Therefore, $L_0 = \Con \< X, \lambda(L_0)\>$.
+\end{proof}
+
+\subsection{Ordinal Sums}
+\label{sec:ordinal-sums}
+%\todo{Revise this section.  Peter has written up some nice lemmas and
+%  theorems on this topic which now appear below in a subsection called
+%  ``Ordinal Sums II,'' but that material should be integrated with and/or
+%  replace the material in this subsection.} 
+For two lattices $L,M$ the \emph{adjoined ordinal sum}  
+is denoted by $L\oplus_a M$ and is defined on $L\uplus (M\setminus\{0\})$
+by $x\le y$ iff $x\in L,y\in M$ or ($x,y\in L$ and $x\le^L y$) or ($x,y\in M$
+and $x\le^M y$). The \emph{ordinal sum} $L\oplus M$ is defined as $L\oplus_a\two\oplus_a M$ (see Figure~\ref{fig:ord_adjord}).
+
+The following theorem is a consequence of 
+McKenzie's shift product construction~\cite{McKenzie:1984}. 
+%, which we describebriefly below.
+% \todo{Possibly add a short description of the shift product.}
+\begin{theorem}
+  \label{thm:ordinal-sums}
+  If $L_1, \dots, L_n \in \sL_{con}$ is a collection of representable lattices, then
+  the ordinal sum and the adjoined ordinal sum, shown in
+  Figure~\ref{fig:ord_adjord}, are representable.
+\end{theorem}
+A more direct proof of Theorem~\ref{thm:ordinal-sums} follows the argument given
+by John Snow in~\cite{Snow:2000}.  As noted above, 
+\Jiri \Tuma proved that
+the class of finite representable lattices is closed under direct products.
+In fact, if $L_1$ and 
+$L_2$ are representable as congruence lattices of algebras of cardinality $m$ and $n$ respectively, then $L_1 \times L_2$ is the congruence lattice of an algebra of
+cardinality $mn$. Now note that the
+adjoined ordinal sum of $L_1$ and $L_2$ is the union, $\alpha^\uparrow \cup
+\beta^\downarrow$,  of a filter and ideal  
+in the lattice $L_1 \times L_2$, where
+$\alpha = \beta = 1_{L_1} \times 0_{L_2}$.  
+Therefore, by Lemma~\ref{lemma:union-filter-ideal},
+the adjoined ordinal sum is representable.  A trivial induction argument proves the
+result for adjoined ordinal sums of $n$ lattices.  The same result for ordinal
+sums (Figure~\ref{fig:ord_adjord} left) follows since the two-element lattice is
+obviously representable. 
+
+  \begin{figure}[h!]
+    \label{fig:ord_adjord}
+    \centering
+        {\scalefont{.8}
+          \begin{tikzpicture}[scale=0.4]
+            \input{inputs/tikz/general-ordinal-sum.tex}
+            \draw (0,-4) node {$L_1$};
+            \draw (0,9) node {$L_n$};
+            \draw (0,1) node {$L_2$};
+          \end{tikzpicture}
+          \hskip1cm
+          \begin{tikzpicture}[scale=0.4]
+            \input{inputs/tikz/adjoined-ordinal-sum.tex}
+            \draw (0,-2) node {$L_1$};
+            \draw (0,8) node {$L_n$};
+            \draw (0,2) node {$L_2$};
+          \end{tikzpicture}
+        }
+        \caption{The ordinal sum (left) and the adjoined ordinal sum (right) of
+          the lattices $L_1, \dots, L_n$.}
+  \end{figure}
+
+%\subsection{Ordinal Sums II}
+%\todo{Merge this subsection with the subsection ``Ordinal Sums I.''}
+%\newcommand{\m}{\mathbf}
+
+Rather than using an algebra of cardinality $mn$,
+we now show that $L_1\oplus_aL_2$ is representable as the congruence 
+lattice of an algebra of cardinality $m+n-1$.
+Let $\bA,\bB$ be two finite algebras with universes $A=\{a_0,\dots,a_{m-1}\}$ and 
+$B=\{b_0,\dots,b_{n-1}\}$ respectively,
+such that $L_1=\Con(\bA)$ and $L_2=\Con(\bB)$. 
+Define a unary algebra $\bA_{m,n}$ with $m+n-1$ elements as follows: 
+the universe $A_{m,n}=A\uplus B_1$ where
+$B_1=\{b_1,\dots,b_{n-1}\}\subset B$, and for each function $h:B_1\to A$ 
+define a unary operation on $A_{m,n}$ by
+$$\hat h(x)=\begin{cases}h(x)&\text{if $x\in B_1$}\\ 
+x&\text{otherwise.}\end{cases}$$
+
+\begin{lemma}
+  For $m,n\ge 1$ the lattice $\Con(\bA_{m,n})$ is isomorphic to
+  $\Eq(\mm)\oplus_a \Eq(\nn)$. 
+\end{lemma}
+\begin{proof}
+  Let $\alpha$ be the equivalence relation
+  $A^2\cup\{(b_1,b_1),\dots,(b_{n-1},b_{n-1})\}$, so as a partition it is  
+  $a_0,\dots,a_{m-1}|b_1|b_2|\dots|b_{n-1}$. 
+  Note that $\Eq(\mm)\oplus_a \Eq(\nn)$ is isomorphic to the sublattice
+  of $\Eq(A\uplus B_1)$ of all equivalence relations comparable to $\alpha$, since
+  $\alpha$ has a unique non-singleton block of size $m$, and $n$ blocks
+  altogether. We claim that this sublattice is the congruence lattice of $\bA_{m,n}$.  
+
+  Suppose $\theta\le\alpha$, and let $(x,y)\in\theta$. Then $x,y\in A$ or $x=y$,
+  hence for any operation $\hat h$ we  have $\hat h(x)=x$ and $\hat h(y)=y$ or
+  $\hat h(x)=\hat h(y)$, so $(\hat h(x),\hat h(y))\in\theta$. 
+
+  Suppose $\alpha\le\theta$, and let $(x,y)\in\theta$. Since $A^2\subseteq\alpha$
+  and since the range of each $\hat h$ is $A$ it follows that 
+  $(\hat h(x),\hat h(y))\in\theta$. 
+
+  Now suppose $\theta$ is incomparable with $\alpha$. Then $A^2$ is not a subset
+  of $\theta$, hence there exist $(x,y)\in A^2\setminus\theta$ and
+  $(u,v)\in\theta\setminus\alpha$. If $u,v\in B_1$ then choose a function $h$ (as
+  in the definition of $\bA_{m,n}$) such that $h(u)=x$ and $h(v)=y$, in which
+  case $\hat h$ is an operation that shows $\theta$ is not a congruence. 
+  If $u\in B_1$, but $v\in A$, note that we cannot have both $(x,v)$ and $(y,v)$
+  in $\theta$ (else $(x,y)\in\theta$). Assume without loss of generality 
+  that $(x,v)\notin\theta$ and choose $h$ such that $h(u)=x$, then again $\hat h$
+  shows that $\theta$ is not a congruence. 
+  The case $u\in A$, $v\in B_1$ is similar, and $u,v\in A$ is excluded since
+  $(u,v)\notin\alpha$. 
+\end{proof}
+
+%\newpage
+
+\begin{theorem}
+  Suppose $\bA=\<A,F\>$ and $\bB=\<B,G\>$ are unary algebras with
+  $A=\{a_0,\dots,a_{m-1}\}$, $B=\{b_0,\dots,b_{n-1}\}$ and 
+  $A\cap B=\{a_0\}=\{b_0\}$ $($so $a_0,b_0$ are identified$)$. Let $\mathbf C$ be the
+  algebra $\bA_{m,n}$ expanded with the operations 
+  $$
+  \hat f(x)=\begin{cases}f(x)&\text{if $x\in A$}\\
+  f(a_0)&\text{otherwise}\end{cases}\qquad\qquad
+  \hat g(x)=\begin{cases}g(x)&\text{if $x\in B$}\\
+  g(b_0)&\text{otherwise}\end{cases}
+  $$
+  for $f\in F$ and $g\in G$. Then $\Con(\mathbf C)$ is isomorphic to
+  $\Con(\bA)\oplus_a\Con(\bB)$. 
+\end{theorem}
+
+\begin{proof}
+  Since $\mathbf C$ is an expansion of $\bA_{m,n}$ it follows from the preceding lemma
+  that $\Con(\mathbf C)$ is a sublattice of 
+  $\{\theta\in \Eq(A\cup B):\theta\le\alpha$ or $\alpha\le\theta\}$ where,
+  as before, $\alpha=A^2\cup\text{id}_B$. Note that $\alpha\in\Con(\mathbf C)$,
+  so it suffices to show that $\{\theta\in\Con(\mathbf C):\theta\le\alpha\}$ is
+  isomorphic to $\Con(\bA)$ and $\{\theta\in\Con(\mathbf C):\alpha\le\theta\}$ 
+  is isomorphic to $\Con(\bB)$. The second isomorphism follows from the
+  observation that $\mathbf C/\alpha$ is isomorphic to $\bB$ via the map 
+  $A\mapsto b_0$ and $\{b_i\}\mapsto b_i$ for $i\ge 1$. For the first isomorphism,
+  note that the operations $\hat g$, $\hat h$ preserve all equivalence relations
+  below $\alpha$. Similarly it is straight forward to check that $\hat f$
+  preserves $\theta\le\alpha$ iff $f$ preserves $\theta\cap A^2$. 
+  Hence the map $\theta\mapsto\theta\cap A^2$ is the required isomorphism.
+\end{proof}
+
+%The remarks below are not conclusive
+%Now assume $\bA$ and $\bB$ are algebras of minimal cardinality 
+%with congruence lattices
+%isomorphic to $L_1$ and $L_2$ respectively. Then it seems likely that the algebra 
+%$\mathbf C$ above has minimal cardinality with respect to having a congruence
+%lattice isomorphic to $L_1\oplus_a L_2$. 
+%Suppose $\mathbf C'$ is a smaller algebra
+%with the same congruence lattice, and let $\alpha$ be the congruence in the
+%``middle'' of the ordinal sum. Then $\mathbf C'/\alpha$ has a congruence lattice
+%isomorphic to $L_2$, hence $|\mathbf C'/\alpha|=|\bB|=$ number of blocks in
+%$\alpha$. However, $\alpha$ does not need to have a unique nontrivial block, so
+%it is not clear at this point how to obtain a smaller algebra $\bA'$ such that
+%$\Con(\bA')$ is isomorphic to $L_1$. 
+
+%% -- End intro.tex file insertion -------------------------------
+
+
+%/////////////////////////////////////////////////////////
+
+\textcolor{purple}{I am deleting this whole section and the next one.}
+
+\begin{comment}
+
+\section{Concrete Representations}
+\label{sec:concr-repr}
+%%%% \input{inputs/concrete.tex} (include all major inputs in one file)
+%% -- Begin concrete.tex file insertion -------------------------------
+
+In this section, we introduce a strategy called the \defn{closure method} 
+that is sometimes useful for constructing a finite algebra with a congruence lattice
+of a given shape.
+
+Recall that  $\EqX$ denotes the lattice of equivalence relations on $X$.
+We often abuse notation and identify $\EqX$ with the lattice of partitions of the set $X$.
+
+
+
+\subsection{Concrete versus abstract representations}
+As Bjarni J\'onsson explains in~\cite{Jonsson:1972}, there are two types of
+representation problems for congruence lattices, the concrete and the
+abstract.  The \emph{concrete representation problem} asks whether a specific family of
+equivalence relations on a set $A$ is equal to $\Con(\bA)$ for some
+algebra $\bA$ with universe $A$.  The \defn{abstract representation problem}
+asks whether a given lattice is isomorphic to $\Con(\bA)$ for some algebra~$\bA$.
+
+These two problems are closely related, and have become even more so since the
+publication in 1980 
+of~\cite{Pudlak:1980}, in which Pavel \Pudlak and
+\Jiri \Tuma prove that every finite
+lattice can be embedded as a 
+spanning sublattice\footnote{Recall, by a 
+  \defn{spanning sublattice}
+  of a bounded lattice $L_0$, we mean a sublattice $L\leq L_0$ that has the same top and
+  bottom as $L_0$.}
+of the lattice $\EqX$ of equivalence relations on a finite set $X$.   
+Given this result, we see that even if our goal is to solve the abstract
+representation problem for some (abstract) lattice $L$, then
+we can embed $L$ into $\EqX$ as $L\cong L_0\leq \EqX$, for some finite set
+$X$, and then try to solve the concrete representation problem for $L_0$.  
+
+A point of clarification is in order here.  The term 
+\defn{representation} 
+is overused in the literature about the finite lattice
+representation problem.  On the one hand, given a finite lattice $L$, if there
+is a finite algebra $\bA$ such that $L \cong \Con(\bA)$, then $L$ is called a
+\defn{representable lattice}.  On the other hand, if $L$ is isomorphic to a sublattice 
+$L_0\leq \EqX$, then $L_0$ is sometimes called a 
+\defn{concrete representation} of $L$ (whether or not $L_0$ is the congruence lattice of an algebra).    
+Below we will define the notion of a \defn{closed concrete representation}, and if we
+have this special kind of concrete representation of a give lattice $L$, then  $L$
+is indeed representable in the first sense (that is, $L$ is isomorphic to the congruence
+lattice of a finite algebra).
+
+As we will see below, there are many examples in which a particular concrete
+representation $L_0\leq \EqX$ of $L$ is not a congruence lattice of a
+finite algebra.  (In fact, we will describe general situations in which we can
+guarantee that there are no non-trivial\footnote{By a 
+  \defn{non-trivial function} we mean a function that is
+  not constant and not the identity.} operations which respect the equivalence
+relations of $L_0$.)  This does not imply $L \notin \sL_{con}$.  It may
+be that $L_0$ is not the ``right'' concrete representation of $L$, and
+perhaps we can find some other sublattice of $\EqX$ that is both a congruence lattice
+and isomorphic to $L$. %%  = \Con \<X, \lambda(L_1)\>$.
+%% \marginpar{$\lambda(L_1)$ is only defined on the next page?}
+
+
+\subsection{The closure method}
+\label{sec:closure-method}
+The idea described in this section
+first appeared in \emph{Topics in Universal Algebra}~\cite{Jonsson:1972},
+pages
+174--175, where J\'onsson states, ``these or related results were discovered
+independently by at least three different parties during the summer and fall of
+1970: by Stanley Burris, Henry Crapo, Alan Day, Dennis Higgs and Warren Nickols
+at the University of Waterloo, by R.~Quackenbush and B.~Wolk at the University
+of Manitoba, and by B.~J\'{o}nsson at Vanderbilt University.''
+
+Let $X^X$ denote the set of all (unary) maps from the set $X$ to itself, and let 
+$\EqX$ denote the lattice of equivalence relations on the set $X$.  If $\theta
+\in \EqX$ and $h\in X^X$, we write $h(\theta) \subseteq \theta$ and say
+that ``$h$ respects $\theta$'' if and only if for all $(x,y)\in X^2$ $(x,y)\in
+\theta$ implies 
+$(h(x),h(y)) \in \theta$.  If $h(\theta) \nsubseteq \theta$, we sometimes say
+that ``$h$ violates $\theta$.''
+
+For $L\subseteq \EqX$ define
+\[
+\lambda(L) = \{h\in X^X: (\forall \theta \in L) \; h(\theta) \subseteq \theta \}.
+\]
+
+For $H\subseteq X^X$ define
+\[
+\rho(H) = \{\theta \in \EqX \mid   (\forall h\in H) \; h(\theta) \subseteq \theta\}.
+\]
+The map $\rho \lambda$ is a \defn{closure operator} on $\Sub(\EqX)$.
+That is, $\rho \lambda$ is
+\begin{itemize}
+\item \emph{idempotent:}\footnote{In fact, $\rho \lambda \rho = \rho$ and 
+  $\lambda \rho \lambda = \lambda$.} $\rho \lambda \rho \lambda = \rho \lambda$;
+\item \emph{extensive:} $L \subseteq \rho \lambda (L)$ for every $L \leq \EqX$;
+\item \emph{order preserving:} $\rho \lambda (L) \leq \rho \lambda (L_0)$ if $L \leq L_0$.
+\end{itemize}
+Given $L\leq \EqX$, if $\rho\lambda(L) = L$, then we say $L$ is a 
+%\defn{closed sublattice of $\EqX$}, in which case we clearly have
+\emph{closed} sublattice of $\EqX$, in which case we clearly have
+\[L = \Con \<X, \lambda(L)\>.\]
+This suggests the following strategy for solving the representation problem for a
+given abstract finite lattice $L$: search for a concrete representation $L \cong
+L_0\leq \EqX$,
+compute $\lambda(L_0)$, compute $\rho\lambda(L_0)$, and determine whether 
+$\rho\lambda(L_0) = L_0$.  If so, then we have solved the abstract representation
+problem for $L$, by finding a \defn{closed concrete representation}, or simply
+\emph{closed representation}, of $L_0$.  We call this strategy the \defn{closure method}.
+
+We now state without proof a well known theorem which shows that the finite lattice
+representation problem can be formulated in terms of closed concrete
+representations (cf.~\cite{Jonsson:1972}).
+\begin{theorem}\label{Concrete-thm-3}
+  If $L \leq \EqX$, then $L= \Con (\bA)$ for some algebra 
+  $\mathbf{A} = \langle X, F\rangle$ if and only if $L$ is closed.
+\end{theorem}
+
+%% In the remaining sections of this chapter, we consider various aspects of the
+%% closure method and prove some results about it.  Later, in
+%% Section~\ref{sec:seven-elem-latt}, we apply it to the problem of finding
+%% closed representations of all lattices of small order.  
+Before proceeding, we introduce a slightly different set-up than the
+one introduced above that we have found particularly useful
+for implementing the closure method on a computer. Instead of considering the
+set of equivalence relations on a finite set, we work with the set of idempotent
+decreasing maps.  These were introduced above in
+Section~\ref{sec:duals-interv-subl-detail}, but we briefly review the definitions here
+for convenience.
+
+\textcolor{red}{Note sure we use the stuff below explicitly. Might delete it and just refer
+to my (RF) paper on computing congruences.}
+
+As above, given a totally ordered set $X$, 
+%consider the subset of the set $X^X$ of all functions that map $X$ into itself.  
+we let $\IC(X) = \{f\in X^X: f^2 = f \text{ and } f(x) \leq x\}$, and 
+define the partial order $\sqsubseteq$ on this set as follows:
+\[
+f\sqsubseteq g \quad \Leftrightarrow \quad \ker f \leq \ker g.  
+\]
+As noted above, 
+this makes \icx into a lattice that is isomorphic to $\EqX$.   
+Define a relation $R$ on $X^X \times \icx$ as follows: 
+\[
+(h,f) \in R \quad \Leftrightarrow \quad (\forall (x,y) \in \ker f)\; (h(x),h(y))
+\in \ker f.
+\]
+If $h\, R\, f$, we say that  $h$ \emph{respects} $f$.
+
+Let $\sF = \power{\icx}$ and $\sH = \power{X^X}$ be partially ordered by set
+inclusion, and define the maps 
+$\lambda: \sF \rightarrow \sH$ and $\rho: \sH \rightarrow \sF$ as follows:
+\[
+\lambda(F) = \{h\in X^X: \forall f\in F,\, h\, R \,f\} \quad (F \in \sF)
+\]
+\[
+\rho(H) = \{f\in \icx: \forall h\in H,\, h\, R\, f\} \quad (H \in \sH)
+\]
+The pair $(\lambda, \rho)$ defines a \defn{Galois correspondence} between
+$\icx$ and $X^X$.  That is, $\lambda$ and $\rho$ are 
+antitone %(order-reversing) 
+maps such that $\lambda \rho \geq \id_{\sH}$ and $\rho
+\lambda \geq \id_{\sF}$.  In particular, for any set $F \in \sF$ we have 
+$F \subseteq \rho \lambda (F)$ and
+%These statements are all trivial verifications, and a couple of easy consequences are:
+\begin{enumerate}
+\item  $\rho\lambda\rho = \rho$ and $\lambda\rho \lambda= \lambda$,
+\item $\rho \lambda$ and $\lambda \rho$ are idempotent.
+\end{enumerate}
+
+Since the map $\rho \lambda$ from $\sF$ to itself is idempotent, extensive, 
+%($F \subseteq \rho \lambda (F)$) 
+and order preserving, it is a 
+\defn{closure operator} 
+on $\sF$, and we say a set $F\in \sF$ is
+\emph{closed} if and only if $\rho\lambda(F) = F$. Equivalently,
+$F$ is closed if and only if $F = \rho(H)$ for some $H\in \sH$.
+
+%% -- End concrete.tex file insertion -------------------------------
+
+
+
+%/////////////////////////////////////////////////////////
+\section{Distributive lattices}
+\label{sec:distr-latt}
+%%%% \input{inputs/distributive.tex}  (include all major inputs in one file)
+%% -- Begin distributive.tex file insertion -------------------------------
+
+\textcolor{red}{This section should go.}
+
+\todo{Cite Birkhoff result about every finite distributive lattice being the
+  congruence lattice of a finite lattice.}
+
+
+A lattice $L$ is called 
+\defn{strongly representable} 
+if whenever $L \cong L_0 \leq \EqX$ for some $X$ then there is an algebra based on $X$
+whose congruence lattice is $L_0$.  In other words, \emph{every} 
+distributive spanning sublattice of the lattice of equivalence relations on a finite set
+$X$ is equal to the congruence lattice of an algebra $\<X, F\>$, for some
+collection $F$ of operations on $X$.
+
+\index{Berman, Joel} \index{Quackenbush, R.} \index{Wolk, B.}
+\begin{theorem}[Berman~\cite{Berman:1970}, Quackenbush and Wolk~\cite{Quack:1971}]
+  Every finite distributive lattice is strongly representable.
+\end{theorem}
+
+\begin{remarks}
+  By Theorem \ref{Concrete-thm-3} above, the result of Berman, Quackenbush and
+  Wolk says, if $L$ is a finite distributive lattice then every embedding
+  $L\cong L_0\leq \EqX$ is closed. The following proof is only slightly
+  shorter than to the original in~\cite{Quack:1971}, and the methods are similar. 
+\end{remarks}
+
+\begin{proof}
+  Without loss of generality, suppose $L\leq \EqX$. 
+  Fix $\theta\in \EqX \setminus L$ and define 
+  $\theta^* = \Meet \{ \gamma \in L \mid \gamma \geq \theta \}$ and 
+  $\theta_* = \Join \{ \gamma \in L \mid \gamma \leq \theta \}$.
+  Let $\alpha$ be a join irreducible in $L$ below $\theta^*$ and not below
+  $\theta_*$. 
+  \marginpar{wjd: should we keep or delete this proof?}
+  Note that $\alpha$ is not below $\theta$.
+  Let $\beta = \Join \{ \gamma \in L \mid \gamma \ngeq \alpha \}$.
+  If $\beta$ were above $\theta$, then $\beta$ would be above $\theta^*$,
+  and so $\beta$ would be above $\alpha$. But $\alpha$ is join prime, so $\beta$ is not
+  above $\theta$. Therefore, there exist $(u, v) \in \alpha \setminus \theta$
+  and $(x, y) \in \theta \setminus \beta$.  
+  %% (Note that $u \neq v$ and $x \neq y$.)
+  As in~(\ref{eq:h}), define
+  \begin{equation*}
+    h_\theta(x) = \begin{cases}
+      a,& \quad x\in u/\beta,\\
+      b,& \quad \text{ otherwise.}
+    \end{cases}
+  \end{equation*}
+  It is clear that $h_\theta$ violates $\theta$ but respects all
+  relations in $\upalpha = \{\gamma \in L: \alpha \leq \gamma\}$ and 
+  $\downbeta = \{\gamma \in L: \gamma \leq \beta\}$. Also,
+  $L = \upalpha \cup \downbeta$.
+  Finally, since $\theta$ was arbitrary, such an $h_\theta$ exists
+  for each $\theta \in \EqX \setminus L$, so we have
+  $L =\Con \langle X, \sH\rangle$, where
+  $\sH = \{h_\theta: \theta \in \EqX \setminus L\}$.
+\end{proof}
+
+%% -- End distributive.tex file insertion -------------------------------
+
+\end{comment}
+
+
+%/////////////////////////////////////////////////////////
+\section{Congruence Lattices of Group Actions}
+\label{sec:congr-latt-group}
+%%%% \input{inputs/groupactions.tex}  (include all major inputs in one file)
+%% -- Begin groupactions.tex file insertion -------------------------------
+
+\textcolor{purple}{Delete this subsection unless William needs it when explaining
+his GAP algorithms.}
+
+%%%%%%%%%%%%%%%%%%%%% TRANSITIVEGSETS %%%%%%%%%%%%%%%%%%%%%%%%%5
+Let $X$ be a finite set and consider the set $X^X$ of all maps from $X$ to
+itself, which, when endowed with composition of maps and the identity mapping,
+forms a monoid, $\<X^X, \circ, \id_X\>$.  The submonoid $S_X$ of all bijective
+maps in $X^X$ is a group, the \defn{symmetric group on} $X$.  When the
+underlying set is more complicated, or for emphasis, we denote the symmetric
+group on $X$ by $\Sym(X)$.  When the  
+underlying set isn't important, we usually write $S_n$ to denote the
+symmetric group on an $n$-element set. 
+
+%% If we have defined some set $F$ of basic operations on $X$, so that
+%% $\bX = \<X, F\>$ is an algebra, then two other important submonoids of
+%% $X^X$ are $\End \bX$, the set of maps in $X^X$ which respect all 
+%% operations in $F$, and $\Aut \bX$, the set of bijective maps in  $X^X$ which
+%% respect all operations in $F$.  It is apparent from the definition that
+%% $\Aut\bX= S_X \cap \End \bX$, and  $\Aut\bX$ is a submonoid of $\End \bX$
+%% and a subgroup of $S_X$.  These four fundamental monoids associated with the
+%% algebra $\bX$, and their relative ordering under inclusion, are shown in the diagram
+%% below. 
+
+%% \begin{figure}
+%% \begin{center}
+%%   \begin{tikzpicture}[scale=.7]
+%%     \node (Aut) at (0,0.2) [draw,circle,inner sep=1pt] {};
+%%     \draw[font=\small] (0,-.30) node {$\Aut\bX$};
+
+%%     \node (End) at (-1.6,2) [draw,circle,inner sep=1pt] {};
+%%     \draw[font=\small] (-2.6,2) node {$\End \bX$};
+
+%%     \node (Sx) at (1.6,2) [draw,circle,inner sep=1pt] {};
+%%     \draw (2.2,2) node {$S_X$};
+
+%%     \node (XX) at (0,3.8) [draw,circle,inner sep=1pt] {};
+%%     \draw (0,4.2) node {$X^X$};
+%%     \draw[semithick,dotted]    (Aut) to (End) to (XX) to (Sx) to (Aut);
+%%   \end{tikzpicture}
+%% \end{center}
+%% \caption{ \ }
+%% \end{figure}
+
+
+
+Given a finite group $G$, and an algebra $\bX = \<X, F\>$, a
+\index{representation!of a finite group}%
+\emph{representation} of $G$ on $\bX$ is a group homomorphism
+from $G$ into $\Aut(\bX)$.  That is, a representation of $G$ is a mapping
+$\varphi : G \rightarrow \Aut(\bX)$ which satisfies $\varphi(g_1 g_2) =
+\varphi(g_1) \circ \varphi(g_2)$, where (as above) $\circ$ denotes composition
+of maps in $\Aut(\bX)$.
+
+\subsection{Transitive $G$-sets}
+A representation $\varphi : G \rightarrow \Aut(\bX)$ defines an action by $G$ on the
+set $X$, as follows: $\phi(g): x \mapsto x^{\varphi(g)}$.  If $\varphi(G) \leq
+\Aut(\bX)$
+denotes the image of $G$ under $\varphi$, we call the algebra $\< X, \phi(G)\>$
+a \defn{G-set}.
+% \footnote{More 
+% generally, a \Gset\ is sometimes defined to be a pair $(X, \varphi)$, where
+% $\varphi$ is a homomorphism from a group into the symmetric group $S_X$, see
+% e.g.~\cite{Suzuki:1982}.}   
+The action is called
+\index{transitive!action}%
+\emph{transitive} if for each pair $x, y \in X$ there is some $g\in
+G$ such that $x^{\phi(g)} = y$. 
+A group that acts transitively on some set is called a 
+\index{transitive!group}%
+\emph{transitive group}.
+(Without specifying the set, however, this term is meaningless, since
+every group acts transitively on some sets and intransitively on others.)
+A representation $\varphi$ is called \emph{transitive} if the resulting action
+is transitive. 
+A representation  $\varphi : G \rightarrow \Aut(\bX)$ is called 
+\emph{faithful}
+\index{faithful!representation}%
+if it is a monomorphism, in which case $G$ is isomorphic to its image under
+$\varphi$, which is a subgroup of $\Aut(\bX)$.  We also say, in this case, that
+the group $G$ acts faithfully, and call it a \defn{permutation group}.
+
+Suppose $G$ acts on the set $X$ and supposed $U$ is the set of ``unmoved''
+points in $X$.  That is, $u\in U$ if every element of $G$ leaves $u$ fixed.
+The \defn{degree} of such a group action is the cardinality of
+$|X\setminus U|$, that is, the cardinality of the set of moved points.
+
+For our purposes the most important representation of a group $G$ is its action 
+on the set of cosets of a subgroup.  That is, for any subgroup $H\leq G$,
+we define a transitive permutation representation of $G$, which we
+will denote by $\rho_H$.  Specifically, $\rho_H$ is a group homomorphism
+from $G$ into the symmetric group $\Sym(G/H)$ of permutations on the set $G/H =
+\{H, Hx_1, Hx_2, \dots \}$ of \emph{right} cosets of $H$ in $G$.  
+
+The action is simply right multiplication by elements of $G$. That is,
+$(Hx)^{\rho(g)}= Hxg$.
+% Clearly, $\rho(g_1 g_2) = \rho(g_1)\rho(g_2)$ for all $g_1,
+% g_2 \in G$, so $\rho$ is a group homomorphism.
+Each $Hx$ is a point in the set $G/H$, and the
+\defn{point stabilizer} of $Hx$ in $G$ is defined by
+$G_{Hx} = \{g\in G \mid Hxg = Hx \}$.  Notice that 
+$G_H = \{g\in G \mid Hg = H \} = H$ is the point stabilizer of $H$ in $G$, and 
+\[
+G_{Hx} =\{g\in G \mid Hxgx^{-1}  = H \} = 
+x^{-1} G_H x  = x^{-1} H x = H^x.
+\]
+Thus, the kernel of the homomorphism $\rho$ is 
+\[
+\ker \rho = \{g\in G \mid \forall x \in G,\; Hxg = Hx \} = 
+\bigcap_{x\in G}G_{Hx} = \bigcap_{x\in G} x^{-1} H x  = \bigcap_{x\in G} H^x.
+\]
+Note that $\ker \rho$ is the largest normal subgroup of $G$ 
+contained in $H$, also known as the \defn{core} of $H$ in $G$, which we denote
+by $\core_G(H)$.
+
+If the subgroup $H$ happens to be \defn{core-free}, that is,
+$\core_G(H)=1$, 
+then $\rho : G \hookrightarrow \Sym(G/H)$, an embedding, so 
+$\rho$ is a faithful representation; hence $G$ is a permutation group.
+
+Finally, a \defn{primitive group} is a group that
+contains a core-free maximal subgroup.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%% GSETISOMORPHISMS %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \subsection{$G$-set isomorphism theorems}
+% \label{subsec:g-set-isomorphism}
+% We have seen above that the action of a group on cosets of a subgroup $H$ is a
+% transitive permutation representation, and the representation is faithful when
+% $H$ is core-free. 
+% The first theorem in this section states that every
+% transitive permutation representation is of this form.
+% (In fact, as we will see in Lemma~\ref{lem:intransitive-gsets} below, every permutation
+% representation, whether transitive or not, can be viewed as an action on cosets.)
+
+% First, we need some more notation. Given a \Gset\ $\bA = \<A, G\>$ and any
+% element $a\in A$,  the set  
+% $G_a = \{g\in G \mid ga = a\}$ 
+% of all elements of $G$ which fix $a$ is a
+% \index{stabilizer subgroup}
+% subgroup of $G$, called the \emph{stabilizer of $a$ in $G$}.
+
+% \begin{theorem}[1st \Gset\ Isomorphism Theorem]
+% \label{thm:g-set-isomorphism1}
+%   If $\bA = \<A, \barG\>$ is a transitive \Gset, then $\bA$ is
+%   isomorphic to the \Gset 
+%   \[
+%   \Gamma :=  \<G/\stab{a}, \{\hat{\lambda}_g : g\in G\}\>
+%   \]
+%   for any $a\in A$.
+% \end{theorem}
+% \begin{proof}
+%   Suppose $\bA= \<A, \barG\>$ is a transitive \Gset, so 
+%   $A = \{\barg a \mid  g\in G\}$ for any $a\in A$.  The operations of the \Gset\ $\Gamma$ are defined, for each $g\in G$ and each
+%   coset $x \stab{a}\in G/\stab{a}$, by $\hat{\lambda}_g(x \stab{a}) = gx\stab{a}$. 
+
+%   Let 
+%   $\bG_\Lambda$ denote the \Gset\ $\<G, \{\lambda_g : g\in G\}\>$, that is,
+%   the group $G$ acting on itself by left multiplication. 
+%   Fix $a\in A$, and define $\varphi_a:G \rightarrow A$ by $\varphi_a(x) =
+%   \barx(a)$ for 
+%   each $x\in G$.  
+%   Then $\varphi_a$ is a homomorphism
+%   from 
+%   $\bG_\Lambda$ 
+%   into $\bA$ --
+%   that is, $\varphi_a$ respects operations:\footnote{In general, if $\bA
+%     =\< A, F\>$ and $\bB = \<B, F\>$ are two algebras of the same
+%     similarity type, then   
+%     $\varphi: \bA \rightarrow \bB$ is a homomorphism provided
+%     \[
+%     \varphi(f^\bA(a_1,\dots, a_n)) = f^\bB(\varphi(a_1),\dots,\varphi(a_n))
+%     \]
+%     whenever $f^\bA$ is an $n$-ary operation of $\bA$, $f^\bB$ is the
+%     corresponding $n$-ary operation of $\bB$, and $a_1,\dots, a_n$ are arbitrary 
+%     elements of $A$.  (Note that a one-to-one correspondence between the
+%     operations of 
+%     two algebras of the same similarity type is assumed, and required for the
+%     definition 
+%     of homomorphism to make sense.)
+%   }
+%   \[
+%   \varphi_a(\lambda_g(x)) = \varphi_a(gx)= \overline{gx}(a)
+%   = \barg \cdot \barx(a)
+%   = \barg \varphi_a(x).
+%   \]
+%   Moreover, since $\bA$ is transitive, $\varphi_a(G) = \{\barg a \mid  g\in G\}
+%   = A$, 
+%   so $\varphi_a$ is an epimorphism.  Therefore,
+%   $\bG_\Lambda/\ker \varphi_a \cong \bA$.  
+%   To complete the proof, one simply checks that the two algebras $\bG_\Lambda
+%   /\ker \varphi_a $ and $\Gamma$ are identical.\footnote{
+%     Indeed, 
+%     $\ker \varphi_a = \{(x,y) \in G^2 \mid  \varphi_a(x) = \varphi_a(y)\}$
+%     and the  universe of $\bG_\Lambda /\ker \varphi_a$ is 
+%     $G/\ker \varphi_a = \{x/\ker \varphi_a  \mid x\in G \}$. 
+%      where for each $x\in G$
+%   \begin{align*}
+%     x/\ker \varphi_a &= \{y\in G  \mid  (x,y) \in \ker \varphi_a\}
+%     = \{y\in G  \mid  \varphi_a(x) = \varphi_a(y)\}
+%     = \{y\in G  \mid  \barx(a) = \bary(a)\}\\
+%     &= \{y\in G  \mid  \id_{A}(a) = \overline{x^{-1}y}(a)\}
+%     = \{y\in G  \mid  x^{-1}y \in \stab{a}\}
+%     = x \stab{a}.
+%   \end{align*}
+%   These are precisely the elements of $G/\stab{a}$,
+%   so the universes of $\bG_\Lambda /\ker \varphi_a$ and $\Gamma$ are
+%   the same, as are their operations (left multiplication by $g\in G$).}
+% \end{proof}
+
+% The next theorem shows why intervals of subgroup lattices are so important for
+% our work.
+%% \begin{theorem}[\Gset\ Isomorphism Theorem]
+%%   \label{thm:g-set-isomorphism2}
+%%   Let $\bA = \<A, G\>$ be a transitive \Gset\ and fix $a\in A$.  
+%%   Then the lattice $\Con(\bA)$ is isomorphic to the
+%%   interval $\lb G_a, G\rb$ in the subgroup lattice of $G$.
+%% \end{theorem}
+% \begin{proof}
+%     For each $\theta  \in \Con(\bA)$, let $H_\theta =\{g\in G \mid (g(a),a) \in
+%     \theta\}$,  
+%     and for each $H \in [G_a, G]$, let 
+%     $(b, c) \in \theta_H$ mean there exist $g \in G$ and $h \in H$ 
+%     such that $gh(a) = b$ and $g(a) =c$. 
+%     If $g_1, g_2 \in H_\theta$, then 
+%     \[
+%     (g_2(a), a) \in \theta \quad \Rightarrow \quad (g_2^{-1} g_2(a), g_2^{-1}(a)) =
+%     (a, g_2^{-1}(a)) \in \theta,
+%     \]
+%     so $(g_2^{-1}(a), a) \in \theta$, by symmetry.  Therefore,
+%     $(g_1g_2^{-1} (a), g_1 (a)) \in \theta$, so 
+%     $(g_1g_2^{-1} (a), (a)) \in \theta$, by transitivity. Thus $H_\theta$ is a
+%     subgroup of 
+%     $G$, and clearly  $G_a \leq H_\theta$. 
+%     It is also easy to see that $\theta_H$ is a congruence of $\bA$.
+%     The equality $H_{\theta_H}=H$ trivially follows from the definitions. 
+%     On the other hand $(b, c) \in \theta_{H_\theta}$ if and only if there exist 
+%     $g, h\in G$ for which $(h(a),a) \in \theta$ and
+%     $b = gh(a)$, and $c = g(a)$. Since $G$ is transitive, it is equivalent 
+%     to $(b, c) \in \theta$.
+%     Therefore, $\theta_{H_\theta} = \theta$. Finally, $H_\theta \leq H_\phi$ if
+%     and only if
+%     $\theta \leq \phi$, so $\theta \mapsto H_\theta$ is an isomorphism
+%     between $\Con(\bA)$ and $[G_a, G]$.
+% \end{proof}
+
+%% Since the foregoing theorem is so central to our work, we provide an alternative 
+%% statement of it. This is the version typically found in group theory 
+%% textbooks (e.g., \cite{Dixon:1996}).  Keeping these two alternative perspectives in
+%% mind can be useful.
+%% \begin{theorem}[\Gset\ Isomorphism Theorem, version 2]
+%%   Let $\bA = \<A, \phi(G)\>$ be a transitive \Gset\
+%%   and fix $a \in A$. Let $\sB$ be the set of all blocks $B$ that contain $a$.
+%%   % Let $[\stab{a},G] \subseteq \Sub(G)$ denote the set of all subgroups of 
+%%   % $G$ containing $\stab{a}$. 
+%%   Then there is a bijection $\Psi :\sB \rightarrow \lb \stab{a},G\rb$ given by $\Psi(B)= G(B)$,
+%%   with inverse mapping $\Phi: \lb \stab{a},G\rb \rightarrow \sB $ 
+%%   given by $\Phi(H) = \{a^{\phi(h)}  \mid  h\in H\}$. 
+%%   The mapping $\Psi$ is order-preserving in the sense
+%%   that
+%%   $B_1\subseteq B_2 \Leftrightarrow \Psi(B_1) \leq \Psi(B_2)$.
+%% \end{theorem}
+%% Briefly, the poset $\<\sB, \subseteq\>$ is order-isomorphic to the 
+%% poset $\<[\stab{a},G], \leq\>$. 
+
+\begin{corollary}
+  Let $G$ act transitively on a set with at least two
+  points. 
+  Then $G$ is primitive if and only if each stabilizer $\stab{a}$ is a
+  maximal subgroup of $G$.
+\end{corollary}
+
+Since the point stabilizers of a transitive group are all conjugate, 
+one stabilizer is maximal only when all of the stabilizers are maximal. 
+In particular, a regular permutation group is primitive if and only if it has
+prime degree. 
+
+Next we describe (up to equivalence) all transitive permutation
+representations of a given group $G$.  
+We call two representations (or actions) 
+\index{equivalent representations}%
+\emph{equivalent}
+provided the associated $G$-sets are isomorphic. 
+The foregoing implies that every transitive permutation representation of $G$ is
+equivalent to $\hlambda_H$ for some subgroup $H \leq G$.  The following
+lemma
+shows that we need only consider a single representative $H$ from each of the
+conjugacy classes of subgroups.  
+
+\begin{lemma}[Lemma~1.6B~\cite{Dixon:1996}]
+  Suppose $G$ acts transitively on two sets,
+  $A$ and $B$.  Fix $a\in A$ and let $G_a$ be the stabilizer of $a$ (under the first
+  action).  Then the two actions are equivalent
+  if and only if the subgroup $G_a$ is also a stabilizer under the second action
+  of some point $b\in B$. 
+\end{lemma}
+
+The point stabilizers of the action $\hlambda_H$ described above are the
+conjugates of $H$ in $G$.  Therefore, the lemma implies that, for any two
+subgroups $H, K \leq G$, the representations $\hlambda_H$ and $\hlambda_K$ are
+equivalent precisely when $K = x Hx^{-1}$ for some $x\in G$. 
+Hence, the transitive permutation representations of $G$ are given, up to
+equivalence, by $\hlambda_{K_i}$ as $K_i$ runs over a set of representatives of
+conjugacy classes of subgroups of $G$.   
+
+%% -- End groupactions.tex file insertion -------------------------------
+
+\todo{rewrite this section up to this point}
+
+%% -- New section on extending P^4
+\subsection{Extensions of the \Palfy \Pudlak Theorem}
+As we noted above, 
+P.~P. \Palfy and P.~\Pudlak 
+showed in \cite{PalfyPudlak1980}
+that the
+following statements are equivalent:
+\begin{itemize}
+\item
+every finite lattice is representable, that is $\sL_{con}$ is all
+finite lattices;
+\item
+every finite lattice is isomorphic to an 
+interval in the subgroup lattice of some finite group.
+\end{itemize}
+They did this by giving lattice conditions described below which force the
+nonconstant operations of a minimal
+representation to be permutations which generate a transitive
+group $G$.
+Given a lattice $L$ we can ask which, if any, of (P1)--(P4) hold and, if
+one of these holds, what is the size of a minimal representation. 
+In the case of (P4) we can also ask the size of the small group $G$ having a
+subgroup $H$ such that the $L \cong \lb H,G \rb$. 
+Below we try to answer at least
+some of these questions for small lattices. 
+
+\begin{comment}
+By a fundamental isomorphism theorem for transitive
+%Theorem~\ref{thm:g-set-isomorphism2}
+$G$-sets---see~\cite[Lemma~4.20]{alvi:1987} (general algebra version)
+or~\cite[Theorem 1.5A]{Dixon:1996} (group-theoretic version)---the
+congruence lattice of such an algebra is isomorphic to the interval
+$\lb G_a,G \rb$. 
+Then they showed every finite lattice could be embedded 
+as an interval into a finite lattice satisfying these conditions.
+%% \marginpar{is mim rep defined?}
+%% wjd: yes, min rep is now defined in Section~\label{sec:minim-repr}.
+However their equivalence is not global: it is possible that there 
+is a representable lattice which is not isomorphic to an interval
+of the subgroup lattice of a finite group. So there are several 
+interesting questions we can ask about a finite lattice
+$L$:
+\begin{enumerate}
+\item\label{question1}
+Is $L$ representable (isomorphic to $\Con(\bA)$ for some 
+finite algebra $\bA$?
+\item\label{question2}
+If $L$ is representable, what is the minimum size of $\bA$ with $L \cong\Con(\bA)$?
+\item\label{question3}
+Is there a group $G$ of permutations on $A$ such that $L \cong \Con \< A,G\>$?
+\item\label{question4}
+Is there a transitive group $G$ of permutations on $A$ such that $L \cong \Con \< A,G\>$?
+Equivalently is $L$ isomorphic an interval in the subgroup lattice of a finite group
+(by the basic isomorphism theorem for transitive $G$-sets; 
+see~\cite[Lemma~4.20]{alvi:1987} or~\cite[Theorem 1.5A]{Dixon:1996}).
+%% Theorem~\ref{thm:g-set-isomorphism2}).
+\item\label{question5}
+If $L \cong \Con \<A,G\>$ for a group $G$ what is the smallest such $G$?
+\end{enumerate}
+As we mentioned, it is possible that \eqref{question1} does not imply \eqref{question4} 
+but certainly \eqref{question4} implies \eqref{question1}. Obviously we don't have 
+an example of an $L$ satisfying \eqref{question1} but not~\eqref{question4}, but 
+in general representing $L$ 
+in the form of~\eqref{question4}
+is more difficult. For example,
+the lattices $\bL_6$ and $\bL_7$ diagrammed in Figure~\ref{fig:L6and7}
+can be represented on algebras of size~6 (and no fewer)
+but representing them with permutation groups is much harder; 
+see Aschbacher~\cite{Aschbacher2008}.
+
+\begin{figure}[htb]
+%\renewcommand{\dotsize}{1.5pt}
+\begin{center}
+  \begin{tikzpicture}[scale=1]
+    \input{inputs/tikz/L6.tex}
+    %    \draw (bottom) node [right]{$\bL_{11}$};
+  \end{tikzpicture}
+  \hskip15mm
+  \begin{tikzpicture}[scale=1]
+    \input{inputs/tikz/L7.tex}
+    %    \draw (bottom) node [right]{$\bL_{11}$};
+  \end{tikzpicture}
+\end{center}
+\caption{$\bL_{6}$ and $\bL_7$}\label{fig:L6and7}
+\end{figure}
+
+\end{comment}
+
+
+
+
+The specific conditions on $L$ that 
+\Palfy and \Pudlak gave which guarantee 
+that, if $L \cong \Con \<A,F\>$ is a minimal representation of $L$,
+then the nonconstant elements of $F$ are 
+permutations and the group they generate acts transitively on $A$ are:
+\begin{enumerate}[(A)]
+\item $L$ is simple.
+\item For each $x \ne 0$ in $L$, there are elements $y$ and $z$
+such that $x \join y = x \join z = 1$ and $y\meet z = 0$.
+\item $|L|\ne 2$ and each element of $L$ that is not an atom or $0$ contains at
+least four atoms.
+\end{enumerate}
+If (A) and (B) hold then all nonconstant elements of $F$ are permutations.
+
+Let (B$'$) and (B$''$) be the conditions related to (B) found in McKenzie's
+paper~\cite{McKenzie1983}:
+\begin{enumerate}
+\item[(B$'$)]
+If $\varphi: L \to L$ is any meet-preserving map such that $\varphi(x) > x$ for
+$x\ne 1$, then $\varphi(x) = 1$ for all~$x$.
+\item[(B$''$)]
+The coatoms of $L$ meet to $0$.
+\end{enumerate}
+Note that
+\[
+\text{(B)} \implies \text{(B$''$)}  \implies \text{(B$'$)}.
+\]
+Clearly (B$''$) implies (B$'$). To see that (B) implies (B$''$),
+let $x$ be the meet of all the coatoms of $L$. If $x > 0$
+then applying (B) gives $y$ and $z$ each joining with $x$ to $1$.
+But $x\join y = 1$ implies $y = 1$. Similarly $z = 1$. But then
+$0 = y \meet z = 1$.
+
+
+McKenzie proves in~\cite{McKenzie1983} that, just like (A) and (B),
+(A) and (B$'$) imply that all nonconstant members of $F$ are
+permutation. We record this as a theorem.
+
+\begin{theorem}[P\'alfy-Pudl\'ak \cite{PalfyPudlak1980}, McKenzie
+\cite{McKenzie1983}]
+Let $L$ be finite lattice and suppose $L \cong \Con \<A,F\>$
+is a minimal representation. If $L$ satisfies \textup{(A)} and
+\textup{(B$'$)} then
+all the nonconstant members of $F$ are permutations. 
+The same conclusion obtains if 
+$L$ satisfies \textup{(A)} and either \textup{(B)} or
+\textup{(B$''$)}.
+\end{theorem}
+
+As we mentioned, if condition (C) is also assumed to hold then
+$F$ generates a transitive permutation group on $A$. 
+This served well for the proof of the P\'alfy-Pud\'lak Theorem. 
+But few lattices satisfy (C) so we seek something more general
+that guarentees the action is transitive. To do this we investigate 
+properites of $\Con \<A,G\>$ where $G$ is a group that acts
+intransitively on~$A$. It turns out such lattices are rather rare.
+
+\subsection{Intransitive group actions} 
+Suppose $\bA = \< A,G\>$ is a $G$-set and let $\bA_i = \<A_i, G\>$, $i < k$,
+be the minimal subalgebras of $\bA$; i.e.~each set $A_i$ is an orbit, or
+one-generated subuniverse, of $\bA$. Define congruences on $A$ by the 
+partitions
+\begin{alignat*}{2}
+\tau &= |A_0|A_1|\cdots|A_{k-1}| &&\quad\text{ (the blocks are the orbits)} \\
+\tau_i &= |A_i| &&\quad\text{ (at most one nontrivial block) }\\
+\gamma_i &= |A_i|A - A_i| &&\quad\text{ (exactly two blocks unless
+$A_i = A$) }
+\end{alignat*}
+So $(a,b) \in \tau$ if and only if they both lie in the same orbit;
+$(a,b) \in \tau_i$ if and only if $a = b$ or both lie in $A_i$;
+$(a,b) \in \gamma_i$ if and only if both lie in $A_i$ or both don't.
+We call $\tau$ the \defn{intransitivity congruence}; $G$ acts transitively if and only if $\tau = 1$. 
+Of course $A_i$ is a subuniverse of $\bA$; the subalgebra
+is denoted~$\bA_i$.
+
+
+\begin{theorem}\label{thm:intrans}
+Let $\bA = \<A,G\>$, where $G$ is a group, be a finite algebra. 
+Let $k$ be the number of orbits of the action of $G$ on $A$.
+Let $\tau$, $\tau_i$ and $\gamma_i$
+be the congruences defined above and let $\theta \in \Con(\bA)$.
+\begin{enumerate}
+\item\label{item1}
+$G$ acts transitively if and only if $\tau = 1_{\bA}$.
+\item \label{item2}
+The interval $\lb\tau,1_\bA\rb$ is isomorphic to $\operatorname{Eq}(k)$.
+\item \label{item3}
+The interval $\lb 0_\bA,\tau\rb$ is isomorphic to $\prod_{i=0}^{k-1} \Con(\bA_i)$.
+\item\label{item4}
+If, for some $i$, $\theta \ge \Join_{j \ne i} \tau_j$ then $\theta \ge \tau$
+or $\theta \le \gamma_i$.
+\item\label{item5}
+If $\theta\meet \tau \prec \tau$  then $\theta \le \gamma_i$ for some~$i$.
+\item\label{item6}
+If $k>1$ and $|A_i| = 1$ for all $i$ except $0$ then every coatom of $\Con(\bA)$
+lies above~$\tau$.
+\item\label{item7}
+If $k>1$ and $\lb 0_\bA,\tau\rb$ is directly indecomposable 
+then every coatom of $\Con(\bA)$ lies above~$\tau$.
+\item\label{item8}
+If $k = 2$ and $|A_1| = 1$ then $\tau$ is a coatom and 
+everything is comparable with it.
+\item\label{item9}
+If $\tau$ is a coatom and $\lb 0_\bA,\tau\rb$ is directly indecomposable
+then everything is comparable with it.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+\eqref{item1} is obvious. Since $G$ acts trivially on $\bA/\tau$,
+$\Con (\bA/\tau)$ is the lattice of all partitions; that is, 
+$\operatorname{Eq}(k)$. So~\eqref{item2} holds. For~\eqref{item3},
+we map
+$(\theta_0, \ldots, \theta_{k-1}) \in \prod_{i=0}^{k-1} \Con(A_i)$
+to $\theta_0 \cup \cdots \cup \theta_{k-1}$. It is straightforward to
+to verify that this is an isomorphism into $\lb 0_\bA,\tau\rb$. The inverse
+map sends $\theta \in \lb 0_\bA,\tau\rb$ to $(\theta_0, \ldots, \theta_{k-1})$,
+where $\theta_i = \theta \cap (A_i \times A_i)$. The details are left to the reader.
+
+For~\eqref{item4} note that if 
+$\theta \not\le \gamma_i$, then
+there are elements $a \in A_i$ and $b \notin A_i$ with
+$(a,b) \in \theta$. Let $b \in A_j$. Of course $j \ne i$.
+Let $a'$ be any other element in $A_i$. Then,
+since $G$ acts transitively on $A_i$,
+there is a  $\sigma \in G$ with $\sigma(a)  = a'$. Let $b' = \sigma(b)$
+and note $b' \in A_j$ so $(b,b') \in \theta$ because $\theta \ge
+\Join_{r\ne i} \tau_r \ge \tau_j$.
+Now
+$(a',b') = (\sigma a,\sigma b) \in \theta.$
+So $(a,b)$, $(b,b')$ and $(a',b')$ are all in $\theta$. Hence
+$(a,a') \in \theta$. Since $a'$ was arbitrary, we see
+$\theta \ge \tau_i$. So $\theta \ge \tau$, as desired.
+
+\eqref{item5} follows from~\eqref{item3} and~\eqref{item4}. If
+$|A_i| = 1$ for $i> 0$ then $\tau_i = 0_\bA$ for these $i$'s. Hence
+$\Join_{i\ne 0} \tau_i = 0_\bA$ and so \eqref{item6} follows
+from~\eqref{item4} again. If $\lb 0_\bA,\tau\rb$ is directly indecomposable, then,
+by~\eqref{item3}, $|A_i| = 1$ for all but at most one~$i$. So~\eqref{item7}
+follows from~\eqref{item6}.
+
+For~\eqref{item8}, that $\tau$ is a coatom follows from~\eqref{item2}. 
+By~\eqref{item6}, $\tau$ is the only coatom. The result follows from this.
+\eqref{item9} follows from~\eqref{item8}.
+\end{proof}
+
+\subsection{Examples}
+
+We give some examples showing the uses of Theorem~\ref{thm:intrans}. 
+In deciding if a lattice has a representation using an intransitive
+permutation group, we consider the possibilities for~$\tau$. 
+By \eqref{item2} of Theorem~\ref{thm:intrans} the filter above
+$\tau$ must be isomorphic to a partition lattice. In particular,
+if the lattice has no filter isomorphic to $\bM_3 \cong \operatorname{Eq}(3)$, then the 
+only candidates for $\tau$ are the coatoms. When $\tau$ is a coatom, $k = 2$
+by~\eqref{item2} and $\gamma_0 = \gamma_1 = \tau$
+
+\begin{figure}[htb]
+%\renewcommand{\dotsize}{1.5pt}
+\begin{center}
+  \begin{tikzpicture}[scale=1]
+    \input{inputs/tikz/L14.tex}
+    %    \draw (bottom) node [right]{$L_{11}$};
+  \end{tikzpicture}
+  \hskip15mm
+  \begin{tikzpicture}[scale=1]
+    \input{inputs/tikz/L15.tex}
+    %    \draw (bottom) node [right]{$L_{11}$};
+  \end{tikzpicture}
+\end{center}
+\caption{$\bL_{14}$ (on the left) and $\bL_{15}$}\label{fig:L14and15}
+\end{figure}
+
+
+Consider the lattices $\bL_{14}$ and its dual $\bL_{15}$ 
+of Figure~\ref{fig:L14and15}. Since neither
+has $\bM_3$ as a filter, the only possibilities for $\tau$ are cotatoms. 
+For $\bL_{14}$ the ideals below each of the coatoms is directly 
+indecomposable so, by Theorem~\ref{thm:intrans}\eqref{item9}, 
+it cannot be represented with a nontransitive permutation group. Conditions
+(A) and (B$''$) do hold and hence a minimal representation of 
+$\bL_{14}$ must be by a transitive group. (More precisely, if
+$\bL_{14} \cong \Con \<A,F\>$ is a minimal representation, 
+then the nonconstant members of $F$ generate 
+a transitive permutation group.) In fact the first author 
+has shown there is a 
+subgroup $H$ of $A_6$ of index 90 so that the interval of subgroups of
+$A_6$ containing $H$ (the lattice of overgroups of $H$ in $A_6$) is $\bL_{14}$.
+Of course in this example the algebra has size 90; we do not
+know if this is the smallest example.
+
+On the other hand the leftmost coatom of $\bL_{15}$ is a candidate for 
+$\tau$ and in fact $\bL_{15}$ is the congruence of
+$\<A,F\>$ where $A = \{0,1,2,3\}$ and $F = \{f\}$ where $f$ is the double
+transposition interchanging $0$ and $1$ and also $2$ and~$3$. 
+Conditions (A) and (B$''$) hold here too so the nonconstant operations of a 
+minimal representation must be permutation. Clearly $\<A,F\>$ is the minimal
+representation.
+
+As we shall outline below, we have shown every lattice of size at most~$7$
+elements
+is representable with only one possible exception: $\bL_{10}$ diagrammed 
+in Figure~\ref{fig:L10}.
+
+\begin{figure}[htb]
+%\renewcommand{\dotsize}{1.5pt}
+\begin{center}
+  \begin{tikzpicture}[scale=1]
+    \input{inputs/tikz/L10.tex}
+    %    \draw (bottom) node [right]{$L_{11}$};
+  \end{tikzpicture}
+\end{center}
+\caption{$\bL_{10}$}\label{fig:L10}
+\end{figure}
+
+This lattice cannot be represented using an intransitive permutation group. 
+By Theorem~\ref{thm:intrans}\eqref{item9}, $\tau$ cannot be the leftmost or rightmost
+coatom. Suppose $\tau$ is the middle coatom.  
+As mentioned above this implies
+$\gamma_0 = \gamma_1 = \tau$. Letting $\theta$ be the rightmost coatom we 
+see that \eqref{item5} is violated. 
+$\bL_{10}$ satisfies (A) and (B$''$) and thus a minimal representation, if one 
+exists, must be by a transitive permutation group.
+
+In Section~\ref{sec:lattices} 
+all nondistributive lattices
+of size 7 or less which are not an ordinal sum are diagrammed. 
+Very few of these can have a representation using a nontransitive
+group. The lattices $\bL_2 = \bM_3$, $\bL_4$, $\bL_{15}$, 
+and $\bL_{34}$ can be represented with an intransitive group. 
+The 4-element algebra given in the figure for $\bL_4$ is a minimal 
+representation and does not generate a group. But $\bL_4$ does 
+have an intranstive representation on a six element set with
+the operations $(1,2,0,4,5,3)$ and $(0,2,1,3,5,4)$. 
+
+Using techniques similar to those above, one
+can prove that all of the remaining lattices cannot
+have a represnetation with an intransitive group.
+The one difficult case is $\bL_{19}$ of Figure~\ref{fig:L19}.
+Lemma~\ref{lemma:complements} below covers this case.
+
+\begin{figure}[htb]
+%\renewcommand{\dotsize}{1.5pt}
+\begin{center}
+  \begin{tikzpicture}[scale=1]
+    \input{inputs/tikz/L19.tex}
+    %    \draw (bottom) node [right]{$L_{11}$};
+  \end{tikzpicture}
+\end{center}
+\caption{$\bL_{19}$}\label{fig:L19}
+\end{figure}
+
+\begin{lemma}\label{lemma:complements}
+Let $\bA = \<A,G\>$ be a finite algebra, where
+$G$ is an intransitive group of permutations on $A$.
+Suppose the intransitivity congruence $\tau$ is a coatom.
+Then there do not exist congruences
+$0_\bA < \psi < \theta$ in $\Con(\bA)$
+with $\theta \meet \tau = 0_\bA$. 
+\end{lemma}
+
+\begin{proof}
+Since $\tau$ is a coatom, there are exactly two orbits; call
+them $B$ and $C$. Since $\theta \meet \tau = 0_\bA$, if
+$(x,y) \in \theta$ then $x=y$ or one is in $B$ and the other
+is in $C$. So $\theta$ defines a bipartite graph between
+$B$ and $C$. Since $G$ acts transitively on both $B$ and $C$,
+this graph corresponds to a bijection between $B$ and $C$. 
+The same applies to $\psi$. But equivalence relations
+corresponding to such graphs cannot be comparable.
+\end{proof}
+
+\begin{theorem}
+Of the lattices with at most 7 elements, the lattices
+$\bL_2 = \bM_3$, $\bL_4$, $\bL_{15}$ and $\bL_{34}$ can be
+represented by unary algebras whose nonconstant operations
+generate an intransitive permutation group. All other
+lattices from $\bL_1$--$\bL_{35}$ have no representation 
+with a nontransitive permutation group.
+\end{theorem}
+
+\begin{proof}
+The harder cases of this result have be considered above. The
+remaining cases are left to the reader.
+\end{proof}
+
+
+In \cite{Shareshian2003} John Shareshian gave a class of finite 
+lattices that he conjectured could not be represented as intervals 
+in subgroup lattices. They are easy to describe. 
+Let $m_1 \ge \cdots \ge m_t \ge 3$ with $t> 1$.
+Take the set $\{\two^{m_i} \mid 1\leq i \leq t\}$ of 
+lattices of subsets of sets of sizes $m_i$ for 
+each $i\in \{1,\ldots,t\}$, remove
+the least and greatest element of each, line them up side 
+by side, and adjoin
+them into one large lattice by giving them all a new common 
+least element and a
+new common greatest element.
+An example of such a lattice appears in the diagram 
+in Figure~\ref{fig:shareshian}.
+
+\begin{figure}[htb]
+\begin{center}
+  \begin{tikzpicture}[scale=.8]
+    \input{inputs/tikz/Shareshian.tex}
+  \end{tikzpicture}
+\end{center}
+\caption{A possibly non-representable lattice.}\label{fig:shareshian}
+\end{figure}
+%% \includegraphics[width=4cm]{inputs/94tov.png}  
+While the conjecture---that this lattice is not
+representable as a congruence lattice of a finite algebra---is still open, much
+progress has been made, primarily by Aschbacher; see~\cite{Aschbacher2013}.
+For example, the problem has been reduced to almost simple groups.
+
+
+Arguments similar to those used above to analyze $\bL_{10}$
+also show that a minimal representation of one of Shareshian's
+lattices could not come from an \emph{intransitive} permutation group.
+This is because such lattices satisfy conditions (A) and (B$''$),
+so a minimal representation, if it exists, would have to be
+the congruence lattice of a transitive $G$-set.
+Hence, if one of Shareshian's lattices does not occur as an
+interval in the subgroup lattice of a finite group, then that lattice has
+no finite representation at all.
+
+%% -- New section on representing some specific examples
+
+%\subsubsection{$L_{11}$}
+%\label{sec:l11}
+
+Next consider $\bL_{11}$ diagrammed in Figure~\ref{fig:L11} (left). Again, we
+can use Theorem~\ref{thm:intrans}\eqref{item9} to show that it's not possible to
+represent $\bL_{11}$ using an intransitive permutation group. However (A) and
+(B$'$) do not hold in this case, so we cannot conclude that a minimal representation
+must come from a transitive permutation group. Nevertheless, with some help from
+\gap, we are able to show that it can be represented as an interval
+in the lattice of subgroups of a group. We do not know if this is the
+smallest representation.
+
+
+\begin{figure}[htb]
+\begin{center}
+  \begin{tikzpicture}[scale=1]
+    \input{inputs/tikz/L3.tex}
+    %    \draw (bottom) node [right]{$L_{11}$};
+    \draw (mp) node [left]{$\alpha$};
+    \draw (02) node [left]{$\beta$};
+    \draw (22) node [right]{$\gamma$};
+    \draw (11) node [right]{$H$};
+    \draw (n11) node [left]{$K$};
+    \draw (top) node [above]{$G$};
+    \draw (bottom) node [below]{$1_G$};
+  \end{tikzpicture}
+  \hskip1cm
+  \begin{tikzpicture}[scale=1]
+    \input{inputs/tikz/PentagonForL11.tex}
+    \draw[semithick] (11) to (22) to (top) to (02) to (mp) to (11);
+    \draw (mp) node [left]{$\alpha$};
+    \draw (02) node [left]{$\beta$};
+    \draw (22) node [right]{$\gamma$};
+    \draw (11) node [below]{$H$};
+    \draw (top) node [above]{$G$};
+  \end{tikzpicture}
+\end{center}
+\caption{$\bL_{11}$ (left) and an upper interval (right)}\label{fig:L11}
+\end{figure}
+Start with the group representation of the pentagon as the upper
+interval $\lb H, G\rb$ where $G \cong ((C_3 \times C_3) : Q_8) : C_3$ and 
+$H \cong C_6$.
+Here $C_k$ denotes the cyclic group of order $k$, $Q_8$ denotes the
+quaternion group of order 8, and {\tt :} denotes the usual semidirect product.
+We let $\alpha \prec \beta$ and $\gamma$ denote the three subgroups inside the
+pentagon $\lb H, G \rb$, as shown in Figure~\ref{fig:L11} (right).
+
+The entire subgroup lattice $\Sub(G)$ is the congruence lattice of an
+algebra. Therefore, if there is a minimal subgroup $K$ ($1 \prec K \leq G$) that
+is below $\beta$, but not below  $\alpha$ or $\gamma$, then lattice $\bL_{11}$ is the 
+union of the ideal $\lb 1, K\rb$ and the filter $\lb H, G\rb$.
+Luckily, there is such a subgroup $K$. We can check this fact using \gap, as we now describe.
+A search of the \gap Library of Small Groups finds that the 153rd
+isomorphism class of groups of order 216---that is, the group 
+returned by the function call \code{SmallGroup( 216, 153 )}, which happens to have
+structure description $((C_3 \times C_3) : Q_8) : C_3$.
+Upon inspection of the conjugacy classes of subgroups of this group, we 
+find that the representative of the 8th class is a suitable candidate for 
+$H$, so we define 
+
+{\small 
+\begin{verbatim}
+    G := SmallGroup( 216, 153 );;    
+    ccsg := ConjugacyClassesSubgroups( G );;
+    H := Representative( ccsg[8] );;
+    intHG := IntermediateSubgroups( G, H );
+\end{verbatim}
+}
+
+\noindent 
+The last of these commands results in the following output:
+
+{\small 
+\begin{verbatim}
+    rec( 
+      subgroups := [ 
+         Group([ f1, f4, f5*f6 ]), Group([ f1, f2, f3*f4, f4 ]), 
+         Group([ f1, f4, f5, f6 ]) 
+      ], 
+      inclusions := [ 
+         [ 0, 1 ], [ 0, 2 ], [ 1, 3 ], [ 2, 4 ], [ 3, 4 ] 
+      ] 
+    )
+\end{verbatim}
+}
+
+\noindent This is a record where the {\tt subgroups} field is a list of
+the subgroups $K$ that lie strictly between $H$ and $G$, that is, $H < K < G$,
+and the {\tt inclusions} field indicates the covering
+relations among the subgroups.
+\gap uses indices $0, 1, \dots, 4$ to label the subgroups 
+in $\lb H, G\rb$, and the correspondence is given in the following table:
+
+\begin{center}
+\begin{tabular}{r|l}
+%0 & 1 & 2 & 3 & 4\\
+4 & $G$\\
+\hline
+3 & \code{Group([ f1, f4, f5, f6 ])} \\ 
+\hline
+2 & \code{Group([ f1, f2, f3*f4, f4 ])}\\ 
+\hline
+1 & \code{Group([ f1, f4, f5*f6 ])}\\
+\hline
+0 & $H$
+\end{tabular}
+\end{center}
+
+\noindent 
+In the \code{inclusions} field the entry \code{[ 1, 3 ]}, for example,
+indicates that \code{Group([ f1, f4, f5*f6 ])} is a maximal subgroup of 
+\code{Group([ f1, f4, f5, f6 ])}.
+So, the \gap output above shows that the interval 
+$\lb H, G \rb$ is a pentagon.
+
+Next, we define the following groups in \gap:
+
+{\small 
+\begin{verbatim}
+A:=intHG.subgroups[1];  B:=intHG.subgroups[3];  C:=intHG.subgroups[2];
+\end{verbatim}
+}
+Here, \code{A} $<$ \code{B} are the comparable generators of the pentagon
+and \code{C} is the incomparable generator.
+We consider the conjugacy classes of the subgroups of \code{B}
+(using the \gap command \code{ccsgB:=ConjugacyClassesSubgroups(B);})
+and by looking at the subgroup lattice in \xgap, we notice that 
+there is a conjugacy class of subgroups of \code{B} containing six
+subgroups each of index 72 in \code{G} (order 3), and the subgroups
+in this class are not subgroups of \code{A} or \code{C}.
+
+{\small 
+\begin{verbatim}
+List(ccsgB, x->Size((x)));
+# returns [ 1, 9, 1, 3, 3, 6, 3, 9, 9, 1, 1, 2, 1, 3, 1, 1 ]
+List(ccsgB, x->Order(Representative(x)));
+# returns [ 1, 2, 3, 3, 3, 3, 6, 6, 6, 9, 9, 9, 18, 18, 27, 54 ]
+\end{verbatim}
+}
+Thus the only conjugacy class of size 6 whose elements 
+have order 3 is the sixth class.  So let
+\code{K:=Representative(ccsgB[6]);}.
+Note that \code{K} is a minimal subgroup since $|K|=3$.  Finally,
+check that \code{K} is a subgroup of \code{B}, and not a subgroup of
+\code{A} or \code{C}:
+{\small 
+\begin{verbatim}
+IsSubgroup(A,K);  # returns false
+IsSubgroup(B,K);  # returns true
+IsSubgroup(C,K);  # returns false
+\end{verbatim}
+}
+This shows lattice $\bL_{11}$ is representable on a set of size 216.
+In this example, where $\lb H,G \rb$ is the pentagon, the index is $[G:H]=36$.  
+
+Now, there might be a nontrivial subgroup $M < H$ such that in the interval
+$\lb M, G \rb$ there is a union of a filter and ideal in $\Sub(G)$ that is isomorphic to
+$\bL_{11}$. This would give us a representation of $\bL_{11}$ on smaller set than 216.
+Indeed, looking at the subgroup lattice of $G$ in \xgap, we see that, 
+$H$ has only two nontrivial proper subgroups.  These are
+
+{\small 
+\begin{verbatim}
+M1:=Representative(ccsgB[2]);
+M2:=Representative(ccsgB[4]);
+IsSubgroup(H,Representative(ccsgB[2]));  # returns true
+IsSubgroup(H,Representative(ccsgB[4]));  # returns true
+\end{verbatim}
+}
+We need to find a subgroup that covers one of these two subgroups
+and is not below \code{A} or \code{C}.
+{\small 
+\begin{verbatim}
+intM1B:=IntermediateSubgroups(B,M1);
+# returns 
+#  rec( 
+#    subgroups := [ 
+#      Group([ f4, f5 ]), Group([ f4, f6 ]), 
+#      Group([ f1^2, f4 ]), Group([ f4, f5*f6 ]), 
+#      Group([ f4, f5^2*f6 ]), Group([ f4, f5, f6 ]), 
+#      Group([ f1^2, f4, f5*f6 ]) 
+#    ], 
+#    inclusions := [ 
+#      [ 0, 1 ], [ 0, 2 ], [ 0, 3 ], [ 0, 4 ], 
+#      [ 0, 5 ], [ 1, 6 ], [ 2, 6 ], [ 3, 7 ], 
+#      [ 4, 6 ], [ 4, 7 ], [ 5, 6 ], [ 6, 8 ], [ 7, 8 ] 
+#    ] 
+#  )
+\end{verbatim}
+}
+\code{M1} is maximal in the intermediate subgroups 1, 2, 3, 4, and 5.
+We now check whether these are subgroups of \code{A} or \code{C}.
+
+{\small 
+\begin{verbatim}
+IsSubgroup(A,intM1B.subgroups[1]);   # returns false
+IsSubgroup(B,intM1B.subgroups[1]);   # returns true (of course)
+IsSubgroup(C,intM1B.subgroups[1]);   # returns false
+\end{verbatim}
+}
+So $\bL_{11}$ is the union of $\lb${\code{M1, intM1B.subgroups[1]}$\rb$
+and $\lb H, G \rb$, and the command \code{Index(G,M1);} returns 108,
+so we have a representation of $\bL_{11}$ on 108 elements.
+
+Next consider \code{M2}.
+
+{\small 
+\begin{verbatim}
+Index(G,M2);  # returns 72
+intM2B:=IntermediateSubgroups(B,M2);
+# returns 
+#  rec( 
+#    subgroups := [ 
+#        Group([ f1, f4 ]), Group([ f1, f4*f5*f6 ]), 
+#        Group([ f1, f4*f5^2*f6^2 ]), Group([ f1, f5*f6 ]), 
+#        Group([ f1, f4, f5*f6 ]), Group([ f1, f4*f5, f5^2*f6^2 ]), 
+#        Group([ f1, f4*f6, f5*f6 ]), Group([ f1, f5, f6 ]) 
+#    ], 
+#    inclusions := [ 
+#        [ 0, 1 ], [ 0, 2 ], [ 0, 3 ], [ 0, 4 ], [ 1, 5 ], 
+#        [ 2, 5 ], [ 3, 5 ], [ 4, 5 ], [ 4, 6 ], [ 4, 7 ], 
+#        [ 4, 8 ], [ 5, 9 ], [ 6, 9 ], [ 7, 9 ], [ 8, 9 ] 
+#    ] 
+#  )
+\end{verbatim}
+}
+So \code{M2} is maximal in the intermediate subgroups 1, 2, 3, and 4.
+We can check whether one of these is not a subgroup of \code{A} or \code{C}:
+
+{\small 
+\begin{verbatim}
+IsSubgroup(A,intM2B.subgroups[1]);   # returns true
+IsSubgroup(C,intM2B.subgroups[1]);   # returns true
+
+IsSubgroup(A,intM2B.subgroups[2]);   # returns true
+IsSubgroup(C,intM2B.subgroups[2]);   # returns false
+
+IsSubgroup(A,intM2B.subgroups[3]);   # returns true
+IsSubgroup(C,intM2B.subgroups[3]);   # returns false
+
+IsSubgroup(A,intM2B.subgroups[3]);   # returns true
+IsSubgroup(C,intM2B.subgroups[3]);   # returns false
+\end{verbatim}
+}
+So, using this method and this group, the smallest set on 
+which we can represent $\bL_{11}$ is 108.
+
+\todo{complete this section: perhaps we should actually perform the closure, get
+  the operations and produce the algebra that has $\bL_{11}$ as a
+  representation (although, this is not absolutely necessary since the above
+  suffices to prove that $\bL_{11}$ is, in indeed, representable).}
+
+
+
+%% # A < B are the comparable generators of the pentagon
+%% # C is the incomparable generator
+
+%% ccsgB:=ConjugacyClassesSubgroups(B);;
+%% # By looking at the subgroup lattice in XGAP, we notice that 
+%% # there is a conjugacy class of subgroups of B containing six
+%% # subgroups each of index 72 in G (order 3), and the subgroups
+%% # in this class are not subgroups of A or C.
+%% # We need to identify this conjugacy class of subgroups.
+%% # To do so, we first check the size of the conjugacy classes 
+%% # of subgroups of B.
+%% List(ccsgB, x->Size((x)));
+%% # returns [ 1, 9, 1, 3, 3, 6, 3, 9, 9, 1, 1, 2, 1, 3, 1, 1 ]
+%% # Thus there is only one conjugacy class of size 6,
+%% K:=Representative(ccsgB[6]);
+%% # and the subgroups of this class have order 3:
+%% Order(K); # returns 3
+%% # Note that K is a minimal subgroup since |K|=3.  
+
+%% # Finally, check that K is a subgroup of B, and not a subgroup of A or C:
+%% IsSubgroup(A,K);  # returns false
+%% IsSubgroup(B,K);  # returns true
+%% IsSubgroup(C,K);  # returns false
+%% # This shows lattice PJ11 is representable on a set of size 216.
+
+%% # In this example, where [H,G] is the pentagon, the index is [G:H]=36.  
+%% # There might be a nontrivial subgroup M < H such that in the 
+%% # interval [M, G] there is a filter+ideal that is isomorphic to PJ11.
+%% # This would give us PJ11 on a smaller set than 216.
+
+%% # Looking at the subgroup lattice of G in XGAP, we see that, 
+%% # H has only two nontrivial proper subgroups.  These are
+%% # Representative(ccsg[2]) and Representative(ccsg[4]):
+%% M1:=Representative(ccsgB[2]);
+%% M2:=Representative(ccsgB[4]);
+%% IsSubgroup(H,Representative(ccsgB[2]));  # returns true
+%% IsSubgroup(H,Representative(ccsgB[4]));  # returns true
+%% # We need to find a subgroup that covers one of these two subgroups
+%% # and is not below A or C.
+%% intM1B:=IntermediateSubgroups(B,M1);
+%% # returns 
+%% #  rec( subgroups := [ Group([ f4, f5 ]), Group([ f4, f6 ]), Group([ f1^2, f4 ]), 
+%% #        Group([ f4, f5*f6 ]), Group([ f4, f5^2*f6 ]), Group([ f4, f5, f6 ]), 
+%% #        Group([ f1^2, f4, f5*f6 ]) ], 
+%% #    inclusions := [ [ 0, 1 ], [ 0, 2 ], [ 0, 3 ], [ 0, 4 ], [ 0, 5 ], [ 1, 6 ], [ 2, 6 ], 
+%% #        [ 3, 7 ], [ 4, 6 ], [ 4, 7 ], [ 5, 6 ], [ 6, 8 ], [ 7, 8 ] ] )
+%% #
+%% # M1 is maximal in the intermediate subgroups 1, 2, 3, 4, and 5.
+%% # Check whether these are subgroups of A or C.
+%% IsSubgroup(A,intM1B.subgroups[1]);   # returns false
+%% IsSubgroup(B,intM1B.subgroups[1]);   # returns true (of course)
+%% IsSubgroup(C,intM1B.subgroups[1]);   # returns false
+%% # So PJ11 is the union of [M1, intM1B.subgroups[1]] and [H, G]
+%% Index(G,M1);  # returns 108
+%% # so we have a representation of PJ11 on 108 elements.
+
+%% # Next consider M2.
+%% Index(G,M2);  # returns 72
+%% intM2B:=IntermediateSubgroups(B,M2);
+%% # returns 
+%% #  rec( subgroups := [ Group([ f1, f4 ]), Group([ f1, f4*f5*f6 ]), Group([ f1, f4*f5^2*f6^2 ]), 
+%% #        Group([ f1, f5*f6 ]), Group([ f1, f4, f5*f6 ]), Group([ f1, f4*f5, f5^2*f6^2 ]), 
+%% #        Group([ f1, f4*f6, f5*f6 ]), Group([ f1, f5, f6 ]) ], 
+%% #    inclusions := [ [ 0, 1 ], [ 0, 2 ], [ 0, 3 ], [ 0, 4 ], [ 1, 5 ], [ 2, 5 ], [ 3, 5 ], 
+%% #        [ 4, 5 ], [ 4, 6 ], [ 4, 7 ], [ 4, 8 ], [ 5, 9 ], [ 6, 9 ], [ 7, 9 ], [ 8, 9 ] ] )
+%% #
+%% # so M2 is maximal in the intermediate subgroups 1, 2, 3, and 4.
+%% # Check whether one of these is not a subgroup of A or C:
+%% IsSubgroup(A,intM2B.subgroups[1]);   # returns true
+%% IsSubgroup(C,intM2B.subgroups[1]);   # returns true
+
+%% IsSubgroup(A,intM2B.subgroups[2]);   # returns true
+%% IsSubgroup(C,intM2B.subgroups[2]);   # returns false
+
+%% IsSubgroup(A,intM2B.subgroups[3]);   # returns true
+%% IsSubgroup(C,intM2B.subgroups[3]);   # returns false
+
+%% IsSubgroup(A,intM2B.subgroups[3]);   # returns true
+%% IsSubgroup(C,intM2B.subgroups[3]);   # returns false
+%% #
+%% # So, using this method and this group, the smallest set on 
+%% # which we can represent PJ11 is 108.
+
+
+%% \end{itemize}
+
+
+
+%/////////////////////////////////////////////////////////
+\section{Small unary algebras for congruence lattices of size $\le 7$}
+\label{sec:small-unary-algebras}
+%%%% \input{inputs/conglattices7.tex}  (include all major inputs in one file)
+%% -- Begin conglattices7.tex file insertion -------------------------------
+
+The algorithm developed by Heitzig and Reinhold 
+in~\cite{HeitzigReinhold2002} and refined by Jipsen and Lawless
+in~\cite{JipsenLawless2015} can be used to find all lattices with
+at most 7 elements (there are~78). By the results 
+in Section~\ref{sec:clos-prop-class}
+we omit distributive lattices and lattices that are ordinal sums 
+of smaller lattices. This leaves 35 lattices listed below 
+with the names $\bL_1,\ldots,\bL_{35}$. In most cases, 
+each lattice $\bL_i$ is followed by a
+unary algebra denoted $\bB_i$ with the property 
+that $\bL_i=\Con(\bB_i)$.
+The base set of each algebra is $\{0,1,\dots,n-1\}$, 
+and each unary operation $f,g,h,\ldots$ is
+specified by a vector of values of these elements.  
+Algebras of cardinality less than
+$11$ 
+\marginpar{PJ: should this be less than or equal to 11???} 
+are known to be minimal-size algebras that produce the corresponding
+congruence lattice. The algebra $\bB_{33}$ is also known 
+to be of minimal cardinality. 
+\textcolor{red}{What (or where) is the proof of this?}
+Currently only $\bL_{10}$ is not known to be the congruence
+lattice of a finite algebra. 
+
+%Thirteen of the 35 lattices below are subdirectly reducible (specifically: 6, 7,12, 13, 26, 27, 28, 29, 30, 31, 32, 34, 35). 
+
+\subsection{Algorithms}
+In this subsection we describe the procedures we used to 
+find representations. The \emph{closure} algorithm, described below,
+was main workhorse and it produces minimal representations. 
+
+A second technique, developed by the first author in~\cite{DeMeo2013},
+starts with an algebra $\bB$ whose congruence lattice is
+a homomorphic image of $L$ and finds an expansion $\bA$ of $\bB$
+whose congruence lattice is $L$.
+The lattices in Section~\ref{sec:lattices} where this 
+technique was used are 
+$\bL_3$, $\bL_6$, $\bL_7$, $\bL_9$,
+$\bL_{13}$, $\bL_{27}$ and $\bL_{28}$. These are marked with 
+``Method: overalgebras". \textcolor{red}{Why aren't the small
+numbered ones marked?}
+
+
+The third method, \emph{filter-ideal}, is described in 
+Section~\ref{sec:union-filter-ideal}. Representations 
+for $\bL_{17}$ and $\bL_{20}$ used this method combined
+with group theoretical methods.
+
+
+Duality (Theorem~\ref{thm:duals-interv-subl}) was used in 
+certain cases. Examples include the pairs 
+$\bL_{14}$ and $\bL_{15}$, which is discussed above,
+$\bL_{18}$ and $\bL_{19}$,
+$\bL_{20}$ and $\bL_{21}$, and
+$\bL_{22}$ and $\bL_{23}$.
+In each case one of the pair has a small representation (given
+in Section~\ref{sec:lattices}). For the pair
+$\bL_{14}$ and $\bL_{15}$ and the pair 
+$\bL_{20}$ and $\bL_{21}$ we have found explicit representations
+use group methods. But for the others, we do not have 
+explicit representations.
+
+
+Finally we used \emph{group theoretic} methods, usually with the aid
+of GAP. A detailed example of this is given after Figure~\ref{fig:L11}.
+
+
+\textcolor{red}{expand this; say where the gap programs are.
+Also mention where the ua files for the B's are.}. 
+
+
+Let $X_k = \{0, 1, \ldots, k-1\}$.
+
+
+\subsubsection{Closure algorithm}\label{sec:closure-method}
+Let $L$ be the finite lattice we are trying to represent. For this
+algorithm we do the following:
+\begin{enumerate}
+\item
+Search through $\operatorname{Eq}(X_k)$, $k = 2,3, \ldots$ finding
+sublattices isomorphic to~$L$. 
+\item
+For each sublattice $L \cong L' \le \operatorname{Eq}(X_k)$ found, 
+find the unary polymorphs of the members of $L'$; that is,
+calculate the set $F$ of all unary operations on $X_k$
+which respect all $\theta \in L'$.
+\textcolor{red}{Specify this?}
+\item
+For $F$ found in the previous step, 
+$\Con(\langle X_k,F \rangle) = L'$. 
+If so then $\bA = \langle X_k,F \rangle$ is a minimal 
+representation. Otherwise continue the search.
+\end{enumerate}
+
+\begin{remarks}
+\begin{enumerate}[i.]
+\item
+Of course if $L$ has no representation, this procedure will not converge.
+Moreover, seaching for $L$ in $\operatorname{Eq}(k)$
+becomes quickly prohibitive. 
+\item
+The procedure can be sped up by first finding a presentation
+of $L$ with the minimal number of generators. Besides speeding
+up the search in $\operatorname{Eq}(k)$, it is enough in 
+calculating the unary polymorphs to respect the generators.
+\item
+Subdirect decompositions can be used to speed up finding unary
+polymorphs. For  example, if $\theta_0$, $\theta_1 \in L' \le 
+\operatorname{Eq}(X_k)$ with $\theta_0 \meet \theta_1 = 0$, 
+then $X_k$ is naturally embedded into 
+$X_k/\theta_0 \times X_k/\theta_1$. Since the operations in a
+direct product are component-wise, this 
+cuts the search space of possible unary polymorphs 
+from $k^k$ down to $r^r  s^s$, where $r$ and $s$ are the number 
+of blocks in $\theta_0$ and~$\theta_1$.
+\item
+If it can be shown that the algebra of a minimal representation 
+of $L$ has a transitive permutation group for its nonconstatant
+unary polynomials, then we can restrict our search in 
+$\operatorname{Eq}(k)$ to uniform equivalence relations.
+Moreover the search for unary polymorphs can be restricted
+to permutations. 
+\item
+Of course if $F' \subseteq F$ is a set of generators for the 
+moniod $F$, we can take $\bA = \langle X_k,F' \rangle$.
+\end{enumerate}
+\end{remarks}
+
+
+\bigskip
+\textcolor{purple}{I changed $\bB_2$ to have 3, not 4, elements
+so it really would be the smallest rep.}
+
+\subsection{Lattices of size at most 7}\label{sec:lattices}
+
+\
+
+\scs
+
+\setlength{\tabcolsep}{2pt}
+\begin{tabular}{ccc}
+$\bL_1$&
+\begin{minipage}{0.06\textwidth}
+\begin{tikzpicture}
+    [scale=0.6, e/.style={circle,draw,inner sep=0pt,minimum size=4pt}]
+\node(4) at (0,1)[e]{};
+\node(3) at (0.33,0.33)[e]{};%[$1\ 2|3\ 4$]
+\node(2) at (-0.5,0.0)[e]{};%$1\ 3|2\ 4$};
+\node(1) at (0.33,-0.33)[e]{};%$1|2|3\ 4$};
+\node(0) at (0,-1)[e]{};
+\node at (0,1.3){};
+\draw(3)--(4);
+\draw(2)--(4);
+\draw(1)--(3);
+\draw(0)--(1);
+\draw(0)--(2);
+\end{tikzpicture}
+\end{minipage}
+&
+$\setlength{\arraycolsep}{1pt}
+\begin{array}{c|cccc}
+    \bB_1& 0& 1& 2& 3\\\hline
+   f(x)& 1& 0& 3& 2\\
+   g(x)& 1& 0& 1& 0\end{array}$
+\end{tabular}
+
+\ 
+
+\begin{tabular}{ccc}
+$\bL_2$&
+\begin{minipage}{0.07\textwidth}
+\begin{tikzpicture}
+    [scale=0.6, e/.style={circle,draw,inner sep=0pt,minimum size=4pt}]
+\node(4) at (-0.0,1.0)[e]{};
+\node(3) at (0.5,0.0)[e]{};
+\node(2) at (0.0,0.0)[e]{};
+\node(1) at (-0.5,0.0)[e]{};
+\node(0) at (-0.0,-1.0)[e]{};
+\node at (0,1.3){};
+\draw(3)--(4);
+\draw(2)--(4);
+\draw(1)--(4);
+\draw(0)--(1);
+\draw(0)--(2);
+\draw(0)--(3);
+\end{tikzpicture}
+\end{minipage}
+&
+$\setlength{\arraycolsep}{1pt}\begin{array}{c|cccc}
+    \bB_2& 0& 1& 2\\\hline
+   f(x)& 0& 1& 2\end{array}$
+\end{tabular}
+
+%$\setlength{\arraycolsep}{1pt}\begin{array}{c|cccc}
+%    \bB_2& 0& 1& 2& 3\\\hline
+%   f(x)& 1& 0& 3& 2\\
+%   g(x)& 2& 3& 0& 1\end{array}$
+%\end{tabular}
+
+\begin{tabular}{ccc}
+$\bL_3$&
+\begin{minipage}{0.07\textwidth}
+\begin{tikzpicture}
+    [scale=0.6, e/.style={circle,draw,inner sep=0pt,minimum size=4pt}]
+\node(5) at (0,1)[e]{};
+\node(4) at (0.5,0.33)[e]{};
+\node(3) at (-0.5,0.0)[e]{};
+\node(2) at (0,0)[e]{};
+\node(1) at (0.5,-0.33)[e]{};
+\node(0) at (0,-1)[e]{};
+\node at (0,1.3){};
+\draw(4)--(5);
+\draw(3)--(5);
+\draw(2)--(5);
+\draw(1)--(4);
+\draw(0)--(1);
+\draw(0)--(2);
+\draw(0)--(3);
+\end{tikzpicture}
+\end{minipage}
+&
+$\setlength{\arraycolsep}{1pt}\begin{array}{c|ccccccc}
+           \bB_3& 0& 1& 2& 3& 4& 5& 6\\\hline
+   f(x)& 0& 1& 2& 1& 2& 1& 0\\
+   g(x)& 0& 3& 4& 3& 4& 3& 0\\
+   h(x)& 6& 5& 2& 5& 2& 5& 6\\
+   k(x)& 0& 1& 2& 0& 0& 2& 2\end{array}$
+\end{tabular}
+
+\begin{tabular}{ccc}
+$\bL_4$&
+\begin{minipage}{0.07\textwidth}
+\begin{tikzpicture}
+    [scale=0.6, e/.style={circle,draw,inner sep=0pt,minimum size=4pt}]
+\node(5) at (0,1)[e]{};
+\node(4) at (0.2,0.33)[e]{};
+\node(3) at (-0.5,0)[e]{};
+\node(2) at (0.4,-0.33)[e]{};
+\node(1) at (0,-0.33)[e]{};
+\node(0) at (0,-1)[e]{};
+\node at (0,1.3){};
+\draw(4)--(5);
+\draw(3)--(5);
+\draw(2)--(4);
+\draw(1)--(4);
+\draw(0)--(3);
+\draw(0)--(2);
+\draw(0)--(1);
+\end{tikzpicture}
+\end{minipage}
+&
+$\setlength{\arraycolsep}{1pt}\begin{array}{c|cccc}
+    \bB_4& 0& 1& 2& 3\\\hline
+   f(x)& 1& 0& 3& 2\\
+   g(x)& 0& 0& 2& 2\end{array}$
+\end{tabular}
+
+\begin{tabular}{ccc}
+$\bL_5$&
+\begin{minipage}{0.07\textwidth}
+\begin{tikzpicture}
+    [scale=0.6, e/.style={circle,draw,inner sep=0pt,minimum size=4pt}]
+\node(5) at (0,1)[e]{};
+\node(4) at (0,0.33)[e]{};
+\node(3) at (0.4,0.33)[e]{};
+\node(2) at (-0.5,0)[e]{};
+\node(1) at (0.2,-0.33)[e]{};
+\node(0) at (0,-1)[e]{};
+\node at (0,1.3){};
+\draw(4)--(5);
+\draw(3)--(5);
+\draw(2)--(5);
+\draw(1)--(3);
+\draw(1)--(4);
+\draw(0)--(1);
+\draw(0)--(2);
+\end{tikzpicture}
+\end{minipage}
+&
+$\setlength{\arraycolsep}{1pt}\begin{array}{c|cccccccccccc}
+           \bB_5& 0& 1& 2& 3& 4& 5& 6& 7& 8& 9 & 10& 11\\\hline
+    f(x)& 1&  2&   3& 4& 5& 0& 7& 8& 9& 10& 11& 6\\
+   g(x)& 6& 11& 10& 9& 8& 7& 0& 5& 4& 3&   2&  1\\
+   h(x)& 0& 0& 0& 6& 0& 0& 0& 0& 6& 0& 0& 0\end{array}$
+\end{tabular}
+
+\begin{tabular}{ccc}
+$\bL_6$&
+\begin{minipage}{0.07\textwidth}
+\begin{tikzpicture}
+    [scale=0.6, e/.style={circle,draw,inner sep=0pt,minimum size=4pt}]
+\node(5) at (0,1)[e]{};
+\node(4) at (-0.5,0.33)[e]{};
+\node(3) at (0.5,0.33)[e]{};
+\node(2) at (-0.5,-0.33)[e]{};
+\node(1) at (0.5,-0.33)[e]{};
+\node(0) at (0,-1)[e]{};
+\node at (0,1.3){};
+\draw(4)--(5);
+\draw(3)--(5);
+\draw(2)--(4);
+\draw(1)--(3);
+\draw(0)--(1);
+\draw(0)--(2);
+\end{tikzpicture}
+\end{minipage}
+&
+$\setlength{\arraycolsep}{1pt}\begin{array}{c|cccccc}
+    \bB_6& 0& 1& 2& 3& 4& 5\\\hline
+   f(x)& 2& 2& 1& 5& 5& 4\\
+   g(x)& 3& 4& 4& 0& 1& 1\\
+   h(x)& 4& 5& 3& 4& 5& 3\end{array}$
+\end{tabular}
+
+\begin{tabular}{ccc}
+$\bL_7$&
+\begin{minipage}{0.07\textwidth}
+\begin{tikzpicture}
+    [scale=0.6, e/.style={circle,draw,inner sep=0pt,minimum size=4pt}]
+\node(5) at (0,1)[e]{};
+\node(4) at (0.5,0.5)[e]{};
+\node(3) at (-0.5,0)[e]{};
+\node(2) at (0.5,0)[e]{};
+\node(1) at (0.5,-0.5)[e]{};
+\node(0) at (0,-1)[e]{};
+\node at (0,1.3){};
+\draw(4)--(5);
+\draw(3)--(5);
+\draw(2)--(4);
+\draw(1)--(2);
+\draw(0)--(1);
+\draw(0)--(3);
+\end{tikzpicture}
+\end{minipage}
+&
+$\setlength{\arraycolsep}{1pt}\begin{array}{c|cccccc}
+    \bB_7& 0& 1& 2& 3& 4& 5\\\hline
+   f(x)& 1& 0& 0& 4& 3& 3\\
+   g(x)& 4& 5& 5& 1& 2& 2\\
+   h(x)& 3& 3& 4& 3& 3& 4\end{array}$
+\end{tabular}
+
+\begin{tabular}{ccc}
+$\bL_8$&
+\begin{minipage}{0.1\textwidth}
+\begin{tikzpicture}
+    [scale=0.6, e/.style={circle,draw,inner sep=0pt,minimum size=4pt}]
+\node(5) at (0,1)[e]{};
+\node(4) at (-.75,0.0)[e]{};
+\node(3) at (-.25,0)[e]{};
+\node(2) at (0.25,0)[e]{};
+\node(1) at (.75,0)[e]{};
+\node(0) at (0,-1)[e]{};
+\node at (0,1.3){};
+\draw(4)--(5);
+\draw(3)--(5);
+\draw(2)--(5);
+\draw(1)--(5);
+\draw(0)--(1);
+\draw(0)--(2);
+\draw(0)--(3);
+\draw(0)--(4);
+\end{tikzpicture}
+\end{minipage}
+&
+$\setlength{\arraycolsep}{1pt}\begin{array}{c|cccccc}
+    \bB_8& 0& 1& 2& 3& 4& 5\\\hline
+   f(x)& 1& 2& 0& 4& 5& 3\\
+   g(x)& 3& 5& 4& 0& 2& 1\end{array}$
+\end{tabular}
+
+\begin{tabular}{ccc}
+$\bL_9$&
+\begin{minipage}{0.08\textwidth}
+\begin{tikzpicture}
+    [scale=0.6, e/.style={circle,draw,inner sep=0pt,minimum size=4pt}]
+\node(6) at (0,1)[e]{};
+\node(5) at (0.5,0.33)[e]{};
+\node(4) at (-0.33,0)[e]{};
+\node(3) at (-0.66,0)[e]{};
+\node(2) at (0,0)[e]{};
+\node(1) at (0.5,-0.33)[e]{};
+\node(0) at (0,-1)[e]{};
+\node at (0,1.3){};
+\draw(5)--(6);
+\draw(4)--(6);
+\draw(3)--(6);
+\draw(2)--(6);
+\draw(1)--(5);
+\draw(0)--(1);
+\draw(0)--(2);
+\draw(0)--(3);
+\draw(0)--(4);
+\end{tikzpicture}
+\end{minipage}
+&
+$\setlength{\arraycolsep}{1pt}\begin{array}{c|cccccccccccccccc}
+        \bB_9& 0& 1& 2& 3& 4& 5& 6& 7& 8& 9 & 10& 11& 12& 13& 14& 15\\\hline
+    f(x)& 0& 0& 0& 0& 0& 0& 2& 1&  2&  1&   3&   4&   5&   3&   4&  5\\
+   g(x)& 0& 0& 0& 0& 0& 0& 6&  7&  6&  7& 10& 11& 12& 10& 11& 12 \\
+   h(x)&13&14&15&1&9&8&15&14&13& 15& 1&  9&    8&   8& 1&   9\end{array}$
+Method: overalgebras
+\end{tabular}
+\marginpar{need to have some discussion of the overalgebras method in the text?}
+
+\begin{tabular}{ccc}
+$\bL_{10}$&
+\begin{minipage}{0.1\textwidth}
+\begin{tikzpicture}
+    [scale=.6, e/.style={circle,draw,inner sep=0pt,minimum size=4pt}]
+\node(6) at (0.33,1)[e]{};
+\node(5) at (0,0.33)[e]{};
+\node(4) at (0.66,0.33)[e]{};
+\node(3) at (-1,0)[e]{};
+\node(2) at (-0.33,-0.33)[e]{};
+\node(1) at (0.33,-0.33)[e]{};
+\node(0) at (0,-1)[e]{};
+\node at (0,1.3){};
+\draw(5)--(6);
+\draw(4)--(6);
+\draw(3)--(6);
+\draw(2)--(5);
+\draw(1)--(4);
+\draw(1)--(5);
+\draw(0)--(1);
+\draw(0)--(2);
+\draw(0)--(3);
+\end{tikzpicture}
+\end{minipage}
+&
+\begin{tabular}{l}
+\textbf{No finite algebra known with this congruence lattice}
+\end{tabular}
+\end{tabular}
+
+\begin{tabular}{ccc}
+$\bL_{11}$&
+\begin{minipage}{0.08\textwidth}
+\begin{tikzpicture}
+    [xscale=.4, yscale=.6, e/.style={circle,draw,inner sep=0pt,minimum size=4pt}]
+\node(6) at (0.33,1)[e]{};
+\node(5) at (-0.33,0.33)[e]{};
+\node(4) at (1,0.33)[e]{};
+\node(3) at (0,0)[e]{};
+\node(2) at (-1,-0.33)[e]{};
+\node(1) at (0.33,-0.33)[e]{};
+\node(0) at (-0.33,-1)[e]{};
+\node at (0,1.3){};
+\draw(5)--(6);
+\draw(4)--(6);
+\draw(3)--(5);
+\draw(2)--(5);
+\draw(1)--(3);
+\draw(1)--(4);
+\draw(0)--(1);
+\draw(0)--(2);
+\end{tikzpicture}
+\end{minipage}
+&
+\begin{tabular}{l}
+A finite algebra with 108 elements known.\\
+(See discussion after Fig.~\ref{fig:L11})
+\end{tabular}
+\end{tabular}
+
+\begin{tabular}{ccc}
+$\bL_{12}$&
+\begin{minipage}{0.07\textwidth}
+\begin{tikzpicture}
+    [scale=.6, e/.style={circle,draw,inner sep=0pt,minimum size=4pt}]
+\node(6) at (0,1)[e]{};
+\node(5) at (0.5,0.33)[e]{};
+\node(4) at (-0.5,0.33)[e]{};
+\node(3) at (0.0,0.0)[e]{};
+\node(2) at (0.5,-0.33)[e]{};
+\node(1) at (-0.5,-0.33)[e]{};
+\node(0) at (0,-1)[e]{};
+\node at (0,1.3){};
+\draw(5)--(6);
+\draw(4)--(6);
+\draw(3)--(6);
+\draw(2)--(5);
+\draw(1)--(4);
+\draw(0)--(1);
+\draw(0)--(2);
+\draw(0)--(3);
+\end{tikzpicture}
+\end{minipage}
+&
+$\setlength{\arraycolsep}{1pt}\begin{array}{c|ccccccccc}
+   \bB_{12}& 0& 1& 2& 3& 4& 5& 6& 7& 8\\\hline
+f(x)& 0& 0& 3& 3& 3& 6& 6& 6& 0\\
+g(x)& 0& 0& 8& 8& 8& 1& 1& 1& 0\\
+h(x)& 0& 5& 5& 4& 0& 0& 5& 4& 4\\
+k(x)& 4& 2& 2& 3& 4& 4& 2& 3& 3\\
+l(x)& 5& 5& 7& 7& 7& 6& 6& 6& 5\end{array}$
+\end{tabular}
+
+\vspace{2mm}
+
+\begin{tabular}{ccc}
+$\bL_{13}$&
+\begin{minipage}{0.07\textwidth}
+\begin{tikzpicture}
+    [scale=.6, e/.style={circle,draw,inner sep=0pt,minimum size=4pt}]
+\node(6) at (0,1)[e]{};
+\node(5) at (0.5,0.5)[e]{};
+\node(4) at (0,0)[e]{};
+\node(3) at (-0.66,0)[e]{};
+\node(2) at (0.5,0)[e]{};
+\node(1) at (0.5,-0.5)[e]{};
+\node(0) at (0,-1)[e]{};
+\node at (0,1.3){};
+\draw(5)--(6);
+\draw(4)--(6);
+\draw(3)--(6);
+\draw(2)--(5);
+\draw(1)--(2);
+\draw(0)--(1);
+\draw(0)--(3);
+\draw(0)--(4);
+\end{tikzpicture}
+\end{minipage}
+&
+$\setlength{\arraycolsep}{1pt}
+\begin{array}{c|ccccccccccccccccccc}
+    \bB_{13}& 0& 1& 2& 3& 4& 5& 6& 7& 8& 9&10&11&12&13&14&15&16&17&18\\\hline
+f(x)& 0& 1& 2& 1& 2& 1& 0& 0& 1& 2&   2& 1&  0&  0&  1&  2&  1&  2& 0\\
+g(x)& 0& 1& 2& 0& 0& 2& 2& 0& 3& 4&  0&  4& 4&   6&  5&  2&  6&  6& 2\\
+h(x)& 0& 1& 2& 3& 4& 5& 6& 0& 1& 2&  4&  5& 6&   0& 1&   2&  3&  4& 6\\
+k(x)& 7& 8& 9& 3&10&11&12&3&3& 3&  3&  3& 3& 11&11&11& 11&11&11\\
+l(x)&13&14&15&16&17& 5&18&13&16&17&17&16&13&5&5&5& 5&  5& 5
+ \end{array}$
+ \begin{tabular}{l}
+ Method: \\overalgebras
+ \end{tabular}
+\end{tabular}
+
+\begin{tabular}{ccc}
+$\bL_{14}$&
+\begin{minipage}{0.08\textwidth}
+\begin{tikzpicture}
+    [scale=.6, e/.style={circle,draw,inner sep=0pt,minimum size=4pt}]
+\node(6) at (0,1)[e]{};
+\node(5) at (0.4,0.33)[e]{};
+\node(4) at (0,0.33)[e]{};
+\node(3) at (-0.8,0)[e]{};
+\node(2) at (-0.4,0)[e]{};
+\node(1) at (0.2,-0.33)[e]{};
+\node(0) at (0,-1)[e]{};
+\node at (0,1.3){};
+\draw(5)--(6);
+\draw(4)--(6);
+\draw(3)--(6);
+\draw(2)--(6);
+\draw(1)--(4);
+\draw(1)--(5);
+\draw(0)--(1);
+\draw(0)--(2);
+\draw(0)--(3);
+\end{tikzpicture}
+\end{minipage}
+&
+\begin{tabular}{l}
+Upper interval in Sub$(A_6)$,\\
+algebra of size 90\end{tabular}
+\end{tabular}
+
+\begin{tabular}{ccc}
+$\bL_{15}$&
+\begin{minipage}{0.08\textwidth}
+\begin{tikzpicture}
+    [scale=.6, e/.style={circle,draw,inner sep=0pt,minimum size=4pt}]
+\node(6) at (0,1)[e]{};
+\node(5) at (0.2,0.33)[e]{};
+\node(4) at (-0.4,0)[e]{};
+\node(3) at (-0.8,0)[e]{};
+\node(2) at (0,-0.33)[e]{};
+\node(1) at (0.4,-0.33)[e]{};
+\node(0) at (0,-1)[e]{};
+\node at (0,1.3){};
+\draw(5)--(6);
+\draw(4)--(6);
+\draw(3)--(6);
+\draw(2)--(5);
+\draw(1)--(5);
+\draw(0)--(4);
+\draw(0)--(3);
+\draw(0)--(2);
+\draw(0)--(1);
+\end{tikzpicture}
+\end{minipage}
+&
+$\setlength{\arraycolsep}{1pt}\begin{array}{c|cccc}
+    \bB_{15}& 0& 1& 2& 3\\\hline
+   f(x)& 1& 0& 3& 2\end{array}$
+\end{tabular}
+
+\begin{tabular}{ccc}
+$\bL_{16}$&
+\begin{minipage}{0.07\textwidth}
+\begin{tikzpicture}
+    [scale=.6, e/.style={circle,draw,inner sep=0pt,minimum size=4pt}]
+\node(6) at (0,1)[e]{};
+\node(5) at (-0.1,0.33)[e]{};
+\node(4) at (0.5,0.33)[e]{};
+\node(3) at (0.2,0.33)[e]{};
+\node(2) at (-0.66,0)[e]{};
+\node(1) at (0.25,-0.33)[e]{};
+\node(0) at (0,-1)[e]{};
+\node at (0,1.3){};
+\draw(5)--(6);
+\draw(4)--(6);
+\draw(3)--(6);
+\draw(2)--(6);
+\draw(1)--(3);
+\draw(1)--(4);
+\draw(1)--(5);
+\draw(0)--(1);
+\draw(0)--(2);
+\end{tikzpicture}
+\end{minipage}
+&
+\begin{tabular}{l}
+Upper interval in Sub$(C_2.A_6)$\\
+algebra of size 180\end{tabular}
+\end{tabular}
+
+\begin{tabular}{ccc}
+$\bL_{17}$&
+\begin{minipage}{0.07\textwidth}
+\begin{tikzpicture}
+    [scale=.6, e/.style={circle,draw,inner sep=0pt,minimum size=4pt}]
+\node(6) at (0,1.0)[e]{};
+\node(5) at (0.25,0.33)[e]{};
+\node(4) at (-0.66,0)[e]{};
+\node(3) at (0.2,-0.33)[e]{};
+\node(2) at (-0.1,-0.33)[e]{};
+\node(1) at (0.5,-0.33)[e]{};
+\node(0) at (0,-1)[e]{};
+\node at (0,1.3){};
+\draw(5)--(6);
+\draw(4)--(6);
+\draw(3)--(5);
+\draw(2)--(5);
+\draw(1)--(5);
+\draw(0)--(4);
+\draw(0)--(3);
+\draw(0)--(2);
+\draw(0)--(1);
+\end{tikzpicture}
+\end{minipage}
+&
+$\setlength{\arraycolsep}{1pt}\begin{array}{c|cccccccccccc}
+       \bB_{17}& 0& 1& 2& 3& 4& 5& 6& 7& 8& 9& 10& 11\\\hline
+    f(x)& 1& 0& 3& 2& 5& 4& 7& 6& 9& 8& 11& 10\\
+   g(x)& 4& 7& 5& 6& 8&11& 9&10& 0& 3&  1&  2\\
+   h(x)& 0& 0& 0& 0& 5& 5& 5& 5&10&10&10&10\end{array}$
+\begin{tabular}{l}
+Method: filter-ideal in Sub$(A_4)$
+\end{tabular}
+\end{tabular}
+
+\begin{tabular}{ccc}
+$\bL_{18}$&
+\begin{minipage}{0.07\textwidth}
+\begin{tikzpicture}
+    [scale=.6, e/.style={circle,draw,inner sep=0pt,minimum size=4pt}]
+\node(6) at (0,1)[e]{};
+\node(5) at (0.5,0.33)[e]{};
+\node(4) at (-0.5,0.33)[e]{};
+\node(3) at (0,0.33)[e]{};
+\node(2) at (0.5,-0.33)[e]{};
+\node(1) at (-0.5,-0.33)[e]{};
+\node(0) at (0,-1)[e]{};
+\node at (0,1.3){};
+\draw(5)--(6);
+\draw(4)--(6);
+\draw(3)--(6);
+\draw(2)--(5);
+\draw(1)--(3);
+\draw(1)--(4);
+\draw(0)--(1);
+\draw(0)--(2);
+\end{tikzpicture}
+\end{minipage}
+&
+\begin{tabular}{l}
+Dual of 19, no explicit\\
+small representation known\end{tabular}
+\end{tabular}
+
+\begin{tabular}{ccc}
+$\bL_{19}$&
+\begin{minipage}{0.07\textwidth}
+\begin{tikzpicture}
+    [scale=.6, e/.style={circle,draw,inner sep=0pt,minimum size=4pt}]
+\node(6) at (0,1)[e]{};
+\node(5) at (-0.5,0.33)[e]{};
+\node(4) at (0.5,0.33)[e]{};
+\node(3) at (-0.5,-0.33)[e]{};
+\node(2) at (0,-0.33)[e]{};
+\node(1) at (0.5,-0.33)[e]{};
+\node(0) at (0,-1)[e]{};
+\node at (0,1.3){};
+\draw(5)--(6);
+\draw(4)--(6);
+\draw(3)--(5);
+\draw(2)--(5);
+\draw(1)--(4);
+\draw(0)--(3);
+\draw(0)--(2);
+\draw(0)--(1);
+\end{tikzpicture}
+\end{minipage}
+&
+$\setlength{\arraycolsep}{1pt}\begin{array}{c|cccccccc}
+   \bB_{19}& 0& 1& 2& 3& 4& 5& 6& 7\\\hline
+f(x)& 0& 1& 1& 0& 4& 5& 5& 4\\
+g(x)& 0& 2& 3& 1& 0& 2& 3& 1\\
+h(x)& 7& 6& 6& 7& 3& 2& 2& 3\end{array}$
+\end{tabular}
+
+\begin{tabular}{ccc}
+$\bL_{20}$&
+\begin{minipage}{0.07\textwidth}
+\begin{tikzpicture}
+    [scale=.6, e/.style={circle,draw,inner sep=0pt,minimum size=4pt}]
+\node(6) at (0,1)[e]{};
+\node(5) at (0.44,0.66)[e]{};
+\node(4) at (0,0.33)[e]{};
+\node(3) at (-0.66,0)[e]{};
+\node(2) at (0.44,0)[e]{};
+\node(1) at (0,-0.33)[e]{};
+\node(0) at (0,-1)[e]{};
+\node at (0,1.3){};
+\draw(5)--(6);
+\draw(4)--(6);
+\draw(3)--(6);
+\draw(2)--(5);
+\draw(1)--(2);
+\draw(1)--(4);
+\draw(0)--(1);
+\draw(0)--(3);
+\end{tikzpicture}
+\end{minipage}
+&
+\begin{tabular}{l}
+Method: filter-ideal in SmallGroup(216,153) in GAP\\
+\end{tabular}
+\end{tabular}
+
+\begin{tabular}{ccc}
+$\bL_{21}$&
+\begin{minipage}{0.07\textwidth}
+\begin{tikzpicture}
+    [scale=.6, e/.style={circle,draw,inner sep=0pt,minimum size=4pt}]
+\node(6) at (0,1)[e]{};
+\node(5) at (0,0.33)[e]{};
+\node(4) at (0.44,0)[e]{};
+\node(3) at (-0.66,0)[e]{};
+\node(2) at (0,-0.33)[e]{};
+\node(1) at (0.44,-0.66)[e]{};
+\node(0) at (0,-1)[e]{};
+\node at (0,1.3){};
+\draw(5)--(6);
+\draw(4)--(5);
+\draw(3)--(6);
+\draw(2)--(5);
+\draw(1)--(4);
+\draw(0)--(3);
+\draw(0)--(2);
+\draw(0)--(1);
+\end{tikzpicture}
+\end{minipage}
+&
+$\setlength{\arraycolsep}{1pt}\begin{array}{c|ccccccccc}
+   \bB_{21}& 0& 1& 2& 3& 4& 5& 6& 7& 8\\\hline
+f(x)& 3& 3& 4& 8& 8& 2& 2& 3& 4\\
+g(x)& 0& 0& 6& 1& 1& 0& 0& 5& 6\\
+h(x)& 4& 5& 5& 7& 8& 8& 7& 4& 4\end{array}$
+\end{tabular}
+
+\begin{tabular}{ccc}
+$\bL_{22}$&
+\begin{minipage}{0.07\textwidth}
+\begin{tikzpicture}
+    [scale=.6, e/.style={circle,draw,inner sep=0pt,minimum size=4pt}]
+\node(6) at (0,1)[e]{};
+\node(5) at (0.5,0.5)[e]{};
+\node(4) at (0,0.5)[e]{};
+\node(3) at (-0.66,0)[e]{};
+\node(2) at (0.5,0)[e]{};
+\node(1) at (0.5,-0.5)[e]{};
+\node(0) at (0,-1)[e]{};
+\node at (0,1.3){};
+\draw(5)--(6);
+\draw(4)--(6);
+\draw(3)--(6);
+\draw(2)--(4);
+\draw(2)--(5);
+\draw(1)--(2);
+\draw(0)--(1);
+\draw(0)--(3);
+\end{tikzpicture}
+\end{minipage}
+&
+\begin{tabular}{l}
+Dual of 23, no explicit small\\
+representation known\end{tabular}
+\end{tabular}
+
+\begin{tabular}{ccc}
+$\bL_{23}$&
+\begin{minipage}{0.07\textwidth}
+\begin{tikzpicture}
+    [scale=.6, e/.style={circle,draw,inner sep=0pt,minimum size=4pt}]
+\node(6) at (0,1)[e]{};
+\node(5) at (0.5,0.5)[e]{};
+\node(4) at (0.5,0)[e]{};
+\node(3) at (-0.66,0)[e]{};
+\node(2) at (0.5,-0.5)[e]{};
+\node(1) at (0,-0.5)[e]{};
+\node(0) at (0,-1)[e]{};
+\node at (0,1.3){};
+\draw(5)--(6);
+\draw(4)--(5);
+\draw(3)--(6);
+\draw(2)--(4);
+\draw(1)--(4);
+\draw(0)--(3);
+\draw(0)--(2);
+\draw(0)--(1);
+\end{tikzpicture}
+\end{minipage}
+&
+$\setlength{\arraycolsep}{1pt}\begin{array}{c|cccccc}
+      \bB_{23}& 0& 1& 2& 3& 4& 5\\\hline
+   f(x)& 0& 1& 0& 1& 4& 4\\
+   g(x)& 1& 1& 3& 3& 4& 5\\
+   h(x)& 3& 2& 3& 2& 5& 5\\
+   k(x)& 4& 1& 5& 3& 4& 5\end{array}$
+\end{tabular}
+
+\begin{tabular}{ccc}
+$\bL_{24}$&
+\begin{minipage}{0.07\textwidth}
+\begin{tikzpicture}
+    [scale=.6, e/.style={circle,draw,inner sep=0pt,minimum size=4pt}]
+\node(6) at (0,1)[e]{};
+\node(5) at (0,0.33)[e]{};
+\node(4) at (0.5,0.33)[e]{};
+\node(3) at (-0.5,0.33)[e]{};
+\node(2) at (0.5,-0.33)[e]{};
+\node(1) at (-0.5,-0.33)[e]{};
+\node(0) at (0,-1)[e]{};
+\node at (0,1.3){};
+\draw(5)--(6);
+\draw(4)--(6);
+\draw(3)--(6);
+\draw(2)--(4);
+\draw(2)--(5);
+\draw(1)--(3);
+\draw(1)--(5);
+\draw(0)--(1);
+\draw(0)--(2);
+\end{tikzpicture}
+\end{minipage}
+&
+$\setlength{\arraycolsep}{1pt}\begin{array}{c|cccc}
+      \bB_{24}& 0& 1& 2& 3\\\hline
+   f(x)& 1& 1& 2& 2\\
+   g(x)& 2& 3& 3& 2\end{array}$
+\end{tabular}
+
+\begin{tabular}{ccc}
+$\bL_{25}$&
+\begin{minipage}{0.07\textwidth}
+\begin{tikzpicture}
+    [scale=.6, e/.style={circle,draw,inner sep=0pt,minimum size=4pt}]
+\node(6) at (0,1)[e]{};
+\node(5) at (-0.5,0.33)[e]{};
+\node(4) at (0.5,0.33)[e]{};
+\node(3) at (-0.5,-0.33)[e]{};
+\node(2) at (0.5,-0.33)[e]{};
+\node(1) at (0,-0.33)[e]{};
+\node(0) at (0,-1)[e]{};
+\node at (0,1.3){};
+\draw(5)--(6);
+\draw(4)--(6);
+\draw(3)--(5);
+\draw(2)--(4);
+\draw(1)--(5);
+\draw(1)--(4);
+\draw(0)--(3);
+\draw(0)--(2);
+\draw(0)--(1);
+\end{tikzpicture}
+\end{minipage}
+&
+$\setlength{\arraycolsep}{1pt}\begin{array}{c|ccccc}
+      \bB_{25}& 0& 1& 2& 3& 4\\\hline
+   f(x)&0& 0& 2& 2& 2\\
+   g(x)&0& 1& 0& 1& 1\\
+   h(x)&1& 1& 4& 4& 4\\
+   k(x)&2& 3& 2& 3& 3\end{array}$
+\end{tabular}
+
+\begin{tabular}{ccc}
+$\bL_{26}$&
+\begin{minipage}{0.07\textwidth}
+\begin{tikzpicture}
+    [scale=.6, e/.style={circle,draw,inner sep=0pt,minimum size=4pt}]
+\node(6) at (0,1)[e]{};
+\node(5) at (0.25,0.5)[e]{};
+\node(4) at (-0.66,0)[e]{};
+\node(3) at (0,0)[e]{};
+\node(2) at (0.5,0)[e]{};
+\node(1) at (0.25,-0.5)[e]{};
+\node(0) at (0,-1)[e]{};
+\node at (0,1.3){};
+\draw(5)--(6);
+\draw(4)--(6);
+\draw(3)--(5);
+\draw(2)--(5);
+\draw(1)--(2);
+\draw(1)--(3);
+\draw(0)--(1);
+\draw(0)--(4);
+\end{tikzpicture}
+\end{minipage}
+&
+$\setlength{\arraycolsep}{1pt}\begin{array}{c|cccccc}
+      \bB_{26}& 0& 1& 2& 3& 4& 5\\\hline
+   f(x)&1& 0& 3& 2& 0& 2\\
+   g(x)&4& 4& 5& 5& 1& 3\\
+   h(x)&0& 0& 0& 0& 1& 1\\
+   k(x)&3& 5& 3& 5& 3& 3\end{array}$
+\end{tabular}
+
+\begin{tabular}{ccc}
+$\bL_{27}$&
+\begin{minipage}{0.07\textwidth}
+\begin{tikzpicture}
+    [scale=.6, e/.style={circle,draw,inner sep=0pt,minimum size=4pt}]
+\node(6) at (0,1)[e]{};
+\node(5) at (0.5,0.5)[e]{};
+\node(4) at (-0.5,0.33)[e]{};
+\node(3) at (0.5,0.0)[e]{};
+\node(2) at (-0.5,-0.33)[e]{};
+\node(1) at (0.5,-0.5)[e]{};
+\node(0) at (0,-1)[e]{};
+\node at (0,1.3){};
+\draw(5)--(6);
+\draw(4)--(6);
+\draw(3)--(5);
+\draw(2)--(4);
+\draw(1)--(3);
+\draw(0)--(1);
+\draw(0)--(2);
+\end{tikzpicture}
+\end{minipage}
+&
+$\setlength{\arraycolsep}{1pt}\begin{array}{c|cccccccccccccccc}
+        \bB_{27}& 0& 1& 2& 3& 4& 5& 6& 7& 8& 9 & 10& 11& 12& 13& 14& 15\\\hline
+   f(x)&0& 1& 2& 3& 4& 5& 0& 0& 0& 0& 0& 2& 2& 2& 2& 2\\
+   g(x)&4& 5& 3& 4& 5& 3& 5& 3& 4& 5& 3& 4& 5& 4& 5& 3\\
+   h(x)&2& 2& 1& 5& 5& 4& 2& 1& 5& 5& 4& 2& 2& 5& 5& 4\\
+   k(x)&3& 4& 4& 0& 1& 1& 4& 4& 0& 1& 1& 3& 4& 0& 1& 1\\
+   l(x)&0& 6& 7& 8& 9& 10& 6& 7& 8& 9& 10& 0& 6& 8& 9& 10\\
+   m(x)&11& 12& 2& 13& 14& 15& 12& 2& 13& 14& 15& 11& 12& 13& 14& 15
+\end{array}$
+ \begin{tabular}{l}
+ Method: \\overalgebras
+ \end{tabular}
+\end{tabular}
+
+\begin{tabular}{ccc}
+$\bL_{28}$&
+\begin{minipage}{0.07\textwidth}
+\begin{tikzpicture}
+    [scale=.6, e/.style={circle,draw,inner sep=0pt,minimum size=4pt}]
+\node(6) at (0,1)[e]{};
+\node(5) at (0.5,0.6)[e]{};
+\node(4) at (-0.5,0)[e]{};
+\node(3) at (0.5,0.2)[e]{};
+\node(2) at (0.5,-0.2)[e]{};
+\node(1) at (0.5,-0.6)[e]{};
+\node(0) at (0,-1)[e]{};
+\node at (0,1.3){};
+\draw(5)--(6);
+\draw(4)--(6);
+\draw(3)--(5);
+\draw(2)--(3);
+\draw(1)--(2);
+\draw(0)--(1);
+\draw(0)--(4);
+\end{tikzpicture}
+\end{minipage}
+&
+$\setlength{\arraycolsep}{1pt}\begin{array}{c|cccccccccccccccc}
+        \bB_{28}& 0& 1& 2& 3& 4& 5& 6& 7& 8& 9 & 10& 11& 12& 13& 14& 15\\\hline
+   f(x)&0& 1& 2& 3& 4& 5& 0& 0& 0& 0& 0& 2& 2& 2& 2& 2\\
+   g(x)&3& 3& 4& 3& 3& 4& 3& 4& 3& 3& 4& 3& 3& 3& 3& 4\\
+   h(x)&1& 0& 0& 4& 3& 3& 0& 0& 4& 3& 3& 1& 0& 4& 3& 3\\
+   k(x)&4& 5& 5& 1& 2& 2& 5& 5& 1& 2& 2& 4& 5& 1& 2& 2\\
+   l(x)&0& 6& 7& 8& 9& 10& 6& 7& 8& 9& 10& 0& 6& 8& 9& 10\\
+   m(x)&11& 12& 2& 13& 14& 15& 12& 2& 13& 14& 15& 11& 12& 13& 14& 15
+\end{array}$
+ \begin{tabular}{l}
+ Method: \\overalgebras
+ \end{tabular}
+
+\end{tabular}
+
+\begin{tabular}{ccc}
+$\bL_{29}$&
+\begin{minipage}{0.07\textwidth}
+\begin{tikzpicture}
+    [scale=.6, e/.style={circle,draw,inner sep=0pt,minimum size=4pt}]
+\node(6) at (0.,1)[e]{};
+\node(5) at (0.5,0.5)[e]{};
+\node(4) at (-0.66,0.25)[e]{};
+\node(3) at (0.5,0)[e]{};
+\node(2) at (-0.66,-0.25)[e]{};
+\node(1) at (0,-0.5)[e]{};
+\node(0) at (0,-1)[e]{};
+\node at (0,1.3){};
+\draw(5)--(6);
+\draw(4)--(6);
+\draw(3)--(5);
+\draw(2)--(4);
+\draw(1)--(3);
+\draw(1)--(4);
+\draw(0)--(1);
+\draw(0)--(2);
+\end{tikzpicture}
+\end{minipage}
+&
+$\setlength{\arraycolsep}{1pt}\begin{array}{c|ccccc}
+      \bB_{29}& 0& 1& 2& 3& 4\\\hline
+   f(x)&1& 0& 3& 2& 2\\
+   g(x)&2& 4& 2& 4& 3\end{array}$
+\end{tabular}
+
+\begin{tabular}{ccc}
+$\bL_{30}$&
+\begin{minipage}{0.07\textwidth}
+\begin{tikzpicture}
+    [scale=.6, e/.style={circle,draw,inner sep=0pt,minimum size=4pt}]
+\node(6) at (0,1)[e]{};
+\node(5) at (0,0.5)[e]{};
+\node(4) at (-0.66,0.25)[e]{};
+\node(3) at (0.5,0)[e]{};
+\node(2) at (-0.66,-0.25)[e]{};
+\node(1) at (0.5,-0.5)[e]{};
+\node(0) at (0,-1)[e]{};
+\node at (0,1.3){};
+\draw(5)--(6);
+\draw(4)--(6);
+\draw(3)--(5);
+\draw(2)--(5);
+\draw(2)--(4);
+\draw(1)--(3);
+\draw(0)--(2);
+\draw(0)--(1);
+\end{tikzpicture}
+\end{minipage}
+&
+$\setlength{\arraycolsep}{1pt}\begin{array}{c|ccccc}
+      \bB_{30}& 0& 1& 2& 3& 4\\\hline
+   f(x)&0& 3& 4& 3& 4\\
+   g(x)&2& 2& 1& 4& 3\end{array}$
+\end{tabular}
+
+\begin{tabular}{ccc}
+$\bL_{31}$&
+\begin{minipage}{0.07\textwidth}
+\begin{tikzpicture}
+    [scale=.6, e/.style={circle,draw,inner sep=0pt,minimum size=4pt}]
+\node(6) at (0,1)[e]{};
+\node(5) at (0.5,0.5)[e]{};
+\node(4) at (-0.66,0.25)[e]{};
+\node(3) at (0.5,0)[e]{};
+\node(2) at (0.5,-0.5)[e]{};
+\node(1) at (0,-0.5)[e]{};
+\node(0) at (0,-1)[e]{};
+\node at (0,1.3){};
+\draw(5)--(6);
+\draw(4)--(6);
+\draw(3)--(5);
+\draw(2)--(3);
+\draw(1)--(3);
+\draw(1)--(4);
+\draw(0)--(1);
+\draw(0)--(2);
+\end{tikzpicture}
+\end{minipage}
+&
+$\setlength{\arraycolsep}{1pt}\begin{array}{c|ccccc}
+   \bB_{31}& 0& 1& 2& 3& 4\\\hline
+   f(x)&0& 1& 1& 0& 0\\
+   g(x)&1& 1& 2& 2& 2\\
+   h(x)&3& 2& 2& 4& 4\end{array}$
+\end{tabular}
+
+\begin{tabular}{ccc}
+$\bL_{32}$&
+\begin{minipage}{0.07\textwidth}
+\begin{tikzpicture}
+    [scale=.6, e/.style={circle,draw,inner sep=0pt,minimum size=4pt}]
+\node(6) at (0,1)[e]{};
+\node(5) at (0,0.5)[e]{};
+\node(4) at (0.5,0.5)[e]{};
+\node(3) at (0.5,0)[e]{};
+\node(2) at (-0.66,-0.25)[e]{};
+\node(1) at (0.5,-0.5)[e]{};
+\node(0) at (0,-1)[e]{};
+\node at (0,1.3){};
+\draw(5)--(6);
+\draw(4)--(6);
+\draw(3)--(5);
+\draw(3)--(4);
+\draw(2)--(5);
+\draw(1)--(3);
+\draw(0)--(2);
+\draw(0)--(1);
+\end{tikzpicture}
+\end{minipage}
+&
+$\setlength{\arraycolsep}{1pt}\begin{array}{c|ccccc}
+      \bB_{32}& 0& 1& 2& 3& 4\\\hline
+   f(x)&0& 1& 1& 3& 3\\
+   g(x)&1& 2& 2& 4& 4\\
+   h(x)&3& 3& 4& 3& 4\end{array}$
+\end{tabular}
+
+\begin{tabular}{ccc}
+$\bL_{33}$&
+\begin{minipage}{0.12\textwidth}
+\begin{tikzpicture}
+    [scale=.6, e/.style={circle,draw,inner sep=0pt,minimum size=4pt}]
+\node(6) at (0,1)[e]{};
+\node(5) at (1,0)[e]{};
+\node(4) at (0.5,0)[e]{};
+\node(3) at (0,0)[e]{};
+\node(2) at (-0.5,0)[e]{};
+\node(1) at (-1,0)[e]{};
+\node(0) at (0,-1)[e]{};
+\node at (0,1.3){};
+\draw(5)--(6);
+\draw(4)--(6);
+\draw(3)--(6);
+\draw(2)--(6);
+\draw(1)--(6);
+\draw(0)--(1);
+\draw(0)--(2);
+\draw(0)--(3);
+\draw(0)--(4);
+\draw(0)--(5);
+\end{tikzpicture}
+\end{minipage}
+&
+$\setlength{\arraycolsep}{1pt}\begin{array}{c|cccccccccccccccc}
+        \bB_{33}& 0& 1& 2& 3& 4& 5& 6& 7& 8& 9 & 10& 11& 12& 13& 14& 15\\\hline
+   f(x)&1& 3& 2& 0& 9& 11& 10& 8& 13& 15& 14& 12& 5& 7& 6& 4\\
+   g(x)&11& 8& 10& 9& 7& 4& 6& 5& 15& 12& 14& 13& 3& 0& 2& 1\\
+   h(x)&14& 15& 12& 13& 10& 11& 8& 9& 6& 7& 4& 5& 2& 3& 0& 1\end{array}$
+\end{tabular}
+
+\begin{tabular}{ccc}
+$\bL_{34}$&
+\begin{minipage}{0.07\textwidth}
+\begin{tikzpicture}
+    [scale=.6, e/.style={circle,draw,inner sep=0pt,minimum size=4pt}]
+\node(6) at (0,1)[e]{};
+\node(5) at (-0.33,0.33)[e]{};
+\node(4) at (0.33,0.33)[e]{};
+\node(3) at (0,0.33)[e]{};
+\node(2) at (-0.66,-0.33)[e]{};
+\node(1) at (0,-0.33)[e]{};
+\node(0) at (-0.33,-1)[e]{};
+\node at (0,1.3){};
+\draw(5)--(6);
+\draw(4)--(6);
+\draw(3)--(6);
+\draw(2)--(5);
+\draw(1)--(3);
+\draw(1)--(4);
+\draw(1)--(5);
+\draw(0)--(1);
+\draw(0)--(2);
+\end{tikzpicture}
+\end{minipage}
+&
+$\setlength{\arraycolsep}{1pt}\begin{array}{c|cccc}
+      \bB_{34}& 0& 1& 2& 3\\\hline
+   f(x)&0& 1& 3& 2\end{array}$
+\end{tabular}
+
+\begin{tabular}{ccc}
+$\bL_{35}$&
+\begin{minipage}{0.07\textwidth}
+\begin{tikzpicture}
+    [scale=.6, e/.style={circle,draw,inner sep=0pt,minimum size=4pt}]
+\node(6) at (-0.33,1)[e]{};
+\node(5) at (0,0.33)[e]{};
+\node(4) at (-0.66,0.33)[e]{};
+\node(3) at (0.33,-0.33)[e]{};
+\node(2) at (0,-0.33)[e]{};
+\node(1) at (-0.33,-0.33)[e]{};
+\node(0) at (0,-1)[e]{};
+\node at (0,1.3){};
+\draw(5)--(6);
+\draw(4)--(6);
+\draw(3)--(5);
+\draw(2)--(5);
+\draw(1)--(5);
+\draw(1)--(4);
+\draw(0)--(3);
+\draw(0)--(2);
+\draw(0)--(1);
+\end{tikzpicture}
+\end{minipage}
+&
+$\setlength{\arraycolsep}{1pt}\begin{array}{c|cccc}
+      \bB_{35}& 0& 1& 2& 3\\\hline
+   f(x)&1& 1& 2& 3\\
+   g(x)&2& 3& 3& 3\end{array}$
+\end{tabular}
+
+%% -- End conglattices7.tex file insertion -------------------------------
+
+
+\bibliographystyle{plain}
+\bibliography{inputs/refs}
+
+\end{document}
+
