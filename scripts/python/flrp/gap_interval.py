@@ -206,7 +206,12 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
 
     if args.emit_claim is not None:
         name = args.name or "".join(ch for ch in f"Interval{grp['id']}" if ch.isalnum())
-        claim = claim_from_coset(raw, lat, name, args.module, args.date, args.provenance)
+        # Prefer the target's canonical tables and name for the certificate when
+        # the interval was confirmed isomorphic to it; the coset algebra's Con
+        # is re-checked against them definitionally by emit_agda regardless.
+        claim_lat = target if (target is not None and witness is not None) else lat
+        claim = claim_from_coset(raw, claim_lat, name, args.module, args.date,
+                                 args.provenance)
         write_json(args.emit_claim, claim)
         print(f"  wrote claim:    {args.emit_claim}  (feed to emit_agda.py)")
 
