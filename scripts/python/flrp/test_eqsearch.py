@@ -111,9 +111,13 @@ class UniformPoolTests(unittest.TestCase):
     """The uniform (coset-block) pool enumerator of issue #494."""
 
     def test_uniform_pool_counts(self) -> None:
-        """pool: nontrivial uniform counts and block-size shapes match #494's table."""
+        """pool: nontrivial uniform counts and block-size shapes match #494's
+        table, including the decisive Eq(12) pool of issue #499 — 32,032
+        nontrivial members split 10,395 + 15,400 + 5,775 + 462 across shapes
+        2⁶, 3⁴, 4³, 6², the first size with comparable nontrivial partitions."""
         expected = {6: {2: 15, 3: 10}, 7: {}, 8: {2: 105, 4: 35},
-                    9: {3: 280}, 10: {2: 945, 5: 126}}
+                    9: {3: 280}, 10: {2: 945, 5: 126},
+                    12: {2: 10395, 3: 15400, 4: 5775, 6: 462}}
         for n, shapes in expected.items():
             pool = uniform_partitions(n)
             self.assertEqual(pool[0], (0,) * n)              # ∇ sorts first
@@ -123,6 +127,23 @@ class UniformPoolTests(unittest.TestCase):
             self.assertEqual(len(nontrivial), sum(shapes.values()))
             by_size = Counter(n // len(set(p)) for p in nontrivial)
             self.assertEqual(dict(by_size), shapes)
+
+    def test_frontier_after_twelve_has_no_uniform_chain(self) -> None:
+        """pool: 13, 14, 15 cannot host a uniform copy of L7, so a negative
+        Eq(12) moves the frontier straight to sixteen (issue #499).  Thirteen
+        is prime — its pool is the bounds alone.  Fourteen (block sizes 2, 7)
+        and fifteen (3, 5) have no divisor chain 1 < a < b < n with a | b, so
+        their nontrivial uniform partitions form an antichain; but L7 embeds
+        the grid cover (0,1) ≺ (1,1), which needs two comparable nontrivial
+        members, so no uniform copy exists."""
+        self.assertEqual(uniform_partitions(13),
+                         ((0,) * 13, tuple(range(13))))      # prime: bounds only
+        for n, sizes in ((14, {2, 7}), (15, {3, 5})):
+            nontrivial_sizes = {k for k in range(2, n) if n % k == 0}
+            self.assertEqual(nontrivial_sizes, sizes)
+            self.assertFalse(any(a != b and b % a == 0
+                                 for a in nontrivial_sizes
+                                 for b in nontrivial_sizes))
 
     def test_uniform_pool_is_canonical_subsequence(self) -> None:
         """pool: the per-divisor enumerator equals the Bell filter, order included (n ≤ 8)."""
