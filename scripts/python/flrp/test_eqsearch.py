@@ -33,8 +33,9 @@ import io
 
 from cg2 import CertificateError
 from eqsearch import (ClassReport, EqTables, Part, UniformTables,
-                      all_partitions, claim_input, classify,
-                      closed_class_algebra, closure_report,
+                      _classify_materialized, _classify_orbit_stabilizer,
+                      _setwise_stabilizer_order, all_partitions, claim_input,
+                      classify, closed_class_algebra, closure_report,
                       invariant_partitions, is_uniform, main, partition_join,
                       preserving_maps, relabel, sublattice_copies, survey,
                       survey_json, tables_from_leq, uniform_partitions,
@@ -356,6 +357,56 @@ class L7SessionTests(unittest.TestCase):
         # empty --group-rep census (UniformSweepTests degeneration test)
         self.assertFalse(any(all(is_uniform(p) for p in r.representative)
                              for r in reports))
+
+
+class OrbitStabilizerClassifierTests(unittest.TestCase):
+    """The orbit–stabilizer classifier of issue #499, pinned byte-identical to
+    the materialized reference on every census where materialization is
+    feasible.  This parity is what licenses trusting it at twelve points,
+    where ``12! ≈ 4.8 × 10⁸`` puts the materialized classifier out of reach and
+    only orbit–stabilizer can run."""
+
+    def _parity(self, lat: TargetLattice, n: int, uniform: bool = False) -> None:
+        eq = UniformTables(n) if uniform else EqTables(n)
+        copies = sublattice_copies(lat, eq)
+        self.assertEqual(_classify_orbit_stabilizer(copies, eq),
+                         _classify_materialized(copies, eq))
+
+    def test_setwise_stabilizer_spot_checks(self) -> None:
+        """classifier: |Stab| of a lone |0,1|2,3| on four points is its block
+        automorphism group (order 8, so orbit 4!/8 = 3, the three 2² partitions);
+        the three matchings of M3 are stabilized setwise by all of S₄ (order 24,
+        orbit 1) — the relation-permuting symmetry a rigid target never has."""
+        self.assertEqual(_setwise_stabilizer_order([(0, 0, 2, 2)], 4), 8)
+        self.assertEqual(
+            _setwise_stabilizer_order(
+                [(0, 1, 0, 1), (0, 1, 1, 0), (0, 0, 2, 2)], 4),
+            24)
+
+    def test_parity_m3_eq4(self) -> None:
+        """classifier: orbit–stabilizer == materialized on M3/Eq(4)."""
+        self._parity(m3(), 4)
+
+    def test_parity_m3_eq6(self) -> None:
+        """classifier: orbit–stabilizer == materialized on M3/Eq(6) — where the
+        block-profile invariant alone merges distinct size-60 orbits and the
+        isomorphism refinement is what separates them."""
+        self._parity(m3(), 6)
+
+    def test_parity_m3_eq6_uniform(self) -> None:
+        """classifier: orbit–stabilizer == materialized on the M3/Eq(6) uniform pool."""
+        self._parity(m3(), 6, uniform=True)
+
+    def test_parity_l7_eq6(self) -> None:
+        """classifier: orbit–stabilizer == materialized on L7/Eq(6) (rigid and symmetric classes)."""
+        self._parity(l7(), 6)
+
+    @unittest.skipUnless(os.environ.get("FLRP_EQSEARCH_SLOW") == "1",
+                         "set FLRP_EQSEARCH_SLOW=1 for the L7/Eq(7) "
+                         "classifier parity (about half a minute)")
+    def test_parity_l7_eq7(self) -> None:
+        """classifier: orbit–stabilizer == materialized on L7/Eq(7) — 55,440 copies, 12 classes."""
+        self._parity(l7(), 7)
 
 
 # ---------------------------------------------------------------------------

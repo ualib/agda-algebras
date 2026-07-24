@@ -54,6 +54,7 @@ import sys
 from collections import Counter
 from dataclasses import dataclass
 from itertools import combinations, permutations
+from math import factorial
 from pathlib import Path
 from typing import (Dict, FrozenSet, Iterator, List, Optional, Sequence, Set,
                     Tuple, Union)
@@ -384,8 +385,147 @@ class ClassReport:
     closed: bool                        # Inv(M) is exactly the copy
 
 
-def classify(copies: Sequence[Copy], eq: Tables) -> List[Tuple[Copy, int]]:
-    """Group the copies into orbits under relabeling of the points.
+def _block_sizes(p: Sequence[int]) -> Tuple[int, ...]:
+    """The block-size multiset of a partition, as a sorted tuple.  This is an
+    invariant of the point relabeling action — two partitions in the same
+    ``S_n`` orbit have the same block sizes — so it and anything built from it
+    can be used to tell orbits apart without ever moving a point."""
+    return tuple(sorted(Counter(p).values()))
+
+
+def _relation_set_key(rels: Sequence[Part]) -> Tuple[object, ...]:
+    """A relabeling-invariant, relation-order-independent key for the set of
+    partitions ``rels``: the sorted block-size profiles of the members,
+    paired with the sorted multiset of pairwise meet/join block-size profiles
+    (each tagged by the endpoints' own profiles).  Every ingredient is an
+    ``S_n`` invariant, so two relation sets in the same orbit always receive
+    the same key — the key can never *split* an orbit.  Distinct orbits that
+    happen to collide on it are not merged silently: the stabilizer
+    conservation check in ``classify`` compares ``n!/|stab|`` against the
+    number of relation sets bucketed here and fails loudly on a collision."""
+    singles = sorted(_block_sizes(p) for p in rels)
+    pairs = []
+    for i in range(len(rels)):
+        for j in range(i + 1, len(rels)):
+            endpoints = tuple(sorted((_block_sizes(rels[i]), _block_sizes(rels[j]))))
+            pairs.append((endpoints,
+                          _block_sizes(partition_meet(rels[i], rels[j])),
+                          _block_sizes(partition_join(rels[i], rels[j]))))
+    return (tuple(singles), tuple(sorted(pairs)))
+
+
+def _realizing(sources: Sequence[Part], targets: Sequence[Part], n: int,
+               first_only: bool = False) -> int:
+    """The number of point permutations ``π`` of ``range(n)`` that carry each
+    ``sources[t]`` exactly onto ``targets[t]`` as ordered tuples of
+    partitions — ``relabel(sources[t], π) == targets[t]`` for every ``t``
+    (with ``first_only`` the search stops at the first such ``π``, returning
+    ``0`` or ``1``, which is all an existence test needs).
+
+    Found by backtracking over ``π(0), π(1), …``: assigning ``π(x) = y``
+    forces, in every relation ``t``, the block of ``x`` in ``sources[t]`` to
+    map to the block of ``y`` in ``targets[t]``, so the search maintains that
+    partial block bijection (``fwd``) and its inverse (``bwd``) and prunes the
+    instant a point's image would contradict an established correspondence or
+    match blocks of different sizes."""
+    m = len(sources)
+    src_size = [Counter(s) for s in sources]
+    tgt_size = [Counter(t) for t in targets]
+    fwd: List[Dict[int, int]] = [dict() for _ in range(m)]
+    bwd: List[Dict[int, int]] = [dict() for _ in range(m)]
+    used = [False] * n
+    count = 0
+    stop = False
+
+    def rec(x: int) -> None:
+        nonlocal count, stop
+        if x == n:
+            count += 1
+            stop = first_only
+            return
+        for y in range(n):
+            if used[y]:
+                continue
+            touched: List[int] = []
+            ok = True
+            for t in range(m):
+                sr, tr = sources[t][x], targets[t][y]
+                if src_size[t][sr] != tgt_size[t][tr]:
+                    ok = False
+                    break
+                mapped = fwd[t].get(sr)
+                if mapped is not None:
+                    if mapped != tr:
+                        ok = False
+                        break
+                elif tr in bwd[t]:
+                    ok = False
+                    break
+                else:
+                    fwd[t][sr] = tr
+                    bwd[t][tr] = sr
+                    touched.append(t)
+            if ok:
+                used[y] = True
+                rec(x + 1)
+                used[y] = False
+            for t in touched:
+                del fwd[t][sources[t][x]]
+                del bwd[t][targets[t][y]]
+            if stop:
+                return
+
+    rec(0)
+    return count
+
+
+def _profile_perms(source_profiles: Sequence[Tuple[int, ...]],
+                   target_profiles: Sequence[Tuple[int, ...]]
+                   ) -> Iterator[Tuple[int, ...]]:
+    """Every bijection ``σ`` of the relations that could match block-size
+    profiles — ``source_profiles[i] == target_profiles[σ(i)]`` — the only
+    ``σ`` a point permutation can realize.  Yields ``σ`` as an image tuple."""
+    m = len(source_profiles)
+    for perm in permutations(range(m)):
+        if all(source_profiles[i] == target_profiles[perm[i]] for i in range(m)):
+            yield perm
+
+
+def _setwise_stabilizer_order(rels: Sequence[Part], n: int) -> int:
+    """The order of the setwise stabilizer ``{π ∈ S_n : π·R = R}`` of the
+    relation set ``R = set(rels)``.  A stabilizing permutation permutes the
+    members of ``R`` among themselves, inducing a bijection ``σ`` of the
+    relations; the stabilizer is the disjoint union, over every ``σ``, of the
+    permutations that realize ``σ`` pointwise, so its order is the sum of
+    those counts.  Only ``σ`` matching block-size profiles can contribute, so
+    for a rigid copy only the identity does (the pointwise stabilizer), while
+    for a copy with interchangeable relations (the three matchings of ``M3``)
+    the relation-permuting ``σ`` contribute too — exactly the group whose
+    index in ``S_n`` is the materialized orbit size."""
+    profile = [_block_sizes(p) for p in rels]
+    return sum(_realizing(rels, [rels[s[i]] for i in range(len(rels))], n)
+               for s in _profile_perms(profile, profile))
+
+
+def _setwise_iso(rels: Sequence[Part], other: Sequence[Part], n: int) -> bool:
+    """Whether some point permutation carries the relation set ``set(rels)``
+    onto ``set(other)`` — i.e. the two sublattices lie in one ``S_n`` orbit.
+    Decomposes over the profile-compatible relation bijections ``σ`` exactly
+    as the stabilizer does, asking only for existence of a realizing ``π``."""
+    if len(rels) != len(other):
+        return False
+    pr = [_block_sizes(p) for p in rels]
+    po = [_block_sizes(p) for p in other]
+    return any(_realizing(rels, [other[s[i]] for i in range(len(rels))], n,
+                          first_only=True)
+               for s in _profile_perms(pr, po))
+
+
+def _classify_orbit_stabilizer(copies: Sequence[Copy],
+                               eq: Tables) -> List[Tuple[Copy, int]]:
+    """Group the copies into orbits under relabeling of the points, by
+    orbit–stabilizer rather than by materializing all ``n!`` relabelings
+    (``12! ≈ 4.8 × 10⁸`` makes the materialized sweep hours per class).
 
     Copies are identified by their *unordered* relation sets (frozensets of
     partition indices): two embeddings differing only by an automorphism of
@@ -393,9 +533,77 @@ def classify(copies: Sequence[Copy], eq: Tables) -> List[Tuple[Copy, int]]:
     test of ``closure_report`` depends only on that relation set.  So this
     classifies sublattices rather than embeddings — orbit sizes count
     distinct relation sets, and the copy census may exceed the class-size
-    total when the target has automorphisms.  Returns one (first-found
-    representative, orbit size) per class, in the order the representatives
-    occur in the sorted copy list."""
+    total when the target has automorphisms.  Relabeling carries copies to
+    copies and fixes the bounds, so the whole ``S_n`` orbit of any copy's
+    relation set is itself present among the copies.
+
+    Each distinct relation set is placed into a class by first hashing it to
+    its relabeling-invariant key (the bounds are fixed by every permutation
+    and carry no orbit information) and then, among the classes sharing that
+    key, matching it against a representative by an explicit setwise
+    isomorphism test — the invariant only narrows the isomorphism search, so
+    distinct orbits that collide on it are still separated correctly.  The
+    representative is the first copy reaching a class in the sorted copy
+    order.  The orbit size is reported as ``n!/|stab|`` from a stabilizer
+    backtrack, guarded by two cross-checks: per class ``n!/|stab|`` must equal
+    the number of relation sets placed there, and globally the orbit sizes
+    must sum to the number of distinct relation sets.  Returns one
+    (first-found representative, orbit size) per class, in first-found order —
+    byte-identical to the materialized classifier wherever both run."""
+    bounds = (eq.bot, eq.top)
+    first_copy: Dict[FrozenSet[int], Copy] = {}
+    order: List[FrozenSet[int]] = []
+    for copy in copies:
+        key = frozenset(copy)
+        if key not in first_copy:
+            first_copy[key] = copy
+            order.append(key)
+
+    by_key: Dict[Tuple[object, ...], List[int]] = {}    # invariant key -> class indices
+    reps: List[Copy] = []
+    rep_rels: List[Tuple[Part, ...]] = []
+    members: List[int] = []                             # distinct relation sets per class
+    stabs: List[int] = []
+    for key in order:
+        rels = tuple(eq.parts[i] for i in sorted(key) if i not in bounds)
+        siblings = by_key.setdefault(_relation_set_key(rels), [])
+        idx = next((c for c in siblings if _setwise_iso(rels, rep_rels[c], eq.n)),
+                   None)
+        if idx is None:
+            idx = len(reps)
+            reps.append(first_copy[key])
+            rep_rels.append(rels)
+            members.append(0)
+            stabs.append(_setwise_stabilizer_order(rels, eq.n))
+            siblings.append(idx)
+        members[idx] += 1
+
+    fact = factorial(eq.n)
+    classes: List[Tuple[Copy, int]] = []
+    for idx, copy in enumerate(reps):
+        stab = stabs[idx]
+        if stab <= 0 or fact % stab != 0:
+            raise CertificateError("stabilizer order does not divide n!")
+        orbit = fact // stab
+        if orbit != members[idx]:
+            raise CertificateError(
+                "orbit size n!/|stab| disagrees with the distinct relation "
+                "sets in its class (stabilizer or isomorphism bug)")
+        classes.append((copy, orbit))
+    if sum(orbit for _, orbit in classes) != len(order):
+        raise CertificateError("orbit sweep lost copies (relabeling bug)")
+    return classes
+
+
+def _classify_materialized(copies: Sequence[Copy],
+                           eq: Tables) -> List[Tuple[Copy, int]]:
+    """The reference classifier: for each new relation set, materialize its
+    whole orbit by relabeling under every one of the ``n!`` point
+    permutations and mark the images seen.  Simple and fast while ``n!`` is
+    small; ``_classify_orbit_stabilizer`` is pinned byte-identical to it on
+    every census where both run and takes over once ``n!`` makes this
+    infeasible.  Same contract: one (first-found representative, orbit size)
+    per class, in first-found order."""
     seen: Dict[FrozenSet[int], int] = {}
     classes: List[Tuple[Copy, int]] = []
     for copy in copies:
@@ -410,6 +618,26 @@ def classify(copies: Sequence[Copy], eq: Tables) -> List[Tuple[Copy, int]]:
     if sum(size for _, size in classes) != len({frozenset(c) for c in copies}):
         raise CertificateError("orbit sweep lost copies (relabeling bug)")
     return classes
+
+
+# Materialize the orbit while n! is at most this (10! = 3,628,800), so the
+# reference classifier runs for every committed census (n ≤ 8, and the empty
+# uniform sweeps at 9 and 10); switch to orbit–stabilizer once n! makes
+# materialization prohibitive — n ≥ 11, in particular the Eq(12) sweep.
+_MATERIALIZE_LIMIT = factorial(10)
+
+
+def classify(copies: Sequence[Copy], eq: Tables) -> List[Tuple[Copy, int]]:
+    """Group the copies into orbits under relabeling of the points, returning
+    one (first-found representative, orbit size) per class in first-found
+    order.  Dispatches to the materialized-orbit reference while ``n!`` is
+    small enough to enumerate and to the orbit–stabilizer classifier once it
+    is not (``n ≥ 11``, i.e. the Eq(12) sweep) — the two are pinned
+    byte-identical wherever both run, so the choice is invisible in the
+    reports."""
+    if factorial(eq.n) <= _MATERIALIZE_LIMIT:
+        return _classify_materialized(copies, eq)
+    return _classify_orbit_stabilizer(copies, eq)
 
 
 # ---------------------------------------------------------------------------

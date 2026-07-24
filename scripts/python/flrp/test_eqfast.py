@@ -8,9 +8,11 @@ Description:
   partitions, the same tables, the same copies, the same classes, and — the
   strongest form — byte-identical survey reports wherever both backends run.
   The ``--group-rep`` restriction (issue #494) is held to the same standard:
-  pool tables with their out-of-pool sentinels equal the pure ones, uniform
-  survey reports are byte-identical through `Eq(9)`, and the chunked orbit
-  relabeling (the `10!` memory path) cannot change classification.
+  pool tables with their out-of-pool sentinels equal the pure ones, and
+  uniform survey reports are byte-identical through `Eq(9)`.  Both engines now
+  share the orbit–stabilizer ``classify`` of ``eqsearch`` (issue #499), so
+  classification is identical between them by construction; its correctness is
+  pinned against the materialized reference in ``test_eqsearch.py``.
 
   On top of parity, the fast backend re-verifies the large censuses: the
   `Eq(7)` figures in seconds, and (behind ``FLRP_EQSEARCH_SLOW=1``) the
@@ -42,7 +44,6 @@ except ImportError:
     HAVE_NUMPY = False
 
 if HAVE_NUMPY:
-    import eqfast
     from eqfast import FastTables, FastUniformTables, survey_fast
 from eqsearch import (EqTables, UniformTables, is_uniform, survey,
                       survey_json)
@@ -99,17 +100,6 @@ class FastBackendTests(unittest.TestCase):
             survey_json(l7(), 9, reports, copies, restriction="uniform"),
             (Path(__file__).parent / "out"
              / "l7_eq9_uniform_report.json").read_text())
-
-    def test_orbit_chunking_is_boundary_independent(self) -> None:
-        """fast: classification is unchanged when orbit relabeling runs in tiny chunks (the 10! memory path)."""
-        reports, copies = survey_fast(m3(), 4)
-        original = eqfast.ORBIT_CHUNK
-        eqfast.ORBIT_CHUNK = 5          # 24 permutations -> 5 chunks
-        try:
-            chunked, chunked_copies = survey_fast(m3(), 4)
-        finally:
-            eqfast.ORBIT_CHUNK = original
-        self.assertEqual((reports, copies), (chunked, chunked_copies))
 
     @unittest.skipUnless(os.environ.get("FLRP_EQSEARCH_SLOW") == "1",
                          "set FLRP_EQSEARCH_SLOW=1 for the Eq(8) sweep (hours)")
