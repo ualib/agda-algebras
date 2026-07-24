@@ -14,7 +14,7 @@ This note records the results of a 2026-07-22 working session on `L7`, the disti
 0 = ⊥,   1 = (1,0),   2 = (0,1),   3 = x,   4 = (1,1),   5 = (0,2),   6 = ⊤
 ```
 
-so the atoms are `1`, `2`, `3`, the coatoms are `4`, `5`, `3`, and the covers are `0 ⋖ 1, 2, 3`;  `1, 2 ⋖ 4`;  `2 ⋖ 5`;  `4, 5, 3 ⋖ 6`.
+so the atoms are `1`, `2`, `3`, the coatoms are `4`, `5`, `3`, and the covers are `0 ≺ 1, 2, 3`;  `1, 2 ≺ 4`;  `2 ≺ 5`;  `4, 5, 3 ≺ 6`.
 
 One structural fact does real work below: `L7` is **simple** — collapsing any covering pair propagates to the total congruence.  (Routine check; for instance from `1 ≡ 0`: joining with `2` gives `4 ≡ 2`, joining with `5` gives `6 ≡ 5`, meeting with `3` gives `3 ≡ 0`, joining with `1` gives `6 ≡ 1`, and meeting with `2` gives `2 ≡ 0` — total collapse.  The other eight covers are similar, and all nine were machine-checked.)
 

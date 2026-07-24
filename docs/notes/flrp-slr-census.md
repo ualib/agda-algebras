@@ -67,7 +67,7 @@ Per the #485 discipline, a claim that fails the engine is first rechecked agains
 
 ### E1 (2026-07-22): `Con(B28) ≠ L28` as printed — one congruence too many
 
-+  **The claim**.  § 6 prints `B28` (16 elements, operations `f`, `g`, `h`, `k`, `l`, `m`, method "overalgebras") as a representation of `L28`, the seven-element lattice `0 ⋖ 1 ⋖ 2 ⋖ 3 ⋖ 5 ⋖ 6` with one doubly irreducible element `4` (a six-element chain plus one).
++  **The claim**.  § 6 prints `B28` (16 elements, operations `f`, `g`, `h`, `k`, `l`, `m`, method "overalgebras") as a representation of `L28`, the seven-element lattice `0 ≺ 1 ≺ 2 ≺ 3 ≺ 5 ≺ 6` with one doubly irreducible element `4` (a six-element chain plus one).
 +  **The refutation**.  `Con(B28)` as printed has **eight** congruences: in bar notation (blocks by least member, reproducible with `python3 scripts/python/flrp/slr_catalog.py --diagnose 28`),
 
   ```text
@@ -81,9 +81,9 @@ Per the #485 discipline, a claim that fails the engine is first rechecked agains
   θ7  |0,1,2,6,7,11,12|3,4,5|8,9,10,13,14,15|
   ```
 
-  with covers `θ0 ⋖ θ2`, `θ0 ⋖ θ4 ⋖ θ6 ⋖ θ5 ⋖ θ1 ⋖ θ7 ⋖ θ3`, `θ2 ⋖ θ3` — a **seven**-element chain plus the doubly irreducible `θ2`, i.e. exactly the `L28` shape with the long chain one element too long (the printed diagram wants the chain `θ4 ⋖ θ6 ⋖ θ5` two steps shorter than the algebra delivers).
+  with covers `θ0 ≺ θ2`, `θ0 ≺ θ4 ≺ θ6 ≺ θ5 ≺ θ1 ≺ θ7 ≺ θ3`, `θ2 ≺ θ3` — a **seven**-element chain plus the doubly irreducible `θ2`, i.e. exactly the `L28` shape with the long chain one element too long (the printed diagram wants the chain `θ4 ≺ θ6 ≺ θ5` two steps shorter than the algebra delivers).
 +  **Why the refutation is airtight**.  Each of the eight partitions is verified to respect all six printed operation tables by a direct double loop independent of the `cg2` machinery (`respects_operations` in `slr_catalog.py`, exercised by `test_slr_catalog.py`); eight pairwise distinct congruences refute `|Con(B28)| = 7` regardless of any enumeration's completeness.
-+  **The transcription was rechecked** character by character against the `.tex` source before recording this: the diagram parse (`0 ⋖ 1; 0 ⋖ 4; 1 ⋖ 2; 2 ⋖ 3; 3 ⋖ 5; 4 ⋖ 6; 5 ⋖ 6`) and all six value rows match the printed entry exactly.
++  **The transcription was rechecked** character by character against the `.tex` source before recording this: the diagram parse (`0 ≺ 1; 0 ≺ 4; 1 ≺ 2; 2 ≺ 3; 3 ≺ 5; 4 ≺ 6; 5 ≺ 6`) and all six value rows match the printed entry exactly.
 +  **Circumstantial diagnosis** (for the upstream report, not acted on here): `B27` — the same overalgebra construction, sharing its `f`, `l`, `m` rows with `B28` verbatim — passes and is engine-audited, which points at a typo in one of `B28`'s `g`/`h`/`k` rows; `B28`'s `h` and `k` rows restricted to `{0,…,5}` are exactly `B7`'s `f` and `g`, consistent with `B28` being built as an overalgebra of `B7`.
 +  **Consequence for the census**: `L28` currently has no verified representation in this library; its lattice stanza (`slr28_lattice.json`) is committed as an `eqsearch.py` target, and a small representation may well be recoverable by the #486 search once the upstream table is corrected.
 

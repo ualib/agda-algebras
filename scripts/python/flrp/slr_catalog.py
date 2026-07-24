@@ -533,7 +533,7 @@ def diagnose(entry: CatalogEntry) -> List[str]:
                     if a != b and leq[a][b]
                     and not any(z not in (a, b) and leq[a][z] and leq[z][b]
                                 for z in range(total)))
-    lines.append("  covers: " + "; ".join(f"θ{a} ⋖ θ{b}" for a, b in covers))
+    lines.append("  covers: " + "; ".join(f"θ{a} ≺ θ{b}" for a, b in covers))
     return lines
 
 
@@ -541,7 +541,7 @@ def diagnose(entry: CatalogEntry) -> List[str]:
 # The naming dictionary and census tables (markdown, for the docs notes)
 
 def covers_text(diagram: HasseDiagram) -> str:
-    return "; ".join(f"{lo} ⋖ {hi}" for lo, hi in sorted(diagram.covers))
+    return "; ".join(f"{lo} ≺ {hi}" for lo, hi in sorted(diagram.covers))
 
 
 def status(entry: CatalogEntry) -> str:
