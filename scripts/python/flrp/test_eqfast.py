@@ -15,9 +15,11 @@ Description:
 
 Usage:
 
-  python3 -m unittest scripts.python.flrp.test_eqfast
+  python3 scripts/python/flrp/test_eqfast.py
 
-  Or run ``make flrp-test`` from the top-level repo directory.
+  Or run ``make flrp-test`` from the top-level repo directory.  (Running the
+  file directly is what puts ``scripts/python/flrp`` on ``sys.path`` for the
+  flat sibling imports; the directory is deliberately not a package.)
 """
 
 from __future__ import annotations

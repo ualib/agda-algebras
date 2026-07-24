@@ -8,7 +8,7 @@ The engine side of the WP-6 certificate pipeline (issue #457; design fixed in `d
 +  `lattice.py` — whole lattices: principal congruences for every carrier pair, closure under joins, meet and join tables, and the (bounded, engine-side) isomorphism match against the claimed target lattice.
 +  `emit_agda.py` — the CLI: claim file in, `.lagda.md` module and audit JSON out.
 +  `eqsearch.py` — the search side (issue #486), converse in direction to the emitters: given a target lattice, find its sublattice copies in `Eq(n)` with bounds at the diagonal and the total relation, classify them up to relabeling, and run the Snow closure test on each class; a closed class yields the witness algebra `⟨X, M⟩` and a ready-made claim file for the emitter.
-+  `eqfast.py` — the optional numpy backend for the search side (`--fast`): identical semantics and byte-identical reports, vectorized kernels; what makes `Eq(8)` a minutes-scale sweep.
++  `eqfast.py` — the optional numpy backend for the search side (`--fast`): identical semantics and byte-identical reports, vectorized kernels; what brings `Eq(8)` within reach at all (the committed `L7` sweep took about three hours — see the fast-backend note below).
 +  `slr_catalog.py` — the transcription stage of issue #485: parse the SmallLatticeReps manuscript's § 6 catalog (`docs/papers/fin-lat-rep/SmallLatticeReps.tex`) — Hasse diagrams from the tikz coordinates and edges, value tables from the array blocks — into claim files, audits, and certificate modules; see § SmallLatticeReps below.
 +  `inputs/` — claim files (`inputs/slr/` for the catalog); `out/` — audit copies of emitted certificates (`out/slr/` likewise) and citable sweep reports.
 

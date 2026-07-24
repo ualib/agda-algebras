@@ -59,7 +59,7 @@ from typing import Dict, List, Sequence, Set, Tuple
 import numpy as np
 
 from cg2 import CertificateError
-from eqsearch import (ClassReport, Copy, EqTables, TargetLattice,
+from eqsearch import (ClassReport, Copy, TargetLattice,
                       all_partitions, assignment_plan, closure_report,
                       validate_target)
 
