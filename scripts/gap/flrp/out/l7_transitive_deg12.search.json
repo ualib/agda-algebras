@@ -1,0 +1,40 @@
+{
+  "format": "flrp-gap-search v1",
+  "date": "2026-07-24",
+  "engine": {
+    "gap": "4.15.1",
+    "libraries": {
+      "primgrp": "4.0.1",
+      "smallgrp": "1.5.4",
+      "transgrp": "3.6.5"
+    }
+  },
+  "config": {
+    "degree": 12,
+    "mode": "transitive-point-stabilizer",
+    "target": "L7",
+    "targetSize": 7
+  },
+  "target": {
+    "name": "L7",
+    "size": 7
+  },
+  "scanned": {
+    "groups": 301
+  },
+  "sizeHistogram": {
+    "10": 3,
+    "16": 1,
+    "2": 6,
+    "3": 74,
+    "4": 134,
+    "5": 29,
+    "6": 31,
+    "7": 18,
+    "8": 2,
+    "9": 3
+  },
+  "candidates": 18,
+  "verdict": "negative",
+  "hits": []
+}

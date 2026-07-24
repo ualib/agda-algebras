@@ -58,7 +58,11 @@ Tally: **27 certified** (21 in batch 1, 6 more once the batch-2 renderer landed)
 ## 3. The parked entries, in detail
 
 +  **`L10`** — this library's `L7`; the manuscript's lone open case, and the subject of the dedicated hunt #484 (minimal `Eq(6)` sublattice representation formalized in `FLRP.L7EqSix`; closure obstructions machine-checked through eight points; see `docs/notes/flrp-l7-eq6.md`).
-+  **`L11`, `L14`, `L16`, `L20`** — the manuscript's representations are group-theoretic (subgroup-lattice intervals and a filter-ideal construction, carriers 90–216).  Route per #485: the WP-3 bridge (#454) once #487 supplies the concrete group data, or direct big-carrier certificates if type-checking cost permits; nothing is emitted for them in this batch.
++  **`L11`, `L14`, `L16`, `L20`** — the manuscript's representations are group-theoretic (carriers 90–216).  The #487 GAP engine has now supplied the concrete group data (committed under `scripts/gap/flrp/out/`); certification remains the WP-3 bridge (#454) at big carrier, driven from #485.
+   +  **`L14`** — reproduced: the core-free index-90 subgroup of `A6` whose upper interval is `≅ L14` (`l14_a6.search.json`, verdict positive), with its 90-point coset action bundled for the bridge.
+   +  **`L11`** — the manuscript's filter-ideal construction reproduced in `SmallGroup(216,153)` (`bin/filter_ideal_216.g`): the pentagon filter `[H, G] ≅ N5` together with the order-3 minimal subgroup `K` (index 72, below β but neither α nor γ), `l11_filter_ideal_216_153.json`.
+   +  **`L16`** — **not reproduced as printed**: the manuscript's "upper interval in `Sub(C2.A6)`, index 180" does not appear in `C2.A6 = 2.A6 = SL(2,9)`; recorded as candidate erratum E2 below.
+   +  **`L20`** — filter-ideal in `SmallGroup(216,153)`; the 2016-06-10 draft states the method but prints no explicit construction, so only the group is pinned, with the pentagon/subgroup data of `L11` in hand for a fuller reproduction.
 +  **`L18`, `L22`** — duals of `L19` and `L23`, with no explicit small algebras in the manuscript.  Both duals' partners are now **certified** (`SLR19`, `SLR23`), so once WP-5 (#456) registers Kurzweil–Netter duality as a named assumption, `L18` and `L22` become assumption-conditional corollaries; explicit algebras may also be found by the #486 search tooling (their lattice stanzas `slr18_lattice.json`, `slr22_lattice.json` are committed as ready-made `eqsearch.py` targets).
 
 ## 4. Erratum log
@@ -86,6 +90,12 @@ Per the #485 discipline, a claim that fails the engine is first rechecked agains
 +  **The transcription was rechecked** character by character against the `.tex` source before recording this: the diagram parse (`0 ≺ 1; 0 ≺ 4; 1 ≺ 2; 2 ≺ 3; 3 ≺ 5; 4 ≺ 6; 5 ≺ 6`) and all six value rows match the printed entry exactly.
 +  **Circumstantial diagnosis** (for the upstream report, not acted on here): `B27` — the same overalgebra construction, sharing its `f`, `l`, `m` rows with `B28` verbatim — passes and is engine-audited, which points at a typo in one of `B28`'s `g`/`h`/`k` rows; `B28`'s `h` and `k` rows restricted to `{0,…,5}` are exactly `B7`'s `f` and `g`, consistent with `B28` being built as an overalgebra of `B7`.
 +  **Consequence for the census**: `L28` currently has no verified representation in this library; its lattice stanza (`slr28_lattice.json`) is committed as an `eqsearch.py` target, and a small representation may well be recoverable by the #486 search once the upstream table is corrected.
+
+### E2 (2026-07-24): `L16` as an upper interval in `Sub(C2.A6)` does not reproduce
+
++  **The claim**.  § 6 lists `L16` (seven elements, covers `0 ≺ 1, 2`; `1 ≺ 3, 4, 5`; `2, 3, 4, 5 ≺ 6`) as an upper interval in `Sub(C2.A6)` with algebra of size 180 — that is, an index-180, hence order-4, subgroup `H` of `C2.A6` (order 720) with `[H, C2.A6] ≅ L16`.
++  **The finding**.  Read as the double cover `C2.A6 = 2.A6 = SL(2,9)`, the claim fails: the #487 engine finds `SL(2,9)` has a single conjugacy class of order-4 (index-180) subgroups, whose upper interval has **38** elements, not seven.  The only size-7 upper interval of `SL(2,9)` (over subgroups of order ≥ 3) is `≅ L14`, at index 90 (`|H| = 8`).  Scanning the other order-720 relatives of `A6` — `S6`, `PGL(2,9)`, `M10` — turns up `L14` (index 90) and two further seven-element lattices (indices 40 and 144), but never `L16`.  Reproduce with `bin/find_interval.g` on `SL(2,9)` at `FLRP_INDEX := 180`.
++  **Caveat and status**.  The lattice transcription (`slr16_lattice.json`) matches the printed diagram, and `C2.A6` is standard ATLAS notation for `2.A6`; either the group name or the index is off in the 2016-06-10 draft.  Recorded as a candidate erratum pending clarification of the intended group; `L16` has no verified group representation in hand, and `slr16_lattice.json` remains a search target.  Reported upstream alongside E1.
 
 ## 5. Costs observed
 

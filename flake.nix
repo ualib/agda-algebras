@@ -163,6 +163,8 @@ EOF
           mkdocsVer = pkgs.python3Packages.mkdocs.version;
           materialVer = pkgs.python3Packages.mkdocs-material.version;
           numpyVer = pkgs.python3Packages.numpy.version;
+          gapPkg = pkgs.gap;
+          gapVer = pkgs.gap.version;
         in {
           default = pkgs.mkShell {
             name = "agda-algebras-dev";
@@ -201,6 +203,44 @@ EOF
                 2.3*) : ;;
                 *) echo "⚠  expected standard-library 2.3, got ${stdlibVer}" ;;
               esac
+            '';
+          };
+
+          # ---- GAP dev shell (`nix develop .#gap`) ---------------------------
+          # Dedicated to the FLRP subgroup-interval search engine (issue #487):
+          # A. Hulpke's intermediate-subgroup routines over the GAP group
+          # libraries.  GAP plus its group libraries is far heavier than the
+          # default shell's numpy, so it is kept OUT of `default`; and nothing
+          # in `make check` or `make flrp-test` may depend on it — GAP is an
+          # untrusted engine whose results enter the repo only as deterministic
+          # JSON artifacts (roadmap § 6).  nixpkgs' default `packageSet =
+          # "standard"` bundles the libraries #487 needs as required packages:
+          # smallgrp (SmallGroups), transgrp (transitive groups), primgrp
+          # (primitive groups).  Bare python3 suffices for the lattice bridge
+          # and the certificate emitter, both stdlib-only (see flake comment on
+          # mkPythonEnv); Agda type-checking of an emitted certificate happens
+          # in the default shell, not here.
+          gap = pkgs.mkShell {
+            name = "agda-algebras-gap";
+
+            packages = [
+              gapPkg
+              pkgs.python3
+              pkgs.gnumake
+              pkgs.git
+            ];
+
+            LANG = "C.UTF-8";
+            LC_ALL = "C.UTF-8";
+
+            shellHook = ''
+              echo ""
+              echo "🧮 agda-algebras GAP shell (issue #487)"
+              echo "   GAP      : ${gapVer}"
+              echo "   libraries: smallgrp / transgrp / primgrp  (packageSet=standard)"
+              echo "   engine   : scripts/gap/flrp/   (run scripts from the repo root)"
+              echo "   smoke    : make gap-smoke"
+              echo ""
             '';
           };
         });
