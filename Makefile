@@ -28,7 +28,7 @@
 #      where a path segment happens to contain the substring `agda`.
 # =============================================================================
 
-.PHONY: default all check test clean site serve serve-full html agda-md site-full profile project-plan unused-imports unused-imports-test flrp-test Everything.agda
+.PHONY: default all check test clean site serve serve-full html agda-md site-full profile project-plan unused-imports unused-imports-test flrp-test flrp-slr Everything.agda
 
 # -- Configuration -----------------------------------------------------------
 SRCDIR    := src
@@ -197,3 +197,13 @@ flrp-test:
 	@echo "target: $@"
 	python3 scripts/python/flrp/test_flrp.py
 	python3 scripts/python/flrp/test_eqsearch.py
+	python3 scripts/python/flrp/test_slr_catalog.py
+
+# Regenerate the SmallLatticeReps catalog artifacts (issue #485) from the
+# manuscript source: claim files under scripts/python/flrp/inputs/slr/, audit
+# JSONs under scripts/python/flrp/out/slr/, and the certificate modules under
+# src/FLRP/Certificates/SmallLatticeReps/.  Deterministic; the committed
+# copies must re-derive byte for byte (checked by flrp-test).
+flrp-slr:
+	@echo "target: $@"
+	python3 scripts/python/flrp/slr_catalog.py --write-inputs --emit

@@ -8,8 +8,9 @@ Description:
   input JSON documented in README.md), run the cg2 engine (``cg2.py``,
   ``lattice.py``), and emit
 
-  + a ``.lagda.md`` module under ``src/FLRP/Certificates/Pilot/`` whose
-    type-checking *is* the verification — the emitted literals feed the
+  + a ``.lagda.md`` module whose type-checking *is* the verification — placed
+    under ``src/<module>/`` for the claim file's dotted ``module`` namespace
+    prefix (default ``FLRP.Certificates.Pilot``); the emitted literals feed the
     search-free checkers of ``Setoid.Congruences.Certificates`` and the
     ``Representableᵈ`` assembly of ``FLRP.Certificates``, so a wrong table or
     trace fails to compile; and
@@ -32,9 +33,9 @@ from __future__ import annotations
 import argparse
 import datetime
 import json
-from dataclasses import asdict
+from dataclasses import asdict, dataclass
 from pathlib import Path
-from typing import Dict, List, Optional, Sequence, Tuple
+from typing import Dict, List, Optional, Sequence
 
 from cg2 import (Algebra, CertificateError, Merge, Operation, SeedJust,
                  TranslateJust, validate_algebra)
@@ -47,8 +48,21 @@ REPO_ROOT = Path(__file__).resolve().parents[3]
 # ---------------------------------------------------------------------------
 # Input parsing
 
-def parse_input(path: Path) -> Tuple[str, str, Algebra, TargetLattice]:
-    """Read a claim file; returns (name, date, algebra, target lattice)."""
+@dataclass(frozen=True)
+class Claim:
+    """A parsed claim file: module placement, provenance, and the claim
+    proper — "the congruence lattice of this algebra is this lattice"."""
+
+    name: str
+    date: str
+    module: str
+    provenance: str
+    algebra: Algebra
+    lattice: TargetLattice
+
+
+def parse_input(path: Path) -> Claim:
+    """Read a claim file into a ``Claim``."""
     data = json.loads(path.read_text())
     if data.get("format") != "flrp-cert-input v1":
         raise CertificateError(f"{path}: expected format 'flrp-cert-input v1'")
@@ -57,6 +71,16 @@ def parse_input(path: Path) -> Tuple[str, str, Algebra, TargetLattice]:
     if not (name and name[0].isalpha() and name.isalnum()):
         raise CertificateError(f"{path}: 'name' must be a plain alphanumeric Agda name")
     date = data.get("date", datetime.date.today().isoformat())
+
+    module = data.get("module", "FLRP.Certificates.Pilot")
+    if not all(seg and seg[0].isalpha() and seg.isalnum()
+               for seg in module.split(".")):
+        raise CertificateError(
+            f"{path}: 'module' must be a dotted prefix of plain alphanumeric Agda names")
+
+    provenance = data.get("provenance", "")
+    if not isinstance(provenance, str):
+        raise CertificateError(f"{path}: 'provenance' must be a Markdown string")
 
     a = data["algebra"]
     algebra = Algebra(
@@ -75,7 +99,8 @@ def parse_input(path: Path) -> Tuple[str, str, Algebra, TargetLattice]:
         join=tuple(tuple(row) for row in lat["join"]))
     validate_lattice(target)
 
-    return name, date, algebra, target
+    return Claim(name=name, date=date, module=module, provenance=provenance,
+                 algebra=algebra, lattice=target)
 
 
 # ---------------------------------------------------------------------------
@@ -158,8 +183,12 @@ def fin_table(prefix: str, table: Sequence[Sequence[int]]) -> Block:
 # ---------------------------------------------------------------------------
 # The module template
 
-def emitted_module(name: str, date: str, alg: Algebra, target: TargetLattice,
-                   cert: WholeLatticeCertificate, input_rel: str) -> str:
+def emitted_module(claim: Claim, cert: WholeLatticeCertificate,
+                   input_rel: str) -> str:
+    name, date, alg, target = claim.name, claim.date, claim.algebra, claim.lattice
+    qualified = f"{claim.module}.{name}"
+    module_path = claim.module.replace(".", "/")
+    prov_block = f"\n{claim.provenance}\n" if claim.provenance else ""
     n, k, m = alg.card, len(alg.operations), target.size
     if any(op.arity != 1 for op in alg.operations):
         raise CertificateError(
@@ -189,19 +218,19 @@ def emitted_module(name: str, date: str, alg: Algebra, target: TargetLattice,
 
     return f'''---
 layout: default
-file: "src/FLRP/Certificates/Pilot/{name}.lagda.md"
-title: "FLRP.Certificates.Pilot.{name} module (The Agda Universal Algebra Library)"
+file: "src/{module_path}/{name}.lagda.md"
+title: "{qualified} module (The Agda Universal Algebra Library)"
 date: "{date}"
 author: "the agda-algebras development team (emitted by scripts/python/flrp)"
 ---
 
 ### A machine-checked representation: Con({alg.name}) ≅ {target.name}
 
-This is the [FLRP.Certificates.Pilot.{name}][] module of the [Agda Universal Algebra Library][].
+This is the [{qualified}][] module of the [Agda Universal Algebra Library][].
 
 **This module was emitted by `scripts/python/flrp/emit_agda.py` from
 `{input_rel}`.  Do not edit it by hand; rerun the emitter instead.**
-
+{prov_block}
 It re-verifies, end-to-end through the WP-6 certificate pipeline (#457), the
 claim that the congruence lattice of the algebra "{alg.name}" — carrier size
 {n}, unary operations {op_names} — is isomorphic to the lattice
@@ -220,7 +249,7 @@ compilation.
 ```agda
 {{-# OPTIONS --cubical-compatible --exact-split --safe #-}}
 
-module FLRP.Certificates.Pilot.{name} where
+module {qualified} where
 
 -- Imports from Agda and the Agda Standard Library -----------------------------
 open import Data.Fin.Base       using ( Fin )
@@ -413,24 +442,26 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument("input", type=Path, help="claim file (flrp-cert-input v1 JSON)")
     parser.add_argument("--out", type=Path, default=None,
-                        help="output .lagda.md (default: src/FLRP/Certificates/Pilot/<name>.lagda.md)")
+                        help="output .lagda.md (default: src/<module path>/<name>.lagda.md)")
     parser.add_argument("--cert-json", type=Path, default=None,
                         help="audit certificate JSON (default: scripts/python/flrp/out/<name>.cert.json)")
     args = parser.parse_args(argv)
 
-    name, date, algebra, target = parse_input(args.input)
-    cert = build_certificate(algebra, target)
+    claim = parse_input(args.input)
+    cert = build_certificate(claim.algebra, claim.lattice)
 
-    out = args.out or REPO_ROOT / "src" / "FLRP" / "Certificates" / "Pilot" / f"{name}.lagda.md"
-    cert_json = args.cert_json or REPO_ROOT / "scripts" / "python" / "flrp" / "out" / f"{name}.cert.json"
+    out = args.out or REPO_ROOT.joinpath(
+        "src", *claim.module.split("."), f"{claim.name}.lagda.md")
+    cert_json = args.cert_json or \
+        REPO_ROOT / "scripts" / "python" / "flrp" / "out" / f"{claim.name}.cert.json"
 
     input_rel = args.input.resolve().relative_to(REPO_ROOT).as_posix() \
         if args.input.resolve().is_relative_to(REPO_ROOT) else str(args.input)
 
     out.parent.mkdir(parents=True, exist_ok=True)
-    out.write_text(emitted_module(name, date, algebra, target, cert, input_rel))
+    out.write_text(emitted_module(claim, cert, input_rel))
     cert_json.parent.mkdir(parents=True, exist_ok=True)
-    cert_json.write_text(certificate_json(name, algebra, target, cert))
+    cert_json.write_text(certificate_json(claim.name, claim.algebra, claim.lattice, cert))
 
     print(f"emitted  {out.relative_to(REPO_ROOT) if out.is_relative_to(REPO_ROOT) else out}")
     print(f"audit    {cert_json.relative_to(REPO_ROOT) if cert_json.is_relative_to(REPO_ROOT) else cert_json}")

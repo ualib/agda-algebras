@@ -30,7 +30,7 @@ from typing import Sequence, Tuple
 from cg2 import (Algebra, CertificateError, CgResult, Merge, Operation, Pair,
                  SeedJust, TranslateJust, UnionFind, congruence_generated_by,
                  forest_edges, validate_algebra)
-from emit_agda import (REPO_ROOT, certificate_json, emitted_module, fin,
+from emit_agda import (REPO_ROOT, Claim, certificate_json, emitted_module, fin,
                        merge_str, parse_input)
 from lattice import (TargetLattice, WholeLatticeCertificate, build_certificate,
                      congruence_lattice, match_target, partition_meet,
@@ -242,29 +242,60 @@ class EmitterTests(unittest.TestCase):
         alg = Algebra("binary", 2, (Operation("f", 2, [[0, 1], [1, 0]]),))
         target = TargetLattice("chain2", 2, ((0, 0), (0, 1)), ((0, 1), (1, 1)))
         cert = build_certificate(alg, target)
+        claim = Claim("Bad", "2026-01-01", "FLRP.Certificates.Pilot", "", alg, target)
         with self.assertRaises(CertificateError):
-            emitted_module("Bad", "2026-01-01", alg, target, cert, "x.json")
+            emitted_module(claim, cert, "x.json")
 
     def test_parse_input_validates(self) -> None:
-        """emitter: the pilot claim file parses with its pinned name and date."""
-        name, date, algebra, target = parse_input(PILOT_INPUT)
-        self.assertEqual((name, date), ("V4RegularM3", "2026-07-22"))
-        self.assertEqual(algebra.card, 4)
-        self.assertEqual(target.size, 5)
+        """emitter: the pilot claim file parses with its pinned name, date, and default namespace."""
+        claim = parse_input(PILOT_INPUT)
+        self.assertEqual((claim.name, claim.date), ("V4RegularM3", "2026-07-22"))
+        self.assertEqual(claim.module, "FLRP.Certificates.Pilot")
+        self.assertEqual(claim.provenance, "")
+        self.assertEqual(claim.algebra.card, 4)
+        self.assertEqual(claim.lattice.size, 5)
+
+    def test_parse_input_rejects_bad_module(self) -> None:
+        """emitter: a malformed 'module' namespace prefix is rejected."""
+        import tempfile
+        from pathlib import Path
+        data = json.loads(PILOT_INPUT.read_text())
+        for bad in ("1FLRP.Certificates", "FLRP..Pilot", "FLRP.Pi-lot", ""):
+            data["module"] = bad
+            with tempfile.TemporaryDirectory() as tmp:
+                p = Path(tmp) / "claim.json"
+                p.write_text(json.dumps(data))
+                with self.assertRaises(CertificateError):
+                    parse_input(p)
+
+    def test_module_field_routes_namespace(self) -> None:
+        """renderer: the claim's 'module' field parameterizes path, title, and module header."""
+        claim = parse_input(PILOT_INPUT)
+        moved = Claim(claim.name, claim.date, "FLRP.Certificates.SmallLatticeReps",
+                      "Provenance paragraph for the catalog.",
+                      claim.algebra, claim.lattice)
+        cert = build_certificate(moved.algebra, moved.lattice)
+        rendered = emitted_module(moved, cert, "inputs/slr/example.json")
+        self.assertIn("module FLRP.Certificates.SmallLatticeReps.V4RegularM3 where", rendered)
+        self.assertIn('file: "src/FLRP/Certificates/SmallLatticeReps/V4RegularM3.lagda.md"', rendered)
+        self.assertIn("This is the [FLRP.Certificates.SmallLatticeReps.V4RegularM3][] module",
+                      rendered)
+        self.assertIn("rerun the emitter instead.**\n\nProvenance paragraph for the catalog.\n\n"
+                      "It re-verifies", rendered)
 
     def test_golden_module(self) -> None:
         """golden: re-emitting the pilot input reproduces the committed module byte for byte."""
-        name, date, algebra, target = parse_input(PILOT_INPUT)
-        cert = build_certificate(algebra, target)
-        rendered = emitted_module(name, date, algebra, target, cert,
+        claim = parse_input(PILOT_INPUT)
+        cert = build_certificate(claim.algebra, claim.lattice)
+        rendered = emitted_module(claim, cert,
                                   "scripts/python/flrp/inputs/v4_regular_m3.json")
         self.assertEqual(rendered, PILOT_MODULE.read_text())
 
     def test_golden_audit_json(self) -> None:
         """golden: re-emitting the pilot input reproduces the committed audit JSON."""
-        name, _, algebra, target = parse_input(PILOT_INPUT)
-        cert = build_certificate(algebra, target)
-        rendered = certificate_json(name, algebra, target, cert)
+        claim = parse_input(PILOT_INPUT)
+        cert = build_certificate(claim.algebra, claim.lattice)
+        rendered = certificate_json(claim.name, claim.algebra, claim.lattice, cert)
         self.assertEqual(rendered, PILOT_AUDIT.read_text())
         self.assertEqual(json.loads(rendered)["format"], "flrp-cert v1")
 
