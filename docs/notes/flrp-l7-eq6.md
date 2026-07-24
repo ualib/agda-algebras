@@ -119,7 +119,7 @@ Chaining the manuscript's transitivity theorem through the sizes:
 +  a ten-point representation would then be minimal, hence transitive — and `Eq(10)` has no uniform copy: **none on ten points**;
 +  an eleven-point representation would then be minimal, hence transitive of prime degree, hence primitive with the two-element congruence lattice: **none on eleven points**.
 
-**The minimal representation of library `L7` (manuscript `L10`), if one exists, has at least twelve elements.**  The machine-checked steps are the two empty censuses, each produced independently by the pure and the vectorized engine with byte-identical reports; the reduction to the transitive case is the manuscript's § 5 theorem, cited here, not re-proved; the step at eleven is the empty prime pool itself.
+**The minimal representation of library `L7` (manuscript `L10`), if one exists, has at least twelve elements**.  The machine-checked steps are the two empty censuses, each produced independently by the pure and the vectorized engine with byte-identical reports; the reduction to the transitive case is the manuscript's § 5 theorem, cited here, not re-proved; the step at eleven is the empty prime pool itself.
 
 Next steps, sharpened by this addendum:
 
