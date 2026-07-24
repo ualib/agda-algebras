@@ -27,13 +27,22 @@ Scripts are run **from the repo root** (like the Python tools), so their `Read("
 
 ```
 scripts/gap/flrp/
-  lib/json.g          # deterministic JSON writer (no external package dependency)
-  lib/provenance.g    # GAP + smallgrp/transgrp/primgrp version stamp
-  bin/smoke.g         # deliverable 1: the shell smoke test
-  out/                # committed JSON artifacts only (raw logs never land here)
+  lib/json.g            # deterministic JSON writer (no external package dependency)
+  lib/provenance.g      # GAP + smallgrp/transgrp/primgrp version stamp
+  lib/interval.g        # [H,G] as a poset via IntermediateSubgroups; core-free normalization
+  lib/cosets.g          # coset action of G on G/H as unary tables (certificate routes)
+  lib/search.g          # scan drivers: transitive point-stabilizer, SmallGroups subgroup hunt
+  bin/smoke.g           # deliverable 1: the shell smoke test
+  bin/pentagon216.g     # deliverable 3: the SmallGroup(216,153) pentagon interval
+  bin/demo_tg9x4.g      # deliverable 6: the 2×2 direct-certificate demonstrator
+  bin/scan_transitive.g # deliverable 4: the degree-n L7 transitive scan
+  inputs/               # target lattice stanzas (shared format with the python side)
+  out/                  # committed JSON artifacts only (raw *.raw.json is git-ignored)
 ```
 
-Forthcoming on this branch (issue #487): `lib/interval.g` (interval poset via `IntermediateSubgroups`, core-free normalization), `lib/search.g` (the slice-driven search), `lib/cosets.g` (coset-action tables for the direct route), `bin/pentagon216.g` (deliverable 3), `bin/search.g` (deliverables 2/5), `bin/scan_transitive.g` (deliverable 4), and the Python bridge `scripts/python/flrp/gap_interval.py`.
+The Python side lives in `scripts/python/flrp/`: `gap_interval.py` (interval → lattice bridge, canonical artifact, direct-certificate claim) and `gap_search.py` (search-report confirmation and verdict), both exercised by `test_gap_interval.py` (GAP-free, part of `make flrp-test`).
+
+Still forthcoming on this branch (issue #487): a SmallGroups subgroup-interval hunt CLI over `lib/search.g`'s `FLRP_ScanSmallGroups` (deliverable 3's full minimality sweep and deliverable 5's L11/L14/L16/L20 interval data).
 
 ## Artifact schema
 

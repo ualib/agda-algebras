@@ -24,6 +24,7 @@ from cg2 import Algebra, CertificateError, Operation
 from eqsearch import tables_from_leq
 from gap_interval import (canonical_artifact, claim_from_coset,
                           interval_lattice, lattice_iso, load_raw)
+from gap_search import confirm, load_search_raw
 from lattice import build_certificate
 
 # Reflexive order matrices (leq[i][j] = "i <= j") for the two nondistributive
@@ -141,6 +142,47 @@ class TestGuardRails(unittest.TestCase):
         self.assertTrue(art["match"]["isomorphic"])
         self.assertIn("meet", art["interval"])
         self.assertIn("cosetAction", art)
+
+
+def search_raw(*candidate_leqs: List[List[bool]]) -> dict:
+    """A minimal raw search report whose candidates carry the given orders."""
+    return {
+        "format": "flrp-gap-search-raw v1",
+        "engine": {"gap": "test", "libraries": {}},
+        "config": {"mode": "test", "degree": 8, "target": "N5", "targetSize": 5},
+        "scanned": {"groups": 1},
+        "sizeHistogram": {"5": len(candidate_leqs)},
+        "candidates": [raw_with(leq, V4_COSET) for leq in candidate_leqs],
+    }
+
+
+class TestSearchConfirm(unittest.TestCase):
+
+    def test_negative_when_no_candidate_matches(self) -> None:
+        """A size match that is not the target yields a NEGATIVE verdict."""
+        target = tables_from_leq("N5", N5_LEQ)
+        hits, verdict = confirm(search_raw(M3_LEQ), target, "2026-07-24")
+        self.assertEqual(verdict, "negative")
+        self.assertEqual(hits, [])
+
+    def test_positive_when_a_candidate_matches(self) -> None:
+        """A candidate isomorphic to the target yields a POSITIVE hit."""
+        target = tables_from_leq("N5", N5_LEQ)
+        hits, verdict = confirm(search_raw(M3_LEQ, N5_LEQ), target, "2026-07-24")
+        self.assertEqual(verdict, "positive")
+        self.assertEqual(len(hits), 1)
+        self.assertTrue(hits[0]["match"]["isomorphic"])
+
+    def test_load_search_raw_rejects_bad_format(self) -> None:
+        """load_search_raw refuses anything that is not a raw search report."""
+        import json
+        import tempfile
+        from pathlib import Path
+        with tempfile.TemporaryDirectory() as d:
+            p = Path(d) / "x.json"
+            p.write_text(json.dumps({"format": "nope"}))
+            with self.assertRaises(CertificateError):
+                load_search_raw(p)
 
 
 # A logging runner, matching test_flrp.py / test_eqsearch.py.

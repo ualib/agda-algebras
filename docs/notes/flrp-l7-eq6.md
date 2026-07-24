@@ -72,7 +72,7 @@ No class is closed, so **no algebra on at most eight elements has congruence lat
 ## 6. Consequences and next steps
 
 +  Combined with the manuscript's § 5 theorem that a minimal representation of `L10 = L7` cannot come from an intransitive permutation group: a minimal representation, if one exists, is the congruence lattice of a **transitive G-set on at least nine points**.
-+  The nine-point frontier: the algebra side is an `Eq(9)` closure sweep (`Bell(9) = 21,147`; the tables alone are ~1.8 GB at `int16`, so the vectorized engine needs blocking before this is comfortable), while the group side — the transitive-degree scan of #487 (`TransitiveGroup(n, k)` with point stabilizer `H`, testing `[H, G] ≅ L7`) — becomes the cheaper attack from here out, with degrees 8 and below now serving only as cross-validation of the sweeps.  (Settled 2026-07-24: under this transitivity reduction only the *uniform* copies matter, the tables shrink to nothing, and § 8's sweeps find no copy on nine or ten points — the frontier now stands at twelve.)
++  The nine-point frontier: the algebra side is an `Eq(9)` closure sweep (`Bell(9) = 21,147`; the tables alone are ~1.8 GB at `int16`, so the vectorized engine needs blocking before this is comfortable), while the group side — the transitive-degree scan of #487 (`TransitiveGroup(n, k)` with point stabilizer `H`, testing `[H, G] ≅ L7`) — becomes the cheaper attack from here out, with degrees 8 and below now serving only as cross-validation of the sweeps.  (Settled 2026-07-24: under this transitivity reduction only the *uniform* copies matter, the tables shrink to nothing, and § 8's sweeps find no copy on nine or ten points — the frontier now stands at twelve; the group side confirms this through degree twelve — § 9.)
 +  The proper-maps phenomenon at eight points suggests a heuristic for larger carriers: classes whose monoids acquire non-bijective maps are the ones to watch, and the gap `|Inv(M)| − 7` is a measure of how far a class is from closure; tracking its minimum across sizes gives the campaign a progress metric.
 +  A closed class at any size yields a finite algebra with `Con ≅ L7` and flows directly into the certificate pipeline of PR #482 for an Agda-checked `Representableᵈ` witness — the headline outcome, if it exists.
 +  The positive fact of § 2 is formalized in `FLRP.L7EqSix`: the seven listed partitions, as normal-form parent vectors, with decided meets, decided join upper bounds, and join least-ness over arbitrary equivalence relations via bounded alternating chains (fuel four suffices, and the module's decisions re-verify it).  How much of the *negative* sweeps is worth certifying in Agda — the per-class `Inv(M)` computations are plain finite checks, the exhaustiveness of the embedding census is the hard part — is an open task on #484; the decision will be recorded here.
@@ -132,3 +132,28 @@ Reproduction (the `--fast` flag is optional; at these pool widths the pure engin
 python3 scripts/python/flrp/eqsearch.py scripts/python/flrp/inputs/l7_lattice.json 9 --group-rep --json l7-eq9u.json
 python3 scripts/python/flrp/eqsearch.py scripts/python/flrp/inputs/l7_lattice.json 10 --group-rep --json l7-eq10u.json
 ```
+
+## 9. Group-side cross-check: the transitive-degree scan (#487)
+
+The algebra-side sweeps above rule out a representation of `L7` on eight *points*.  The manuscript's § 5 transitivity theorem gives the complementary group-side test: a minimal representation of `L7`, if one exists, is a transitive `G`-set, and a transitive `G`-set of degree `n` is `G` acting on the cosets of a point stabilizer `H` of index `n`, with `Con(G ↷ G/H) ≅ [H, G]`.  So scanning every transitive group of degree 8 and testing `[H, G] ≅ L7` settles existence of a degree-8 minimal representation independently of the closure sweep.  The GAP engine of #487 (`scripts/gap/flrp/`, A. Hulpke's `IntermediateSubgroups`) carries this out.
+
+The verdict is **negative, and emphatically so**.  Across all **50** transitive groups of degree 8, the point-stabilizer interval `[H, G]` never even has seven elements: the interval-size histogram is
+
+```text
+size  |  2   3   4   6   8  10  16
+count |  7  14  18   7   2   1   1
+```
+
+so there is no size-5 or size-7 interval at all, and in particular none isomorphic to `L7` (0 candidates before any isomorphism test is needed).  This **cross-validates the `Eq(8)` closure sweep** of § 5: both engines — the algebra side (no 8-point algebra has `Con ≅ L7`) and the group side (no degree-8 transitive `G`-set has `Con ≅ L7`) — independently agree that eight points do not suffice.  Degrees of prime order are skipped as free negatives (transitive ⇒ primitive ⇒ two-element interval); degree 8 is composite, a genuine scan.
+
+Reproduction (inside `nix develop .#gap`, GAP 4.15.1, transgrp 3.6.5; the committed report is `scripts/gap/flrp/out/l7_transitive_deg8.search.json`, format `flrp-gap-search v1`):
+
+```sh
+gap -A -q -b scripts/gap/flrp/bin/scan_transitive.g
+python3 scripts/python/flrp/gap_search.py \
+    scripts/gap/flrp/out/l7_transitive_deg8.raw.json \
+    --target scripts/python/flrp/inputs/l7_lattice.json \
+    --out scripts/gap/flrp/out/l7_transitive_deg8.search.json --date 2026-07-24
+```
+
+The higher degrees § 8 flags for the group side — nine, ten, and twelve (eleven is prime, a free negative) — continue this same scan; that is #487's contribution to the twelve-point frontier.
