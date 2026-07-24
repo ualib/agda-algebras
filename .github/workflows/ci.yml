@@ -103,6 +103,32 @@ jobs:
           nix develop --command make check
 
   # ---------------------------------------------------------------------------
+  # Docs cross-links.  Pure-Python, no Nix/Agda/MkDocs, so it runs in seconds and
+  # gives fast feedback: undefined reference-style links (`[ADR-008][]`) render
+  # as literal text and slip past `mkdocs build --strict`, so this guards them at
+  # the source.  See `make check-links` and scripts/python/{gen,check}_links.py.
+  # ---------------------------------------------------------------------------
+  link-check:
+    name: Docs cross-links
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Reference-link library is in sync and every reference resolves
+        run: |
+          set -euxo pipefail
+          make check-links-test
+          make check-links
+
+  # ---------------------------------------------------------------------------
   # Aggregate status: a single stable required-check name for branch
   # protection.  Uses `if: always()` so that skipped/conditional jobs added
   # in the future don't block the gate.
@@ -112,12 +138,12 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 2
     if: always()
-    needs: [check]
+    needs: [check, link-check]
     steps:
       - name: Verify all required jobs passed
         run: |
           set -euxo pipefail
-          results=( "${{ needs.check.result }}" )
+          results=( "${{ needs.check.result }}" "${{ needs.link-check.result }}" )
           for r in "${results[@]}"; do
             if [ "$r" = "failure" ] || [ "$r" = "cancelled" ]; then
               echo "A required job ended with result: $r"
