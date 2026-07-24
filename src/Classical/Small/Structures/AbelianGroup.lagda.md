@@ -10,7 +10,7 @@ author: "the agda-algebras development team"
 
 This is the [Classical.Small.Structures.AbelianGroup][] module of the [Agda Universal Algebra Library][].
 
-Specializes [`Classical.Structures.Group.AbelianGroup`][] to the `0ℓ`–`0ℓ` case,
+Specializes [`Classical.Structures.Group.AbelianGroup`][Classical.Structures.Group.AbelianGroup] to the `0ℓ`–`0ℓ` case,
 mirroring the veneers of `Monoid`, `CommutativeMonoid`, `Group`, etc.
 
 <!--

@@ -52,8 +52,8 @@ top-level aggregator below imports each layer in turn.
    two reasons (see [`DEPRECATED.md`][DEPRECATED]): (i) so v2.x downstream
    users have a mechanical migration path during the 3.0 transition; and
    (ii) because some modules — most prominently
-   [`Legacy.Base.Relations.Continuous`][Continuous] and the
-   [`Legacy.Base.Complexity`][Complexity] subtree, both central to milestone
+   [`Legacy.Base.Relations.Continuous`][Legacy.Base.Relations.Continuous] and the
+   [`Legacy.Base.Complexity`][Legacy.Base.Complexity] subtree, both central to milestone
    M9 (algebraic complexity / CSP) — have no `Setoid/` analog yet and are
    scheduled for migration in later milestones.  New work does not land in
    `Legacy.Base`.
@@ -71,7 +71,7 @@ top-level aggregator below imports each layer in turn.
    pedagogical presentations of marquee results:
    [`Examples.Demos.HSP`][Examples.Demos.HSP] is a single-file rendition of
    Birkhoff's theorem suitable for teaching; the canonical proof of record
-   lives in [`Setoid.Varieties.HSP`][Setoid.HSP], factored across the
+   lives in [`Setoid.Varieties.HSP`][Setoid.Varieties.HSP], factored across the
    broader `Setoid.Varieties.*` development.
 
 <!--
@@ -115,7 +115,7 @@ open import Examples
 The [`Examples.Demos.HSP`][Examples.Demos.HSP] module presents a fairly self-contained formal
 proof of Birkhoff's theorem in a single Agda module — the version most
 often discussed in the project's expository writing.  The canonical proof
-of record lives in [`Setoid.Varieties.HSP`][Setoid.HSP], factored across the
+of record lives in [`Setoid.Varieties.HSP`][Setoid.Varieties.HSP], factored across the
 broader `Setoid.Varieties.*` development.  The theorem itself asserts that a
 class 𝒦 of algebras of fixed signature is closed under homomorphic images,
 subalgebras, and arbitrary products if and only if it is the class of all
@@ -130,3 +130,8 @@ under the [Apache License 2.0][LICENSE], and the documentation under `docs/`
 (together with the prose embedded in literate Agda files) is released under
 [Creative Commons Attribution 4.0 International][LICENSE-docs].  See the
 project [`README.md`][README] for further detail and citation information.
+
+<!-- Page-local reference definition.  DEPRECATED.md is the frozen-tree
+     inventory under src/Legacy/Base/; it is not a rendered site page, so it is
+     linked to its GitHub source (as the mkdocs hook does for that filename). -->
+[DEPRECATED]: https://github.com/ualib/agda-algebras/blob/master/src/Legacy/Base/DEPRECATED.md

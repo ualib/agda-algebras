@@ -102,7 +102,7 @@ The flags, in order, mean the following:
 +  `--exact-split` requires every clause matches the type of the function being defined, preventing definitional-equality surprises that trip up proof automation and the training-corpus consumers.
 
 **Exceptions**.  
-+  `src/Legacy/Base/`, will retain its historical `--without-K` pragma; new contributions do not land in `Legacy/` (see [Milestone 2][`docs/GITHUB_PROJECT.md`]).
++  `src/Legacy/Base/`, will retain its historical `--without-K` pragma; new contributions do not land in `Legacy/` (see [Milestone 2][ROADMAP]).
 +  Generated files (`src/Everything.agda`); the pragma is still required, but the file is written by the Makefile and should not be hand-edited.
 
 ### Module header
@@ -191,7 +191,7 @@ Downstream modules `open import Setoid.Algebras` to get the whole theme and `ope
 
 ### Classical structures quintuple
 
-In upcoming versions of agda-algebras (to land in [Milestone 3][`docs/GITHUB_PROJECT.md`]), each classical algebraic structure `X` will ship as a quintuple of modules under `src/Classical/`:
+In upcoming versions of agda-algebras (to land in [Milestone 3][ROADMAP]), each classical algebraic structure `X` will ship as a quintuple of modules under `src/Classical/`:
 
 +  `Classical/Signatures/X.agda`: the signature (operation symbols + arities).
 +  `Classical/Theories/X.agda`: the equational theory (the axioms as `Theory 𝑆ₓ`).
@@ -199,7 +199,7 @@ In upcoming versions of agda-algebras (to land in [Milestone 3][`docs/GITHUB_PRO
 +  `Classical/Bundles/X.agda`: the record-typed "bundle view" matching stdlib's `Algebra.Bundles.X`.
 +  `Classical/Small/Structures/X.agda`: a level-fixed veneer at `ℓ₀` for the common case.
 
-This pattern is to be ratified in ADR-002 (to land with [M3-1][`docs/GITHUB_PROJECT.md`]) and exemplified in `Classical/Structures/Semigroup.lagda.md` (M3-2) as the pattern-setting first structure.
+This pattern is to be ratified in ADR-002 (to land with [M3-1][ROADMAP]) and exemplified in `Classical/Structures/Semigroup.lagda.md` (M3-2) as the pattern-setting first structure.
 
 ### Module headers have comment blocks
 
@@ -693,7 +693,7 @@ Deprecate a public definition as follows:
 
 ## References
 
-+  Project roadmap: [`docs/GITHUB_PROJECT.md`][].
++  Project roadmap: [`docs/GITHUB_PROJECT.md`][ROADMAP].
 +  Architecture Decision Records: [`docs/adr/`](adr/) (scaffolding in M1-6).
 +  Contributing guide: [`../CONTRIBUTING.md`](../CONTRIBUTING.md).
 +  Related Agda-ecosystem style references:
@@ -704,5 +704,3 @@ Deprecate a public definition as follows:
 ---
 
 *This document will evolve.  Specific decisions flagged as "tracked in M4-*" will be resolved as those issues close.  When you encounter an undocumented convention while working on the library, please open a PR or Issue to document it — style guides die when maintenance becomes someone-else's-problem.*
-
-[`docs/GITHUB_PROJECT.md`]: https://github.com/ualib/agda-algebras/blob/master/docs/GITHUB_PROJECT.md

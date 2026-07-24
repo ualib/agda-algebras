@@ -8,7 +8,7 @@ author: "the agda-algebras development team"
 ## Setoid Types for General Algebra
 
 This module collects all submodule of that part of the library based on setoids,
-as opposed to "bare" types (see [Legacy.Base.lagda][]).
+as opposed to "bare" types (see [Legacy.Base][]).
 
 
 ```agda

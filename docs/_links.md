@@ -3,9 +3,10 @@
 <!-- pymdownx.snippets auto-appends this file to every page so reference-style -->
 <!-- links resolve site-wide without a per-page include directive.  Internal -->
 <!-- targets are ROOT-RELATIVE so cross-references work under `mkdocs serve` -->
-<!-- and at the deployed site alike.  The module sections are GENERATED from -->
-<!-- the src/ tree by scripts/python/gen_links.py; re-run it rather than -->
-<!-- editing those entries by hand. -->
+<!-- and at the deployed site alike.  The module and ADR sections are GENERATED -->
+<!-- from the src/ and docs/adr/ trees by scripts/python/gen_links.py; re-run it -->
+<!-- rather than editing those entries by hand (CI runs it with --check).  New -->
+<!-- external links may be added by hand to the External-links section. -->
 
 <!-- ===== Rendered module pages ===== -->
 [Overture]: /Overture/
@@ -47,14 +48,21 @@
 [Setoid.Complexity.CSP]: /Setoid/Complexity/CSP/
 [Setoid.Congruences]: /Setoid/Congruences/
 [Setoid.Congruences.Basic]: /Setoid/Congruences/Basic/
+[Setoid.Congruences.Certificates]: /Setoid/Congruences/Certificates/
+[Setoid.Congruences.Certificates.Congruence]: /Setoid/Congruences/Certificates/Congruence/
+[Setoid.Congruences.Certificates.Lattice]: /Setoid/Congruences/Certificates/Lattice/
+[Setoid.Congruences.Certificates.Schema]: /Setoid/Congruences/Certificates/Schema/
 [Setoid.Congruences.ChainJoin]: /Setoid/Congruences/ChainJoin/
 [Setoid.Congruences.CompleteLattice]: /Setoid/Congruences/CompleteLattice/
 [Setoid.Congruences.Finite]: /Setoid/Congruences/Finite/
+[Setoid.Congruences.Finite.Basic]: /Setoid/Congruences/Finite/Basic/
+[Setoid.Congruences.Finite.Decidable]: /Setoid/Congruences/Finite/Decidable/
 [Setoid.Congruences.Generation]: /Setoid/Congruences/Generation/
 [Setoid.Congruences.Lattice]: /Setoid/Congruences/Lattice/
 [Setoid.Congruences.Monolith]: /Setoid/Congruences/Monolith/
 [Setoid.Congruences.Permutability]: /Setoid/Congruences/Permutability/
 [Setoid.Congruences.Presented]: /Setoid/Congruences/Presented/
+[Setoid.Congruences.Presented.Basic]: /Setoid/Congruences/Presented/Basic/
 [Setoid.Congruences.Presented.Decidable]: /Setoid/Congruences/Presented/Decidable/
 [Setoid.Congruences.Properties]: /Setoid/Congruences/Properties/
 [Setoid.Functions]: /Setoid/Functions/
@@ -177,6 +185,7 @@
 [Classical.Structures.Group.Dedekind]: /Classical/Structures/Group/Dedekind/
 [Classical.Structures.Group.GSet]: /Classical/Structures/Group/GSet/
 [Classical.Structures.Group.NormalCore]: /Classical/Structures/Group/NormalCore/
+[Classical.Structures.Group.Product]: /Classical/Structures/Group/Product/
 [Classical.Structures.Group.SubgroupLattice]: /Classical/Structures/Group/SubgroupLattice/
 [Classical.Structures.Group.Subgroups]: /Classical/Structures/Group/Subgroups/
 [Classical.Structures.Interpret]: /Classical/Structures/Interpret/
@@ -186,6 +195,7 @@
 [Classical.Structures.Ring]: /Classical/Structures/Ring/
 [Classical.Structures.Semigroup]: /Classical/Structures/Semigroup/
 [Classical.Structures.Semilattice]: /Classical/Structures/Semilattice/
+[Classical.Structures.Unary]: /Classical/Structures/Unary/
 [Classical.Theories]: /Classical/Theories/
 [Classical.Theories.AbelianGroup]: /Classical/Theories/AbelianGroup/
 [Classical.Theories.CommutativeMonoid]: /Classical/Theories/CommutativeMonoid/
@@ -321,12 +331,42 @@
 [agda-algebras]: /agda-algebras/
 
 [FLRP]: /FLRP/
-[FLRP.Problem]: /FLRP/Problem/
-[FLRP.Enforceable]: /FLRP/Enforceable/
-[FLRP.Bridge]: /FLRP/Bridge/
-[FLRP.Representable]: /FLRP/Representable/
 [FLRP.Assumptions]: /FLRP/Assumptions/
+[FLRP.Bridge]: /FLRP/Bridge/
+[FLRP.Certificates]: /FLRP/Certificates/
+[FLRP.Certificates.Pilot.V4RegularM3]: /FLRP/Certificates/Pilot/V4RegularM3/
+[FLRP.Certificates.SmallLatticeReps.SLR01]: /FLRP/Certificates/SmallLatticeReps/SLR01/
+[FLRP.Certificates.SmallLatticeReps.SLR02]: /FLRP/Certificates/SmallLatticeReps/SLR02/
+[FLRP.Certificates.SmallLatticeReps.SLR03]: /FLRP/Certificates/SmallLatticeReps/SLR03/
+[FLRP.Certificates.SmallLatticeReps.SLR04]: /FLRP/Certificates/SmallLatticeReps/SLR04/
+[FLRP.Certificates.SmallLatticeReps.SLR05]: /FLRP/Certificates/SmallLatticeReps/SLR05/
+[FLRP.Certificates.SmallLatticeReps.SLR06]: /FLRP/Certificates/SmallLatticeReps/SLR06/
+[FLRP.Certificates.SmallLatticeReps.SLR07]: /FLRP/Certificates/SmallLatticeReps/SLR07/
+[FLRP.Certificates.SmallLatticeReps.SLR08]: /FLRP/Certificates/SmallLatticeReps/SLR08/
+[FLRP.Certificates.SmallLatticeReps.SLR09]: /FLRP/Certificates/SmallLatticeReps/SLR09/
+[FLRP.Certificates.SmallLatticeReps.SLR12]: /FLRP/Certificates/SmallLatticeReps/SLR12/
+[FLRP.Certificates.SmallLatticeReps.SLR13]: /FLRP/Certificates/SmallLatticeReps/SLR13/
+[FLRP.Certificates.SmallLatticeReps.SLR15]: /FLRP/Certificates/SmallLatticeReps/SLR15/
+[FLRP.Certificates.SmallLatticeReps.SLR17]: /FLRP/Certificates/SmallLatticeReps/SLR17/
+[FLRP.Certificates.SmallLatticeReps.SLR19]: /FLRP/Certificates/SmallLatticeReps/SLR19/
+[FLRP.Certificates.SmallLatticeReps.SLR21]: /FLRP/Certificates/SmallLatticeReps/SLR21/
+[FLRP.Certificates.SmallLatticeReps.SLR23]: /FLRP/Certificates/SmallLatticeReps/SLR23/
+[FLRP.Certificates.SmallLatticeReps.SLR24]: /FLRP/Certificates/SmallLatticeReps/SLR24/
+[FLRP.Certificates.SmallLatticeReps.SLR25]: /FLRP/Certificates/SmallLatticeReps/SLR25/
+[FLRP.Certificates.SmallLatticeReps.SLR26]: /FLRP/Certificates/SmallLatticeReps/SLR26/
+[FLRP.Certificates.SmallLatticeReps.SLR27]: /FLRP/Certificates/SmallLatticeReps/SLR27/
+[FLRP.Certificates.SmallLatticeReps.SLR29]: /FLRP/Certificates/SmallLatticeReps/SLR29/
+[FLRP.Certificates.SmallLatticeReps.SLR30]: /FLRP/Certificates/SmallLatticeReps/SLR30/
+[FLRP.Certificates.SmallLatticeReps.SLR31]: /FLRP/Certificates/SmallLatticeReps/SLR31/
+[FLRP.Certificates.SmallLatticeReps.SLR32]: /FLRP/Certificates/SmallLatticeReps/SLR32/
+[FLRP.Certificates.SmallLatticeReps.SLR33]: /FLRP/Certificates/SmallLatticeReps/SLR33/
+[FLRP.Certificates.SmallLatticeReps.SLR34]: /FLRP/Certificates/SmallLatticeReps/SLR34/
+[FLRP.Certificates.SmallLatticeReps.SLR35]: /FLRP/Certificates/SmallLatticeReps/SLR35/
+[FLRP.Enforceable]: /FLRP/Enforceable/
+[FLRP.L7EqSix]: /FLRP/L7EqSix/
 [FLRP.LayerBridge]: /FLRP/LayerBridge/
+[FLRP.Problem]: /FLRP/Problem/
+[FLRP.Representable]: /FLRP/Representable/
 
 <!-- ===== Module sources on GitHub ===== -->
 [Overture.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Overture.lagda.md
@@ -368,14 +408,21 @@
 [Setoid/Complexity/CSP.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Complexity/CSP.lagda.md
 [Setoid/Congruences.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Congruences.lagda.md
 [Setoid/Congruences/Basic.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Congruences/Basic.lagda.md
+[Setoid/Congruences/Certificates.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Congruences/Certificates.lagda.md
+[Setoid/Congruences/Certificates/Congruence.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Congruences/Certificates/Congruence.lagda.md
+[Setoid/Congruences/Certificates/Lattice.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Congruences/Certificates/Lattice.lagda.md
+[Setoid/Congruences/Certificates/Schema.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Congruences/Certificates/Schema.lagda.md
 [Setoid/Congruences/ChainJoin.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Congruences/ChainJoin.lagda.md
 [Setoid/Congruences/CompleteLattice.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Congruences/CompleteLattice.lagda.md
 [Setoid/Congruences/Finite.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Congruences/Finite.lagda.md
+[Setoid/Congruences/Finite/Basic.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Congruences/Finite/Basic.lagda.md
+[Setoid/Congruences/Finite/Decidable.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Congruences/Finite/Decidable.lagda.md
 [Setoid/Congruences/Generation.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Congruences/Generation.lagda.md
 [Setoid/Congruences/Lattice.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Congruences/Lattice.lagda.md
 [Setoid/Congruences/Monolith.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Congruences/Monolith.lagda.md
 [Setoid/Congruences/Permutability.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Congruences/Permutability.lagda.md
 [Setoid/Congruences/Presented.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Congruences/Presented.lagda.md
+[Setoid/Congruences/Presented/Basic.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Congruences/Presented/Basic.lagda.md
 [Setoid/Congruences/Presented/Decidable.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Congruences/Presented/Decidable.lagda.md
 [Setoid/Congruences/Properties.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Congruences/Properties.lagda.md
 [Setoid/Functions.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Functions.lagda.md
@@ -498,6 +545,7 @@
 [Classical/Structures/Group/Dedekind.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Group/Dedekind.lagda.md
 [Classical/Structures/Group/GSet.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Group/GSet.lagda.md
 [Classical/Structures/Group/NormalCore.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Group/NormalCore.lagda.md
+[Classical/Structures/Group/Product.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Group/Product.lagda.md
 [Classical/Structures/Group/SubgroupLattice.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Group/SubgroupLattice.lagda.md
 [Classical/Structures/Group/Subgroups.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Group/Subgroups.lagda.md
 [Classical/Structures/Interpret.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Interpret.lagda.md
@@ -507,6 +555,7 @@
 [Classical/Structures/Ring.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Ring.lagda.md
 [Classical/Structures/Semigroup.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Semigroup.lagda.md
 [Classical/Structures/Semilattice.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Semilattice.lagda.md
+[Classical/Structures/Unary.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Unary.lagda.md
 [Classical/Theories.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Theories.lagda.md
 [Classical/Theories/AbelianGroup.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Theories/AbelianGroup.lagda.md
 [Classical/Theories/CommutativeMonoid.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Theories/CommutativeMonoid.lagda.md
@@ -642,22 +691,58 @@
 [agda-algebras.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/agda-algebras.lagda.md
 
 [FLRP.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP.lagda.md
-[FLRP/Problem.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/Problem.lagda.md
-[FLRP/Enforceable.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/Enforceable.lagda.md
-[FLRP/Bridge.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/Bridge.lagda.md
-[FLRP/Representable.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/Representable.lagda.md
 [FLRP/Assumptions.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/Assumptions.lagda.md
+[FLRP/Bridge.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/Bridge.lagda.md
+[FLRP/Certificates.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/Certificates.lagda.md
+[FLRP/Certificates/Pilot/V4RegularM3.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/Certificates/Pilot/V4RegularM3.lagda.md
+[FLRP/Certificates/SmallLatticeReps/SLR01.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/Certificates/SmallLatticeReps/SLR01.lagda.md
+[FLRP/Certificates/SmallLatticeReps/SLR02.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/Certificates/SmallLatticeReps/SLR02.lagda.md
+[FLRP/Certificates/SmallLatticeReps/SLR03.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/Certificates/SmallLatticeReps/SLR03.lagda.md
+[FLRP/Certificates/SmallLatticeReps/SLR04.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/Certificates/SmallLatticeReps/SLR04.lagda.md
+[FLRP/Certificates/SmallLatticeReps/SLR05.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/Certificates/SmallLatticeReps/SLR05.lagda.md
+[FLRP/Certificates/SmallLatticeReps/SLR06.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/Certificates/SmallLatticeReps/SLR06.lagda.md
+[FLRP/Certificates/SmallLatticeReps/SLR07.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/Certificates/SmallLatticeReps/SLR07.lagda.md
+[FLRP/Certificates/SmallLatticeReps/SLR08.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/Certificates/SmallLatticeReps/SLR08.lagda.md
+[FLRP/Certificates/SmallLatticeReps/SLR09.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/Certificates/SmallLatticeReps/SLR09.lagda.md
+[FLRP/Certificates/SmallLatticeReps/SLR12.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/Certificates/SmallLatticeReps/SLR12.lagda.md
+[FLRP/Certificates/SmallLatticeReps/SLR13.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/Certificates/SmallLatticeReps/SLR13.lagda.md
+[FLRP/Certificates/SmallLatticeReps/SLR15.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/Certificates/SmallLatticeReps/SLR15.lagda.md
+[FLRP/Certificates/SmallLatticeReps/SLR17.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/Certificates/SmallLatticeReps/SLR17.lagda.md
+[FLRP/Certificates/SmallLatticeReps/SLR19.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/Certificates/SmallLatticeReps/SLR19.lagda.md
+[FLRP/Certificates/SmallLatticeReps/SLR21.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/Certificates/SmallLatticeReps/SLR21.lagda.md
+[FLRP/Certificates/SmallLatticeReps/SLR23.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/Certificates/SmallLatticeReps/SLR23.lagda.md
+[FLRP/Certificates/SmallLatticeReps/SLR24.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/Certificates/SmallLatticeReps/SLR24.lagda.md
+[FLRP/Certificates/SmallLatticeReps/SLR25.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/Certificates/SmallLatticeReps/SLR25.lagda.md
+[FLRP/Certificates/SmallLatticeReps/SLR26.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/Certificates/SmallLatticeReps/SLR26.lagda.md
+[FLRP/Certificates/SmallLatticeReps/SLR27.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/Certificates/SmallLatticeReps/SLR27.lagda.md
+[FLRP/Certificates/SmallLatticeReps/SLR29.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/Certificates/SmallLatticeReps/SLR29.lagda.md
+[FLRP/Certificates/SmallLatticeReps/SLR30.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/Certificates/SmallLatticeReps/SLR30.lagda.md
+[FLRP/Certificates/SmallLatticeReps/SLR31.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/Certificates/SmallLatticeReps/SLR31.lagda.md
+[FLRP/Certificates/SmallLatticeReps/SLR32.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/Certificates/SmallLatticeReps/SLR32.lagda.md
+[FLRP/Certificates/SmallLatticeReps/SLR33.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/Certificates/SmallLatticeReps/SLR33.lagda.md
+[FLRP/Certificates/SmallLatticeReps/SLR34.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/Certificates/SmallLatticeReps/SLR34.lagda.md
+[FLRP/Certificates/SmallLatticeReps/SLR35.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/Certificates/SmallLatticeReps/SLR35.lagda.md
+[FLRP/Enforceable.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/Enforceable.lagda.md
+[FLRP/L7EqSix.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/L7EqSix.lagda.md
 [FLRP/LayerBridge.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/LayerBridge.lagda.md
+[FLRP/Problem.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/Problem.lagda.md
+[FLRP/Representable.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/Representable.lagda.md
+
+<!-- ===== Architecture Decision Records ===== -->
+[ADR-000]: /adr/000-template/
+[ADR-001]: /adr/001-setoid-as-canonical/
+[ADR-002]: /adr/002-classical-layer-design/
+[ADR-003]: /adr/003-cubical-canonical-target/
+[ADR-004]: /adr/004-lagda-md-canonical/
+[ADR-005]: /adr/005-universe-level-variable-scope/
+[ADR-006]: /adr/006-signature-morphism-category/
+[ADR-007]: /adr/007-mkdocs-rendering-pipeline/
+[ADR-008]: /adr/008-two-layer-congruence-discipline/
+[ADR-009]: /adr/009-signature-genericity-generalized-variables/
 
 <!-- ===== External links ===== -->
 [A Machine-checked proof of Birkhoff's Variety Theorem in Martin-Löf Type Theory]: https://arxiv.org/abs/2101.10166
 [absolute value]: https://en.wikipedia.org/wiki/Absolute_value
-[ADR-001]: https://github.com/ualib/agda-algebras/blob/master/docs/adr/001-setoid-as-canonical.md
-[ADR-002]: https://github.com/ualib/agda-algebras/blob/master/docs/adr/002-classical-layer-design.md
-[ADR-003]: https://github.com/ualib/agda-algebras/blob/master/docs/adr/003-cubical-canonical-target.md
-[ADR-004]: https://github.com/ualib/agda-algebras/blob/master/docs/adr/004-lagda-md-canonical.md
-[ADR-005]: https://github.com/ualib/agda-algebras/blob/master/docs/adr/005-universe-level-variable-scope.md
-[ADR-006]: https://github.com/ualib/agda-algebras/blob/master/docs/adr/006-signature-morphism-category.md
 [ADR-dir]: https://github.com/ualib/agda-algebras/tree/master/docs/adr
 [Agda]: https://wiki.portal.chalmers.se/agda/pmwiki.php
 [Agda Language Reference]: https://agda.readthedocs.io/en/v2.6.1.3/language
@@ -667,7 +752,6 @@
 [Agda User's Manual]: https://agda.readthedocs.io/en/v2.6.1.3/
 [Agda Wiki]: https://wiki.portal.chalmers.se/agda/pmwiki.php
 [agda2-mode]: https://agda.readthedocs.io/en/v2.6.1.3/tools/emacs-mode.html
-[agda-algebras]: https://github.com/ualib/agda-algebras
 [agda-algebras development team]: https://github.com/ualib/agda-algebras#credits
 [Algebraic Effects and Handlers]: https://www.cs.uoregon.edu/research/summerschool/summer18/topics.php#Bauer
 [Andreas Abel]: http://www.cse.chalmers.se/~abela/
@@ -786,5 +870,4 @@
 [Agda UniversalAlgebra]: /
 [agda-algebras-everything]: /agda-algebras/
 [Containers]: https://ncatlab.org/nlab/show/container
-[ADR-007]: /adr/007-mkdocs-rendering-pipeline/
 [Nix]: https://nixos.org/
