@@ -89,9 +89,11 @@ open import Classical.Theories.Lattice        using  ( Eq-Lattice ; Th-Lattice ;
 open import Classical.Theories.Semilattice    using  ( Th-Semilattice )
                                               renaming  ( assoc to assocˢˡ ; comm  to commˢˡ
                                                         ; idem  to idemˢˡ )
+open import Overture.Operations               using  ( Op )
 open import Overture.Terms                    using  ( Term ; ℊ ; node )
 open import Overture.Signatures               using  ( ArityOf ; OperationSymbolsOf )
-open import Setoid.Algebras.Basic             using  ( Algebra ; _^_ ; 𝔻[_] ; 𝕌[_] )
+open import Setoid.Algebras.Basic             using  ( Algebra ; _^_ ; 𝔻[_] ; 𝕌[_]
+                                                     ; mkAlgebra )
 open import Setoid.Algebras.Reduct            using  ( reductBy )
 open import Setoid.Signatures                 using  ( ⟨_⟩ )
 open import Setoid.Terms                      using  ( module Environment )
@@ -462,4 +464,69 @@ eqsToLattice A _∧'_ _∨'_ ∧-assoc-≡ ∧-comm-≡ ∧-idem-≡ ∨-assoc-�
   proof ∨-idem  ρ = ∨-idem-≡  (ρ 0F)
   proof absorbˡ ρ = absorbˡ-≡ (ρ 0F) (ρ 1F)
   proof absorbʳ ρ = absorbʳ-≡ (ρ 0F) (ρ 1F)
+```
+
+#### Setoid-level lattice builders
+
+`eqsToLattice`{.AgdaFunction} covers carriers with propositional equality; the
+constructions that build one lattice out of others — the binary product, the dual,
+and the ordinal sum of [Classical.Structures.Lattice.Product][],
+[Classical.Structures.Lattice.Dual][], and [Classical.Structures.Lattice.OrdinalSum][]
+— produce *setoid* carriers, so they need the general form.
+`setoidOpsToBareLattice`{.AgdaFunction} assembles the `Sig-Lattice` algebra from a
+carrier setoid, two binary operations, and their congruence proofs (which the
+propositional case got for free from `cong₂`{.AgdaFunction});
+`setoidEqsToLattice`{.AgdaFunction} adds the eight equations, now stated over the
+setoid equality `≈`.
+
+The interpretation clauses *apply* the argument tuple (`a 0F ∧' a 1F` rather than
+routing through `pair`{.AgdaFunction}), so each equation of `Th-Lattice`
+evaluates definitionally to its curried form, and the satisfaction proof consumes the
+curried hypotheses directly — the same reduction discipline that makes
+`eqsToLattice`{.AgdaFunction}'s proof clauses one-liners.
+
+```agda
+module _ (𝐷 : Setoid α ρ) where
+  open Setoid 𝐷 using ( _≈_ ) renaming ( Carrier to D )
+
+  setoidOpsToBareLattice : (_∧'_ _∨'_ : D → D → D)
+    → (∀ {x y u v} → x ≈ y → u ≈ v → (x ∧' u) ≈ (y ∧' v))
+    → (∀ {x y u v} → x ≈ y → u ≈ v → (x ∨' u) ≈ (y ∨' v))
+    → Algebra {𝑆 = Sig-Lattice} α ρ
+  setoidOpsToBareLattice _∧'_ _∨'_ ∧'-cong ∨'-cong = mkAlgebra 𝐷 interp interp-congruence
+    where
+    interp : (o : OperationSymbolsOf Sig-Lattice) → Op (ArityOf Sig-Lattice o) D
+    interp ∧-Op a = a 0F ∧' a 1F
+    interp ∨-Op a = a 0F ∨' a 1F
+
+    interp-congruence : ∀ o {u v : ArityOf Sig-Lattice o → D}
+      → (∀ i → u i ≈ v i) → interp o u ≈ interp o v
+    interp-congruence ∧-Op e = ∧'-cong (e 0F) (e 1F)
+    interp-congruence ∨-Op e = ∨'-cong (e 0F) (e 1F)
+
+  setoidEqsToLattice : (_∧'_ _∨'_ : D → D → D)
+    → (∧'-cong    : ∀ {x y u v} → x ≈ y → u ≈ v → (x ∧' u) ≈ (y ∧' v))
+    → (∨'-cong    : ∀ {x y u v} → x ≈ y → u ≈ v → (x ∨' u) ≈ (y ∨' v))
+    → (∧'-assoc-≈ : ∀ a b c → ((a ∧' b) ∧' c) ≈ (a ∧' (b ∧' c)))
+    → (∧'-comm-≈  : ∀ a b → (a ∧' b) ≈ (b ∧' a))
+    → (∧'-idem-≈  : ∀ a → (a ∧' a) ≈ a)
+    → (∨'-assoc-≈ : ∀ a b c → ((a ∨' b) ∨' c) ≈ (a ∨' (b ∨' c)))
+    → (∨'-comm-≈  : ∀ a b → (a ∨' b) ≈ (b ∨' a))
+    → (∨'-idem-≈  : ∀ a → (a ∨' a) ≈ a)
+    → (absorbˡ-≈  : ∀ a b → (a ∧' (a ∨' b)) ≈ a)
+    → (absorbʳ-≈  : ∀ a b → ((a ∧' b) ∨' a) ≈ a)
+    → Lattice α ρ
+  setoidEqsToLattice _∧'_ _∨'_ ∧'-cong ∨'-cong
+    ∧'-assoc-≈ ∧'-comm-≈ ∧'-idem-≈ ∨'-assoc-≈ ∨'-comm-≈ ∨'-idem-≈ absorbˡ-≈ absorbʳ-≈ =
+    setoidOpsToBareLattice _∧'_ _∨'_ ∧'-cong ∨'-cong , proof
+    where
+    proof : setoidOpsToBareLattice _∧'_ _∨'_ ∧'-cong ∨'-cong ⊨ˡᵃ Th-Lattice
+    proof ∧-assoc η = ∧'-assoc-≈ (η 0F) (η 1F) (η 2F)
+    proof ∧-comm  η = ∧'-comm-≈  (η 0F) (η 1F)
+    proof ∧-idem  η = ∧'-idem-≈  (η 0F)
+    proof ∨-assoc η = ∨'-assoc-≈ (η 0F) (η 1F) (η 2F)
+    proof ∨-comm  η = ∨'-comm-≈  (η 0F) (η 1F)
+    proof ∨-idem  η = ∨'-idem-≈  (η 0F)
+    proof absorbˡ η = absorbˡ-≈  (η 0F) (η 1F)
+    proof absorbʳ η = absorbʳ-≈  (η 0F) (η 1F)
 ```
