@@ -47,14 +47,14 @@ Two modules, both `--cubical-compatible --exact-split --safe`.
    +  `coord h i = projᵢ ∘ h` and `IsSubdirectEmbedding` (a hom that is injective and
       whose every coordinate map is surjective); `SubdirectEmbedding`; `subdirect→≤`
       (a subdirect embedding is in particular a subalgebra inclusion `𝑩 ≤ ⨅ 𝒜`).
-   +  **The bridge.**  For a family `θ : I → Con 𝑨`, the natural map
+   +  **The bridge**.  For a family `θ : I → Con 𝑨`, the natural map
       `natmap = ⨅-hom-co (πhom ∘ θ) : 𝑨 → ⨅ (λ i → 𝑨 ╱ θ i)`.  `Separates θ` says the
       meet `⋂ θ` is the diagonal (`∀ i, θ i a b ⟹ a ≈ b`).  Then `natmap-injective` /
       `natmap-separates` show injectivity of the natural map is **definitionally** the
       separation property, and `natmap-proj-onto` shows each coordinate map *is* the
       canonical quotient epimorphism, hence surjective — with no decidability or choice
       on the index.  `separating→SubdirectEmbedding` assembles them.
-   +  **Birkhoff, reduced to existence.**  `SubdirectlyRepresentable 𝑨` (a family of SI
+   +  **Birkhoff, reduced to existence**.  `SubdirectlyRepresentable 𝑨` (a family of SI
       algebras with a subdirect embedding of `𝑨` into their product) is the theorem's
       conclusion.  `SubdirectSIRep 𝑨` packages the bridge's input: a separating family
       whose quotients are all subdirectly irreducible.  `SIRep→Representable` is the

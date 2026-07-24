@@ -13,7 +13,7 @@ The deliverable of M6-3 was bounded: the forward Maltsev theorem (`MaltsevTerm�
 uninhabited `Type`.  M6-4 builds the reusable infrastructure the converse needs, and
 M6-5 inhabits the statement, completing the iff for congruence permutability.
 
-**Layout update (M6-7 cleanup).**  The interim module `Setoid.Varieties.FreeBridge`
+**Layout update (M6-7 cleanup)**.  The interim module `Setoid.Varieties.FreeBridge`
 that originally packaged the bridge has since been dissolved, its pieces moved to their
 canonical homes: the principal (single-pair) relation `❴_,_❵` to
 `Setoid.Congruences.Generation` (`module principal`), the bridge lemma `Cg⊆ker` to
@@ -158,23 +158,23 @@ live — `𝒈 (ov 0ℓ)`, the absorbing level of `Setoid.Congruences.Generation
 
 ## Findings
 
-+  **The bridge is small because `Cg-least` does the work.**  Once the kernel is a
++  **The bridge is small because `Cg-least` does the work**.  Once the kernel is a
    congruence (it already was, `kercon`), "a generated congruence sits inside any
    collapsing kernel" is `Cg-least` verbatim.  The whole of M6-4 is then plumbing:
    the substitution hom (proof `refl`), the single-pair relation, and the `toEq` shim.
 
-+  **Choosing `σ` to be the `_✦_` position map is the lever.**  It turns the
++  **Choosing `σ` to be the `_✦_` position map is the lever**.  It turns the
    interpretation/derivation mismatch from a per-model evaluation argument into one
    syntactic `graft≐[]` step, and makes both collapsing conditions `refl`.  This is the
    M6-5 analogue of M6-3's "the satisfaction condition keeps paying off."
 
-+  **`graft` and `_[_]` are the same map but not definitionally so.**  The term monad's
++  **`graft` and `_[_]` are the same map but not definitionally so**.  The term monad's
    bind appears twice in the library — heterogeneous (`graft`, for `_✦_`) and
    level-homogeneous (`_[_]`, for `Sub`).  For closed terms they compute identically;
    for a variable term they are distinct neutrals.  `graft≐[]` is the one-line bridge,
    and belongs with the other `_≐_`-level substitution facts.
 
-+  **The level sharing in `FreeAlgebra` is the real constraint, not the math.**  The
++  **The level sharing in `FreeAlgebra` is the real constraint, not the math**.  The
    converse is perfectly general mathematically; the `Type 0ℓ` restriction is an
    artifact of the one-`χ` free-algebra interface.  A future refactor giving
    `FreeAlgebra` independent levels for equation contexts and generators would lift it;

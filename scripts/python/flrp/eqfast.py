@@ -26,6 +26,13 @@ Description:
   — is this engine's output, cross-validated figure for figure against an independent
   schedule-specific implementation.
 
+  The ``--group-rep`` restriction of issue #494 (``survey_fast(..., uniform=True)``,
+  semantics in ``eqsearch``) runs over ``FastUniformTables``: the tiny uniform pool
+  replaces the Bell(n) census, rows are encoded by binary search over the sorted
+  pool codes instead of the dense ``n^n`` lookup table (~1.5 GB at ``n = 9``,
+  ~40 GB at ``n = 10`` — the sizes the restriction exists to reach), and orbit
+  generation is chunked so ``10!`` relabelings fit in memory.
+
   The run took about three hours on one core, not minutes: the generic height-ordered
   assignment plan defers join constraints, so intermediate prefix counts balloon; the
   known fix is a constraint-density-guided assignment order (follow-up on #486).
@@ -54,14 +61,14 @@ Usage:
 from __future__ import annotations
 
 from itertools import permutations
-from typing import Dict, List, Sequence, Set, Tuple
+from typing import Dict, List, Sequence, Set, Tuple, Union
 
 import numpy as np
 
 from cg2 import CertificateError
 from eqsearch import (ClassReport, Copy, TargetLattice,
                       all_partitions, assignment_plan, closure_report,
-                      validate_target)
+                      uniform_partitions, validate_target)
 
 
 # ---------------------------------------------------------------------------
@@ -113,6 +120,7 @@ class FastTables:
         self.index: Dict[Tuple[int, ...], int] = {p: i for i, p in enumerate(self.parts)}
         self.bot = self.index[tuple(range(n))]
         self.top = self.index[(0,) * n]
+        self.universe = self.parts                     # Inv(M) ranges over all of Eq(n)
         count = len(self.parts)
         matrix = np.array(self.parts, dtype=np.int8)
         self.matrix = matrix
@@ -123,24 +131,75 @@ class FastTables:
         self.meet = np.empty((count, count), dtype=np.int16)
         self.join = np.empty((count, count), dtype=np.int16)
         for i in range(count):
-            self.meet[i] = self._codes(meet_rows(matrix[i], matrix, n))
-            self.join[i] = self._codes(join_rows(matrix[i], matrix, n))
+            self.meet[i] = self.codes_of(meet_rows(matrix[i], matrix, n))
+            self.join[i] = self.codes_of(join_rows(matrix[i], matrix, n))
 
-    def _codes(self, rows: np.ndarray) -> np.ndarray:
+    def codes_of(self, rows: np.ndarray) -> np.ndarray:
+        """Canonical indices of normal-form rows via the dense lookup table;
+        a miss means a kernel produced a non-canonical row, which is a bug."""
         idx = self.lut[rows.astype(np.int64) @ self.powers]
         if (idx < 0).any():
             raise CertificateError("vectorized kernel produced a non-canonical row")
         return idx.astype(np.int16)
 
 
+class FastUniformTables:
+    """Meet and join tables over the uniform pool only — the fast backend of
+    the ``--group-rep`` sweep (issue #494), mirroring ``eqsearch``'s
+    ``UniformTables``: ``parts`` is ``uniform_partitions(n)`` (bounds
+    included) and a table entry is ``-1`` where the true meet or join in
+    Eq(n) leaves the pool, which the candidate masks of the embedding
+    search read as a failed placement.  Rows are encoded by binary search
+    over the sorted pool codes rather than a dense ``n^n`` lookup table
+    (~1.5 GB at ``n = 9``, ~40 GB at ``n = 10`` — the sizes this
+    restriction exists to reach).  ``universe`` carries all of Eq(n), so
+    the delegated pure closure test keeps its unrestricted meaning."""
+
+    def __init__(self, n: int) -> None:
+        self.n = n
+        self.parts = uniform_partitions(n)             # tuples, canonical order
+        self.index: Dict[Tuple[int, ...], int] = {p: i for i, p in enumerate(self.parts)}
+        self.bot = self.index[tuple(range(n))]
+        self.top = self.index[(0,) * n]
+        self.universe = all_partitions(n)              # Inv(M) ranges over all of Eq(n)
+        count = len(self.parts)
+        matrix = np.array(self.parts, dtype=np.int8)
+        self.matrix = matrix
+        self.powers = (n ** np.arange(n)).astype(np.int64)
+        codes = matrix.astype(np.int64) @ self.powers
+        order = np.argsort(codes)                      # codes are little-endian,
+        self._sorted_codes = codes[order]              # so NOT in parts order
+        self._pool_at = order.astype(np.int32)         # pool index per sorted slot
+        self.meet = np.empty((count, count), dtype=np.int16)
+        self.join = np.empty((count, count), dtype=np.int16)
+        for i in range(count):
+            self.meet[i] = self.codes_of(meet_rows(matrix[i], matrix, n))
+            self.join[i] = self.codes_of(join_rows(matrix[i], matrix, n))
+
+    def codes_of(self, rows: np.ndarray) -> np.ndarray:
+        """Pool indices of normal-form rows, with ``-1`` for a row outside
+        the pool — the out-of-pool sentinel of the restricted tables."""
+        keys = rows.astype(np.int64) @ self.powers
+        pos = np.minimum(np.searchsorted(self._sorted_codes, keys),
+                         len(self._sorted_codes) - 1)
+        return np.where(self._sorted_codes[pos] == keys,
+                        self._pool_at[pos], -1).astype(np.int16)
+
+
+# The fast sweep's table interface: full Eq(n) tables or the restricted pool.
+Tables = Union[FastTables, FastUniformTables]
+
+
 # ---------------------------------------------------------------------------
 # The embedding search, vectorized over candidate partitions
 
-def sublattice_copies_fast(lat: TargetLattice, ft: FastTables) -> List[Copy]:
+def sublattice_copies_fast(lat: TargetLattice, ft: Tables) -> List[Copy]:
     """Every embedding of the target into Eq(n) with bounds at the diagonal
     and the total relation — the same copies, in the same order, as the pure
     ``sublattice_copies``, with each step's candidate filtering done as mask
-    arithmetic over the whole partition table."""
+    arithmetic over the whole partition table.  Over restricted tables the
+    ``-1`` out-of-pool sentinel can never equal a candidate index or a
+    placed value, so the same masks are the pool-membership test."""
     bot, top = validate_target(lat)
     plan = assignment_plan(lat, bot, top)
     count = len(ft.parts)
@@ -195,32 +254,46 @@ def sublattice_copies_fast(lat: TargetLattice, ft: FastTables) -> List[Copy]:
 # ---------------------------------------------------------------------------
 # Classification, with vectorized orbit generation
 
-def _orbit_keys(copy: Copy, ft: FastTables,
-                perms: np.ndarray) -> np.ndarray:
+ORBIT_CHUNK = 250_000   # permutations per relabeling block: bounds the
+                        # normal-form pass's memory at 10! without changing
+                        # results (unique-of-uniques is chunk-independent)
+
+
+def _orbit_keys(copy: Copy, ft: Tables, perms: np.ndarray) -> np.ndarray:
     """All relabelings of one copy under every point permutation: unique
     sorted rows of partition indices, one row per orbit member."""
     n, k = ft.n, len(copy)
     vecs = ft.matrix[list(copy)]                       # (k, n)
-    count = perms.shape[0]
-    images = np.empty((count, k, n), dtype=np.int8)
-    images[np.arange(count)[:, None, None],
-           np.arange(k)[None, :, None],
-           perms[:, None, :]] = vecs[None, :, :]
-    flat = normal_form_rows(images.reshape(count * k, n))
-    codes = ft.lut[flat.astype(np.int64) @ ft.powers].reshape(count, k)
-    codes.sort(axis=1)
-    return np.unique(codes, axis=0)
+    chunks: List[np.ndarray] = []
+    for start in range(0, perms.shape[0], ORBIT_CHUNK):
+        block = perms[start:start + ORBIT_CHUNK]
+        count = block.shape[0]
+        images = np.empty((count, k, n), dtype=np.int8)
+        images[np.arange(count)[:, None, None],
+               np.arange(k)[None, :, None],
+               block[:, None, :]] = vecs[None, :, :]
+        flat = normal_form_rows(images.reshape(count * k, n))
+        codes = ft.codes_of(flat).reshape(count, k).astype(np.int64)
+        if (codes < 0).any():
+            raise CertificateError("orbit relabeling left the partition pool")
+        codes.sort(axis=1)
+        chunks.append(np.unique(codes, axis=0))
+    return np.unique(np.concatenate(chunks), axis=0)
 
 
-def classify_fast(copies: Sequence[Copy], ft: FastTables) -> List[Tuple[Copy, int]]:
+def classify_fast(copies: Sequence[Copy], ft: Tables) -> List[Tuple[Copy, int]]:
     """The same classification as the pure ``classify`` — copies identified
     by their unordered relation sets, first-found representatives in sorted
     order, orbit sizes counting distinct relation sets — with each class's
     orbit generated by one vectorized relabeling pass and all set keys
-    produced by bulk byte slicing rather than per-row Python objects."""
+    produced by bulk byte slicing rather than per-row Python objects.  The
+    permutations are streamed straight into a compact array: at ``n = 10``
+    there are 3.6 M of them, and a Python list of tuples would dwarf the
+    array itself."""
     if not copies:
         return []
-    perms = np.array(list(permutations(range(ft.n))), dtype=np.int64)
+    perms = np.fromiter(permutations(range(ft.n)),
+                        dtype=np.dtype((np.int8, ft.n)))
     width = len(copies[0])
     keys = np.sort(np.array(copies, dtype=np.int64), axis=1)
     key_bytes = keys.tobytes()
@@ -245,12 +318,15 @@ def classify_fast(copies: Sequence[Copy], ft: FastTables) -> List[Tuple[Copy, in
 # ---------------------------------------------------------------------------
 # The fast survey
 
-def survey_fast(lat: TargetLattice, n: int) -> Tuple[List[ClassReport], int]:
+def survey_fast(lat: TargetLattice, n: int,
+                uniform: bool = False) -> Tuple[List[ClassReport], int]:
     """Drop-in replacement for ``eqsearch.survey``: identical reports and
     copy count, computed with the vectorized kernels.  Closure verdicts are
     delegated to the pure implementation (they are per-class and cheap), so
-    the two backends cannot drift on the part that matters."""
-    ft = FastTables(n)
+    the two backends cannot drift on the part that matters.  With
+    ``uniform`` the sweep runs over the uniform pool (the ``--group-rep``
+    restriction of issue #494), closure verdicts still over all of Eq(n)."""
+    ft: Tables = FastUniformTables(n) if uniform else FastTables(n)
     copies = sublattice_copies_fast(lat, ft)
     return ([closure_report(copy, size, ft)          # type: ignore[arg-type]
              for copy, size in classify_fast(copies, ft)], len(copies))

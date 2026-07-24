@@ -99,7 +99,7 @@ with `x θ z` and `z φ y` (i.e. `(x , y) ∈ θ ∘ φ`), the classical argumen
 
 Two ingredients are needed to run this against the *interpretation*-based hypothesis.
 
-**Extracting the curried `m` and its identities.**  `HasMaltsevTerm ℰ` carries an
+**Extracting the curried `m` and its identities**.  `HasMaltsevTerm ℰ` carries an
 interpretation `I : Interpretation Sig-Maltsev 𝑆` and, for each model `𝑩`, a proof
 `reductᴵ 𝑩 I ⊨ₑ Th-Maltsev`.  The curried operation is the evaluation of the derived
 term `I m-Op` against the named tuple: `m𝑩 a b c = ⟦ I m-Op ⟧ ⟨$⟩ tri a b c`
@@ -110,7 +110,7 @@ rewrites a Maltsev application in the reduct to `m𝑩`, and the two identities 
 `tri a b b`.  This mirrors the group instance of `Classical.Interpretations.Maltsev`,
 where the same `graft`/`eval` shape extracts the curried group laws.
 
-**Congruences respect term operations.**  The Maltsev operation `m𝑩` is a *term
+**Congruences respect term operations**.  The Maltsev operation `m𝑩` is a *term
 operation* (it is `⟦ I m-Op ⟧`), so its compatibility with any congruence `θ` of `𝑩` is
 the special case `t = I m-Op` of the general lemma `term-compatible`: for every term `t`
 and `θ`-related environments, the values of `t` are `θ`-related.  This is the fact that
@@ -143,7 +143,7 @@ recorded so a successor can pick it up.
 
 ### Converse of Maltsev (`CP⇒maltsev-Statement`)
 
-**Update (M6-4 / M6-5, #410 / #411).**  Now *proved*: the bridge is `cg-pair→⊢` (in
+**Update (M6-4 / M6-5, #410 / #411)**.  Now *proved*: the bridge is `cg-pair→⊢` (in
 `Setoid.Varieties.FreeSubstitution`, since the M6-7 cleanup dissolved the interim
 `Setoid.Varieties.FreeBridge` module) and the converse is `CP⇒maltsev` in
 `Setoid.Varieties.Maltsev.Permutability` (next to its statement); see the design note
@@ -195,24 +195,24 @@ free-algebra/`Cg` bridge is in place.
 
 ## Findings
 
-+  **The satisfaction condition keeps paying off.**  The forward theorem never unfolds
++  **The satisfaction condition keeps paying off**.  The forward theorem never unfolds
    an interpretation by hand: `eval-m` is one `cong` over a `Fin 3` split, and the two
    identities are `trans`-sandwiches around the reduct's `Th-Maltsev` satisfaction —
    the same division of labour M4-5f found, now consumed one milestone downstream.
 
-+  **`term-compatible` is the right abstraction.**  Phrasing "the Maltsev operation
++  **`term-compatible` is the right abstraction**.  Phrasing "the Maltsev operation
    respects congruences" as the special case of "every term operation respects every
    congruence" turns the two compatibility steps of Maltsev's argument into two
    one-liners and yields a lemma reusable for Jónsson, Day, and any later
    clone-theoretic argument.
 
-+  **Composition lives at `BinRel`, not `Con`.**  `θ ∘ φ` is deliberately *not* a
++  **Composition lives at `BinRel`, not `Con`**.  `θ ∘ φ` is deliberately *not* a
    congruence (it need not be transitive); making it a bare relation keeps the
    permutability statement honest and avoids smuggling in a join.  The lattice join
    `θ ∨ φ` and the composition `θ ∘ φ` coincide exactly when the algebra is CP — that
    coincidence, not a definitional identification, is the content.
 
-+  **The absorbing level recurs.**  CD/CM, like the complete lattice, can only state
++  **The absorbing level recurs**.  CD/CM, like the complete lattice, can only state
    their equations once meet and join share a level; reusing `𝐋 ℓ₀ = 𝓞 ⊔ 𝓥 ⊔ α ⊔ ρ ⊔ ℓ₀`
    keeps them consistent with `Setoid.Congruences.CompleteLattice`.  A first cut that
    tried to spell the level inline tripped the generalizable-variable check (`𝓞`/`𝓥`

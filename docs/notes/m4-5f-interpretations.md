@@ -70,7 +70,7 @@ needed no setoid and `_≼_` needs satisfaction.
 
 ## Findings
 
-+  **The satisfaction condition is the load-bearing theorem, exactly as in M4-5e.**  Both
++  **The satisfaction condition is the load-bearing theorem, exactly as in M4-5e**.  Both
    `≼-refl` and `≼-trans` are short, and short *because* the `_≐_`-laws (`✦-id`, `✦-∘`) and
    the satisfaction condition (`⊧-interp` / `⊧-uninterp`) already isolate the content.
    Transitivity in particular cannot be proved purely syntactically: the interpretation `I`
@@ -80,7 +80,7 @@ needed no setoid and `_≼_` needs satisfaction.
    class-level closure needs reconstruction.
 
 +  **The M3-5 / `Fin`-η obstruction stays dissolved at the general level, and the worked
-   instance pays exactly the residue the M4-5e note predicted.**  `_✦_`, its laws,
+   instance pays exactly the residue the M4-5e note predicted**.  `_✦_`, its laws,
    `reductᴵ-interp`, and the satisfaction condition are structural inductions over abstract
    positions — no clause matches a neutral `ArityOf 𝑆 f ≡ Fin n`, no `interp-node` family,
    no `Fin`-η bridge.  The residue surfaces only in `Classical.Interpretations.Maltsev`, and
@@ -94,7 +94,7 @@ needed no setoid and `_≼_` needs satisfaction.
    group calculation is three lines per Maltsev equation, and the syntactic plumbing is one
    `eval-m` plus one `eval-node`.
 
-+  **A `--safe` fresh-pattern-lambda gotcha, new to this issue.**  An extended (pattern-
++  **A `--safe` fresh-pattern-lambda gotcha, new to this issue**.  An extended (pattern-
    matching) lambda `λ { 0F → … }` elaborates to a *fresh* generated definition each time it
    is written, so two textually identical occurrences are **not** definitionally equal.  The
    first cut wrote the Maltsev tuple inline in `mlt` and tried to infer the `graft`
@@ -114,19 +114,19 @@ quasi-order with reflexivity and transitivity; one genuinely term-valued worked 
 
 Deferred (out of scope here, candidates for a successor issue once M4-5-1..5 exist):
 
-+  **Antisymmetry-up-to-equi-interpretability and the lattice structure.**  `_≼_` is a
++  **Antisymmetry-up-to-equi-interpretability and the lattice structure**.  `_≼_` is a
    quasi-order; its quotient by mutual interpretability is the Garcia–Taylor *lattice of
    interpretability types*.  Building that quotient (and its join/meet) is a development in
    its own right, deliberately not started.
-+  **A clone-category packaging.**  `Interpretation` with `idᴵ` / `_∘ᴵ_` and the `✦-id` /
++  **A clone-category packaging**.  `Interpretation` with `idᴵ` / `_∘ᴵ_` and the `✦-id` /
    `✦-∘` laws is a category (the clone category / category of algebraic theories), and could
    be packaged as a `Category` instance like `TermKleisli`.  The laws are in hand (up to
    `_≐_`); only the bundling is left.  Not done, to keep this issue bounded.
-+  **More Maltsev conditions.**  A majority term, a near-unanimity term, a chain of Jónsson
++  **More Maltsev conditions**.  A majority term, a near-unanimity term, a chain of Jónsson
    terms — each is an interpretation of a small theory, and each is a natural next worked
    instance (lattices have a majority term; this is where the `Classical.Interpretations`
    subtree would grow).
-+  **Interpreting derivations, not just equations.**  `✦-sub` (the monad-morphism square)
++  **Interpreting derivations, not just equations**.  `✦-sub` (the monad-morphism square)
    is exactly what is needed to push an equational *derivation* (`SoundAndComplete`'s
    `_⊢_▹_≈_`, which uses the substitution rule) through an interpretation, giving the
    syntactic counterpart of the semantic `_≼_`.  The law is proved; wiring it to `_⊢_▹_≈_`
@@ -150,22 +150,22 @@ representation.
 Several organizational refinements landed during review and just after the merge; they do
 not change the mathematics, only the module layout and a few signatures.
 
-+  **`Overture.Terms` split.**  The bare `Term` datatype (with `ℊ`, `node`, and the level
++  **`Overture.Terms` split**.  The bare `Term` datatype (with `ℊ`, `node`, and the level
    shorthand `ov`) now lives in `Overture.Terms.Basic`, and `Overture.Terms` is an umbrella
    re-exporting `Basic`, `Interpretation`, and `Translation` — mirroring the `Setoid.Terms`
    / `Setoid.Terms.Basic` arrangement.  `Overture.Terms.Interpretation` and
    `Overture.Terms.Translation` import `Overture.Terms.Basic` directly (importing the
    umbrella would be a cycle).
-+  **`reductᴵ` takes the algebra first.**  The interpretation reduct and the satisfaction
++  **`reductᴵ` takes the algebra first**.  The interpretation reduct and the satisfaction
    lemmas are organized as `module _ (𝑩) where module _ (I) where …`, so the spelling is
    `reductᴵ 𝑩 I`, `⊧-interp 𝑩 I`, `⊧-uninterp 𝑩 I` (algebra outermost).
-+  **`_≼_` is level-parameterized by a module.**  Rather than threading `{α ρ}` as implicit
++  **`_≼_` is level-parameterized by a module**.  Rather than threading `{α ρ}` as implicit
    arguments, the quasi-order lives in `module Interpret (α ρ : Level)`; a consumer writes
    `open Interpret α ρ` and then `ℰ₁ ≼ ℰ₂`.  `≼-refl` / `≼-trans` open it at the chosen
    levels, and `Setoid.Varieties.Maltsev`'s `HasMaltsevTerm` does the same.  (The relation
    is still level-polymorphic; the levels are simply supplied to the module rather than to
    the operator.)
-+  **Maltsev naming.**  In `Setoid.Varieties.Maltsev`, the two equation constructors are
++  **Maltsev naming**.  In `Setoid.Varieties.Maltsev`, the two equation constructors are
    `mxxy≈y` / `mxyy≈x`, the term-builder is `m a b c`, and the named position tuple is
    `tri a b c` (an ordinary function, per the fresh-pattern-lambda finding above).
 

@@ -21,18 +21,23 @@ from __future__ import annotations
 
 import json
 import os
+import tempfile
 import unittest
+from collections import Counter
 from itertools import product
+from pathlib import Path
 from typing import List, Sequence, Tuple
 
 import contextlib
 import io
 
 from cg2 import CertificateError
-from eqsearch import (EqTables, Part, all_partitions, claim_input, classify,
-                      closed_class_algebra, closure_report, invariant_partitions,
-                      main, partition_join, preserving_maps, relabel,
-                      sublattice_copies, survey, survey_json, tables_from_leq,
+from eqsearch import (ClassReport, EqTables, Part, UniformTables,
+                      all_partitions, claim_input, classify,
+                      closed_class_algebra, closure_report,
+                      invariant_partitions, is_uniform, main, partition_join,
+                      preserving_maps, relabel, sublattice_copies, survey,
+                      survey_json, tables_from_leq, uniform_partitions,
                       validate_target)
 from lattice import TargetLattice, build_certificate, partition_meet
 from test_flrp import check_certificate, m3
@@ -98,6 +103,142 @@ class PartitionKernelTests(unittest.TestCase):
         self.assertEqual(len(invariant_partitions([(0, 1, 2, 3)], eq)), 15)
 
 
+class UniformPoolTests(unittest.TestCase):
+    """The uniform (coset-block) pool enumerator of issue #494."""
+
+    def test_uniform_pool_counts(self) -> None:
+        """pool: nontrivial uniform counts and block-size shapes match #494's table."""
+        expected = {6: {2: 15, 3: 10}, 7: {}, 8: {2: 105, 4: 35},
+                    9: {3: 280}, 10: {2: 945, 5: 126}}
+        for n, shapes in expected.items():
+            pool = uniform_partitions(n)
+            self.assertEqual(pool[0], (0,) * n)              # ∇ sorts first
+            self.assertEqual(pool[-1], tuple(range(n)))      # Δ sorts last
+            nontrivial = [p for p in pool
+                          if p not in ((0,) * n, tuple(range(n)))]
+            self.assertEqual(len(nontrivial), sum(shapes.values()))
+            by_size = Counter(n // len(set(p)) for p in nontrivial)
+            self.assertEqual(dict(by_size), shapes)
+
+    def test_uniform_pool_is_canonical_subsequence(self) -> None:
+        """pool: the per-divisor enumerator equals the Bell filter, order included (n ≤ 8)."""
+        for n in range(1, 9):
+            self.assertEqual(uniform_partitions(n),
+                             tuple(p for p in all_partitions(n)
+                                   if is_uniform(p)))
+
+    def test_is_uniform_spot_checks(self) -> None:
+        """pool: the bounds are uniform; the L7 grid element |0,2|3,4| on six points is not."""
+        self.assertTrue(is_uniform(tuple(range(6))))
+        self.assertTrue(is_uniform((0,) * 6))
+        self.assertTrue(is_uniform((0, 1, 0, 3, 3, 1)))      # |0,2|1,5|3,4|
+        self.assertFalse(is_uniform((0, 1, 0, 3, 3, 5)))     # |0,2|3,4| + singletons
+
+
+class UniformSweepTests(unittest.TestCase):
+    """The --group-rep restriction (issue #494): pool tables with the
+    out-of-pool sentinel, closure over the full Eq(n) universe, and filter
+    parity — the restricted census must be exactly the all-uniform subset
+    of the unrestricted one."""
+
+    def test_uniform_tables_sentinel_and_universe(self) -> None:
+        """uniform: Eq(6) pool tables agree with the full tables where the result stays in the pool, are -1 where it leaves, and Inv ranges over all 203 partitions."""
+        eq, ut = EqTables(6), UniformTables(6)
+        self.assertEqual(ut.parts, uniform_partitions(6))
+        self.assertEqual(len(ut.parts), 27)
+        self.assertEqual(ut.universe, all_partitions(6))
+        for i, p in enumerate(ut.parts):
+            for j, q in enumerate(ut.parts):
+                meet = eq.parts[eq.meet[eq.index[p]][eq.index[q]]]
+                join = eq.parts[eq.join[eq.index[p]][eq.index[q]]]
+                self.assertEqual(ut.meet[i][j], ut.index.get(meet, -1))
+                self.assertEqual(ut.join[i][j], ut.index.get(join, -1))
+        # |0,1|2,3|4,5| ∨ |0,2|1,3|4,5| = |0,1,2,3|4,5|: uniform arguments,
+        # non-uniform join — the sentinel is exercised, not hypothetical
+        self.assertEqual(
+            ut.join[ut.index[(0, 0, 2, 2, 4, 4)]][ut.index[(0, 1, 0, 1, 4, 4)]],
+            -1)
+        # the empty monoid constrains nothing: Inv is all of Eq(6), not the pool
+        self.assertEqual(len(invariant_partitions([], ut)), 203)
+
+    def _filter_parity(self, lat: TargetLattice,
+                       n: int) -> Tuple[List[ClassReport], int]:
+        """Assert the uniform survey equals the all-uniform subset of the
+        full survey, class report for class report, and return it."""
+        full_reports, _ = survey(lat, n)
+        uni_reports, uni_copies = survey(lat, n, uniform=True)
+        self.assertEqual(uni_reports,
+                         [r for r in full_reports
+                          if all(is_uniform(p) for p in r.representative)])
+        return uni_reports, uni_copies
+
+    def test_m3_eq4_uniform_keeps_the_matchings_class(self) -> None:
+        """uniform: the M3/Eq(4) --group-rep census is exactly the closed matchings class — the restriction keeps real transitive representations."""
+        reports, copies = self._filter_parity(m3(), 4)
+        self.assertEqual(copies, 6)
+        self.assertEqual([r.closed for r in reports], [True])
+
+    def test_m3_eq6_uniform_filter_parity(self) -> None:
+        """uniform: the M3/Eq(6) --group-rep census (840 copies, 3 open classes) equals the all-uniform subset of the full census."""
+        reports, copies = self._filter_parity(m3(), 6)
+        self.assertEqual(copies, 840)
+        self.assertEqual(
+            [(r.orbit_size, r.group_order, r.monoid_size, r.proper_maps,
+              r.invariants, r.closed) for r in reports],
+            [(60, 6, 12, 0, 6, False), (60, 2, 10, 2, 22, False),
+             (20, 6, 12, 0, 6, False)])
+
+    def test_l7_eq6_uniform_census_is_empty(self) -> None:
+        """uniform: the L7/Eq(6) --group-rep census is EMPTY — both known classes contain the non-uniform grid element |0,2|3,4|."""
+        reports, copies = self._filter_parity(l7(), 6)
+        self.assertEqual((reports, copies), ([], 0))
+
+    def test_l7_eq7_uniform_pool_degenerates(self) -> None:
+        """uniform: 7 is prime, so the pool is the bounds alone and the L7 sweep is empty — a transitive action of prime degree is primitive."""
+        self.assertEqual(uniform_partitions(7), ((0,) * 7, tuple(range(7))))
+        self.assertEqual(survey(l7(), 7, uniform=True), ([], 0))
+
+    def test_report_restriction_field(self) -> None:
+        """reports: --group-rep adds one restriction key after points; without it the v1 payload is unchanged."""
+        reports, copies = survey(m3(), 4)
+        plain = json.loads(survey_json(m3(), 4, reports, copies))
+        self.assertEqual(list(plain),
+                         ["format", "target", "points", "copies", "classes"])
+        marked = json.loads(survey_json(m3(), 4, reports, copies, "uniform"))
+        self.assertEqual(list(marked), ["format", "target", "points",
+                                        "restriction", "copies", "classes"])
+        self.assertEqual(marked["restriction"], "uniform")
+
+    @unittest.skipUnless(os.environ.get("FLRP_EQSEARCH_SLOW") == "1",
+                         "set FLRP_EQSEARCH_SLOW=1 for the Eq(10) uniform "
+                         "sweep (about seven minutes)")
+    def test_l7_eq10_uniform_committed_report(self) -> None:
+        """uniform: the pure Eq(10) --group-rep sweep re-derives the committed ten-point report — zero uniform copies — byte for byte.  The committed file is the fast engine's 2026-07-24 output, so this pin is also a cross-engine parity check at ten points."""
+        reports, copies = survey(l7(), 10, uniform=True)
+        self.assertEqual((reports, copies), ([], 0))
+        self.assertEqual(
+            survey_json(l7(), 10, reports, copies, restriction="uniform"),
+            (Path(__file__).parent / "out"
+             / "l7_eq10_uniform_report.json").read_text())
+
+    def test_cli_group_rep_end_to_end(self) -> None:
+        """cli: --group-rep runs the M3 pilot claim on four points, marks stdout, and writes a report carrying the restriction field."""
+        target = Path(__file__).parent / "inputs" / "v4_regular_m3.json"
+        with tempfile.TemporaryDirectory() as tmp:
+            out = Path(tmp) / "report.json"
+            stdout = io.StringIO()
+            with contextlib.redirect_stdout(stdout):
+                code = main(["eqsearch.py", str(target), "4", "--group-rep",
+                             "--json", str(out)])
+            self.assertEqual(code, 0)
+            report = json.loads(out.read_text())
+        self.assertEqual(report["restriction"], "uniform")
+        self.assertEqual((report["target"], report["copies"]), ("M3", 6))
+        self.assertEqual([c["closed"] for c in report["classes"]], [True])
+        self.assertIn("M3 in Eq(4) (uniform copies only): 6 labelled copies",
+                      stdout.getvalue())
+
+
 class TargetLatticeTests(unittest.TestCase):
 
     def test_tables_from_leq_reproduces_m3(self) -> None:
@@ -117,7 +258,9 @@ class TargetLatticeTests(unittest.TestCase):
         for argv in (["eqsearch.py"],
                      ["eqsearch.py", "t.json", "4", "--json"],
                      ["eqsearch.py", "t.json", "4", "--report", "x.json"],
-                     ["eqsearch.py", "t.json", "4", "--json", "x.json", "y"]):
+                     ["eqsearch.py", "t.json", "4", "--json", "x.json", "y"],
+                     ["eqsearch.py", "--group-rep"],
+                     ["eqsearch.py", "t.json", "4", "--group-rep", "--json"]):
             with contextlib.redirect_stderr(io.StringIO()):
                 self.assertEqual(main(argv), 2)
 
@@ -209,6 +352,10 @@ class L7SessionTests(unittest.TestCase):
                          [59, 59] + [877] * 10)
         self.assertEqual(sorted(r.group_order for r in reports),
                          [1] * 10 + [2, 2])
+        # 7 is prime, so no class is all-uniform: the filter side of the
+        # empty --group-rep census (UniformSweepTests degeneration test)
+        self.assertFalse(any(all(is_uniform(p) for p in r.representative)
+                             for r in reports))
 
 
 # ---------------------------------------------------------------------------
