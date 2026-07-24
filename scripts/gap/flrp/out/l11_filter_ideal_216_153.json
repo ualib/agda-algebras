@@ -1,0 +1,145 @@
+{
+  "engine": {
+    "gap": "4.15.1",
+    "libraries": {
+      "primgrp": "4.0.1",
+      "smallgrp": "1.5.4",
+      "transgrp": "3.6.5"
+    }
+  },
+  "filter": {
+    "H": {
+      "generators": "[ f1, f4 ]",
+      "order": 6
+    },
+    "alpha": {
+      "generators": "[ f1, f4, f5*f6 ]",
+      "order": 18
+    },
+    "beta": {
+      "generators": "[ f1, f4, f5, f6 ]",
+      "order": 54
+    },
+    "gamma": {
+      "generators": "[ f1, f2, f3*f4, f4 ]",
+      "order": 24
+    },
+    "interval": {
+      "covers": [
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          2
+        ],
+        [
+          1,
+          3
+        ],
+        [
+          2,
+          4
+        ],
+        [
+          3,
+          4
+        ]
+      ],
+      "leq": [
+        [
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          false,
+          true,
+          false,
+          true,
+          true
+        ],
+        [
+          false,
+          false,
+          true,
+          false,
+          true
+        ],
+        [
+          false,
+          false,
+          false,
+          true,
+          true
+        ],
+        [
+          false,
+          false,
+          false,
+          false,
+          true
+        ]
+      ],
+      "nodes": [
+        {
+          "generators": "[ f1, f4 ]",
+          "index": 0,
+          "order": 6,
+          "role": "bottom"
+        },
+        {
+          "generators": "[ f1, f4, f5*f6 ]",
+          "index": 1,
+          "order": 18,
+          "role": "interior"
+        },
+        {
+          "generators": "[ f1, f2, f3*f4, f4 ]",
+          "index": 2,
+          "order": 24,
+          "role": "interior"
+        },
+        {
+          "generators": "[ f1, f4, f5, f6 ]",
+          "index": 3,
+          "order": 54,
+          "role": "interior"
+        },
+        {
+          "generators": "[ f1, f2, f3, f4, f5, f6 ]",
+          "index": 4,
+          "order": 216,
+          "role": "top"
+        }
+      ],
+      "size": 5
+    },
+    "name": "[H, G] pentagon (N5)"
+  },
+  "format": "flrp-gap-filter-ideal v1",
+  "group": {
+    "id": [
+      216,
+      153
+    ],
+    "order": 216,
+    "source": "SmallGroup",
+    "structureDescription": "(C3 x C3) : SL(2,3)"
+  },
+  "ideal": {
+    "K": {
+      "generators": "[ f1*f6 ]",
+      "index": 72,
+      "order": 3
+    },
+    "belowAlpha": false,
+    "belowBeta": true,
+    "belowGamma": false,
+    "name": "[1, K]"
+  },
+  "target": "L11"
+}
