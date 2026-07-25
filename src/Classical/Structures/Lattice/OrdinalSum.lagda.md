@@ -39,6 +39,9 @@ Because the sum glues at chosen extrema, the construction takes them as data: a
    the basepoint.  This pullback presentation makes reflexivity, symmetry, and
    transitivity componentwise — no case analysis — and on each summand it restricts
    to the original equivalence, while across summands it holds exactly at the glue.
+   It is carried by a *record indexed by its two endpoints*, not by a defined
+   relation; see "Why a record and not a defined relation" below, and apply the same
+   idiom to any relation built by restriction along a non-injective map.
 
 +  **The operations never cross the glue**.
 
@@ -107,10 +110,17 @@ module GlueSetoid (𝐴 : Setoid α ρ) (a₀ : Setoid.Carrier 𝐴)
   retractʳ (inj₁ _) = b₀
   retractʳ (inj₂ y) = y
 
-  -- Glued equality: both retractions agree.
-  _≈ᵍ_ : A ⊎ B → A ⊎ B → Type (ρ ⊔ σ)
-  x ≈ᵍ y = (retractˡ x ≈₁ retractˡ y) × (retractʳ x ≈₂ retractʳ y)
+  -- Glued equality: both retractions agree.  A *record* indexed by the two
+  -- endpoints, not a defined relation — see the note below.
   infix 4 _≈ᵍ_
+  record _≈ᵍ_ (x y : A ⊎ B) : Type (ρ ⊔ σ) where
+    constructor _,ᵍ_
+    field
+      ≈ˡ : retractˡ x ≈₁ retractˡ y
+      ≈ʳ : retractʳ x ≈₂ retractʳ y
+
+  infixr 4 _,ᵍ_
+  open _≈ᵍ_ public
 
   -- The amalgam setoid: A ⊎ B with the basepoints identified.
   glueSetoid : Setoid (α ⊔ β) (ρ ⊔ σ)
@@ -118,27 +128,72 @@ module GlueSetoid (𝐴 : Setoid α ρ) (a₀ : Setoid.Carrier 𝐴)
     { Carrier        = A ⊎ B
     ; _≈_            = _≈ᵍ_
     ; isEquivalence  = record
-        { refl   = refl₁ , refl₂
-        ; sym    = λ (e₁ , e₂) → sym₁ e₁ , sym₂ e₂
-        ; trans  = λ (d₁ , d₂) (e₁ , e₂) → trans₁ d₁ e₁ , trans₂ d₂ e₂
+        { refl   = refl₁ ,ᵍ refl₂
+        ; sym    = λ (e₁ ,ᵍ e₂) → sym₁ e₁ ,ᵍ sym₂ e₂
+        ; trans  = λ (d₁ ,ᵍ d₂) (e₁ ,ᵍ e₂) → trans₁ d₁ e₁ ,ᵍ trans₂ d₂ e₂
         }
     }
 
   -- The glue itself: the two basepoints are identified.
   glue-≈ : (inj₁ a₀) ≈ᵍ (inj₂ b₀)
-  glue-≈ = refl₁ , refl₂
+  glue-≈ = refl₁ ,ᵍ refl₂
 
   -- Injections are ≈-embeddings: the intro forms supply the constant component.
   ≈ᵍ-inj₁ : {x y : A} → x ≈₁ y → (inj₁ x) ≈ᵍ (inj₁ y)
-  ≈ᵍ-inj₁ e = e , refl₂
+  ≈ᵍ-inj₁ e = e ,ᵍ refl₂
 
   ≈ᵍ-inj₂ : {x y : B} → x ≈₂ y → (inj₂ x) ≈ᵍ (inj₂ y)
-  ≈ᵍ-inj₂ e = refl₁ , e
+  ≈ᵍ-inj₂ e = refl₁ ,ᵍ e
 ```
 
-The elimination forms are the two projections: `proj₁` of an `inj₁`/`inj₁`
-equation is the left equivalence, `proj₂` of an `inj₂`/`inj₂` equation the right
-one, and on a mixed pair the two projections are exactly the basepoint conditions.
+The elimination forms are the two fields: `≈ˡ`{.AgdaField} of an `inj₁`/`inj₁`
+equation is the left equivalence, `≈ʳ`{.AgdaField} of an `inj₂`/`inj₂` equation the
+right one, and on a mixed pair the two fields are exactly the basepoint conditions.
+
+**Why a record and not a defined relation**.
+
+The mathematically obvious phrasing of the same relation is the defined pullback
+
+    x ≈ᵍ y = (retractˡ x ≈₁ retractˡ y) × (retractʳ x ≈₂ retractʳ y)
+
+and that phrasing is hostile to Agda's unifier.  A *defined* relation is unfolded
+whenever the type checker must infer an implicit endpoint whose type mentions it,
+leaving constraints whose metavariables sit under the retractions —
+
+    retractˡ _x = retractˡ x    retractʳ _x = retractʳ x
+
+— which are permanently stuck, for two independent reasons: the retractions are
+genuinely non-injective (each collapses a whole summand to a basepoint), so the
+constraint cannot be inverted; and the carrier `A ⊎ B` is a datatype without an
+η-rule, so the metavariable cannot be η-expanded into components the way a
+`Σ`-typed one can.  The sibling product construction
+([Classical.Structures.Lattice.Product][]) defines its equivalence through
+`proj₁`/`proj₂`, which are just as non-injective — but there `Σ`-η lets Agda solve
+the projected metas componentwise, so inference never breaks.  The failure needs
+exactly the combination present here: defined relation, non-injective non-variable
+head, no η on the carrier.
+
+A one-constructor record *indexed by the two endpoints* keeps every good property
+of the pullback presentation — reflexivity, symmetry, and transitivity are still
+componentwise with no case analysis; on each summand the fields still reduce to
+that summand's equivalence, and across summands to the glue condition; η keeps
+proofs pair-like — while making the relation a **record type former, hence
+injective for unification**.  A constraint `?x ≈ᵍ ?y ≟ a ≈ᵍ b` now solves the
+endpoints *before* any retraction is exposed, so implicit-endpoint lemmas
+(`Setoid.refl`/`sym`/`trans` at `≈ᵍ`, congruences passed under-applied to
+record-constructor arguments, parameterized-module applications) all infer.  The
+canary below fails to type-check the moment that property is lost.[^3]
+
+The idiom generalizes: *any* relation defined by restriction along a non-injective
+map — including relations built downstream through these same retractions — should
+be a record indexed by its endpoints rather than a definition.
+
+```agda
+  -- Canary: an implicit endpoint under `_≈ᵍ_` must be inferable.  This fails
+  -- with [UnsolvedMetaVariables] if `_≈ᵍ_` ever reverts to a defined relation.
+  _ : ∀ x → x ≈ᵍ x
+  _ = λ x → Setoid.refl glueSetoid
+```
 
 #### The ordinal-sum construction
 
@@ -249,25 +304,25 @@ glue is discharged by the extremum-absorption lemmas above (an argument
 
 <!--
 ```agda
-  ∧ᵒ-cong {inj₁ _} {inj₁ _} {inj₁ _} {inj₁ _} (ea , _) (fa , _) = ∧₁-cong ea fa , refl₂
-  ∧ᵒ-cong {inj₂ _} {inj₂ _} {inj₂ _} {inj₂ _} (_ , eb) (_ , fb)  = refl₁ , ∧₂-cong eb fb
+  ∧ᵒ-cong {inj₁ _} {inj₁ _} {inj₁ _} {inj₁ _} (ea ,ᵍ _) (fa ,ᵍ _) = ∧₁-cong ea fa ,ᵍ refl₂
+  ∧ᵒ-cong {inj₂ _} {inj₂ _} {inj₂ _} {inj₂ _} (_ ,ᵍ eb) (_ ,ᵍ fb)  = refl₁ ,ᵍ ∧₂-cong eb fb
 
-  ∧ᵒ-cong {inj₁ _} {inj₁ y} {inj₁ _} {inj₂ _} (ea , _)  (fa , _)  = trans₁ (∧₁-cong ea fa) (x∧⊤ y) , refl₂
-  ∧ᵒ-cong {inj₁ _} {inj₁ y} {inj₂ _} {inj₁ _} (ea , _)  (fa , _)  = trans₁ ea (trans₁ (sym₁ (x∧⊤ y)) (∧₁-cong refl₁ fa)) , refl₂
-  ∧ᵒ-cong {inj₁ _} {inj₂ _} {inj₁ _} {inj₁ v} (ea , _)  (fa , _)  = trans₁ (∧₁-cong ea fa) (⊤∧x v) , refl₂
-  ∧ᵒ-cong {inj₂ _} {inj₁ _} {inj₁ _} {inj₁ v} (ea , _)  (fa , _)  = trans₁ fa (trans₁ (sym₁ (⊤∧x v)) (∧₁-cong ea refl₁)) , refl₂
+  ∧ᵒ-cong {inj₁ _} {inj₁ y} {inj₁ _} {inj₂ _} (ea ,ᵍ _)  (fa ,ᵍ _)  = trans₁ (∧₁-cong ea fa) (x∧⊤ y) ,ᵍ refl₂
+  ∧ᵒ-cong {inj₁ _} {inj₁ y} {inj₂ _} {inj₁ _} (ea ,ᵍ _)  (fa ,ᵍ _)  = trans₁ ea (trans₁ (sym₁ (x∧⊤ y)) (∧₁-cong refl₁ fa)) ,ᵍ refl₂
+  ∧ᵒ-cong {inj₁ _} {inj₂ _} {inj₁ _} {inj₁ v} (ea ,ᵍ _)  (fa ,ᵍ _)  = trans₁ (∧₁-cong ea fa) (⊤∧x v) ,ᵍ refl₂
+  ∧ᵒ-cong {inj₂ _} {inj₁ _} {inj₁ _} {inj₁ v} (ea ,ᵍ _)  (fa ,ᵍ _)  = trans₁ fa (trans₁ (sym₁ (⊤∧x v)) (∧₁-cong ea refl₁)) ,ᵍ refl₂
 
-  ∧ᵒ-cong {inj₁ _} {inj₁ _} {inj₂ _} {inj₂ _} (ea , _)  _         = ea , refl₂
-  ∧ᵒ-cong {inj₂ _} {inj₂ _} {inj₁ _} {inj₁ _} _         (fa , _)  = fa , refl₂
-  ∧ᵒ-cong {inj₁ _} {inj₂ _} {inj₂ _} {inj₁ _} (ea , _)  (fa , _)  = trans₁ ea fa , refl₂
-  ∧ᵒ-cong {inj₂ _} {inj₁ _} {inj₁ _} {inj₂ _} (ea , _)  (fa , _)  = trans₁ fa ea , refl₂
-  ∧ᵒ-cong {inj₁ _} {inj₂ _} {inj₁ _} {inj₂ _} (ea , eb) (fa , fb) = trans₁ (∧₁-cong ea fa) ∧₁-idem , trans₂ (sym₂ ∧₂-idem) (∧₂-cong eb fb)
-  ∧ᵒ-cong {inj₂ _} {inj₁ _} {inj₂ _} {inj₁ _} (ea , eb) (fa , fb) = trans₁ (sym₁ ∧₁-idem) (∧₁-cong ea fa) , trans₂ (∧₂-cong eb fb) ∧₂-idem
+  ∧ᵒ-cong {inj₁ _} {inj₁ _} {inj₂ _} {inj₂ _} (ea ,ᵍ _)  _         = ea ,ᵍ refl₂
+  ∧ᵒ-cong {inj₂ _} {inj₂ _} {inj₁ _} {inj₁ _} _         (fa ,ᵍ _)  = fa ,ᵍ refl₂
+  ∧ᵒ-cong {inj₁ _} {inj₂ _} {inj₂ _} {inj₁ _} (ea ,ᵍ _)  (fa ,ᵍ _)  = trans₁ ea fa ,ᵍ refl₂
+  ∧ᵒ-cong {inj₂ _} {inj₁ _} {inj₁ _} {inj₂ _} (ea ,ᵍ _)  (fa ,ᵍ _)  = trans₁ fa ea ,ᵍ refl₂
+  ∧ᵒ-cong {inj₁ _} {inj₂ _} {inj₁ _} {inj₂ _} (ea ,ᵍ eb) (fa ,ᵍ fb) = trans₁ (∧₁-cong ea fa) ∧₁-idem ,ᵍ trans₂ (sym₂ ∧₂-idem) (∧₂-cong eb fb)
+  ∧ᵒ-cong {inj₂ _} {inj₁ _} {inj₂ _} {inj₁ _} (ea ,ᵍ eb) (fa ,ᵍ fb) = trans₁ (sym₁ ∧₁-idem) (∧₁-cong ea fa) ,ᵍ trans₂ (∧₂-cong eb fb) ∧₂-idem
 
-  ∧ᵒ-cong {inj₁ _} {inj₂ _} {inj₂ _} {inj₂ v} (ea , eb) _         = ea , trans₂ (sym₂ (⊥∧x v)) (∧₂-cong eb refl₂)
-  ∧ᵒ-cong {inj₂ _} {inj₁ _} {inj₂ u} {inj₂ _} (ea , eb) _         = ea , trans₂ (∧₂-cong eb refl₂) (⊥∧x u)
-  ∧ᵒ-cong {inj₂ _} {inj₂ y} {inj₁ _} {inj₂ _} _         (fa , fb) = fa , trans₂ (sym₂ (x∧⊥ y)) (∧₂-cong refl₂ fb)
-  ∧ᵒ-cong {inj₂ x} {inj₂ _} {inj₂ _} {inj₁ _} _         (fa , fb) = fa , trans₂ (∧₂-cong refl₂ fb) (x∧⊥ x)
+  ∧ᵒ-cong {inj₁ _} {inj₂ _} {inj₂ _} {inj₂ v} (ea ,ᵍ eb) _         = ea ,ᵍ trans₂ (sym₂ (⊥∧x v)) (∧₂-cong eb refl₂)
+  ∧ᵒ-cong {inj₂ _} {inj₁ _} {inj₂ u} {inj₂ _} (ea ,ᵍ eb) _         = ea ,ᵍ trans₂ (∧₂-cong eb refl₂) (⊥∧x u)
+  ∧ᵒ-cong {inj₂ _} {inj₂ y} {inj₁ _} {inj₂ _} _         (fa ,ᵍ fb) = fa ,ᵍ trans₂ (sym₂ (x∧⊥ y)) (∧₂-cong refl₂ fb)
+  ∧ᵒ-cong {inj₂ x} {inj₂ _} {inj₂ _} {inj₁ _} _         (fa ,ᵍ fb) = fa ,ᵍ trans₂ (∧₂-cong refl₂ fb) (x∧⊥ x)
 ```
 -->
 
@@ -277,25 +332,25 @@ glue is discharged by the extremum-absorption lemmas above (an argument
 
 <!--
 ```agda
-  ∨ᵒ-cong {inj₁ _} {inj₁ _} {inj₁ _} {inj₁ _} (ea , _)  (fa , _)  = ∨₁-cong ea fa , refl₂
-  ∨ᵒ-cong {inj₂ _} {inj₂ _} {inj₂ _} {inj₂ _} (_ , eb)  (_ , fb)  = refl₁ , ∨₂-cong eb fb
+  ∨ᵒ-cong {inj₁ _} {inj₁ _} {inj₁ _} {inj₁ _} (ea ,ᵍ _)  (fa ,ᵍ _)  = ∨₁-cong ea fa ,ᵍ refl₂
+  ∨ᵒ-cong {inj₂ _} {inj₂ _} {inj₂ _} {inj₂ _} (_ ,ᵍ eb)  (_ ,ᵍ fb)  = refl₁ ,ᵍ ∨₂-cong eb fb
 
-  ∨ᵒ-cong {inj₁ x} {inj₁ _} {inj₁ _} {inj₂ _} (ea , _)  (fa , fb) = trans₁ (∨₁-cong refl₁ fa) (x∨⊤ x) , fb
-  ∨ᵒ-cong {inj₁ _} {inj₁ y} {inj₂ _} {inj₁ _} (ea , _)  (fa , fb) = trans₁ (sym₁ (x∨⊤ y)) (∨₁-cong refl₁ fa) , fb
-  ∨ᵒ-cong {inj₁ _} {inj₂ _} {inj₁ u} {inj₁ _} (ea , eb) (fa , _)  = trans₁ (∨₁-cong ea refl₁) (⊤∨x u) , eb
-  ∨ᵒ-cong {inj₂ _} {inj₁ _} {inj₁ _} {inj₁ v} (ea , eb) (fa , _)  = trans₁ (sym₁ (⊤∨x v)) (∨₁-cong ea refl₁) , eb
+  ∨ᵒ-cong {inj₁ x} {inj₁ _} {inj₁ _} {inj₂ _} (ea ,ᵍ _)  (fa ,ᵍ fb) = trans₁ (∨₁-cong refl₁ fa) (x∨⊤ x) ,ᵍ fb
+  ∨ᵒ-cong {inj₁ _} {inj₁ y} {inj₂ _} {inj₁ _} (ea ,ᵍ _)  (fa ,ᵍ fb) = trans₁ (sym₁ (x∨⊤ y)) (∨₁-cong refl₁ fa) ,ᵍ fb
+  ∨ᵒ-cong {inj₁ _} {inj₂ _} {inj₁ u} {inj₁ _} (ea ,ᵍ eb) (fa ,ᵍ _)  = trans₁ (∨₁-cong ea refl₁) (⊤∨x u) ,ᵍ eb
+  ∨ᵒ-cong {inj₂ _} {inj₁ _} {inj₁ _} {inj₁ v} (ea ,ᵍ eb) (fa ,ᵍ _)  = trans₁ (sym₁ (⊤∨x v)) (∨₁-cong ea refl₁) ,ᵍ eb
 
-  ∨ᵒ-cong {inj₁ _} {inj₁ _} {inj₂ _} {inj₂ _} _         (_ , fb)  = refl₁ , fb
-  ∨ᵒ-cong {inj₂ _} {inj₂ _} {inj₁ _} {inj₁ _} (_ , eb)  _         = refl₁ , eb
-  ∨ᵒ-cong {inj₁ _} {inj₂ _} {inj₂ _} {inj₁ _} (ea , eb) (fa , fb) = refl₁ , trans₂ fb eb
-  ∨ᵒ-cong {inj₂ _} {inj₁ _} {inj₁ _} {inj₂ _} (ea , eb) (fa , fb) = refl₁ , trans₂ eb fb
-  ∨ᵒ-cong {inj₁ _} {inj₂ _} {inj₁ _} {inj₂ _} (ea , eb) (fa , fb) = trans₁ (∨₁-cong ea fa) ∨₁-idem , trans₂ (sym₂ ∨₂-idem) (∨₂-cong eb fb)
-  ∨ᵒ-cong {inj₂ _} {inj₁ _} {inj₂ _} {inj₁ _} (ea , eb) (fa , fb) = trans₁ (sym₁ ∨₁-idem) (∨₁-cong ea fa) , trans₂ (∨₂-cong eb fb) ∨₂-idem
+  ∨ᵒ-cong {inj₁ _} {inj₁ _} {inj₂ _} {inj₂ _} _         (_ ,ᵍ fb)  = refl₁ ,ᵍ fb
+  ∨ᵒ-cong {inj₂ _} {inj₂ _} {inj₁ _} {inj₁ _} (_ ,ᵍ eb)  _         = refl₁ ,ᵍ eb
+  ∨ᵒ-cong {inj₁ _} {inj₂ _} {inj₂ _} {inj₁ _} (ea ,ᵍ eb) (fa ,ᵍ fb) = refl₁ ,ᵍ trans₂ fb eb
+  ∨ᵒ-cong {inj₂ _} {inj₁ _} {inj₁ _} {inj₂ _} (ea ,ᵍ eb) (fa ,ᵍ fb) = refl₁ ,ᵍ trans₂ eb fb
+  ∨ᵒ-cong {inj₁ _} {inj₂ _} {inj₁ _} {inj₂ _} (ea ,ᵍ eb) (fa ,ᵍ fb) = trans₁ (∨₁-cong ea fa) ∨₁-idem ,ᵍ trans₂ (sym₂ ∨₂-idem) (∨₂-cong eb fb)
+  ∨ᵒ-cong {inj₂ _} {inj₁ _} {inj₂ _} {inj₁ _} (ea ,ᵍ eb) (fa ,ᵍ fb) = trans₁ (sym₁ ∨₁-idem) (∨₁-cong ea fa) ,ᵍ trans₂ (∨₂-cong eb fb) ∨₂-idem
 
-  ∨ᵒ-cong {inj₁ _} {inj₂ _} {inj₂ _} {inj₂ v} (ea , eb) (_ , fb)  = refl₁ , trans₂ fb (trans₂ (sym₂ (⊥∨x v)) (∨₂-cong eb refl₂))
-  ∨ᵒ-cong {inj₂ _} {inj₁ _} {inj₂ u} {inj₂ _} (ea , eb) (_ , fb)  = refl₁ , trans₂ (∨₂-cong eb refl₂) (trans₂ (⊥∨x u) fb)
-  ∨ᵒ-cong {inj₂ _} {inj₂ y} {inj₁ _} {inj₂ _} (_ , eb)  (_ , fb)  = refl₁ , trans₂ eb (trans₂ (sym₂ (x∨⊥ y)) (∨₂-cong refl₂ fb))
-  ∨ᵒ-cong {inj₂ x} {inj₂ _} {inj₂ _} {inj₁ _} (_ , eb)  (_ , fb)  = refl₁ , trans₂ (∨₂-cong refl₂ fb) (trans₂ (x∨⊥ x) eb)
+  ∨ᵒ-cong {inj₁ _} {inj₂ _} {inj₂ _} {inj₂ v} (ea ,ᵍ eb) (_ ,ᵍ fb)  = refl₁ ,ᵍ trans₂ fb (trans₂ (sym₂ (⊥∨x v)) (∨₂-cong eb refl₂))
+  ∨ᵒ-cong {inj₂ _} {inj₁ _} {inj₂ u} {inj₂ _} (ea ,ᵍ eb) (_ ,ᵍ fb)  = refl₁ ,ᵍ trans₂ (∨₂-cong eb refl₂) (trans₂ (⊥∨x u) fb)
+  ∨ᵒ-cong {inj₂ _} {inj₂ y} {inj₁ _} {inj₂ _} (_ ,ᵍ eb)  (_ ,ᵍ fb)  = refl₁ ,ᵍ trans₂ eb (trans₂ (sym₂ (x∨⊥ y)) (∨₂-cong refl₂ fb))
+  ∨ᵒ-cong {inj₂ x} {inj₂ _} {inj₂ _} {inj₁ _} (_ ,ᵍ eb)  (_ ,ᵍ fb)  = refl₁ ,ᵍ trans₂ (∨₂-cong refl₂ fb) (trans₂ (x∨⊥ x) eb)
 ```
 -->
 
@@ -306,78 +361,72 @@ idempotency step in their `inj₂`-meets-`inj₁` (resp. mirrored) case.
 
 ```agda
   ∧ᵒ-assoc : ∀ {p q r} → (p ∧ᵒ q) ∧ᵒ r ≈ᵍ p ∧ᵒ (q ∧ᵒ r)
-  ∧ᵒ-assoc {inj₁ _} {inj₁ _} {inj₁ _} = ∧₁-assoc , refl₂
-  ∧ᵒ-assoc {inj₂ _} {inj₂ _} {inj₂ _} = refl₁ , ∧₂-assoc
+  ∧ᵒ-assoc {inj₁ _} {inj₁ _} {inj₁ _} = ∧₁-assoc ,ᵍ refl₂
+  ∧ᵒ-assoc {inj₂ _} {inj₂ _} {inj₂ _} = refl₁ ,ᵍ ∧₂-assoc
 
-  ∧ᵒ-assoc {inj₁ _} {inj₁ _} {inj₂ _} = refl₁ , refl₂
-  ∧ᵒ-assoc {inj₁ _} {inj₂ _} {inj₁ _} = refl₁ , refl₂
-  ∧ᵒ-assoc {inj₂ _} {inj₁ _} {inj₁ _} = refl₁ , refl₂
-  ∧ᵒ-assoc {inj₁ _} {inj₂ _} {inj₂ _} = refl₁ , refl₂
-  ∧ᵒ-assoc {inj₂ _} {inj₁ _} {inj₂ _} = refl₁ , refl₂
-  ∧ᵒ-assoc {inj₂ _} {inj₂ _} {inj₁ _} = refl₁ , refl₂
+  ∧ᵒ-assoc {inj₁ _} {inj₁ _} {inj₂ _} = refl₁ ,ᵍ refl₂
+  ∧ᵒ-assoc {inj₁ _} {inj₂ _} {inj₁ _} = refl₁ ,ᵍ refl₂
+  ∧ᵒ-assoc {inj₂ _} {inj₁ _} {inj₁ _} = refl₁ ,ᵍ refl₂
+  ∧ᵒ-assoc {inj₁ _} {inj₂ _} {inj₂ _} = refl₁ ,ᵍ refl₂
+  ∧ᵒ-assoc {inj₂ _} {inj₁ _} {inj₂ _} = refl₁ ,ᵍ refl₂
+  ∧ᵒ-assoc {inj₂ _} {inj₂ _} {inj₁ _} = refl₁ ,ᵍ refl₂
 
   ∧ᵒ-comm : ∀ {p q} → p ∧ᵒ q ≈ᵍ q ∧ᵒ p
-  ∧ᵒ-comm {inj₁ _} {inj₁ _} = ∧₁-comm , refl₂
-  ∧ᵒ-comm {inj₁ _} {inj₂ _} = refl₁ , refl₂
-  ∧ᵒ-comm {inj₂ _} {inj₁ _} = refl₁ , refl₂
-  ∧ᵒ-comm {inj₂ _} {inj₂ _} = refl₁ , ∧₂-comm
+  ∧ᵒ-comm {inj₁ _} {inj₁ _} = ∧₁-comm ,ᵍ refl₂
+  ∧ᵒ-comm {inj₁ _} {inj₂ _} = refl₁ ,ᵍ refl₂
+  ∧ᵒ-comm {inj₂ _} {inj₁ _} = refl₁ ,ᵍ refl₂
+  ∧ᵒ-comm {inj₂ _} {inj₂ _} = refl₁ ,ᵍ ∧₂-comm
 
   ∧ᵒ-idem : ∀ {p} → p ∧ᵒ p ≈ᵍ p
-  ∧ᵒ-idem {inj₁ _} = ∧₁-idem , refl₂
-  ∧ᵒ-idem {inj₂ _} = refl₁ , ∧₂-idem
+  ∧ᵒ-idem {inj₁ _} = ∧₁-idem ,ᵍ refl₂
+  ∧ᵒ-idem {inj₂ _} = refl₁ ,ᵍ ∧₂-idem
 
   ∨ᵒ-assoc : ∀ {p q r} → (p ∨ᵒ q) ∨ᵒ r ≈ᵍ p ∨ᵒ (q ∨ᵒ r)
-  ∨ᵒ-assoc {inj₁ _} {inj₁ _} {inj₁ _} = ∨₁-assoc , refl₂
-  ∨ᵒ-assoc {inj₂ _} {inj₂ _} {inj₂ _} = refl₁ , ∨₂-assoc
-  ∨ᵒ-assoc {inj₁ _} {inj₁ _} {inj₂ _} = refl₁ , refl₂
-  ∨ᵒ-assoc {inj₁ _} {inj₂ _} {inj₁ _} = refl₁ , refl₂
-  ∨ᵒ-assoc {inj₁ _} {inj₂ _} {inj₂ _} = refl₁ , refl₂
-  ∨ᵒ-assoc {inj₂ _} {inj₁ _} {inj₁ _} = refl₁ , refl₂
-  ∨ᵒ-assoc {inj₂ _} {inj₁ _} {inj₂ _} = refl₁ , refl₂
-  ∨ᵒ-assoc {inj₂ _} {inj₂ _} {inj₁ _} = refl₁ , refl₂
+  ∨ᵒ-assoc {inj₁ _} {inj₁ _} {inj₁ _} = ∨₁-assoc ,ᵍ refl₂
+  ∨ᵒ-assoc {inj₂ _} {inj₂ _} {inj₂ _} = refl₁ ,ᵍ ∨₂-assoc
+  ∨ᵒ-assoc {inj₁ _} {inj₁ _} {inj₂ _} = refl₁ ,ᵍ refl₂
+  ∨ᵒ-assoc {inj₁ _} {inj₂ _} {inj₁ _} = refl₁ ,ᵍ refl₂
+  ∨ᵒ-assoc {inj₁ _} {inj₂ _} {inj₂ _} = refl₁ ,ᵍ refl₂
+  ∨ᵒ-assoc {inj₂ _} {inj₁ _} {inj₁ _} = refl₁ ,ᵍ refl₂
+  ∨ᵒ-assoc {inj₂ _} {inj₁ _} {inj₂ _} = refl₁ ,ᵍ refl₂
+  ∨ᵒ-assoc {inj₂ _} {inj₂ _} {inj₁ _} = refl₁ ,ᵍ refl₂
 
   ∨ᵒ-comm : ∀ {p q} → p ∨ᵒ q ≈ᵍ q ∨ᵒ p
-  ∨ᵒ-comm {inj₁ _} {inj₁ _} = ∨₁-comm , refl₂
-  ∨ᵒ-comm {inj₁ _} {inj₂ _} = refl₁ , refl₂
-  ∨ᵒ-comm {inj₂ _} {inj₁ _} = refl₁ , refl₂
-  ∨ᵒ-comm {inj₂ _} {inj₂ _} = refl₁ , ∨₂-comm
+  ∨ᵒ-comm {inj₁ _} {inj₁ _} = ∨₁-comm ,ᵍ refl₂
+  ∨ᵒ-comm {inj₁ _} {inj₂ _} = refl₁ ,ᵍ refl₂
+  ∨ᵒ-comm {inj₂ _} {inj₁ _} = refl₁ ,ᵍ refl₂
+  ∨ᵒ-comm {inj₂ _} {inj₂ _} = refl₁ ,ᵍ ∨₂-comm
 
   ∨ᵒ-idem : ∀ {p} → p ∨ᵒ p ≈ᵍ p
-  ∨ᵒ-idem {inj₁ _} = ∨₁-idem , refl₂
-  ∨ᵒ-idem {inj₂ _} = refl₁ , ∨₂-idem
+  ∨ᵒ-idem {inj₁ _} = ∨₁-idem ,ᵍ refl₂
+  ∨ᵒ-idem {inj₂ _} = refl₁ ,ᵍ ∨₂-idem
 
   absorbˡᵒ : ∀ {p q} → p ∧ᵒ (p ∨ᵒ q) ≈ᵍ p
-  absorbˡᵒ {inj₁ _} {inj₁ _} = absorbˡ₁ , refl₂
-  absorbˡᵒ {inj₁ _} {inj₂ _} = refl₁ , refl₂
-  absorbˡᵒ {inj₂ _} {inj₁ _} = refl₁ , ∧₂-idem
-  absorbˡᵒ {inj₂ _} {inj₂ _} = refl₁ , absorbˡ₂
+  absorbˡᵒ {inj₁ _} {inj₁ _} = absorbˡ₁ ,ᵍ refl₂
+  absorbˡᵒ {inj₁ _} {inj₂ _} = refl₁ ,ᵍ refl₂
+  absorbˡᵒ {inj₂ _} {inj₁ _} = refl₁ ,ᵍ ∧₂-idem
+  absorbˡᵒ {inj₂ _} {inj₂ _} = refl₁ ,ᵍ absorbˡ₂
 
   absorbʳᵒ : ∀ {p q} → (p ∧ᵒ q) ∨ᵒ p ≈ᵍ p
-  absorbʳᵒ {inj₁ _} {inj₁ _} = absorbʳ₁ , refl₂
-  absorbʳᵒ {inj₁ _} {inj₂ _} = ∨₁-idem , refl₂
-  absorbʳᵒ {inj₂ _} {inj₁ _} = refl₁ , refl₂
-  absorbʳᵒ {inj₂ _} {inj₂ _} = refl₁ , absorbʳ₂
+  absorbʳᵒ {inj₁ _} {inj₁ _} = absorbʳ₁ ,ᵍ refl₂
+  absorbʳᵒ {inj₁ _} {inj₂ _} = ∨₁-idem ,ᵍ refl₂
+  absorbʳᵒ {inj₂ _} {inj₁ _} = refl₁ ,ᵍ refl₂
+  absorbʳᵒ {inj₂ _} {inj₂ _} = refl₁ ,ᵍ absorbʳ₂
 
 ```
 
-Assembling through the setoid-level builder yields the ordinal sum.  (The two
-congruence arguments are η-expanded with their implicits forwarded: the carrier
-`A ⊎ B` has no η-rule, so Agda cannot recover the endpoints of an under-applied
-congruence through the non-injective retractions.)
+Assembling through the setoid-level builder yields the ordinal sum.  Every
+argument is passed under-applied: the record presentation of `_≈ᵍ_`{.AgdaRecord}
+lets Agda recover each implicit endpoint from the expected type, so none of them
+has to be forwarded by hand.
 
 ```agda
   ⊕-Lattice : Lattice (α ⊔ β) (ρ ⊔ σ)
   ⊕-Lattice = setoidEqsToLattice glueSetoid _∧ᵒ_ _∨ᵒ_
-    (λ {p} {q} {u} {v} → ∧ᵒ-cong {p} {q} {u} {v})
-    (λ {p} {q} {u} {v} → ∨ᵒ-cong {p} {q} {u} {v})
-    (λ {p q u} → ∧ᵒ-assoc {p} {q} {u})
-    (λ {p q} → ∧ᵒ-comm {p} {q})
-    (λ {p} → ∧ᵒ-idem {p})
-    (λ {p q u} → ∨ᵒ-assoc {p} {q} {u})
-    (λ {p q} → ∨ᵒ-comm {p} {q})
-    (λ {p} → ∨ᵒ-idem {p})
-    (λ {p q} → absorbˡᵒ {p} {q})
-    (λ {p q} → absorbʳᵒ {p} {q})
+    ∧ᵒ-cong ∨ᵒ-cong
+    ∧ᵒ-assoc ∧ᵒ-comm ∧ᵒ-idem
+    ∨ᵒ-assoc ∨ᵒ-comm ∨ᵒ-idem
+    absorbˡᵒ absorbʳᵒ
 ```
 
 #### The sum order, characterized
@@ -392,31 +441,31 @@ the glue.  The four lemmas name these unfoldings for consumers.
 
   -- Within the lower summand, the sum order is the lower order.
   ≤ᵒ-inj₁ : {x y : 𝕌[ 𝑨 ]} → x ≤₁ y → inj₁ x ≤ᵒ inj₁ y
-  ≤ᵒ-inj₁ e = e , refl₂
+  ≤ᵒ-inj₁ e = e ,ᵍ refl₂
 
   ≤ᵒ-inj₁-elim : {x y : 𝕌[ 𝑨 ]} → inj₁ x ≤ᵒ inj₁ y → x ≤₁ y
-  ≤ᵒ-inj₁-elim = proj₁
+  ≤ᵒ-inj₁-elim = ≈ˡ
 
   -- Within the upper summand, the sum order is the upper order.
   ≤ᵒ-inj₂ : {x y : 𝕌[ 𝑩 ]} → x ≤₂ y → inj₂ x ≤ᵒ inj₂ y
-  ≤ᵒ-inj₂ e = refl₁ , e
+  ≤ᵒ-inj₂ e = refl₁ ,ᵍ e
 
   ≤ᵒ-inj₂-elim : {x y : 𝕌[ 𝑩 ]} → inj₂ x ≤ᵒ inj₂ y → x ≤₂ y
-  ≤ᵒ-inj₂-elim = proj₂
+  ≤ᵒ-inj₂-elim = ≈ʳ
 
   -- Everything in the lower summand is below everything in the upper one.
   ≤ᵒ-up : {x : 𝕌[ 𝑨 ]} {y : 𝕌[ 𝑩 ]} → inj₁ x ≤ᵒ inj₂ y
-  ≤ᵒ-up = refl₁ , refl₂
+  ≤ᵒ-up = refl₁ ,ᵍ refl₂
 
   -- An upper element below a lower one forces both to the glue ...
   ≤ᵒ-down-elim : {x : 𝕌[ 𝑩 ]} {y : 𝕌[ 𝑨 ]}
     → inj₂ x ≤ᵒ (inj₁ y) → (y ≈₁ ⊤₁) × (x ≈₂ ⊥₂)
-  ≤ᵒ-down-elim (p , q) = p , sym₂ q
+  ≤ᵒ-down-elim (p ,ᵍ q) = p , sym₂ q
 
   -- ... and, at the glue, it does sit below.
   ≤ᵒ-down : {x : 𝕌[ 𝑩 ]} {y : 𝕌[ 𝑨 ]}
     → y ≈₁ ⊤₁ → x ≈₂ ⊥₂ → inj₂ x ≤ᵒ inj₁ y
-  ≤ᵒ-down y≈⊤ x≈⊥ = y≈⊤ , sym₂ x≈⊥
+  ≤ᵒ-down y≈⊤ x≈⊥ = y≈⊤ ,ᵍ sym₂ x≈⊥
 ```
 
 #### The sum operator
@@ -437,3 +486,8 @@ ordinalSum 𝑳₁ t 𝑳₂ b = LatticeOrdinalSum.⊕-Lattice 𝑳₁ t 𝑳₂
       `chain₂` and its concrete `0`/`1`).
 
 [^2]: See Work Package 5 (WP-5) of [the roadmap](docs/notes/flrp-research-roadmap.md).
+
+[^3]: The full failure analysis, the minimal reproduction, and the rejected
+      alternatives (a four-constructor inductive family, an `opaque` block, an
+      injectivity pragma) are in
+      [issue #504](https://github.com/ualib/agda-algebras/issues/504).
