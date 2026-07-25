@@ -91,13 +91,13 @@ Two standing warnings apply to everything under this namespace.
 
 module FLRP where
 
-open import FLRP.Problem public
-open import FLRP.Enforceable public
-open import FLRP.Bridge public
-open import FLRP.Representable public
-open import FLRP.Assumptions public
-open import FLRP.Closure public
-open import FLRP.LayerBridge public
-open import FLRP.Certificates public
-open import FLRP.L7EqSix public
+open import FLRP.Problem        public
+open import FLRP.Enforceable    public
+open import FLRP.Bridge         public
+open import FLRP.Representable  public
+open import FLRP.Assumptions    public
+open import FLRP.Closure        public
+open import FLRP.LayerBridge    public
+open import FLRP.Certificates   public
+open import FLRP.L7EqSix        public
 ```
