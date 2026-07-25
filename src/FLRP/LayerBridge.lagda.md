@@ -53,7 +53,7 @@ The `OrderIso`{.AgdaRecord} composition here is done by hand at each of the two
 transports rather than through a general transitivity combinator: the round trips
 need the middle lattice map to respect `≑`{.AgdaFunction} (antisymmetry), which a
 fully generic `OrderIso`-transitivity cannot supply without extra hypotheses, so the
-direct assembly from small named lemmas is clearer.[^2]
+direct assembly from small named lemmas is clearer.
 
 <!--
 ```agda
@@ -293,5 +293,3 @@ module _ {𝑳 : Lattice} where
       (`≤-antisym`{.AgdaFunction} of [Classical.Properties.Lattice][]
       — the same one-line fact the no-go theorem of [FLRP.Problem][] uses).
 
-[^2]: The standing FLRP research-track separation warning of [FLRP.Problem][] applies
-      here too.

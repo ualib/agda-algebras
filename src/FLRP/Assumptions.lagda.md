@@ -51,12 +51,18 @@ free constructive data reconstitutes the full semantic
 `FiniteCongruences`{.AgdaRecord}, so the assumption is exactly the classical delta
 between the two layers, no more, no less.
 
-**Coordination note**.  Work package 5 (WP-5) also plans to register
-its Kurzweil–Netter duality in this module.[^3]  The module is structured as
-*per-assumption statement definitions* (rather than one monolithic record) precisely
-so that a second entry can be appended without disturbing the first: WP-5 should add
-its duality as "Entry 2" alongside `CongruenceCompleteness`{.AgdaFunction}, and
-downstream results take whichever entry they need as an ordinary argument.[^4]
+**Entry 2**: Kurzweil–Netter duality.  The class of representable lattices is
+closed under dualization — proved by Kurzweil (1985) for intervals in solvable
+groups and by Netter (1986) in general, the latter possibly never published.  The
+closure toolkit of work package WP-5 ([FLRP.Closure][]) proves product and
+ordinal-sum closure outright; duality enters as this registry's second entry,
+`KurzweilNetterDuality`{.AgdaFunction}, an explicit hypothesis pending a formal
+reproof.[^3]
+
+The module is structured as *per-assumption statement definitions* (rather than one
+monolithic record) precisely so that entries can be appended without disturbing one
+another, and downstream results take whichever entry they need as an ordinary
+argument.
 
 <!--
 ```agda
@@ -71,10 +77,13 @@ open import Data.List.Membership.Propositional    using  ( _∈_ )
 open import Data.Product                          using  ( _×_ ; _,_ ; Σ-syntax
                                                          ; proj₁ ; proj₂ )
 open import Function                              using  (_∘_)
-open import Level                                 using  ( Level ; _⊔_ )
+open import Level                                 using  ( Level ; _⊔_ ; 0ℓ )
                                                   renaming ( suc to lsuc )
 
 -- Imports from the Agda Universal Algebra Library ------------------------------
+open import Classical.Small.Structures.Lattice    using  ( Lattice )
+open import Classical.Structures.Lattice.Dual     using  ( dualLattice )
+open import FLRP.Representable                    using  ( Representableᵈ )
 open import Overture                              using  ( 𝓞 ; 𝓥 ; Signature )
 open import Setoid.Algebras.Basic                 using  ( Algebra )
 open import Setoid.Algebras.Finite                using  ( FiniteAlgebra )
@@ -176,6 +185,59 @@ transitivity.
       φ≑e = d≑e .proj₁ ∘ φ≑d .proj₁ , φ≑d .proj₂ ∘ d≑e .proj₂
 ```
 
+#### Entry 2: Kurzweil–Netter duality
+
+The **theorem of Kurzweil and Netter**: if a finite lattice is representable as
+the congruence lattice of a finite algebra, then so is its dual.  Kurzweil proved
+the group-interval case (H. Kurzweil, *Endliche Gruppen mit vielen Untergruppen*,
+J. reine angew. Math. 356 (1985) 140–160); his student Netter proved the general
+statement (R. Netter, 1986), in an article that may never have been published.
+The argument this library targets is the one presented in
+`docs/papers/fin-lat-rep/SmallLatticeReps.tex` § "Lattice duals: the theorem of
+Kurzweil and Netter", following Pálfy's 2009 lectures: represent the dual of
+`Eq(n)` as the interval `[D , Sⁿ]` in the subgroup lattice of a power of a
+nonabelian simple group `S`, transport along the congruence lattice of the
+transitive `Sⁿ`-set on `Sⁿ/D`, and cut down to the desired dual by expanding the
+algebra with lifted operations.
+
++  **Meaning**.  `KurzweilNetterDualityAt`{.AgdaFunction} `𝑳` says: from a
+   decidable representation of `𝑳`{.AgdaBound}, one can produce a decidable
+   representation of `dualLattice 𝑳`{.AgdaFunction}
+   ([Classical.Structures.Lattice.Dual][]).  The ∀-form
+   `KurzweilNetterDuality`{.AgdaFunction} is the full theorem.  The per-lattice
+   form is the useful granularity downstream: a consumer may assume duality at
+   exactly the lattice it dualizes (the small-lattice census, issue #485, needs it
+   only at the certified partners of its two dual entries).
+
++  **Source and status**.  Unlike Entry 1 — an axiom-calibrated *bridge* whose
+   strength is pinned between WLEM and LEM — this entry is a *classically proven
+   theorem* imported pending formalization.  Its proof route needs the powers
+   `Sⁿ` of a finite simple group, the interval `[D , Sⁿ]`, and the transitive
+   G-set congruence bridge of work package WP-3, none of which is formalized yet;
+   when the stretch goal of issue #456 lands, this entry retires and
+   `dual-Representableᵈ`{.AgdaFunction} of [FLRP.Closure][] becomes a theorem.
+
++  **Layer**.  The entry is registered at Layer D (`Representableᵈ`{.AgdaRecord}),
+   the program's working notion per [ADR-008][]; the classical statement is the
+   Layer-S reading, and the two coincide classically through Entry 1.  A formal
+   Kurzweil–Netter proof would in any case produce the Layer-D form: the
+   construction is finite and explicit.
+
++  **Size**.  The construction represents the dual on an algebra of
+   `|S|ⁿ⁻¹ ≥ 60ⁿ⁻¹` elements (for an `n`-element original), which is why the
+   census keeps dual entries assumption-conditional rather than materializing
+   concrete certificate algebras.
+
+```agda
+-- Entry 2, per-lattice form: a decidable representation of 𝑳 yields one of its dual.
+KurzweilNetterDualityAt : Lattice → Type (lsuc 0ℓ)
+KurzweilNetterDualityAt 𝑳 = Representableᵈ 𝑳 → Representableᵈ (dualLattice 𝑳)
+
+-- The full theorem of Kurzweil (1985) and Netter (1986), as an explicit hypothesis.
+KurzweilNetterDuality : Type (lsuc 0ℓ)
+KurzweilNetterDuality = (𝑳 : Lattice) → KurzweilNetterDualityAt 𝑳
+```
+
 --------------------------------------
 
 [^1]: This is the assumption-registry discipline of [ADR-008][] and the FLRP roadmap.
@@ -183,11 +245,8 @@ transitivity.
 [^2]: Pinning the exact strength is a side question the program does not need
       (see `docs/notes/flrp-two-layer-congruences.md` § 2.1, L4).
 
-[^3]: **WP-5: closure toolkit** formalizes product and ordinal-sum closure of
-      representability (see
+[^3]: **WP-5: closure toolkit** formalized product and ordinal-sum closure of
+      decidable representability outright in [FLRP.Closure][] and registered
+      duality here as Entry 2 (see
       [`docs/notes/flrp-research-roadmap.md`](docs/notes/flrp-research-roadmap.md) § 7
       and GitHub [Issue #456](https://github.com/ualib/agda-algebras/issues/456).
-
-[^4]: The standing FLRP research-track separation warning of [FLRP.Problem][] applies
-      here too: this is problem-specific formal content, not to be conflated with the
-      algebraic-complexity / finite-CSP work elsewhere in the library.

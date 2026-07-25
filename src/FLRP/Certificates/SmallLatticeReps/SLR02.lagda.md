@@ -60,7 +60,7 @@ open import Setoid.Algebras.Finite       using ( FiniteAlgebra )
 open import Setoid.Congruences.Certificates.Schema
                                          using ( ParentVec ; Trace ; LatticeCert
                                                ; mkLatticeCert ; mkMerge
-                                               ; seed ; translate )
+                                               ; seed )
 open import Setoid.Congruences.Certificates.Congruence
                                          using ( module CertCheck )
 open import Setoid.Congruences.Certificates.Lattice

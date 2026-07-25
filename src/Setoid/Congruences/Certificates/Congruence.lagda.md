@@ -134,8 +134,7 @@ open import Setoid.Congruences.Certificates.Schema  using  ( ParentVec ; parent
                                                            ; IdempotentParent
                                                            ; forestEdges
                                                            ; Justification ; seed
-                                                           ; translate ; Merge
-                                                           ; mkMerge ; Trace
+                                                           ; translate ; mkMerge ; Trace
                                                            ; CgCert )
 open import Setoid.Signatures.Finite                using  ( FiniteSignature )
 

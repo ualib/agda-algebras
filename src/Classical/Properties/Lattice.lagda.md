@@ -16,18 +16,12 @@ a `Lattice α ρ` — that is, the algebraic data of meet, join, and the eight
 equations — we construct the partial order `x ≤ y := x ∧ y ≈ x` and show that
 `_∧_` and `_∨_` are the binary meet and join with respect to it.
 
-The dual order characterization `x ≤ y ⇔ x ∨ y ≈ y` is proved as the connecting
-lemma.  The partial-order properties and the GLB properties use only
-associativity, commutativity, and idempotency; the join upper-bound clauses use
-absorption directly, and the join leastness proof routes through the connecting
-lemma.
-
-This is the first module in `Classical/Properties/`.  The directory is a
-by-concern parallel of `Classical/Structures/`, `Classical/Bundles/`, etc., for
-*derived* results about classical structures — results that are theorems
-*about* a fixed inhabitant of one of those structures, not part of its
-definition.  Future inhabitants include, for example, uniqueness of inverses in
-Group and `0 · x ≈ 0` in Ring.
+This is the first module in `Classical/Properties/`.  The directory is a by-concern
+parallel of `Classical/Structures/`, `Classical/Bundles/`, etc., for *derived*
+results about classical structures — results that are theorems *about* a fixed
+inhabitant of one of those structures, not part of its definition.  Future
+inhabitants include, for example, uniqueness of inverses in Group and `0 · x ≈ 0`
+in Ring.
 
 <!--
 ```agda
@@ -41,9 +35,9 @@ open import Agda.Primitive                           using () renaming ( Set to 
 open import Data.Fin.Base                            using ( Fin )
 open import Data.Fin.Properties                      using ( _≟_ ; all? )
 open import Data.Nat.Base                            using ( ℕ )
-open import Data.Product                             using ( proj₁ ; _×_ )
+open import Data.Product                             using ( proj₁ ; _×_ ; Σ-syntax )
 open import Data.Sum.Base                            using ( _⊎_ )
-open import Level                                    using ( Level )
+open import Level                                    using ( Level ; _⊔_ )
 open import Relation.Binary                          using ( Setoid )
 open import Relation.Binary.PropositionalEquality    using ( _≡_ ; _≢_ )
 open import Relation.Nullary.Decidable.Core          using ( Dec ; ¬? ; _×-dec_ ; _→-dec_ ; _⊎-dec_ )
@@ -68,7 +62,9 @@ module Lattice-Order {α ρ : Level} (𝑳 : Lattice α ρ) where
   open SetoidReasoning 𝔻[ 𝑨 ]
 ```
 
-**The induced order.**  `x ≤ y` is `x ∧ y ≈ x` (the meet-form characterization).
+**The induced order**.
+
+`x ≤ y` is `x ∧ y ≈ x` (the meet-form characterization).
 The join-form `x ∨ y ≈ y` is proved iff-equivalent below.
 
 ```agda
@@ -77,85 +73,100 @@ The join-form `x ∨ y ≈ y` is proved iff-equivalent below.
   x ≤ y = x ∧ y ≈ x
 ```
 
-**Connecting lemma: meet-form and join-form agree.**  Forward direction uses
-the second absorption law (in its `absorbʳ-law` shape: `(y ∧ x) ∨ y ≈ y`);
-backward direction uses the first.  The partial-order and GLB results below need
-only associativity, commutativity, and idempotency; the join upper-bound clauses
-use absorption directly.
+The dual order characterization `x ≤ y ⇔ x ∨ y ≈ y` is proved as the connecting
+lemma.  The partial-order properties and the GLB properties use only associativity,
+commutativity, and idempotency; the join upper-bound clauses use absorption directly,
+and the join leastness proof routes through the connecting lemma.
+
+**Connecting lemma: meet-form and join-form agree**.
+
+Forward direction uses the second absorption law (in its `absorbʳ-law` shape:
+`(y ∧ x) ∨ y ≈ y`); backward direction uses the first.
+
 
 ```agda
   ≤-via-∨ : ∀ {x y} → x ≤ y → x ∨ y ≈ y
   ≤-via-∨ {x} {y} x≤y = begin
-    x ∨ y         ≈⟨ ∨-cong (sym x≤y) refl ⟩
-    (x ∧ y) ∨ y   ≈⟨ ∨-cong (∧-comm-law x y) refl ⟩
-    (y ∧ x) ∨ y   ≈⟨ absorbʳ-law y x ⟩
+    x ∨ y         ≈˘⟨ ∨-cong x≤y refl ⟩
+    (x ∧ y) ∨ y   ≈⟨ ∨-cong ∧-comm-law refl ⟩
+    (y ∧ x) ∨ y   ≈⟨ absorbʳ-law ⟩
     y             ∎
 
   ≤-from-∨ : ∀ {x y} → x ∨ y ≈ y → x ≤ y
   ≤-from-∨ {x} {y} x∨y≈y = begin
-    x ∧ y         ≈⟨ ∧-cong refl (sym x∨y≈y) ⟩
-    x ∧ (x ∨ y)   ≈⟨ absorbˡ-law x y ⟩
+    x ∧ y         ≈˘⟨ ∧-cong refl x∨y≈y ⟩
+    x ∧ (x ∨ y)   ≈⟨ absorbˡ-law ⟩
     x             ∎
 ```
 
-**Partial order modulo `≈`.**  Reflexivity is idempotency, transitivity uses
-associativity, antisymmetry uses commutativity, and the `≈`-respect lemmas use
-binary congruence.
+**Partial order modulo `≈`**.
+
+Reflexivity is idempotency, transitivity uses associativity, antisymmetry uses
+commutativity, and the `≈`-respect lemmas use binary congruence.
 
 ```agda
   ≤-refl : ∀ {x} → x ≤ x
-  ≤-refl {x} = ∧-idem-law x
+  ≤-refl = ∧-idem-law
 
   ≤-trans : ∀ {x y z} → x ≤ y → y ≤ z → x ≤ z
   ≤-trans {x} {y} {z} x≤y y≤z = begin
-    x ∧ z         ≈⟨ ∧-cong (sym x≤y) refl ⟩
-    (x ∧ y) ∧ z   ≈⟨ ∧-assoc-law x y z ⟩
+    x ∧ z         ≈˘⟨ ∧-cong x≤y refl ⟩
+    (x ∧ y) ∧ z   ≈⟨ ∧-assoc-law ⟩
     x ∧ (y ∧ z)   ≈⟨ ∧-cong refl y≤z ⟩
     x ∧ y         ≈⟨ x≤y ⟩
     x             ∎
 
   ≤-antisym : ∀ {x y} → x ≤ y → y ≤ x → x ≈ y
   ≤-antisym {x} {y} x≤y y≤x = begin
-    x       ≈⟨ sym x≤y ⟩
-    x ∧ y   ≈⟨ ∧-comm-law x y ⟩
+    x       ≈˘⟨ x≤y ⟩
+    x ∧ y   ≈⟨ ∧-comm-law ⟩
     y ∧ x   ≈⟨ y≤x ⟩
     y       ∎
 
   ≤-respˡ-≈ : ∀ {x x' y} → x ≈ x' → x ≤ y → x' ≤ y
   ≤-respˡ-≈ {x} {x'} {y} x≈x' x≤y = begin
-    x' ∧ y   ≈⟨ ∧-cong (sym x≈x') refl ⟩
+    x' ∧ y   ≈˘⟨ ∧-cong x≈x' refl ⟩
     x ∧ y    ≈⟨ x≤y ⟩
     x        ≈⟨ x≈x' ⟩
     x'       ∎
 
   ≤-respʳ-≈ : ∀ {x y y'} → y ≈ y' → x ≤ y → x ≤ y'
   ≤-respʳ-≈ {x} {y} {y'} y≈y' x≤y = begin
-    x ∧ y'   ≈⟨ ∧-cong refl (sym y≈y') ⟩
+    x ∧ y'   ≈˘⟨ ∧-cong refl y≈y' ⟩
     x ∧ y    ≈⟨ x≤y ⟩
     x        ∎
+
+  -- ≈-equal elements are ≤-comparable (the `reflexive` field of the preorder).
+  ≤-reflexive : ∀ {x y} → x ≈ y → x ≤ y
+  ≤-reflexive {x} {y} x≈y = begin
+    x ∧ y   ≈˘⟨ ∧-cong refl x≈y ⟩
+    x ∧ x   ≈⟨ ∧-idem-law ⟩
+    x       ∎
 ```
 
-**`_∧_` is the binary meet.**  The two lower-bound clauses and the universal
-property — together with the partial-order facts above — say that `x ∧ y` is
-the greatest lower bound of `x` and `y` with respect to `_≤_`.
+**`_∧_` is the binary meet**.
+
+The two lower-bound clauses and the universal property, together with the
+partial-order facts above, say that `x ∧ y` is the greatest lower bound of `x` and
+`y` with respect to `_≤_`.
 
 ```agda
-  ∧-lowerˡ : ∀ x y → (x ∧ y) ≤ x
-  ∧-lowerˡ x y = begin
-    (x ∧ y) ∧ x   ≈⟨ ∧-comm-law (x ∧ y) x ⟩
-    x ∧ (x ∧ y)   ≈⟨ sym (∧-assoc-law x x y) ⟩
-    (x ∧ x) ∧ y   ≈⟨ ∧-cong (∧-idem-law x) refl ⟩
+  ∧-lowerˡ : ∀ {x y} → (x ∧ y) ≤ x
+  ∧-lowerˡ {x} {y} = begin
+    (x ∧ y) ∧ x   ≈⟨ ∧-comm-law ⟩
+    x ∧ (x ∧ y)   ≈˘⟨ ∧-assoc-law ⟩
+    (x ∧ x) ∧ y   ≈⟨ ∧-cong ∧-idem-law refl ⟩
     x ∧ y         ∎
 
-  ∧-lowerʳ : ∀ x y → (x ∧ y) ≤ y
-  ∧-lowerʳ x y = begin
-    (x ∧ y) ∧ y   ≈⟨ ∧-assoc-law x y y ⟩
-    x ∧ (y ∧ y)   ≈⟨ ∧-cong refl (∧-idem-law y) ⟩
+  ∧-lowerʳ : ∀ {x y} → (x ∧ y) ≤ y
+  ∧-lowerʳ {x} {y} = begin
+    (x ∧ y) ∧ y   ≈⟨ ∧-assoc-law ⟩
+    x ∧ (y ∧ y)   ≈⟨ ∧-cong refl ∧-idem-law ⟩
     x ∧ y         ∎
 
   ∧-greatest : ∀ {x y z} → z ≤ x → z ≤ y → z ≤ (x ∧ y)
   ∧-greatest {x} {y} {z} z≤x z≤y = begin
-    z ∧ (x ∧ y)   ≈⟨ sym (∧-assoc-law z x y) ⟩
+    z ∧ (x ∧ y)   ≈˘⟨ ∧-assoc-law ⟩
     (z ∧ x) ∧ y   ≈⟨ ∧-cong z≤x refl ⟩
     z ∧ y         ≈⟨ z≤y ⟩
     z             ∎
@@ -167,21 +178,60 @@ property is proved through the join-form characterization to avoid going
 through absorption twice.
 
 ```agda
-  ∨-upperˡ : ∀ x y → x ≤ (x ∨ y)
-  ∨-upperˡ x y = absorbˡ-law x y
+  ∨-upperˡ : ∀ {x y} → x ≤ (x ∨ y)
+  ∨-upperˡ = absorbˡ-law
 
-  ∨-upperʳ : ∀ x y → y ≤ (x ∨ y)
-  ∨-upperʳ x y = begin
-    y ∧ (x ∨ y)   ≈⟨ ∧-cong refl (∨-comm-law x y) ⟩
-    y ∧ (y ∨ x)   ≈⟨ absorbˡ-law y x ⟩
+  ∨-upperʳ : ∀ {x y} → y ≤ (x ∨ y)
+  ∨-upperʳ {x} {y} = begin
+    y ∧ (x ∨ y)   ≈⟨ ∧-cong refl ∨-comm-law ⟩
+    y ∧ (y ∨ x)   ≈⟨ absorbˡ-law ⟩
     y             ∎
 
   ∨-least : ∀ {x y z} → x ≤ z → y ≤ z → (x ∨ y) ≤ z
   ∨-least {x} {y} {z} x≤z y≤z = ≤-from-∨ (begin
-    (x ∨ y) ∨ z   ≈⟨ ∨-assoc-law x y z ⟩
+    (x ∨ y) ∨ z   ≈⟨ ∨-assoc-law ⟩
     x ∨ (y ∨ z)   ≈⟨ ∨-cong refl (≤-via-∨ y≤z) ⟩
     x ∨ z         ≈⟨ ≤-via-∨ x≤z ⟩
     z             ∎)
+```
+
+**Extrema.**  `IsTop t` says `t` is a greatest element of the meet order, and
+`IsBot b` that `b` is a least one.  An arbitrary lattice need not have either; the
+predicates state the universal property of a *chosen* extremum, and by antisymmetry
+any two choices are `≈`-equal.  Constructions that glue lattices at their ends — the
+ordinal sum of [Classical.Structures.Lattice.OrdinalSum][] — consume exactly this
+data.
+
+```agda
+  -- t is a top (greatest) element of the meet order.
+  IsTop : 𝕌[ 𝑨 ] → Type (α ⊔ ρ)
+  IsTop t = ∀ x → x ≤ t
+
+  -- b is a bottom (least) element of the meet order.
+  IsBot : 𝕌[ 𝑨 ] → Type (α ⊔ ρ)
+  IsBot b = ∀ x → b ≤ x
+
+  -- Tops are unique up to ≈, by antisymmetry; likewise bottoms.
+  top-unique : ∀ {t t'} → IsTop t → IsTop t' → t ≈ t'
+  top-unique {t} {t'} pt pt' = ≤-antisym (pt' t) (pt t')
+
+  bot-unique : ∀ {b b'} → IsBot b → IsBot b' → b ≈ b'
+  bot-unique {b} {b'} pb pb' = ≤-antisym (pb b') (pb' b)
+```
+
+#### Chosen extrema, packaged
+
+`TopOf 𝑳` is the type of chosen tops of `𝑳`: an element paired with its
+universal property; `BotOf 𝑳` likewise for bottoms.  These are the arguments a
+construction takes when it needs a *specific* extremum (again, see the ordinal sum),
+packaged as Σ-types per the library's Σ-first discipline.
+
+```agda
+TopOf : Lattice α ρ → Type (α ⊔ ρ)
+TopOf 𝑳 = Σ[ t ∈ 𝕌[ proj₁ 𝑳 ] ] Lattice-Order.IsTop 𝑳 t
+
+BotOf : Lattice α ρ → Type (α ⊔ ρ)
+BotOf 𝑳 = Σ[ b ∈ 𝕌[ proj₁ 𝑳 ] ] Lattice-Order.IsBot 𝑳 b
 ```
 
 #### The decidable meet order and its atoms {#finite-order}

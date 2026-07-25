@@ -89,9 +89,11 @@ open import Classical.Theories.Lattice        using  ( Eq-Lattice ; Th-Lattice ;
 open import Classical.Theories.Semilattice    using  ( Th-Semilattice )
                                               renaming  ( assoc to assocˢˡ ; comm  to commˢˡ
                                                         ; idem  to idemˢˡ )
+open import Overture.Operations               using  ( Op )
 open import Overture.Terms                    using  ( Term ; ℊ ; node )
 open import Overture.Signatures               using  ( ArityOf ; OperationSymbolsOf )
-open import Setoid.Algebras.Basic             using  ( Algebra ; _^_ ; 𝔻[_] ; 𝕌[_] )
+open import Setoid.Algebras.Basic             using  ( Algebra ; _^_ ; 𝔻[_] ; 𝕌[_]
+                                                     ; mkAlgebra )
 open import Setoid.Algebras.Reduct            using  ( reductBy )
 open import Setoid.Signatures                 using  ( ⟨_⟩ )
 open import Setoid.Terms                      using  ( module Environment )
@@ -184,8 +186,8 @@ module _ (𝑳 : Lattice α ρ) where
     ∨-cong : ∀ {x y u v} → x ≈ y → u ≈ v → (x ∨ u) ≈ (y ∨ v)
     ∨-cong x≈y u≈v = interp-cong 𝑨 ∨-Op (λ { 0F → x≈y ; 1F → u≈v })
 
-  lt-∧-assoc : ∀ x y z → (x ∧ y) ∧ z ≈ x ∧ (y ∧ z)
-  lt-∧-assoc x y z = begin
+  lt-∧-assoc : ∀ {x y z} → (x ∧ y) ∧ z ≈ x ∧ (y ∧ z)
+  lt-∧-assoc {x} {y} {z} = begin
     (x ∧ y) ∧ z       ≈⟨ ∧-cong (≈sym (interp-node-∧ (ℊ 0F) (ℊ 1F) η)) ≈refl ⟩
     ⟦ xy ⟧ ⟨$⟩ η ∧ z  ≈⟨ ≈sym (interp-node-∧ xy (ℊ 2F) η) ⟩
     ⟦ lhsT ⟧ ⟨$⟩ η    ≈⟨ proj₂ 𝑳 ∧-assoc η ⟩
@@ -201,19 +203,20 @@ module _ (𝑳 : Lattice α ρ) where
     lhsT = node ∧-Op (pair xy (ℊ 2F))
     rhsT = node ∧-Op (pair (ℊ 0F) yz)
 
-  lt-∧-comm : ∀ x y → x ∧ y ≈ y ∧ x
-  lt-∧-comm x y = ≈trans  (≈sym (interp-node-∧ (ℊ 0F) (ℊ 1F) η))
-                          (≈trans (proj₂ 𝑳 ∧-comm η) (interp-node-∧ (ℊ 1F) (ℊ 0F) η))
+  lt-∧-comm : ∀ {x y} → x ∧ y ≈ y ∧ x
+  lt-∧-comm {x} {y} =
+    ≈trans  (≈sym (interp-node-∧ (ℊ 0F) (ℊ 1F) η))
+            (≈trans (proj₂ 𝑳 ∧-comm η) (interp-node-∧ (ℊ 1F) (ℊ 0F) η))
     where η : Fin 3 → 𝕌[ 𝑨 ]
           η = λ { 0F → x ; 1F → y ; 2F → x }
 
-  lt-∧-idem : ∀ x → x ∧ x ≈ x
-  lt-∧-idem x = ≈trans (≈sym (interp-node-∧ (ℊ 0F) (ℊ 0F) η)) (proj₂ 𝑳 ∧-idem η)
+  lt-∧-idem : ∀ {x} → x ∧ x ≈ x
+  lt-∧-idem {x} = ≈trans (≈sym (interp-node-∧ (ℊ 0F) (ℊ 0F) η)) (proj₂ 𝑳 ∧-idem η)
     where η : Fin 3 → 𝕌[ 𝑨 ]
           η = λ { 0F → x ; 1F → x ; 2F → x }
 
-  lt-∨-assoc : ∀ x y z → (x ∨ y) ∨ z ≈ x ∨ (y ∨ z)
-  lt-∨-assoc x y z = begin
+  lt-∨-assoc : ∀ {x y z} → (x ∨ y) ∨ z ≈ x ∨ (y ∨ z)
+  lt-∨-assoc {x} {y} {z} = begin
     (x ∨ y) ∨ z       ≈⟨ ∨-cong (≈sym (interp-node-∨ (ℊ 0F) (ℊ 1F) η)) ≈refl ⟩
     ⟦ xy ⟧ ⟨$⟩ η ∨ z  ≈⟨ ≈sym (interp-node-∨ xy (ℊ 2F) η) ⟩
     ⟦ lhsT ⟧ ⟨$⟩ η    ≈⟨ proj₂ 𝑳 ∨-assoc η ⟩
@@ -229,20 +232,21 @@ module _ (𝑳 : Lattice α ρ) where
     lhsT = node ∨-Op (pair xy (ℊ 2F))
     rhsT = node ∨-Op (pair (ℊ 0F) yz)
 
-  lt-∨-comm : ∀ x y → x ∨ y ≈ y ∨ x
-  lt-∨-comm x y = ≈trans  (≈sym (interp-node-∨ (ℊ 0F) (ℊ 1F) η))
-                          (≈trans (proj₂ 𝑳 ∨-comm η) (interp-node-∨ (ℊ 1F) (ℊ 0F) η))
+  lt-∨-comm : ∀ {x y} → x ∨ y ≈ y ∨ x
+  lt-∨-comm {x} {y} =
+    ≈trans  (≈sym (interp-node-∨ (ℊ 0F) (ℊ 1F) η))
+            (≈trans (proj₂ 𝑳 ∨-comm η) (interp-node-∨ (ℊ 1F) (ℊ 0F) η))
     where η : Fin 3 → 𝕌[ 𝑨 ]
           η = λ { 0F → x ; 1F → y ; 2F → x }
 
-  lt-∨-idem : ∀ x → x ∨ x ≈ x
-  lt-∨-idem x = ≈trans (≈sym (interp-node-∨ (ℊ 0F) (ℊ 0F) η)) (proj₂ 𝑳 ∨-idem η)
+  lt-∨-idem : ∀ {x} → x ∨ x ≈ x
+  lt-∨-idem {x} = ≈trans (≈sym (interp-node-∨ (ℊ 0F) (ℊ 0F) η)) (proj₂ 𝑳 ∨-idem η)
     where  η : Fin 3 → 𝕌[ 𝑨 ]
            η = λ { 0F → x ; 1F → x ; 2F → x }
 
   -- x ∧ (x ∨ y) ≈ x   (meet absorbs join)
-  lt-absorbˡ : ∀ x y → x ∧ (x ∨ y) ≈ x
-  lt-absorbˡ x y = begin
+  lt-absorbˡ : ∀ {x y} → x ∧ (x ∨ y) ≈ x
+  lt-absorbˡ {x} {y} = begin
     x ∧ (x ∨ y)        ≈⟨ ∧-cong ≈refl (≈sym (interp-node-∨ (ℊ 0F) (ℊ 1F) η)) ⟩
     x ∧ ⟦ x∨y ⟧ ⟨$⟩ η  ≈⟨ ≈sym (interp-node-∧ (ℊ 0F) x∨y η) ⟩
     ⟦ lhsT ⟧ ⟨$⟩ η     ≈⟨ proj₂ 𝑳 absorbˡ η ⟩
@@ -255,8 +259,8 @@ module _ (𝑳 : Lattice α ρ) where
     lhsT = node ∧-Op (pair (ℊ 0F) x∨y)
 
   -- (x ∧ y) ∨ x ≈ x   (join absorbs meet, with x on the right of the outer ∨)
-  lt-absorbʳ : ∀ x y → (x ∧ y) ∨ x ≈ x
-  lt-absorbʳ x y = begin
+  lt-absorbʳ : ∀ {x y} → (x ∧ y) ∨ x ≈ x
+  lt-absorbʳ {x} {y} = begin
     (x ∧ y) ∨ x        ≈⟨ ∨-cong (≈sym (interp-node-∧ (ℊ 0F) (ℊ 1F) η)) ≈refl ⟩
     ⟦ x∧y ⟧ ⟨$⟩ η ∨ x  ≈⟨ ≈sym (interp-node-∨ x∧y (ℊ 0F) η) ⟩
     ⟦ lhsT ⟧ ⟨$⟩ η     ≈⟨ proj₂ 𝑳 absorbʳ η ⟩
@@ -308,28 +312,28 @@ module Lattice-Op {α ρ : Level} (𝑳 : Lattice α ρ) where
     → ⟦ node ∨-Op (pair s t) ⟧ ⟨$⟩ η ≈ ⟦ s ⟧ ⟨$⟩ η ∨ ⟦ t ⟧ ⟨$⟩ η
   interp-node-∨ s t = interp-cong 𝑨 ∨-Op λ { 0F → ≈refl ; 1F → ≈refl }
 
-  ∧-assoc-law : ∀ x y z → (x ∧ y) ∧ z ≈ x ∧ (y ∧ z)
+  ∧-assoc-law : ∀ {x y z} → (x ∧ y) ∧ z ≈ x ∧ (y ∧ z)
   ∧-assoc-law = lt-∧-assoc 𝑳
 
-  ∧-comm-law : ∀ x y → x ∧ y ≈ y ∧ x
+  ∧-comm-law : ∀ {x y} → x ∧ y ≈ y ∧ x
   ∧-comm-law = lt-∧-comm 𝑳
 
-  ∧-idem-law : ∀ x → x ∧ x ≈ x
+  ∧-idem-law : ∀ {x} → x ∧ x ≈ x
   ∧-idem-law = lt-∧-idem 𝑳
 
-  ∨-assoc-law : ∀ x y z → (x ∨ y) ∨ z ≈ x ∨ (y ∨ z)
+  ∨-assoc-law : ∀ {x y z} → (x ∨ y) ∨ z ≈ x ∨ (y ∨ z)
   ∨-assoc-law = lt-∨-assoc 𝑳
 
-  ∨-comm-law : ∀ x y → x ∨ y ≈ y ∨ x
+  ∨-comm-law : ∀ {x y} → x ∨ y ≈ y ∨ x
   ∨-comm-law = lt-∨-comm 𝑳
 
-  ∨-idem-law : ∀ x → x ∨ x ≈ x
+  ∨-idem-law : ∀ {x} → x ∨ x ≈ x
   ∨-idem-law = lt-∨-idem 𝑳
 
-  absorbˡ-law : ∀ x y → x ∧ (x ∨ y) ≈ x
+  absorbˡ-law : ∀ {x y} → x ∧ (x ∨ y) ≈ x
   absorbˡ-law = lt-absorbˡ 𝑳
 
-  absorbʳ-law : ∀ x y → (x ∧ y) ∨ x ≈ x
+  absorbʳ-law : ∀ {x y} → (x ∧ y) ∨ x ≈ x
   absorbʳ-law = lt-absorbʳ 𝑳
 ```
 
@@ -363,7 +367,7 @@ lattice→meetSemilattice ℒ@(𝑳 , _) = 𝑹 , thm
   thm assocˢˡ η = let x = η 0F ; y = η 1F ; z = η 2F in begin
     ⟦ Th-Semilattice assocˢˡ .proj₁ ⟧ ⟨$⟩ η  ≈⟨ interp-congᴿ xy (ℊ 2F) η ⟩
     ⟦ xy ⟧ ⟨$⟩ η ∧ z                         ≈⟨ ∧-congᴿ (interp-congᴿ (ℊ 0F) (ℊ 1F) η) ≈refl ⟩
-    (x ∧ y) ∧ z                              ≈⟨ ∧-assoc-law x y z ⟩
+    (x ∧ y) ∧ z                              ≈⟨ ∧-assoc-law ⟩
     x ∧ (y ∧ z)                              ≈˘⟨ ∧-congᴿ ≈refl (interp-congᴿ (ℊ 1F) (ℊ 2F) η) ⟩
     x ∧ ⟦ yz ⟧ ⟨$⟩ η                         ≈˘⟨ interp-congᴿ (ℊ 0F) yz η ⟩
     ⟦ Th-Semilattice assocˢˡ .proj₂ ⟧ ⟨$⟩ η  ∎
@@ -374,13 +378,13 @@ lattice→meetSemilattice ℒ@(𝑳 , _) = 𝑹 , thm
 
   thm commˢˡ η = let x = η 0F ; y = η 1F in begin
     ⟦ Th-Semilattice commˢˡ .proj₁ ⟧ ⟨$⟩ η  ≈⟨ interp-congᴿ (ℊ 0F) (ℊ 1F) η ⟩
-    x ∧ y                                   ≈⟨ ∧-comm-law x y ⟩
+    x ∧ y                                   ≈⟨ ∧-comm-law ⟩
     y ∧ x                                   ≈˘⟨ interp-congᴿ (ℊ 1F) (ℊ 0F) η ⟩
     ⟦ Th-Semilattice commˢˡ .proj₂ ⟧ ⟨$⟩ η  ∎
 
   thm idemˢˡ η = let x = η 0F in begin
     ⟦ Th-Semilattice idemˢˡ .proj₁ ⟧ ⟨$⟩ η  ≈⟨ interp-congᴿ (ℊ 0F) (ℊ 0F) η ⟩
-    x ∧ x                                   ≈⟨ ∧-idem-law x ⟩
+    x ∧ x                                   ≈⟨ ∧-idem-law ⟩
     x                                       ∎
 
 lattice→joinSemilattice : Lattice α ρ → Semilattice α ρ
@@ -404,7 +408,7 @@ lattice→joinSemilattice ℒ@(𝑳 , _) = 𝑹 , thm
   thm assocˢˡ η = let x = η 0F ; y = η 1F ; z = η 2F in begin
     ⟦ Th-Semilattice assocˢˡ .proj₁ ⟧ ⟨$⟩ η  ≈⟨ interp-congᴿ xy (ℊ 2F) η ⟩
     ⟦ xy ⟧ ⟨$⟩ η ∨ z                         ≈⟨ ∨-congᴿ (interp-congᴿ (ℊ 0F) (ℊ 1F) η) ≈refl ⟩
-    (x ∨ y) ∨ z                              ≈⟨ ∨-assoc-law x y z ⟩
+    (x ∨ y) ∨ z                              ≈⟨ ∨-assoc-law ⟩
     x ∨ (y ∨ z)                              ≈˘⟨ ∨-congᴿ ≈refl (interp-congᴿ (ℊ 1F) (ℊ 2F) η) ⟩
     x ∨ ⟦ yz ⟧ ⟨$⟩ η                         ≈˘⟨ interp-congᴿ (ℊ 0F) yz η ⟩
     ⟦ Th-Semilattice assocˢˡ .proj₂ ⟧ ⟨$⟩ η  ∎
@@ -415,13 +419,13 @@ lattice→joinSemilattice ℒ@(𝑳 , _) = 𝑹 , thm
 
   thm commˢˡ η = let x = η 0F ; y = η 1F in begin
     ⟦ Th-Semilattice commˢˡ .proj₁ ⟧ ⟨$⟩ η  ≈⟨ interp-congᴿ (ℊ 0F) (ℊ 1F) η ⟩
-    x ∨ y                                   ≈⟨ ∨-comm-law x y ⟩
+    x ∨ y                                   ≈⟨ ∨-comm-law ⟩
     y ∨ x                                   ≈˘⟨ interp-congᴿ (ℊ 1F) (ℊ 0F) η ⟩
     ⟦ Th-Semilattice commˢˡ .proj₂ ⟧ ⟨$⟩ η  ∎
 
   thm idemˢˡ η = let x = η 0F in begin
     ⟦ Th-Semilattice idemˢˡ .proj₁ ⟧ ⟨$⟩ η  ≈⟨ interp-congᴿ (ℊ 0F) (ℊ 0F) η ⟩
-    x ∨ x                                   ≈⟨ ∨-idem-law x ⟩
+    x ∨ x                                   ≈⟨ ∨-idem-law ⟩
     x                                       ∎
 ```
 
@@ -462,4 +466,69 @@ eqsToLattice A _∧'_ _∨'_ ∧-assoc-≡ ∧-comm-≡ ∧-idem-≡ ∨-assoc-�
   proof ∨-idem  ρ = ∨-idem-≡  (ρ 0F)
   proof absorbˡ ρ = absorbˡ-≡ (ρ 0F) (ρ 1F)
   proof absorbʳ ρ = absorbʳ-≡ (ρ 0F) (ρ 1F)
+```
+
+#### Setoid-level lattice builders
+
+`eqsToLattice`{.AgdaFunction} covers carriers with propositional equality; the
+constructions that build one lattice out of others — the binary product, the dual,
+and the ordinal sum of [Classical.Structures.Lattice.Product][],
+[Classical.Structures.Lattice.Dual][], and [Classical.Structures.Lattice.OrdinalSum][]
+— produce *setoid* carriers, so they need the general form.
+`setoidOpsToBareLattice`{.AgdaFunction} assembles the `Sig-Lattice` algebra from a
+carrier setoid, two binary operations, and their congruence proofs (which the
+propositional case got for free from `cong₂`{.AgdaFunction});
+`setoidEqsToLattice`{.AgdaFunction} adds the eight equations, now stated over the
+setoid equality `≈`.
+
+The interpretation clauses *apply* the argument tuple (`a 0F ∧' a 1F` rather than
+routing through `pair`{.AgdaFunction}), so each equation of `Th-Lattice`
+evaluates definitionally to its curried form, and the satisfaction proof consumes the
+curried hypotheses directly — the same reduction discipline that makes
+`eqsToLattice`{.AgdaFunction}'s proof clauses one-liners.
+
+```agda
+module _ (𝐷 : Setoid α ρ) where
+  open Setoid 𝐷 using ( _≈_ ) renaming ( Carrier to D )
+
+  setoidOpsToBareLattice : (_∧'_ _∨'_ : D → D → D)
+    → (∀ {x y u v} → x ≈ y → u ≈ v → (x ∧' u) ≈ (y ∧' v))
+    → (∀ {x y u v} → x ≈ y → u ≈ v → (x ∨' u) ≈ (y ∨' v))
+    → Algebra {𝑆 = Sig-Lattice} α ρ
+  setoidOpsToBareLattice _∧'_ _∨'_ ∧'-cong ∨'-cong = mkAlgebra 𝐷 interp interp-congruence
+    where
+    interp : (o : OperationSymbolsOf Sig-Lattice) → Op (ArityOf Sig-Lattice o) D
+    interp ∧-Op a = a 0F ∧' a 1F
+    interp ∨-Op a = a 0F ∨' a 1F
+
+    interp-congruence : ∀ o {u v : ArityOf Sig-Lattice o → D}
+      → (∀ i → u i ≈ v i) → interp o u ≈ interp o v
+    interp-congruence ∧-Op e = ∧'-cong (e 0F) (e 1F)
+    interp-congruence ∨-Op e = ∨'-cong (e 0F) (e 1F)
+
+  setoidEqsToLattice : (_∧'_ _∨'_ : D → D → D)
+    → (∧'-cong    : ∀ {x y u v} → x ≈ y → u ≈ v → (x ∧' u) ≈ (y ∧' v))
+    → (∨'-cong    : ∀ {x y u v} → x ≈ y → u ≈ v → (x ∨' u) ≈ (y ∨' v))
+    → (∧'-assoc-≈ : ∀ {a b c} → ((a ∧' b) ∧' c) ≈ (a ∧' (b ∧' c)))
+    → (∧'-comm-≈  : ∀ {a b} → (a ∧' b) ≈ (b ∧' a))
+    → (∧'-idem-≈  : ∀ {a} → (a ∧' a) ≈ a)
+    → (∨'-assoc-≈ : ∀ {a b c} → ((a ∨' b) ∨' c) ≈ (a ∨' (b ∨' c)))
+    → (∨'-comm-≈  : ∀ {a b} → (a ∨' b) ≈ (b ∨' a))
+    → (∨'-idem-≈  : ∀ {a} → (a ∨' a) ≈ a)
+    → (absorbˡ-≈  : ∀ {a b} → (a ∧' (a ∨' b)) ≈ a)
+    → (absorbʳ-≈  : ∀ {a b} → ((a ∧' b) ∨' a) ≈ a)
+    → Lattice α ρ
+  setoidEqsToLattice _∧'_ _∨'_ ∧'-cong ∨'-cong
+    ∧'-assoc-≈ ∧'-comm-≈ ∧'-idem-≈ ∨'-assoc-≈ ∨'-comm-≈ ∨'-idem-≈ absorbˡ-≈ absorbʳ-≈ =
+    setoidOpsToBareLattice _∧'_ _∨'_ ∧'-cong ∨'-cong , proof
+    where
+    proof : setoidOpsToBareLattice _∧'_ _∨'_ ∧'-cong ∨'-cong ⊨ˡᵃ Th-Lattice
+    proof ∧-assoc η = ∧'-assoc-≈ -- (η 0F) (η 1F) (η 2F)
+    proof ∧-comm  η = ∧'-comm-≈  -- (η 0F) (η 1F)
+    proof ∧-idem  η = ∧'-idem-≈  -- (η 0F)
+    proof ∨-assoc η = ∨'-assoc-≈ -- (η 0F) (η 1F) (η 2F)
+    proof ∨-comm  η = ∨'-comm-≈  -- (η 0F) (η 1F)
+    proof ∨-idem  η = ∨'-idem-≈  -- (η 0F)
+    proof absorbˡ η = absorbˡ-≈  -- (η 0F) (η 1F)
+    proof absorbʳ η = absorbʳ-≈  -- (η 0F) (η 1F)
 ```

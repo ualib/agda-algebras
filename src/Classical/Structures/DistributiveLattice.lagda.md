@@ -122,10 +122,10 @@ module DistributiveLattice-Op {α ρ : Level} (𝑫 : DistributiveLattice α ρ)
   equations = proj₂ 𝑫
 
   -- x ∧ (y ∨ z) ≈ (x ∧ y) ∨ (x ∧ z)   (meet distributes over join, on the left)
-  ∧-distribˡ-law : ∀ x y z → x ∧ (y ∨ z) ≈ (x ∧ y) ∨ (x ∧ z)
-  ∧-distribˡ-law x y z = begin
+  ∧-distribˡ-law : ∀ {x y z} → x ∧ (y ∨ z) ≈ (x ∧ y) ∨ (x ∧ z)
+  ∧-distribˡ-law {x} {y} {z} = begin
     x ∧ (y ∨ z)                   ≈⟨ ∧-cong refl (sym (interp-node-∨ (ℊ 1F) (ℊ 2F) {η})) ⟩
-    x ∧ ⟦ y∨z ⟧ ⟨$⟩ η             ≈⟨ sym (interp-node-∧ (ℊ 0F) y∨z {η}) ⟩
+    x ∧ ⟦ y∨z ⟧ ⟨$⟩ η             ≈˘⟨ interp-node-∧ (ℊ 0F) y∨z {η} ⟩
     ⟦ lhsT ⟧ ⟨$⟩ η                ≈⟨ equations ∧-distribˡ η ⟩
     ⟦ rhsT ⟧ ⟨$⟩ η                ≈⟨ interp-node-∨ xy xz {η} ⟩
     ⟦ xy ⟧ ⟨$⟩ η ∨ ⟦ xz ⟧ ⟨$⟩ η   ≈⟨ ∨-cong (interp-node-∧ (ℊ 0F) (ℊ 1F) {η}) (interp-node-∧ (ℊ 0F) (ℊ 2F) {η}) ⟩
@@ -141,10 +141,10 @@ module DistributiveLattice-Op {α ρ : Level} (𝑫 : DistributiveLattice α ρ)
     rhsT = node ∨-Op (pair xy xz)
 
   -- x ∨ (y ∧ z) ≈ (x ∨ y) ∧ (x ∨ z)   (join distributes over meet, on the left)
-  ∨-distribˡ-law : ∀ x y z → x ∨ (y ∧ z) ≈ (x ∨ y) ∧ (x ∨ z)
-  ∨-distribˡ-law x y z = begin
+  ∨-distribˡ-law : ∀ {x y z} → x ∨ (y ∧ z) ≈ (x ∨ y) ∧ (x ∨ z)
+  ∨-distribˡ-law {x} {y} {z} = begin
     x ∨ (y ∧ z)                   ≈⟨ ∨-cong refl (sym (interp-node-∧ (ℊ 1F) (ℊ 2F) {η})) ⟩
-    x ∨ ⟦ y∧z ⟧ ⟨$⟩ η             ≈⟨ sym (interp-node-∨ (ℊ 0F) y∧z {η}) ⟩
+    x ∨ ⟦ y∧z ⟧ ⟨$⟩ η             ≈˘⟨ interp-node-∨ (ℊ 0F) y∧z {η} ⟩
     ⟦ lhsT ⟧ ⟨$⟩ η                ≈⟨ equations ∨-distribˡ η ⟩
     ⟦ rhsT ⟧ ⟨$⟩ η                ≈⟨ interp-node-∧ xy xz {η} ⟩
     ⟦ xy ⟧ ⟨$⟩ η ∧ ⟦ xz ⟧ ⟨$⟩ η   ≈⟨ ∧-cong (interp-node-∨ (ℊ 0F) (ℊ 1F) {η}) (interp-node-∨ (ℊ 0F) (ℊ 2F) {η}) ⟩
@@ -160,19 +160,19 @@ module DistributiveLattice-Op {α ρ : Level} (𝑫 : DistributiveLattice α ρ)
     rhsT = node ∧-Op (pair xy xz)
 
   -- (y ∨ z) ∧ x ≈ (y ∧ x) ∨ (z ∧ x)   (right form, by ∧-commutativity)
-  ∧-distribʳ-law : ∀ x y z → (y ∨ z) ∧ x ≈ (y ∧ x) ∨ (z ∧ x)
-  ∧-distribʳ-law x y z = begin
-    (y ∨ z) ∧ x        ≈⟨ ∧-comm-law (y ∨ z) x ⟩
-    x ∧ (y ∨ z)        ≈⟨ ∧-distribˡ-law x y z ⟩
-    (x ∧ y) ∨ (x ∧ z)  ≈⟨ ∨-cong (∧-comm-law x y) (∧-comm-law x z) ⟩
+  ∧-distribʳ-law : ∀ {x y z} → (y ∨ z) ∧ x ≈ (y ∧ x) ∨ (z ∧ x)
+  ∧-distribʳ-law {x} {y} {z} = begin
+    (y ∨ z) ∧ x        ≈⟨ ∧-comm-law ⟩
+    x ∧ (y ∨ z)        ≈⟨ ∧-distribˡ-law ⟩
+    (x ∧ y) ∨ (x ∧ z)  ≈⟨ ∨-cong ∧-comm-law ∧-comm-law ⟩
     (y ∧ x) ∨ (z ∧ x)  ∎
 
   -- (y ∧ z) ∨ x ≈ (y ∨ x) ∧ (z ∨ x)   (right form, by ∨-commutativity)
-  ∨-distribʳ-law : ∀ x y z → (y ∧ z) ∨ x ≈ (y ∨ x) ∧ (z ∨ x)
-  ∨-distribʳ-law x y z = begin
-    (y ∧ z) ∨ x        ≈⟨ ∨-comm-law (y ∧ z) x ⟩
-    x ∨ (y ∧ z)        ≈⟨ ∨-distribˡ-law x y z ⟩
-    (x ∨ y) ∧ (x ∨ z)  ≈⟨ ∧-cong (∨-comm-law x y) (∨-comm-law x z) ⟩
+  ∨-distribʳ-law : ∀ {x y z} → (y ∧ z) ∨ x ≈ (y ∨ x) ∧ (z ∨ x)
+  ∨-distribʳ-law {x} {y} {z} = begin
+    (y ∧ z) ∨ x        ≈⟨ ∨-comm-law ⟩
+    x ∨ (y ∧ z)        ≈⟨ ∨-distribˡ-law ⟩
+    (x ∨ y) ∧ (x ∨ z)  ≈⟨ ∧-cong ∨-comm-law ∨-comm-law ⟩
     (y ∨ x) ∧ (z ∨ x)  ∎
 ```
 

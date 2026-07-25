@@ -69,16 +69,16 @@ private variable α ρ : Level
   ; isDistributiveLattice = record
       { isLattice = record
           { isEquivalence = isEquivalence
-          ; ∨-comm        = ∨-comm-law
-          ; ∨-assoc       = ∨-assoc-law
+          ; ∨-comm        = λ x y → ∨-comm-law {x}{y}
+          ; ∨-assoc       = λ x y z → ∨-assoc-law {x}{y}{z}
           ; ∨-cong        = ∨-cong
-          ; ∧-comm        = ∧-comm-law
-          ; ∧-assoc       = ∧-assoc-law
+          ; ∧-comm        = λ x y → ∧-comm-law {x}{y}
+          ; ∧-assoc       = λ x y z → ∧-assoc-law {x}{y}{z}
           ; ∧-cong        = ∧-cong
-          ; absorptive    = ∨-absorbs-∧ , absorbˡ-law
+          ; absorptive    = ∨-absorbs-∧ , λ x y → absorbˡ-law {x}{y}
           }
-      ; ∨-distrib-∧ = ∨-distribˡ-law , ∨-distribʳ-law
-      ; ∧-distrib-∨ = ∧-distribˡ-law , ∧-distribʳ-law
+      ; ∨-distrib-∧ = (λ x y z → ∨-distribˡ-law {x}{y}{z}) , λ x y z → ∨-distribʳ-law {x}{y}{z}
+      ; ∧-distrib-∨ = (λ x y z → ∧-distribˡ-law {x}{y}{z}) , λ x y z → ∧-distribʳ-law {x}{y}{z}
       }
   }
   where
@@ -87,7 +87,7 @@ private variable α ρ : Level
 
   -- stdlib's first absorption is x ∨ (x ∧ y) ≈ x; our absorbʳ-law is (x ∧ y) ∨ x ≈ x.
   ∨-absorbs-∧ : ∀ x y → x ∨ (x ∧ y) ≈ x
-  ∨-absorbs-∧ x y = ≈trans (∨-comm-law x (x ∧ y)) (absorbʳ-law x y)
+  ∨-absorbs-∧ x y = ≈trans ∨-comm-law absorbʳ-law
 
 ⟪_⟫ᵈˡ : stdlib-DistributiveLattice α ρ → DistributiveLattice α ρ
 ⟪ L ⟫ᵈˡ = 𝑨 , λ { ∧-assoc    ρ → L-∧-assoc (ρ 0F) (ρ 1F) (ρ 2F)
