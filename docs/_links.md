@@ -367,6 +367,7 @@
 [FLRP.Certificates.SmallLatticeReps.SLR34]: /FLRP/Certificates/SmallLatticeReps/SLR34/
 [FLRP.Certificates.SmallLatticeReps.SLR35]: /FLRP/Certificates/SmallLatticeReps/SLR35/
 [FLRP.Closure]: /FLRP/Closure/
+[FLRP.Closure.Basic]: /FLRP/Closure/Basic/
 [FLRP.Closure.OrdinalSum]: /FLRP/Closure/OrdinalSum/
 [FLRP.Closure.Product]: /FLRP/Closure/Product/
 [FLRP.Enforceable]: /FLRP/Enforceable/
@@ -734,6 +735,7 @@
 [FLRP/Certificates/SmallLatticeReps/SLR34.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/Certificates/SmallLatticeReps/SLR34.lagda.md
 [FLRP/Certificates/SmallLatticeReps/SLR35.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/Certificates/SmallLatticeReps/SLR35.lagda.md
 [FLRP/Closure.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/Closure.lagda.md
+[FLRP/Closure/Basic.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/Closure/Basic.lagda.md
 [FLRP/Closure/OrdinalSum.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/Closure/OrdinalSum.lagda.md
 [FLRP/Closure/Product.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/Closure/Product.lagda.md
 [FLRP/Enforceable.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/Enforceable.lagda.md

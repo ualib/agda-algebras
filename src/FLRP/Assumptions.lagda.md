@@ -249,5 +249,4 @@ KurzweilNetterDuality = (𝑳 : Lattice) → KurzweilNetterDualityAt 𝑳
       decidable representability outright in [FLRP.Closure][] and registered
       duality here as Entry 2 (see
       [`docs/notes/flrp-research-roadmap.md`](docs/notes/flrp-research-roadmap.md) § 7
-      and GitHub [Issue #456](https://github.com/ualib/agda-algebras/issues/456)).
-
+      and GitHub [Issue #456](https://github.com/ualib/agda-algebras/issues/456).
