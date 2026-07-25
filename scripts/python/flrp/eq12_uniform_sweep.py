@@ -19,8 +19,11 @@ below it are refinements (few), the second coatom ``(0,2)`` is pinned by
 atom — each step tightly constrained, so the tree is small.
 
 Rigour.  For a class whose representative has coatom ``c_k``, exactly
-``|Stab(c_k)| / |Stab(rep)|`` of its members carry that canonical coatom
-(``Stab(rep) ≤ Stab(c_k)``, and ``|Stab(c_k)| = |S_k ≀ S_{12/k}|``).  Summing
+``|Stab(c_k)| / |Stab(rep)|`` of its members carry that canonical coatom:
+``Stab(rep) ≤ Stab(c_k)`` — forced by rigidity, since ``Aut(L7)`` is trivial,
+so a relabeling fixing the relation set fixes every lattice role, the coatom
+included — with ``|Stab(c_k)| = |S_k ≀ S_{12/k}|``; the divisibility this
+subgroup relation implies is asserted at run time, not assumed.  Summing
 over classes must reproduce the exhaustively counted number of canonical-coatom
 copies; the sweep stops enumerating the instant that identity holds, which
 *proves* every class has been found — no class can hide.  Every representative
@@ -158,8 +161,13 @@ def _orbits(lz: LazyUniformTables, lat: TargetLattice, anc: _Anchor,
     """The relabeling classes among the copies with coatom ``anc.p4``: dedup by
     setwise isomorphism, keeping the first representative in the deterministic
     order, and stop as soon as ``Σ |Stab(c_k)|/|stab|`` reaches ``total`` — the
-    completeness certificate that no class remains.  Returns (representative,
+    completeness certificate that no class remains.  Each class's stabilizer
+    order is checked to divide ``|Stab(c_k)|`` (it must: rigidity of ``L7``
+    puts ``Stab(rep)`` inside ``Stab(c_k)``), so a violated assumption — say
+    on a future target whose automorphisms swap coatom roles — fails loudly
+    instead of silently corrupting the count.  Returns (representative,
     stabilizer order) per class."""
+    anchor_stab = coatom_stabilizer_order(anc.k)
     reps: List[Tuple[Cp, Tuple, int]] = []
     covered = 0
     for cp in _copies(lz, anc, diversify=True):
@@ -169,8 +177,14 @@ def _orbits(lz: LazyUniformTables, lat: TargetLattice, anc: _Anchor,
         if not _verify_full(lz, lat, cp):
             raise CertificateError(f"search produced a non-L7 copy: {cp}")
         stab = _setwise_stabilizer_order(rels, 12)
+        if anchor_stab % stab != 0:
+            raise CertificateError(
+                f"coatom c_{anc.k}: stabilizer order {stab} does not divide "
+                f"|Stab(c_{anc.k})| = {anchor_stab}, so Stab(rep) is not a "
+                "subgroup of the anchor stabilizer and the completeness "
+                "count would be invalid")
         reps.append((cp, rels, stab))
-        covered += coatom_stabilizer_order(anc.k) // stab
+        covered += anchor_stab // stab
         if covered == total:
             break
     if covered != total:

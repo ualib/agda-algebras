@@ -25,6 +25,7 @@ import tempfile
 import unittest
 from collections import Counter
 from itertools import product
+from math import factorial
 from pathlib import Path
 from typing import List, Sequence, Tuple
 from unittest import mock
@@ -36,7 +37,8 @@ import eqsearch
 from cg2 import CertificateError
 from eqsearch import (ClassReport, EqTables, LazyUniformTables, Part,
                       UniformTables, _classify_materialized,
-                      _classify_orbit_stabilizer, _setwise_stabilizer_order,
+                      _classify_orbit_stabilizer, _realizing, _setwise_iso,
+                      _setwise_stabilizer_order,
                       all_partitions, claim_input, classify,
                       closed_class_algebra, closure_report,
                       invariant_partitions, is_uniform, main, partition_join,
@@ -440,6 +442,26 @@ class OrbitStabilizerClassifierTests(unittest.TestCase):
                 [(0, 1, 0, 1), (0, 1, 1, 0), (0, 0, 2, 2)], 4),
             24)
 
+    def test_empty_relation_set_is_closed_form(self) -> None:
+        """classifier: the empty relation list is answered in closed form —
+        every permutation realizes it, so the stabilizer is all of S_n — and
+        never by enumeration; at n = 12 the enumeration would be 12! ≈ 4.8e8
+        steps, an effective hang this pin guards against."""
+        self.assertEqual(_realizing((), (), 12), factorial(12))
+        self.assertEqual(_realizing((), (), 12, first_only=True), 1)
+        self.assertTrue(_setwise_iso((), (), 12))
+        self.assertEqual(_setwise_stabilizer_order([], 12), factorial(12))
+
+    def test_bounds_only_copy_classifies_at_twelve(self) -> None:
+        """classifier: a two-element target at n = 12 (orbit–stabilizer
+        territory) yields only the bounds-only copy, whose empty relation set
+        classifies instantly to one class of orbit size 1."""
+        c2 = tables_from_leq("C2", ((True, True), (False, True)))
+        eq = LazyUniformTables(12)
+        copies = sublattice_copies(c2, eq)
+        self.assertEqual(copies, [(eq.bot, eq.top)])
+        self.assertEqual(classify(copies, eq), [((eq.bot, eq.top), 1)])
+
     def test_parity_m3_eq4(self) -> None:
         """classifier: orbit–stabilizer == materialized on M3/Eq(4)."""
         self._parity(m3(), 4)
@@ -508,6 +530,21 @@ class Eq12UniformReportTests(unittest.TestCase):
         self.assertEqual(
             Counter(c["invariants"] for c in self.data["classes"]),
             Counter({4213597: 2, 6841: 8, 319: 3, 54: 1, 16: 1}))
+
+    def test_completeness_certificate_arithmetic(self) -> None:
+        """eq12: for every committed class the stabilizer order 12!/orbitSize
+        divides |Stab(c_k)| = (k!)^(12/k) · (12/k)! of its coatom's block size
+        — the subgroup relation Stab(rep) ≤ Stab(c_k) the sweep's completeness
+        certificate rests on, and which the sweep now guards at run time."""
+        fact = factorial(12)
+        for c in self.data["classes"]:
+            self.assertEqual(fact % c["orbitSize"], 0)
+            stab = fact // c["orbitSize"]
+            coatom = c["partitions"][4]          # lattice element 4 = (1,1)
+            k = 12 // len(set(coatom))           # block size of the coatom
+            self.assertIn(k, (4, 6))
+            anchor = factorial(k) ** (12 // k) * factorial(12 // k)
+            self.assertEqual(anchor % stab, 0)
 
 
 # ---------------------------------------------------------------------------

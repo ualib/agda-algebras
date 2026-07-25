@@ -499,8 +499,13 @@ def _realizing(sources: Sequence[Part], targets: Sequence[Part], n: int,
     map to the block of ``y`` in ``targets[t]``, so the search maintains that
     partial block bijection (``fwd``) and its inverse (``bwd``) and prunes the
     instant a point's image would contradict an established correspondence or
-    match blocks of different sizes."""
+    match blocks of different sizes.  The empty relation list is answered in
+    closed form — every permutation vacuously realizes it — rather than by
+    enumeration, so a degenerate input (the bounds-only relation set of a
+    two-element target) never walks ``n!`` permutations one by one."""
     m = len(sources)
+    if m == 0:
+        return 1 if first_only else factorial(n)
     src_size = [Counter(s) for s in sources]
     tgt_size = [Counter(t) for t in targets]
     fwd: List[Dict[int, int]] = [dict() for _ in range(m)]
