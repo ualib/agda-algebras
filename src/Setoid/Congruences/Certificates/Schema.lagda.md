@@ -61,8 +61,7 @@ open import Agda.Primitive using () renaming ( Set to Type )
 -- Imports from the Agda Standard Library -----------------------------------
 open import Data.Fin.Base                          using  ( Fin ; _≤_ )
 open import Data.Fin.Properties                    using  ( _≟_ ; _≤?_ ; all? )
-open import Data.List.Base                         using  ( List ; [] ; _∷_
-                                                          ; map ; filter ; allFin )
+open import Data.List.Base                         using  ( List ; map ; filter ; allFin )
 open import Data.Nat.Base                          using  ( ℕ )
 open import Data.Product                           using  ( _×_ ; _,_ )
 open import Data.Vec.Base                          using  ( Vec ; lookup )

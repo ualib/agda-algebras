@@ -76,9 +76,8 @@ open import Relation.Nullary.Decidable             using  ( Dec )
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
 open import FLRP.Problem                                using  ( FiniteLattice
-                                                               ; toLattice ; OrderIso )
-open import FLRP.Representable                          using  ( Representableᵈ ; _⊆ᵈ_
-                                                               ; ConIsoᵈ ; _≑ᵈ_ )
+                                                               ; toLattice )
+open import FLRP.Representable                          using  ( Representableᵈ ; ConIsoᵈ )
 open import Overture                                    using  ( Signature )
 open import Setoid.Algebras.Basic                       using  ( Algebra )
 open import Setoid.Algebras.Finite                      using  ( FiniteAlgebra )

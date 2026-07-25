@@ -186,8 +186,8 @@ module _ (𝑳 : Lattice α ρ) where
     ∨-cong : ∀ {x y u v} → x ≈ y → u ≈ v → (x ∨ u) ≈ (y ∨ v)
     ∨-cong x≈y u≈v = interp-cong 𝑨 ∨-Op (λ { 0F → x≈y ; 1F → u≈v })
 
-  lt-∧-assoc : ∀ x y z → (x ∧ y) ∧ z ≈ x ∧ (y ∧ z)
-  lt-∧-assoc x y z = begin
+  lt-∧-assoc : ∀ {x y z} → (x ∧ y) ∧ z ≈ x ∧ (y ∧ z)
+  lt-∧-assoc {x} {y} {z} = begin
     (x ∧ y) ∧ z       ≈⟨ ∧-cong (≈sym (interp-node-∧ (ℊ 0F) (ℊ 1F) η)) ≈refl ⟩
     ⟦ xy ⟧ ⟨$⟩ η ∧ z  ≈⟨ ≈sym (interp-node-∧ xy (ℊ 2F) η) ⟩
     ⟦ lhsT ⟧ ⟨$⟩ η    ≈⟨ proj₂ 𝑳 ∧-assoc η ⟩
@@ -203,19 +203,20 @@ module _ (𝑳 : Lattice α ρ) where
     lhsT = node ∧-Op (pair xy (ℊ 2F))
     rhsT = node ∧-Op (pair (ℊ 0F) yz)
 
-  lt-∧-comm : ∀ x y → x ∧ y ≈ y ∧ x
-  lt-∧-comm x y = ≈trans  (≈sym (interp-node-∧ (ℊ 0F) (ℊ 1F) η))
-                          (≈trans (proj₂ 𝑳 ∧-comm η) (interp-node-∧ (ℊ 1F) (ℊ 0F) η))
+  lt-∧-comm : ∀ {x y} → x ∧ y ≈ y ∧ x
+  lt-∧-comm {x} {y} =
+    ≈trans  (≈sym (interp-node-∧ (ℊ 0F) (ℊ 1F) η))
+            (≈trans (proj₂ 𝑳 ∧-comm η) (interp-node-∧ (ℊ 1F) (ℊ 0F) η))
     where η : Fin 3 → 𝕌[ 𝑨 ]
           η = λ { 0F → x ; 1F → y ; 2F → x }
 
-  lt-∧-idem : ∀ x → x ∧ x ≈ x
-  lt-∧-idem x = ≈trans (≈sym (interp-node-∧ (ℊ 0F) (ℊ 0F) η)) (proj₂ 𝑳 ∧-idem η)
+  lt-∧-idem : ∀ {x} → x ∧ x ≈ x
+  lt-∧-idem {x} = ≈trans (≈sym (interp-node-∧ (ℊ 0F) (ℊ 0F) η)) (proj₂ 𝑳 ∧-idem η)
     where η : Fin 3 → 𝕌[ 𝑨 ]
           η = λ { 0F → x ; 1F → x ; 2F → x }
 
-  lt-∨-assoc : ∀ x y z → (x ∨ y) ∨ z ≈ x ∨ (y ∨ z)
-  lt-∨-assoc x y z = begin
+  lt-∨-assoc : ∀ {x y z} → (x ∨ y) ∨ z ≈ x ∨ (y ∨ z)
+  lt-∨-assoc {x} {y} {z} = begin
     (x ∨ y) ∨ z       ≈⟨ ∨-cong (≈sym (interp-node-∨ (ℊ 0F) (ℊ 1F) η)) ≈refl ⟩
     ⟦ xy ⟧ ⟨$⟩ η ∨ z  ≈⟨ ≈sym (interp-node-∨ xy (ℊ 2F) η) ⟩
     ⟦ lhsT ⟧ ⟨$⟩ η    ≈⟨ proj₂ 𝑳 ∨-assoc η ⟩
@@ -231,20 +232,21 @@ module _ (𝑳 : Lattice α ρ) where
     lhsT = node ∨-Op (pair xy (ℊ 2F))
     rhsT = node ∨-Op (pair (ℊ 0F) yz)
 
-  lt-∨-comm : ∀ x y → x ∨ y ≈ y ∨ x
-  lt-∨-comm x y = ≈trans  (≈sym (interp-node-∨ (ℊ 0F) (ℊ 1F) η))
-                          (≈trans (proj₂ 𝑳 ∨-comm η) (interp-node-∨ (ℊ 1F) (ℊ 0F) η))
+  lt-∨-comm : ∀ {x y} → x ∨ y ≈ y ∨ x
+  lt-∨-comm {x} {y} =
+    ≈trans  (≈sym (interp-node-∨ (ℊ 0F) (ℊ 1F) η))
+            (≈trans (proj₂ 𝑳 ∨-comm η) (interp-node-∨ (ℊ 1F) (ℊ 0F) η))
     where η : Fin 3 → 𝕌[ 𝑨 ]
           η = λ { 0F → x ; 1F → y ; 2F → x }
 
-  lt-∨-idem : ∀ x → x ∨ x ≈ x
-  lt-∨-idem x = ≈trans (≈sym (interp-node-∨ (ℊ 0F) (ℊ 0F) η)) (proj₂ 𝑳 ∨-idem η)
+  lt-∨-idem : ∀ {x} → x ∨ x ≈ x
+  lt-∨-idem {x} = ≈trans (≈sym (interp-node-∨ (ℊ 0F) (ℊ 0F) η)) (proj₂ 𝑳 ∨-idem η)
     where  η : Fin 3 → 𝕌[ 𝑨 ]
            η = λ { 0F → x ; 1F → x ; 2F → x }
 
   -- x ∧ (x ∨ y) ≈ x   (meet absorbs join)
-  lt-absorbˡ : ∀ x y → x ∧ (x ∨ y) ≈ x
-  lt-absorbˡ x y = begin
+  lt-absorbˡ : ∀ {x y} → x ∧ (x ∨ y) ≈ x
+  lt-absorbˡ {x} {y} = begin
     x ∧ (x ∨ y)        ≈⟨ ∧-cong ≈refl (≈sym (interp-node-∨ (ℊ 0F) (ℊ 1F) η)) ⟩
     x ∧ ⟦ x∨y ⟧ ⟨$⟩ η  ≈⟨ ≈sym (interp-node-∧ (ℊ 0F) x∨y η) ⟩
     ⟦ lhsT ⟧ ⟨$⟩ η     ≈⟨ proj₂ 𝑳 absorbˡ η ⟩
@@ -257,8 +259,8 @@ module _ (𝑳 : Lattice α ρ) where
     lhsT = node ∧-Op (pair (ℊ 0F) x∨y)
 
   -- (x ∧ y) ∨ x ≈ x   (join absorbs meet, with x on the right of the outer ∨)
-  lt-absorbʳ : ∀ x y → (x ∧ y) ∨ x ≈ x
-  lt-absorbʳ x y = begin
+  lt-absorbʳ : ∀ {x y} → (x ∧ y) ∨ x ≈ x
+  lt-absorbʳ {x} {y} = begin
     (x ∧ y) ∨ x        ≈⟨ ∨-cong (≈sym (interp-node-∧ (ℊ 0F) (ℊ 1F) η)) ≈refl ⟩
     ⟦ x∧y ⟧ ⟨$⟩ η ∨ x  ≈⟨ ≈sym (interp-node-∨ x∧y (ℊ 0F) η) ⟩
     ⟦ lhsT ⟧ ⟨$⟩ η     ≈⟨ proj₂ 𝑳 absorbʳ η ⟩
@@ -310,28 +312,28 @@ module Lattice-Op {α ρ : Level} (𝑳 : Lattice α ρ) where
     → ⟦ node ∨-Op (pair s t) ⟧ ⟨$⟩ η ≈ ⟦ s ⟧ ⟨$⟩ η ∨ ⟦ t ⟧ ⟨$⟩ η
   interp-node-∨ s t = interp-cong 𝑨 ∨-Op λ { 0F → ≈refl ; 1F → ≈refl }
 
-  ∧-assoc-law : ∀ x y z → (x ∧ y) ∧ z ≈ x ∧ (y ∧ z)
+  ∧-assoc-law : ∀ {x y z} → (x ∧ y) ∧ z ≈ x ∧ (y ∧ z)
   ∧-assoc-law = lt-∧-assoc 𝑳
 
-  ∧-comm-law : ∀ x y → x ∧ y ≈ y ∧ x
+  ∧-comm-law : ∀ {x y} → x ∧ y ≈ y ∧ x
   ∧-comm-law = lt-∧-comm 𝑳
 
-  ∧-idem-law : ∀ x → x ∧ x ≈ x
+  ∧-idem-law : ∀ {x} → x ∧ x ≈ x
   ∧-idem-law = lt-∧-idem 𝑳
 
-  ∨-assoc-law : ∀ x y z → (x ∨ y) ∨ z ≈ x ∨ (y ∨ z)
+  ∨-assoc-law : ∀ {x y z} → (x ∨ y) ∨ z ≈ x ∨ (y ∨ z)
   ∨-assoc-law = lt-∨-assoc 𝑳
 
-  ∨-comm-law : ∀ x y → x ∨ y ≈ y ∨ x
+  ∨-comm-law : ∀ {x y} → x ∨ y ≈ y ∨ x
   ∨-comm-law = lt-∨-comm 𝑳
 
-  ∨-idem-law : ∀ x → x ∨ x ≈ x
+  ∨-idem-law : ∀ {x} → x ∨ x ≈ x
   ∨-idem-law = lt-∨-idem 𝑳
 
-  absorbˡ-law : ∀ x y → x ∧ (x ∨ y) ≈ x
+  absorbˡ-law : ∀ {x y} → x ∧ (x ∨ y) ≈ x
   absorbˡ-law = lt-absorbˡ 𝑳
 
-  absorbʳ-law : ∀ x y → (x ∧ y) ∨ x ≈ x
+  absorbʳ-law : ∀ {x y} → (x ∧ y) ∨ x ≈ x
   absorbʳ-law = lt-absorbʳ 𝑳
 ```
 
@@ -365,7 +367,7 @@ lattice→meetSemilattice ℒ@(𝑳 , _) = 𝑹 , thm
   thm assocˢˡ η = let x = η 0F ; y = η 1F ; z = η 2F in begin
     ⟦ Th-Semilattice assocˢˡ .proj₁ ⟧ ⟨$⟩ η  ≈⟨ interp-congᴿ xy (ℊ 2F) η ⟩
     ⟦ xy ⟧ ⟨$⟩ η ∧ z                         ≈⟨ ∧-congᴿ (interp-congᴿ (ℊ 0F) (ℊ 1F) η) ≈refl ⟩
-    (x ∧ y) ∧ z                              ≈⟨ ∧-assoc-law x y z ⟩
+    (x ∧ y) ∧ z                              ≈⟨ ∧-assoc-law ⟩
     x ∧ (y ∧ z)                              ≈˘⟨ ∧-congᴿ ≈refl (interp-congᴿ (ℊ 1F) (ℊ 2F) η) ⟩
     x ∧ ⟦ yz ⟧ ⟨$⟩ η                         ≈˘⟨ interp-congᴿ (ℊ 0F) yz η ⟩
     ⟦ Th-Semilattice assocˢˡ .proj₂ ⟧ ⟨$⟩ η  ∎
@@ -376,13 +378,13 @@ lattice→meetSemilattice ℒ@(𝑳 , _) = 𝑹 , thm
 
   thm commˢˡ η = let x = η 0F ; y = η 1F in begin
     ⟦ Th-Semilattice commˢˡ .proj₁ ⟧ ⟨$⟩ η  ≈⟨ interp-congᴿ (ℊ 0F) (ℊ 1F) η ⟩
-    x ∧ y                                   ≈⟨ ∧-comm-law x y ⟩
+    x ∧ y                                   ≈⟨ ∧-comm-law ⟩
     y ∧ x                                   ≈˘⟨ interp-congᴿ (ℊ 1F) (ℊ 0F) η ⟩
     ⟦ Th-Semilattice commˢˡ .proj₂ ⟧ ⟨$⟩ η  ∎
 
   thm idemˢˡ η = let x = η 0F in begin
     ⟦ Th-Semilattice idemˢˡ .proj₁ ⟧ ⟨$⟩ η  ≈⟨ interp-congᴿ (ℊ 0F) (ℊ 0F) η ⟩
-    x ∧ x                                   ≈⟨ ∧-idem-law x ⟩
+    x ∧ x                                   ≈⟨ ∧-idem-law ⟩
     x                                       ∎
 
 lattice→joinSemilattice : Lattice α ρ → Semilattice α ρ
@@ -406,7 +408,7 @@ lattice→joinSemilattice ℒ@(𝑳 , _) = 𝑹 , thm
   thm assocˢˡ η = let x = η 0F ; y = η 1F ; z = η 2F in begin
     ⟦ Th-Semilattice assocˢˡ .proj₁ ⟧ ⟨$⟩ η  ≈⟨ interp-congᴿ xy (ℊ 2F) η ⟩
     ⟦ xy ⟧ ⟨$⟩ η ∨ z                         ≈⟨ ∨-congᴿ (interp-congᴿ (ℊ 0F) (ℊ 1F) η) ≈refl ⟩
-    (x ∨ y) ∨ z                              ≈⟨ ∨-assoc-law x y z ⟩
+    (x ∨ y) ∨ z                              ≈⟨ ∨-assoc-law ⟩
     x ∨ (y ∨ z)                              ≈˘⟨ ∨-congᴿ ≈refl (interp-congᴿ (ℊ 1F) (ℊ 2F) η) ⟩
     x ∨ ⟦ yz ⟧ ⟨$⟩ η                         ≈˘⟨ interp-congᴿ (ℊ 0F) yz η ⟩
     ⟦ Th-Semilattice assocˢˡ .proj₂ ⟧ ⟨$⟩ η  ∎
@@ -417,13 +419,13 @@ lattice→joinSemilattice ℒ@(𝑳 , _) = 𝑹 , thm
 
   thm commˢˡ η = let x = η 0F ; y = η 1F in begin
     ⟦ Th-Semilattice commˢˡ .proj₁ ⟧ ⟨$⟩ η  ≈⟨ interp-congᴿ (ℊ 0F) (ℊ 1F) η ⟩
-    x ∨ y                                   ≈⟨ ∨-comm-law x y ⟩
+    x ∨ y                                   ≈⟨ ∨-comm-law ⟩
     y ∨ x                                   ≈˘⟨ interp-congᴿ (ℊ 1F) (ℊ 0F) η ⟩
     ⟦ Th-Semilattice commˢˡ .proj₂ ⟧ ⟨$⟩ η  ∎
 
   thm idemˢˡ η = let x = η 0F in begin
     ⟦ Th-Semilattice idemˢˡ .proj₁ ⟧ ⟨$⟩ η  ≈⟨ interp-congᴿ (ℊ 0F) (ℊ 0F) η ⟩
-    x ∨ x                                   ≈⟨ ∨-idem-law x ⟩
+    x ∨ x                                   ≈⟨ ∨-idem-law ⟩
     x                                       ∎
 ```
 

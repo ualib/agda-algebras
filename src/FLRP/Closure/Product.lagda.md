@@ -100,7 +100,6 @@ open import Setoid.Algebras.Basic                  using  ( Algebra ; 𝔻[_] ; 
 open import Setoid.Algebras.Finite                 using  ( FiniteAlgebra )
 open import Setoid.Congruences.Basic               using  ( mkcon ; reflexive ; _∣≈_
                                                           ; is-equivalence ; is-compatible )
-open import Setoid.Congruences.ChainJoin           using  ( Finitary )
 open import Setoid.Congruences.Finite.Basic        using  ( DecCon ; ConRel )
 open import Setoid.Signatures.Finite               using  ( FiniteSignature )
 

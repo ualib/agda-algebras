@@ -93,12 +93,12 @@ open import Data.List.Relation.Unary.Any
 open import Data.List.Relation.Unary.Any.Properties
                                   using  ( ++⁺ˡ ; ++⁺ʳ ; ++⁻ )
 open import Data.Nat.Base         using  ( ℕ )
-open import Data.Product          using  ( _×_ ; _,_ ; proj₁ ; proj₂ ; Σ-syntax )
+open import Data.Product          using  ( _×_ ; _,_ ; proj₁ ; proj₂ )
 open import Data.Sum.Base         using  ( inj₁ ; inj₂ )
-open import Level                 using  ( Level ; _⊔_ ; Lift ; lift ; lower )
+open import Level                 using  ( Level ; _⊔_ ; lift ; lower )
 open import Relation.Binary       using  ( Setoid )
 open import Relation.Binary.PropositionalEquality
-                                  using  ( _≡_ ; refl ; sym ; trans ; cong ; subst )
+                                  using  ( _≡_ ; sym ; trans ; subst )
 open import Relation.Nullary.Decidable
                                   using  ( Dec ; map′ ; _×-dec_ ; _→-dec_ )
 
@@ -116,11 +116,11 @@ open import Setoid.Congruences.Lattice                  using  ( _⊆_ ; _≑_
                                                                ; ≑-sym ; ≑-trans )
 open import Setoid.Congruences.Presented                using  ( fromPairs
                                                                ; con-resp-≈ )
-open import Setoid.Congruences.Certificates.Schema      using  ( ParentVec ; parent
+open import Setoid.Congruences.Certificates.Schema      using  ( parent
                                                                ; NormalForm
                                                                ; normalForm?
                                                                ; forestEdges
-                                                               ; Trace ; LatticeCert )
+                                                               ; LatticeCert )
 open import Setoid.Congruences.Certificates.Congruence  using  ( module CertCheck )
 open import Setoid.Signatures.Finite                    using  ( FiniteSignature )
 
@@ -142,7 +142,7 @@ module LatticeCheck {𝑆 : Signature 𝓞 𝓥} {𝑨 : Algebra {𝑆 = 𝑆} �
   open FiniteAlgebra 𝑭 using ( _≟_ ; card ; enum ; enum-sur )
   open FiniteSignature 𝑺 using ( opCard )
   open Setoid 𝔻[ 𝑨 ] using ( _≈_ )
-    renaming ( refl to ≈refl ; sym to ≈sym ; trans to ≈trans )
+    renaming ( sym to ≈sym ; trans to ≈trans )
 
   private
     -- A chosen enumeration index for each carrier element, and its correctness.

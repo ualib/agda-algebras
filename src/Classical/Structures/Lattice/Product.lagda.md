@@ -40,7 +40,6 @@ equivalences — so it can be mechanically substituted on the eventual port.
 
 module Classical.Structures.Lattice.Product where
 
-open import Agda.Primitive using () renaming ( Set to Type )
 
 -- Imports from the Agda Standard Library ---------------------------------------
 open import Data.Product          using ( _,_ ; _×_ ; proj₁ ; proj₂ )
@@ -128,28 +127,28 @@ the pair of the component proofs, applied at the projections.
   ∨ₓ-cong e f = ∨₁-cong (proj₁ e) (proj₁ f) , ∨₂-cong (proj₂ e) (proj₂ f)
 
   ∧ₓ-assoc : ∀ p q r → ((p ∧ₓ q) ∧ₓ r) ≈ₓ (p ∧ₓ (q ∧ₓ r))
-  ∧ₓ-assoc p q r = ∧₁-assoc _ _ _ , ∧₂-assoc _ _ _
+  ∧ₓ-assoc p q r = ∧₁-assoc , ∧₂-assoc
 
   ∧ₓ-comm : ∀ p q → (p ∧ₓ q) ≈ₓ (q ∧ₓ p)
-  ∧ₓ-comm p q = ∧₁-comm _ _ , ∧₂-comm _ _
+  ∧ₓ-comm p q = ∧₁-comm , ∧₂-comm
 
   ∧ₓ-idem : ∀ p → (p ∧ₓ p) ≈ₓ p
-  ∧ₓ-idem p = ∧₁-idem _ , ∧₂-idem _
+  ∧ₓ-idem p = ∧₁-idem , ∧₂-idem
 
   ∨ₓ-assoc : ∀ p q r → ((p ∨ₓ q) ∨ₓ r) ≈ₓ (p ∨ₓ (q ∨ₓ r))
-  ∨ₓ-assoc p q r = ∨₁-assoc _ _ _ , ∨₂-assoc _ _ _
+  ∨ₓ-assoc p q r = ∨₁-assoc , ∨₂-assoc
 
   ∨ₓ-comm : ∀ p q → (p ∨ₓ q) ≈ₓ (q ∨ₓ p)
-  ∨ₓ-comm p q = ∨₁-comm _ _ , ∨₂-comm _ _
+  ∨ₓ-comm p q = ∨₁-comm , ∨₂-comm
 
   ∨ₓ-idem : ∀ p → (p ∨ₓ p) ≈ₓ p
-  ∨ₓ-idem p = ∨₁-idem _ , ∨₂-idem _
+  ∨ₓ-idem p = ∨₁-idem , ∨₂-idem
 
   absorbˡₓ : ∀ p q → (p ∧ₓ (p ∨ₓ q)) ≈ₓ p
-  absorbˡₓ p q = absorbˡ₁ _ _ , absorbˡ₂ _ _
+  absorbˡₓ p q = absorbˡ₁ , absorbˡ₂
 
   absorbʳₓ : ∀ p q → ((p ∧ₓ q) ∨ₓ p) ≈ₓ p
-  absorbʳₓ p q = absorbʳ₁ _ _ , absorbʳ₂ _ _
+  absorbʳₓ p q = absorbʳ₁ , absorbʳ₂
 ```
 
 Assembling through the setoid-level builder yields the product lattice.

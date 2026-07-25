@@ -10,21 +10,21 @@ author: "the agda-algebras development team"
 
 This is the [Classical.Structures.Lattice.Dual][] module of the [Agda Universal Algebra Library][].
 
-The **dual** (or *opposite*) of a lattice swaps meet and join, equivalently
-reverses the order.  Because the lattice theory `Th-Lattice` is self-dual, the
-construction is a matter of re-interpreting the two operation symbols of
+The **dual** (or *opposite*) of a lattice swaps meet and join, equivalently reverses
+the order.  Because the lattice theory `Th-Lattice` is self-dual, the construction is
+a matter of re-interpreting the two operation symbols of
 [`Sig-Lattice`][Classical.Signatures.Lattice] on the *same* carrier setoid: the
 dual's meet is `𝑳`{.AgdaBound}'s join and vice versa, six of the eight equations
 transfer verbatim with the `∧`/`∨` roles exchanged, and the two absorption laws
 of the dual follow from those of `𝑳`{.AgdaBound} by one commutativity step each
 (`a ∨ (a ∧ b) ≈ a` is `absorbʳ`{.AgdaFunction} read backwards).
 
-The module also records how the dualization acts on the derived order-theoretic
-data of [Classical.Properties.Lattice][]:
+The module also records how the dualization acts on the derived order-theoretic data
+of [Classical.Properties.Lattice][].
 
-+  the meet order flips — `x ≤ y` in the dual iff `y ≤ x` in `𝑳`{.AgdaBound}
-   (`≤ᵈ-flip`{.AgdaFunction} / `≤ᵈ-unflip`{.AgdaFunction});
-+  chosen extrema swap — a top of `𝑳`{.AgdaBound} is a bottom of the dual and
++  The meet order flips: `x ≤ y` in the dual iff `y ≤ x` in `𝑳`{.AgdaBound}
+   (`≤ᵈ-flip`{.AgdaFunction} / `≤ᵈ-unflip`{.AgdaFunction}).
++  Chosen extrema swap: a top of `𝑳`{.AgdaBound} is a bottom of the dual and
    conversely (`dualBotOf`{.AgdaFunction} / `dualTopOf`{.AgdaFunction}).
 
 Dualization is involutive up to the evident isomorphism (the identity map on the
@@ -35,9 +35,9 @@ extensionality — and no current consumer requires it; a consumer that dualizes
 twice should transport along the identity carrier map.
 
 The first consumer is the Kurzweil–Netter duality entry of the FLRP assumptions
-registry ([FLRP.Assumptions][], work package WP-5): the classical theorem that the
+registry: the classical theorem that the
 class of representable lattices is closed under dualization is *stated* over
-`dualLattice`{.AgdaFunction} and imported as an explicit hypothesis.
+`dualLattice`{.AgdaFunction} and imported as an explicit hypothesis.[^1]
 
 <!--
 ```agda
@@ -45,10 +45,9 @@ class of representable lattices is closed under dualization is *stated* over
 
 module Classical.Structures.Lattice.Dual where
 
-open import Agda.Primitive using () renaming ( Set to Type )
 
 -- Imports from the Agda Standard Library ---------------------------------------
-open import Data.Product          using ( _,_ ; proj₁ ; proj₂ )
+open import Data.Product          using ( _,_ ; proj₁ )
 open import Level                 using ( Level )
 open import Relation.Binary       using ( Setoid )
 
@@ -72,7 +71,7 @@ module LatticeDual (𝑳 : Lattice α ρ) where
   private 𝑨 = proj₁ 𝑳
 
   open Setoid 𝔻[ 𝑨 ] using ( _≈_ )
-    renaming ( refl to ≈refl ; sym to ≈sym ; trans to ≈trans )
+    renaming ( trans to ≈trans )
   open Lattice-Op 𝑳 using
     ( _∧_ ; _∨_ ; ∧-cong ; ∨-cong
     ; ∧-assoc-law ; ∧-comm-law ; ∧-idem-law
@@ -86,11 +85,11 @@ commutativity step each.
 ```agda
   -- a ∨ (a ∧ b) ≈ a : the dual reading of absorption, from absorbʳ by ∨-commutativity.
   dual-absorbˡ : ∀ a b → (a ∨ (a ∧ b)) ≈ a
-  dual-absorbˡ a b = ≈trans (∨-comm-law a (a ∧ b)) (absorbʳ-law a b)
+  dual-absorbˡ a b = ≈trans ∨-comm-law absorbʳ-law
 
   -- (a ∨ b) ∧ a ≈ a : the other dual absorption, from absorbˡ by ∧-commutativity.
   dual-absorbʳ : ∀ a b → ((a ∨ b) ∧ a) ≈ a
-  dual-absorbʳ a b = ≈trans (∧-comm-law (a ∨ b) a) (absorbˡ-law a b)
+  dual-absorbʳ a b = ≈trans ∧-comm-law absorbˡ-law
 ```
 
 The dual lattice: same carrier setoid, meet interpreted by `_∨_` and join by
@@ -100,8 +99,12 @@ absorption laws.
 ```agda
   dual-Lattice : Lattice α ρ
   dual-Lattice = setoidEqsToLattice 𝔻[ 𝑨 ] _∨_ _∧_ ∨-cong ∧-cong
-    ∨-assoc-law ∨-comm-law ∨-idem-law
-    ∧-assoc-law ∧-comm-law ∧-idem-law
+    (λ x y z → ∨-assoc-law{x}{y}{z})
+    (λ x y → ∨-comm-law {x}{y})
+    (λ x → ∨-idem-law{x})
+    (λ x y z → ∧-assoc-law {x}{y}{z})
+    (λ x y → ∧-comm-law {x}{y})
+    (λ x → ∧-idem-law{x})
     dual-absorbˡ dual-absorbʳ
 ```
 
@@ -117,11 +120,11 @@ connecting lemmas); the two directions are one commutativity step each.
 
   -- An inequality in the dual reverses in 𝑳.
   ≤ᵈ-flip : ∀ {x y} → x ≤ᵈ y → y ≤₀ x
-  ≤ᵈ-flip {x} {y} x≤ᵈy = ≤-from-∨ (≈trans (∨-comm-law y x) x≤ᵈy)
+  ≤ᵈ-flip {x} {y} x≤ᵈy = ≤-from-∨ (≈trans ∨-comm-law x≤ᵈy)
 
   -- An inequality in 𝑳 reverses in the dual.
   ≤ᵈ-unflip : ∀ {x y} → y ≤₀ x → x ≤ᵈ y
-  ≤ᵈ-unflip {x} {y} y≤x = ≈trans (∨-comm-law x y) (≤-via-∨ y≤x)
+  ≤ᵈ-unflip {x} {y} y≤x = ≈trans ∨-comm-law (≤-via-∨ y≤x)
 ```
 
 #### Extrema swap under dualization
@@ -148,3 +151,4 @@ dualLattice 𝑳 = LatticeDual.dual-Lattice 𝑳
 ```
 
 --------------------------------------
+[^1]: See [FLRP.Assumptions][] and work package WP-5.

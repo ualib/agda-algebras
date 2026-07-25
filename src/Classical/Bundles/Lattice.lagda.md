@@ -61,13 +61,13 @@ private variable α ρ : Level
   ; _∧_     = _∧_
   ; isLattice = record
       { isEquivalence = isEquivalence
-      ; ∨-comm        = ∨-comm-law
-      ; ∨-assoc       = ∨-assoc-law
+      ; ∨-comm        = λ x y → ∨-comm-law {x}{y}
+      ; ∨-assoc       = λ x y z → ∨-assoc-law {x}{y}{z}
       ; ∨-cong        = ∨-cong
-      ; ∧-comm        = ∧-comm-law
-      ; ∧-assoc       = ∧-assoc-law
+      ; ∧-comm        = λ x y → ∧-comm-law {x}{y}
+      ; ∧-assoc       = λ x y z → ∧-assoc-law {x}{y}{z}
       ; ∧-cong        = ∧-cong
-      ; absorptive    = ∨-absorbs-∧ , absorbˡ-law
+      ; absorptive    = (λ x y → ∨-absorbs-∧ {x}{y}) , λ x y → absorbˡ-law {x}{y}
       }
   }
   where
@@ -75,8 +75,8 @@ private variable α ρ : Level
   open Setoid 𝔻[ proj₁ 𝑳 ]
 
   -- stdlib's first absorption is x ∨ (x ∧ y) ≈ x; our absorbʳ-law is (x ∧ y) ∨ x ≈ x.
-  ∨-absorbs-∧ : ∀ x y → (x ∨ (x ∧ y)) ≈ x
-  ∨-absorbs-∧ x y = trans (∨-comm-law x (x ∧ y)) (absorbʳ-law x y)
+  ∨-absorbs-∧ : ∀ {x y} → (x ∨ (x ∧ y)) ≈ x
+  ∨-absorbs-∧ = trans ∨-comm-law absorbʳ-law
 
 ⟪_⟫ˡᵃ : stdlib-Lattice α ρ → Lattice α ρ
 ⟪ L ⟫ˡᵃ = 𝑨 , λ { ∧-assoc ρ → L-∧-assoc (ρ 0F) (ρ 1F) (ρ 2F)

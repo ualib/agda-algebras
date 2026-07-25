@@ -86,7 +86,7 @@ open import Data.Sum.Base                          using  ( _⊎_ ; inj₁ ; inj
 open import Data.Unit.Base                         using  ( tt )
 open import Function                               using  ( _∘_ )
 open import Function.Construct.Identity            using  ( ↔-id )
-open import Level                                  using  ( 0ℓ ; Lift ; lift ; lower )
+open import Level                                  using  ( 0ℓ ; lift ; lower )
 open import Relation.Binary                        using  ( Setoid ; IsEquivalence )
 open import Relation.Binary.PropositionalEquality  using  ( _≡_ ; refl ; cong ; trans ; sym )
 open import Relation.Nullary                       using  ( ¬_ ; Dec ; yes ; no )
@@ -114,7 +114,6 @@ open import Setoid.Algebras.Basic                    using  ( Algebra ; 𝔻[_] 
 open import Setoid.Algebras.Finite                   using  ( FiniteAlgebra )
 open import Setoid.Congruences.Basic                 using  ( mkcon ; reflexive ; _∣≈_
                                                             ; is-equivalence ; is-compatible )
-open import Setoid.Congruences.ChainJoin             using  ( Finitary )
 open import Setoid.Congruences.Finite.Basic          using  ( DecCon ; ConRel )
 open import Setoid.Signatures.Finite                 using  ( FiniteSignature )
 
@@ -159,7 +158,7 @@ retractions (the isolated-equality locus for the Cubical port lives in
     A⊎B = 𝕌[ 𝑨 ] ⊎ 𝕌[ 𝑩 ]
 
   open Setoid glueSetoid using ()
-    renaming ( refl to reflᵍ ; sym to symᵍ ; trans to transᵍ ; reflexive to ≡→≈ᵍ )
+    renaming ( trans to transᵍ ; reflexive to ≡→≈ᵍ )
 ```
 
 **The signature**: the two component signatures side by side with the

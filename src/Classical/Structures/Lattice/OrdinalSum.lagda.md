@@ -10,28 +10,32 @@ author: "the agda-algebras development team"
 
 This is the [Classical.Structures.Lattice.OrdinalSum][] module of the [Agda Universal Algebra Library][].
 
-The **adjoined ordinal sum** of lattices `𝑳₁`{.AgdaBound} and `𝑳₂`{.AgdaBound}
-stacks `𝑳₂`{.AgdaBound} on top of `𝑳₁`{.AgdaBound} and *glues* the top of
-`𝑳₁`{.AgdaBound} to the bottom of `𝑳₂`{.AgdaBound}: every element of the lower
-summand lies below every element of the upper one, and the two chosen extrema
-become a single element.  This is the operation `L ⊕ₐ M` of the small-lattice
-representations manuscript (`docs/papers/fin-lat-rep/SmallLatticeReps.tex`,
-§ Ordinal Sums); the *unglued* ordinal sum, in which the top of the lower summand
-is covered by the bottom of the upper, is the derived composite
-`(𝑳₁ ⊕ₐ chain₂) ⊕ₐ 𝑳₂` — gluing a two-element chain in the middle leaves exactly
-one covering edge — so the glued form is the module's single canonical primitive.
+The **adjoined ordinal sum** of lattices `𝑳₁`{.AgdaBound} and `𝑳₂`{.AgdaBound} stacks
+`𝑳₂`{.AgdaBound} on top of `𝑳₁`{.AgdaBound} and *glues* the top of `𝑳₁`{.AgdaBound}
+to the bottom of `𝑳₂`{.AgdaBound}: every element of the lower summand lies below
+every element of the upper one, and the two chosen extrema become a single element.
 
-Because the sum glues at *chosen* extrema, the construction takes them as data:
-a `TopOf 𝑳₁`{.AgdaFunction} and a `BotOf 𝑳₂`{.AgdaFunction}
-([Classical.Properties.Lattice][]).  General lattices need not have extrema, and
-threading the choice keeps the construction total and the resulting carrier
-syntactically predictable (the corollaries that adjoin a fresh extremum to a
-lattice instantiate a summand at `chain₂` and its concrete `0`/`1`).
+This is the operation `L ⊕ₐ M` of the small-lattice representations manuscript
+(`docs/papers/fin-lat-rep/SmallLatticeReps.tex`, § Ordinal Sums); the *unglued*
+ordinal sum, in which the top of the lower summand is covered by the bottom of the
+upper, is the derived composite `(𝑳₁ ⊕ₐ chain₂) ⊕ₐ 𝑳₂`, gluing a two-element chain
+in the middle leaves exactly one covering edge, so the glued form is the module's
+single canonical primitive.
 
-Two design points:
+Because the sum glues at chosen extrema, the construction takes them as data: a
+`TopOf 𝑳₁`{.AgdaFunction} and a `BotOf 𝑳₂`{.AgdaFunction}
+([Classical.Properties.Lattice][]).
 
-+  **Gluing is by setoid equality, not element removal.**  The carrier is the
-   disjoint union `A ⊎ B` with the equivalence coarsened so that
+General lattices need not have extrema, and threading the choice keeps the
+construction total and the resulting carrier syntactically predictable (the
+corollaries that adjoin a fresh extremum to a lattice instantiate a summand at
+`chain₂` and its concrete `0`/`1`).
+
+**Remarks on the design**.
+
++  **Gluing is by setoid equality, not element removal**.
+
+   The carrier is the disjoint union `A ⊎ B` with the equivalence coarsened so that
    `inj₁ ⊤₁ ≈ inj₂ ⊥₂`; removing a point would require deciding equality with it,
    whereas coarsening is constructive and level-polymorphic.  The amalgam setoid is
    isolated in `GlueSetoid`{.AgdaModule} (the Cubical-port equality locus), defined
@@ -40,16 +44,17 @@ Two design points:
    the basepoint.  This pullback presentation makes reflexivity, symmetry, and
    transitivity componentwise — no case analysis — and on each summand it restricts
    to the original equivalence, while across summands it holds exactly at the glue.
-+  **The operations never cross the glue.**  Meet sends a mixed pair to its lower
-   summand's member and join to its upper one, so the eight lattice equations hold
-   by case analysis with the component laws on the diagonal cases and definitional
-   reduction elsewhere; only the *congruence* of the operations interacts with the
-   glue, and there the extremum laws (`x ∧ ⊤ ≈ x`, `⊥ ∨ x ≈ x`, and their mirrors)
-   discharge every case.
 
-The first consumer is the FLRP closure toolkit ([FLRP.Closure][], work package
-WP-5), which represents the ordinal sum as a congruence lattice whenever its
-summands are so representable (roadmap § 3).
++  **The operations never cross the glue**.
+
+   Meet sends a mixed pair to its lower summand's member and join to its upper one,
+   so the eight lattice equations hold by case analysis with the component laws on
+   the diagonal cases and definitional reduction elsewhere; only the *congruence* of
+   the operations interacts with the glue, and there the extremum laws (`x ∧ ⊤ ≈ x`,
+   `⊥ ∨ x ≈ x`, and their mirrors) discharge every case.
+
+The first consumer is the FLRP closure toolkit ([FLRP.Closure][]), which represents
+the ordinal sum as a congruence lattice whenever its summands are so representable.[^1]
 
 <!--
 ```agda
@@ -79,12 +84,13 @@ private variable α ρ β σ : Level
 
 `GlueSetoid`{.AgdaModule} `𝐴 a₀ 𝐵 b₀` is the disjoint union of the carriers with
 `inj₁ a₀` and `inj₂ b₀` identified.  The equivalence is stated through the two
-retractions: `retractˡ`{.AgdaFunction} keeps the left summand and collapses the
-right to `a₀`, and `retractʳ`{.AgdaFunction} mirrors it; two elements are glued
-equal exactly when both retractions agree.  On `inj₁`/`inj₁` pairs the right
-retraction is constantly `b₀`, so the condition is the left equivalence (dually on
-`inj₂`/`inj₂`), and on mixed pairs it says precisely "left component at `a₀`, right
-component at `b₀`" — the glue and nothing else.
+retractions: `retractˡ`{.AgdaFunction} keeps the left summand and collapses the right
+to `a₀`, and `retractʳ`{.AgdaFunction} mirrors it; two elements are glued equal
+exactly when both retractions agree.
+
+On `inj₁`/`inj₁` pairs the right retraction is constantly `b₀`, so the condition is
+the left equivalence (dually on `inj₂`/`inj₂`), and on mixed pairs it says precisely
+"left component at `a₀`, right component at `b₀`" — the glue and nothing else.
 
 ```agda
 module GlueSetoid (𝐴 : Setoid α ρ) (a₀ : Setoid.Carrier 𝐴)
@@ -184,25 +190,25 @@ universal properties themselves.
     x∧⊤ x = proj₂ t x
 
     ⊤∧x : ∀ x → (⊤₁ ∧₁ x) ≈₁ x
-    ⊤∧x x = trans₁ (∧₁-comm ⊤₁ x) (x∧⊤ x)
+    ⊤∧x x = trans₁ ∧₁-comm (x∧⊤ x)
 
     x∨⊤ : ∀ x → (x ∨₁ ⊤₁) ≈₁ ⊤₁
     x∨⊤ x = ≤-via-∨₁ (proj₂ t x)
 
     ⊤∨x : ∀ x → (⊤₁ ∨₁ x) ≈₁ ⊤₁
-    ⊤∨x x = trans₁ (∨₁-comm ⊤₁ x) (x∨⊤ x)
+    ⊤∨x x = trans₁ ∨₁-comm (x∨⊤ x)
 
     ⊥∧x : ∀ x → (⊥₂ ∧₂ x) ≈₂ ⊥₂
     ⊥∧x x = proj₂ b x
 
     x∧⊥ : ∀ x → (x ∧₂ ⊥₂) ≈₂ ⊥₂
-    x∧⊥ x = trans₂ (∧₂-comm x ⊥₂) (⊥∧x x)
+    x∧⊥ x = trans₂ ∧₂-comm (⊥∧x x)
 
     ⊥∨x : ∀ x → (⊥₂ ∨₂ x) ≈₂ x
     ⊥∨x x = ≤-via-∨₂ (proj₂ b x)
 
     x∨⊥ : ∀ x → (x ∨₂ ⊥₂) ≈₂ x
-    x∨⊥ x = trans₂ (∨₂-comm x ⊥₂) (⊥∨x x)
+    x∨⊥ x = trans₂ ∨₂-comm (⊥∨x x)
 ```
 
 The glued carrier, at the two chosen extrema.
@@ -235,7 +241,7 @@ upper one — the lower summand lies entirely below the upper.
   infixr 6 _∨ᵒ_
 ```
 
-**Congruence.**  This is the one place the glue matters.  Each of the sixteen
+**Congruence**.  This is the one place the glue matters.  Each of the sixteen
 constructor combinations reduces to a pair of component goals; the diagonal
 combinations are the component congruences, and every combination that crosses the
 glue is discharged by the extremum-absorption lemmas above (an argument
@@ -243,9 +249,8 @@ glue is discharged by the extremum-absorption lemmas above (an argument
 `⊥₂`, and absorption then collapses the affected meet or join).
 
 ```agda
-  ∧ᵒ-cong : ∀ {p q u v} → p ≈ᵍ q → u ≈ᵍ v → (p ∧ᵒ u) ≈ᵍ (q ∧ᵒ v)
-  ∧ᵒ-cong {inj₁ x} {inj₁ y} {inj₁ u} {inj₁ v} (ea , _) (fa , _) =
-    ∧₁-cong ea fa , refl₂
+  ∧ᵒ-cong : ∀ {p q u v} → p ≈ᵍ q → u ≈ᵍ v → p ∧ᵒ u ≈ᵍ q ∧ᵒ v
+  ∧ᵒ-cong {inj₁ x} {inj₁ y} {inj₁ u} {inj₁ v} (ea , _) (fa , _) = ∧₁-cong ea fa , refl₂
   ∧ᵒ-cong {inj₁ x} {inj₁ y} {inj₁ u} {inj₂ v} (ea , _) (fa , _) =
     trans₁ (∧₁-cong ea fa) (x∧⊤ y) , refl₂
   ∧ᵒ-cong {inj₁ x} {inj₁ y} {inj₂ u} {inj₁ v} (ea , _) (fa , _) =
@@ -255,7 +260,7 @@ glue is discharged by the extremum-absorption lemmas above (an argument
   ∧ᵒ-cong {inj₁ x} {inj₂ y} {inj₁ u} {inj₁ v} (ea , _) (fa , _) =
     trans₁ (∧₁-cong ea fa) (⊤∧x v) , refl₂
   ∧ᵒ-cong {inj₁ x} {inj₂ y} {inj₁ u} {inj₂ v} (ea , eb) (fa , fb) =
-    trans₁ (∧₁-cong ea fa) (∧₁-idem ⊤₁) , trans₂ (sym₂ (∧₂-idem ⊥₂)) (∧₂-cong eb fb)
+    trans₁ (∧₁-cong ea fa) ∧₁-idem , trans₂ (sym₂ ∧₂-idem) (∧₂-cong eb fb)
   ∧ᵒ-cong {inj₁ x} {inj₂ y} {inj₂ u} {inj₁ v} (ea , _) (fa , _) =
     trans₁ ea fa , refl₂
   ∧ᵒ-cong {inj₁ x} {inj₂ y} {inj₂ u} {inj₂ v} (ea , eb) _ =
@@ -265,7 +270,7 @@ glue is discharged by the extremum-absorption lemmas above (an argument
   ∧ᵒ-cong {inj₂ x} {inj₁ y} {inj₁ u} {inj₂ v} (ea , _) (fa , _) =
     trans₁ fa ea , refl₂
   ∧ᵒ-cong {inj₂ x} {inj₁ y} {inj₂ u} {inj₁ v} (ea , eb) (fa , fb) =
-    trans₁ (sym₁ (∧₁-idem ⊤₁)) (∧₁-cong ea fa) , trans₂ (∧₂-cong eb fb) (∧₂-idem ⊥₂)
+    trans₁ (sym₁ ∧₁-idem) (∧₁-cong ea fa) , trans₂ (∧₂-cong eb fb) ∧₂-idem
   ∧ᵒ-cong {inj₂ x} {inj₁ y} {inj₂ u} {inj₂ v} (ea , eb) _ =
     ea , trans₂ (∧₂-cong eb refl₂) (⊥∧x u)
   ∧ᵒ-cong {inj₂ x} {inj₂ y} {inj₁ u} {inj₁ v} _ (fa , _) =
@@ -289,7 +294,7 @@ glue is discharged by the extremum-absorption lemmas above (an argument
   ∨ᵒ-cong {inj₁ x} {inj₂ y} {inj₁ u} {inj₁ v} (ea , eb) (fa , _) =
     trans₁ (∨₁-cong ea refl₁) (⊤∨x u) , eb
   ∨ᵒ-cong {inj₁ x} {inj₂ y} {inj₁ u} {inj₂ v} (ea , eb) (fa , fb) =
-    trans₁ (∨₁-cong ea fa) (∨₁-idem ⊤₁) , trans₂ (sym₂ (∨₂-idem ⊥₂)) (∨₂-cong eb fb)
+    trans₁ (∨₁-cong ea fa) ∨₁-idem , trans₂ (sym₂ ∨₂-idem) (∨₂-cong eb fb)
   ∨ᵒ-cong {inj₁ x} {inj₂ y} {inj₂ u} {inj₁ v} (ea , eb) (fa , fb) =
     refl₁ , trans₂ fb eb
   ∨ᵒ-cong {inj₁ x} {inj₂ y} {inj₂ u} {inj₂ v} (ea , eb) (_ , fb) =
@@ -299,7 +304,7 @@ glue is discharged by the extremum-absorption lemmas above (an argument
   ∨ᵒ-cong {inj₂ x} {inj₁ y} {inj₁ u} {inj₂ v} (ea , eb) (fa , fb) =
     refl₁ , trans₂ eb fb
   ∨ᵒ-cong {inj₂ x} {inj₁ y} {inj₂ u} {inj₁ v} (ea , eb) (fa , fb) =
-    trans₁ (sym₁ (∨₁-idem ⊤₁)) (∨₁-cong ea fa) , trans₂ (∨₂-cong eb fb) (∨₂-idem ⊥₂)
+    trans₁ (sym₁ ∨₁-idem) (∨₁-cong ea fa) , trans₂ (∨₂-cong eb fb) ∨₂-idem
   ∨ᵒ-cong {inj₂ x} {inj₁ y} {inj₂ u} {inj₂ v} (ea , eb) (_ , fb) =
     refl₁ , trans₂ (∨₂-cong eb refl₂) (trans₂ (⊥∨x u) fb)
   ∨ᵒ-cong {inj₂ x} {inj₂ y} {inj₁ u} {inj₁ v} (_ , eb) _ =
@@ -319,56 +324,56 @@ idempotency step in their `inj₂`-meets-`inj₁` (resp. mirrored) case.
 
 ```agda
   ∧ᵒ-assoc : ∀ p q r → ((p ∧ᵒ q) ∧ᵒ r) ≈ᵍ (p ∧ᵒ (q ∧ᵒ r))
-  ∧ᵒ-assoc (inj₁ x) (inj₁ y) (inj₁ z) = ∧₁-assoc x y z , refl₂
+  ∧ᵒ-assoc (inj₁ x) (inj₁ y) (inj₁ z) = ∧₁-assoc , refl₂
   ∧ᵒ-assoc (inj₁ x) (inj₁ y) (inj₂ z) = refl₁ , refl₂
   ∧ᵒ-assoc (inj₁ x) (inj₂ y) (inj₁ z) = refl₁ , refl₂
   ∧ᵒ-assoc (inj₁ x) (inj₂ y) (inj₂ z) = refl₁ , refl₂
   ∧ᵒ-assoc (inj₂ x) (inj₁ y) (inj₁ z) = refl₁ , refl₂
   ∧ᵒ-assoc (inj₂ x) (inj₁ y) (inj₂ z) = refl₁ , refl₂
   ∧ᵒ-assoc (inj₂ x) (inj₂ y) (inj₁ z) = refl₁ , refl₂
-  ∧ᵒ-assoc (inj₂ x) (inj₂ y) (inj₂ z) = refl₁ , ∧₂-assoc x y z
+  ∧ᵒ-assoc (inj₂ x) (inj₂ y) (inj₂ z) = refl₁ , ∧₂-assoc
 
   ∧ᵒ-comm : ∀ p q → (p ∧ᵒ q) ≈ᵍ (q ∧ᵒ p)
-  ∧ᵒ-comm (inj₁ x) (inj₁ y) = ∧₁-comm x y , refl₂
+  ∧ᵒ-comm (inj₁ x) (inj₁ y) = ∧₁-comm , refl₂
   ∧ᵒ-comm (inj₁ x) (inj₂ y) = refl₁ , refl₂
   ∧ᵒ-comm (inj₂ x) (inj₁ y) = refl₁ , refl₂
-  ∧ᵒ-comm (inj₂ x) (inj₂ y) = refl₁ , ∧₂-comm x y
+  ∧ᵒ-comm (inj₂ x) (inj₂ y) = refl₁ , ∧₂-comm
 
   ∧ᵒ-idem : ∀ p → (p ∧ᵒ p) ≈ᵍ p
-  ∧ᵒ-idem (inj₁ x) = ∧₁-idem x , refl₂
-  ∧ᵒ-idem (inj₂ x) = refl₁ , ∧₂-idem x
+  ∧ᵒ-idem (inj₁ x) = ∧₁-idem , refl₂
+  ∧ᵒ-idem (inj₂ x) = refl₁ , ∧₂-idem
 
   ∨ᵒ-assoc : ∀ p q r → ((p ∨ᵒ q) ∨ᵒ r) ≈ᵍ (p ∨ᵒ (q ∨ᵒ r))
-  ∨ᵒ-assoc (inj₁ x) (inj₁ y) (inj₁ z) = ∨₁-assoc x y z , refl₂
+  ∨ᵒ-assoc (inj₁ x) (inj₁ y) (inj₁ z) = ∨₁-assoc , refl₂
   ∨ᵒ-assoc (inj₁ x) (inj₁ y) (inj₂ z) = refl₁ , refl₂
   ∨ᵒ-assoc (inj₁ x) (inj₂ y) (inj₁ z) = refl₁ , refl₂
   ∨ᵒ-assoc (inj₁ x) (inj₂ y) (inj₂ z) = refl₁ , refl₂
   ∨ᵒ-assoc (inj₂ x) (inj₁ y) (inj₁ z) = refl₁ , refl₂
   ∨ᵒ-assoc (inj₂ x) (inj₁ y) (inj₂ z) = refl₁ , refl₂
   ∨ᵒ-assoc (inj₂ x) (inj₂ y) (inj₁ z) = refl₁ , refl₂
-  ∨ᵒ-assoc (inj₂ x) (inj₂ y) (inj₂ z) = refl₁ , ∨₂-assoc x y z
+  ∨ᵒ-assoc (inj₂ x) (inj₂ y) (inj₂ z) = refl₁ , ∨₂-assoc
 
   ∨ᵒ-comm : ∀ p q → (p ∨ᵒ q) ≈ᵍ (q ∨ᵒ p)
-  ∨ᵒ-comm (inj₁ x) (inj₁ y) = ∨₁-comm x y , refl₂
+  ∨ᵒ-comm (inj₁ x) (inj₁ y) = ∨₁-comm , refl₂
   ∨ᵒ-comm (inj₁ x) (inj₂ y) = refl₁ , refl₂
   ∨ᵒ-comm (inj₂ x) (inj₁ y) = refl₁ , refl₂
-  ∨ᵒ-comm (inj₂ x) (inj₂ y) = refl₁ , ∨₂-comm x y
+  ∨ᵒ-comm (inj₂ x) (inj₂ y) = refl₁ , ∨₂-comm
 
   ∨ᵒ-idem : ∀ p → (p ∨ᵒ p) ≈ᵍ p
-  ∨ᵒ-idem (inj₁ x) = ∨₁-idem x , refl₂
-  ∨ᵒ-idem (inj₂ x) = refl₁ , ∨₂-idem x
+  ∨ᵒ-idem (inj₁ x) = ∨₁-idem , refl₂
+  ∨ᵒ-idem (inj₂ x) = refl₁ , ∨₂-idem
 
   absorbˡᵒ : ∀ p q → (p ∧ᵒ (p ∨ᵒ q)) ≈ᵍ p
-  absorbˡᵒ (inj₁ x) (inj₁ y) = absorbˡ₁ x y , refl₂
+  absorbˡᵒ (inj₁ x) (inj₁ y) = absorbˡ₁ , refl₂
   absorbˡᵒ (inj₁ x) (inj₂ y) = refl₁ , refl₂
-  absorbˡᵒ (inj₂ x) (inj₁ y) = refl₁ , ∧₂-idem x
-  absorbˡᵒ (inj₂ x) (inj₂ y) = refl₁ , absorbˡ₂ x y
+  absorbˡᵒ (inj₂ x) (inj₁ y) = refl₁ , ∧₂-idem
+  absorbˡᵒ (inj₂ x) (inj₂ y) = refl₁ , absorbˡ₂
 
   absorbʳᵒ : ∀ p q → ((p ∧ᵒ q) ∨ᵒ p) ≈ᵍ p
-  absorbʳᵒ (inj₁ x) (inj₁ y) = absorbʳ₁ x y , refl₂
-  absorbʳᵒ (inj₁ x) (inj₂ y) = ∨₁-idem x , refl₂
+  absorbʳᵒ (inj₁ x) (inj₁ y) = absorbʳ₁ , refl₂
+  absorbʳᵒ (inj₁ x) (inj₂ y) = ∨₁-idem , refl₂
   absorbʳᵒ (inj₂ x) (inj₁ y) = refl₁ , refl₂
-  absorbʳᵒ (inj₂ x) (inj₂ y) = refl₁ , absorbʳ₂ x y
+  absorbʳᵒ (inj₂ x) (inj₂ y) = refl₁ , absorbʳ₂
 ```
 
 Assembling through the setoid-level builder yields the ordinal sum.  (The two
@@ -434,3 +439,5 @@ ordinalSum 𝑳₁ t 𝑳₂ b = LatticeOrdinalSum.⊕-Lattice 𝑳₁ t 𝑳₂
 ```
 
 --------------------------------------
+
+[^1]: See Work Package 5 (WP-5) of [the roadmap](docs/notes/flrp-research-roadmap.md).
