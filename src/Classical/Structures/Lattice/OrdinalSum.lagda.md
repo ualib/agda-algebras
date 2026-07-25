@@ -16,20 +16,15 @@ to the bottom of `𝑳₂`{.AgdaBound}: every element of the lower summand lies 
 every element of the upper one, and the two chosen extrema become a single element.
 
 This is the operation `L ⊕ₐ M` of the small-lattice representations manuscript
-(`docs/papers/fin-lat-rep/SmallLatticeReps.tex`, § Ordinal Sums); the *unglued*
-ordinal sum, in which the top of the lower summand is covered by the bottom of the
-upper, is the derived composite `(𝑳₁ ⊕ₐ chain₂) ⊕ₐ 𝑳₂`, gluing a two-element chain
-in the middle leaves exactly one covering edge, so the glued form is the module's
-single canonical primitive.
+([docs/papers/fin-lat-rep/SmallLatticeReps.tex](docs/papers/fin-lat-rep/SmallLatticeReps.tex),
+§ Ordinal Sums); the *unglued* ordinal sum, in which the top of the lower summand is
+covered by the bottom of the upper, is the derived composite `(𝑳₁ ⊕ₐ chain₂) ⊕ₐ 𝑳₂`,
+gluing a two-element chain in the middle leaves exactly one covering edge, so the
+glued form is the module's single canonical primitive.
 
 Because the sum glues at chosen extrema, the construction takes them as data: a
 `TopOf 𝑳₁`{.AgdaFunction} and a `BotOf 𝑳₂`{.AgdaFunction}
-([Classical.Properties.Lattice][]).
-
-General lattices need not have extrema, and threading the choice keeps the
-construction total and the resulting carrier syntactically predictable (the
-corollaries that adjoin a fresh extremum to a lattice instantiate a summand at
-`chain₂` and its concrete `0`/`1`).
+([Classical.Properties.Lattice][]).[^1]
 
 **Remarks on the design**.
 
@@ -54,7 +49,7 @@ corollaries that adjoin a fresh extremum to a lattice instantiate a summand at
    `⊥ ∨ x ≈ x`, and their mirrors) discharge every case.
 
 The first consumer is the FLRP closure toolkit ([FLRP.Closure][]), which represents
-the ordinal sum as a congruence lattice whenever its summands are so representable.[^1]
+the ordinal sum as a congruence lattice whenever its summands are so representable.[^2]
 
 <!--
 ```agda
@@ -99,8 +94,8 @@ module GlueSetoid (𝐴 : Setoid α ρ) (a₀ : Setoid.Carrier 𝐴)
     A = Setoid.Carrier 𝐴
     B = Setoid.Carrier 𝐵
 
-  open Setoid 𝐴 using () renaming ( _≈_ to _≈₁_ ; refl to refl₁ ; sym to sym₁ ; trans to trans₁ )
-  open Setoid 𝐵 using () renaming ( _≈_ to _≈₂_ ; refl to refl₂ ; sym to sym₂ ; trans to trans₂ )
+  open Setoid 𝐴 renaming ( _≈_ to _≈₁_ ; refl to refl₁ ; sym to sym₁ ; trans to trans₁ )
+  open Setoid 𝐵 renaming ( _≈_ to _≈₂_ ; refl to refl₂ ; sym to sym₂ ; trans to trans₂ )
 
   -- Keep the left summand; collapse the right to the left basepoint.
   retractˡ : A ⊎ B → A
@@ -124,8 +119,8 @@ module GlueSetoid (𝐴 : Setoid α ρ) (a₀ : Setoid.Carrier 𝐴)
     ; _≈_            = _≈ᵍ_
     ; isEquivalence  = record
         { refl   = refl₁ , refl₂
-        ; sym    = λ e → sym₁ (proj₁ e) , sym₂ (proj₂ e)
-        ; trans  = λ d e → trans₁ (proj₁ d) (proj₁ e) , trans₂ (proj₂ d) (proj₂ e)
+        ; sym    = λ (e₁ , e₂) → sym₁ e₁ , sym₂ e₂
+        ; trans  = λ (d₁ , d₂) (e₁ , e₂) → trans₁ d₁ e₁ , trans₂ d₂ e₂
         }
     }
 
@@ -250,130 +245,119 @@ glue is discharged by the extremum-absorption lemmas above (an argument
 
 ```agda
   ∧ᵒ-cong : ∀ {p q u v} → p ≈ᵍ q → u ≈ᵍ v → p ∧ᵒ u ≈ᵍ q ∧ᵒ v
-  ∧ᵒ-cong {inj₁ x} {inj₁ y} {inj₁ u} {inj₁ v} (ea , _) (fa , _) = ∧₁-cong ea fa , refl₂
-  ∧ᵒ-cong {inj₁ x} {inj₁ y} {inj₁ u} {inj₂ v} (ea , _) (fa , _) =
-    trans₁ (∧₁-cong ea fa) (x∧⊤ y) , refl₂
-  ∧ᵒ-cong {inj₁ x} {inj₁ y} {inj₂ u} {inj₁ v} (ea , _) (fa , _) =
-    trans₁ ea (trans₁ (sym₁ (x∧⊤ y)) (∧₁-cong refl₁ fa)) , refl₂
-  ∧ᵒ-cong {inj₁ x} {inj₁ y} {inj₂ u} {inj₂ v} (ea , _) _ =
-    ea , refl₂
-  ∧ᵒ-cong {inj₁ x} {inj₂ y} {inj₁ u} {inj₁ v} (ea , _) (fa , _) =
-    trans₁ (∧₁-cong ea fa) (⊤∧x v) , refl₂
-  ∧ᵒ-cong {inj₁ x} {inj₂ y} {inj₁ u} {inj₂ v} (ea , eb) (fa , fb) =
-    trans₁ (∧₁-cong ea fa) ∧₁-idem , trans₂ (sym₂ ∧₂-idem) (∧₂-cong eb fb)
-  ∧ᵒ-cong {inj₁ x} {inj₂ y} {inj₂ u} {inj₁ v} (ea , _) (fa , _) =
-    trans₁ ea fa , refl₂
-  ∧ᵒ-cong {inj₁ x} {inj₂ y} {inj₂ u} {inj₂ v} (ea , eb) _ =
-    ea , trans₂ (sym₂ (⊥∧x v)) (∧₂-cong eb refl₂)
-  ∧ᵒ-cong {inj₂ x} {inj₁ y} {inj₁ u} {inj₁ v} (ea , _) (fa , _) =
-    trans₁ fa (trans₁ (sym₁ (⊤∧x v)) (∧₁-cong ea refl₁)) , refl₂
-  ∧ᵒ-cong {inj₂ x} {inj₁ y} {inj₁ u} {inj₂ v} (ea , _) (fa , _) =
-    trans₁ fa ea , refl₂
-  ∧ᵒ-cong {inj₂ x} {inj₁ y} {inj₂ u} {inj₁ v} (ea , eb) (fa , fb) =
-    trans₁ (sym₁ ∧₁-idem) (∧₁-cong ea fa) , trans₂ (∧₂-cong eb fb) ∧₂-idem
-  ∧ᵒ-cong {inj₂ x} {inj₁ y} {inj₂ u} {inj₂ v} (ea , eb) _ =
-    ea , trans₂ (∧₂-cong eb refl₂) (⊥∧x u)
-  ∧ᵒ-cong {inj₂ x} {inj₂ y} {inj₁ u} {inj₁ v} _ (fa , _) =
-    fa , refl₂
-  ∧ᵒ-cong {inj₂ x} {inj₂ y} {inj₁ u} {inj₂ v} _ (fa , fb) =
-    fa , trans₂ (sym₂ (x∧⊥ y)) (∧₂-cong refl₂ fb)
-  ∧ᵒ-cong {inj₂ x} {inj₂ y} {inj₂ u} {inj₁ v} _ (fa , fb) =
-    fa , trans₂ (∧₂-cong refl₂ fb) (x∧⊥ x)
-  ∧ᵒ-cong {inj₂ x} {inj₂ y} {inj₂ u} {inj₂ v} (_ , eb) (_ , fb) =
-    refl₁ , ∧₂-cong eb fb
-
-  ∨ᵒ-cong : ∀ {p q u v} → p ≈ᵍ q → u ≈ᵍ v → (p ∨ᵒ u) ≈ᵍ (q ∨ᵒ v)
-  ∨ᵒ-cong {inj₁ x} {inj₁ y} {inj₁ u} {inj₁ v} (ea , _) (fa , _) =
-    ∨₁-cong ea fa , refl₂
-  ∨ᵒ-cong {inj₁ x} {inj₁ y} {inj₁ u} {inj₂ v} (ea , _) (fa , fb) =
-    trans₁ (∨₁-cong refl₁ fa) (x∨⊤ x) , fb
-  ∨ᵒ-cong {inj₁ x} {inj₁ y} {inj₂ u} {inj₁ v} (ea , _) (fa , fb) =
-    trans₁ (sym₁ (x∨⊤ y)) (∨₁-cong refl₁ fa) , fb
-  ∨ᵒ-cong {inj₁ x} {inj₁ y} {inj₂ u} {inj₂ v} _ (_ , fb) =
-    refl₁ , fb
-  ∨ᵒ-cong {inj₁ x} {inj₂ y} {inj₁ u} {inj₁ v} (ea , eb) (fa , _) =
-    trans₁ (∨₁-cong ea refl₁) (⊤∨x u) , eb
-  ∨ᵒ-cong {inj₁ x} {inj₂ y} {inj₁ u} {inj₂ v} (ea , eb) (fa , fb) =
-    trans₁ (∨₁-cong ea fa) ∨₁-idem , trans₂ (sym₂ ∨₂-idem) (∨₂-cong eb fb)
-  ∨ᵒ-cong {inj₁ x} {inj₂ y} {inj₂ u} {inj₁ v} (ea , eb) (fa , fb) =
-    refl₁ , trans₂ fb eb
-  ∨ᵒ-cong {inj₁ x} {inj₂ y} {inj₂ u} {inj₂ v} (ea , eb) (_ , fb) =
-    refl₁ , trans₂ fb (trans₂ (sym₂ (⊥∨x v)) (∨₂-cong eb refl₂))
-  ∨ᵒ-cong {inj₂ x} {inj₁ y} {inj₁ u} {inj₁ v} (ea , eb) (fa , _) =
-    trans₁ (sym₁ (⊤∨x v)) (∨₁-cong ea refl₁) , eb
-  ∨ᵒ-cong {inj₂ x} {inj₁ y} {inj₁ u} {inj₂ v} (ea , eb) (fa , fb) =
-    refl₁ , trans₂ eb fb
-  ∨ᵒ-cong {inj₂ x} {inj₁ y} {inj₂ u} {inj₁ v} (ea , eb) (fa , fb) =
-    trans₁ (sym₁ ∨₁-idem) (∨₁-cong ea fa) , trans₂ (∨₂-cong eb fb) ∨₂-idem
-  ∨ᵒ-cong {inj₂ x} {inj₁ y} {inj₂ u} {inj₂ v} (ea , eb) (_ , fb) =
-    refl₁ , trans₂ (∨₂-cong eb refl₂) (trans₂ (⊥∨x u) fb)
-  ∨ᵒ-cong {inj₂ x} {inj₂ y} {inj₁ u} {inj₁ v} (_ , eb) _ =
-    refl₁ , eb
-  ∨ᵒ-cong {inj₂ x} {inj₂ y} {inj₁ u} {inj₂ v} (_ , eb) (_ , fb) =
-    refl₁ , trans₂ eb (trans₂ (sym₂ (x∨⊥ y)) (∨₂-cong refl₂ fb))
-  ∨ᵒ-cong {inj₂ x} {inj₂ y} {inj₂ u} {inj₁ v} (_ , eb) (_ , fb) =
-    refl₁ , trans₂ (∨₂-cong refl₂ fb) (trans₂ (x∨⊥ x) eb)
-  ∨ᵒ-cong {inj₂ x} {inj₂ y} {inj₂ u} {inj₂ v} (_ , eb) (_ , fb) =
-    refl₁ , ∨₂-cong eb fb
 ```
 
-**The eight equations.**  The operations never cross the glue, so every mixed
+<!--
+```agda
+  ∧ᵒ-cong {inj₁ _} {inj₁ _} {inj₁ _} {inj₁ _} (ea , _) (fa , _) = ∧₁-cong ea fa , refl₂
+  ∧ᵒ-cong {inj₂ _} {inj₂ _} {inj₂ _} {inj₂ _} (_ , eb) (_ , fb)  = refl₁ , ∧₂-cong eb fb
+
+  ∧ᵒ-cong {inj₁ _} {inj₁ y} {inj₁ _} {inj₂ _} (ea , _)  (fa , _)  = trans₁ (∧₁-cong ea fa) (x∧⊤ y) , refl₂
+  ∧ᵒ-cong {inj₁ _} {inj₁ y} {inj₂ _} {inj₁ _} (ea , _)  (fa , _)  = trans₁ ea (trans₁ (sym₁ (x∧⊤ y)) (∧₁-cong refl₁ fa)) , refl₂
+  ∧ᵒ-cong {inj₁ _} {inj₂ _} {inj₁ _} {inj₁ v} (ea , _)  (fa , _)  = trans₁ (∧₁-cong ea fa) (⊤∧x v) , refl₂
+  ∧ᵒ-cong {inj₂ _} {inj₁ _} {inj₁ _} {inj₁ v} (ea , _)  (fa , _)  = trans₁ fa (trans₁ (sym₁ (⊤∧x v)) (∧₁-cong ea refl₁)) , refl₂
+
+  ∧ᵒ-cong {inj₁ _} {inj₁ _} {inj₂ _} {inj₂ _} (ea , _)  _         = ea , refl₂
+  ∧ᵒ-cong {inj₂ _} {inj₂ _} {inj₁ _} {inj₁ _} _         (fa , _)  = fa , refl₂
+  ∧ᵒ-cong {inj₁ _} {inj₂ _} {inj₂ _} {inj₁ _} (ea , _)  (fa , _)  = trans₁ ea fa , refl₂
+  ∧ᵒ-cong {inj₂ _} {inj₁ _} {inj₁ _} {inj₂ _} (ea , _)  (fa , _)  = trans₁ fa ea , refl₂
+  ∧ᵒ-cong {inj₁ _} {inj₂ _} {inj₁ _} {inj₂ _} (ea , eb) (fa , fb) = trans₁ (∧₁-cong ea fa) ∧₁-idem , trans₂ (sym₂ ∧₂-idem) (∧₂-cong eb fb)
+  ∧ᵒ-cong {inj₂ _} {inj₁ _} {inj₂ _} {inj₁ _} (ea , eb) (fa , fb) = trans₁ (sym₁ ∧₁-idem) (∧₁-cong ea fa) , trans₂ (∧₂-cong eb fb) ∧₂-idem
+
+  ∧ᵒ-cong {inj₁ _} {inj₂ _} {inj₂ _} {inj₂ v} (ea , eb) _         = ea , trans₂ (sym₂ (⊥∧x v)) (∧₂-cong eb refl₂)
+  ∧ᵒ-cong {inj₂ _} {inj₁ _} {inj₂ u} {inj₂ _} (ea , eb) _         = ea , trans₂ (∧₂-cong eb refl₂) (⊥∧x u)
+  ∧ᵒ-cong {inj₂ _} {inj₂ y} {inj₁ _} {inj₂ _} _         (fa , fb) = fa , trans₂ (sym₂ (x∧⊥ y)) (∧₂-cong refl₂ fb)
+  ∧ᵒ-cong {inj₂ x} {inj₂ _} {inj₂ _} {inj₁ _} _         (fa , fb) = fa , trans₂ (∧₂-cong refl₂ fb) (x∧⊥ x)
+```
+-->
+
+```agda
+  ∨ᵒ-cong : ∀ {p q u v} → p ≈ᵍ q → u ≈ᵍ v → p ∨ᵒ u ≈ᵍ q ∨ᵒ v
+```
+
+<!--
+```agda
+  ∨ᵒ-cong {inj₁ _} {inj₁ _} {inj₁ _} {inj₁ _} (ea , _)  (fa , _)  = ∨₁-cong ea fa , refl₂
+  ∨ᵒ-cong {inj₂ _} {inj₂ _} {inj₂ _} {inj₂ _} (_ , eb)  (_ , fb)  = refl₁ , ∨₂-cong eb fb
+
+  ∨ᵒ-cong {inj₁ x} {inj₁ _} {inj₁ _} {inj₂ _} (ea , _)  (fa , fb) = trans₁ (∨₁-cong refl₁ fa) (x∨⊤ x) , fb
+  ∨ᵒ-cong {inj₁ _} {inj₁ y} {inj₂ _} {inj₁ _} (ea , _)  (fa , fb) = trans₁ (sym₁ (x∨⊤ y)) (∨₁-cong refl₁ fa) , fb
+  ∨ᵒ-cong {inj₁ _} {inj₂ _} {inj₁ u} {inj₁ _} (ea , eb) (fa , _)  = trans₁ (∨₁-cong ea refl₁) (⊤∨x u) , eb
+  ∨ᵒ-cong {inj₂ _} {inj₁ _} {inj₁ _} {inj₁ v} (ea , eb) (fa , _)  = trans₁ (sym₁ (⊤∨x v)) (∨₁-cong ea refl₁) , eb
+
+  ∨ᵒ-cong {inj₁ _} {inj₁ _} {inj₂ _} {inj₂ _} _         (_ , fb)  = refl₁ , fb
+  ∨ᵒ-cong {inj₂ _} {inj₂ _} {inj₁ _} {inj₁ _} (_ , eb)  _         = refl₁ , eb
+  ∨ᵒ-cong {inj₁ _} {inj₂ _} {inj₂ _} {inj₁ _} (ea , eb) (fa , fb) = refl₁ , trans₂ fb eb
+  ∨ᵒ-cong {inj₂ _} {inj₁ _} {inj₁ _} {inj₂ _} (ea , eb) (fa , fb) = refl₁ , trans₂ eb fb
+  ∨ᵒ-cong {inj₁ _} {inj₂ _} {inj₁ _} {inj₂ _} (ea , eb) (fa , fb) = trans₁ (∨₁-cong ea fa) ∨₁-idem , trans₂ (sym₂ ∨₂-idem) (∨₂-cong eb fb)
+  ∨ᵒ-cong {inj₂ _} {inj₁ _} {inj₂ _} {inj₁ _} (ea , eb) (fa , fb) = trans₁ (sym₁ ∨₁-idem) (∨₁-cong ea fa) , trans₂ (∨₂-cong eb fb) ∨₂-idem
+
+  ∨ᵒ-cong {inj₁ _} {inj₂ _} {inj₂ _} {inj₂ v} (ea , eb) (_ , fb)  = refl₁ , trans₂ fb (trans₂ (sym₂ (⊥∨x v)) (∨₂-cong eb refl₂))
+  ∨ᵒ-cong {inj₂ _} {inj₁ _} {inj₂ u} {inj₂ _} (ea , eb) (_ , fb)  = refl₁ , trans₂ (∨₂-cong eb refl₂) (trans₂ (⊥∨x u) fb)
+  ∨ᵒ-cong {inj₂ _} {inj₂ y} {inj₁ _} {inj₂ _} (_ , eb)  (_ , fb)  = refl₁ , trans₂ eb (trans₂ (sym₂ (x∨⊥ y)) (∨₂-cong refl₂ fb))
+  ∨ᵒ-cong {inj₂ x} {inj₂ _} {inj₂ _} {inj₁ _} (_ , eb)  (_ , fb)  = refl₁ , trans₂ (∨₂-cong refl₂ fb) (trans₂ (x∨⊥ x) eb)
+```
+-->
+
+**The eight equations**.  The operations never cross the glue, so every mixed
 case reduces definitionally and is closed by reflexivity; the diagonal cases are
 the component laws, and the two absorption laws additionally consume one
 idempotency step in their `inj₂`-meets-`inj₁` (resp. mirrored) case.
 
 ```agda
-  ∧ᵒ-assoc : ∀ p q r → ((p ∧ᵒ q) ∧ᵒ r) ≈ᵍ (p ∧ᵒ (q ∧ᵒ r))
-  ∧ᵒ-assoc (inj₁ x) (inj₁ y) (inj₁ z) = ∧₁-assoc , refl₂
-  ∧ᵒ-assoc (inj₁ x) (inj₁ y) (inj₂ z) = refl₁ , refl₂
-  ∧ᵒ-assoc (inj₁ x) (inj₂ y) (inj₁ z) = refl₁ , refl₂
-  ∧ᵒ-assoc (inj₁ x) (inj₂ y) (inj₂ z) = refl₁ , refl₂
-  ∧ᵒ-assoc (inj₂ x) (inj₁ y) (inj₁ z) = refl₁ , refl₂
-  ∧ᵒ-assoc (inj₂ x) (inj₁ y) (inj₂ z) = refl₁ , refl₂
-  ∧ᵒ-assoc (inj₂ x) (inj₂ y) (inj₁ z) = refl₁ , refl₂
-  ∧ᵒ-assoc (inj₂ x) (inj₂ y) (inj₂ z) = refl₁ , ∧₂-assoc
+  ∧ᵒ-assoc : ∀ {p q r} → (p ∧ᵒ q) ∧ᵒ r ≈ᵍ p ∧ᵒ (q ∧ᵒ r)
+  ∧ᵒ-assoc {inj₁ _} {inj₁ _} {inj₁ _} = ∧₁-assoc , refl₂
+  ∧ᵒ-assoc {inj₂ _} {inj₂ _} {inj₂ _} = refl₁ , ∧₂-assoc
 
-  ∧ᵒ-comm : ∀ p q → (p ∧ᵒ q) ≈ᵍ (q ∧ᵒ p)
-  ∧ᵒ-comm (inj₁ x) (inj₁ y) = ∧₁-comm , refl₂
-  ∧ᵒ-comm (inj₁ x) (inj₂ y) = refl₁ , refl₂
-  ∧ᵒ-comm (inj₂ x) (inj₁ y) = refl₁ , refl₂
-  ∧ᵒ-comm (inj₂ x) (inj₂ y) = refl₁ , ∧₂-comm
+  ∧ᵒ-assoc {inj₁ _} {inj₁ _} {inj₂ _} = refl₁ , refl₂
+  ∧ᵒ-assoc {inj₁ _} {inj₂ _} {inj₁ _} = refl₁ , refl₂
+  ∧ᵒ-assoc {inj₂ _} {inj₁ _} {inj₁ _} = refl₁ , refl₂
+  ∧ᵒ-assoc {inj₁ _} {inj₂ _} {inj₂ _} = refl₁ , refl₂
+  ∧ᵒ-assoc {inj₂ _} {inj₁ _} {inj₂ _} = refl₁ , refl₂
+  ∧ᵒ-assoc {inj₂ _} {inj₂ _} {inj₁ _} = refl₁ , refl₂
 
-  ∧ᵒ-idem : ∀ p → (p ∧ᵒ p) ≈ᵍ p
-  ∧ᵒ-idem (inj₁ x) = ∧₁-idem , refl₂
-  ∧ᵒ-idem (inj₂ x) = refl₁ , ∧₂-idem
+  ∧ᵒ-comm : ∀ {p q} → p ∧ᵒ q ≈ᵍ q ∧ᵒ p
+  ∧ᵒ-comm {inj₁ _} {inj₁ _} = ∧₁-comm , refl₂
+  ∧ᵒ-comm {inj₁ _} {inj₂ _} = refl₁ , refl₂
+  ∧ᵒ-comm {inj₂ _} {inj₁ _} = refl₁ , refl₂
+  ∧ᵒ-comm {inj₂ _} {inj₂ _} = refl₁ , ∧₂-comm
 
-  ∨ᵒ-assoc : ∀ p q r → ((p ∨ᵒ q) ∨ᵒ r) ≈ᵍ (p ∨ᵒ (q ∨ᵒ r))
-  ∨ᵒ-assoc (inj₁ x) (inj₁ y) (inj₁ z) = ∨₁-assoc , refl₂
-  ∨ᵒ-assoc (inj₁ x) (inj₁ y) (inj₂ z) = refl₁ , refl₂
-  ∨ᵒ-assoc (inj₁ x) (inj₂ y) (inj₁ z) = refl₁ , refl₂
-  ∨ᵒ-assoc (inj₁ x) (inj₂ y) (inj₂ z) = refl₁ , refl₂
-  ∨ᵒ-assoc (inj₂ x) (inj₁ y) (inj₁ z) = refl₁ , refl₂
-  ∨ᵒ-assoc (inj₂ x) (inj₁ y) (inj₂ z) = refl₁ , refl₂
-  ∨ᵒ-assoc (inj₂ x) (inj₂ y) (inj₁ z) = refl₁ , refl₂
-  ∨ᵒ-assoc (inj₂ x) (inj₂ y) (inj₂ z) = refl₁ , ∨₂-assoc
+  ∧ᵒ-idem : ∀ {p} → p ∧ᵒ p ≈ᵍ p
+  ∧ᵒ-idem {inj₁ _} = ∧₁-idem , refl₂
+  ∧ᵒ-idem {inj₂ _} = refl₁ , ∧₂-idem
 
-  ∨ᵒ-comm : ∀ p q → (p ∨ᵒ q) ≈ᵍ (q ∨ᵒ p)
-  ∨ᵒ-comm (inj₁ x) (inj₁ y) = ∨₁-comm , refl₂
-  ∨ᵒ-comm (inj₁ x) (inj₂ y) = refl₁ , refl₂
-  ∨ᵒ-comm (inj₂ x) (inj₁ y) = refl₁ , refl₂
-  ∨ᵒ-comm (inj₂ x) (inj₂ y) = refl₁ , ∨₂-comm
+  ∨ᵒ-assoc : ∀ {p q r} → (p ∨ᵒ q) ∨ᵒ r ≈ᵍ p ∨ᵒ (q ∨ᵒ r)
+  ∨ᵒ-assoc {inj₁ _} {inj₁ _} {inj₁ _} = ∨₁-assoc , refl₂
+  ∨ᵒ-assoc {inj₂ _} {inj₂ _} {inj₂ _} = refl₁ , ∨₂-assoc
+  ∨ᵒ-assoc {inj₁ _} {inj₁ _} {inj₂ _} = refl₁ , refl₂
+  ∨ᵒ-assoc {inj₁ _} {inj₂ _} {inj₁ _} = refl₁ , refl₂
+  ∨ᵒ-assoc {inj₁ _} {inj₂ _} {inj₂ _} = refl₁ , refl₂
+  ∨ᵒ-assoc {inj₂ _} {inj₁ _} {inj₁ _} = refl₁ , refl₂
+  ∨ᵒ-assoc {inj₂ _} {inj₁ _} {inj₂ _} = refl₁ , refl₂
+  ∨ᵒ-assoc {inj₂ _} {inj₂ _} {inj₁ _} = refl₁ , refl₂
 
-  ∨ᵒ-idem : ∀ p → (p ∨ᵒ p) ≈ᵍ p
-  ∨ᵒ-idem (inj₁ x) = ∨₁-idem , refl₂
-  ∨ᵒ-idem (inj₂ x) = refl₁ , ∨₂-idem
+  ∨ᵒ-comm : ∀ {p q} → p ∨ᵒ q ≈ᵍ q ∨ᵒ p
+  ∨ᵒ-comm {inj₁ _} {inj₁ _} = ∨₁-comm , refl₂
+  ∨ᵒ-comm {inj₁ _} {inj₂ _} = refl₁ , refl₂
+  ∨ᵒ-comm {inj₂ _} {inj₁ _} = refl₁ , refl₂
+  ∨ᵒ-comm {inj₂ _} {inj₂ _} = refl₁ , ∨₂-comm
 
-  absorbˡᵒ : ∀ p q → (p ∧ᵒ (p ∨ᵒ q)) ≈ᵍ p
-  absorbˡᵒ (inj₁ x) (inj₁ y) = absorbˡ₁ , refl₂
-  absorbˡᵒ (inj₁ x) (inj₂ y) = refl₁ , refl₂
-  absorbˡᵒ (inj₂ x) (inj₁ y) = refl₁ , ∧₂-idem
-  absorbˡᵒ (inj₂ x) (inj₂ y) = refl₁ , absorbˡ₂
+  ∨ᵒ-idem : ∀ {p} → p ∨ᵒ p ≈ᵍ p
+  ∨ᵒ-idem {inj₁ _} = ∨₁-idem , refl₂
+  ∨ᵒ-idem {inj₂ _} = refl₁ , ∨₂-idem
 
-  absorbʳᵒ : ∀ p q → ((p ∧ᵒ q) ∨ᵒ p) ≈ᵍ p
-  absorbʳᵒ (inj₁ x) (inj₁ y) = absorbʳ₁ , refl₂
-  absorbʳᵒ (inj₁ x) (inj₂ y) = ∨₁-idem , refl₂
-  absorbʳᵒ (inj₂ x) (inj₁ y) = refl₁ , refl₂
-  absorbʳᵒ (inj₂ x) (inj₂ y) = refl₁ , absorbʳ₂
+  absorbˡᵒ : ∀ {p q} → p ∧ᵒ (p ∨ᵒ q) ≈ᵍ p
+  absorbˡᵒ {inj₁ _} {inj₁ _} = absorbˡ₁ , refl₂
+  absorbˡᵒ {inj₁ _} {inj₂ _} = refl₁ , refl₂
+  absorbˡᵒ {inj₂ _} {inj₁ _} = refl₁ , ∧₂-idem
+  absorbˡᵒ {inj₂ _} {inj₂ _} = refl₁ , absorbˡ₂
+
+  absorbʳᵒ : ∀ {p q} → (p ∧ᵒ q) ∨ᵒ p ≈ᵍ p
+  absorbʳᵒ {inj₁ _} {inj₁ _} = absorbʳ₁ , refl₂
+  absorbʳᵒ {inj₁ _} {inj₂ _} = ∨₁-idem , refl₂
+  absorbʳᵒ {inj₂ _} {inj₁ _} = refl₁ , refl₂
+  absorbʳᵒ {inj₂ _} {inj₂ _} = refl₁ , absorbʳ₂
+
 ```
 
 Assembling through the setoid-level builder yields the ordinal sum.  (The two
@@ -386,7 +370,14 @@ congruence through the non-injective retractions.)
   ⊕-Lattice = setoidEqsToLattice glueSetoid _∧ᵒ_ _∨ᵒ_
     (λ {p} {q} {u} {v} → ∧ᵒ-cong {p} {q} {u} {v})
     (λ {p} {q} {u} {v} → ∨ᵒ-cong {p} {q} {u} {v})
-    ∧ᵒ-assoc ∧ᵒ-comm ∧ᵒ-idem ∨ᵒ-assoc ∨ᵒ-comm ∨ᵒ-idem absorbˡᵒ absorbʳᵒ
+    (λ {p q u} → ∧ᵒ-assoc {p} {q} {u})
+    (λ {p q} → ∧ᵒ-comm {p} {q})
+    (λ {p} → ∧ᵒ-idem {p})
+    (λ {p q u} → ∨ᵒ-assoc {p} {q} {u})
+    (λ {p q} → ∨ᵒ-comm {p} {q})
+    (λ {p} → ∨ᵒ-idem {p})
+    (λ {p q} → absorbˡᵒ {p} {q})
+    (λ {p q} → absorbʳᵒ {p} {q})
 ```
 
 #### The sum order, characterized
@@ -400,31 +391,31 @@ the glue.  The four lemmas name these unfoldings for consumers.
   open Lattice-Order ⊕-Lattice using () renaming ( _≤_ to _≤ᵒ_ )
 
   -- Within the lower summand, the sum order is the lower order.
-  ≤ᵒ-inj₁ : {x y : 𝕌[ 𝑨 ]} → x ≤₁ y → (inj₁ x) ≤ᵒ (inj₁ y)
+  ≤ᵒ-inj₁ : {x y : 𝕌[ 𝑨 ]} → x ≤₁ y → inj₁ x ≤ᵒ inj₁ y
   ≤ᵒ-inj₁ e = e , refl₂
 
-  ≤ᵒ-inj₁-elim : {x y : 𝕌[ 𝑨 ]} → (inj₁ x) ≤ᵒ (inj₁ y) → x ≤₁ y
+  ≤ᵒ-inj₁-elim : {x y : 𝕌[ 𝑨 ]} → inj₁ x ≤ᵒ inj₁ y → x ≤₁ y
   ≤ᵒ-inj₁-elim = proj₁
 
   -- Within the upper summand, the sum order is the upper order.
-  ≤ᵒ-inj₂ : {x y : 𝕌[ 𝑩 ]} → x ≤₂ y → (inj₂ x) ≤ᵒ (inj₂ y)
+  ≤ᵒ-inj₂ : {x y : 𝕌[ 𝑩 ]} → x ≤₂ y → inj₂ x ≤ᵒ inj₂ y
   ≤ᵒ-inj₂ e = refl₁ , e
 
-  ≤ᵒ-inj₂-elim : {x y : 𝕌[ 𝑩 ]} → (inj₂ x) ≤ᵒ (inj₂ y) → x ≤₂ y
+  ≤ᵒ-inj₂-elim : {x y : 𝕌[ 𝑩 ]} → inj₂ x ≤ᵒ inj₂ y → x ≤₂ y
   ≤ᵒ-inj₂-elim = proj₂
 
   -- Everything in the lower summand is below everything in the upper one.
-  ≤ᵒ-up : (x : 𝕌[ 𝑨 ]) (y : 𝕌[ 𝑩 ]) → (inj₁ x) ≤ᵒ (inj₂ y)
-  ≤ᵒ-up x y = refl₁ , refl₂
+  ≤ᵒ-up : {x : 𝕌[ 𝑨 ]} {y : 𝕌[ 𝑩 ]} → inj₁ x ≤ᵒ inj₂ y
+  ≤ᵒ-up = refl₁ , refl₂
 
   -- An upper element below a lower one forces both to the glue ...
   ≤ᵒ-down-elim : {x : 𝕌[ 𝑩 ]} {y : 𝕌[ 𝑨 ]}
-    → (inj₂ x) ≤ᵒ (inj₁ y) → (y ≈₁ ⊤₁) × (x ≈₂ ⊥₂)
+    → inj₂ x ≤ᵒ (inj₁ y) → (y ≈₁ ⊤₁) × (x ≈₂ ⊥₂)
   ≤ᵒ-down-elim (p , q) = p , sym₂ q
 
   -- ... and, at the glue, it does sit below.
   ≤ᵒ-down : {x : 𝕌[ 𝑩 ]} {y : 𝕌[ 𝑨 ]}
-    → y ≈₁ ⊤₁ → x ≈₂ ⊥₂ → (inj₂ x) ≤ᵒ (inj₁ y)
+    → y ≈₁ ⊤₁ → x ≈₂ ⊥₂ → inj₂ x ≤ᵒ inj₁ y
   ≤ᵒ-down y≈⊤ x≈⊥ = y≈⊤ , sym₂ x≈⊥
 ```
 
@@ -440,4 +431,9 @@ ordinalSum 𝑳₁ t 𝑳₂ b = LatticeOrdinalSum.⊕-Lattice 𝑳₁ t 𝑳₂
 
 --------------------------------------
 
-[^1]: See Work Package 5 (WP-5) of [the roadmap](docs/notes/flrp-research-roadmap.md).
+[^1]: General lattices need not have extrema, and threading the choice keeps the
+      construction total and the resulting carrier syntactically predictable (the
+      corollaries that adjoin a fresh extremum to a lattice instantiate a summand at
+      `chain₂` and its concrete `0`/`1`).
+
+[^2]: See Work Package 5 (WP-5) of [the roadmap](docs/notes/flrp-research-roadmap.md).

@@ -62,7 +62,7 @@ reproof.[^3]
 The module is structured as *per-assumption statement definitions* (rather than one
 monolithic record) precisely so that entries can be appended without disturbing one
 another, and downstream results take whichever entry they need as an ordinary
-argument.[^4]
+argument.
 
 <!--
 ```agda
@@ -251,6 +251,3 @@ KurzweilNetterDuality = (𝑳 : Lattice) → KurzweilNetterDualityAt 𝑳
       [`docs/notes/flrp-research-roadmap.md`](docs/notes/flrp-research-roadmap.md) § 7
       and GitHub [Issue #456](https://github.com/ualib/agda-algebras/issues/456)).
 
-[^4]: The standing FLRP research-track separation warning of [FLRP.Problem][] applies
-      here too: this is problem-specific formal content, not to be conflated with the
-      algebraic-complexity / finite-CSP work elsewhere in the library.

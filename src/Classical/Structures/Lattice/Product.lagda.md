@@ -12,7 +12,8 @@ This is the [Classical.Structures.Lattice.Product][] module of the [Agda Univers
 
 Given lattices `𝑳₁`{.AgdaBound} and `𝑳₂`{.AgdaBound} over
 [`Sig-Lattice`][Classical.Signatures.Lattice], this module constructs their
-**binary direct product** `𝑳₁ ×ˡ 𝑳₂`{.AgdaFunction}: the lattice on the product
+**binary direct product** `𝑳₁`{.AgdaBound}` ×ˡ `{.AgdaFunction}`𝑳₂`{.AgdaBound}:
+the lattice on the product
 setoid whose meet and join act componentwise.  The construction mirrors the group
 case ([Classical.Structures.Group.Product][]) but is assembled through the
 setoid-level builder `setoidEqsToLattice`{.AgdaFunction} of
@@ -126,29 +127,29 @@ the pair of the component proofs, applied at the projections.
   ∨ₓ-cong : ∀ {p q u v} → p ≈ₓ q → u ≈ₓ v → (p ∨ₓ u) ≈ₓ (q ∨ₓ v)
   ∨ₓ-cong e f = ∨₁-cong (proj₁ e) (proj₁ f) , ∨₂-cong (proj₂ e) (proj₂ f)
 
-  ∧ₓ-assoc : ∀ p q r → ((p ∧ₓ q) ∧ₓ r) ≈ₓ (p ∧ₓ (q ∧ₓ r))
-  ∧ₓ-assoc p q r = ∧₁-assoc , ∧₂-assoc
+  ∧ₓ-assoc : ∀ {p q r} → ((p ∧ₓ q) ∧ₓ r) ≈ₓ (p ∧ₓ (q ∧ₓ r))
+  ∧ₓ-assoc = ∧₁-assoc , ∧₂-assoc
 
-  ∧ₓ-comm : ∀ p q → (p ∧ₓ q) ≈ₓ (q ∧ₓ p)
-  ∧ₓ-comm p q = ∧₁-comm , ∧₂-comm
+  ∧ₓ-comm : ∀ {p q} → (p ∧ₓ q) ≈ₓ (q ∧ₓ p)
+  ∧ₓ-comm = ∧₁-comm , ∧₂-comm
 
-  ∧ₓ-idem : ∀ p → (p ∧ₓ p) ≈ₓ p
-  ∧ₓ-idem p = ∧₁-idem , ∧₂-idem
+  ∧ₓ-idem : ∀ {p} → (p ∧ₓ p) ≈ₓ p
+  ∧ₓ-idem = ∧₁-idem , ∧₂-idem
 
-  ∨ₓ-assoc : ∀ p q r → ((p ∨ₓ q) ∨ₓ r) ≈ₓ (p ∨ₓ (q ∨ₓ r))
-  ∨ₓ-assoc p q r = ∨₁-assoc , ∨₂-assoc
+  ∨ₓ-assoc : ∀ {p q r} → ((p ∨ₓ q) ∨ₓ r) ≈ₓ (p ∨ₓ (q ∨ₓ r))
+  ∨ₓ-assoc = ∨₁-assoc , ∨₂-assoc
 
-  ∨ₓ-comm : ∀ p q → (p ∨ₓ q) ≈ₓ (q ∨ₓ p)
-  ∨ₓ-comm p q = ∨₁-comm , ∨₂-comm
+  ∨ₓ-comm : ∀ {p q} → (p ∨ₓ q) ≈ₓ (q ∨ₓ p)
+  ∨ₓ-comm = ∨₁-comm , ∨₂-comm
 
-  ∨ₓ-idem : ∀ p → (p ∨ₓ p) ≈ₓ p
-  ∨ₓ-idem p = ∨₁-idem , ∨₂-idem
+  ∨ₓ-idem : ∀ {p} → (p ∨ₓ p) ≈ₓ p
+  ∨ₓ-idem = ∨₁-idem , ∨₂-idem
 
-  absorbˡₓ : ∀ p q → (p ∧ₓ (p ∨ₓ q)) ≈ₓ p
-  absorbˡₓ p q = absorbˡ₁ , absorbˡ₂
+  absorbˡₓ : ∀ {p q} → (p ∧ₓ (p ∨ₓ q)) ≈ₓ p
+  absorbˡₓ = absorbˡ₁ , absorbˡ₂
 
-  absorbʳₓ : ∀ p q → ((p ∧ₓ q) ∨ₓ p) ≈ₓ p
-  absorbʳₓ p q = absorbʳ₁ , absorbʳ₂
+  absorbʳₓ : ∀ {p q} → ((p ∧ₓ q) ∨ₓ p) ≈ₓ p
+  absorbʳₓ = absorbʳ₁ , absorbʳ₂
 ```
 
 Assembling through the setoid-level builder yields the product lattice.

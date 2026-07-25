@@ -84,12 +84,12 @@ commutativity step each.
 
 ```agda
   -- a ∨ (a ∧ b) ≈ a : the dual reading of absorption, from absorbʳ by ∨-commutativity.
-  dual-absorbˡ : ∀ a b → (a ∨ (a ∧ b)) ≈ a
-  dual-absorbˡ a b = ≈trans ∨-comm-law absorbʳ-law
+  dual-absorbˡ : ∀ {a b} → a ∨ (a ∧ b) ≈ a
+  dual-absorbˡ = ≈trans ∨-comm-law absorbʳ-law
 
   -- (a ∨ b) ∧ a ≈ a : the other dual absorption, from absorbˡ by ∧-commutativity.
-  dual-absorbʳ : ∀ a b → ((a ∨ b) ∧ a) ≈ a
-  dual-absorbʳ a b = ≈trans ∧-comm-law absorbˡ-law
+  dual-absorbʳ : ∀ {a b} → (a ∨ b) ∧ a ≈ a
+  dual-absorbʳ = ≈trans ∧-comm-law absorbˡ-law
 ```
 
 The dual lattice: same carrier setoid, meet interpreted by `_∨_` and join by
@@ -99,12 +99,7 @@ absorption laws.
 ```agda
   dual-Lattice : Lattice α ρ
   dual-Lattice = setoidEqsToLattice 𝔻[ 𝑨 ] _∨_ _∧_ ∨-cong ∧-cong
-    (λ x y z → ∨-assoc-law{x}{y}{z})
-    (λ x y → ∨-comm-law {x}{y})
-    (λ x → ∨-idem-law{x})
-    (λ x y z → ∧-assoc-law {x}{y}{z})
-    (λ x y → ∧-comm-law {x}{y})
-    (λ x → ∧-idem-law{x})
+    ∨-assoc-law ∨-comm-law ∨-idem-law ∧-assoc-law ∧-comm-law ∧-idem-law
     dual-absorbˡ dual-absorbʳ
 ```
 
@@ -120,11 +115,11 @@ connecting lemmas); the two directions are one commutativity step each.
 
   -- An inequality in the dual reverses in 𝑳.
   ≤ᵈ-flip : ∀ {x y} → x ≤ᵈ y → y ≤₀ x
-  ≤ᵈ-flip {x} {y} x≤ᵈy = ≤-from-∨ (≈trans ∨-comm-law x≤ᵈy)
+  ≤ᵈ-flip x≤ᵈy = ≤-from-∨ (≈trans ∨-comm-law x≤ᵈy)
 
   -- An inequality in 𝑳 reverses in the dual.
   ≤ᵈ-unflip : ∀ {x y} → y ≤₀ x → x ≤ᵈ y
-  ≤ᵈ-unflip {x} {y} y≤x = ≈trans ∨-comm-law (≤-via-∨ y≤x)
+  ≤ᵈ-unflip y≤x = ≈trans ∨-comm-law (≤-via-∨ y≤x)
 ```
 
 #### Extrema swap under dualization
@@ -151,4 +146,5 @@ dualLattice 𝑳 = LatticeDual.dual-Lattice 𝑳
 ```
 
 --------------------------------------
+
 [^1]: See [FLRP.Assumptions][] and work package WP-5.

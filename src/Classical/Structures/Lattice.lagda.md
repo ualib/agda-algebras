@@ -509,26 +509,26 @@ module _ (𝐷 : Setoid α ρ) where
   setoidEqsToLattice : (_∧'_ _∨'_ : D → D → D)
     → (∧'-cong    : ∀ {x y u v} → x ≈ y → u ≈ v → (x ∧' u) ≈ (y ∧' v))
     → (∨'-cong    : ∀ {x y u v} → x ≈ y → u ≈ v → (x ∨' u) ≈ (y ∨' v))
-    → (∧'-assoc-≈ : ∀ a b c → ((a ∧' b) ∧' c) ≈ (a ∧' (b ∧' c)))
-    → (∧'-comm-≈  : ∀ a b → (a ∧' b) ≈ (b ∧' a))
-    → (∧'-idem-≈  : ∀ a → (a ∧' a) ≈ a)
-    → (∨'-assoc-≈ : ∀ a b c → ((a ∨' b) ∨' c) ≈ (a ∨' (b ∨' c)))
-    → (∨'-comm-≈  : ∀ a b → (a ∨' b) ≈ (b ∨' a))
-    → (∨'-idem-≈  : ∀ a → (a ∨' a) ≈ a)
-    → (absorbˡ-≈  : ∀ a b → (a ∧' (a ∨' b)) ≈ a)
-    → (absorbʳ-≈  : ∀ a b → ((a ∧' b) ∨' a) ≈ a)
+    → (∧'-assoc-≈ : ∀ {a b c} → ((a ∧' b) ∧' c) ≈ (a ∧' (b ∧' c)))
+    → (∧'-comm-≈  : ∀ {a b} → (a ∧' b) ≈ (b ∧' a))
+    → (∧'-idem-≈  : ∀ {a} → (a ∧' a) ≈ a)
+    → (∨'-assoc-≈ : ∀ {a b c} → ((a ∨' b) ∨' c) ≈ (a ∨' (b ∨' c)))
+    → (∨'-comm-≈  : ∀ {a b} → (a ∨' b) ≈ (b ∨' a))
+    → (∨'-idem-≈  : ∀ {a} → (a ∨' a) ≈ a)
+    → (absorbˡ-≈  : ∀ {a b} → (a ∧' (a ∨' b)) ≈ a)
+    → (absorbʳ-≈  : ∀ {a b} → ((a ∧' b) ∨' a) ≈ a)
     → Lattice α ρ
   setoidEqsToLattice _∧'_ _∨'_ ∧'-cong ∨'-cong
     ∧'-assoc-≈ ∧'-comm-≈ ∧'-idem-≈ ∨'-assoc-≈ ∨'-comm-≈ ∨'-idem-≈ absorbˡ-≈ absorbʳ-≈ =
     setoidOpsToBareLattice _∧'_ _∨'_ ∧'-cong ∨'-cong , proof
     where
     proof : setoidOpsToBareLattice _∧'_ _∨'_ ∧'-cong ∨'-cong ⊨ˡᵃ Th-Lattice
-    proof ∧-assoc η = ∧'-assoc-≈ (η 0F) (η 1F) (η 2F)
-    proof ∧-comm  η = ∧'-comm-≈  (η 0F) (η 1F)
-    proof ∧-idem  η = ∧'-idem-≈  (η 0F)
-    proof ∨-assoc η = ∨'-assoc-≈ (η 0F) (η 1F) (η 2F)
-    proof ∨-comm  η = ∨'-comm-≈  (η 0F) (η 1F)
-    proof ∨-idem  η = ∨'-idem-≈  (η 0F)
-    proof absorbˡ η = absorbˡ-≈  (η 0F) (η 1F)
-    proof absorbʳ η = absorbʳ-≈  (η 0F) (η 1F)
+    proof ∧-assoc η = ∧'-assoc-≈ -- (η 0F) (η 1F) (η 2F)
+    proof ∧-comm  η = ∧'-comm-≈  -- (η 0F) (η 1F)
+    proof ∧-idem  η = ∧'-idem-≈  -- (η 0F)
+    proof ∨-assoc η = ∨'-assoc-≈ -- (η 0F) (η 1F) (η 2F)
+    proof ∨-comm  η = ∨'-comm-≈  -- (η 0F) (η 1F)
+    proof ∨-idem  η = ∨'-idem-≈  -- (η 0F)
+    proof absorbˡ η = absorbˡ-≈  -- (η 0F) (η 1F)
+    proof absorbʳ η = absorbʳ-≈  -- (η 0F) (η 1F)
 ```

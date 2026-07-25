@@ -38,8 +38,6 @@ small-lattice census (`L18` and `L22`, duals of the certified `SLR19` and
 `SLR23`) become assumption-conditional corollaries; materializing those
 conditional certificates is issue #485's concern, not this module's.
 
-The standing FLRP research-track separation warning applies to everything here.
-
 <!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}

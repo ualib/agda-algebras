@@ -37,10 +37,6 @@ with no axiom.  Concretely, this module provides:
    with **no postulate**.  This is the object the no-go theorem showed impossible at
    Layer S; making it constructive here closes that loop.
 
-The standing FLRP research-track separation warning of [FLRP.Problem][] applies here
-too: this is problem-specific formal content, not to be conflated with the
-algebraic-complexity / finite-CSP work elsewhere in the library.
-
 <!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}

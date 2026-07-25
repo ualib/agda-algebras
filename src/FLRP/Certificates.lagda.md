@@ -52,9 +52,8 @@ lattice's meet order `x ≤ y := x ∧ y ≈ x` ([Classical.Properties.Lattice][
 Since `toLattice`{.AgdaFunction} builds its carrier setoid on propositional equality,
 the translation is definitional.
 
-The standing FLRP research-track separation warning applies: this is problem-specific
-wiring; all reusable mathematics lives under the `Setoid` tree; in this case, under
-`Setoid.Congruences.Certificates`.
+This is problem-specific wiring; all reusable mathematics lives under the `Setoid`
+tree; in this case, under `Setoid.Congruences.Certificates`.
 
 <!--
 ```agda
