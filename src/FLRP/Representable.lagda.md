@@ -476,6 +476,17 @@ module _ {𝑆 : Signature 𝓞 𝓥} {𝑨 : Algebra {𝑆 = 𝑆} α ρ} where
   -- The total congruence, as a DecCon.
   𝟙ᵈ : DecCon 𝑨 ℓ
   𝟙ᵈ {ℓ} = 𝟙[ 𝑨 ] {ℓ} , λ _ _ → yes (lift tt)
+
+  -- A congruence's relation respects the setoid equality on both sides
+  -- (reflexivity feeds ≈ into the relation, equivalence moves it around).
+  ConRel-resp : (d : DecCon 𝑨 ℓ) {x x' y y' : 𝕌[ 𝑨 ]}
+    → x ≈ x' → y ≈ y' → ConRel d x y → ConRel d x' y'
+  ConRel-resp d x≈x' y≈y' p = θtrans (θsym (θrefl x≈x')) (θtrans p (θrefl y≈y'))
+    where
+    θcon    = proj₂ (proj₁ d)
+    θrefl   = reflexive θcon
+    θsym    = IsEquivalence.sym (is-equivalence θcon)
+    θtrans  = IsEquivalence.trans (is-equivalence θcon)
 ```
 
 #### Congruence-trivial algebras
