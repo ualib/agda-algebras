@@ -25,14 +25,20 @@ import tempfile
 import unittest
 from collections import Counter
 from itertools import product
+from math import factorial
 from pathlib import Path
 from typing import List, Sequence, Tuple
+from unittest import mock
 
 import contextlib
 import io
 
+import eqsearch
 from cg2 import CertificateError
-from eqsearch import (ClassReport, EqTables, Part, UniformTables,
+from eqsearch import (ClassReport, EqTables, LazyUniformTables, Part,
+                      UniformTables, _classify_materialized,
+                      _classify_orbit_stabilizer, _realizing, _setwise_iso,
+                      _setwise_stabilizer_order,
                       all_partitions, claim_input, classify,
                       closed_class_algebra, closure_report,
                       invariant_partitions, is_uniform, main, partition_join,
@@ -107,9 +113,13 @@ class UniformPoolTests(unittest.TestCase):
     """The uniform (coset-block) pool enumerator of issue #494."""
 
     def test_uniform_pool_counts(self) -> None:
-        """pool: nontrivial uniform counts and block-size shapes match #494's table."""
+        """pool: nontrivial uniform counts and block-size shapes match #494's
+        table, including the decisive Eq(12) pool of issue #499 — 32,032
+        nontrivial members split 10,395 + 15,400 + 5,775 + 462 across shapes
+        2⁶, 3⁴, 4³, 6², the first size with comparable nontrivial partitions."""
         expected = {6: {2: 15, 3: 10}, 7: {}, 8: {2: 105, 4: 35},
-                    9: {3: 280}, 10: {2: 945, 5: 126}}
+                    9: {3: 280}, 10: {2: 945, 5: 126},
+                    12: {2: 10395, 3: 15400, 4: 5775, 6: 462}}
         for n, shapes in expected.items():
             pool = uniform_partitions(n)
             self.assertEqual(pool[0], (0,) * n)              # ∇ sorts first
@@ -119,6 +129,23 @@ class UniformPoolTests(unittest.TestCase):
             self.assertEqual(len(nontrivial), sum(shapes.values()))
             by_size = Counter(n // len(set(p)) for p in nontrivial)
             self.assertEqual(dict(by_size), shapes)
+
+    def test_frontier_after_twelve_has_no_uniform_chain(self) -> None:
+        """pool: 13, 14, 15 cannot host a uniform copy of L7, so a negative
+        Eq(12) moves the frontier straight to sixteen (issue #499).  Thirteen
+        is prime — its pool is the bounds alone.  Fourteen (block sizes 2, 7)
+        and fifteen (3, 5) have no divisor chain 1 < a < b < n with a | b, so
+        their nontrivial uniform partitions form an antichain; but L7 embeds
+        the grid cover (0,1) ≺ (1,1), which needs two comparable nontrivial
+        members, so no uniform copy exists."""
+        self.assertEqual(uniform_partitions(13),
+                         ((0,) * 13, tuple(range(13))))      # prime: bounds only
+        for n, sizes in ((14, {2, 7}), (15, {3, 5})):
+            nontrivial_sizes = {k for k in range(2, n) if n % k == 0}
+            self.assertEqual(nontrivial_sizes, sizes)
+            self.assertFalse(any(a != b and b % a == 0
+                                 for a in nontrivial_sizes
+                                 for b in nontrivial_sizes))
 
     def test_uniform_pool_is_canonical_subsequence(self) -> None:
         """pool: the per-divisor enumerator equals the Bell filter, order included (n ≤ 8)."""
@@ -356,6 +383,168 @@ class L7SessionTests(unittest.TestCase):
         # empty --group-rep census (UniformSweepTests degeneration test)
         self.assertFalse(any(all(is_uniform(p) for p in r.representative)
                              for r in reports))
+
+
+class LazyUniformTablesTests(unittest.TestCase):
+    """The on-the-fly uniform tables (issue #499) that replace the eager pool²
+    build once the pool is too large to tabulate (32,034 members at twelve),
+    pinned to the eager tables where both run: identical meets and joins, and
+    a byte-identical survey report through the search and the closure test."""
+
+    def test_lazy_meet_join_match_eager(self) -> None:
+        """lazy: meet_at/join_at agree with the eager pool tables on every pool pair (n = 8), out-of-pool -1 sentinels included."""
+        ut, lz = UniformTables(8), LazyUniformTables(8)
+        self.assertEqual(lz.parts, ut.parts)
+        self.assertEqual((lz.bot, lz.top), (ut.bot, ut.top))
+        for a in range(len(ut.parts)):
+            for b in range(len(ut.parts)):
+                self.assertEqual(lz.meet_at(a, b), ut.meet[a][b])
+                self.assertEqual(lz.join_at(a, b), ut.join[a][b])
+
+    def test_lazy_universe_is_all_of_eq_n(self) -> None:
+        """lazy: the closure universe is built on demand and is all of Eq(n)."""
+        lz = LazyUniformTables(6)
+        self.assertEqual(lz.universe, all_partitions(6))
+        self.assertEqual(len(invariant_partitions([], lz)), 203)
+
+    def test_lazy_survey_is_byte_identical(self) -> None:
+        """lazy: forcing the on-the-fly tables reproduces the eager M3/Eq(6)
+        uniform report byte for byte — search and closure both unchanged."""
+        eager = survey_json(m3(), 6, *survey(m3(), 6, uniform=True),
+                            restriction="uniform")
+        with mock.patch.object(eqsearch, "_EAGER_POOL_LIMIT", 0):  # force lazy
+            lazy = survey_json(m3(), 6, *survey(m3(), 6, uniform=True),
+                               restriction="uniform")
+        self.assertEqual(lazy, eager)
+
+
+class OrbitStabilizerClassifierTests(unittest.TestCase):
+    """The orbit–stabilizer classifier of issue #499, pinned byte-identical to
+    the materialized reference on every census where materialization is
+    feasible.  This parity is what licenses trusting it at twelve points,
+    where ``12! ≈ 4.8 × 10⁸`` puts the materialized classifier out of reach and
+    only orbit–stabilizer can run."""
+
+    def _parity(self, lat: TargetLattice, n: int, uniform: bool = False) -> None:
+        eq = UniformTables(n) if uniform else EqTables(n)
+        copies = sublattice_copies(lat, eq)
+        self.assertEqual(_classify_orbit_stabilizer(copies, eq),
+                         _classify_materialized(copies, eq))
+
+    def test_setwise_stabilizer_spot_checks(self) -> None:
+        """classifier: |Stab| of a lone |0,1|2,3| on four points is its block
+        automorphism group (order 8, so orbit 4!/8 = 3, the three 2² partitions);
+        the three matchings of M3 are stabilized setwise by all of S₄ (order 24,
+        orbit 1) — the relation-permuting symmetry a rigid target never has."""
+        self.assertEqual(_setwise_stabilizer_order([(0, 0, 2, 2)], 4), 8)
+        self.assertEqual(
+            _setwise_stabilizer_order(
+                [(0, 1, 0, 1), (0, 1, 1, 0), (0, 0, 2, 2)], 4),
+            24)
+
+    def test_empty_relation_set_is_closed_form(self) -> None:
+        """classifier: the empty relation list is answered in closed form —
+        every permutation realizes it, so the stabilizer is all of S_n — and
+        never by enumeration; at n = 12 the enumeration would be 12! ≈ 4.8e8
+        steps, an effective hang this pin guards against."""
+        self.assertEqual(_realizing((), (), 12), factorial(12))
+        self.assertEqual(_realizing((), (), 12, first_only=True), 1)
+        self.assertTrue(_setwise_iso((), (), 12))
+        self.assertEqual(_setwise_stabilizer_order([], 12), factorial(12))
+
+    def test_bounds_only_copy_classifies_at_twelve(self) -> None:
+        """classifier: a two-element target at n = 12 (orbit–stabilizer
+        territory) yields only the bounds-only copy, whose empty relation set
+        classifies instantly to one class of orbit size 1."""
+        c2 = tables_from_leq("C2", ((True, True), (False, True)))
+        eq = LazyUniformTables(12)
+        copies = sublattice_copies(c2, eq)
+        self.assertEqual(copies, [(eq.bot, eq.top)])
+        self.assertEqual(classify(copies, eq), [((eq.bot, eq.top), 1)])
+
+    def test_parity_m3_eq4(self) -> None:
+        """classifier: orbit–stabilizer == materialized on M3/Eq(4)."""
+        self._parity(m3(), 4)
+
+    def test_parity_m3_eq6(self) -> None:
+        """classifier: orbit–stabilizer == materialized on M3/Eq(6) — where the
+        block-profile invariant alone merges distinct size-60 orbits and the
+        isomorphism refinement is what separates them."""
+        self._parity(m3(), 6)
+
+    def test_parity_m3_eq6_uniform(self) -> None:
+        """classifier: orbit–stabilizer == materialized on the M3/Eq(6) uniform pool."""
+        self._parity(m3(), 6, uniform=True)
+
+    def test_parity_l7_eq6(self) -> None:
+        """classifier: orbit–stabilizer == materialized on L7/Eq(6) (rigid and symmetric classes)."""
+        self._parity(l7(), 6)
+
+    @unittest.skipUnless(os.environ.get("FLRP_EQSEARCH_SLOW") == "1",
+                         "set FLRP_EQSEARCH_SLOW=1 for the L7/Eq(7) "
+                         "classifier parity (about half a minute)")
+    def test_parity_l7_eq7(self) -> None:
+        """classifier: orbit–stabilizer == materialized on L7/Eq(7) — 55,440 copies, 12 classes."""
+        self._parity(l7(), 7)
+
+
+class Eq12UniformReportTests(unittest.TestCase):
+    """The committed `Eq(12)` uniform sweep report (issue #499): a pinned
+    negative census — 15 relabeling classes, none closed — so no algebra on
+    twelve points has `Con ≅ L7`.  Order-independent facts only, so the pin is
+    stable under the sweep's representative-discovery order."""
+
+    REPORT = Path(__file__).parent / "out" / "l7_eq12_uniform_report.json"
+
+    @classmethod
+    def setUpClass(cls) -> None:
+        cls.data = json.loads(cls.REPORT.read_text())
+
+    def test_format_and_restriction(self) -> None:
+        """eq12: the report is a uniform `flrp-eqsearch v1` census of L7 on 12 points."""
+        self.assertEqual(self.data["format"], "flrp-eqsearch v1")
+        self.assertEqual((self.data["target"], self.data["points"],
+                          self.data["restriction"]), ("L7", 12, "uniform"))
+
+    def test_fifteen_open_classes(self) -> None:
+        """eq12: 15 classes, 3,353,011,200 labelled copies, none closed."""
+        classes = self.data["classes"]
+        self.assertEqual(len(classes), 15)
+        self.assertEqual(self.data["copies"], 3353011200)
+        self.assertFalse(any(c["closed"] for c in classes))
+
+    def test_endomorphism_wall(self) -> None:
+        """eq12: every class is |M| = |G| + 12 constants with no proper map — the
+        closure obstruction, so Inv(M) = Inv(G) is far larger than the seven of a copy."""
+        for c in self.data["classes"]:
+            self.assertEqual(c["properMaps"], 0)
+            self.assertEqual(c["monoidSize"], c["groupOrder"] + 12)
+            self.assertGreater(c["invariants"], 7)
+
+    def test_orbit_and_invariant_distributions(self) -> None:
+        """eq12: the by-stabilizer split of orbit sizes and |Inv(M)| is pinned."""
+        self.assertEqual(
+            Counter(c["orbitSize"] for c in self.data["classes"]),
+            Counter({479001600: 2, 239500800: 8, 119750400: 3,
+                     79833600: 1, 39916800: 1}))
+        self.assertEqual(
+            Counter(c["invariants"] for c in self.data["classes"]),
+            Counter({4213597: 2, 6841: 8, 319: 3, 54: 1, 16: 1}))
+
+    def test_completeness_certificate_arithmetic(self) -> None:
+        """eq12: for every committed class the stabilizer order 12!/orbitSize
+        divides |Stab(c_k)| = (k!)^(12/k) · (12/k)! of its coatom's block size
+        — the subgroup relation Stab(rep) ≤ Stab(c_k) the sweep's completeness
+        certificate rests on, and which the sweep now guards at run time."""
+        fact = factorial(12)
+        for c in self.data["classes"]:
+            self.assertEqual(fact % c["orbitSize"], 0)
+            stab = fact // c["orbitSize"]
+            coatom = c["partitions"][4]          # lattice element 4 = (1,1)
+            k = 12 // len(set(coatom))           # block size of the coatom
+            self.assertIn(k, (4, 6))
+            anchor = factorial(k) ** (12 // k) * factorial(12 // k)
+            self.assertEqual(anchor % stab, 0)
 
 
 # ---------------------------------------------------------------------------

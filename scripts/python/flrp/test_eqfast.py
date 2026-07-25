@@ -8,9 +8,11 @@ Description:
   partitions, the same tables, the same copies, the same classes, and — the
   strongest form — byte-identical survey reports wherever both backends run.
   The ``--group-rep`` restriction (issue #494) is held to the same standard:
-  pool tables with their out-of-pool sentinels equal the pure ones, uniform
-  survey reports are byte-identical through `Eq(9)`, and the chunked orbit
-  relabeling (the `10!` memory path) cannot change classification.
+  pool tables with their out-of-pool sentinels equal the pure ones, and
+  uniform survey reports are byte-identical through `Eq(9)`.  Both engines now
+  share the orbit–stabilizer ``classify`` of ``eqsearch`` (issue #499), so
+  classification is identical between them by construction; its correctness is
+  pinned against the materialized reference in ``test_eqsearch.py``.
 
   On top of parity, the fast backend re-verifies the large censuses: the
   `Eq(7)` figures in seconds, and (behind ``FLRP_EQSEARCH_SLOW=1``) the
@@ -34,18 +36,20 @@ import os
 import unittest
 from collections import Counter
 from pathlib import Path
+from unittest import mock
 
 try:
-    import numpy  # noqa: F401  (probe only)
+    import numpy as np
     HAVE_NUMPY = True
 except ImportError:
     HAVE_NUMPY = False
 
 if HAVE_NUMPY:
     import eqfast
-    from eqfast import FastTables, FastUniformTables, survey_fast
-from eqsearch import (EqTables, UniformTables, is_uniform, survey,
-                      survey_json)
+    from eqfast import (FastLazyUniformTables, FastTables, FastUniformTables,
+                        invariant_partitions_fast, survey_fast)
+from eqsearch import (EqTables, UniformTables, invariant_partitions,
+                      is_uniform, survey, survey_json)
 from test_eqsearch import l7
 from test_flrp import m3
 
@@ -100,17 +104,6 @@ class FastBackendTests(unittest.TestCase):
             (Path(__file__).parent / "out"
              / "l7_eq9_uniform_report.json").read_text())
 
-    def test_orbit_chunking_is_boundary_independent(self) -> None:
-        """fast: classification is unchanged when orbit relabeling runs in tiny chunks (the 10! memory path)."""
-        reports, copies = survey_fast(m3(), 4)
-        original = eqfast.ORBIT_CHUNK
-        eqfast.ORBIT_CHUNK = 5          # 24 permutations -> 5 chunks
-        try:
-            chunked, chunked_copies = survey_fast(m3(), 4)
-        finally:
-            eqfast.ORBIT_CHUNK = original
-        self.assertEqual((reports, copies), (chunked, chunked_copies))
-
     @unittest.skipUnless(os.environ.get("FLRP_EQSEARCH_SLOW") == "1",
                          "set FLRP_EQSEARCH_SLOW=1 for the Eq(8) sweep (hours)")
     def test_l7_eq8_census_and_committed_report(self) -> None:
@@ -148,6 +141,42 @@ class FastBackendTests(unittest.TestCase):
 
 
 @unittest.skipUnless(HAVE_NUMPY, "numpy is not installed")
+class FastLazyTablesTests(unittest.TestCase):
+    """The on-the-fly fast tables (issue #499) — pool rows computed by kernel
+    and the closure universe packed as an int8 matrix with a vectorized
+    invariance filter — pinned to the eager fast backend and to the pure
+    filter where all of them run."""
+
+    def test_lazy_rows_match_eager(self) -> None:
+        """fast lazy: meet_row/join_row equal the eager pool rows (n = 8)."""
+        fut, flz = FastUniformTables(8), FastLazyUniformTables(8)
+        self.assertEqual(flz.parts, fut.parts)
+        for a in range(len(fut.parts)):
+            self.assertTrue(np.array_equal(flz.meet_row(a), fut.meet[a]))
+            self.assertTrue(np.array_equal(flz.join_row(a), fut.join[a]))
+
+    def test_vectorized_invariant_filter_matches_pure(self) -> None:
+        """fast lazy: the int8-matrix invariance filter returns exactly the pure invariant_partitions set (n = 6), the empty monoid (all 203) included."""
+        eq6 = EqTables(6)
+        matrix = np.array(eq6.parts, dtype=np.int8)
+        for maps in ([], [(0, 0, 2, 2, 4, 4)],
+                     [(1, 2, 0, 4, 5, 3), (0, 0, 2, 2, 4, 4)]):
+            self.assertEqual(set(invariant_partitions_fast(maps, matrix, 6)),
+                             set(invariant_partitions(maps, eq6)))
+
+    def test_lazy_survey_is_byte_identical(self) -> None:
+        """fast lazy: forcing the on-the-fly tables (with the vectorized
+        closure filter) reproduces the eager fast M3/Eq(6) uniform report byte
+        for byte — every stage, search through closure, agrees."""
+        eager = survey_json(m3(), 6, *survey_fast(m3(), 6, uniform=True),
+                            restriction="uniform")
+        with mock.patch.object(eqfast, "_EAGER_POOL_LIMIT", 0):  # force lazy
+            lazy = survey_json(m3(), 6, *survey_fast(m3(), 6, uniform=True),
+                               restriction="uniform")
+        self.assertEqual(lazy, eager)
+
+
+@unittest.skipUnless(HAVE_NUMPY, "numpy is not installed")
 class Eq7FastTests(unittest.TestCase):
     """One shared fast Eq(7) sweep (~30 s): the census pin and the prime-
     degree side of the uniform restriction."""
@@ -169,6 +198,32 @@ class Eq7FastTests(unittest.TestCase):
         self.assertFalse(any(all(is_uniform(p) for p in r.representative)
                              for r in self.reports))
         self.assertEqual(survey_fast(l7(), 7, uniform=True), ([], 0))
+
+
+@unittest.skipUnless(HAVE_NUMPY, "numpy is not installed")
+class Eq12SweepTests(unittest.TestCase):
+    """The coatom-anchored `Eq(12)` uniform sweep (issue #499): its arithmetic,
+    and — behind `FLRP_EQSEARCH_SLOW=1` — that it re-derives the committed
+    report byte for byte (the sweep imports the numpy backend for `Inv(M)`)."""
+
+    def test_coatom_stabilizer_order(self) -> None:
+        """eq12: |Stab(c_k)| = |S_k wr S_(12/k)| for the two coatom block sizes."""
+        from eq12_uniform_sweep import coatom_stabilizer_order
+        self.assertEqual(coatom_stabilizer_order(4), 82944)      # (4!)^3 * 3!
+        self.assertEqual(coatom_stabilizer_order(6), 1036800)    # (6!)^2 * 2!
+
+    @unittest.skipUnless(os.environ.get("FLRP_EQSEARCH_SLOW") == "1",
+                         "set FLRP_EQSEARCH_SLOW=1 for the Eq(12) sweep (~4 min)")
+    def test_sweep_reproduces_committed_report(self) -> None:
+        """eq12: the sweep re-derives the committed 15-class report — none closed — byte for byte."""
+        from eq12_uniform_sweep import l7_target, sweep
+        lat, reports, copies = sweep()
+        self.assertEqual(len(reports), 15)
+        self.assertFalse(any(r.closed for r in reports))
+        self.assertEqual(
+            survey_json(lat, 12, reports, copies, restriction="uniform"),
+            (Path(__file__).parent / "out"
+             / "l7_eq12_uniform_report.json").read_text())
 
 
 # ---------------------------------------------------------------------------

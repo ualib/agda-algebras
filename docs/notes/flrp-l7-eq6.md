@@ -162,3 +162,32 @@ for d in 8 9 10 12; do
       --out scripts/gap/flrp/out/l7_transitive_deg$d.search.json --date 2026-07-24
 done
 ```
+
+## 10. Addendum (2026-07-24): the `Eq(12)` uniform sweep settles twelve on the algebra side; the frontier moves to sixteen
+
+Section 8 left the `Eq(12)` uniform sweep as the decisive open computation, and § 9's degree-12 group-side scan settled its minimality-relevant part.  This section carries out the full algebra-side sweep (issue #499) and reaches the same verdict independently — and more strongly, since it rules out non-group uniform copies too.
+
+**Bringing twelve within reach.**  The generic height-ordered search of #486/#494 balloons at twelve: element `1` alone ranges over all 32,032 nontrivial uniform partitions, each with about 6,700 partners meeting it at `Δ`, for some `2.1 × 10⁸` two-element prefixes and a projected 584 hours.  The sweep of `scripts/python/flrp/eq12_uniform_sweep.py` runs the same census in minutes with a constraint-density, symmetry-broken search: it anchors on the coatom `(1,1) = (1,0) ∨ (0,1)`, whose block size must be a composite proper divisor of twelve — 4 or 6 — and, since `S₁₂` is transitive on the uniform partitions of a fixed block size, fixes it to the two canonical representatives `c₄`, `c₆` (every relabeling class has a copy with the coatom in canonical form); the two atoms below it are then refinements, the second coatom `(0,2)` is pinned by `(1,1) ∧ (0,2) = (0,1)`, and `x` is a transversal atom.  Classification counting and every closure test are delegated unchanged to the orbit–stabilizer engine of #499 (the preserving monoid over *all* unary maps, `Inv(M)` over all of `Eq(12)`), so the verdicts mean exactly what they do in §§ 4–5.  Completeness is certified, not assumed: for a class whose representative carries coatom `c_k`, exactly `|Stab(c_k)| / |Stab(rep)|` of its members carry that canonical coatom, and the sweep stops the instant those counts sum to the exhaustively counted number of canonical-coatom copies — so no class can hide.
+
+**The census.**  `Eq(12)` is the first ground-set size that contains a uniform copy of `L7` at all — the divisor chains `2 | 4`, `2 | 6`, `3 | 6` foreseen in § 8 — and it contains **3,353,011,200** labelled copies, in exactly **15 classes up to relabeling**: four with a block-size-4 coatom, eleven with a block-size-6 coatom.
+
+| classes | stabilizer | orbit size | `\|M\|` | `\|G\|` | proper maps | `\|Inv(M)\|` | closed |
+|---|---|---|---|---|---|---|---|
+| 2 | trivial | 479,001,600 | 13 | 1 | 0 | 4,213,597 | no |
+| 8 | order 2 | 239,500,800 | 14 | 2 | 0 | 6,841 | no |
+| 3 | order 4 | 119,750,400 | 16 | 4 | 0 | 319 | no |
+| 1 | order 6 | 79,833,600 | 18 | 6 | 0 | 54 | no |
+| 1 | order 12 | 39,916,800 | 24 | 12 | 0 | 16 | no |
+
+**No class is closed**, and the failure is the endomorphism wall of six and seven points: every class's preserving monoid is its stabilizer group plus the twelve constants, with **no non-bijective non-constant map at all**, so `Inv(M) = Inv(G)` — the partitions fixed by a small group on twelve points, always far more than the seven of a copy.  Consequently **no algebra on twelve points has congruence lattice isomorphic to `L7`**, on the algebra side and in full, matching § 9's group-side degree-12 negative.
+
+**The frontier moves to sixteen.**  Chaining the manuscript's § 5 transitivity theorem past twelve: a representation on 13, 14, or 15 points would be of minimal size (§ 8 and the above rule out everything through twelve), hence transitive, hence a uniform copy of `L7` on that many points — but 13 is prime (a transitive action of prime degree is primitive, with the two-element congruence lattice), and the uniform pools at 14 (block sizes 2, 7) and 15 (block sizes 3, 5) are antichains, since neither `2 | 7` nor `3 | 5`, so neither has the two comparable nontrivial members the grid cover `(0,1) ≺ (1,1)` needs.  The first ground-set size where a uniform copy is again conceivable is `16 = 2⁴` (chains `2 | 4 | 8`).  **Therefore the minimal representation of library `L7` (manuscript `L10`), if one exists, has at least sixteen elements** — three sizes past § 8's bound, one past § 9's.
+
+Reproduction (byte-deterministic; committed report `scripts/python/flrp/out/l7_eq12_uniform_report.json`, format `flrp-eqsearch v1`, restriction `uniform`; about four minutes on one core):
+
+```sh
+python3 scripts/python/flrp/eq12_uniform_sweep.py \
+    --json scripts/python/flrp/out/l7_eq12_uniform_report.json
+```
+
+`make flrp-test` pins the committed report's fifteen classes and their open verdicts on every run, and re-derives it behind `FLRP_EQSEARCH_SLOW=1`.  This does **not** start `Eq(16)`: that pool (`16 = 2⁴`, 10,480,142,147 members) is the next campaign step, not this one.
