@@ -466,6 +466,50 @@ class OrbitStabilizerClassifierTests(unittest.TestCase):
         self._parity(l7(), 7)
 
 
+class Eq12UniformReportTests(unittest.TestCase):
+    """The committed `Eq(12)` uniform sweep report (issue #499): a pinned
+    negative census — 15 relabeling classes, none closed — so no algebra on
+    twelve points has `Con ≅ L7`.  Order-independent facts only, so the pin is
+    stable under the sweep's representative-discovery order."""
+
+    REPORT = Path(__file__).parent / "out" / "l7_eq12_uniform_report.json"
+
+    @classmethod
+    def setUpClass(cls) -> None:
+        cls.data = json.loads(cls.REPORT.read_text())
+
+    def test_format_and_restriction(self) -> None:
+        """eq12: the report is a uniform `flrp-eqsearch v1` census of L7 on 12 points."""
+        self.assertEqual(self.data["format"], "flrp-eqsearch v1")
+        self.assertEqual((self.data["target"], self.data["points"],
+                          self.data["restriction"]), ("L7", 12, "uniform"))
+
+    def test_fifteen_open_classes(self) -> None:
+        """eq12: 15 classes, 3,353,011,200 labelled copies, none closed."""
+        classes = self.data["classes"]
+        self.assertEqual(len(classes), 15)
+        self.assertEqual(self.data["copies"], 3353011200)
+        self.assertFalse(any(c["closed"] for c in classes))
+
+    def test_endomorphism_wall(self) -> None:
+        """eq12: every class is |M| = |G| + 12 constants with no proper map — the
+        closure obstruction, so Inv(M) = Inv(G) is far larger than the seven of a copy."""
+        for c in self.data["classes"]:
+            self.assertEqual(c["properMaps"], 0)
+            self.assertEqual(c["monoidSize"], c["groupOrder"] + 12)
+            self.assertGreater(c["invariants"], 7)
+
+    def test_orbit_and_invariant_distributions(self) -> None:
+        """eq12: the by-stabilizer split of orbit sizes and |Inv(M)| is pinned."""
+        self.assertEqual(
+            Counter(c["orbitSize"] for c in self.data["classes"]),
+            Counter({479001600: 2, 239500800: 8, 119750400: 3,
+                     79833600: 1, 39916800: 1}))
+        self.assertEqual(
+            Counter(c["invariants"] for c in self.data["classes"]),
+            Counter({4213597: 2, 6841: 8, 319: 3, 54: 1, 16: 1}))
+
+
 # ---------------------------------------------------------------------------
 # A logging runner, matching test_flrp.py.
 

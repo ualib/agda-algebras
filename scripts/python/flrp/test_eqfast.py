@@ -200,6 +200,32 @@ class Eq7FastTests(unittest.TestCase):
         self.assertEqual(survey_fast(l7(), 7, uniform=True), ([], 0))
 
 
+@unittest.skipUnless(HAVE_NUMPY, "numpy is not installed")
+class Eq12SweepTests(unittest.TestCase):
+    """The coatom-anchored `Eq(12)` uniform sweep (issue #499): its arithmetic,
+    and — behind `FLRP_EQSEARCH_SLOW=1` — that it re-derives the committed
+    report byte for byte (the sweep imports the numpy backend for `Inv(M)`)."""
+
+    def test_coatom_stabilizer_order(self) -> None:
+        """eq12: |Stab(c_k)| = |S_k wr S_(12/k)| for the two coatom block sizes."""
+        from eq12_uniform_sweep import coatom_stabilizer_order
+        self.assertEqual(coatom_stabilizer_order(4), 82944)      # (4!)^3 * 3!
+        self.assertEqual(coatom_stabilizer_order(6), 1036800)    # (6!)^2 * 2!
+
+    @unittest.skipUnless(os.environ.get("FLRP_EQSEARCH_SLOW") == "1",
+                         "set FLRP_EQSEARCH_SLOW=1 for the Eq(12) sweep (~4 min)")
+    def test_sweep_reproduces_committed_report(self) -> None:
+        """eq12: the sweep re-derives the committed 15-class report — none closed — byte for byte."""
+        from eq12_uniform_sweep import l7_target, sweep
+        lat, reports, copies = sweep()
+        self.assertEqual(len(reports), 15)
+        self.assertFalse(any(r.closed for r in reports))
+        self.assertEqual(
+            survey_json(lat, 12, reports, copies, restriction="uniform"),
+            (Path(__file__).parent / "out"
+             / "l7_eq12_uniform_report.json").read_text())
+
+
 # ---------------------------------------------------------------------------
 # A logging runner, matching test_flrp.py.
 
