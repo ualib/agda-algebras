@@ -190,6 +190,9 @@
 [Classical.Structures.Group.Subgroups]: /Classical/Structures/Group/Subgroups/
 [Classical.Structures.Interpret]: /Classical/Structures/Interpret/
 [Classical.Structures.Lattice]: /Classical/Structures/Lattice/
+[Classical.Structures.Lattice.Dual]: /Classical/Structures/Lattice/Dual/
+[Classical.Structures.Lattice.OrdinalSum]: /Classical/Structures/Lattice/OrdinalSum/
+[Classical.Structures.Lattice.Product]: /Classical/Structures/Lattice/Product/
 [Classical.Structures.Magma]: /Classical/Structures/Magma/
 [Classical.Structures.Monoid]: /Classical/Structures/Monoid/
 [Classical.Structures.Ring]: /Classical/Structures/Ring/
@@ -363,6 +366,9 @@
 [FLRP.Certificates.SmallLatticeReps.SLR33]: /FLRP/Certificates/SmallLatticeReps/SLR33/
 [FLRP.Certificates.SmallLatticeReps.SLR34]: /FLRP/Certificates/SmallLatticeReps/SLR34/
 [FLRP.Certificates.SmallLatticeReps.SLR35]: /FLRP/Certificates/SmallLatticeReps/SLR35/
+[FLRP.Closure]: /FLRP/Closure/
+[FLRP.Closure.OrdinalSum]: /FLRP/Closure/OrdinalSum/
+[FLRP.Closure.Product]: /FLRP/Closure/Product/
 [FLRP.Enforceable]: /FLRP/Enforceable/
 [FLRP.L7EqSix]: /FLRP/L7EqSix/
 [FLRP.LayerBridge]: /FLRP/LayerBridge/
@@ -551,6 +557,9 @@
 [Classical/Structures/Group/Subgroups.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Group/Subgroups.lagda.md
 [Classical/Structures/Interpret.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Interpret.lagda.md
 [Classical/Structures/Lattice.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Lattice.lagda.md
+[Classical/Structures/Lattice/Dual.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Lattice/Dual.lagda.md
+[Classical/Structures/Lattice/OrdinalSum.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Lattice/OrdinalSum.lagda.md
+[Classical/Structures/Lattice/Product.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Lattice/Product.lagda.md
 [Classical/Structures/Magma.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Magma.lagda.md
 [Classical/Structures/Monoid.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Monoid.lagda.md
 [Classical/Structures/Ring.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Ring.lagda.md
@@ -724,6 +733,9 @@
 [FLRP/Certificates/SmallLatticeReps/SLR33.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/Certificates/SmallLatticeReps/SLR33.lagda.md
 [FLRP/Certificates/SmallLatticeReps/SLR34.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/Certificates/SmallLatticeReps/SLR34.lagda.md
 [FLRP/Certificates/SmallLatticeReps/SLR35.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/Certificates/SmallLatticeReps/SLR35.lagda.md
+[FLRP/Closure.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/Closure.lagda.md
+[FLRP/Closure/OrdinalSum.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/Closure/OrdinalSum.lagda.md
+[FLRP/Closure/Product.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/Closure/Product.lagda.md
 [FLRP/Enforceable.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/Enforceable.lagda.md
 [FLRP/L7EqSix.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/L7EqSix.lagda.md
 [FLRP/LayerBridge.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/LayerBridge.lagda.md
