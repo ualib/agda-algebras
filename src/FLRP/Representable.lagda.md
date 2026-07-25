@@ -52,9 +52,9 @@ open import Agda.Primitive       using () renaming ( Set to Type )
 open import Data.Empty           using ( ⊥-elim )
 open import Data.Fin.Base        using ( Fin )
 open import Data.Fin.Patterns    using ( 0F ; 1F )
-open import Data.Fin.Properties  using ( ¬Fin0 ) renaming ( _≟_ to _≟ᶠ_ )
+open import Data.Fin.Properties  using ( ¬Fin0 ; all? ; ¬∀⟶∃¬ ) renaming ( _≟_ to _≟ᶠ_ )
 open import Data.Nat.Base        using ( zero ; suc )
-open import Data.Product         using ( _,_ ; proj₁ ; proj₂ ; Σ-syntax )
+open import Data.Product         using ( _,_ ; _×_ ; proj₁ ; proj₂ ; Σ-syntax )
 open import Data.Sum.Base        using ( _⊎_ ; inj₁ ; inj₂ )
 open import Data.Unit.Base       using ( tt )
 open import Level                using ( Level ; 0ℓ ; _⊔_ ; Lift ; lift ; lower )
@@ -63,6 +63,8 @@ open import Relation.Binary      using ( Setoid ; IsEquivalence )
 open import Relation.Binary.PropositionalEquality
                                  using ( _≡_ ; refl ; sym ; subst )
 open import Relation.Nullary     using ( ¬_ ; Dec ; yes ; no )
+open import Relation.Nullary.Decidable
+                                 using ( _→-dec_ )
 
 -- Imports from the Agda Universal Algebra Library ------------------------------
 open import Classical.Properties.Lattice         using  ( module Lattice-Order
@@ -514,6 +516,62 @@ constructions replace a possibly-empty witness algebra by `𝟏`{.AgdaFunction}.
 𝟏-ConTrivialᵈ : {𝑆 : Signature 𝓞 𝓥} → ConTrivialᵈ {𝑨 = 𝟏 {𝑆 = 𝑆}} ℓ
 𝟏-ConTrivialᵈ d e =
   (λ _ → reflexive (proj₂ (proj₁ e)) tt) , (λ _ → reflexive (proj₂ (proj₁ d)) tt)
+```
+
+#### Containment of decidable congruences is decidable
+
+On a finite algebra, `d ⊆ᵈ e` reduces to finitely many decidable implications:
+check the enumerated pairs and lift the verdict through surjectivity via
+`ConRel-resp`{.AgdaFunction}.  Consequently a *failed* containment yields a
+concrete violating pair (of enumerated elements) — the constructive
+witness-extraction step the ordinal-sum closure's comparability argument runs
+on.
+
+```agda
+module _ {𝑆 : Signature 𝓞 𝓥} {𝑨 : Algebra {𝑆 = 𝑆} α ρ} (𝑭 : FiniteAlgebra 𝑨) where
+  open Setoid 𝔻[ 𝑨 ] using ( _≈_ ) renaming ( sym to ≈sym )
+
+  private
+    -- The enumerated-pairs table of a containment.
+    Table : DecCon 𝑨 ℓ → DecCon 𝑨 ℓ → Type ℓ
+    Table d e = ∀ i j → ConRel d (𝑭 .enum i) (𝑭 .enum j) → ConRel e (𝑭 .enum i) (𝑭 .enum j)
+
+    table? : (d e : DecCon 𝑨 ℓ) → Dec (Table d e)
+    table? d e = all? (λ i → all? (λ j →
+      proj₂ d (𝑭 .enum i) (𝑭 .enum j) →-dec proj₂ e (𝑭 .enum i) (𝑭 .enum j)))
+
+    -- Lift a full table to the containment, through surjectivity.
+    table→⊆ : (d e : DecCon 𝑨 ℓ) → Table d e → d ⊆ᵈ e
+    table→⊆ d e tbl {x} {y} dxy with 𝑭 .enum-sur x | 𝑭 .enum-sur y
+    ... | i , pi | j , pj =
+      ConRel-resp e pi pj (tbl i j (ConRel-resp d (≈sym pi) (≈sym pj) dxy))
+
+  -- Containment of decidable congruences is decidable.
+  ⊆ᵈ-dec : (d e : DecCon 𝑨 ℓ) → Dec (d ⊆ᵈ e)
+  ⊆ᵈ-dec d e with table? d e
+  ... | yes tbl  = yes (table→⊆ d e tbl)
+  ... | no ¬tbl  = no (λ sub → ¬tbl (λ i j dij → sub dij))
+
+  -- A failed containment yields a concrete violating pair.
+  ⊈ᵈ-witness : (d e : DecCon 𝑨 ℓ) → ¬ (d ⊆ᵈ e)
+    → Σ[ x ∈ 𝕌[ 𝑨 ] ] Σ[ y ∈ 𝕌[ 𝑨 ] ] (ConRel d x y × ¬ ConRel e x y)
+  ⊈ᵈ-witness d e ¬sub with table? d e
+  ... | yes tbl  = ⊥-elim (¬sub (table→⊆ d e tbl))
+  ... | no ¬tbl  = unpack
+    where
+    -- Peel the two Fin quantifiers off the refuted table, then split the
+    -- refuted (decidable) implication into premise and refuted conclusion.
+    ¬→-split : {P Q : Type ℓ} → Dec P → ¬ (P → Q) → P × ¬ Q
+    ¬→-split (yes p) ¬imp  = p , λ q → ¬imp (λ _ → q)
+    ¬→-split (no ¬p) ¬imp  = ⊥-elim (¬imp (λ p → ⊥-elim (¬p p)))
+
+    unpack : Σ[ x ∈ 𝕌[ 𝑨 ] ] Σ[ y ∈ 𝕌[ 𝑨 ] ] (ConRel d x y × ¬ ConRel e x y)
+    unpack with ¬∀⟶∃¬ _ _ (λ i → all? (λ j →
+                   proj₂ d (𝑭 .enum i) (𝑭 .enum j) →-dec proj₂ e (𝑭 .enum i) (𝑭 .enum j))) ¬tbl
+    ... | i , ¬rowᵢ with ¬∀⟶∃¬ _ _ (λ j →
+                   proj₂ d (𝑭 .enum i) (𝑭 .enum j) →-dec proj₂ e (𝑭 .enum i) (𝑭 .enum j)) ¬rowᵢ
+    ...   | j , ¬impᵢⱼ =
+      𝑭 .enum i , 𝑭 .enum j , ¬→-split (proj₂ d (𝑭 .enum i) (𝑭 .enum j)) ¬impᵢⱼ
 ```
 
 #### Consequences of a decidable-layer isomorphism
