@@ -93,6 +93,7 @@ module FLRP where
 
 open import FLRP.Problem        public
 open import FLRP.Enforceable    public
+open import FLRP.Parachute      public
 open import FLRP.Bridge         public
 open import FLRP.Representable  public
 open import FLRP.Assumptions    public

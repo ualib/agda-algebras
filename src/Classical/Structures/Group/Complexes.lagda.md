@@ -40,7 +40,7 @@ open import Classical.Structures.Group.Basic      using ( Group ; module Group-O
 open import Classical.Structures.Group.Subgroups  using ( IsSubgroup )
 open import Setoid.Algebras.Basic                 using ( 𝕌[_] ; 𝔻[_] )
 
-private variable ℓ ℓ' : Level
+private variable ℓ ℓ' ℓ₁ ℓ₂ : Level
 ```
 -->
 
@@ -72,8 +72,10 @@ module Complex {α ρ : Level} (𝒢 : Group α ρ) where
   ∙ᶜ-respects P Q x≈y (p , q , p∈P , q∈Q , x≈pq) =
     p , q , p∈P , q∈Q , ≈trans (≈sym x≈y) x≈pq
 
-  -- The complex product is monotone in both arguments.
-  ∙ᶜ-mono : {P P' : Pred G ℓ} {Q Q' : Pred G ℓ'}
+  -- The complex product is monotone in both arguments.  (The four predicates are
+  -- given independent levels: consumers routinely enlarge a product of two
+  -- small-level factors into a single subgroup at another level.)
+  ∙ᶜ-mono : {P : Pred G ℓ} {P' : Pred G ℓ₁} {Q : Pred G ℓ'} {Q' : Pred G ℓ₂}
     →  P ⊆ P' → Q ⊆ Q' → P ∙ᶜ Q ⊆ P' ∙ᶜ Q'
   ∙ᶜ-mono P⊆P' Q⊆Q' (p , q , p∈P , q∈Q , x≈pq) =
     p , q , P⊆P' p∈P , Q⊆Q' q∈Q , x≈pq
