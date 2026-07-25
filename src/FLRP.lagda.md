@@ -56,8 +56,14 @@ Two standing warnings apply to everything under this namespace.
    attained here with no postulate).
 +  [FLRP.Assumptions][] — the registry of classical theorems imported as
    explicit hypotheses (never postulates), keeping the tree honest under
-   `--safe`; its first entry is the congruence-completeness bridge
-   `CongruenceCompleteness`, the single Layer-S→Layer-D assumption of ADR-008.
+   `--safe`; Entry 1 is the congruence-completeness bridge
+   `CongruenceCompleteness`, the single Layer-S→Layer-D assumption of ADR-008,
+   and Entry 2 is Kurzweil–Netter duality, consumed by the WP-5 closure
+   toolkit.
++  [FLRP.Closure][] — the WP-5 closure toolkit: product and ordinal-sum
+   closure of `Representableᵈ` (issue #456), the adjoin-a-new-extremum
+   corollaries at `chain₂`, and the duality corollary `dual-Representableᵈ`
+   conditional on the registry's Entry 2.
 +  [FLRP.LayerBridge][] — the cross-layer bridge: under the congruence-completeness
    assumption, the semantic and decidable congruence posets are order-isomorphic
    (`conDecIso`), whence `Representable 𝑳 ↔ Representableᵈ 𝑳`.
@@ -90,6 +96,7 @@ open import FLRP.Enforceable public
 open import FLRP.Bridge public
 open import FLRP.Representable public
 open import FLRP.Assumptions public
+open import FLRP.Closure public
 open import FLRP.LayerBridge public
 open import FLRP.Certificates public
 open import FLRP.L7EqSix public
