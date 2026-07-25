@@ -412,10 +412,15 @@ the glue.  The four lemmas name these unfoldings for consumers.
   ≤ᵒ-up : (x : 𝕌[ 𝑨 ]) (y : 𝕌[ 𝑩 ]) → (inj₁ x) ≤ᵒ (inj₂ y)
   ≤ᵒ-up x y = refl₁ , refl₂
 
-  -- An upper element below a lower one forces both to the glue.
+  -- An upper element below a lower one forces both to the glue ...
   ≤ᵒ-down-elim : {x : 𝕌[ 𝑩 ]} {y : 𝕌[ 𝑨 ]}
     → (inj₂ x) ≤ᵒ (inj₁ y) → (y ≈₁ ⊤₁) × (x ≈₂ ⊥₂)
   ≤ᵒ-down-elim (p , q) = p , sym₂ q
+
+  -- ... and, at the glue, it does sit below.
+  ≤ᵒ-down : {x : 𝕌[ 𝑩 ]} {y : 𝕌[ 𝑨 ]}
+    → y ≈₁ ⊤₁ → x ≈₂ ⊥₂ → (inj₂ x) ≤ᵒ (inj₁ y)
+  ≤ᵒ-down y≈⊤ x≈⊥ = y≈⊤ , sym₂ x≈⊥
 ```
 
 #### The sum operator
