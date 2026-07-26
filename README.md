@@ -26,11 +26,14 @@ From a clean checkout to a green build, assuming [Nix][] with flakes enabled (se
 git clone https://github.com/ualib/agda-algebras.git
 cd agda-algebras
 nix develop          # pins Agda 2.8.0 + standard-library 2.3 automatically
-make check           # type-check the entire library
+make check           # type-check the library and the frozen Legacy tree
+make check-all       # (optional) the above plus the FLRP certificate census
 make site            # (optional) build the documentation site under ./site
 ```
 
 The first `nix develop` downloads and builds the pinned Agda and standard library (and the MkDocs toolchain); subsequent entries into the shell are essentially instantaneous.  Non-Nix installation paths (Agda's PyPI package, prebuilt binaries, `cabal` from source) are documented in [`INSTALL.md`](INSTALL.md).
+
+The build has three tiers.  `make check` covers the library and the frozen `Legacy/` tree; `make check-certificates` covers the machine-checked small-lattice representation certificates of the FLRP research track (`src/FLRP/Certificates/SmallLatticeReps/`), which no library module imports and which cost as much to type-check as the rest of the library put together; `make check-all` is everything.  CI runs all three, the certificates in their own parallel job.
 
 ---
 
