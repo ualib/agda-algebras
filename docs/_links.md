@@ -178,6 +178,7 @@
 [Classical.Structures.Group]: /Classical/Structures/Group/
 [Classical.Structures.Group.AbelianGroup]: /Classical/Structures/Group/AbelianGroup/
 [Classical.Structures.Group.Basic]: /Classical/Structures/Group/Basic/
+[Classical.Structures.Group.Centralizer]: /Classical/Structures/Group/Centralizer/
 [Classical.Structures.Group.Complements]: /Classical/Structures/Group/Complements/
 [Classical.Structures.Group.Complexes]: /Classical/Structures/Group/Complexes/
 [Classical.Structures.Group.Conjugation]: /Classical/Structures/Group/Conjugation/
@@ -552,6 +553,7 @@
 [Classical/Structures/Group.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Group.lagda.md
 [Classical/Structures/Group/AbelianGroup.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Group/AbelianGroup.lagda.md
 [Classical/Structures/Group/Basic.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Group/Basic.lagda.md
+[Classical/Structures/Group/Centralizer.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Group/Centralizer.lagda.md
 [Classical/Structures/Group/Complements.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Group/Complements.lagda.md
 [Classical/Structures/Group/Complexes.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Group/Complexes.lagda.md
 [Classical/Structures/Group/Conjugation.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Group/Conjugation.lagda.md

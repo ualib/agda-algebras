@@ -44,7 +44,7 @@ open import Data.Unit.Base   using  ( tt )
 open import Level            using  ( Level ; 0ℓ ; lift ) renaming ( suc to lsuc )
 open import Relation.Binary  using  ( Setoid )
 open import Relation.Binary.PropositionalEquality  using  ( _≡_ )
-open import Relation.Nullary using  ( ¬_ ; Dec )
+open import Relation.Nullary using  ( ¬_ ; Dec ; yes ; no )
 open import Relation.Unary   using  ( Pred ; _∈_ ; _⊆_ ; _∩_ )
 
 -- Imports from the Agda Universal Algebra Library ------------------------------
@@ -276,6 +276,15 @@ parachute's own, transported.
 
     K-proper : (i j : Fin (ℕ.suc m)) → ¬ (i ≡ j) → Proper (K i)
     K-proper i j i≢j all = K-⊄H j (λ {x} z → atoms-meet′ i j i≢j (all x , z))
+
+    -- Properness is decidable in a parachute: a member is everything exactly when
+    -- its image is the parachute's top, and being the top is decidable there.
+    -- (This is the datum Lemma 3.7 of [FLRP.Parachute][] needs.)
+    IsAll? : (M : Interval≈) → Dec (IsAll M)
+    IsAll? M with ⊤ᵖ≤? (to M)
+    ... | yes le  = yes (above-top M (≤ᵖ-sound le))
+    ... | no ¬le  = no  (λ all → ¬le (≤ᵖ-complete
+                          (≤ᴸ-trans top-≤ (to-mono′ Gᵢ M (λ {x} _ → all x)))))
 ```
 
 #### The canopies are represented

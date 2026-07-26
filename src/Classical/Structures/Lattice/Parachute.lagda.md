@@ -582,6 +582,12 @@ representation of `Lᵢ` off a representation of the parachute.
   π-cong : (i : Fin (ℕ.suc m)) {z w : P} → z ≈ᵖ w → [ i ] π i z ≈ π i w
   π-cong i (z≤w , w≤z) = ≤antisym i (π-mono i z≤w) (π-mono i w≤z)
 
+  -- Being the whole parachute is decidable: only the top is above the top.
+  ⊤ᵖ≤? : (z : P) → Dec (⊤ᵖ ≤ᵖ z)
+  ⊤ᵖ≤? ⊤ᵖ           = yes ⊤-great
+  ⊤ᵖ≤? ⊥ᵖ           = no (λ ())
+  ⊤ᵖ≤? (can i x p)  = no (λ ())
+
   -- The retraction sends the i-th atom to the i-th canopy's bottom.
   π-atom : (i : Fin (ℕ.suc m)) → [ i ] π i (atom i) ≈ bot i
   π-atom i rewrite ≟-diag i = ≈refl i

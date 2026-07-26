@@ -22,6 +22,10 @@ lattices `L₁ , … , Lₙ`, at least two of which have more than two elements,
    parachute of the enforcing lattices (`conjunction-cfIE`{.AgdaFunction}).  No
    representability hypothesis enters: the corollary is about enforcement, not about
    existence.
++  **Lemma 3.7**, through the `Structure37`{.AgdaModule} instance inside a core-free
+   representation: `NH = G` for every nontrivial normal `N`, the centralizer of a
+   minimal normal subgroup is trivial, that subgroup is nonabelian, and no
+   nontrivial normal subgroup meets it trivially — `G` is subdirectly irreducible.
 +  **The strategy meta-theorem**.  If the enforced classes have *empty intersection*
    then `𝒫` is not group representable
    (`empty-intersection→not-representable`{.AgdaFunction}); with Pálfy–Pudlák
@@ -170,6 +174,15 @@ core-free and carries its canopy, so the group has every enforced property.
       enforced : (i : Fin (2 + m)) → Ps i 𝒢
       enforced i = Ps-cfIE i 𝒢 (set (K i)) (element-isSubgroup (K i))
                               (K-CoreFree i) (canopyIso i)
+
+      -- Lemma 3.7 applies to this representation: properness is decidable in a
+      -- parachute (`IsAll?`), and the p-th atom is a member strictly between H
+      -- and G.  What remains open in `Structure` is only the minimal normal
+      -- subgroup, which the caller supplies.
+      module Structure37 = Structure config H-cf p≢q
+                             (bigCanopy p big-p) (bigCanopy q big-q) IsAll?
+                             (K p) (K-proper p (proj₁ (companion p)) (proj₂ (companion p)))
+                             (K-⊄H p)
 
       -- The witnesses, in the packaged form statement (C) asks for.
       canopy-witnesses : (i : Fin (2 + m))

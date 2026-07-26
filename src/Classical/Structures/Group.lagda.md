@@ -16,6 +16,7 @@ This is the [Classical.Structures.Group][] module of the [Agda Universal Algebra
 module Classical.Structures.Group where
 
 open import Classical.Structures.Group.Basic public
+open import Classical.Structures.Group.Centralizer public
 open import Classical.Structures.Group.AbelianGroup public
 open import Classical.Structures.Group.Complements public
 open import Classical.Structures.Group.Complexes public

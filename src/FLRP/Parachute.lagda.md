@@ -67,15 +67,18 @@ open import Data.Unit.Base                         using  ( tt )
 open import Level                                  using  ( Level ; 0ℓ ; lift )
                                                    renaming ( suc to lsuc )
 open import Relation.Binary.PropositionalEquality  using  ( _≡_ ; refl ; sym ; trans )
-open import Relation.Nullary                       using  ( ¬_ ; yes ; no )
+open import Relation.Nullary                       using  ( ¬_ ; Dec ; yes ; no )
 open import Relation.Unary                         using  ( Pred ; _∈_ ; _⊆_ ; _∩_ )
 
 -- Imports from the Agda Universal Algebra Library ------------------------------
 open import Classical.Structures.Group  using  ( Group ; IsSubgroup ; module Core
-                                               ; module Complements ; module Complex
-                                               ; module Conj ; module Group-Op
-                                               ; module GroupSublattice
+                                               ; module Centralizer ; module Complements
+                                               ; module Complex ; module Conj
+                                               ; module Group-Op ; module GroupSublattice
+                                               ; dedekindʳ
                                                ; fullSubgroup ; trivialSubgroup )
+open import Relation.Binary             using  ( Setoid )
+open import Setoid.Algebras             using  ( 𝔻[_] )
 open import FLRP.Enforceable            using  ( module UpperInterval ; CoreFree )
 open import Setoid.Algebras             using  ( 𝕌[_] )
 ```
@@ -98,8 +101,12 @@ module GroupParachute
                                   ; Factorize-sym ; normal-∙ᶜ-isSubgroup
                                   ; complement-⊆-collapse )
   open Complex 𝒢           using  ( _∙ᶜ_ ; ∙ᶜ-mono ; subgroup-∙ᶜ-idem )
-  open Conj 𝒢              using  ( IsNormal )
-  open Group-Op 𝒢          using  ( ε )
+  open Centralizer 𝒢       using  ( C[_] ; C-antitone ; C-isSubgroup ; C-normal
+                                  ; normals-centralize )
+  open Conj 𝒢              using  ( conj ; IsNormal ; conj-congᵍ ; conj-action-∙ )
+  open Group-Op 𝒢          using  ( _∙_ ; ε ; _⁻¹ ; ∙-cong ; idˡ-law )
+  open Setoid 𝔻[ proj₁ 𝒢 ] using  ( _≈_ ) renaming ( refl to ≈refl ; sym to ≈sym
+                                                   ; trans to ≈trans )
   open GroupSublattice 𝒢 0ℓ  using  ( ∧-isSubgroup )
   open IsSubgroup          using  ( ε-closed )
 ```
@@ -360,6 +367,195 @@ note uses.
     normal-∙ᶜH-all cf p≢q big-p big-q Y NH-proper =
       normal-in-proper-trivial cf p≢q big-p big-q (CoreProduct.NHᵢ Y) NH-proper
         (CoreProduct.N-normal Y) (CoreProduct.N⊆NH Y)
+```
+
+#### Lemma 3.7: the structure of a core-free parachute representation
+
+The note's Lemma 3.7 describes the normal structure that a parachute forces: for
+every nontrivial normal `N` one has `NH = G` and `C_G(N) = 1`, and consequently `G`
+is subdirectly irreducible with a nonabelian monolith.  The module below proves this
+under two further hypotheses, both of them consequences of *finiteness* that the
+library cannot yet derive and that are therefore threaded as ordinary arguments.
+
++  **Decidable properness** `all?`{.AgdaBound}.  The note's argument moves freely
+   between "`NH` is proper" and "`NH = G`"; constructively `IsAll`{.AgdaFunction} is
+   a Π-statement, so the step from `¬ ¬ IsAll` to `IsAll` needs a decision.  Over a
+   parachute the decision is *free* — the image of a member of the interval is the
+   top, the bottom, or a canopy element, and only the first is everything — and
+   [FLRP.Parachute.Representation][] supplies it.  This is the ADR-008 layer
+   discipline: the obstruction is real, so the decision procedure becomes data.
+
++  **A minimal normal subgroup** `M`{.AgdaBound}.  The centralizer argument descends
+   to a minimal nontrivial normal subgroup; existence follows from finiteness by
+   well-founded descent, which the library does not yet have.
+
++  **A strictly intermediate member** `K`{.AgdaBound}, that is, `H < K < G`.  In a
+   parachute with `n ≥ 2` any atom will do, and the theorems module passes one.
+
+```agda
+    module Structure
+      (H-cf     : CoreFree 𝒢 H H-sg)
+      {p q      : Fin n} (p≢q : ¬ (p ≡ q))
+      (big-p    : BigCanopy (atom p)) (big-q : BigCanopy (atom q))
+      (all?     : (M : Interval≈) → Dec (IsAll M))
+      (K        : Interval≈) (K-proper : Proper K) (K-⊄H : ¬ (set K ⊆ H))
+      where
+
+      private
+        Triv : Pred 𝕌[ proj₁ 𝒢 ] 0ℓ
+        Triv = proj₁ (trivialSubgroup 𝒢)
+
+        K-sg : IsSubgroup 𝒢 (set K)
+        K-sg = element-isSubgroup K
+
+      -- The propagation theorem, in the form Lemma 3.7 uses.
+      normal-in-proper : (Y : Interval≈) → Proper Y
+        → {N : Pred 𝕌[ proj₁ 𝒢 ] 0ℓ} → IsNormal N → N ⊆ set Y → N ⊆ Triv
+      normal-in-proper Y Y-proper = normal-in-proper-trivial H-cf p≢q big-p big-q Y Y-proper
+
+      -- The member N H of the interval, for an arbitrary normal subgroup N.
+      NHof : (N : Pred 𝕌[ proj₁ 𝒢 ] 0ℓ) → IsSubgroup 𝒢 N → IsNormal N → Interval≈
+      NHof N N-sg N-nrm =
+        mk (N ∙ᶜ H) (normal-∙ᶜ-isSubgroup N-nrm N-sg H-sg) (mem-∙ᶜʳ (ε-closed N-sg))
+```
+
+**Lemma 3.7 (i), first half**: `NH = G` for every nontrivial normal `N`.  Were `NH`
+proper, `N` would sit inside a proper member of the interval and hence be trivial;
+the decision procedure turns that into the positive statement.
+
+```agda
+      NH-all : (N : Pred 𝕌[ proj₁ 𝒢 ] 0ℓ) (N-sg : IsSubgroup 𝒢 N) (N-nrm : IsNormal N)
+        → ¬ (N ⊆ Triv) → IsAll (NHof N N-sg N-nrm)
+      NH-all N N-sg N-nrm nontriv with all? (NHof N N-sg N-nrm)
+      ... | yes a  = a
+      ... | no ¬a  = ⊥-elim (nontriv (normal-in-proper (NHof N N-sg N-nrm) ¬a N-nrm
+                                                       (mem-∙ᶜˡ (ε-closed H-sg))))
+```
+
+**Lemma 3.7 (i), second half**: the centralizer of a *minimal* nontrivial normal
+subgroup `M` is trivial.  Suppose not; then `C = C_G(M)` is a nontrivial normal
+subgroup, so `CH = G`.  Now `M ∩ K` is normalized by `C H`, hence by all of `G`: an
+element of `H` normalizes it because it normalizes both `M` and `K`, and an element
+of `C` fixes every member of `M` pointwise.  And `M ∩ K` is nontrivial, by Dedekind's
+rule: `K = K ∩ MH = (M ∩ K)H`, which would collapse `K` into `H`.  Minimality of `M`
+then puts `M` inside `K`, so `MH ⊆ K` is proper — contradicting `MH = G`.
+
+```agda
+      module Minimal
+        (M          : Pred 𝕌[ proj₁ 𝒢 ] 0ℓ)
+        (M-sg       : IsSubgroup 𝒢 M)
+        (M-nrm      : IsNormal M)
+        (M-nontriv  : ¬ (M ⊆ Triv))
+        (M-min      : {N : Pred 𝕌[ proj₁ 𝒢 ] 0ℓ} → IsSubgroup 𝒢 N → IsNormal N
+                    → N ⊆ M → ¬ (N ⊆ Triv) → M ⊆ N)
+        where
+
+        private
+          C-sg : IsSubgroup 𝒢 C[ M ]
+          C-sg = C-isSubgroup M
+
+          C-nrm : IsNormal C[ M ]
+          C-nrm = C-normal M-nrm
+
+          -- M ∩ K is a subgroup (a meet in the subgroup lattice).
+          MK-sg : IsSubgroup 𝒢 (M ∩ set K)
+          MK-sg = ∧-isSubgroup (M , IsSubgroup.isSubuniverse M-sg) (sublat K) M-sg K-sg
+
+          M-all : IsAll (NHof M M-sg M-nrm)
+          M-all = NH-all M M-sg M-nrm M-nontriv
+
+        -- M ∩ K is nontrivial: otherwise Dedekind's rule collapses K into H.
+        MK-nontriv : ¬ ((M ∩ set K) ⊆ Triv)
+        MK-nontriv MK⊆triv = K-⊄H inside
+          where
+          inside : set K ⊆ H
+          inside {x} x∈K = IsSubgroup.respects H-sg (≈sym x≈h) h∈H
+            where
+            split : x ∈ (M ∩ set K) ∙ᶜ H
+            split = proj₂ (dedekindʳ 𝒢 {H = H} {C = M} {K = set K} K-sg (above K))
+                          (M-all x , x∈K)
+
+            h    = proj₁ (proj₂ split)
+            h∈H  = proj₁ (proj₂ (proj₂ (proj₂ split)))
+
+            x≈h : x ≈ h
+            x≈h = ≈trans (proj₂ (proj₂ (proj₂ (proj₂ split))))
+                         (≈trans (∙-cong (MK⊆triv (proj₁ (proj₂ (proj₂ split)))) ≈refl)
+                                 (idˡ-law h))
+
+        -- Were the centralizer nontrivial, M ∩ K would be normal in G.
+        private
+          MK-normal : IsAll (NHof C[ M ] C-sg C-nrm) → IsNormal (M ∩ set K)
+          MK-normal all g {x} (x∈M , x∈K) = M-nrm g x∈M , K-mem
+            where
+            factor = all g
+            c      = proj₁ factor
+            h      = proj₁ (proj₂ factor)
+            c∈C    = proj₁ (proj₂ (proj₂ factor))
+            h∈H    = proj₁ (proj₂ (proj₂ (proj₂ factor)))
+            g≈ch   = proj₂ (proj₂ (proj₂ (proj₂ factor)))
+
+            -- Conjugating by an element of H stays inside both M and K.
+            hx∈K : conj h x ∈ set K
+            hx∈K = IsSubgroup.∙-closed K-sg
+                     (IsSubgroup.∙-closed K-sg (above K h∈H) x∈K)
+                     (IsSubgroup.⁻¹-closed K-sg (above K h∈H))
+
+            hx∈M : conj h x ∈ M
+            hx∈M = M-nrm h x∈M
+
+            -- Conjugating a member of M by an element of its centralizer fixes it.
+            fixed : conj c (conj h x) ≈ conj h x
+            fixed = ≈trans (∙-cong (c∈C (conj h x) hx∈M) ≈refl)
+                           (≈trans (Group-Op.assoc-law 𝒢 (conj h x) c (c ⁻¹))
+                                   (≈trans (∙-cong ≈refl (Group-Op.invʳ-law 𝒢 c))
+                                           (Group-Op.idʳ-law 𝒢 (conj h x))))
+
+            K-mem : conj g x ∈ set K
+            K-mem = set-respects K
+                      (≈sym (≈trans (conj-congᵍ x g≈ch)
+                                    (≈trans (conj-action-∙ c h x) fixed)))
+                      hx∈K
+
+        -- Lemma 3.7 (i), second half.
+        centralizer-trivial : C[ M ] ⊆ Triv
+        centralizer-trivial =
+          normal-in-proper (NHof C[ M ] C-sg C-nrm) C-proper C-nrm (mem-∙ᶜˡ (ε-closed H-sg))
+          where
+          C-proper : Proper (NHof C[ M ] C-sg C-nrm)
+          C-proper all = K-proper (λ x → M⊆K (M-all x))
+            where
+            M⊆M∩K : M ⊆ (M ∩ set K)
+            M⊆M∩K = M-min MK-sg (MK-normal all) (λ z → proj₁ z) MK-nontriv
+
+            -- M inside K forces M H inside K, and M H is everything.
+            M⊆K : (M ∙ᶜ H) ⊆ set K
+            M⊆K z = proj₁ (subgroup-∙ᶜ-idem K-sg)
+                      (∙ᶜ-mono (λ w → proj₂ (M⊆M∩K w)) (above K) z)
+
+        -- The note's Remark: a nontrivial normal subgroup is nonabelian, since an
+        -- abelian one lies inside its own (trivial) centralizer.
+        nonabelian : ¬ (∀ x y → x ∈ M → y ∈ M → x ∙ y ≈ y ∙ x)
+        nonabelian abelian =
+          M-nontriv (λ {x} x∈M → centralizer-trivial (λ y y∈M → abelian x y x∈M y∈M))
+
+        -- Lemma 3.7 (ii), pairwise form: no nontrivial normal subgroup meets M
+        -- trivially, so M is the monolith and G is subdirectly irreducible.
+        normals-meet : (N : Pred 𝕌[ proj₁ 𝒢 ] 0ℓ) → IsSubgroup 𝒢 N → IsNormal N
+          → (∀ {w} → w ∈ M → w ∈ N → w ≈ ε) → N ⊆ Triv
+        normals-meet N N-sg N-nrm meet z =
+          centralizer-trivial (normals-centralize M-sg N-sg M-nrm N-nrm meet z)
+
+      -- The centralizer of *any* nontrivial normal subgroup with a minimal normal
+      -- subgroup inside it is trivial, since centralizers are antitone.
+      centralizer-of-normal :
+           (M N : Pred 𝕌[ proj₁ 𝒢 ] 0ℓ)
+        →  (M-sg : IsSubgroup 𝒢 M) (M-nrm : IsNormal M) (M-nontriv : ¬ (M ⊆ Triv))
+        →  ({R : Pred 𝕌[ proj₁ 𝒢 ] 0ℓ} → IsSubgroup 𝒢 R → IsNormal R
+              → R ⊆ M → ¬ (R ⊆ Triv) → M ⊆ R)
+        →  M ⊆ N → C[ N ] ⊆ Triv
+      centralizer-of-normal M N M-sg M-nrm M-nontriv M-min M⊆N z =
+        Minimal.centralizer-trivial M M-sg M-nrm M-nontriv M-min (C-antitone M⊆N z)
 ```
 
 ---
