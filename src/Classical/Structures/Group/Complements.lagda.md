@@ -10,9 +10,9 @@ author: "the agda-algebras development team"
 
 This is the [Classical.Structures.Group.Complements][] module of the [Agda Universal Algebra Library][].
 
-Fix subgroups `H ≤ G` and an intermediate subgroup `A ∈ [H , G]`.  A **complement of
-`A` in the interval `[H , G]`** is a subgroup `B ∈ [H , G]` with `A ∩ B = H` and
-`⟨A , B⟩ = G`; the note of the FLRP program writes `A^⊥(H,G)` for the set of these.[^1]
+Fix subgroups `H ≤ G` and an intermediate subgroup `A ∈ [H , G]`.
+A **complement of `A` in the interval `[H , G]`** is a subgroup `B ∈ [H , G]` with
+`A ∩ B = H` and `⟨A , B⟩ = G`; the note of the FLRP program writes `A^⊥(H,G)` for the set of these.[^1]
 The result this module is built for is the note's Corollary 3.5:
 
 > if every member of a set `ℬ ⊆ A^⊥(H,G)` permutes with `A`, then `ℬ` is an antichain.
@@ -24,24 +24,27 @@ The proof is one application of Dedekind's rule
 
 so no strict containment is possible.
 
-**Complements, formalized through the complex product.**  Two of the note's
-hypotheses — that `B` permutes with `A` (`AB = BA`) and that `A` and `B` join to `G`
-— are used only through their conjunction, which is the single statement `BA = G`:
-the *complex product* `B ∙ᶜ A` of [Classical.Structures.Group.Complexes][] exhausts
-the group.  We take that statement, `Factorize`{.AgdaFunction}, as the primitive.
+**Complements, formalized through the complex product**.
+
+Two of the note's hypotheses — that `B` permutes with `A` (`AB = BA`) and that `A`
+and `B` join to `G` — are used only through their conjunction, which is the single
+statement `BA = G`: the *complex product* `B ∙ᶜ A` of
+[Classical.Structures.Group.Complexes][] exhausts the group.
+We call that statement `Factorize`{.AgdaFunction} and take it as the primitive.
+
 It is exactly equivalent to the note's pair of hypotheses — a permuting pair of
 subgroups has `⟨A , B⟩ = AB` — and it keeps the argument free of the *generated*
-subgroup, whose inductive presentation would otherwise have to be unfolded.  The
-join hypothesis is recovered where consumers need it: a factorization of `G` is
-inherited by any subgroup containing `A` and `B`
-(`Factorize-least`{.AgdaFunction}), which is the universal property of the join.
+subgroup, whose inductive presentation would otherwise have to be unfolded.
+
+The join hypothesis is recovered where consumers need it: a factorization of `G` is
+inherited by any subgroup containing `A` and `B` (`Factorize-least`{.AgdaFunction}),
+which is the universal property of the join.
 
 The module also collects the small facts about complex products that the argument and
 its FLRP consumers need: a permuting product of subgroups is a subgroup
 (`permuting-∙ᶜ-isSubgroup`{.AgdaFunction}), a normal subgroup permutes with
-everything (`normal-permutes`{.AgdaFunction}), and hence `NB` is a subgroup for `N`
-normal (`normal-∙ᶜ-isSubgroup`{.AgdaFunction}) — the subgroup `NH` on which the
-parachute theorems turn.
+every subgroup (`normal-permutes`{.AgdaFunction}), hence `NB` is a subgroup for `N`
+normal (`normal-∙ᶜ-isSubgroup`{.AgdaFunction}).
 
 <!--
 ```agda
@@ -52,8 +55,9 @@ module Classical.Structures.Group.Complements where
 open import Agda.Primitive using () renaming ( Set to Type )
 
 -- Imports from the Agda Standard Library ---------------------------------------
-open import Data.Product     using ( _,_ ; proj₁ ; proj₂ )
+open import Data.Product     using ( _,_ ; proj₁ ; proj₂ ; Σ-syntax ; _×_)
 open import Level            using ( Level ; _⊔_ )
+open import Function         using ( id ; _∘_ )
 open import Relation.Binary  using ( Setoid )
 open import Relation.Unary   using ( Pred ; _∈_ ; _⊆_ ; _∩_ ; _≐_ )
 
@@ -62,6 +66,7 @@ import Relation.Binary.Reasoning.Setoid as SetoidReasoning
 
 -- Imports from the Agda Universal Algebra Library ------------------------------
 open import Classical.Bundles.Group                 using ( ⟨_⟩ᵍᵖ )
+open import Classical.Signatures.Group              using ( Sig-Group )
 open import Classical.Structures.Group.Basic        using ( Group ; module Group-Op )
 open import Classical.Structures.Group.Complexes    using ( module Complex )
 open import Classical.Structures.Group.Conjugation  using ( module Conj )
@@ -78,10 +83,11 @@ private variable ℓᵃ ℓᵇ ℓᶜ ℓʰ ℓⁿ : Level
 ```agda
 module Complements {α ρ : Level} (𝒢 : Group α ρ) where
   private
+    𝑮 : Algebra {𝑆 = Sig-Group} α ρ
     𝑮 = proj₁ 𝒢
-    G = 𝕌[ 𝑮 ]
 
-  open Setoid 𝔻[ 𝑮 ]  using ( _≈_ ) renaming ( refl to ≈refl ; sym to ≈sym ; trans to ≈trans )
+  open Setoid 𝔻[ 𝑮 ] using ( _≈_ ) renaming  ( Carrier to G ; refl to ≈refl
+                                              ; sym to ≈sym ; trans to ≈trans )
   open SetoidReasoning 𝔻[ 𝑮 ]
   open Group-Op 𝒢  using  ( _∙_ ; ε ; _⁻¹ ; ∙-cong ; ⁻¹-cong ; assoc-law
                           ; idˡ-law ; idʳ-law ; invˡ-law ; invʳ-law )
@@ -141,11 +147,21 @@ rewritten as some `a₃b₃`, after which associativity regroups the four factor
       swap : b₁ ∙ a₂ ∈ A ∙ᶜ B
       swap = BA⊆AB (mem-∙ᶜ b₁∈B a₂∈A)
 
-      a₃ = proj₁ swap
-      b₃ = proj₁ (proj₂ swap)
-      a₃∈A = proj₁ (proj₂ (proj₂ swap))
-      b₃∈B = proj₁ (proj₂ (proj₂ (proj₂ swap)))
-      b₁a₂≈a₃b₃ = proj₂ (proj₂ (proj₂ (proj₂ swap)))
+      a₃ b₃ : G
+      a₃ = swap .proj₁
+      b₃ = swap .proj₂ .proj₁
+
+      ξ : a₃ ∈ A × b₃ ∈ B × b₁ ∙ a₂ ≈ a₃ ∙ b₃
+      ξ = swap .proj₂ .proj₂
+
+      a₃∈A : a₃ ∈ A
+      a₃∈A = ξ .proj₁
+
+      b₃∈B : b₃ ∈ B
+      b₃∈B = ξ .proj₂ .proj₁
+
+      b₁a₂≈a₃b₃ : b₁ ∙ a₂ ≈ a₃ ∙ b₃
+      b₁a₂≈a₃b₃ = ξ .proj₂ .proj₂
 
       regroup : x ∙ y ≈ (a₁ ∙ a₃) ∙ (b₃ ∙ b₂)
       regroup = begin
@@ -175,7 +191,7 @@ is a subgroup whenever `N` is normal and both are subgroups — this is the subg
 ```agda
   -- Moving a conjugate across a factor, in the two directions.
   private
-    swapˡ : ∀ b n → b ∙ (conj (b ⁻¹) n) ≈ n ∙ b
+    swapˡ : ∀ b n → b ∙ conj (b ⁻¹) n ≈ n ∙ b
     swapˡ b n = begin
       b ∙ (b ⁻¹ ∙ n ∙ (b ⁻¹) ⁻¹)  ≈⟨ ∙-cong ≈refl (∙-cong ≈refl (⁻¹-involutive b)) ⟩
       b ∙ (b ⁻¹ ∙ n ∙ b)          ≈˘⟨ assoc-law b (b ⁻¹ ∙ n) b ⟩
@@ -184,7 +200,7 @@ is a subgroup whenever `N` is normal and both are subgroups — this is the subg
       (ε ∙ n) ∙ b                 ≈⟨ ∙-cong (idˡ-law n) ≈refl ⟩
       n ∙ b                       ∎
 
-    swapʳ : ∀ b n → (conj b n) ∙ b ≈ b ∙ n
+    swapʳ : ∀ b n → conj b n ∙ b ≈ b ∙ n
     swapʳ b n = begin
       (b ∙ n ∙ b ⁻¹) ∙ b   ≈⟨ assoc-law (b ∙ n) (b ⁻¹) b ⟩
       (b ∙ n) ∙ (b ⁻¹ ∙ b) ≈⟨ ∙-cong ≈refl (invˡ-law b) ⟩
@@ -196,11 +212,11 @@ is a subgroup whenever `N` is normal and both are subgroups — this is the subg
   normal-permutes {N = N} B N-normal = to , from
     where
     to : N ∙ᶜ B ⊆ B ∙ᶜ N
-    to {x} (n , b , n∈N , b∈B , x≈nb) =
+    to (n , b , n∈N , b∈B , x≈nb) =
       b , conj (b ⁻¹) n , b∈B , N-normal (b ⁻¹) n∈N , ≈trans x≈nb (≈sym (swapˡ b n))
 
     from : B ∙ᶜ N ⊆ N ∙ᶜ B
-    from {x} (b , n , b∈B , n∈N , x≈bn) =
+    from (b , n , b∈B , n∈N , x≈bn) =
       conj b n , b , N-normal b n∈N , b∈B , ≈trans x≈bn (≈sym (swapʳ b n))
 
   -- Hence the product of a normal subgroup with any subgroup is a subgroup.
@@ -231,11 +247,21 @@ by every subgroup above both factors, which is the join's universal property.
     open IsSubgroup P-sg using () renaming ( ⁻¹-closed to P⁻¹ )
     open IsSubgroup Q-sg using () renaming ( ⁻¹-closed to Q⁻¹ )
 
-    p = proj₁ (fact (x ⁻¹))
-    q = proj₁ (proj₂ (fact (x ⁻¹)))
-    p∈P = proj₁ (proj₂ (proj₂ (fact (x ⁻¹))))
-    q∈Q = proj₁ (proj₂ (proj₂ (proj₂ (fact (x ⁻¹)))))
-    x⁻¹≈pq = proj₂ (proj₂ (proj₂ (proj₂ (fact (x ⁻¹)))))
+    p q : G
+    p = fact (x ⁻¹) .proj₁
+    q = fact (x ⁻¹) .proj₂ .proj₁
+
+    ξ : p ∈ P × q ∈ Q × x ⁻¹ ≈ p ∙ q
+    ξ = fact (x ⁻¹) .proj₂ .proj₂
+
+    p∈P : p ∈ P
+    p∈P = ξ .proj₁
+
+    q∈Q : q ∈ Q
+    q∈Q = ξ .proj₂ .proj₁
+
+    x⁻¹≈pq : x ⁻¹ ≈ p ∙ q
+    x⁻¹≈pq = ξ .proj₂ .proj₂
 
     anti : x ≈ q ⁻¹ ∙ p ⁻¹
     anti = begin
@@ -250,7 +276,7 @@ by every subgroup above both factors, which is the join's universal property.
   -- A factorization of the group is inherited by any subgroup containing both
   -- factors: this is "⟨P , Q⟩ = G" in its universal-property form.
   Factorize-least : {P : Pred G ℓᵃ} {Q : Pred G ℓᵇ} {C : Pred G ℓᶜ}
-    →  IsSubgroup 𝒢 C → P ⊆ C → Q ⊆ C → Factorize P Q → (x : G) → x ∈ C
+    → IsSubgroup 𝒢 C → P ⊆ C → Q ⊆ C → Factorize P Q → (x : G) → x ∈ C
   Factorize-least {C = C} C-sg P⊆C Q⊆C fact x =
     proj₁ (subgroup-∙ᶜ-idem C-sg) (∙ᶜ-mono P⊆C Q⊆C (fact x))
 ```
@@ -265,14 +291,11 @@ because `B₁ ≤ B₂` and `B₂` is a subgroup — in `B₁(A ∩ B₂)`; the 
 shrinks the second factor to `H ⊆ B₁`, and `B₁B₁ = B₁` collapses the product.
 
 ```agda
-  complement-⊆-collapse :
-       {H : Pred G ℓʰ} {A : Pred G ℓᵃ} {B₁ B₂ : Pred G ℓᵇ}
-    →  IsSubgroup 𝒢 B₁ → IsSubgroup 𝒢 B₂
-    →  H ⊆ B₁ → B₁ ⊆ B₂
-    →  (A ∩ B₂) ⊆ H
-    →  Factorize B₁ A
-    →  B₂ ⊆ B₁
-  complement-⊆-collapse {H = H} {A} {B₁} {B₂} B₁-sg B₂-sg H⊆B₁ B₁⊆B₂ meet-⊆ fact {x} x∈B₂ =
+  complement-⊆-collapse : {H : Pred G ℓʰ} {A : Pred G ℓᵃ} {B₁ B₂ : Pred G ℓᵇ}
+    → IsSubgroup 𝒢 B₁ → IsSubgroup 𝒢 B₂
+    → H ⊆ B₁ → B₁ ⊆ B₂ → A ∩ B₂ ⊆ H → Factorize B₁ A → B₂ ⊆ B₁
+
+  complement-⊆-collapse {A = A} {B₁} {B₂} B₁-sg B₂-sg H⊆B₁ B₁⊆B₂ meet-⊆ fact {x} x∈B₂ =
     proj₁ (subgroup-∙ᶜ-idem B₁-sg) inside
     where
     -- x lies in B₁A and in B₂ ...
@@ -281,11 +304,11 @@ shrinks the second factor to `H ⊆ B₁`, and `B₁B₁ = B₁` collapses the p
 
     -- ... hence in B₁(A ∩ B₂), by Dedekind's rule ...
     step₂ : x ∈ B₁ ∙ᶜ (A ∩ B₂)
-    step₂ = proj₂ (dedekindˡ 𝒢 {H = B₁} {C = A} {K = B₂} B₂-sg B₁⊆B₂) step₁
+    step₂ = proj₂ (dedekindˡ 𝒢 B₂-sg B₁⊆B₂) step₁
 
     -- ... and A ∩ B₂ ⊆ H ⊆ B₁ turns that into a product of two members of B₁.
     inside : x ∈ B₁ ∙ᶜ B₁
-    inside = ∙ᶜ-mono (λ z → z) (λ z → H⊆B₁ (meet-⊆ z)) step₂
+    inside = ∙ᶜ-mono id (H⊆B₁ ∘ meet-⊆ ) step₂
 ```
 
 An **antichain** of subgroups, indexed by a type `I`, is a family in which no member
@@ -293,8 +316,9 @@ is contained in another except when the containment reverses — the constructiv
 reading of "pairwise incomparable" for subsets ordered by inclusion, where equality
 *is* mutual containment.
 
-The corollary itself: a family of permuting complements of `A` in `[H , G]` is an
-antichain.
+**The corollary**.
+
+A family of permuting complements of `A` in `[H , G]` is an antichain.
 
 ```agda
   -- No strict containments: a containment between members is mutual.
@@ -305,9 +329,9 @@ antichain.
   complements-antichain :
        {I : Type ℓᶜ} {H : Pred G ℓʰ} {A : Pred G ℓᵃ} (ℬ : I → Pred G ℓᵇ)
     →  (∀ i → IsSubgroup 𝒢 (ℬ i))
-    →  (∀ i → H ⊆ ℬ i)                    -- every member lies in the interval [H , G]
-    →  (∀ i → (A ∩ ℬ i) ⊆ H)              -- every member meets A in H
-    →  (∀ i → Factorize (ℬ i) A)          -- every member permutes with A and joins it to G
+    →  (∀ i → H ⊆ ℬ i)              -- every member lies in the interval [H , G]
+    →  (∀ i → A ∩ ℬ i ⊆ H)        -- every member meets A in H
+    →  (∀ i → Factorize (ℬ i) A)    -- every member permutes with A and joins it to G
     →  Antichain ℬ
   complements-antichain ℬ ℬ-sg H⊆ℬ meet fact i j ℬi⊆ℬj =
     complement-⊆-collapse (ℬ-sg i) (ℬ-sg j) (H⊆ℬ i) ℬi⊆ℬj (meet j) (fact i)
