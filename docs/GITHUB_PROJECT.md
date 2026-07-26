@@ -3626,7 +3626,7 @@ Depends on WP-2 (WP-3 is helpful but not required).  Part of #451.
 
 ---
 
-### Issue M6-13e: FLRP WP-5: closure toolkit — products, ordinal sums, Kurzweil–Netter duality (#456)
+### Issue M6-13e: FLRP WP-5: closure toolkit — products, ordinal sums, Kurzweil–Netter duality (#456, closed)
 
 **Labels**: `milestone-6-flrp`, `research-exploratory`, `flrp-research`
 
