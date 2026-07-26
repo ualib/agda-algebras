@@ -181,6 +181,7 @@
 [Classical.Structures.Group.Centralizer]: /Classical/Structures/Group/Centralizer/
 [Classical.Structures.Group.Complements]: /Classical/Structures/Group/Complements/
 [Classical.Structures.Group.Complexes]: /Classical/Structures/Group/Complexes/
+[Classical.Structures.Group.Congruences]: /Classical/Structures/Group/Congruences/
 [Classical.Structures.Group.Conjugation]: /Classical/Structures/Group/Conjugation/
 [Classical.Structures.Group.Cosets]: /Classical/Structures/Group/Cosets/
 [Classical.Structures.Group.Dedekind]: /Classical/Structures/Group/Dedekind/
@@ -219,6 +220,7 @@
 [Order]: /Order/
 [Order.CompleteLattice]: /Order/CompleteLattice/
 [Order.Interval]: /Order/Interval/
+[Order.Iso]: /Order/Iso/
 
 [Examples]: /Examples/
 [Examples.Classical]: /Examples/Classical/
@@ -556,6 +558,7 @@
 [Classical/Structures/Group/Centralizer.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Group/Centralizer.lagda.md
 [Classical/Structures/Group/Complements.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Group/Complements.lagda.md
 [Classical/Structures/Group/Complexes.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Group/Complexes.lagda.md
+[Classical/Structures/Group/Congruences.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Group/Congruences.lagda.md
 [Classical/Structures/Group/Conjugation.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Group/Conjugation.lagda.md
 [Classical/Structures/Group/Cosets.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Group/Cosets.lagda.md
 [Classical/Structures/Group/Dedekind.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Group/Dedekind.lagda.md
@@ -594,6 +597,7 @@
 [Order.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Order.lagda.md
 [Order/CompleteLattice.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Order/CompleteLattice.lagda.md
 [Order/Interval.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Order/Interval.lagda.md
+[Order/Iso.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Order/Iso.lagda.md
 
 [Examples.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Examples.lagda.md
 [Examples/Classical.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Examples/Classical.lagda.md
