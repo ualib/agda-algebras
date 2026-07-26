@@ -382,6 +382,7 @@
 [FLRP.Parachute.Representation]: /FLRP/Parachute/Representation/
 [FLRP.Parachute.Theorems]: /FLRP/Parachute/Theorems/
 [FLRP.Problem]: /FLRP/Problem/
+[FLRP.Reductions]: /FLRP/Reductions/
 [FLRP.Representable]: /FLRP/Representable/
 
 <!-- ===== Module sources on GitHub ===== -->
@@ -758,6 +759,7 @@
 [FLRP/Parachute/Representation.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/Parachute/Representation.lagda.md
 [FLRP/Parachute/Theorems.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/Parachute/Theorems.lagda.md
 [FLRP/Problem.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/Problem.lagda.md
+[FLRP/Reductions.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/Reductions.lagda.md
 [FLRP/Representable.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/Representable.lagda.md
 
 <!-- ===== Architecture Decision Records ===== -->
