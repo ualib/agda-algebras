@@ -162,11 +162,13 @@ the subgroup lattice are intersections, and above `H` because both factors are.
 
 #### The parachute shape, as group-theoretic data
 
-`ParachuteConfig n` is the shape of `[H , G]` that the argument consumes: `n` atoms,
-distinct ones meeting at the bottom and joining to the top, and the covering
-property.  The fields are exactly the hypotheses the theorem below uses — nothing
-about the canopies themselves is needed, which is why the theorem applies verbatim
-however the canopies are presented.
+`ParachuteConfig n` states the shape of `[H , G]`: `n` atoms, distinct ones meeting
+at the bottom and joining to the top, and the covering property.  Nothing about the
+canopies themselves appears, which is why the results below apply verbatim however
+the canopies are presented.  (`proper-CoreFree`{.AgdaFunction} consumes only
+`atoms-join`{.AgdaField} and `covered`{.AgdaField}; `atoms-meet`{.AgdaField} records
+the other half of the picture — it is what keeps the atoms distinct — and is used by
+the consumers that establish properness of an atom.)
 
 ```agda
   record ParachuteConfig (n : ℕ) : Type (lsuc 0ℓ) where

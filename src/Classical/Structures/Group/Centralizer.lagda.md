@@ -27,8 +27,6 @@ using normality of `N`), hence is trivial, which is exactly `n m = m n`.
 
 module Classical.Structures.Group.Centralizer where
 
-open import Agda.Primitive using () renaming ( Set to Type )
-
 -- Imports from the Agda Standard Library ---------------------------------------
 open import Data.Product     using ( proj₁ )
 open import Level            using ( Level ; _⊔_ )
@@ -137,7 +135,7 @@ and conjugating that equation by `k` gives what is wanted.
     →  N ⊆ C[ M ]
   normals-centralize {M = M} {N} M-sg N-sg M-nrm N-nrm meet {n} n∈N m m∈M = commute
     where
-    open IsSubgroup M-sg using () renaming ( ∙-closed to M∙ ; ⁻¹-closed to M⁻¹ ; respects to M-resp )
+    open IsSubgroup M-sg using () renaming ( ∙-closed to M∙ ; ⁻¹-closed to M⁻¹ )
     open IsSubgroup N-sg using () renaming ( ∙-closed to N∙ ; ⁻¹-closed to N⁻¹ ; respects to N-resp )
 
     -- The commutator, read as (n m n⁻¹) m⁻¹ ...

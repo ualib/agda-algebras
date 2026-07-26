@@ -68,17 +68,16 @@ module FLRP.Parachute.Theorems where
 open import Agda.Primitive using () renaming ( Set to Type )
 
 -- Imports from the Agda Standard Library ---------------------------------------
-open import Data.Empty       using  ( ⊥-elim )
 open import Data.Fin.Base    using  ( Fin )
 open import Data.Fin.Patterns using ( 0F ; 1F )
 open import Data.Fin.Properties using ( _≟_ )
 open import Data.Nat.Base    using  ( ℕ ; _+_ )
 open import Data.Product     using  ( _,_ ; _×_ ; Σ-syntax ; ∃-syntax ; proj₁ ; proj₂ )
-open import Level            using  ( Level ; 0ℓ ) renaming ( suc to lsuc )
+open import Level            using  ( Level ; 0ℓ )
 open import Relation.Binary  using  ( Setoid )
 open import Relation.Binary.PropositionalEquality  using  ( _≡_ ; sym ; trans )
 open import Relation.Nullary using  ( ¬_ ; Dec ; yes ; no )
-open import Relation.Unary   using  ( Pred ; _∈_ ; _⊆_ )
+open import Relation.Unary   using  ( Pred ; _∈_ )
 
 -- Imports from the Agda Universal Algebra Library ------------------------------
 open import Classical.Properties.Lattice  using  ( TopOf ; BotOf )

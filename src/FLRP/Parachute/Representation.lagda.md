@@ -38,10 +38,10 @@ open import Agda.Primitive using () renaming ( Set to Type )
 -- Imports from the Agda Standard Library ---------------------------------------
 open import Data.Fin.Base    using  ( Fin )
 open import Data.Nat.Base    using  ( ℕ )
-open import Data.Product     using  ( _,_ ; _×_ ; Σ-syntax ; proj₁ ; proj₂ )
+open import Data.Product     using  ( _,_ ; Σ-syntax ; proj₁ ; proj₂ )
 open import Data.Sum.Base    using  ( _⊎_ ; inj₁ ; inj₂ )
 open import Data.Unit.Base   using  ( tt )
-open import Level            using  ( Level ; 0ℓ ; lift ) renaming ( suc to lsuc )
+open import Level            using  ( 0ℓ ; lift )
 open import Relation.Binary  using  ( Setoid )
 open import Relation.Binary.PropositionalEquality  using  ( _≡_ )
 open import Relation.Nullary using  ( ¬_ ; Dec ; yes ; no )
@@ -79,7 +79,7 @@ module IntervalIsoTools
   open UpperInterval 𝒢 H H-sg
   open GroupParachute 𝒢 H H-sg  using  ( IsAll ; Hᵢ ; Gᵢ ; ⊇→IsAll )
   open OrderIso iso
-  open Lattice-Order 𝑳         using  ( _≤_ ; ≤-refl ; ≤-trans ; ≤-antisym ; ≤-reflexive )
+  open Lattice-Order 𝑳         using  ( _≤_ ; ≤-trans ; ≤-antisym ; ≤-reflexive )
   open Setoid 𝔻[ proj₁ 𝑳 ]     using  () renaming ( _≈_ to _≈ᴸ_ ; sym to ≈ᴸ-sym )
 
   -- Monotonicity with the endpoints explicit.  Neither `to`, `from`, nor `set`
@@ -210,9 +210,7 @@ module ParachuteRep {m : ℕ}
     open Lattice-Order ⊕ᵖ-Lattice  using  () renaming ( _≤_ to _≤ᴸ_ ; ≤-trans to ≤ᴸ-trans
                                                       ; ≤-respˡ-≈ to ≤ᴸ-respˡ ; ≤-respʳ-≈ to ≤ᴸ-respʳ
                                                       ; ∧-greatest to ∧ᴸ-greatest
-                                                      ; ∨-least to ∨ᴸ-least
-                                                      ; ∧-lowerˡ to ∧ᴸ-lowerˡ
-                                                      ; ∧-lowerʳ to ∧ᴸ-lowerʳ )
+                                                      ; ∨-least to ∨ᴸ-least )
 ```
 
 The `i`-th atom of the representation is the subgroup corresponding to the `i`-th

@@ -52,7 +52,7 @@ module Classical.Structures.Group.Complements where
 open import Agda.Primitive using () renaming ( Set to Type )
 
 -- Imports from the Agda Standard Library ---------------------------------------
-open import Data.Product     using ( _,_ ; _×_ ; proj₁ ; proj₂ )
+open import Data.Product     using ( _,_ ; proj₁ ; proj₂ )
 open import Level            using ( Level ; _⊔_ )
 open import Relation.Binary  using ( Setoid )
 open import Relation.Unary   using ( Pred ; _∈_ ; _⊆_ ; _∩_ ; _≐_ )
