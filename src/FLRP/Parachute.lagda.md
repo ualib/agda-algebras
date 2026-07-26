@@ -101,7 +101,7 @@ module GroupParachute
                                   ; Factorize-sym ; normal-∙ᶜ-isSubgroup
                                   ; complement-⊆-collapse )
   open Complex 𝒢           using  ( _∙ᶜ_ ; ∙ᶜ-mono ; subgroup-∙ᶜ-idem )
-  open Centralizer 𝒢       using  ( C[_] ; C-antitone ; C-isSubgroup ; C-normal
+  open Centralizer 𝒢       using  ( C[_] ; C-isAntitone ; C-isSubgroup ; C-isNormal
                                   ; normals-centralize )
   open Conj 𝒢              using  ( conj ; IsNormal ; conj-congᵍ ; conj-action-∙ )
   open Group-Op 𝒢          using  ( _∙_ ; ε ; _⁻¹ ; ∙-cong ; idˡ-law )
@@ -457,7 +457,7 @@ then puts `M` inside `K`, so `MH ⊆ K` is proper — contradicting `MH = G`.
           C-sg = C-isSubgroup M
 
           C-nrm : IsNormal C[ M ]
-          C-nrm = C-normal M-nrm
+          C-nrm = C-isNormal M-nrm
 
           -- M ∩ K is a subgroup (a meet in the subgroup lattice).
           MK-sg : IsSubgroup 𝒢 (M ∩ set K)
@@ -557,7 +557,7 @@ then puts `M` inside `K`, so `MH ⊆ K` is proper — contradicting `MH = G`.
               → R ⊆ M → ¬ (R ⊆ Triv) → M ⊆ R)
         →  M ⊆ N → C[ N ] ⊆ Triv
       centralizer-of-normal M N M-sg M-nrm M-nontriv M-min M⊆N z =
-        Minimal.centralizer-trivial M M-sg M-nrm M-nontriv M-min (C-antitone M⊆N z)
+        Minimal.centralizer-trivial M M-sg M-nrm M-nontriv M-min (C-isAntitone M⊆N z)
 ```
 
 ---

@@ -93,10 +93,11 @@ import Relation.Binary.Lattice                     as OrdLattice
 import Relation.Binary.Lattice.Properties.Lattice  as OrdLatticeProps
 
 -- Imports from the Agda Universal Algebra Library ------------------------------
-open import Classical.Properties.Lattice  using  ( module Lattice-Order ; TopOf ; BotOf )
-open import Classical.Structures.Lattice  using  ( Lattice ; module Lattice-Op
-                                                 ; setoidEqsToLattice )
-open import Setoid.Algebras.Basic         using  ( 𝕌[_] ; 𝔻[_] )
+open import Classical.Properties.Lattice        using  ( module Lattice-Order
+                                                       ; TopOf ; BotOf )
+open import Classical.Structures.Lattice.Basic  using  ( Lattice ; module Lattice-Op
+                                                       ; setoidEqsToLattice )
+open import Setoid.Algebras.Basic               using  ( 𝕌[_] ; 𝔻[_] )
 
 private variable α ρ : Level
 ```

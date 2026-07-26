@@ -117,8 +117,8 @@ by `k` still centralizes, because `k⁻¹ x k` is again in `N`, so `g` commutes 
 and conjugating that equation by `k` gives what is wanted.
 
 ```agda
-  C-normal : {N : Pred G ℓ} → IsNormal N → IsNormal C[ N ]
-  C-normal N-normal k {g} g∈C x x∈N = begin
+  C-isNormal : {N : Pred G ℓ} → IsNormal N → IsNormal C[ N ]
+  C-isNormal N-normal k {g} g∈C x x∈N = begin
     conj k g ∙ x                       ≈˘⟨ ∙-cong ≈refl (conj-conj⁻¹ k x) ⟩
     conj k g ∙ conj k (conj (k ⁻¹) x)  ≈˘⟨ conj-∙-hom k g (conj (k ⁻¹) x) ⟩
     conj k (g ∙ conj (k ⁻¹) x)         ≈⟨ conj-cong k (g∈C (conj (k ⁻¹) x) (N-normal (k ⁻¹) x∈N)) ⟩
