@@ -377,6 +377,8 @@
 [FLRP.L7EqSix]: /FLRP/L7EqSix/
 [FLRP.LayerBridge]: /FLRP/LayerBridge/
 [FLRP.Parachute]: /FLRP/Parachute/
+[FLRP.Parachute.Representation]: /FLRP/Parachute/Representation/
+[FLRP.Parachute.Theorems]: /FLRP/Parachute/Theorems/
 [FLRP.Problem]: /FLRP/Problem/
 [FLRP.Representable]: /FLRP/Representable/
 
@@ -749,6 +751,8 @@
 [FLRP/L7EqSix.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/L7EqSix.lagda.md
 [FLRP/LayerBridge.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/LayerBridge.lagda.md
 [FLRP/Parachute.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/Parachute.lagda.md
+[FLRP/Parachute/Representation.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/Parachute/Representation.lagda.md
+[FLRP/Parachute/Theorems.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/Parachute/Theorems.lagda.md
 [FLRP/Problem.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/Problem.lagda.md
 [FLRP/Representable.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/Representable.lagda.md
 

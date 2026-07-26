@@ -63,7 +63,8 @@ open import Data.Nat.Base                          using  ( ℕ )
 open import Data.Product                           using  ( _,_ ; _×_ ; Σ-syntax
                                                           ; proj₁ ; proj₂ )
 open import Data.Sum.Base                          using  ( _⊎_ ; inj₁ ; inj₂ )
-open import Level                                  using  ( Level ; 0ℓ )
+open import Data.Unit.Base                         using  ( tt )
+open import Level                                  using  ( Level ; 0ℓ ; lift )
                                                    renaming ( suc to lsuc )
 open import Relation.Binary.PropositionalEquality  using  ( _≡_ ; refl ; sym ; trans )
 open import Relation.Nullary                       using  ( ¬_ ; yes ; no )
@@ -74,7 +75,7 @@ open import Classical.Structures.Group  using  ( Group ; IsSubgroup ; module Cor
                                                ; module Complements ; module Complex
                                                ; module Conj ; module Group-Op
                                                ; module GroupSublattice
-                                               ; trivialSubgroup )
+                                               ; fullSubgroup ; trivialSubgroup )
 open import FLRP.Enforceable            using  ( module UpperInterval ; CoreFree )
 open import Setoid.Algebras             using  ( 𝕌[_] )
 ```
@@ -114,6 +115,29 @@ Its negation is the note's `M < G`.
   -- M is a proper member of the interval.
   Proper : Interval≈ → Type 0ℓ
   Proper M = ¬ (IsAll M)
+```
+
+The two ends of the interval, as members of it: the bottom is `H` itself and the top
+is the full subgroup.  `IsAll`{.AgdaFunction} is containment of the top, spelled
+pointwise.
+
+```agda
+  -- The bottom and the top of [H , G].
+  Hᵢ : Interval≈
+  Hᵢ = mk H H-sg (λ z → z)
+
+  Gᵢ : Interval≈
+  Gᵢ = mk  (proj₁ (fullSubgroup 𝒢 0ℓ)) (proj₂ (fullSubgroup 𝒢 0ℓ)) (λ _ → lift tt)
+
+  IsAll→⊇ : (M : Interval≈) → IsAll M → set Gᵢ ⊆ set M
+  IsAll→⊇ M all {x} _ = all x
+
+  ⊇→IsAll : (M : Interval≈) → set Gᵢ ⊆ set M → IsAll M
+  ⊇→IsAll M sub x = sub {x} (lift tt)
+
+  -- Interval equality is mutual containment, so it composes pointwise.
+  ≈ᵢ-trans : {M N R : Interval≈} → M ≈ᵢ N → N ≈ᵢ R → M ≈ᵢ R
+  ≈ᵢ-trans (M⊆N , N⊆M) (N⊆R , R⊆N) = (λ z → N⊆R (M⊆N z)) , (λ z → N⊆M (R⊆N z))
 ```
 
 The meet of two interval elements is their intersection: a subgroup because meets in

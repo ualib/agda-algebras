@@ -148,48 +148,47 @@ are the images of a function of `i`, so Agda could not infer it.
 
 <!--
 ```agda
-  private
-    ≈refl : (i : Fin n) {x : U i} → [ i ] x ≈ x
-    ≈refl i = Setoid.refl 𝔻[ proj₁ (𝑳 i) ]
+  ≈refl : (i : Fin n) {x : U i} → [ i ] x ≈ x
+  ≈refl i = Setoid.refl 𝔻[ proj₁ (𝑳 i) ]
 
-    ≈sym : (i : Fin n) {x y : U i} → [ i ] x ≈ y → [ i ] y ≈ x
-    ≈sym i = Setoid.sym 𝔻[ proj₁ (𝑳 i) ]
+  ≈sym : (i : Fin n) {x y : U i} → [ i ] x ≈ y → [ i ] y ≈ x
+  ≈sym i = Setoid.sym 𝔻[ proj₁ (𝑳 i) ]
 
-    ≈trans : (i : Fin n) {x y z : U i} → [ i ] x ≈ y → [ i ] y ≈ z → [ i ] x ≈ z
-    ≈trans i = Setoid.trans 𝔻[ proj₁ (𝑳 i) ]
+  ≈trans : (i : Fin n) {x y z : U i} → [ i ] x ≈ y → [ i ] y ≈ z → [ i ] x ≈ z
+  ≈trans i = Setoid.trans 𝔻[ proj₁ (𝑳 i) ]
 
-    ≤refl : (i : Fin n) {x : U i} → [ i ] x ≤ x
-    ≤refl i = Lattice-Order.≤-refl (𝑳 i)
+  ≤refl : (i : Fin n) {x : U i} → [ i ] x ≤ x
+  ≤refl i = Lattice-Order.≤-refl (𝑳 i)
 
-    ≤reflexive : (i : Fin n) {x y : U i} → [ i ] x ≈ y → [ i ] x ≤ y
-    ≤reflexive i = Lattice-Order.≤-reflexive (𝑳 i)
+  ≤reflexive : (i : Fin n) {x y : U i} → [ i ] x ≈ y → [ i ] x ≤ y
+  ≤reflexive i = Lattice-Order.≤-reflexive (𝑳 i)
 
-    ≤trans : (i : Fin n) {x y z : U i} → [ i ] x ≤ y → [ i ] y ≤ z → [ i ] x ≤ z
-    ≤trans i = Lattice-Order.≤-trans (𝑳 i)
+  ≤trans : (i : Fin n) {x y z : U i} → [ i ] x ≤ y → [ i ] y ≤ z → [ i ] x ≤ z
+  ≤trans i = Lattice-Order.≤-trans (𝑳 i)
 
-    ≤antisym : (i : Fin n) {x y : U i} → [ i ] x ≤ y → [ i ] y ≤ x → [ i ] x ≈ y
-    ≤antisym i = Lattice-Order.≤-antisym (𝑳 i)
+  ≤antisym : (i : Fin n) {x y : U i} → [ i ] x ≤ y → [ i ] y ≤ x → [ i ] x ≈ y
+  ≤antisym i = Lattice-Order.≤-antisym (𝑳 i)
 
-    ∧lowerˡ : (i : Fin n) {x y : U i} → [ i ] meet i x y ≤ x
-    ∧lowerˡ i = Lattice-Order.∧-lowerˡ (𝑳 i)
+  ∧lowerˡ : (i : Fin n) {x y : U i} → [ i ] meet i x y ≤ x
+  ∧lowerˡ i = Lattice-Order.∧-lowerˡ (𝑳 i)
 
-    ∧lowerʳ : (i : Fin n) {x y : U i} → [ i ] meet i x y ≤ y
-    ∧lowerʳ i = Lattice-Order.∧-lowerʳ (𝑳 i)
+  ∧lowerʳ : (i : Fin n) {x y : U i} → [ i ] meet i x y ≤ y
+  ∧lowerʳ i = Lattice-Order.∧-lowerʳ (𝑳 i)
 
-    ∧greatest : (i : Fin n) {x y z : U i} → [ i ] z ≤ x → [ i ] z ≤ y → [ i ] z ≤ meet i x y
-    ∧greatest i = Lattice-Order.∧-greatest (𝑳 i)
+  ∧greatest : (i : Fin n) {x y z : U i} → [ i ] z ≤ x → [ i ] z ≤ y → [ i ] z ≤ meet i x y
+  ∧greatest i = Lattice-Order.∧-greatest (𝑳 i)
 
-    ∨upperˡ : (i : Fin n) {x y : U i} → [ i ] x ≤ join i x y
-    ∨upperˡ i = Lattice-Order.∨-upperˡ (𝑳 i)
+  ∨upperˡ : (i : Fin n) {x y : U i} → [ i ] x ≤ join i x y
+  ∨upperˡ i = Lattice-Order.∨-upperˡ (𝑳 i)
 
-    ∨upperʳ : (i : Fin n) {x y : U i} → [ i ] y ≤ join i x y
-    ∨upperʳ i = Lattice-Order.∨-upperʳ (𝑳 i)
+  ∨upperʳ : (i : Fin n) {x y : U i} → [ i ] y ≤ join i x y
+  ∨upperʳ i = Lattice-Order.∨-upperʳ (𝑳 i)
 
-    ∨least : (i : Fin n) {x y z : U i} → [ i ] x ≤ z → [ i ] y ≤ z → [ i ] join i x y ≤ z
-    ∨least i = Lattice-Order.∨-least (𝑳 i)
+  ∨least : (i : Fin n) {x y z : U i} → [ i ] x ≤ z → [ i ] y ≤ z → [ i ] join i x y ≤ z
+  ∨least i = Lattice-Order.∨-least (𝑳 i)
 
-    ≤top : (i : Fin n) (x : U i) → [ i ] x ≤ top i
-    ≤top i = proj₂ (𝒕 i)
+  ≤top : (i : Fin n) (x : U i) → [ i ] x ≤ top i
+  ≤top i = proj₂ (𝒕 i)
 ```
 -->
 
@@ -313,13 +312,14 @@ for the join, `↑`{.AgdaFunction} normalizes a result that may have reached the
     joinᶜ i .i x y (yes refl)  = ↑ i (join i x y)
     joinᶜ i j  x y (no _)      = ⊤ᵖ
 
-    -- Comparing a canopy index with itself answers yes.  This is *not* the K
-    -- rule: `Fin n` has decidable equality, hence unique identity proofs, so
-    -- the reflexive case of the comparison is pinned constructively.  It is
-    -- needed wherever two elements are already known to share a canopy —
-    -- exactly the situation in which `--without-K` refuses to match `refl`.
-    ≟-diag : (i : Fin n) → (i ≟ i) ≡ yes refl
-    ≟-diag i = ≡-≟-identity _≟_ refl
+
+  -- Comparing a canopy index with itself answers yes.  This is *not* the K
+  -- rule: `Fin n` has decidable equality, hence unique identity proofs, so the
+  -- reflexive case of the comparison is pinned constructively.  It is needed
+  -- wherever two elements are already known to share a canopy — exactly the
+  -- situation in which `--without-K` refuses to match `refl`.
+  ≟-diag : (i : Fin n) → (i ≟ i) ≡ yes refl
+  ≟-diag i = ≡-≟-identity _≟_ refl
 
   infixr 7 _∧ᵖ_
   infixr 6 _∨ᵖ_
@@ -543,6 +543,84 @@ module ParachuteAtoms {m : ℕ}
   covered ⊥ᵖ                = inj₁ ⊥-least
   covered (can i x p)       = inj₂ (i , atom-≤ i x p)
   covered ⊤ᵖ                = inj₂ (0F , ⊤-great)
+```
+
+#### The `i`-th canopy is the interval above the `i`-th atom
+
+The parachute retracts onto each canopy: `π i`{.AgdaFunction} keeps canopy `i`,
+sends the shared top to that canopy's top, and collapses everything else to that
+canopy's bottom.  Restricted to the elements *above the `i`-th atom* it is inverse
+to `↑ i`{.AgdaFunction}, so the interval `[atom i , ⊤]` of the parachute is
+order-isomorphic to `Lᵢ` — the sense in which `Lᵢ` is the `i`-th canopy.  These are
+the lemmas the FLRP side transports along an interval isomorphism to read a
+representation of `Lᵢ` off a representation of the parachute.
+
+```agda
+  -- The chosen bottom of the i-th canopy.
+  bot : (i : Fin (ℕ.suc m)) → U i
+  bot i = proj₁ (𝒃 i)
+
+  private
+    πᶜ : (i j : Fin (ℕ.suc m)) → U j → Dec (i ≡ j) → U i
+    πᶜ i .i x (yes refl)  = x
+    πᶜ i j  x (no _)      = bot i
+
+  -- The retraction onto the i-th canopy.
+  π : (i : Fin (ℕ.suc m)) → P → U i
+  π i ⊤ᵖ           = top i
+  π i ⊥ᵖ           = bot i
+  π i (can j x _)  = πᶜ i j x (i ≟ j)
+
+  -- The retraction is monotone (hence respects the parachute equality).
+  π-mono : (i : Fin (ℕ.suc m)) {z w : P} → z ≤ᵖ w → [ i ] π i z ≤ π i w
+  π-mono i ⊥-least             = proj₂ (𝒃 i) _
+  π-mono i ⊤-great             = ≤top i _
+  π-mono i (c≤c {j} {x} {y} e) with i ≟ j
+  ... | yes refl  = e
+  ... | no _      = ≤refl i
+
+  π-cong : (i : Fin (ℕ.suc m)) {z w : P} → z ≈ᵖ w → [ i ] π i z ≈ π i w
+  π-cong i (z≤w , w≤z) = ≤antisym i (π-mono i z≤w) (π-mono i w≤z)
+
+  -- The retraction sends the i-th atom to the i-th canopy's bottom.
+  π-atom : (i : Fin (ℕ.suc m)) → [ i ] π i (atom i) ≈ bot i
+  π-atom i rewrite ≟-diag i = ≈refl i
+
+  -- `↑ i` is monotone: if x is the canopy top then so is anything above it.
+  ↑-mono : (i : Fin (ℕ.suc m)) {x y : U i} → [ i ] x ≤ y → ↑ i x ≤ᵖ ↑ i y
+  ↑-mono i {x} {y} x≤y with top? i x | top? i y
+  ... | yes _    | yes _  = ⊤-great
+  ... | yes x≈⊤  | no q   =
+        ⊥-elim (q (≤antisym i (≤top i y) (≤trans i (≤reflexive i (≈sym i x≈⊤)) x≤y)))
+  ... | no _     | yes _  = ⊤-great
+  ... | no _     | no _   = c≤c x≤y
+
+  -- `↑ i` sends the canopy top to the parachute top and a proper element to
+  -- itself.
+  ↑-top : (i : Fin (ℕ.suc m)) → ↑ i (top i) ≈ᵖ ⊤ᵖ
+  ↑-top i with top? i (top i)
+  ... | yes _  = ≈ᵖ-refl
+  ... | no p   = ⊥-elim (p (≈refl i))
+
+  ↑-can : (i : Fin (ℕ.suc m)) (x : U i) (p : NonTop i x) → ↑ i x ≈ᵖ can i x p
+  ↑-can i x p with top? i x
+  ... | yes q  = ⊥-elim (p q)
+  ... | no _   = c≤c (≤refl i) , c≤c (≤refl i)
+
+  -- Every element represented by a canopy element lies above that canopy's atom.
+  atom-≤-↑ : (i : Fin (ℕ.suc m)) (x : U i) → atom i ≤ᵖ ↑ i x
+  atom-≤-↑ i x = ≤ᵖ-trans (proj₂ (↑-can i (bot i) (nondeg i))) (↑-mono i (proj₂ (𝒃 i) x))
+
+  -- The two round trips: `π i` and `↑ i` are mutually inverse between the
+  -- canopy `Lᵢ` and the interval above the `i`-th atom.
+  π∘↑ : (i : Fin (ℕ.suc m)) (x : U i) → [ i ] π i (↑ i x) ≈ x
+  π∘↑ i x with top? i x
+  ... | yes x≈⊤  = ≈sym i x≈⊤
+  ... | no _     rewrite ≟-diag i = ≈refl i
+
+  ↑∘π : (i : Fin (ℕ.suc m)) (z : P) → atom i ≤ᵖ z → ↑ i (π i z) ≈ᵖ z
+  ↑∘π i ⊤ᵖ _                    = ↑-top i
+  ↑∘π i (can .i x p) (c≤c _) rewrite ≟-diag i = ↑-can i x p
 ```
 
 ---
