@@ -175,7 +175,6 @@
 [Classical.Structures.CommutativeMonoid]: /Classical/Structures/CommutativeMonoid/
 [Classical.Structures.CommutativeRing]: /Classical/Structures/CommutativeRing/
 [Classical.Structures.CommutativeSemigroup]: /Classical/Structures/CommutativeSemigroup/
-[Classical.Structures.DistributiveLattice]: /Classical/Structures/DistributiveLattice/
 [Classical.Structures.Group]: /Classical/Structures/Group/
 [Classical.Structures.Group.AbelianGroup]: /Classical/Structures/Group/AbelianGroup/
 [Classical.Structures.Group.Basic]: /Classical/Structures/Group/Basic/
@@ -190,6 +189,8 @@
 [Classical.Structures.Group.Subgroups]: /Classical/Structures/Group/Subgroups/
 [Classical.Structures.Interpret]: /Classical/Structures/Interpret/
 [Classical.Structures.Lattice]: /Classical/Structures/Lattice/
+[Classical.Structures.Lattice.Basic]: /Classical/Structures/Lattice/Basic/
+[Classical.Structures.Lattice.DistributiveLattice]: /Classical/Structures/Lattice/DistributiveLattice/
 [Classical.Structures.Lattice.Dual]: /Classical/Structures/Lattice/Dual/
 [Classical.Structures.Lattice.OrdinalSum]: /Classical/Structures/Lattice/OrdinalSum/
 [Classical.Structures.Lattice.Product]: /Classical/Structures/Lattice/Product/
@@ -543,7 +544,6 @@
 [Classical/Structures/CommutativeMonoid.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/CommutativeMonoid.lagda.md
 [Classical/Structures/CommutativeRing.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/CommutativeRing.lagda.md
 [Classical/Structures/CommutativeSemigroup.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/CommutativeSemigroup.lagda.md
-[Classical/Structures/DistributiveLattice.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/DistributiveLattice.lagda.md
 [Classical/Structures/Group.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Group.lagda.md
 [Classical/Structures/Group/AbelianGroup.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Group/AbelianGroup.lagda.md
 [Classical/Structures/Group/Basic.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Group/Basic.lagda.md
@@ -558,6 +558,8 @@
 [Classical/Structures/Group/Subgroups.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Group/Subgroups.lagda.md
 [Classical/Structures/Interpret.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Interpret.lagda.md
 [Classical/Structures/Lattice.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Lattice.lagda.md
+[Classical/Structures/Lattice/Basic.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Lattice/Basic.lagda.md
+[Classical/Structures/Lattice/DistributiveLattice.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Lattice/DistributiveLattice.lagda.md
 [Classical/Structures/Lattice/Dual.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Lattice/Dual.lagda.md
 [Classical/Structures/Lattice/OrdinalSum.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Lattice/OrdinalSum.lagda.md
 [Classical/Structures/Lattice/Product.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Lattice/Product.lagda.md
@@ -757,6 +759,7 @@
 [ADR-009]: /adr/009-signature-genericity-generalized-variables/
 
 <!-- ===== External links ===== -->
+[Classical.Structures.DistributiveLattice]: /Classical/Structures/Lattice/DistributiveLattice/
 [A Machine-checked proof of Birkhoff's Variety Theorem in Martin-Löf Type Theory]: https://arxiv.org/abs/2101.10166
 [absolute value]: https://en.wikipedia.org/wiki/Absolute_value
 [ADR-dir]: https://github.com/ualib/agda-algebras/tree/master/docs/adr

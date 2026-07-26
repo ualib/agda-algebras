@@ -29,24 +29,24 @@ in Ring.
 
 module Classical.Properties.Lattice where
 
-open import Agda.Primitive                           using () renaming ( Set to Type )
+open import Agda.Primitive using () renaming ( Set to Type )
 
 -- Imports from the Agda Standard Library -----------------------------------------
-open import Data.Fin.Base                            using ( Fin )
-open import Data.Fin.Properties                      using ( _≟_ ; all? )
-open import Data.Nat.Base                            using ( ℕ )
-open import Data.Product                             using ( proj₁ ; _×_ ; Σ-syntax )
-open import Data.Sum.Base                            using ( _⊎_ )
-open import Level                                    using ( Level ; _⊔_ )
-open import Relation.Binary                          using ( Setoid )
-open import Relation.Binary.PropositionalEquality    using ( _≡_ ; _≢_ )
-open import Relation.Nullary.Decidable.Core          using ( Dec ; ¬? ; _×-dec_ ; _→-dec_ ; _⊎-dec_ )
+open import Data.Fin.Base                          using ( Fin )
+open import Data.Fin.Properties                    using ( _≟_ ; all? )
+open import Data.Nat.Base                          using ( ℕ )
+open import Data.Product                           using ( proj₁ ; _×_ ; Σ-syntax )
+open import Data.Sum.Base                          using ( _⊎_ )
+open import Level                                  using ( Level ; _⊔_ )
+open import Relation.Binary                        using ( Setoid )
+open import Relation.Binary.PropositionalEquality  using ( _≡_ ; _≢_ )
+open import Relation.Nullary.Decidable.Core        using ( Dec ; ¬? ; _×-dec_ ; _→-dec_ ; _⊎-dec_ )
 
 import Relation.Binary.Reasoning.Setoid as SetoidReasoning
 
 -- Imports from the Agda Universal Algebra Library --------------------------------
-open import Classical.Structures.Lattice   using ( Lattice ; module Lattice-Op )
-open import Setoid.Algebras.Basic          using ( 𝔻[_] ; 𝕌[_] )
+open import Classical.Structures.Lattice.Basic  using ( Lattice ; module Lattice-Op )
+open import Setoid.Algebras.Basic               using ( 𝔻[_] ; 𝕌[_] )
 
 private variable α ρ : Level
 ```

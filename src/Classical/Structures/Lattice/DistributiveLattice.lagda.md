@@ -1,17 +1,17 @@
 ---
 layout: default
-file: "src/Classical/Structures/DistributiveLattice.lagda.md"
-title: "Classical.Structures.DistributiveLattice module"
+file: "src/Classical/Structures/Lattice/DistributiveLattice.lagda.md"
+title: "Classical.Structures.Lattice.DistributiveLattice module"
 date: "2026-05-31"
 author: "the agda-algebras development team"
 ---
 
 ### Distributive lattices {#classical-structures-distributivelattice}
 
-This is the [Classical.Structures.DistributiveLattice][] module of the [Agda Universal Algebra Library][].
+This is the [Classical.Structures.Lattice.DistributiveLattice][] module of the [Agda Universal Algebra Library][].
 
 A **distributive lattice** inhabits `Σ[ 𝑨 ∈ Algebra α ρ ] 𝑨 ⊨ Th-DistributiveLattice`
-over the *same* `Sig-Lattice` signature as [`Lattice`][Classical.Structures.Lattice].
+over the *same* `Sig-Lattice` signature as [`Lattice`][Classical.Structures.Lattice.Basic].
 It is an *equation-only* extension of `Lattice`: the forgetful
 `distributiveLattice→lattice` is a pure theory-reindex (the two distributivity
 equations are dropped, the remaining eight map across definitionally), and
@@ -31,7 +31,7 @@ left and a right law.
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
-module Classical.Structures.DistributiveLattice where
+module Classical.Structures.Lattice.DistributiveLattice where
 
 open import Agda.Primitive                using () renaming ( Set to Type )
 
@@ -49,23 +49,31 @@ import Relation.Binary.Reasoning.Setoid as SetoidReasoning
 open Func renaming ( to to _⟨$⟩_ )
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
-open import Classical.Operations          using  ( pair )
-open import Classical.Signatures.Lattice  using  ( Sig-Lattice ; ∧-Op ; ∨-Op )
-open import Classical.Structures.Lattice  using  ( Lattice ; module Lattice-Op
-                                                 ; opsToBareLattice )
-open import Classical.Theories.Lattice    using  ()
-  renaming  ( ∧-assoc to ∧-assocˡᵃ ; ∧-comm to ∧-commˡᵃ ; ∧-idem to ∧-idemˡᵃ
-            ; ∨-assoc to ∨-assocˡᵃ ; ∨-comm to ∨-commˡᵃ ; ∨-idem to ∨-idemˡᵃ
-            ; absorbˡ to absorbˡˡᵃ ; absorbʳ to absorbʳˡᵃ )
+open import Classical.Operations                    using  ( pair )
+open import Classical.Signatures.Lattice            using  ( Sig-Lattice ; ∧-Op ; ∨-Op )
+open import Classical.Structures.Lattice.Basic      using  ( Lattice ; module Lattice-Op
+                                                           ; opsToBareLattice )
+open import Classical.Theories.DistributiveLattice  using  ( Eq-DistributiveLattice
+                                                           ; Th-DistributiveLattice
+                                                           ; ∧-assoc ; ∧-comm ; ∧-idem
+                                                           ; ∨-assoc ; ∨-comm ; ∨-idem
+                                                           ; absorbˡ ; absorbʳ
+                                                           ; ∧-distribˡ ; ∨-distribˡ )
 
-open import Classical.Theories.DistributiveLattice
-  using  ( Eq-DistributiveLattice ; Th-DistributiveLattice ; ∧-assoc ; ∧-comm ; ∧-idem
-         ; ∨-assoc ; ∨-comm ; ∨-idem ; absorbˡ ; absorbʳ ; ∧-distribˡ ; ∨-distribˡ )
+open import Classical.Theories.Lattice              using  ()
+                                                    renaming  ( ∧-assoc to ∧-assocˡᵃ
+                                                              ; ∧-comm  to ∧-commˡᵃ
+                                                              ; ∧-idem  to ∧-idemˡᵃ
+                                                              ; ∨-assoc to ∨-assocˡᵃ
+                                                              ; ∨-comm  to ∨-commˡᵃ
+                                                              ; ∨-idem  to ∨-idemˡᵃ
+                                                              ; absorbˡ to absorbˡˡᵃ
+                                                              ; absorbʳ to absorbʳˡᵃ )
 
-open import Overture.Terms {𝑆 = Sig-Lattice} using ( Term ; ℊ ; node )
-open import Setoid.Algebras.Basic using ( Algebra ; 𝔻[_] ; 𝕌[_] )
-open import Setoid.Terms using ( module Environment )
-open import Setoid.Varieties.EquationalLogic using ( _⊧_≈_ )
+open import Overture.Terms {𝑆 = Sig-Lattice}        using ( Term ; ℊ ; node )
+open import Setoid.Algebras.Basic                   using ( Algebra ; 𝔻[_] ; 𝕌[_] )
+open import Setoid.Terms                            using ( module Environment )
+open import Setoid.Varieties.EquationalLogic        using ( _⊧_≈_ )
 
 private variable α ρ : Level
 ```

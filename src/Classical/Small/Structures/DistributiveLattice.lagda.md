@@ -23,7 +23,7 @@ module Classical.Small.Structures.DistributiveLattice where
 open import Agda.Primitive                          using () renaming ( Set to Type )
 open import Level                                   using ( 0ℓ ; suc )
 open import Relation.Binary.PropositionalEquality   using ( _≡_ )
-import Classical.Structures.DistributiveLattice as Polymorphic
+import Classical.Structures.Lattice.DistributiveLattice as Polymorphic
 ```
 -->
 

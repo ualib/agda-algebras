@@ -45,15 +45,16 @@ open import Relation.Binary.PropositionalEquality using (refl)
 open Func renaming ( to to _⟨$⟩_ )
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
-open import Classical.Signatures.Lattice              using  ( ∧-Op ; ∨-Op ; Sig-Lattice )
-open import Classical.Structures.DistributiveLattice  using  ( DistributiveLattice
-                                                             ; module DistributiveLattice-Op )
-open import Classical.Theories.DistributiveLattice    using  ( ∧-assoc ; ∧-comm ; ∧-idem
-                                                             ; ∨-assoc ; ∨-comm ; ∨-idem
-                                                             ; absorbˡ ; absorbʳ
-                                                             ; ∧-distribˡ ; ∨-distribˡ )
-open import Setoid.Algebras.Basic   using  ( Algebra ; 𝕌[_] ; 𝔻[_] )
-open import Setoid.Signatures                         using  ( ⟨_⟩ )
+open import Classical.Signatures.Lattice            using  ( ∧-Op ; ∨-Op ; Sig-Lattice )
+open import Classical.Structures.Lattice.DistributiveLattice
+                                                    using  ( DistributiveLattice
+                                                           ; module DistributiveLattice-Op )
+open import Classical.Theories.DistributiveLattice  using  ( ∧-assoc ; ∧-comm ; ∧-idem
+                                                           ; ∨-assoc ; ∨-comm ; ∨-idem
+                                                           ; absorbˡ ; absorbʳ
+                                                           ; ∧-distribˡ ; ∨-distribˡ )
+open import Setoid.Algebras.Basic                   using  ( Algebra ; 𝕌[_] ; 𝔻[_] )
+open import Setoid.Signatures                       using  ( ⟨_⟩ )
 
 private variable α ρ : Level
 ```

@@ -38,7 +38,7 @@ open import Relation.Binary.PropositionalEquality using ( _≡_ ; refl ; trans )
 open import Classical.Bundles.DistributiveLattice using ( ⟨_⟩ᵈˡ ; ⟪_⟫ᵈˡ )
 open import Classical.Small.Structures.DistributiveLattice
   using ( DistributiveLattice ; eqsToDistributiveLattice )
-import Classical.Structures.DistributiveLattice as Polymorphic
+import Classical.Structures.Lattice.DistributiveLattice as Polymorphic
 ```
 -->
 
