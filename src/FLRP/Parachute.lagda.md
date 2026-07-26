@@ -34,7 +34,7 @@ Otherwise `NH` lies above some atom `Kₘ`; pick one of the two big canopies, sa
 because `N` is normal.  Corollary 3.5 ([Classical.Structures.Group.Complements][])
 then forces `Kᵣ` and `Z` to be incomparable, contradicting `Kᵣ < Z`.
 
-**Constructive shape.**  The note argues by contradiction from "`N ≠ 1`"; here the
+**Constructive shape**.  The note argues by contradiction from "`N ≠ 1`"; here the
 same steps read as a direct proof, because the parachute's covering property is
 *data*: `covered`{.AgdaField} decides, for each member of the interval, whether it
 collapses to `H` or lies above an atom.  In the first case core-freeness of `H`

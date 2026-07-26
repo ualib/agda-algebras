@@ -14,7 +14,7 @@ For a group `G`{.AgdaBound} and a subgroup `H`{.AgdaBound}, the congruence latti
 the transitive coset G-set `G ↷ G/H` is order-isomorphic to the interval `[H , G]`
 in the subgroup lattice `Sub G`.
 
-This module formalizes the **easy** (constructive) **direction** of the Pálfy–Pudlák
+This module formalizes the *easy (constructive) direction* of the Pálfy–Pudlák
 correspondence.[^1]
 
 The correspondence has two mutually inverse, order-preserving maps.
@@ -37,7 +37,7 @@ The two maps are mutually inverse and monotone, giving the order isomorphism
 `bridge`{.AgdaFunction}.
 
 *On the interval side we use the respecting `UpperInterval`{.AgdaModule} of
-[FLRP.Enforceable][], not the bare `SubInterval`{.AgdaModule}.*
+[FLRP.Enforceable][], not the bare `SubInterval`{.AgdaModule}*.
 
 This honors the WP-4 finding: the round trip `to (from M) ≈ M` moves
 membership across the setoid equality `ε ⁻¹ ∙ g ≈ g`, which is sound only because
@@ -383,7 +383,7 @@ the coset algebra.
     }
 ```
 
-**Corollary (toward representability).**  If the coset algebra is finite, then the
+**Corollary (toward representability)**.  If the coset algebra is finite, then the
 interval `[H , 𝒢]` is realized as the congruence lattice of a finite algebra — namely
 the coset algebra itself.  The roadmap's corollary "every interval in a finite
 subgroup lattice is representable" is this statement with the finiteness witness

@@ -214,7 +214,7 @@ it is what makes towers of changes-of-variables collapse.
 []-assoc (node f ts) σ τ = gnl λ i → []-assoc (ts i) σ τ
 ```
 
-**Congruence.**  Substitution respects `_≐_` in both arguments — replacing the term
+**Congruence**.  Substitution respects `_≐_` in both arguments — replacing the term
 by an equal term and the substitution by a pointwise-equal substitution gives equal
 results.  This is what makes `_[_]` a legitimate operation on the term *setoid* (and
 it is the `∘-resp-≈` law of the Kleisli category).

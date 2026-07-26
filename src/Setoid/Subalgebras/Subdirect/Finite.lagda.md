@@ -278,7 +278,7 @@ maximum `count`; `count`-maximality is `⊆`-maximality, by `count-mono`/`count-
     Θ-max-count d d∈f = lookup (f[xs]≤f[argmax] {f = count} (witness Δ) a≢bCons) d∈f
 ```
 
-**Maximality.**  If `d ∈ a≢bCons` contains `Θ`, then `d ⊆ Θ`: were the containment
+**Maximality**.  If `d ∈ a≢bCons` contains `Θ`, then `d ⊆ Θ`: were the containment
 proper on the enumerated carrier, `d` would out-count `Θ`, contradicting maximum
 count.  The witness of properness is extracted from the *decidable* failure of
 carrier-containment.

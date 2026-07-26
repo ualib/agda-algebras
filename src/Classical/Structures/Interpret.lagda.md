@@ -23,7 +23,7 @@ The *only* signature-generic content of that bridge is the congruence step itsel
 proof, and carries no `subst`.  It is the common core of `∙-cong` (binary
 congruence) and of every `interp-nodeₙ` lemma.
 
-**Per-structure convention (normative).**  Each `<Structure>-Op` module defines its
+**Per-structure convention (normative)**.  Each `<Structure>-Op` module defines its
 own named `interp-nodeₙ` family — `interp-node∙` (binary), `interp-node₀`
 (nullary, for an identity element `ε-Op`), `interp-node⁻¹` (unary, for an inverse
 `⁻¹-Op`) — over *its own* signature's terms, each a one-liner delegating to

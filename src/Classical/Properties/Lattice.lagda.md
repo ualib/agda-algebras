@@ -172,7 +172,7 @@ partial-order facts above, say that `x ∧ y` is the greatest lower bound of `x`
     z             ∎
 ```
 
-**`_∨_` is the binary join.**  Dually: `x ∨ y` is the least upper bound of `x`
+**`_∨_` is the binary join**.  Dually: `x ∨ y` is the least upper bound of `x`
 and `y`.  The two upper-bound clauses use absorption directly; the universal
 property is proved through the join-form characterization to avoid going
 through absorption twice.
@@ -195,7 +195,7 @@ through absorption twice.
     z             ∎)
 ```
 
-**Extrema.**  `IsTop t` says `t` is a greatest element of the meet order, and
+**Extrema**.  `IsTop t` says `t` is a greatest element of the meet order, and
 `IsBot b` that `b` is a least one.  An arbitrary lattice need not have either; the
 predicates state the universal property of a *chosen* extremum, and by antisymmetry
 any two choices are `≈`-equal.  Constructions that glue lattices at their ends — the
@@ -250,7 +250,7 @@ module FiniteOrder {n : ℕ} (_∧_ : Fin n → Fin n → Fin n) where
   a ≤ b = a ∧ b ≡ a
 
   _≤?_ : (a b : Fin n) → Dec (a ≤ b)
-  a ≤? b = (a ∧ b) ≟ a
+  a ≤? b = a ∧ b ≟ a
 
   module Bounded (⊥ ⊤ : Fin n) where
 

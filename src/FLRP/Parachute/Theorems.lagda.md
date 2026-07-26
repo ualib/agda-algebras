@@ -38,7 +38,7 @@ subgroup `Kᵢ`, above which `[Kᵢ , G] ≅ Lᵢ` by the canopy isomorphism of
 [FLRP.Parachute.Representation][].  So each `Lᵢ` gets to speak, over a *core-free*
 subgroup, about the same group.
 
-**What is assumed, and where.**  Three hypotheses are threaded as ordinary
+**What is assumed, and where**.  Three hypotheses are threaded as ordinary
 arguments, never postulated.
 
 +  `CoreFreeReduction`{.AgdaRecord} ([FLRP.Enforceable][]) turns an arbitrary
@@ -52,7 +52,7 @@ arguments, never postulated.
    setoid lattice and rebuild its tables) is routine and unformalized.
 +  `PalfyPudlak`{.AgdaFunction} (Entry 3) is the classical import.
 
-**On the converse direction of Theorem 3.6.**  (C) `⟹` (B) is immediate in the note
+**On the converse direction of Theorem 3.6**.  (C) `⟹` (B) is immediate in the note
 ("obviously"), by applying (C) to a family containing the lattice to be represented
 padded with two big canopies.  Formalizing it needs a concrete three-element lattice
 and the padding bookkeeping, and it carries no weight in the program — the strategy
