@@ -104,7 +104,7 @@ open import Relation.Nullary.Decidable             using  ( _×-dec_ ; map′ )
 -- Imports from the Agda Universal Algebra Library ------------------------------
 open import Classical.Properties.Lattice             using  ( module Lattice-Order
                                                             ; TopOf ; BotOf )
-open import Classical.Signatures.Lattice             using  (Sig-Lattice)
+open import Classical.Signatures.Lattice             using  ( Sig-Lattice )
 open import Classical.Small.Structures.Lattice       using  ( Lattice )
 open import Classical.Structures.Interpret           using  ( interp-cong )
 open import Classical.Structures.Lattice.OrdinalSum  using  ( module GlueSetoid
@@ -265,12 +265,12 @@ The three evaluation lemmas — at the basepoint, at the programmed point, away 
     ĥ i k (inj₂ b) = inj₁ (h i k b)
 
     ĥ-cong : ∀ i k {x y} → x ≈ᵍ y → ĥ i k x ≈ᵍ ĥ i k y
-    ĥ-cong i k {inj₁ a} {inj₁ a'} (ea ,ᵍ _)   = ≈ᵍ-inj₁ ea
-    ĥ-cong i k {inj₁ a} {inj₂ b}  (ea ,ᵍ eb)  =
+    ĥ-cong i k {inj₁ a} {inj₁ a'} (ea ∧ᵍ _)   = ≈ᵍ-inj₁ ea
+    ĥ-cong i k {inj₁ a} {inj₂ b}  (ea ∧ᵍ eb)  =
       ≈ᵍ-inj₁ (trans₁ ea (sym₁ (h-at-b* i k (sym₂ eb))))
-    ĥ-cong i k {inj₂ b} {inj₁ a}  (ea ,ᵍ eb)  =
+    ĥ-cong i k {inj₂ b} {inj₁ a}  (ea ∧ᵍ eb)  =
       ≈ᵍ-inj₁ (trans₁ (h-at-b* i k eb) ea)
-    ĥ-cong i k {inj₂ b} {inj₂ b'} (_ ,ᵍ eb)   = ≈ᵍ-inj₁ (h-cong i k eb)
+    ĥ-cong i k {inj₂ b} {inj₂ b'} (_ ∧ᵍ eb)   = ≈ᵍ-inj₁ (h-cong i k eb)
 
     -- The lift always lands in the left summand, so its right retraction is b*.
     ĥ-lands-left : ∀ i k x → retractʳ (ĥ i k x) ≡ b*
@@ -322,23 +322,23 @@ through a `combine`/`remQuot` layer.
     decEq : (x y : A⊎B) → Dec (x ≈ᵍ y)
 
     decEq (inj₁ a) (inj₁ a') with a ≟₁ a'
-    ... | yes p = yes (p ,ᵍ refl₂)
+    ... | yes p = yes (p ∧ᵍ refl₂)
     ... | no ¬p = no λ e → ¬p (≈ˡ e)
 
     decEq (inj₁ a) (inj₂ b) with a ≟₁ a* | b* ≟₂ b
-    ... | yes p  | yes q  = yes (p ,ᵍ q)
-    ... | yes _  | no ¬q  = no λ (_ ,ᵍ e) → ¬q e
-    ... | no ¬p  | yes _  = no λ (e ,ᵍ _) → ¬p e
-    ... | no ¬p  | no _   = no λ (e ,ᵍ _) → ¬p e
+    ... | yes p  | yes q  = yes (p ∧ᵍ q)
+    ... | yes _  | no ¬q  = no λ (_ ∧ᵍ e) → ¬q e
+    ... | no ¬p  | yes _  = no λ (e ∧ᵍ _) → ¬p e
+    ... | no ¬p  | no _   = no λ (e ∧ᵍ _) → ¬p e
 
     decEq (inj₂ b) (inj₁ a) with a* ≟₁ a | b ≟₂ b*
-    ... | yes p  | yes q  = yes (p ,ᵍ q)
-    ... | yes _  | no ¬q  = no λ (_ ,ᵍ e) → ¬q e
-    ... | no ¬p  | yes _  = no λ (e ,ᵍ _) → ¬p e
-    ... | no ¬p  | no _   = no λ (e ,ᵍ _) → ¬p e
+    ... | yes p  | yes q  = yes (p ∧ᵍ q)
+    ... | yes _  | no ¬q  = no λ (_ ∧ᵍ e) → ¬q e
+    ... | no ¬p  | yes _  = no λ (e ∧ᵍ _) → ¬p e
+    ... | no ¬p  | no _   = no λ (e ∧ᵍ _) → ¬p e
     decEq (inj₂ b) (inj₂ b') with b ≟₂ b'
-    ... | yes p = yes (refl₁ ,ᵍ p)
-    ... | no ¬p = no λ (_ ,ᵍ e) → ¬p e
+    ... | yes p = yes (refl₁ ∧ᵍ p)
+    ... | no ¬p = no λ (_ ∧ᵍ e) → ¬p e
 
   𝑪-FiniteAlgebra .card = m + n
   𝑪-FiniteAlgebra .enum = enumC
@@ -523,7 +523,7 @@ note in [Classical.Structures.Lattice.OrdinalSum][].
     rel = LowerExtRel d₁
 
     rfl : ∀ {x y} → x ≈ᵍ y → rel x y
-    rfl (l ,ᵍ r) = reflexive con₁ l ,ˡ r
+    rfl (l ∧ᵍ r) = reflexive con₁ l ,ˡ r
 
     eqv : IsEquivalence rel
     eqv = record
@@ -570,7 +570,7 @@ note in [Classical.Structures.Lattice.OrdinalSum][].
     rel = UpperExtRel d₂
 
     rfl : ∀ {x y} → x ≈ᵍ y → rel x y
-    rfl (_ ,ᵍ r) = viaʳ (reflexive con₂ r)
+    rfl (_ ∧ᵍ r) = viaʳ (reflexive con₂ r)
 
     eqv : IsEquivalence rel
     eqv = record
@@ -655,12 +655,12 @@ chained through `a*` in the pure case.
     lower-gap θ ¬α⊆θ with ⊈ᵈ-witness 𝑪-FiniteAlgebra αᵈ θ ¬α⊆θ
     ... | inj₁ a , inj₁ a' , (_ , ¬θr)   = a , a' , ¬θr
     ... | inj₁ a , inj₂ b , (αr , ¬θr)   =
-      a , a* , λ p → ¬θr (ConRel-resp θ (refl₁ ,ᵍ refl₂) (refl₁ ,ᵍ αr) p)
+      a , a* , λ p → ¬θr (ConRel-resp θ (refl₁ ∧ᵍ refl₂) (refl₁ ∧ᵍ αr) p)
 
     ... | inj₂ b , inj₁ a , (αr , ¬θr)   =
-      a* , a , λ p → ¬θr (ConRel-resp θ (refl₁ ,ᵍ sym₂ αr) (refl₁ ,ᵍ refl₂) p)
+      a* , a , λ p → ¬θr (ConRel-resp θ (refl₁ ∧ᵍ sym₂ αr) (refl₁ ∧ᵍ refl₂) p)
     ... | inj₂ b , inj₂ b' , (αr , ¬θr)  =
-      ⊥-elim (¬θr (reflexive (proj₂ (proj₁ θ)) (refl₁ ,ᵍ αr)))
+      ⊥-elim (¬θr (reflexive (proj₂ (proj₁ θ)) (refl₁ ∧ᵍ αr)))
 
     -- The mixed engine: a θ-related pair (inj₁ a , inj₂ b) with b off the
     -- basepoint collapses onto any given lower pair, refuting its unrelatedness.
@@ -674,7 +674,7 @@ chained through `a*` in the pure case.
 
       -- Send b to any designated target, staying θ-related to a.
       punch : (z : 𝕌[ 𝑨 ]) → ConRel θ (inj₁ a) (inj₁ z)
-      punch z = ConRel-resp θ  (refl₁ ,ᵍ refl₂) (≈ᵍ-inj₁ (h-at b z ¬b*))
+      punch z = ConRel-resp θ  (refl₁ ∧ᵍ refl₂) (≈ᵍ-inj₁ (h-at b z ¬b*))
                   (is-compatible θcon (inj₂ (inj₂ (idx₂ b , idx₁ z))) (λ _ → θab))
 
       decide : ⊥
@@ -708,9 +708,9 @@ chained through `a*` in the pure case.
         pure ¬bb' with 𝑭₂ ._≟_ b b* | 𝑭₂ ._≟_ b' b*
         ... | yes pb  | yes pb'  =  ¬bb' (trans₂ pb (sym₂ pb'))
         ... | yes pb  | no ¬pb'  =  mixed-absurd θ x y ¬θxy a* b' ¬pb'
-                                    (ConRel-resp θ (refl₁ ,ᵍ pb) (refl₁ ,ᵍ refl₂) θr)
+                                    (ConRel-resp θ (refl₁ ∧ᵍ pb) (refl₁ ∧ᵍ refl₂) θr)
         ... | no ¬pb  | yes pb'  =  mixed-absurd θ x y ¬θxy a* b ¬pb
-                                    (θsym (ConRel-resp θ (refl₁ ,ᵍ refl₂) (refl₁ ,ᵍ pb') θr))
+                                    (θsym (ConRel-resp θ (refl₁ ∧ᵍ refl₂) (refl₁ ∧ᵍ pb') θr))
         ... | no ¬pb  | no ¬pb'  =  ¬θxy (θtrans θx-a* θa*-y)
           where
           θx-a* : ConRel θ (inj₁ x) (inj₁ a*)
@@ -748,15 +748,15 @@ upper extension.  These are the constructive readings of the manuscript's
 
     fwd : θ ⊆ᵈ lowerExt (restrictA θ)
     fwd {inj₁ _} {inj₁ _} p = p ,ˡ θ⊆α p
-    fwd {inj₁ _} {inj₂ _} p = ConRel-resp θ (refl₁ ,ᵍ refl₂) (refl₁ ,ᵍ sym₂ (θ⊆α p)) p ,ˡ θ⊆α p
-    fwd {inj₂ _} {inj₁ _} p = ConRel-resp θ (refl₁ ,ᵍ θ⊆α p) (refl₁ ,ᵍ refl₂) p ,ˡ θ⊆α p
+    fwd {inj₁ _} {inj₂ _} p = ConRel-resp θ (refl₁ ∧ᵍ refl₂) (refl₁ ∧ᵍ sym₂ (θ⊆α p)) p ,ˡ θ⊆α p
+    fwd {inj₂ _} {inj₁ _} p = ConRel-resp θ (refl₁ ∧ᵍ θ⊆α p) (refl₁ ∧ᵍ refl₂) p ,ˡ θ⊆α p
     fwd {inj₂ _} {inj₂ _} p = reflexive θcon (≈ᵍ-inj₁ refl₁) ,ˡ θ⊆α p
 
     bwd : lowerExt (restrictA θ) ⊆ᵈ θ
     bwd {inj₁ _} {inj₁ _} (l ,ˡ r) = l
-    bwd {inj₁ _} {inj₂ _} (l ,ˡ r) = ConRel-resp θ  (refl₁ ,ᵍ refl₂) (refl₁ ,ᵍ r) l
-    bwd {inj₂ _} {inj₁ _} (l ,ˡ r) = ConRel-resp θ (refl₁ ,ᵍ sym₂ r) (refl₁ ,ᵍ refl₂) l
-    bwd {inj₂ _} {inj₂ _} (l ,ˡ r) = reflexive θcon (refl₁ ,ᵍ r)
+    bwd {inj₁ _} {inj₂ _} (l ,ˡ r) = ConRel-resp θ  (refl₁ ∧ᵍ refl₂) (refl₁ ∧ᵍ r) l
+    bwd {inj₂ _} {inj₁ _} (l ,ˡ r) = ConRel-resp θ (refl₁ ∧ᵍ sym₂ r) (refl₁ ∧ᵍ refl₂) l
+    bwd {inj₂ _} {inj₂ _} (l ,ˡ r) = reflexive θcon (refl₁ ∧ᵍ r)
 
   upper-split : (θ : DecCon 𝑪 0ℓ) → αᵈ ⊆ᵈ θ → θ ≑ᵈ upperExt (restrictB θ)
   upper-split θ@((_ , θcon) , θdec) α⊆θ = fwd , bwd
@@ -768,7 +768,7 @@ upper extension.  These are the constructive readings of the manuscript's
     -- upper elements on the nose, lower ones through the boundary.
     bridge : ∀ z → ConRel θ z (inj₂ (retractʳ z))
     bridge (inj₁ a) = α⊆θ refl₂
-    bridge (inj₂ b) = reflexive θcon (refl₁ ,ᵍ refl₂)
+    bridge (inj₂ b) = reflexive θcon (refl₁ ∧ᵍ refl₂)
 
     -- `x` and `y` are named because `bridge` is applied to them, not to forward
     -- implicits: these binders survive the record refactor on their own merits.
@@ -818,10 +818,10 @@ the images of the total and diagonal congruences.
     open Setoid 𝔻[ 𝑳₂ ] using ()
       renaming ( _≈_ to _≈ᴸ²_ ; refl to reflᴸ² ; sym to symᴸ² ; trans to transᴸ² )
     -- The sum's own glued equality: its constructor, renamed to avoid clashing
-    -- with the witness algebra's (`_,ᵍ_` of `GlueSetoid 𝔻[ 𝑨 ] a* 𝔻[ 𝑩 ] b*`).
+    -- with the witness algebra's (`_∧ᵍ_` of `GlueSetoid 𝔻[ 𝑨 ] a* 𝔻[ 𝑩 ] b*`).
     open LatticeOrdinalSum 𝓛₁ t 𝓛₂ b using
       ( ≤ᵒ-inj₁ ; ≤ᵒ-inj₁-elim ; ≤ᵒ-inj₂ ; ≤ᵒ-inj₂-elim ; ≤ᵒ-up ; ≤ᵒ-down ; ≤ᵒ-down-elim )
-      renaming ( _,ᵍ_ to _,ᴸ_ )
+      renaming ( _∧ᵍ_ to _∧ᴸ_ )
 
     private
       -- Boundary coherence: the extreme images agree with the chosen extrema.
@@ -910,8 +910,8 @@ branch, with the mixed branches all funneling through the glue coherences.
 
     to∘fromᵒ : ∀ u → Setoid._≈_ 𝔻[ proj₁ (ordinalSum 𝓛₁ t 𝓛₂ b) ] (toᵒ (fromᵒ u)) u
     to∘fromᵒ (inj₁ u) with compare (lowerExt (from₁ u))
-    ... | inj₁ _ = transᴸ¹ (to-cong≑₁ (restrictA-lowerExt (from₁ u))) (to∘from₁ u) ,ᴸ reflᴸ²
-    ... | inj₂ α⊆ = symᴸ¹ u≈⊤ ,ᴸ atGlue-⊥ (lowerExt (from₁ u)) ext≑α
+    ... | inj₁ _ = transᴸ¹ (to-cong≑₁ (restrictA-lowerExt (from₁ u))) (to∘from₁ u) ∧ᴸ reflᴸ²
+    ... | inj₂ α⊆ = symᴸ¹ u≈⊤ ∧ᴸ atGlue-⊥ (lowerExt (from₁ u)) ext≑α
       where
       -- the extension is squeezed onto the boundary, so u is the top
       ext≑α : lowerExt (from₁ u) ≑ᵈ αᵈ
@@ -923,8 +923,8 @@ branch, with the mixed branches all funneling through the glue coherences.
       u≈⊤ : u ≈ᴸ¹ ⊤₁
       u≈⊤ = transᴸ¹ (symᴸ¹ (to∘from₁ u)) (transᴸ¹ (to-cong≑₁ from₁u≑𝟙) to₁𝟙≈⊤)
     to∘fromᵒ (inj₂ v) with compare (upperExt (from₂ v))
-    ... | inj₂ _ = reflᴸ¹ ,ᴸ transᴸ² (to-cong≑₂ (restrictB-upperExt (from₂ v))) (to∘from₂ v)
-    ... | inj₁ θ⊆α = atGlue-⊤ (upperExt (from₂ v)) ext≑α ,ᴸ symᴸ² v≈⊥
+    ... | inj₂ _ = reflᴸ¹ ∧ᴸ transᴸ² (to-cong≑₂ (restrictB-upperExt (from₂ v))) (to∘from₂ v)
+    ... | inj₁ θ⊆α = atGlue-⊤ (upperExt (from₂ v)) ext≑α ∧ᴸ symᴸ² v≈⊥
       where
       ext≑α : upperExt (from₂ v) ≑ᵈ αᵈ
       ext≑α = θ⊆α , α-⊆-upperExt (from₂ v)
