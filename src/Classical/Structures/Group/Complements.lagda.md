@@ -55,7 +55,7 @@ module Classical.Structures.Group.Complements where
 open import Agda.Primitive using () renaming ( Set to Type )
 
 -- Imports from the Agda Standard Library ---------------------------------------
-open import Data.Product     using ( _,_ ; proj₁ ; proj₂ ; Σ-syntax ; _×_)
+open import Data.Product     using ( _,_ ; proj₁ ; proj₂ ; _×_)
 open import Level            using ( Level ; _⊔_ )
 open import Function         using ( id ; _∘_ )
 open import Relation.Binary  using ( Setoid )
@@ -330,7 +330,7 @@ A family of permuting complements of `A` in `[H , G]` is an antichain.
        {I : Type ℓᶜ} {H : Pred G ℓʰ} {A : Pred G ℓᵃ} (ℬ : I → Pred G ℓᵇ)
     →  (∀ i → IsSubgroup 𝒢 (ℬ i))
     →  (∀ i → H ⊆ ℬ i)              -- every member lies in the interval [H , G]
-    →  (∀ i → A ∩ ℬ i ⊆ H)        -- every member meets A in H
+    →  (∀ i → A ∩ ℬ i ⊆ H)          -- every member meets A in H
     →  (∀ i → Factorize (ℬ i) A)    -- every member permutes with A and joins it to G
     →  Antichain ℬ
   complements-antichain ℬ ℬ-sg H⊆ℬ meet fact i j ℬi⊆ℬj =
