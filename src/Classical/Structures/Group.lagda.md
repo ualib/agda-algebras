@@ -20,6 +20,7 @@ open import Classical.Structures.Group.Centralizer public
 open import Classical.Structures.Group.AbelianGroup public
 open import Classical.Structures.Group.Complements public
 open import Classical.Structures.Group.Complexes public
+open import Classical.Structures.Group.Congruences public
 open import Classical.Structures.Group.Conjugation public
 open import Classical.Structures.Group.Cosets public
 open import Classical.Structures.Group.Dedekind public
