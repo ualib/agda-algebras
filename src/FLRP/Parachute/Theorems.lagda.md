@@ -72,7 +72,7 @@ open import Data.Fin.Base    using  ( Fin )
 open import Data.Fin.Patterns using ( 0F ; 1F )
 open import Data.Fin.Properties using ( _≟_ )
 open import Data.Nat.Base    using  ( ℕ ; _+_ )
-open import Data.Product     using  ( _,_ ; _×_ ; Σ-syntax ; ∃-syntax ; proj₁ ; proj₂ )
+open import Data.Product     using  ( _,_ ; _×_ ; Σ-syntax ; proj₁ ; proj₂ )
 open import Level            using  ( Level ; 0ℓ )
 open import Relation.Binary  using  ( Setoid )
 open import Relation.Binary.PropositionalEquality  using  ( _≡_ ; sym ; trans )
@@ -92,6 +92,7 @@ open import FLRP.Parachute.Representation
                               using  ( module ParachuteRep ; LatticeIso
                                      ; compose-IntervalIsoʳ )
 open import FLRP.Problem      using  ( FiniteLattice ; toLattice ; FLRP-Statement )
+open import Overture          using  ( ∃-syntax )
 open import Setoid.Algebras   using  ( 𝕌[_] ; 𝔻[_] )
 ```
 -->
@@ -185,7 +186,8 @@ core-free and carries its canopy, so the group has every enforced property.
 
       -- The witnesses, in the packaged form statement (C) asks for.
       canopy-witnesses : (i : Fin (2 + m))
-        → ∃[ J ] ∃[ J-sg ] ( CoreFree 𝒢 J J-sg × IntervalIso 𝒢 J J-sg (𝑳s i) )
+        → ∃[ J ∈ Pred 𝕌[ proj₁ 𝒢 ] 0ℓ ] ∃[ J-sg ∈ IsSubgroup 𝒢 J ]
+            ( CoreFree 𝒢 J J-sg × IntervalIso 𝒢 J J-sg (𝑳s i) )
       canopy-witnesses i =
         set (K i) , element-isSubgroup (K i) , K-CoreFree i , canopyIso i
 ```
@@ -209,7 +211,7 @@ enforced classes, with every canopy realized over a core-free subgroup.
       →  CoreFreeReduction
       →  Σ[ 𝒢 ∈ Group 0ℓ 0ℓ ]
            (  (∀ i → Ps i 𝒢)
-           ×  (∀ i → ∃[ J ] ∃[ J-sg ]
+           ×  (∀ i → ∃[ J ∈ Pred 𝕌[ proj₁ 𝒢 ] 0ℓ ] ∃[ J-sg ∈ IsSubgroup 𝒢 J ]
                      ( CoreFree 𝒢 J J-sg × IntervalIso 𝒢 J J-sg (𝑳s i) )) )
     parachute-representable rep cfr =
       𝒬 , Core-Free.enforced 𝒬 J J-sg J-cf iso𝒬

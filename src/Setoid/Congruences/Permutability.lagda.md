@@ -37,13 +37,13 @@ module Setoid.Congruences.Permutability where
 
 -- Imports from Agda and the Agda Standard Library ----------------------------
 open import Agda.Primitive   using () renaming ( Set to Type )
-open import Data.Product     using ( _×_ ; _,_ ; ∃-syntax ; proj₁ )
+open import Data.Product     using ( _×_ ; _,_ ; proj₁ )
 open import Level            using ( Level ; _⊔_ )
 open import Relation.Binary  using ( Setoid ; IsEquivalence )
                              renaming ( Rel to BinaryRel ; _⇒_ to _⊆_ )
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
-open import Overture                  using ( 𝑆 )
+open import Overture                  using ( 𝑆 ; ∃-syntax )
 open import Setoid.Algebras.Basic     using ( ov ; Algebra ; 𝕌[_] )
 open import Setoid.Congruences.Basic  using ( Con ; is-equivalence )
 
@@ -57,13 +57,13 @@ For congruences `θ φ : Con 𝑨 ℓ` we write `θ ∘ φ` for the composition 
 underlying relations: `(θ ∘ φ) x y` is inhabited by a witness `z` together with
 proofs `x θ z` and `z φ y`.  The composition is a *bare* binary relation, not a
 congruence — it need not be transitive — so its codomain is `BinaryRel`, and the
-existential bumps the relation level from `ℓ` to `α ⊔ ℓ` (the witness ranges over
-the carrier `𝕌[ 𝑨 ] : Type α`).
+existential bumps the relation level from `ℓ` to `α ⊔ ℓ`, the witness ranging over
+the carrier `𝕌[ 𝑨 ] : Type α`.
 
 ```agda
 module _ {𝑨 : Algebra {𝑆 = 𝑆} α ρ} where
   _∘_ : Con 𝑨 ℓ → Con 𝑨 ℓ → BinaryRel 𝕌[ 𝑨 ] (α ⊔ ℓ)
-  ((_θ_ , _) ∘ (_φ_ , _)) x y = ∃[ z ] x θ z × z φ y
+  ((_θ_ , _) ∘ (_φ_ , _)) x y = ∃[ z ∈ 𝕌[ 𝑨 ] ] x θ z × z φ y
   infixr 7 _∘_
 ```
 

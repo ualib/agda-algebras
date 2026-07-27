@@ -88,6 +88,7 @@ open import Classical.Structures.Group    using  ( module Core ; Group ; _×ᵍ_
                                                  ; module GroupSublattice
                                                  ; IsSubgroup ; trivialSubgroup )
 open import FLRP.Problem                  using  ( OrderIso ; FiniteLattice ; toLattice )
+open import Overture                      using  ( ∃-syntax )
 open import Setoid.Algebras               using  ( 𝔻[_] ; 𝕌[_] ; FiniteAlgebra )
 open import Setoid.Homomorphisms          using  ( _IsHomImageOf_ )
 open import Setoid.Subalgebras            using  ( Subuniverses )
@@ -592,7 +593,8 @@ enters as the hypothesis record `CoreFreeReduction`{.AgdaRecord}, and Lemma 3.1 
 ```agda
 record CoreFreeReduction : Type (lsuc 0ℓ) where
   field
-    reduce : ∀ 𝒢 H H-sg → ∃[ 𝒬 ] ∃[ J ] ∃[ J-sg ]
+    reduce : ∀ 𝒢 H H-sg
+      → ∃[ 𝒬 ∈ Group 0ℓ 0ℓ ] ∃[ J ∈ Pred 𝕌[ proj₁ 𝒬 ] 0ℓ ] ∃[ J-sg ∈ IsSubgroup 𝒬 J ]
       ( CoreFree 𝒬 J J-sg
       × (∀ 𝑳 → IntervalIso 𝒢 H H-sg 𝑳 → IntervalIso 𝒬 J J-sg 𝑳)
       × (𝒬 .proj₁ IsHomImageOf 𝒢 .proj₁) )
@@ -648,7 +650,7 @@ elements exist), and *at least two members* of the family do.
 ```agda
 HasThreeDistinct : Lattice → Type 0ℓ
 HasThreeDistinct (L , _) = let open Setoid 𝔻[ L ] in
-  ∃[ x ] ∃[ y ] ∃[ z ] ( ¬ (x ≈ y) × ¬ (x ≈ z) × ¬ (y ≈ z) )
+  ∃[ x ∈ 𝕌[ L ] ] ∃[ y ∈ 𝕌[ L ] ] ∃[ z ∈ 𝕌[ L ] ] ( ¬ (x ≈ y) × ¬ (x ≈ z) × ¬ (y ≈ z) )
 
 TwoBigCanopies : {m : ℕ} → (Fin m → FiniteLattice) → Type 0ℓ
 TwoBigCanopies {m} 𝑳s =
@@ -671,10 +673,10 @@ Statement-C ℓP =
   ∀ (n : ℕ) (𝑳s : Fin (2 + n) → FiniteLattice) (Ps : Fin (2 + n) → GroupProperty ℓP)
   → TwoBigCanopies 𝑳s
   → (∀ i → cfIE (Ps i) (toLattice (𝑳s i)))
-  → ∃[ 𝒢 ] ( (∀ i → Ps i 𝒢)
-              × ( ∀ i →  ∃[ H ] ∃[ H-sg ]
-                         ( CoreFree 𝒢 H H-sg × IntervalIso 𝒢 H H-sg (toLattice (𝑳s i)) ))
-            )
+  → ∃[ 𝒢 ∈ Group 0ℓ 0ℓ ]
+      ( (∀ i → Ps i 𝒢)
+      × ( ∀ i → ∃[ H ∈ Pred 𝕌[ proj₁ 𝒢 ] 0ℓ ] ∃[ H-sg ∈ IsSubgroup 𝒢 H ]
+                ( CoreFree 𝒢 H H-sg × IntervalIso 𝒢 H H-sg (toLattice (𝑳s i)) )))
 ```
 
 The proof of (B) → (C) rests on the **parachute construction**
@@ -702,8 +704,7 @@ record ParachuteHypotheses : Type (lsuc 0ℓ) where
       (r : GroupRepresentable (toLattice (parachute n 𝑳s)))
       → CoreFree (r .grp) (r .sub) (r .isSubgroup)
       → TwoBigCanopies 𝑳s
-      → ∀ i → ∃[ H ]    -- ∈ Pred 𝕌[ proj₁ (r .grp) ] 0ℓ
-              ∃[ H-sg ] -- ∈ IsSubgroup (r .grp) H
+      → ∀ i → ∃[ H ∈ Pred 𝕌[ proj₁ (r .grp) ] 0ℓ ] ∃[ H-sg ∈ IsSubgroup (r .grp) H ]
                 ( CoreFree (r .grp) H H-sg × IntervalIso (r .grp) H H-sg (toLattice (𝑳s i)) )
 
 -- Theorem thm-wjd-1 of the note, as a statement.
