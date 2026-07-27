@@ -95,7 +95,7 @@ module Complements {α ρ : Level} (𝒢 : Group α ρ) where
   open Group-Op 𝒢
   open GroupProperties ⟨ 𝒢 ⟩ᵍᵖ  using ( ⁻¹-involutive ; ⁻¹-anti-homo-∙ )
   open Complex 𝒢 using ( _∙ᶜ_ ; mem-∙ᶜ ; ∙ᶜ-respects ; ∙ᶜ-mono ; subgroup-∙ᶜ-idem )
-  open Conjugate 𝒢 using ( conj ; IsNormal )
+  open Conjugate 𝒢 using ( cong-syntax ; IsNormal )
 ```
 
 A member of one factor is a member of the product, provided the *other* factor
@@ -193,7 +193,7 @@ is a subgroup whenever `N` is normal and both are subgroups — this is the subg
 ```agda
   -- Moving a conjugate across a factor, in the two directions.
   private
-    swapˡ : ∀ b n → b ∙ conj (b ⁻¹) n ≈ n ∙ b
+    swapˡ : ∀ b n → b ∙ n ^ (b ⁻¹) ≈ n ∙ b
     swapˡ b n = begin
       b ∙ (b ⁻¹ ∙ n ∙ (b ⁻¹) ⁻¹)  ≈⟨ ∙-cong ≈refl (∙-cong ≈refl (⁻¹-involutive b)) ⟩
       b ∙ (b ⁻¹ ∙ n ∙ b)          ≈˘⟨ assoc-law b (b ⁻¹ ∙ n) b ⟩
@@ -202,7 +202,7 @@ is a subgroup whenever `N` is normal and both are subgroups — this is the subg
       ε ∙ n ∙ b                   ≈⟨ ∙-cong (idˡ-law n) ≈refl ⟩
       n ∙ b                       ∎
 
-    swapʳ : ∀ b n → conj b n ∙ b ≈ b ∙ n
+    swapʳ : ∀ b n → n ^ b ∙ b ≈ b ∙ n
     swapʳ b n = begin
       b ∙ n ∙ b ⁻¹ ∙ b    ≈⟨ assoc-law (b ∙ n) (b ⁻¹) b ⟩
       b ∙ n ∙ (b ⁻¹ ∙ b)  ≈⟨ ∙-cong ≈refl (invˡ-law b) ⟩
@@ -215,11 +215,11 @@ is a subgroup whenever `N` is normal and both are subgroups — this is the subg
     where
     to : N ∙ᶜ B ⊆ B ∙ᶜ N
     to (n , b , n∈N , b∈B , x≈nb) =
-      b , conj (b ⁻¹) n , b∈B , N-normal (b ⁻¹) n∈N , ≈trans x≈nb (≈sym (swapˡ b n))
+      b , n ^ (b ⁻¹) , b∈B , N-normal (b ⁻¹) n∈N , ≈trans x≈nb (≈sym (swapˡ b n))
 
     from : B ∙ᶜ N ⊆ N ∙ᶜ B
     from (b , n , b∈B , n∈N , x≈bn) =
-      conj b n , b , N-normal b n∈N , b∈B , ≈trans x≈bn (≈sym (swapʳ b n))
+      n ^ b , b , N-normal b n∈N , b∈B , ≈trans x≈bn (≈sym (swapʳ b n))
 
   -- Hence the product of a normal subgroup with any subgroup is a subgroup.
   normal-∙ᶜ-isSubgroup : {N : Pred G ℓⁿ} {B : Pred G ℓᵇ}
