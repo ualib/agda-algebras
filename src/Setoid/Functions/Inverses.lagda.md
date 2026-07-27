@@ -19,13 +19,13 @@ module Setoid.Functions.Inverses where
 -- Imports from Agda and the Agda Standard Library --------------------
 open import Agda.Primitive    using ( _⊔_ ; Level ) renaming ( Set to Type )
 open import Function          using ( _$_ )   renaming ( Func to _⟶_ )
-open import Data.Product      using ( _,_ ; Σ-syntax )
+open import Data.Product      using ( _,_ ; Σ-syntax ; ∃-syntax )
                               renaming ( _×_ to _∧_)
 open import Relation.Unary    using ( Pred ; _∈_ )
 open import Relation.Binary   using ( Setoid ; _Preserves_⟶_ )
 
 -- Imports from agda-algebras -----------------------------------------
-open import Overture using ( proj₁ ; proj₂ ; ∃-syntax )
+open import Overture using ( proj₁ ; proj₂ )
 
 private variable α ρᵃ β ρᵇ : Level
 ```
@@ -59,7 +59,7 @@ the second is for functions on setoids.
   open Image_∋_
 
   IsInRange : (𝑨 ⟶ 𝑩) → Pred B (α ⊔ ρᵇ)
-  IsInRange F b = ∃[ a ∈ A ] (F ⟨$⟩ a) ≈₂ b
+  IsInRange F b = ∃[ a ] (F ⟨$⟩ a) ≈₂ b
 
   Image⊆Range : ∀ {F b} → Image F ∋ b → b ∈ IsInRange F
   Image⊆Range (eq a x) = a , (sym₂ x)
@@ -74,7 +74,7 @@ the second is for functions on setoids.
 
   -- the carrier
   range : (𝑨 ⟶ 𝑩) → Type (α ⊔ β ⊔ ρᵇ)
-  range F = Σ[ b ∈ B ] ∃[ a ∈ A ](F ⟨$⟩ a) ≈₂ b
+  range F = Σ[ b ∈ B ] ∃[ a ] (F ⟨$⟩ a) ≈₂ b
 
   image : (F : 𝑨 ⟶ 𝑩) → range F → B
   image F (b , (_ , _)) = b
