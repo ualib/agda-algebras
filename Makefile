@@ -156,9 +156,21 @@ site-full:
 	$(MAKE) agda-md
 	$(MAKE) site
 
+# Profile a whole-library type-check.  Agda accepts one profiling mode at a time,
+# so override PROFILE to choose:
+#   internal     phases (Coverage, Serialization, InterfaceInstantiateFull, ...)
+#                — the one that says *what to fix*; the cost is rarely the typing
+#   modules      per-module ranking — says *which module* to look at
+#   definitions  per-definition attribution (its `Miscellaneous` line absorbs
+#                everything not attributable to a definition, and is often the
+#                largest)
+# Measure from an empty build (`make clean`), or only stale modules are timed.
+# (The pre-2.8 spelling `-v profile:7 -v profile.definitions:15` prints nothing.)
+PROFILE ?= modules
+
 profile: Everything.agda
 	@echo "target: $@"
-	$(AGDA) $(RTS_OPTS) -v profile:7 -v profile.definitions:15 $(SRCDIR)/Everything.agda
+	$(AGDA) $(RTS_OPTS) --profile=$(PROFILE) $(SRCDIR)/Everything.agda
 
 clean:
 	@echo "target: $@"

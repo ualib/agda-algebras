@@ -7,6 +7,7 @@ Guidance for Claude Code working in this repository.  Keep changes consistent wi
 +  Enter the toolchain with `nix develop` (pins Agda 2.8.0 and standard-library 2.3 via `flake.lock`).  Never assume a system Agda.
 +  Type-check the whole library: `nix develop --command make check`.
 +  Type-check one module while iterating: `nix develop --command agda src/Path/To/Module.lagda.md`.
++  When a module is slow to check, profile before guessing: `agda --profile=internal <module>` (or `make profile` for the whole library).  The cost is rarely the typing — see the `agda-typecheck-performance` skill.
 +  There is no separate test or lint step — type-checking is the test, exactly as CI runs it.
 +  Do not commit generated artifacts: `*.agdai`, the generated `Everything*.agda` aggregator, and `/.agda/` are gitignored.
 
@@ -24,7 +25,8 @@ Guidance for Claude Code working in this repository.  Keep changes consistent wi
 These proof terms are first-class training data.  Optimize for legibility and stability, not cleverness.
 
 +  Prefer many small, focused theorems over a few large ones.
-+  Prefer named helper lemmas over inlined or opaque `rewrite` chains.
++  Prefer named helper lemmas over inlined or opaque `rewrite` chains.  This is not only style: a `with` (or `rewrite`) inside a proof abstracts the *whole* goal, and when the goal unfolds into the generic interpretation machinery the coverage check of the generated auxiliary is expensive — measured at 15 s in one module, 0.9 s once the split moved into a lemma taking the `Dec` value as an argument.
++  A construction whose operations are determined by an order (a lattice, say) is cheaper to build and to check order-first: establish the partial order with its infimum and supremum and let the standard library derive the equations, rather than proving the equations and their congruences by hand.
 +  One canonical form per concept; introduce deprecations, never synonyms.
 +  Put an explicit type signature on every public definition.
 +  Pair each formal statement with a natural-language comment explaining what it says and why.
@@ -55,8 +57,9 @@ These proof terms are first-class training data.  Optimize for legibility and st
 
 ## Environment gotchas
 
-+  If `GH_TOKEN` is set in the parent environment it overrides the keyring credential; prefix `gh` calls with `env -u GH_TOKEN`.
++  If `GH_TOKEN` is set in the parent environment it overrides the keyring credential; prefix `gh` calls with `env -u GH_TOKEN`.  `gh issue view` and `gh pr edit` fail against this repository's classic Project; read and edit issues and PRs through `gh api` instead.
 +  `wenkokke/setup-agda` is not used (it maxes at Agda 2.7.0.1); the flake is the source of truth for the toolchain.
++  The `agda` on `PATH` inside `nix develop` is a wrapper that hard-codes `--library-file` for the worktree the shell was entered from, so building a *different* worktree from the same shell resolves modules to the wrong tree (`ModuleDefinedInOtherFile`).  Give that worktree its own `.agda/libraries` and wrapper, and pass `make AGDA=<wrapper> check`.
 +  Development uses git worktrees, one per branch, inside `nix develop`.  Prefer `@imports` (or `~/.claude/CLAUDE.md`) over `CLAUDE.local.md` for personal notes, since imports behave correctly across worktrees.
 
 
