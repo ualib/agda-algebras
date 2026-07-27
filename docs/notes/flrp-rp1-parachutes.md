@@ -40,11 +40,28 @@ An unexpected dividend: with no quotient, the parachute's order is an *inductive
 
 `_≈ᵖ_` is defined as `(u ≤ᵖ v) × (v ≤ᵖ u)` rather than as a second inductive family.  This is forced, not stylistic.  The canopy carrier `U i` *depends* on the index `i`, so inverting a proof about two elements that Agda already knows to lie in the same canopy requires eliminating the reflexive equation `i ≡ i`, which `--without-K` refuses.  With equality defined as mutual comparability, antisymmetry is the pairing function and no such inversion is ever needed.  (The one place where a comparison of a canopy index with itself is unavoidable — the meet and join of two elements of the *same* canopy — is discharged by `≟-diag`, which is Hedberg's theorem for `Fin`, not the K rule.)
 
-### 2.4  The order comes first, the equations follow
+### 2.4  Every case split is a named lemma
 
-The eight lattice equations, and in particular the two operation congruences, are not proved by hand.  The module establishes that `_≤ᵖ_` is a partial order with `_∧ᵖ_` its infimum and `_∨ᵖ_` its supremum, and the standard library's `Relation.Binary.Lattice.Properties.Lattice` derives the algebraic laws.  Congruence is then a theorem (an infimum is unique up to `≈`), not an obligation.  For comparison, the sibling ordinal-sum construction spends 32 hand-written congruence cases on the same kind of gluing; the parachute needs none.  **This is worth propagating**: any future lattice construction in the library should be built order-first.
+The construction makes exactly three decisions — is this canopy element the top of its canopy, do these two elements share a canopy, and (on the diagonal, where `--without-K` refuses to match `refl`) the comparison of an index with itself.  Each is analysed in one small `private` lemma that takes the `Dec` value as an *explicit argument*, and every consumer applies that lemma instead of repeating the split.  This is the library's house style (`CLAUDE.md`: "prefer named helper lemmas over inlined or opaque `rewrite` chains"), and it is also what makes the module cheap to type-check: a `with` inside a proof abstracts the *whole* goal, and these goals mention the canopy order, which unfolds into the generic interpretation machinery of `Algebra`.  Measured on issue #515: replacing the proof-level `with`s by lemmas on the decision, together with merging `ParachuteAtoms` into `LatticeParachute` (see § 2.5), cut the module's own type-checking cost from about 47 s to about 6 s.  The breakdown, from `agda --profile=internal`, is instructive — the expensive phases were *not* typing:
 
-### 2.5  The parachute shape is group-theoretic data
+| phase | before | after |
+| --- | --- | --- |
+| Coverage | 15.6 s | 0.9 s |
+| Serialization | 10.5 s | 1.0 s |
+| InterfaceInstantiateFull | 10.1 s | 0.5 s |
+| DeadCode | 5.7 s | 0.8 s |
+| Positivity | 2.5 s | 0.3 s |
+| Typing | 1.0 s | 1.5 s |
+
+### 2.5  One module, not two
+
+`LatticeParachute` takes the canopy bottoms and the nondegeneracy assumption alongside the tops and the top test, rather than layering an `ParachuteAtoms` module on top of a bottom-free construction.  The layered version was more general — the lattice structure genuinely does not need the bottoms — but the generality bought nothing (every consumer wants the atoms) and cost a module application that re-instantiated, re-serialized, and re-positivity-checked every definition of the inner module: 10 s of `InterfaceInstantiateFull` plus most of the serialization cost, for a module that takes 6 s in total once merged.  **Prefer one module with more parameters over two modules related by `open … public`** when the inner module has more than a handful of definitions.
+
+### 2.6  The order comes first, the equations follow
+
+The eight lattice equations, and in particular the two operation congruences, are not proved by hand.  The module establishes that `_≤ᵖ_` is a partial order with `_∧ᵖ_` its infimum and `_∨ᵖ_` its supremum, and the standard library's `Relation.Binary.Lattice.Properties.Lattice` derives the algebraic laws.  Congruence is then a theorem (an infimum is unique up to `≈`), not an obligation.  For comparison, the sibling ordinal-sum construction spends 32 hand-written congruence cases on the same kind of gluing; the parachute needs none.  **This is worth propagating**: any future lattice construction in the library should be built order-first.  (It is also cheap: the whole derivation, `⊕ᵖ-Lattice` included, costs under 40 ms — when the module was slow, this was not why.)
+
+### 2.7  The parachute shape is group-theoretic data
 
 `FLRP.Parachute.ParachuteConfig` states the shape of `[H , G]` — atoms, their meets and joins, and the covering property — as subgroup data, and `proper-CoreFree` is proved from that alone.  The bridge from the lattice (`FLRP.Parachute.Representation`) is a separate module.  The split keeps the substantive argument independent of how the parachute is presented, and it is what makes the *constructive* reading below possible.
 

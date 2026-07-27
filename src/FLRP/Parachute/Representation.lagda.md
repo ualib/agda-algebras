@@ -54,7 +54,7 @@ open import Classical.Properties.Lattice            using  ( module Lattice-Orde
                                                            ; TopOf ; BotOf )
 open import Classical.Small.Structures              using  ( Lattice )
 open import Classical.Structures.Group              using  ( Group ; IsSubgroup )
-open import Classical.Structures.Lattice.Parachute  using  ( module ParachuteAtoms )
+open import Classical.Structures.Lattice.Parachute  using  ( module LatticeParachute )
 open import FLRP.Enforceable                        using  ( module UpperInterval
                                                            ; IntervalIso )
 open import FLRP.Parachute                          using  ( module GroupParachute )
@@ -187,7 +187,7 @@ module ParachuteRep {m : ℕ}
   (nondeg : ∀ i → ¬ 𝔻[ 𝑳s i .proj₁ ] ._≈_ (𝒃 i .proj₁) (𝒕 i .proj₁))
   where
 
-  open ParachuteAtoms 𝑳s 𝒕 top? 𝒃 nondeg public
+  open LatticeParachute 𝑳s 𝒕 top? 𝒃 nondeg public
 
   -- "|Lᵢ| > 2": the i-th canopy has an element strictly between its two ends.
   record BigCanopyᴸ (i : Fin (suc m)) : Type 0ℓ where
