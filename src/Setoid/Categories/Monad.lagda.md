@@ -66,7 +66,7 @@ same reason: componentwise statements are what instances can prove pointwise und
 
 Two instances anchor the abstraction in this library:
 
-+  **From an adjunction.**  Every adjunction `L ⊣ R` induces a monad on the domain of
++  **From an adjunction**.  Every adjunction `L ⊣ R` induces a monad on the domain of
    `L`, with `T = R ∘F L`, unit the adjunction's unit, and multiplication obtained by
    running the counit inside `R`.  This is proved in general below
    (`adjunction→monad`{.AgdaFunction}) and instantiated in

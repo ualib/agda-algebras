@@ -16,11 +16,11 @@ Here we formalize the *adjoined* (glued) ordinal sum of
 [Classical.Structures.Lattice.OrdinalSum][] at Layer D of [ADR-008][].
 
 Given decidable representations of the summands and chosen extrema — a
-`TopOf 𝓛₁`{.AgdaFunction} and a `BotOf 𝓛₂`{.AgdaFunction} — we construct a
+`TopOf 𝓛₁`{.AgdaFunction} and a `BottomOf 𝓛₂`{.AgdaFunction} — we construct a
 finite finitary algebra whose decidable-congruence poset is order-isomorphic to
 the glued sum, yielding
 
-    ordinalSum-Representableᵈ : (t : TopOf 𝓛₁) (b : BotOf 𝓛₂)
+    ordinalSum-Representableᵈ : (t : TopOf 𝓛₁) (b : BottomOf 𝓛₂)
       → Representableᵈ 𝓛₁ → Representableᵈ 𝓛₂
       → Representableᵈ (ordinalSum 𝓛₁ t 𝓛₂ b)
 
@@ -103,7 +103,7 @@ open import Relation.Nullary.Decidable             using  ( _×-dec_ ; map′ )
 
 -- Imports from the Agda Universal Algebra Library ------------------------------
 open import Classical.Properties.Lattice             using  ( module Lattice-Order
-                                                            ; TopOf ; BotOf )
+                                                            ; TopOf ; BottomOf )
 open import Classical.Signatures.Lattice             using  ( Sig-Lattice )
 open import Classical.Small.Structures.Lattice       using  ( Lattice )
 open import Classical.Structures.Interpret           using  ( interp-cong )
@@ -789,7 +789,7 @@ extrema (`top-unique`{.AgdaFunction} / `bot-unique`{.AgdaFunction}) applied to
 the images of the total and diagonal congruences.
 
 ```agda
-  module _ {𝓛₁ 𝓛₂ : Lattice} (t : TopOf 𝓛₁) (b : BotOf 𝓛₂)
+  module _ {𝓛₁ 𝓛₂ : Lattice} (t : TopOf 𝓛₁) (b : BottomOf 𝓛₂)
            (iso₁ : ConIsoᵈ 𝑨 𝓛₁) (iso₂ : ConIsoᵈ 𝑩 𝓛₂)
     where
     𝑳₁ 𝑳₂ : Algebra {𝑆 = Sig-Lattice} 0ℓ 0ℓ
@@ -964,7 +964,7 @@ Normalize both witnesses to inhabited carriers, instantiate the construction,
 and package the result.
 
 ```agda
-ordinalSum-Representableᵈ : {𝓛₁ 𝓛₂ : Lattice} (t : TopOf 𝓛₁) (b : BotOf 𝓛₂)
+ordinalSum-Representableᵈ : {𝓛₁ 𝓛₂ : Lattice} (t : TopOf 𝓛₁) (b : BottomOf 𝓛₂)
   → Representableᵈ 𝓛₁ → Representableᵈ 𝓛₂ → Representableᵈ (ordinalSum 𝓛₁ t 𝓛₂ b)
 ordinalSum-Representableᵈ {𝓛₁} {𝓛₂} t b r₁ r₂ =
   assemble (inhabited-witness r₁) (inhabited-witness r₂)

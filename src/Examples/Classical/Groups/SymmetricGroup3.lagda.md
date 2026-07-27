@@ -50,12 +50,13 @@ module Examples.Classical.Groups.SymmetricGroup3 where
 -- Imports from Agda and the Agda Standard Library ----------------------------
 open import Data.Fin                               using ( Fin )
 open import Data.Fin.Patterns                      using ( 0F ; 1F ; 2F ; 3F ; 4F ; 5F )
-open import Data.Product                           using ( ∃-syntax ; _,_ )
+open import Data.Product                           using ( _,_ )
 open import Data.Vec.Base                          using ( _∷_ ; [] )
 open import Relation.Binary.PropositionalEquality  using ( _≡_ ; _≢_ ; refl )
 open import Relation.Nullary.Negation.Core         using ( ¬_ ; contradiction )
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
+open import Overture.Basic                    using  ( ∃-syntax )
 open import Overture.Cayley                   using  ( Table ; ⟦_⟧ ; from-yes )
 open import Overture.Operations.Properties    using  ( Associative? ; LeftIdentity? ; RightIdentity?
                                                      ; LeftInverse? ; RightInverse? )
@@ -112,7 +113,7 @@ The product `r · s = rs` (index `1 · 3 = 4`) differs from `s · r = r²s`
 The witnessing inequality is the absurd pattern `λ ()`, since `4 ≡ 5` is uninhabited.
 
 ```agda
-s3-noncomm : ∃[ a ] ∃[ b ] a · b ≢ b · a
+s3-noncomm : ∃[ a ∈ Fin 6 ] ∃[ b ∈ Fin 6 ] a · b ≢ b · a
 s3-noncomm = 1F , 3F , λ ()
 ```
 

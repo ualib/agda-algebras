@@ -50,7 +50,7 @@ open import Data.Product                           using  ( _,_ )
 open import Relation.Binary.PropositionalEquality  using  ( refl )
 
 -- Imports from the Agda Universal Algebra Library ------------------------------
-open import Classical.Properties.Lattice              using  ( TopOf ; BotOf )
+open import Classical.Properties.Lattice              using  ( TopOf ; BottomOf )
 open import Classical.Small.Structures.Lattice        using  ( Lattice )
 open import Classical.Structures.Lattice.Dual         using  ( dualLattice )
 open import Classical.Structures.Lattice.OrdinalSum   using  ( ordinalSum )
@@ -73,7 +73,7 @@ bottom is `0`, each universal property decided by the four table entries.
 chain₂-top : TopOf chain₂-lattice
 chain₂-top = 1F , λ { 0F → refl ; 1F → refl }
 
-chain₂-bot : BotOf chain₂-lattice
+chain₂-bot : BottomOf chain₂-lattice
 chain₂-bot = 0F , λ { 0F → refl ; 1F → refl }
 ```
 
@@ -89,7 +89,7 @@ summands.
 
 ```agda
 -- Adjoin a new bottom: chain₂ glued below 𝑳, at 𝑳's chosen bottom.
-adjoinBottom-Representableᵈ : {𝑳 : Lattice} (b : BotOf 𝑳)
+adjoinBottom-Representableᵈ : {𝑳 : Lattice} (b : BottomOf 𝑳)
   → Representableᵈ 𝑳 → Representableᵈ (ordinalSum chain₂-lattice chain₂-top 𝑳 b)
 adjoinBottom-Representableᵈ b r =
   ordinalSum-Representableᵈ chain₂-top b chain₂-Representableᵈ r

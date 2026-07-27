@@ -59,6 +59,14 @@ ordinal-sum closure outright; duality enters as this registry's second entry,
 `KurzweilNetterDuality`{.AgdaFunction}, an explicit hypothesis pending a formal
 reproof.[^3]
 
+**Entry 3**: the Pálfy–Pudlák theorem.  Every finite lattice is a congruence
+lattice of a finite algebra *if and only if* every finite lattice is an interval in
+the subgroup lattice of a finite group.  The FLRP program consumes one direction of
+it, and only at the level of the two *statements*, which is exactly how the theorem
+is used: exhibiting a finite lattice that is no interval refutes the group-side
+statement, hence the algebra-side one.  It is registered as
+`PalfyPudlak`{.AgdaFunction}.[^4]
+
 The module is structured as *per-assumption statement definitions* (rather than one
 monolithic record) precisely so that entries can be appended without disturbing one
 another, and downstream results take whichever entry they need as an ordinary
@@ -83,6 +91,8 @@ open import Level                                 using  ( Level ; _⊔_ ; 0ℓ 
 -- Imports from the Agda Universal Algebra Library ------------------------------
 open import Classical.Small.Structures.Lattice    using  ( Lattice )
 open import Classical.Structures.Lattice.Dual     using  ( dualLattice )
+open import FLRP.Enforceable                      using  ( GroupFLRP-Statement )
+open import FLRP.Problem                          using  ( FLRP-Statement )
 open import FLRP.Representable                    using  ( Representableᵈ )
 open import Overture                              using  ( 𝓞 ; 𝓥 ; Signature )
 open import Setoid.Algebras.Basic                 using  ( Algebra )
@@ -238,6 +248,47 @@ KurzweilNetterDuality : Type (lsuc 0ℓ)
 KurzweilNetterDuality = (𝑳 : Lattice) → KurzweilNetterDualityAt 𝑳
 ```
 
+#### Entry 3: the Pálfy–Pudlák theorem
+
+The **theorem of Pálfy and Pudlák** (P. P. Pálfy and P. Pudlák, *Congruence
+lattices of finite algebras and intervals in subgroup lattices of finite groups*,
+Algebra Universalis 11 (1980) 22–27) states the equivalence of
+
++  **(A)** every finite lattice is isomorphic to the congruence lattice of a finite
+   algebra — the type `FLRP-Statement`{.AgdaFunction} of [FLRP.Problem][]; and
++  **(B)** every finite lattice is isomorphic to an interval in the subgroup lattice
+   of a finite group — the type `GroupFLRP-Statement`{.AgdaFunction} of
+   [FLRP.Enforceable][].
+
++  **Meaning**.  `PalfyPudlak`{.AgdaFunction} is the direction (A) `→` (B), which is
+   the one the program consumes: its contrapositive turns a lattice proved to be no
+   interval into a negative answer for the FLRP.  The converse direction (B) `→` (A)
+   is not needed anywhere and is deliberately not registered.
+
++  **Granularity**.  The entry is *statement-level*, matching the theorem as
+   published: it says nothing about which particular lattice fails, only that the
+   two universally quantified statements stand or fall together.  A per-lattice
+   reading ("this congruence lattice is an interval") would be a stronger assumption
+   and is not assumed here — which is why the strategy meta-theorem of
+   [FLRP.Parachute.Theorems][] concludes `¬ FLRP-Statement`{.AgdaFunction} rather
+   than non-representability of the parachute itself.
+
++  **Status and retirement path**.  A classically proven theorem imported pending
+   formalization.  Its proof needs the minimal-cardinality argument (a minimal
+   algebra representing a lattice has only permutations among its unary polynomials,
+   so its congruence lattice is that of a transitive G-set) together with the
+   Pálfy–Pudlák correspondence `Con (G ↷ G/H) ≅ [H , G]`; the latter is work package
+   WP-3 and the former is the remaining gap.
+
++  **Layer**.  Layer S on both sides, as published.  The Layer-D reading follows by
+   Entry 1 where a consumer needs it.
+
+```agda
+-- Entry 3: statement (A) of Pálfy–Pudlák implies statement (B).
+PalfyPudlak : Type (lsuc 0ℓ)
+PalfyPudlak = FLRP-Statement → GroupFLRP-Statement
+```
+
 --------------------------------------
 
 [^1]: This is the assumption-registry discipline of [ADR-008][] and the FLRP roadmap.
@@ -250,3 +301,8 @@ KurzweilNetterDuality = (𝑳 : Lattice) → KurzweilNetterDualityAt 𝑳
       duality here as Entry 2 (see
       [`docs/notes/flrp-research-roadmap.md`](docs/notes/flrp-research-roadmap.md) § 7
       and GitHub [Issue #456](https://github.com/ualib/agda-algebras/issues/456).
+
+[^4]: Registered by **RP-1** (GitHub
+      [Issue #458](https://github.com/ualib/agda-algebras/issues/458)), which needs it
+      for the strategy meta-theorem of [FLRP.Parachute.Theorems][]; see
+      [`docs/notes/flrp-rp1-parachutes.md`](docs/notes/flrp-rp1-parachutes.md).

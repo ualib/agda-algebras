@@ -22,6 +22,12 @@ def flagged(text: str) -> dict[str, tuple[str, ...]]:
     return {f.module: f.unused for f in report.findings}
 
 
+def flagged_with(text: str, notations: dict[str, frozenset[str]]) -> dict[str, tuple[str, ...]]:
+    """As :func:`flagged`, with a harvested ``syntax``-notation registry."""
+    report = ui.analyze_file(Path("T.lagda.md"), text, notations)
+    return {f.module: f.unused for f in report.findings}
+
+
 def block(*code: str) -> str:
     """Wrap Agda lines in a ```` ```agda ```` fenced block."""
     return "```agda\n" + "\n".join(code) + "\n```\n"
@@ -134,6 +140,61 @@ def test_syntax_backed_name_genuinely_unused() -> None:
         "foo = bar",
     )
     assert flagged(text) == {"Data.Product": ("Σ-syntax",)}
+
+
+# --------------------------------------------------------------------------- #
+# `syntax` declarations: the notation, not the name, appears at use sites
+# --------------------------------------------------------------------------- #
+
+def test_parse_syntax_decl_operator() -> None:
+    assert ui.parse_syntax_decl("  syntax cong-syntax g x = x ^ g") == (
+        "cong-syntax", frozenset({"^"}))
+
+
+def test_parse_syntax_decl_bracket() -> None:
+    assert ui.parse_syntax_decl("syntax Σ-syntax A (λ x → B) = Σ[ x ∈ A ] B") == (
+        "Σ-syntax", frozenset({"Σ[", "∈", "]"}))
+
+
+def test_parse_syntax_decl_not_a_declaration() -> None:
+    assert ui.parse_syntax_decl("foo = bar") is None
+    assert ui.parse_syntax_decl("-- syntax that reads better") is None
+
+
+def test_harvest_syntax_notations() -> None:
+    text = block(
+        "cong-syntax : G → G → G",
+        "cong-syntax = conj",
+        "syntax cong-syntax g x = x ^ g",
+    )
+    assert ui.harvest_syntax_notations([(Path("C.lagda.md"), text)]) == {
+        "cong-syntax": frozenset({"^"})}
+
+
+def test_syntax_notation_used() -> None:
+    text = block(
+        "open import M using ( cong-syntax )",
+        "foo : x ^ g ≈ y",
+    )
+    assert flagged_with(text, {"cong-syntax": frozenset({"^"})}) == {}
+
+
+def test_syntax_notation_unused() -> None:
+    text = block(
+        "open import M using ( cong-syntax )",
+        "foo = bar",
+    )
+    assert flagged_with(text, {"cong-syntax": frozenset({"^"})}) == {"M": ("cong-syntax",)}
+
+
+def test_syntax_notation_partially_present_is_unused() -> None:
+    """All the notation's literal tokens must appear, not just one of them."""
+    text = block(
+        "open import M using ( Rel-syntax )",
+        "foo = x ^ y",
+    )
+    notations = {"Rel-syntax": frozenset({"Rel[", "^", "]"})}
+    assert flagged_with(text, notations) == {"M": ("Rel-syntax",)}
 
 
 # --------------------------------------------------------------------------- #

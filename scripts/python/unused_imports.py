@@ -93,7 +93,8 @@ from dataclasses import dataclass, replace
 from functools import reduce
 from itertools import accumulate
 from pathlib import Path
-from typing import Optional
+from types import MappingProxyType
+from typing import Iterable, Mapping, Optional
 
 # Import the shared functional utilities the way the sibling scripts do: make
 # this file's directory importable, then pull in the Result monad and the pure
@@ -332,23 +333,78 @@ def code_tokens(code: str) -> frozenset[str]:
     return frozenset(t for t in _DELIM.split(code) if t)
 
 
+# A ``syntax`` declaration: ``syntax NAME <params> = <notation>``.  The notation
+# is arbitrary, so the only way to know what a syntax-backing name looks like at
+# its use sites is to read the declaration.
+_SYNTAX_DECL = re.compile(r"^\s*syntax\s+(\S+)\s+(.*?)\s*=\s*(\S.*)$")
+
+# What a syntax-backing name looks like in code: its declared notation's literal
+# tokens (the ones that are not argument placeholders).
+SyntaxNotations = Mapping[str, frozenset[str]]
+
+NO_NOTATIONS: SyntaxNotations = MappingProxyType({})
+
+
+def parse_syntax_decl(code_line: str) -> Optional[tuple[str, frozenset[str]]]:
+    """``syntax cong-syntax g x = x ^ g`` -> ``("cong-syntax", {"^"})``, and
+    ``syntax Σ-syntax A (λ x → B) = Σ[ x ∈ A ] B`` -> ``("Σ-syntax", {"Σ[", "∈", "]"})``.
+
+    The literal tokens are those of the notation that are not bound on the left of
+    the ``=``.  A declaration whose notation is all placeholders yields ``None``:
+    there would be nothing to look for.  A declaration whose notation mentions a
+    name that is *not* among its parameters (``∃-syntax`` in ``Overture.Basic``
+    does) yields an over-strict entry, which simply never matches; the ``Foo[``
+    fallback in :func:`is_used` then applies, so the outcome is still correct."""
+    m = _SYNTAX_DECL.match(code_line)
+    if m is None:
+        return None
+    name, params, notation = m.group(1), m.group(2), m.group(3)
+    bound = code_tokens(params)
+    literals = frozenset(t for t in code_tokens(notation) if t not in bound)
+    return (name, literals) if literals else None
+
+
+def harvest_syntax_notations(sources: Iterable[tuple[Path, str]]) -> dict[str, frozenset[str]]:
+    """Collect every ``syntax`` declaration in the scanned corpus.  Names are
+    global here rather than per-module: two modules declaring the same
+    syntax-backing name are rare, and on collision we keep the *intersection* of
+    the literal tokens, which can only make a name easier to count as used —
+    the safe direction for a gate that must not raise false alarms."""
+    found: dict[str, frozenset[str]] = {}
+    for _, text in sources:
+        for line in file_code_lines(text):
+            decl = parse_syntax_decl(line)
+            if decl is None:
+                continue
+            name, literals = decl
+            found[name] = found[name] & literals if name in found else literals
+    return {n: lits for n, lits in found.items() if lits}
+
+
 def name_parts(name: str) -> tuple[str, ...]:
     """The non-empty parts of a (possibly mixfix) name: ``_∙_`` -> ``('∙',)``."""
     return tuple(p for p in name.split("_") if p)
 
 
-def is_used(name: str, toks: frozenset[str]) -> bool:
+def is_used(name: str, toks: frozenset[str], notations: SyntaxNotations = NO_NOTATIONS) -> bool:
     """Is ``name`` used, given the set of tokens from a module's code?  A mixfix
     name is used when its full form or any of its operator parts appears.
 
-    A name of the form ``Foo-syntax`` backs an Agda ``syntax`` declaration whose
-    notation opens with ``Foo[`` (e.g. ``Σ-syntax`` is used as ``Σ[ x ∈ A ] B``).
-    Such a name never appears verbatim at its use site, so its notation token is
-    what we look for instead."""
+    A name of the form ``Foo-syntax`` backs an Agda ``syntax`` declaration and so
+    never appears verbatim at its use site; what appears is the declared notation.
+    ``notations`` maps such a name to the literal tokens of its notation, harvested
+    from the corpus by :func:`harvest_syntax_notations`, and the name counts as used
+    when all of them appear.  Failing that, the common ``Foo[`` shape is recognised,
+    which covers standard-library names such as ``Σ-syntax`` whose declaration is
+    outside the corpus."""
     if name in toks:
         return True
-    if name.endswith("-syntax") and (name[: -len("-syntax")] + "[") in toks:
-        return True
+    if name.endswith("-syntax"):
+        literals = notations.get(name)
+        if literals is not None and literals <= toks:
+            return True
+        if (name[: -len("-syntax")] + "[") in toks:
+            return True
     # Operator sections keep one hole glued to the name: `_⊨ˢᵍ_` used as
     # `(_⊨ˢᵍ Th)` tokenises to `_⊨ˢᵍ`, and `(x ∙_)` to `∙_`.
     if {name.lstrip("_"), name.rstrip("_")} & toks:
@@ -551,6 +607,7 @@ def evaluate(
     toks: frozenset[str],
     usage_text: str,
     module_refs: frozenset[str],
+    notations: SyntaxNotations = NO_NOTATIONS,
 ) -> Optional[Finding]:
     """Decide whether ``stmt`` introduces anything unused.  ``toks`` is the set of
     usage tokens; ``usage_text`` is the raw usage corpus (for qualified-path
@@ -564,7 +621,7 @@ def evaluate(
     if stmt.is_qualified:
         if stmt.in_scope:  # `import M as N` -> check the alias N
             alias = stmt.in_scope[0].local
-            if is_used(alias, toks) or alias in module_refs:
+            if is_used(alias, toks, notations) or alias in module_refs:
                 return None
             return Finding(path, stmt.line, stmt.keyword, stmt.module, (alias,), 1, "qualified")
         # `import M` -> used iff the path is re-opened/qualified by another
@@ -581,7 +638,7 @@ def evaluate(
     # whether or not the name was imported with the `module` keyword: a plain
     # `using ( signature )` can still be consumed by a later `open signature`.
     def used(it: ImportItem) -> bool:
-        return is_used(it.local, toks) or it.local in module_refs
+        return is_used(it.local, toks, notations) or it.local in module_refs
 
     unused = tuple(it.local for it in stmt.in_scope if not used(it))
     if not unused:
@@ -623,7 +680,7 @@ class Scan:
     public: int
 
 
-def scan_file(path: Path, text: str) -> Scan:
+def scan_file(path: Path, text: str, notations: SyntaxNotations = NO_NOTATIONS) -> Scan:
     """Parse, classify, and evaluate every import/open statement in one file."""
     code_lines = file_code_lines(text)
     raws = collect_statements(code_lines)
@@ -660,7 +717,7 @@ def scan_file(path: Path, text: str) -> Scan:
     findings = tuple(
         (loc, f)
         for i, loc in enumerate(located)
-        if (f := evaluate(path, loc.stmt, toks, usage_text, others[i]))
+        if (f := evaluate(path, loc.stmt, toks, usage_text, others[i], notations))
     )
     open_ended = tuple(
         OpenEnded(path, loc.stmt.line, loc.stmt.keyword, loc.stmt.module, reason)
@@ -674,9 +731,9 @@ def scan_file(path: Path, text: str) -> Scan:
     return Scan(path, findings, open_ended, analyzed, public)
 
 
-def analyze_file(path: Path, text: str) -> FileReport:
+def analyze_file(path: Path, text: str, notations: SyntaxNotations = NO_NOTATIONS) -> FileReport:
     """Produce the findings and open-ended report for one file."""
-    scan = scan_file(path, text)
+    scan = scan_file(path, text, notations)
     return FileReport(
         path,
         tuple(f for _, f in scan.findings),
@@ -770,7 +827,7 @@ class FixResult:
     new_text: Optional[str]        # None when nothing changed
 
 
-def fix_file(path: Path, text: str) -> FixResult:
+def fix_file(path: Path, text: str, notations: SyntaxNotations = NO_NOTATIONS) -> FixResult:
     """Compute the edited source for one file by deleting its unused imports.
 
     Whole-statement and qualified findings delete the statement's line span;
@@ -779,7 +836,7 @@ def fix_file(path: Path, text: str) -> FixResult:
     Statements that share a line with another statement are left for manual
     handling.  The character offsets from the cleaned text apply unchanged to the
     original source because comment removal is length-preserving."""
-    scan = scan_file(path, text)
+    scan = scan_file(path, text, notations)
     orig_lines = text.split("\n")
     edits: dict[int, tuple[tuple[int, ...], list[str]]] = {}
     manual: list[str] = []
@@ -896,9 +953,14 @@ def gather_files(paths: list[Path], include_legacy: bool) -> list[Path]:
     return sorted({f for p in paths for f in expand_target(p, include_legacy)})
 
 
-def read_and_analyze(path: Path) -> Result[FileReport, PipelineError]:
-    """IO boundary: read a file (in the Result monad) and analyze it."""
-    return read_text(path).map(lambda text: analyze_file(path, text))
+def read_all(files: list[Path]) -> tuple[list[tuple[Path, str]], list[tuple[Path, PipelineError]]]:
+    """IO boundary: read every file (in the Result monad), splitting the successes
+    from the failures.  Reading precedes analysis because the ``syntax``
+    declarations of the whole corpus have to be known before any single file can
+    be judged."""
+    reads = [(f, read_text(f)) for f in files]
+    return ([(f, r.unwrap()) for f, r in reads if r.is_ok],
+            [(f, r.unwrap_err()) for f, r in reads if r.is_err])
 
 
 def render_report(
@@ -966,9 +1028,9 @@ def main(argv: list[str]) -> int:
     if args.fix:
         return run_fix(files)
 
-    results = [(f, read_and_analyze(f)) for f in files]
-    reports = [r.unwrap() for _, r in results if r.is_ok]
-    errors = [(f, r.unwrap_err()) for f, r in results if r.is_err]
+    sources, errors = read_all(files)
+    notations = harvest_syntax_notations(sources)
+    reports = [analyze_file(f, text, notations) for f, text in sources]
     findings = [f for r in reports for f in r.findings]
 
     if args.json:
@@ -982,15 +1044,17 @@ def main(argv: list[str]) -> int:
 
 
 def run_fix(files: list[Path]) -> int:
-    """Apply ``--fix``: read each file, delete its unused imports, write it back."""
+    """Apply ``--fix``: read each file, delete its unused imports, write it back.
+    The corpus is read up front so that the ``syntax`` notations are known: without
+    them a name used only through its notation would be deleted as unused."""
+    sources, read_errors = read_all(files)
+    notations = harvest_syntax_notations(sources)
+    for path, err in read_errors:
+        print(f"!! {path}: {err}", file=sys.stderr)
     changed = total_names = total_statements = 0
     manual: list[str] = []
-    for path in files:
-        read = read_text(path)
-        if read.is_err:
-            print(f"!! {path}: {read.unwrap_err()}", file=sys.stderr)
-            continue
-        result = fix_file(path, read.unwrap())
+    for path, text in sources:
+        result = fix_file(path, text, notations)
         manual.extend(result.manual)
         if result.new_text is None:
             continue

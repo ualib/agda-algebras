@@ -39,12 +39,13 @@ module Examples.Classical.CommutativeIdempotentMagma where
 -- Imports from the Agda Standard Library -------------------------------------
 open import Data.Fin                                using ( Fin )
 open import Data.Fin.Patterns                       using ( 0F ; 1F ; 2F ; 3F )
-open import Data.Product                            using ( ∃-syntax ; _,_ )
+open import Data.Product                            using ( _,_ )
 open import Data.Vec.Base                           using ( _∷_ ; [] )
 open import Relation.Binary.PropositionalEquality   using ( _≡_ ; _≢_ ; refl )
 open import Relation.Nullary.Negation.Core          using ( ¬_ ; contradiction )
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
+open import Overture.Basic                          using  ( ∃-syntax )
 open import Overture.Cayley                         using  ( Table ; ⟦_⟧ ; from-yes )
 open import Overture.Operations.Properties          using  ( Commutative? ; Idempotent? )
 open import Classical.Bundles.Magma                 using  ( ⟨_⟩ᵐᵃ ; ⟪_⟫ᵐᵃ )
@@ -103,7 +104,7 @@ distinguishes the two bracketings; the witnessing inequality is the absurd patte
 `λ ()`{.AgdaFunction}, since the goal `2 ≡ 3` is uninhabited.
 
 ```agda
-·-not-associative : ∃[ a ] ∃[ b ] ∃[ c ] (a · b) · c ≢ a · (b · c)
+·-not-associative : ∃[ a ∈ Fin 4 ] ∃[ b ∈ Fin 4 ] ∃[ c ∈ Fin 4 ] (a · b) · c ≢ a · (b · c)
 ·-not-associative = 0F , 1F , 2F , λ ()
 ```
 

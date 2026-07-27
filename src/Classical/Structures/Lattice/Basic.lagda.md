@@ -27,25 +27,25 @@ This module's prose adds the following conventions to the
 two-binary-symbols-with-eight-equations case beyond the
 [Monoid][Classical.Structures.Monoid] template:
 
-+  **Two reducts, one per operation.**  `lattice→meetMagma` and
++  **Two reducts, one per operation**.  `lattice→meetMagma` and
    `lattice→joinMagma` are the two container-morphism reducts
    `Sig-Magma ↪ Sig-Lattice` that send `∙-Op` to `∧-Op` and `∨-Op` respectively,
    with identity position maps.  Both are pure reducts (no laws needed); the
    downstream `lattice→meetSemilattice` and `lattice→joinSemilattice` add
    `Th-Semilattice` satisfaction on top via the curried-law pivot, exactly as
    `monoid→semigroup` does for the single-operation case.
-+  **Eight standalone curried laws.**  Each of the eight equations in
++  **Eight standalone curried laws**.  Each of the eight equations in
    `Th-Lattice` is exposed as a standalone curried-form lemma
    (`lt-∧-assoc` through `lt-absorbʳ`) defined once in a
    `module _ (𝑳 : Lattice α ρ)` block above the forgetfuls, so that both
    `Lattice-Op` and each `lattice→<X>Semilattice` consume the same proof.
-+  **Direct curried accessors.**  `Lattice-Op` defines `_∧_` and `_∨_` directly
++  **Direct curried accessors**.  `Lattice-Op` defines `_∧_` and `_∨_` directly
    via `Curry₂ (∧-Op ^ 𝑨)` / `Curry₂ (∨-Op ^ 𝑨)` rather than inheriting through
    either semilattice reduct, for the same reason Monoid does: the reduct's
    position map re-indexes definitionally to the identity in both cases, but
    keeping the accessors direct keeps every downstream `refl` independent of
    that reduction.
-+  **No two-symbol bridge primitive.**  The absorption laws involve terms
++  **No two-symbol bridge primitive**.  The absorption laws involve terms
    nesting two operation symbols (e.g. `node ∧-Op (pair (ℊ 0F)
    (node ∨-Op (pair (ℊ 0F) (ℊ 1F))))`), but the term-to-curried bridge is two
    compositions of single-symbol `interp-cong` calls — one per operation —

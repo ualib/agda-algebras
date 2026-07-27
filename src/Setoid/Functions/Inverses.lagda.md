@@ -74,7 +74,7 @@ the second is for functions on setoids.
 
   -- the carrier
   range : (𝑨 ⟶ 𝑩) → Type (α ⊔ β ⊔ ρᵇ)
-  range F = Σ[ b ∈ B ] ∃[ a ∈ A ](F ⟨$⟩ a) ≈₂ b
+  range F = Σ[ b ∈ B ] ∃[ a ∈ A ] (F ⟨$⟩ a) ≈₂ b
 
   image : (F : 𝑨 ⟶ 𝑩) → range F → B
   image F (b , (_ , _)) = b

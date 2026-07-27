@@ -52,7 +52,7 @@ import Relation.Binary.Reasoning.Setoid as SetoidReasoning
 -- Imports from the Agda Universal Algebra Library ------------------------------
 open import Classical.Structures.Group.Basic        using ( Group ; module Group-Op )
 open import Classical.Structures.Group.Subgroups    using ( IsSubgroup )
-open import Classical.Structures.Group.Conjugation  using ( module Conj )
+open import Classical.Structures.Group.Conjugation  using ( module Conjugate )
 open import Setoid.Algebras.Basic                   using ( 𝕌[_] ; 𝔻[_] )
 open import Setoid.Subalgebras.CompleteLattice      using ( module Sublattice )
 ```
@@ -78,7 +78,7 @@ module Core {α ρ : Level} (𝑮 : Group α ρ) {ℓ : Level}
   open Setoid 𝔻[ 𝑨 ]  using ( _≈_ ) renaming ( sym to ≈sym )
   open SetoidReasoning 𝔻[ 𝑨 ]
   open Group-Op 𝑮 using ( _∙_ ; ε ; _⁻¹ )
-  open Conj 𝑮
+  open Conjugate 𝑮
   open Sublattice 𝑨 (α ⊔ ρ ⊔ ℓ) using ( Subᴸ ; ⨅ )
   open IsSubgroup H-isSubgroup using () renaming  (respects to H-respects
                                                   ; isSubuniverse to H-isSubuniverse)

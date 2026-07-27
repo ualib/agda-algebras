@@ -33,13 +33,13 @@ module Setoid.Congruences.Monolith where
 
 -- Imports from Agda and the Agda Standard Library ----------------------------
 open import Agda.Primitive    using () renaming ( Set to Type )
-open import Data.Product      using ( _×_ ; _,_ ; Σ-syntax ; ∃-syntax ; proj₁ ; proj₂ )
+open import Data.Product      using ( _×_ ; _,_ ; Σ-syntax ; proj₁ ; proj₂ )
 open import Level             using ( Level ; _⊔_ )
 open import Relation.Binary   using ( Setoid ; IsEquivalence ; _⇒_ )
 open import Relation.Nullary  using ( ¬_ )
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
-open import Overture                    using  ( 𝑆 )
+open import Overture                    using  ( 𝑆 ; ∃-syntax )
 open import Setoid.Algebras.Basic       using  ( ov ; Algebra ; 𝕌[_] ; 𝔻[_] )
 open import Setoid.Congruences.Basic    using  ( Con ; mkcon ; _∣≈_ ; reflexive
                                                ; is-equivalence ; is-compatible )
@@ -61,8 +61,7 @@ module _ (𝑨 : Algebra {𝑆 = 𝑆} α ρ) where
 
   -- 𝑨 has two ≈-distinct elements.
   Nontrivial : Type (α ⊔ ρ)
-  Nontrivial = ∃[ a ] ∃[ b ] ¬ (a ≈ b)
-  -- `∃[ a ] P a`  is shorthand for `Σ[ a ∈ 𝕌[ 𝑨 ] ] P a`
+  Nontrivial = ∃[ a ∈ 𝕌[ 𝑨 ] ] ∃[ b ∈ 𝕌[ 𝑨 ] ] ¬ (a ≈ b)
 
   -- Every two elements of 𝑨 are equal (the one-element, degenerate case).
   Trivial : Type (α ⊔ ρ)

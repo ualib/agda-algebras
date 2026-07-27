@@ -81,7 +81,7 @@ itself (`conj-action-ε`{.AgdaFunction}, `conj-action-∙`{.AgdaFunction}) by
 `conj⁻¹-conj`{.AgdaFunction} the two inverse laws).
 
 ```agda
-module Conj {α ρ : Level} (𝒢 : Group α ρ) where
+module Conjugate {α ρ : Level} (𝒢 : Group α ρ) where
   private
     𝑮 = proj₁ 𝒢
     G = 𝕌[ 𝑮 ]

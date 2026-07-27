@@ -64,7 +64,7 @@ open import Relation.Nullary.Decidable
 
 -- Imports from the Agda Universal Algebra Library ------------------------------
 open import Classical.Properties.Lattice         using  ( module Lattice-Order
-                                                        ; TopOf ; BotOf )
+                                                        ; TopOf ; BottomOf )
 open import Classical.Small.Structures.Lattice   using  ( Lattice )
 open import FLRP.Problem                         using  ( OrderIso ; FiniteLattice
                                                         ; toLattice ; 𝑆∅ ; chain₂-lattice )
@@ -578,7 +578,7 @@ lattice's meet order), it respects `≈`{.AgdaFunction} in the reverse direction
 (via `≤-reflexive`{.AgdaFunction}), and it sends the extreme congruences to
 extrema of the target lattice.  The last point equips every decidably
 representable lattice with *chosen* extrema — the `TopOf`{.AgdaFunction} /
-`BotOf`{.AgdaFunction} data of [Classical.Properties.Lattice][] that the
+`BottomOf`{.AgdaFunction} data of [Classical.Properties.Lattice][] that the
 ordinal-sum construction consumes.
 
 ```agda
@@ -591,7 +591,7 @@ module ConIsoᵈ-Consequences {𝑆 : Signature 0ℓ 0ℓ} {𝑨 : Algebra {𝑆
              ; to∘from to to∘fromᴸ ; from∘to to from∘toᴸ )
   open Setoid 𝔻[ proj₁ 𝑳 ] using ( _≈_ ) renaming ( sym to ≈sym ; trans to ≈trans )
   open Lattice-Order 𝑳 using ( _≤_ ; ≤-antisym ; ≤-reflexive ; ≤-respˡ-≈ ; ≤-respʳ-≈
-                             ; IsTop ; IsBot )
+                             ; IsTop ; IsBottom )
 
   -- ≑ᵈ-equal congruences have ≈-equal images.
   to-cong≑ : {d e : DecCon 𝑨 0ℓ} → d ≑ᵈ e → toᴸ d ≈ toᴸ e
@@ -606,7 +606,7 @@ module ConIsoᵈ-Consequences {𝑆 : Signature 0ℓ 0ℓ} {𝑨 : Algebra {𝑆
   to-𝟙-top u = ≤-respˡ-≈ (to∘fromᴸ u) (to-monoᴸ λ _ → lift tt)
 
   -- ... and the image of the diagonal is a bottom.
-  to-𝟘-bot : (≈dec : ∀ x y → Dec (Setoid._≈_ 𝔻[ 𝑨 ] x y)) → IsBot (toᴸ (𝟘ᵈ ≈dec))
+  to-𝟘-bot : (≈dec : ∀ x y → Dec (Setoid._≈_ 𝔻[ 𝑨 ] x y)) → IsBottom (toᴸ (𝟘ᵈ ≈dec))
   to-𝟘-bot ≈dec u = ≤-respʳ-≈ (to∘fromᴸ u) (to-monoᴸ (𝟘-min (proj₁ (fromᴸ u))))
 
 -- Chosen extrema for any decidably representable lattice.
@@ -620,8 +620,8 @@ module _ {𝑳 : Lattice} (r : Representableᵈ 𝑳) where
   Representableᵈ-TopOf : TopOf 𝑳
   Representableᵈ-TopOf = toᴸ (𝟙ᵈ {ℓ = 0ℓ}) , to-𝟙-top
 
-  Representableᵈ-BotOf : BotOf 𝑳
-  Representableᵈ-BotOf = toᴸ (𝟘ᵈ (finiteᵈ ._≟_)) , to-𝟘-bot (finiteᵈ ._≟_)
+  Representableᵈ-BottomOf : BottomOf 𝑳
+  Representableᵈ-BottomOf = toᴸ (𝟘ᵈ (finiteᵈ ._≟_)) , to-𝟘-bot (finiteᵈ ._≟_)
 ```
 
 #### Inhabited witnesses

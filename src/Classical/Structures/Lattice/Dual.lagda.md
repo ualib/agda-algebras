@@ -25,7 +25,7 @@ of [Classical.Properties.Lattice][].
 +  The meet order flips: `x ≤ y` in the dual iff `y ≤ x` in `𝑳`{.AgdaBound}
    (`≤ᵈ-flip`{.AgdaFunction} / `≤ᵈ-unflip`{.AgdaFunction}).
 +  Chosen extrema swap: a top of `𝑳`{.AgdaBound} is a bottom of the dual and
-   conversely (`dualBotOf`{.AgdaFunction} / `dualTopOf`{.AgdaFunction}).
+   conversely (`dualBottomOf`{.AgdaFunction} / `dualTopOf`{.AgdaFunction}).
 
 Dualization is involutive up to the evident isomorphism (the identity map on the
 carrier): applying `dualLattice`{.AgdaFunction} twice re-interprets each symbol by
@@ -53,7 +53,7 @@ open import Relation.Binary       using ( Setoid )
 
 -- Imports from the Agda Universal Algebra Library ------------------------------
 open import Classical.Properties.Lattice        using  ( module Lattice-Order
-                                                       ; TopOf ; BotOf )
+                                                       ; TopOf ; BottomOf )
 open import Classical.Structures.Lattice.Basic  using  ( Lattice ; module Lattice-Op
                                                        ; setoidEqsToLattice )
 open import Setoid.Algebras.Basic               using  ( 𝔻[_] )
@@ -130,10 +130,10 @@ is unchanged, and its universal property flips through
 `≤ᵈ-unflip`{.AgdaFunction}.
 
 ```agda
-  dualBotOf : TopOf 𝑳 → BotOf dual-Lattice
-  dualBotOf (t , t-top) = t , λ x → ≤ᵈ-unflip (t-top x)
+  dualBottomOf : TopOf 𝑳 → BottomOf dual-Lattice
+  dualBottomOf (t , t-top) = t , λ x → ≤ᵈ-unflip (t-top x)
 
-  dualTopOf : BotOf 𝑳 → TopOf dual-Lattice
+  dualTopOf : BottomOf 𝑳 → TopOf dual-Lattice
   dualTopOf (b , b-bot) = b , λ x → ≤ᵈ-unflip (b-bot x)
 ```
 

@@ -52,7 +52,7 @@ module _ {A : Type a}{B : Type b} where
  Range f b = ∃[ a ∈ A ] (f a) ≡ b
 
  range : (A → B) → Type (a ⊔ b)
- range f = Σ[ b ∈ B ] ∃[ a ∈ A ](f a) ≡ b
+ range f = Σ[ b ∈ B ] ∃[ a ∈ A ] (f a) ≡ b
 
  Image⊆Range : (f : A → B) → ∀ b → Image f ∋ b → b ∈ Range f
  Image⊆Range f b (eq a x) = a , (sym x)
