@@ -57,7 +57,18 @@ CERTDIR   := $(SRCDIR)/FLRP/Certificates/SmallLatticeReps
 
 # -- Targets -----------------------------------------------------------------
 
-default: Everything.agda
+# Bare `make` refreshes every tier's index, so that adding or removing a module
+# anywhere is picked up in one command.  The individual check targets depend on
+# just the aggregators they need.
+default: Everything.agda EverythingLegacy.agda EverythingCertificates.agda
+
+# On the OPTIONS pragma the three aggregators emit: `--exact-split` is
+# deliberately absent.  It constrains *definitions* (it requires a definition's
+# clauses to hold as definitional equalities), and an aggregator contains
+# nothing but imports, so the flag has nothing to check here.  It is neither
+# infective nor coinfective, so omitting it does not weaken the modules being
+# imported: each library module carries `--exact-split` in its own header and is
+# checked under it.  All three aggregators therefore share one pragma.
 
 # The canonical library aggregator.  Excludes Legacy/ and the certificate
 # census (see the tier note in the header).  Feeds HTML rendering and is the
