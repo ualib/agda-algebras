@@ -73,7 +73,7 @@ open import Relation.Unary                         using  ( Pred ; _∈_ ; _⊆_
 -- Imports from the Agda Universal Algebra Library ------------------------------
 open import Classical.Structures.Group  using  ( Group ; IsSubgroup ; module Core
                                                ; module Centralizer ; module Complements
-                                               ; module Complex ; module Conj
+                                               ; module Complex ; module Conjugate
                                                ; module Group-Op ; module GroupSublattice
                                                ; dedekindʳ
                                                ; fullSubgroup ; trivialSubgroup )
@@ -97,13 +97,13 @@ module GroupParachute
   where
 
   open UpperInterval 𝒢 H H-sg
-  open Complements 𝒢       using  ( mem-∙ᶜˡ ; mem-∙ᶜʳ ; Factorize
-                                  ; Factorize-sym ; normal-∙ᶜ-isSubgroup
+  open Complements 𝒢       using  ( mem-∙ᶜˡ ; mem-∙ᶜʳ ; Factors
+                                  ; Factors-sym ; normal-∙ᶜ-isSubgroup
                                   ; complement-⊆-collapse )
   open Complex 𝒢           using  ( _∙ᶜ_ ; ∙ᶜ-mono ; subgroup-∙ᶜ-idem )
   open Centralizer 𝒢       using  ( C[_] ; C-isAntitone ; C-isSubgroup ; C-isNormal
                                   ; normals-centralize )
-  open Conj 𝒢              using  ( conj ; IsNormal ; conj-congᵍ ; conj-action-∙ )
+  open Conjugate 𝒢        using  ( conj ; IsNormal ; conj-congᵍ ; conj-action-∙ )
   open Group-Op 𝒢          using  ( _∙_ ; ε ; _⁻¹ ; ∙-cong ; idˡ-law )
   open Setoid 𝔻[ proj₁ 𝒢 ] using  ( _≈_ ) renaming ( refl to ≈refl ; sym to ≈sym
                                                    ; trans to ≈trans )
@@ -305,8 +305,8 @@ of more than two elements, every proper member of `[H , G]` is core-free.
         -- Any W above the r-th atom factorizes the group with N H: the subgroup
         -- N W contains both Kᵣ and Kₘ, hence is everything, and it sits inside
         -- (N H) W.
-        factorize : (W : Interval≈) → set (atom r) ⊆ set W → Factorize (set W) NH
-        factorize W Kᵣ⊆W = Factorize-sym NH-sg W-sg product-is-all
+        factorize : (W : Interval≈) → set (atom r) ⊆ set W → Factors (set W) NH
+        factorize W Kᵣ⊆W = Factors-sym NH-sg W-sg product-is-all
           where
           W-sg : IsSubgroup 𝒢 (set W)
           W-sg = element-isSubgroup W
@@ -321,7 +321,7 @@ of more than two elements, every proper member of `[H , G]` is core-free.
                      (λ z → mem-∙ᶜʳ (ε-closed N-sg) (Kᵣ⊆W z))
                      (λ z → ∙ᶜ-mono (λ w → w) (above W) (Kₘ⊆NH z))
 
-          product-is-all : Factorize NH (set W)
+          product-is-all : Factors NH (set W)
           product-is-all x = ∙ᶜ-mono N⊆NH (λ w → w) (all-NW x)
 
         -- Corollary 3.5 applied to the two comparable complements Kᵣ ≤ Z of N H.

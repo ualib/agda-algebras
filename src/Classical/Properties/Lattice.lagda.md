@@ -196,7 +196,7 @@ through absorption twice.
 ```
 
 **Extrema**.  `IsTop t` says `t` is a greatest element of the meet order, and
-`IsBot b` that `b` is a least one.  An arbitrary lattice need not have either; the
+`IsBottom b` that `b` is a least one.  An arbitrary lattice need not have either; the
 predicates state the universal property of a *chosen* extremum, and by antisymmetry
 any two choices are `≈`-equal.  Constructions that glue lattices at their ends — the
 ordinal sum of [Classical.Structures.Lattice.OrdinalSum][] — consume exactly this
@@ -208,21 +208,21 @@ data.
   IsTop t = ∀ x → x ≤ t
 
   -- b is a bottom (least) element of the meet order.
-  IsBot : 𝕌[ 𝑨 ] → Type (α ⊔ ρ)
-  IsBot b = ∀ x → b ≤ x
+  IsBottom : 𝕌[ 𝑨 ] → Type (α ⊔ ρ)
+  IsBottom b = ∀ x → b ≤ x
 
   -- Tops are unique up to ≈, by antisymmetry; likewise bottoms.
   top-unique : ∀ {t t'} → IsTop t → IsTop t' → t ≈ t'
   top-unique {t} {t'} pt pt' = ≤-antisym (pt' t) (pt t')
 
-  bot-unique : ∀ {b b'} → IsBot b → IsBot b' → b ≈ b'
+  bot-unique : ∀ {b b'} → IsBottom b → IsBottom b' → b ≈ b'
   bot-unique {b} {b'} pb pb' = ≤-antisym (pb b') (pb' b)
 ```
 
 #### Chosen extrema, packaged
 
 `TopOf 𝑳` is the type of chosen tops of `𝑳`: an element paired with its
-universal property; `BotOf 𝑳` likewise for bottoms.  These are the arguments a
+universal property; `BottomOf 𝑳` likewise for bottoms.  These are the arguments a
 construction takes when it needs a *specific* extremum (again, see the ordinal sum),
 packaged as Σ-types per the library's Σ-first discipline.
 
@@ -230,8 +230,8 @@ packaged as Σ-types per the library's Σ-first discipline.
 TopOf : Lattice α ρ → Type (α ⊔ ρ)
 TopOf 𝑳 = Σ[ t ∈ 𝕌[ proj₁ 𝑳 ] ] Lattice-Order.IsTop 𝑳 t
 
-BotOf : Lattice α ρ → Type (α ⊔ ρ)
-BotOf 𝑳 = Σ[ b ∈ 𝕌[ proj₁ 𝑳 ] ] Lattice-Order.IsBot 𝑳 b
+BottomOf : Lattice α ρ → Type (α ⊔ ρ)
+BottomOf 𝑳 = Σ[ b ∈ 𝕌[ proj₁ 𝑳 ] ] Lattice-Order.IsBottom 𝑳 b
 ```
 
 #### The decidable meet order and its atoms {#finite-order}

@@ -76,6 +76,11 @@ module _ {𝑨 : Algebra {𝑆 = 𝑆} α ρ} where
   _≑_ : Con 𝑨 ℓ → Con 𝑨 ℓ → Type (α ⊔ ℓ)
   θ ≑ φ = θ ⊆ φ × φ ⊆ θ
   infix 4 _≑_
+
+  -- TODO: consider defining _≑_ as follows instead:
+  -- _≑_ : Con 𝑨 ℓ → Con 𝑨 ℓ → Type (α ⊔ ℓ)
+  -- θ ≑ φ = θ .proj₁ ≐ φ .proj₁
+  -- where ≐ is mutual containment of predicates defined in Relation.Unary.
 ```
 
 The order is reflexive and transitive, and `_≑_` collapses it to a partial order.

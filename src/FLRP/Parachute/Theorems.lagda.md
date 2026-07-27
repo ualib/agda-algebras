@@ -80,7 +80,7 @@ open import Relation.Nullary using  ( ¬_ ; Dec ; yes ; no )
 open import Relation.Unary   using  ( Pred ; _∈_ )
 
 -- Imports from the Agda Universal Algebra Library ------------------------------
-open import Classical.Properties.Lattice  using  ( TopOf ; BotOf )
+open import Classical.Properties.Lattice  using  ( TopOf ; BottomOf )
 open import Classical.Small.Structures    using  ( Lattice )
 open import Classical.Structures.Group    using  ( Group ; IsSubgroup )
 open import FLRP.Assumptions              using  ( PalfyPudlak )
@@ -107,7 +107,7 @@ module ParachuteTheorems {ℓP : Level} {m : ℕ}
   (𝒕       : ∀ i → TopOf (𝑳s i))
   (top?    : ∀ i (x : 𝕌[ proj₁ (𝑳s i) ])
            → Dec (Setoid._≈_ 𝔻[ proj₁ (𝑳s i) ] x (proj₁ (𝒕 i))))
-  (𝒃       : ∀ i → BotOf (𝑳s i))
+  (𝒃       : ∀ i → BottomOf (𝑳s i))
   (nondeg  : ∀ i → ¬ (Setoid._≈_ 𝔻[ proj₁ (𝑳s i) ] (proj₁ (𝒃 i)) (proj₁ (𝒕 i))))
   where
 

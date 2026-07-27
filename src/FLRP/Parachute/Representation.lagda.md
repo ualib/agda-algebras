@@ -51,7 +51,7 @@ open import Relation.Unary                          using  ( Pred ; _∈_ ; _⊆
 
 -- Imports from the Agda Universal Algebra Library ------------------------------
 open import Classical.Properties.Lattice            using  ( module Lattice-Order
-                                                           ; TopOf ; BotOf )
+                                                           ; TopOf ; BottomOf )
 open import Classical.Small.Structures              using  ( Lattice )
 open import Classical.Structures.Group              using  ( Group ; IsSubgroup )
 open import Classical.Structures.Lattice.Parachute  using  ( module LatticeParachute )
@@ -110,7 +110,7 @@ module IntervalIsoTools
   -- The two ends of the interval, transported.  A member whose image is below a
   -- bottom of `𝑳` collapses to `H`; a member whose image is above a top is all
   -- of `G`.
-  module Ends ((⊥ᴸ , ⊥ᴸmin) : BotOf 𝓛) ((⊤ᴸ , ⊤ᴸmax) : TopOf 𝓛) where
+  module Ends ((⊥ᴸ , ⊥ᴸmin) : BottomOf 𝓛) ((⊤ᴸ , ⊤ᴸmax) : TopOf 𝓛) where
     -- The image of the interval's top is a top of `𝑳`, and dually at the bottom.
     top-≤ : ⊤ᴸ ≤ to Gᵢ
     top-≤ = ≤-trans  (≤-reflexive (≈ᴸ-sym (to∘from ⊤ᴸ)))
@@ -183,7 +183,7 @@ module ParachuteRep {m : ℕ}
   (𝑳s : Fin (suc m) → Lattice)
   (𝒕 : ∀ i → TopOf (𝑳s i))
   (top? : ∀ i (x : 𝕌[ 𝑳s i .proj₁ ]) → Dec (𝔻[ 𝑳s i .proj₁ ] ._≈_ x (𝒕 i .proj₁)))
-  (𝒃 : ∀ i → BotOf (𝑳s i))
+  (𝒃 : ∀ i → BottomOf (𝑳s i))
   (nondeg : ∀ i → ¬ 𝔻[ 𝑳s i .proj₁ ] ._≈_ (𝒃 i .proj₁) (𝒕 i .proj₁))
   where
 
@@ -206,7 +206,7 @@ module ParachuteRep {m : ℕ}
     open UpperInterval 𝒢 H H-sg
     open GroupParachute 𝒢 H H-sg
     open IntervalIsoTools 𝒢 H H-sg ⊕ᵖ-Lattice iso
-    open Ends ⊥ᵖ-isBot ⊤ᵖ-isTop
+    open Ends ⊥ᵖ-isBottom ⊤ᵖ-isTop
 
     open OrderIso iso using ( to ; from ; to∘from ; from∘to )
 

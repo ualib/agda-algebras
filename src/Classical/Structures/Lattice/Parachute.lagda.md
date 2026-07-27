@@ -11,35 +11,36 @@ author: "the agda-algebras development team"
 This is the [Classical.Structures.Lattice.Parachute][] module of the [Agda Universal Algebra Library][].
 
 The **parachute** `𝒫(L₁, … , Lₙ)` of a finite family of lattices is a fresh bottom
-element together with `n` *canopies* `Lᵢ` stacked side by side and glued along a
-single shared top: distinct canopies meet at the bottom and join at the top, and
+element together with `n` **canopies** `Lᵢ`, sitting side-by-side and connected by a
+single shared top.  Distinct canopies meet at the bottom and join at the top, and
 inside a canopy the order is that canopy's own.  The bottoms `⊥ᵢ` of the canopies are
-the `n` atoms of `𝒫`, and the interval above the `i`-th atom is `Lᵢ` — the picture of
-Figure 2 of the FLRP note.[^1]
+the `n` atoms of `𝒫`, and the interval above the `i`-th atom is `Lᵢ`.[^1]
 
 The construction is the engine of the note's Theorem 3.6 and Lemma 3.7: a core-free
 group representation of a parachute forces every proper subgroup above an atom to be
 core-free, so the enforceable properties of *all* the canopies apply to a single
 group.
 
-**Design: normal forms rather than gluing.**  A first instinct is to build the
-carrier as a disjoint union `⊥ + Σᵢ Lᵢ` with the setoid equality coarsened to
-identify the `n` tops, in the style of `GlueSetoid`{.AgdaModule} of
-[Classical.Structures.Lattice.OrdinalSum][].  That fails constructively, and
-instructively: with the tops glued, the meet of `inj (i , x)` and `inj (j , y)` for
-`i ≠ j` must be the bottom when `x` and `y` are proper canopy elements and must be
-`inj (j , y)` when `x` is the top; deciding between the two is deciding `x ≈ ⊤ᵢ`.
-No congruent meet exists without that decision.
+??? note "**Design Note**: normal forms rather than gluing"
 
-We therefore give the carrier in **normal form** — the top, the bottom, and the
-*proper* elements of each canopy, tagged with their canopy index — so that no
+    A first instinct is to build the carrier as a disjoint union `⊥ + Σᵢ Lᵢ` with the
+    setoid equality coarsened to identify the `n` tops, in the style of
+    `GlueSetoid`{.AgdaModule} of [Classical.Structures.Lattice.OrdinalSum][].
+    That fails constructively, and instructively: with the tops glued, the meet of
+    `inj (i , x)` and `inj (j , y)` for `i ≠ j` must be the bottom when `x` and `y`
+    are proper canopy elements and must be `inj (j , y)` when `x` is the top;
+    deciding between the two is deciding `x ≈ ⊤ᵢ`.  No congruent meet exists without
+    that decision.
+
+We define a **normal form** for the carrier: the top, the bottom, and the
+*proper* elements of each canopy, tagged with their canopy index.  Thus, no
 quotient is taken and the order is a three-constructor inductive family.  The
 decision reappears exactly once, in the join of two elements of the same canopy
 (which may reach the top), and is supplied as the module parameter
 `top?`{.AgdaBound}.[^2]
 
-Per issue #504, the order `_≤ᵖ_`{.AgdaFunction} is an *inductive family indexed by
-its endpoints*, never a relation defined by restriction along a non-injective map:
+The order `_≤ᵖ_`{.AgdaFunction} is an *inductive family indexed by its endpoints*,
+never a relation defined by restriction along a non-injective map:
 type constructors are injective for unification, so an implicit endpoint is solved
 before the relation is ever unfolded.  The dividend here is that the order
 constructor `c≤c`{.AgdaFunction} carries the canopy index *once*: matching a proof
@@ -57,24 +58,29 @@ required.  (The head of the definition is `_×_`, which has η, and its two
 components are applications of the injective family `_≤ᵖ_`, so the inference hazard
 issue #504 documents does not arise.)
 
-**Design: the order comes first.**  The eight lattice equations — in particular the
-two congruences, which is where the ordinal sum spends most of its length — are not
-proved by hand.  We establish instead that `_≤ᵖ_`{.AgdaFunction} is a partial order
-with `_∧ᵖ_`{.AgdaFunction} its infimum and `_∨ᵖ_`{.AgdaFunction} its supremum, and
-let the standard library's `Relation.Binary.Lattice.Properties.Lattice` derive the
-algebraic laws.  Congruence of the operations is then a *theorem* (an infimum is
-unique up to `≈`), not an obligation, and the case analyses stay small.
+??? note "**Design Note**: the order comes first"
 
-**Design: every case split is a named lemma.**  Each of the three decisions the
-construction makes — is this canopy element the top, do these two elements share a
-canopy, and (on the diagonal) the comparison of an index with itself — is analysed
-in one small `private` lemma taking the `Dec`{.AgdaDatatype} value as an explicit
-argument, and every consumer applies that lemma instead of repeating the split.
-Besides being the library's house style, this is what keeps the module cheap to
-type-check: a `with` inside a proof abstracts the *whole* goal, and these goals
-mention the canopy order, which unfolds into the generic interpretation machinery of
-`Algebra`{.AgdaRecord}.  Pushing the split into a lemma with a small goal removed
-about two thirds of the module's coverage-checking cost.
+    The eight lattice equations — in particular the two congruences, which is where
+    the ordinal sum spends most of its length — are not proved by hand.  We establish
+    instead that `_≤ᵖ_`{.AgdaFunction} is a partial order with `_∧ᵖ_`{.AgdaFunction}
+    its infimum and `_∨ᵖ_`{.AgdaFunction} its supremum, and let the standard
+    library's `Relation.Binary.Lattice.Properties.Lattice` derive the algebraic laws.
+    Congruence of the operations is then a *theorem* (an infimum is unique up to
+    `≈`), not an obligation, and the case analyses stay small.
+
+??? note "**Design Note**: every case split is a named lemma**
+
+    Each of the three decisions the construction makes — is this canopy element the
+    top, do these two elements share a canopy, and (on the diagonal) the comparison
+    of an index with itself — is analysed in one small `private` lemma taking the
+    `Dec`{.AgdaDatatype} value as an explicit argument, and every consumer applies
+    that lemma instead of repeating the split.
+
+    Besides being the library's house style, this is what keeps the module cheap to
+    type-check: a `with` inside a proof abstracts the *whole* goal, and these goals
+    mention the canopy order, which unfolds into the generic interpretation machinery
+    of `Algebra`{.AgdaRecord}.  Pushing the split into a lemma with a small goal
+    removed about two thirds of the module's coverage-checking cost.
 
 <!--
 ```agda
@@ -105,7 +111,7 @@ import Relation.Binary.Lattice.Properties.Lattice  as OrdLatticeProps
 
 -- Imports from the Agda Universal Algebra Library ------------------------------
 open import Classical.Properties.Lattice        using  ( module Lattice-Order
-                                                       ; TopOf ; BotOf )
+                                                       ; TopOf ; BottomOf )
 open import Classical.Structures.Lattice.Basic  using  ( Lattice ; module Lattice-Op
                                                        ; setoidEqsToLattice )
 open import Setoid.Algebras.Basic               using  ( 𝕌[_] ; 𝔻[_] )
@@ -127,13 +133,14 @@ There is at least one canopy: a parachute over the empty family has no atoms bel
 its bottom, and the covering property below would fail.
 
 ```agda
+open Setoid using (_≈_)
+
 module LatticeParachute {m : ℕ}
   (𝓛       : Fin (ℕ.suc m) → Lattice α ρ)
   (𝒕       : ∀ i → TopOf (𝓛 i))
-  (top?    : ∀ i (x : 𝕌[ 𝓛 i .proj₁ ])
-           → Dec (Setoid._≈_ 𝔻[ 𝓛 i .proj₁ ] x (𝒕 i .proj₁)))
-  (𝒃       : ∀ i → BotOf (𝓛 i))
-  (nondeg  : ∀ i → ¬ (Setoid._≈_ 𝔻[ 𝓛 i .proj₁ ] (𝒃 i .proj₁) (𝒕 i .proj₁)))
+  (top?    : ∀ i (x : 𝕌[ 𝓛 i .proj₁ ]) → Dec (𝔻[ 𝓛 i .proj₁ ] ._≈_ x (𝒕 i .proj₁)))
+  (𝒃       : ∀ i → BottomOf (𝓛 i))
+  (nondeg  : ∀ i → ¬ 𝔻[ 𝓛 i .proj₁ ] ._≈_ (𝒃 i .proj₁) (𝒕 i .proj₁))
   where
 
   -- The canopy index.
@@ -461,12 +468,13 @@ canopy's, and across canopies they are the two extrema.
     joinᶜ-≢ i j x y i≢j (no _)     = ⊤-great
 ```
 
-**Decision 3: comparing a canopy index with itself.**  When two elements are
-*already known* to share a canopy — the case `--without-K` refuses to match — the
-comparison still has to be run, and `≟-diag`{.AgdaFunction} pins its answer.  This
-is not the K rule: `Fin`{.AgdaDatatype} has decidable equality, hence unique
-identity proofs.  The three lemmas below are the only places it is needed, and each
-has a small goal.
+**Decision 3: comparing a canopy index with itself**.
+
+When two elements are *already known* to share a canopy (the case `--without-K`
+refuses to match) the comparison still has to be run, and `≟-diag`{.AgdaFunction}
+pins its answer.  This is not the K rule: `Fin`{.AgdaDatatype} has decidable
+equality, hence unique identity proofs.  The three lemmas below are the only places
+it is needed, and each has a small goal.
 
 ```agda
   ≟-diag : (i : Ix) → (i ≟ i) ≡ yes refl
@@ -475,11 +483,11 @@ has a small goal.
   private
     -- Two elements of the same canopy meet and join in that canopy.
     ∧ᵖ-diag : (i : Ix) (x y : U i) (p : NonTop i x) (q : NonTop i y)
-            → (can i x p ∧ᵖ can i y q) ≈ᵖ can i (x ⋀ y) (meet-NonTop i p)
+      → (can i x p ∧ᵖ can i y q) ≈ᵖ can i (x ⋀ y) (meet-NonTop i p)
     ∧ᵖ-diag i x y p q rewrite ≟-diag i = ≈ᵖ-refl
 
     ∨ᵖ-diag : (i : Ix) (x y : U i) (p : NonTop i x) (q : NonTop i y)
-            → (can i x p ∨ᵖ can i y q) ≈ᵖ ↑ i (x ⋁ y)
+      → (can i x p ∨ᵖ can i y q) ≈ᵖ ↑ i (x ⋁ y)
     ∨ᵖ-diag i x y p q rewrite ≟-diag i = ≈ᵖ-refl
 ```
 
@@ -607,8 +615,8 @@ The two extrema, in the packaged form the constructions of
   ⊤ᵖ-isTop : TopOf ⊕ᵖ-Lattice
   ⊤ᵖ-isTop = ⊤ᵖ , λ x → ≤ᵖ-sound {x} {⊤ᵖ} ⊤-great
 
-  ⊥ᵖ-isBot : BotOf ⊕ᵖ-Lattice
-  ⊥ᵖ-isBot = ⊥ᵖ , λ x → ≤ᵖ-sound {⊥ᵖ} {x} ⊥-least
+  ⊥ᵖ-isBottom : BottomOf ⊕ᵖ-Lattice
+  ⊥ᵖ-isBottom = ⊥ᵖ , λ x → ≤ᵖ-sound {⊥ᵖ} {x} ⊥-least
 ```
 
 #### Atoms

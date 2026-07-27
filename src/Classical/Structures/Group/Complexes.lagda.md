@@ -69,8 +69,10 @@ module Complex {α ρ : Level} (𝒢 : Group α ρ) where
 
   -- The complex product respects the setoid equality, with no hypotheses on P, Q.
   ∙ᶜ-respects : (P : Pred G ℓ) (Q : Pred G ℓ') → (P ∙ᶜ Q) Respects _≈_
-  ∙ᶜ-respects P Q x≈y (p , q , p∈P , q∈Q , x≈pq) =
-    p , q , p∈P , q∈Q , ≈trans (≈sym x≈y) x≈pq
+  ∙ᶜ-respects P Q {x} {y} x≈y (p , q , p∈P , q∈Q , x≈pq) = p , q , p∈P , q∈Q , y≈pq
+    where
+    y≈pq : y ≈ p ∙ q
+    y≈pq = ≈trans (≈sym x≈y) x≈pq
 
   -- The complex product is monotone in both arguments.  (The four predicates are
   -- given independent levels: consumers routinely enlarge a product of two

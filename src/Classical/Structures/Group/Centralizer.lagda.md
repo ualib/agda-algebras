@@ -39,7 +39,7 @@ import Relation.Binary.Reasoning.Setoid as SetoidReasoning
 
 -- Imports from the Agda Universal Algebra Library ------------------------------
 open import Classical.Structures.Group.Basic        using ( Group ; module Group-Op )
-open import Classical.Structures.Group.Conjugation  using ( module Conj )
+open import Classical.Structures.Group.Conjugation  using ( module Conjugate )
 open import Classical.Signatures.Group              using ( Sig-Group )
 open import Classical.Structures.Group.Subgroups    using ( IsSubgroup ; mkIsSubgroup )
 open import Setoid.Algebras.Basic                   using ( 𝕌[_] ; 𝔻[_] ; Algebra)
@@ -61,7 +61,7 @@ module Centralizer {α ρ : Level} (𝒢 : Group α ρ) where
   open SetoidReasoning 𝔻[ 𝑮 ]
   open Group-Op 𝒢     using  ( _∙_ ; ε ; _⁻¹ ; ∙-cong ; assoc-law
                              ; idˡ-law ; idʳ-law ; invˡ-law ; invʳ-law )
-  open Conj 𝒢         using  ( conj ; IsNormal ; conj-cong ; conj-∙-hom ; conj-conj⁻¹ )
+  open Conjugate 𝒢         using  ( conj ; IsNormal ; conj-cong ; conj-∙-hom ; conj-conj⁻¹ )
 
   -- The centralizer of N: the elements commuting with every member of N.
   C[_] : Pred G ℓ → Pred G (α ⊔ ρ ⊔ ℓ)

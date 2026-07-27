@@ -12,32 +12,35 @@ This is the [Classical.Structures.Group.Complements][] module of the [Agda Unive
 
 Fix subgroups `H ≤ G` and an intermediate subgroup `A ∈ [H , G]`.
 A **complement of `A` in the interval `[H , G]`** is a subgroup `B ∈ [H , G]` with
-`A ∩ B = H` and `⟨A , B⟩ = G`; the note of the FLRP program writes `A^⊥(H,G)` for the set of these.[^1]
-The result this module is built for is the note's Corollary 3.5:
+`A ∩ B = H` and `⟨A , B⟩ = G`.
 
-> if every member of a set `ℬ ⊆ A^⊥(H,G)` permutes with `A`, then `ℬ` is an antichain.
+This module proves Corollary 3.5 of the *Interval Enforceable Properties* note:[^1]
+
+> If ℬ is a nonempty set of complements of `A` in `[H , G]` every member of which
+> permutes with `A`, then `ℬ` is an antichain.
 
 The proof is one application of Dedekind's rule
-([Classical.Structures.Group.Dedekind][]): if `B₁ ≤ B₂` are two such complements then
+([Classical.Structures.Group.Dedekind][]):
+for all `B₁ , B₂ ∈ ℬ`, if `B₁ ≤ B₂` then
 
-    B₁ = B₁H = B₁(A ∩ B₂) = B₁A ∩ B₂ = G ∩ B₂ = B₂,
+    B₁ = B₁H = B₁(A ∩ B₂) = B₁A ∩ B₂ = G ∩ B₂ = B₂.
 
-so no strict containment is possible.
+Thus no strict containment is possible.
 
 **Complements, formalized through the complex product**.
 
 Two of the note's hypotheses — that `B` permutes with `A` (`AB = BA`) and that `A`
 and `B` join to `G` — are used only through their conjunction, which is the single
-statement `BA = G`: the *complex product* `B ∙ᶜ A` of
-[Classical.Structures.Group.Complexes][] exhausts the group.
-We call that statement `Factorize`{.AgdaFunction} and take it as the primitive.
+statement `BA = G`; that is, the *complex product* `B ∙ᶜ A` of
+[Classical.Structures.Group.Complexes][] is the whole group.
+We call that statement `Factors`{.AgdaFunction} and take it as the primitive.
 
-It is exactly equivalent to the note's pair of hypotheses — a permuting pair of
-subgroups has `⟨A , B⟩ = AB` — and it keeps the argument free of the *generated*
+It is exactly equivalent to the note's pair of hypotheses — for a permuting pair of
+subgroups `⟨A , B⟩ = AB` — and it keeps the argument free of the *generated*
 subgroup, whose inductive presentation would otherwise have to be unfolded.
 
 The join hypothesis is recovered where consumers need it: a factorization of `G` is
-inherited by any subgroup containing `A` and `B` (`Factorize-least`{.AgdaFunction}),
+inherited by any subgroup containing `A` and `B` (`Factors-least`{.AgdaFunction}),
 which is the universal property of the join.
 
 The module also collects the small facts about complex products that the argument and
@@ -69,7 +72,7 @@ open import Classical.Bundles.Group                 using ( ⟨_⟩ᵍᵖ )
 open import Classical.Signatures.Group              using ( Sig-Group )
 open import Classical.Structures.Group.Basic        using ( Group ; module Group-Op )
 open import Classical.Structures.Group.Complexes    using ( module Complex )
-open import Classical.Structures.Group.Conjugation  using ( module Conj )
+open import Classical.Structures.Group.Conjugation  using ( module Conjugate )
 open import Classical.Structures.Group.Dedekind     using ( dedekindˡ )
 open import Classical.Structures.Group.Subgroups    using ( IsSubgroup ; mkIsSubgroup )
 open import Setoid.Algebras.Basic                   using ( Algebra ; 𝕌[_] ; 𝔻[_] )
@@ -89,11 +92,10 @@ module Complements {α ρ : Level} (𝒢 : Group α ρ) where
   open Setoid 𝔻[ 𝑮 ] using ( _≈_ ) renaming  ( Carrier to G ; refl to ≈refl
                                               ; sym to ≈sym ; trans to ≈trans )
   open SetoidReasoning 𝔻[ 𝑮 ]
-  open Group-Op 𝒢  using  ( _∙_ ; ε ; _⁻¹ ; ∙-cong ; ⁻¹-cong ; assoc-law
-                          ; idˡ-law ; idʳ-law ; invˡ-law ; invʳ-law )
-  open GroupProperties ⟨ 𝒢 ⟩ᵍᵖ using ( ⁻¹-involutive ; ⁻¹-anti-homo-∙ )
-  open Complex 𝒢  using  ( _∙ᶜ_ ; mem-∙ᶜ ; ∙ᶜ-respects ; ∙ᶜ-mono ; subgroup-∙ᶜ-idem )
-  open Conj 𝒢 using ( conj ; IsNormal )
+  open Group-Op 𝒢
+  open GroupProperties ⟨ 𝒢 ⟩ᵍᵖ  using ( ⁻¹-involutive ; ⁻¹-anti-homo-∙ )
+  open Complex 𝒢 using ( _∙ᶜ_ ; mem-∙ᶜ ; ∙ᶜ-respects ; ∙ᶜ-mono ; subgroup-∙ᶜ-idem )
+  open Conjugate 𝒢 using ( IsNormal )
 ```
 
 A member of one factor is a member of the product, provided the *other* factor
@@ -120,7 +122,7 @@ is the note's hypothesis on the members of `ℬ`, and it is what makes the produ
 
   -- P and Q permute: P Q = Q P as subsets.
   _permutes_ : Pred G ℓᵃ → Pred G ℓᵇ → Type (α ⊔ ρ ⊔ ℓᵃ ⊔ ℓᵇ)
-  P permutes Q = (P ∙ᶜ Q) ≐ (Q ∙ᶜ P)
+  P permutes Q = P ∙ᶜ Q  ≐  Q ∙ᶜ P
 ```
 
 The product of two permuting subgroups is a subgroup.  Closure under `∙` is the one
@@ -165,13 +167,13 @@ rewritten as some `a₃b₃`, after which associativity regroups the four factor
 
       regroup : x ∙ y ≈ (a₁ ∙ a₃) ∙ (b₃ ∙ b₂)
       regroup = begin
-        x ∙ y                    ≈⟨ ∙-cong x≈a₁b₁ y≈a₂b₂ ⟩
-        (a₁ ∙ b₁) ∙ (a₂ ∙ b₂)    ≈˘⟨ assoc-law (a₁ ∙ b₁) a₂ b₂ ⟩
-        ((a₁ ∙ b₁) ∙ a₂) ∙ b₂    ≈⟨ ∙-cong (assoc-law a₁ b₁ a₂) ≈refl ⟩
-        (a₁ ∙ (b₁ ∙ a₂)) ∙ b₂    ≈⟨ ∙-cong (∙-cong ≈refl b₁a₂≈a₃b₃) ≈refl ⟩
-        (a₁ ∙ (a₃ ∙ b₃)) ∙ b₂    ≈˘⟨ ∙-cong (assoc-law a₁ a₃ b₃) ≈refl ⟩
-        ((a₁ ∙ a₃) ∙ b₃) ∙ b₂    ≈⟨ assoc-law (a₁ ∙ a₃) b₃ b₂ ⟩
-        (a₁ ∙ a₃) ∙ (b₃ ∙ b₂)    ∎
+        x ∙ y                ≈⟨ ∙-cong x≈a₁b₁ y≈a₂b₂ ⟩
+        a₁ ∙ b₁ ∙ (a₂ ∙ b₂)  ≈˘⟨ assoc-law (a₁ ∙ b₁) a₂ b₂ ⟩
+        a₁ ∙ b₁ ∙ a₂ ∙ b₂    ≈⟨ ∙-cong (assoc-law a₁ b₁ a₂) ≈refl ⟩
+        a₁ ∙ (b₁ ∙ a₂) ∙ b₂  ≈⟨ ∙-cong (∙-cong ≈refl b₁a₂≈a₃b₃) ≈refl ⟩
+        a₁ ∙ (a₃ ∙ b₃) ∙ b₂  ≈˘⟨ ∙-cong (assoc-law a₁ a₃ b₃) ≈refl ⟩
+        a₁ ∙ a₃ ∙ b₃ ∙ b₂    ≈⟨ assoc-law (a₁ ∙ a₃) b₃ b₂ ⟩
+        a₁ ∙ a₃ ∙ (b₃ ∙ b₂)  ∎
 
     ⁻¹-c : ∀ {x} → x ∈ A ∙ᶜ B → x ⁻¹ ∈ A ∙ᶜ B
     ⁻¹-c {x} (a , b , a∈A , b∈B , x≈ab) =
@@ -191,21 +193,21 @@ is a subgroup whenever `N` is normal and both are subgroups — this is the subg
 ```agda
   -- Moving a conjugate across a factor, in the two directions.
   private
-    swapˡ : ∀ b n → b ∙ conj (b ⁻¹) n ≈ n ∙ b
+    swapˡ : ∀ b n → b ∙ n ^ (b ⁻¹) ≈ n ∙ b
     swapˡ b n = begin
       b ∙ (b ⁻¹ ∙ n ∙ (b ⁻¹) ⁻¹)  ≈⟨ ∙-cong ≈refl (∙-cong ≈refl (⁻¹-involutive b)) ⟩
       b ∙ (b ⁻¹ ∙ n ∙ b)          ≈˘⟨ assoc-law b (b ⁻¹ ∙ n) b ⟩
-      (b ∙ (b ⁻¹ ∙ n)) ∙ b        ≈˘⟨ ∙-cong (assoc-law b (b ⁻¹) n) ≈refl ⟩
-      ((b ∙ b ⁻¹) ∙ n) ∙ b        ≈⟨ ∙-cong (∙-cong (invʳ-law b) ≈refl) ≈refl ⟩
-      (ε ∙ n) ∙ b                 ≈⟨ ∙-cong (idˡ-law n) ≈refl ⟩
+      b ∙ (b ⁻¹ ∙ n) ∙ b          ≈˘⟨ ∙-cong (assoc-law b (b ⁻¹) n) ≈refl ⟩
+      b ∙ b ⁻¹ ∙ n ∙ b            ≈⟨ ∙-cong (∙-cong (invʳ-law b) ≈refl) ≈refl ⟩
+      ε ∙ n ∙ b                   ≈⟨ ∙-cong (idˡ-law n) ≈refl ⟩
       n ∙ b                       ∎
 
-    swapʳ : ∀ b n → conj b n ∙ b ≈ b ∙ n
+    swapʳ : ∀ b n → n ^ b ∙ b ≈ b ∙ n
     swapʳ b n = begin
-      (b ∙ n ∙ b ⁻¹) ∙ b   ≈⟨ assoc-law (b ∙ n) (b ⁻¹) b ⟩
-      (b ∙ n) ∙ (b ⁻¹ ∙ b) ≈⟨ ∙-cong ≈refl (invˡ-law b) ⟩
-      (b ∙ n) ∙ ε          ≈⟨ idʳ-law (b ∙ n) ⟩
-      b ∙ n                ∎
+      b ∙ n ∙ b ⁻¹ ∙ b    ≈⟨ assoc-law (b ∙ n) (b ⁻¹) b ⟩
+      b ∙ n ∙ (b ⁻¹ ∙ b)  ≈⟨ ∙-cong ≈refl (invˡ-law b) ⟩
+      b ∙ n ∙ ε           ≈⟨ idʳ-law (b ∙ n) ⟩
+      b ∙ n               ∎
 
   -- A normal subset permutes with every subset.
   normal-permutes : {N : Pred G ℓⁿ} (B : Pred G ℓᵇ) → IsNormal N → N permutes B
@@ -213,11 +215,11 @@ is a subgroup whenever `N` is normal and both are subgroups — this is the subg
     where
     to : N ∙ᶜ B ⊆ B ∙ᶜ N
     to (n , b , n∈N , b∈B , x≈nb) =
-      b , conj (b ⁻¹) n , b∈B , N-normal (b ⁻¹) n∈N , ≈trans x≈nb (≈sym (swapˡ b n))
+      b , n ^ (b ⁻¹) , b∈B , N-normal (b ⁻¹) n∈N , ≈trans x≈nb (≈sym (swapˡ b n))
 
     from : B ∙ᶜ N ⊆ N ∙ᶜ B
     from (b , n , b∈B , n∈N , x≈bn) =
-      conj b n , b , N-normal b n∈N , b∈B , ≈trans x≈bn (≈sym (swapʳ b n))
+      n ^ b , b , N-normal b n∈N , b∈B , ≈trans x≈bn (≈sym (swapʳ b n))
 
   -- Hence the product of a normal subgroup with any subgroup is a subgroup.
   normal-∙ᶜ-isSubgroup : {N : Pred G ℓⁿ} {B : Pred G ℓᵇ}
@@ -228,21 +230,21 @@ is a subgroup whenever `N` is normal and both are subgroups — this is the subg
 
 #### Factorizations of the group
 
-`Factorize P Q` says the complex product `P Q` exhausts the group.  For subgroups
+`Factors P Q` says the complex product `P Q` exhausts the group.  For subgroups
 this is the note's "`P` and `Q` permute and `⟨P , Q⟩ = G`", packaged as one
 statement: it is symmetric (invert a factorization elementwise), and it is inherited
 by every subgroup above both factors, which is the join's universal property.
 
 ```agda
   -- Every element of the group is a product of a member of P and a member of Q.
-  Factorize : Pred G ℓᵃ → Pred G ℓᵇ → Type (α ⊔ ρ ⊔ ℓᵃ ⊔ ℓᵇ)
-  Factorize P Q = ∀ x → x ∈ P ∙ᶜ Q
+  Factors : Pred G ℓᵃ → Pred G ℓᵇ → Type (α ⊔ ρ ⊔ ℓᵃ ⊔ ℓᵇ)
+  Factors P Q = ∀ (x : G) → x ∈ P ∙ᶜ Q
 
   -- A factorization of the group by subgroups may be read in either order:
   -- x ⁻¹ ≈ p ∙ q gives x ≈ q ⁻¹ ∙ p ⁻¹.
-  Factorize-sym : {P : Pred G ℓᵃ} {Q : Pred G ℓᵇ}
-    →  IsSubgroup 𝒢 P → IsSubgroup 𝒢 Q → Factorize P Q → Factorize Q P
-  Factorize-sym {P = P} {Q} P-sg Q-sg fact x = ∙ᶜ-respects Q P (≈sym anti) mem
+  Factors-sym : {P : Pred G ℓᵃ} {Q : Pred G ℓᵇ}
+    →  IsSubgroup 𝒢 P → IsSubgroup 𝒢 Q → Factors P Q → Factors Q P
+  Factors-sym {P = P} {Q} P-sg Q-sg fact x = ∙ᶜ-respects Q P (≈sym anti) mem
     where
     open IsSubgroup P-sg using () renaming ( ⁻¹-closed to P⁻¹ )
     open IsSubgroup Q-sg using () renaming ( ⁻¹-closed to Q⁻¹ )
@@ -275,25 +277,25 @@ by every subgroup above both factors, which is the join's universal property.
 
   -- A factorization of the group is inherited by any subgroup containing both
   -- factors: this is "⟨P , Q⟩ = G" in its universal-property form.
-  Factorize-least : {P : Pred G ℓᵃ} {Q : Pred G ℓᵇ} {C : Pred G ℓᶜ}
-    → IsSubgroup 𝒢 C → P ⊆ C → Q ⊆ C → Factorize P Q → (x : G) → x ∈ C
-  Factorize-least {C = C} C-sg P⊆C Q⊆C fact x =
+  Factors-least : {P : Pred G ℓᵃ} {Q : Pred G ℓᵇ} {C : Pred G ℓᶜ}
+    → IsSubgroup 𝒢 C → P ⊆ C → Q ⊆ C → Factors P Q → (x : G) → x ∈ C
+  Factors-least {C = C} C-sg P⊆C Q⊆C fact x =
     proj₁ (subgroup-∙ᶜ-idem C-sg) (∙ᶜ-mono P⊆C Q⊆C (fact x))
 ```
 
 #### Corollary 3.5: comparable permuting complements collapse
 
 The heart of the matter, in the form the parachute argument uses: if `B₁ ≤ B₂` are
-subgroups of the interval `[H , G]`, if `B₂` meets `A` in `H`, and if `B₁ A = G`,
+subgroups of the interval `[H , G]`, if `B₂` meets `A` at `H`, and if `B₁ A = G`,
 then already `B₂ ≤ B₁`.  Reading the note's chain of equalities from the right, an
-element `x ∈ B₂` lies in `B₁A ∩ B₂`, hence — by Dedekind's rule, which applies
-because `B₁ ≤ B₂` and `B₂` is a subgroup — in `B₁(A ∩ B₂)`; the meet hypothesis
+element `x ∈ B₂` lies in `B₁A ∩ B₂`, hence in `B₁(A ∩ B₂)` (by Dedekind's rule, which
+applies because `B₁ ≤ B₂` and `B₂` is a subgroup).  The meet hypothesis
 shrinks the second factor to `H ⊆ B₁`, and `B₁B₁ = B₁` collapses the product.
 
 ```agda
   complement-⊆-collapse : {H : Pred G ℓʰ} {A : Pred G ℓᵃ} {B₁ B₂ : Pred G ℓᵇ}
     → IsSubgroup 𝒢 B₁ → IsSubgroup 𝒢 B₂
-    → H ⊆ B₁ → B₁ ⊆ B₂ → A ∩ B₂ ⊆ H → Factorize B₁ A → B₂ ⊆ B₁
+    → H ⊆ B₁ → B₁ ⊆ B₂ → A ∩ B₂ ⊆ H → Factors B₁ A → B₂ ⊆ B₁
 
   complement-⊆-collapse {A = A} {B₁} {B₂} B₁-sg B₂-sg H⊆B₁ B₁⊆B₂ meet-⊆ fact {x} x∈B₂ =
     proj₁ (subgroup-∙ᶜ-idem B₁-sg) inside
@@ -316,9 +318,8 @@ is contained in another except when the containment reverses — the constructiv
 reading of "pairwise incomparable" for subsets ordered by inclusion, where equality
 *is* mutual containment.
 
-**The corollary**.
-
-A family of permuting complements of `A` in `[H , G]` is an antichain.
+**Corollary 3.5**. If `H ≤ A ≤ G` and if every group in `ℬ ⊆ [H , G]` permutes with
+`A`, then `ℬ` is an antichain.
 
 ```agda
   -- No strict containments: a containment between members is mutual.
@@ -326,12 +327,11 @@ A family of permuting complements of `A` in `[H , G]` is an antichain.
   Antichain {I = I} ℬ = (i j : I) → ℬ i ⊆ ℬ j → ℬ j ⊆ ℬ i
 
   -- Corollary 3.5 (cor:dedekind1 of the note).
-  complements-antichain :
-       {I : Type ℓᶜ} {H : Pred G ℓʰ} {A : Pred G ℓᵃ} (ℬ : I → Pred G ℓᵇ)
-    →  (∀ i → IsSubgroup 𝒢 (ℬ i))
-    →  (∀ i → H ⊆ ℬ i)              -- every member lies in the interval [H , G]
-    →  (∀ i → A ∩ ℬ i ⊆ H)          -- every member meets A in H
-    →  (∀ i → Factorize (ℬ i) A)    -- every member permutes with A and joins it to G
+  complements-antichain : {I : Type ℓᶜ} {H : Pred G ℓʰ} {A : Pred G ℓᵃ}
+    (ℬ : I → Pred G ℓᵇ) → (∀ i → IsSubgroup 𝒢 (ℬ i))
+    →  (∀ i → H ⊆ ℬ i)            -- every member lies in the interval [H , G]
+    →  (∀ i → A ∩ ℬ i ⊆ H)        -- every member meets A in H
+    →  (∀ i → Factors (ℬ i) A)    -- every member permutes with A and joins it to G
     →  Antichain ℬ
   complements-antichain ℬ ℬ-sg H⊆ℬ meet fact i j ℬi⊆ℬj =
     complement-⊆-collapse (ℬ-sg i) (ℬ-sg j) (H⊆ℬ i) ℬi⊆ℬj (meet j) (fact i)

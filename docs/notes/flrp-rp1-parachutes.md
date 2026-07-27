@@ -4,21 +4,21 @@ Research phase RP-1 (GitHub [issue #458](https://github.com/ualib/agda-algebras/
 
 ## 1.  What landed
 
-| Note | Formal statement | Module |
-| --- | --- | --- |
-| Dedekind's rule (Thm 3.4) | `dedekindˡ` / `dedekindʳ` | `Classical.Structures.Group.Dedekind` (pre-existing) |
-| Corollary 3.5 (antichain) | `complements-antichain` | `Classical.Structures.Group.Complements` |
-| `𝒫(L₁ , … , Lₙ)` | `⊕ᵖ-Lattice` | `Classical.Structures.Lattice.Parachute` |
-| the interval above the `i`-th atom is `Lᵢ` | `π` / `↑` and `canopyIso` | `Classical.Structures.Lattice.Parachute`, `FLRP.Parachute.Representation` |
-| core-freeness propagation (proof of Thm 3.6) | `proper-CoreFree` | `FLRP.Parachute` |
-| Theorem 3.6, (B) → (C) | `parachute-representable` | `FLRP.Parachute.Theorems` |
-| Corollary 3.8 | `conjunction-cfIE` | `FLRP.Parachute.Theorems` |
-| Lemma 3.7 (i) `NY = G` | `normal-in-proper-trivial`, `NH-all` | `FLRP.Parachute` |
-| Lemma 3.7 (i) `C_G(N) = 1` | `Minimal.centralizer-trivial` | `FLRP.Parachute` |
-| Lemma 3.7 remark (nonabelian) | `Minimal.nonabelian` | `FLRP.Parachute` |
-| Lemma 3.7 (ii) subdirect irreducibility | `Minimal.normals-meet` | `FLRP.Parachute` |
-| the strategy meta-theorem | `strategy-meta-theorem` | `FLRP.Parachute.Theorems` |
-| Pálfy–Pudlák | `PalfyPudlak` (Entry 3) | `FLRP.Assumptions` |
+| Note                                         | Formal statement                     | Module(s)                                                                 |
+| -------------------------------------------- | ------------------------------------ | ------------------------------------------------------------------------- |
+| Dedekind's rule (Thm 3.4)                    | `dedekindˡ` / `dedekindʳ`            | `Classical.Structures.Group.Dedekind` (pre-existing)                      |
+| Corollary 3.5 (antichain)                    | `complements-antichain`              | `Classical.Structures.Group.Complements`                                  |
+| `𝒫(L₁ , … , Lₙ)`                             | `⊕ᵖ-Lattice`                         | `Classical.Structures.Lattice.Parachute`                                  |
+| the interval above the `i`-th atom is `Lᵢ`   | `π` / `↑` and `canopyIso`            | `Classical.Structures.Lattice.Parachute`, `FLRP.Parachute.Representation` |
+| core-freeness propagation (proof of Thm 3.6) | `proper-CoreFree`                    | `FLRP.Parachute`                                                          |
+| Theorem 3.6, (B) → (C)                       | `parachute-representable`            | `FLRP.Parachute.Theorems`                                                 |
+| Corollary 3.8                                | `conjunction-cfIE`                   | `FLRP.Parachute.Theorems`                                                 |
+| Lemma 3.7 (i) `NY = G`                       | `normal-in-proper-trivial`, `NH-all` | `FLRP.Parachute`                                                          |
+| Lemma 3.7 (i) `C_G(N) = 1`                   | `Minimal.centralizer-trivial`        | `FLRP.Parachute`                                                          |
+| Lemma 3.7 remark (nonabelian)                | `Minimal.nonabelian`                 | `FLRP.Parachute`                                                          |
+| Lemma 3.7 (ii) subdirect irreducibility      | `Minimal.normals-meet`               | `FLRP.Parachute`                                                          |
+| the strategy meta-theorem                    | `strategy-meta-theorem`              | `FLRP.Parachute.Theorems`                                                 |
+| Pálfy–Pudlák                                 | `PalfyPudlak` (Entry 3)              | `FLRP.Assumptions`                                                        |
 
 Supporting reusable mathematics: `Classical.Structures.Group.Centralizer` (centralizers, and the commutator fact that normal subgroups meeting trivially centralize each other) and the level generalization of `Complexes.∙ᶜ-mono`.
 

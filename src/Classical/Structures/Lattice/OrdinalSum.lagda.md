@@ -25,7 +25,7 @@ two-element chain in the middle leaves exactly one covering edge, so the glued f
 is the module's single canonical primitive.
 
 Because the sum glues at chosen extrema, the construction takes them as data: a
-`TopOf 𝓛₁`{.AgdaFunction} and a `BotOf 𝓛₂`{.AgdaFunction}
+`TopOf 𝓛₁`{.AgdaFunction} and a `BottomOf 𝓛₂`{.AgdaFunction}
 ([Classical.Properties.Lattice][]).[^1]
 
 #### Remarks on the design
@@ -68,14 +68,14 @@ module Classical.Structures.Lattice.OrdinalSum where
 open import Agda.Primitive using () renaming ( Set to Type )
 
 -- Imports from the Agda Standard Library ---------------------------------------
-open import Data.Product          using ( _,_ ; _×_ ; proj₁ ; proj₂ )
+open import Data.Product          using ( _,_ ; _×_ ; proj₁ )
 open import Data.Sum.Base         using ( _⊎_ ; inj₁ ; inj₂ )
 open import Level                 using ( Level ; _⊔_ )
 open import Relation.Binary       using ( Setoid )
 
 -- Imports from the Agda Universal Algebra Library ------------------------------
 open import Classical.Properties.Lattice        using  ( module Lattice-Order
-                                                       ; TopOf ; BotOf )
+                                                       ; TopOf ; BottomOf )
 open import Classical.Signatures.Lattice        using  ( Sig-Lattice )
 open import Classical.Structures.Lattice.Basic  using  ( Lattice ; module Lattice-Op
                                                        ; setoidEqsToLattice )
@@ -237,7 +237,7 @@ module LatticeOrdinalSum
   (𝓛₁ : Lattice α ρ)
   ((⊤₁ , ⊤₁max) : TopOf 𝓛₁)      -- ASSUMPTION: 𝓛₁ has maximal element ⊤₁
   (𝓛₂ : Lattice β σ)
-  ((⊥₂ , ⊥₂min) : BotOf 𝓛₂)      -- ASSUMPTION: 𝓛₂ has minimal element ⊥₂
+  ((⊥₂ , ⊥₂min) : BottomOf 𝓛₂)      -- ASSUMPTION: 𝓛₂ has minimal element ⊥₂
   where
   private
     𝑳₁ : Algebra {𝑆 = Sig-Lattice} α ρ
@@ -517,7 +517,7 @@ lemmas name these unfoldings for consumers.
 The standalone operator, for consumers who need only the lattice.
 
 ```agda
-ordinalSum : (𝓛₁ : Lattice α ρ) → TopOf 𝓛₁ → (𝓛₂ : Lattice β σ) → BotOf 𝓛₂
+ordinalSum : (𝓛₁ : Lattice α ρ) → TopOf 𝓛₁ → (𝓛₂ : Lattice β σ) → BottomOf 𝓛₂
   → Lattice (α ⊔ β) (ρ ⊔ σ)
 ordinalSum 𝓛₁ t 𝓛₂ b = LatticeOrdinalSum.⊕-Lattice 𝓛₁ t 𝓛₂ b
 ```

@@ -667,6 +667,79 @@ The core move eliminates the `docs/Notes` path entirely, so the collision is res
 
 This is repo-infrastructure and docs-governance hygiene, so it belongs in milestone **M1** (home of CI, the STYLE_GUIDE, `docs/adr/`, and the GITHUB_PROJECT tooling), as **M1-12** — the next free M1 number (M1-11 / #349 is the highest used).
 
+---
+
+### Issue M1-13: Tier the type-check: the paper-specific certificates are 44% of a clean build (#515)
+
+**Labels**: `enhancement`, `milestone-1-infra`, `ci`, `flrp-research`
+
+## Description
+
+Type-checking the whole library has roughly doubled in wall-clock time, and a large share of the new cost is modules that matter only to the FLRP research track and to the `fin-lat-rep` manuscript — above all the generated representation certificates under `src/FLRP/Certificates/SmallLatticeReps/`.  A user of the algebra library who does not care about the finite lattice representation problem should not pay for them on every build, and a contributor waiting on `make check` should not either.
+
+**Measurements** (this worktree, Agda 2.8.0, `agda --profile=modules src/Everything.agda` from an empty `_build/`, `-M6G -A128M`):
+
+| | time | share of build |
+| --- | --- | --- |
+| whole clean type-check | **395.2 s** (6.6 min, 6.3 GB peak RSS) | 100 % |
+| `FLRP.Certificates.SmallLatticeReps.*` (27 modules) | **175.2 s** | **44.3 %** |
+| the other two certificates (`Pilot`, `Group`) | 3.4 s | 0.9 % |
+| `Legacy.*`, pulled in transitively by `Examples.Structures` and `Exercises.Complexity.FiniteCSP` (#322, #323) | 24.1 s | 6.1 % |
+| core library and everything else | 192.4 s | 48.7 % |
+
+So **the census costs as much as the entire rest of the library**, and it is concentrated: the four slowest certificates (`SLR13` 45.2 s, `SLR27` 29.6 s, `SLR09` 25.2 s, `SLR33` 23.6 s) are 71 % of the census total.  Two further data points worth recording here, both actionable independently of this issue:
+
++  the slowest single module in the whole library is **not** a certificate — it is `Classical.Structures.Lattice.Parachute` at **45.4 s** (currently in review on #506), just ahead of `SLR13`;
++  `Setoid.Subalgebras.Subdirect.Finite` costs **22.1 s**, which corroborates #439's guess about that module from measurement rather than impression.
+
+For scale on the other axis: the census is 36,095 lines, 39 % of all source under `src/`, but only 12 % of interface bytes.
+
+Three structural facts make this cheap to fix.
+
++  **The census certificates are pure leaves.**  No module in `src/` imports any `FLRP.Certificates.SmallLatticeReps.SLR*` module — not even the `FLRP.Certificates` barrel, which contains only the checker assembly.  They enter the build solely through the generated `src/Everything.agda`, so excluding them changes no import graph and no public API.
++  **The Makefile already has the pattern.**  `EverythingLegacy.agda` is a second generated aggregator with its own gate, precisely so the frozen `Legacy/` tree is checked without being part of the canonical library.  A certificate tier is the same move a second time.
++  **Two CI cache bugs are inflating the measured cost independently of any tiering.**  The `Cache .agdai interface files` step caches `path: src/**/*.agdai`, but Agda 2.7+ writes interfaces to `_build/<version>/agda/src/...` — there are **zero** `.agdai` files under `src/`, so the cache saves and restores nothing.  Its key also hashes `src/**/*.agda`, which misses the `.lagda.md` files that are ~99 % of the sources.  Fixing those two lines is likely a larger win for CI than the tiering itself, and is worth doing first because it is independent.
+
+## Options considered
+
+**A.  Tier the aggregator (recommended).**  Exclude `src/FLRP/Certificates/SmallLatticeReps/**` from `Everything.agda`, add a generated `EverythingCertificates.agda` over exactly that directory, and give it its own `make` target and its own CI job.  Keeps every module in the repository and under CI, needs no file moves, touches no imports, and is trivially reversible.  Keep `FLRP/Certificates/{Pilot,Group}/**` — two modules — in the core tier so the default build still exercises the certificate checker end to end.
+
+**A′.  Move the certificates out of `src/` entirely** (say to `certificates/`), so they are artifacts rather than library modules.  Architecturally tidier and the aggregator excludes them for free, but it moves 27 files, rewrites their cross-links and site paths, and needs the `.agda-lib` include path extended.  Worth considering later; not worth it as a first step.
+
+**B.  Move the certificates to `UniversalAlgebra/fin-lat-rep`.**  Cleanest audience separation, and the option to keep in view — but the costs are real and worth writing down before choosing it:
+
++  that repository has been untouched since **October 2016**; it holds LaTeX, lattice lists, UACalc files, and talks, with no `.github/`, no CI, no Nix, and no Agda — so the whole toolchain would have to be stood up there first;
++  the certificates *import the library's checkers* (`FLRP.Certificates`, `Setoid.Congruences.Certificates`), so the other repository needs a pinned `agda-algebras` dependency, and version skew becomes a maintenance surface;
++  cross-repo breakage becomes invisible: a change to a checker's API here would be discovered late, in a repository nobody is watching, instead of by `make check` in the PR that caused it;
++  it gives up the atomic-PR property that FLRP roadmap § 1 explicitly chose in-repo development for ("a single PR can extend the foundation and use the extension atomically");
++  it also gives up M8 corpus value — machine-checked certificates are among the most valuable training artifacts the repository has;
++  and the manuscript source is itself vendored *here*, at `docs/papers/fin-lat-rep/SmallLatticeReps.tex`, so moving only the evidence would separate the paper from its checked artifacts rather than co-locating them.
+
+**C.  Make the certificates cheaper to check** (worth doing regardless, and it feeds #439).  The per-module profile attached above says where the time actually goes; candidate levers are `abstract`/`opaque` boundaries around the big tables so downstream normalization cannot unfold them, replacing compile-time `from-yes (… ?)` evaluation with tabulated structural proofs, and splitting the largest modules so interface caching is finer-grained.  This should be a follow-up issue driven by the profile, not guesswork.
+
+## Proposal
+
+Do the independent CI cache fix and option A now; open a data-driven follow-up for C; leave B on the table as the answer if the census keeps growing.
+
+## Tasks
+
+- [ ] Fix the CI interface cache: `path: _build/` and a key that hashes `src/**/*.lagda.md` as well as `src/**/*.agda`.
+- [ ] `Everything.agda`: exclude `$(SRCDIR)/FLRP/Certificates/SmallLatticeReps/*`, with the reason in the target's comment block.
+- [ ] New generated aggregator `EverythingCertificates.agda` over that directory, in the style of `EverythingLegacy.agda`.
+- [ ] Targets: `make check` (core + Legacy, as now, minus the census), `make check-certificates` (the new tier), `make check-all` (both).  Update the Makefile header, `README.md`, and `CONTRIBUTING.md`, which currently tell contributors that `make check` type-checks *the entire library*.
+- [ ] CI: add a `Type-check certificates` job running `make check-certificates`, in parallel with the existing job and required by `all-green`.  Nothing goes unchecked; core feedback arrives sooner and total wall-clock drops because the jobs run concurrently.
+- [ ] `make html` and `make agda-md` keep rendering the certificate tier, so the published site and `/classic/` do not lose pages.
+- [ ] Attach the per-module profile to #439 and open a follow-up for the worst offenders.
+
+## Acceptance criteria
+
+- [ ] `make check` no longer type-checks `FLRP/Certificates/SmallLatticeReps/**`, and the measured improvement is reported in the PR.
+- [ ] `make check-all` is green, and CI still gates on the certificate tier.
+- [ ] The site still renders every certificate page.
+- [ ] No core-tier module imports a census certificate (guaranteed today; `make check-all` would catch a regression).
+
+Related: #439 (profile type-checking times), #483 and #485 (the census that produces these certificates), #451 (FLRP program).
+
 <!-- END GENERATED: milestone-1 -->
 
 ### Milestone 1 Dependencies
@@ -4113,6 +4186,191 @@ On completion, `KurzweilNetterDuality` becomes a proved theorem, `dual-Represent
 ## Acceptance criteria
 
 - [ ] Type-checks under `--safe` with no postulates and no registry hypothesis; `FLRP.Assumptions` Entry 2 is retired with its documentation updated to point at the theorem.
+
+---
+
+### Issue M6-17: Retire the degenerate `minIE` in favour of `MinimallyIE` (#509)
+
+**Labels**: `bug`, `milestone-6-flrp`, `flrp-research`
+
+## Description
+
+`minIE` of `FLRP.Enforceable` (WP-4) does not define minimal interval enforceability.  It quantifies minimality against a **single** other representation:
+
+```agda
+minIE P 𝑳 = ∀ 𝒢 𝒬 H J H-sg J-sg → (fin : FiniteAlgebra …) → IntervalIso 𝒢 H H-sg 𝑳
+           → (fin' : FiniteAlgebra …) → IntervalIso 𝒬 J J-sg 𝑳 → fin .card ≤ⁿ fin' .card → P 𝒢
+```
+
+Instantiating `𝒬 := 𝒢` and `fin' := fin` makes the cardinality premise `card ≤ card`, so `minIE P 𝑳` implies `P` of **every** finitely presented representation of `𝑳`.  It is therefore plain interval enforceability restricted to finite groups, not min-IE.  `minIE-degenerate` in `FLRP.Reductions` (#507) proves the collapse in one line, and the RP-2 catalog states its min-IE entry (Köhler, Pálfy–Pudlák on minimal representations of `Mₙ`) over the repaired notion `MinimallyIE` instead, in which minimality is quantified over all finite representations.
+
+This was left unfixed on #507 deliberately, to keep that branch additive while #506 was in review.
+
+## Tasks
+
+- [ ] Move `MinimallyIE`, `IE→MinimallyIE`, and `MinimallyIE-∧` from `FLRP.Reductions` into `FLRP.Enforceable`, replacing `minIE` under that name (one canonical form per concept — no synonym pair).
+- [ ] Keep `minIE-degenerate` as a regression witness, restated against whatever the replacement is called, or record the defect in the module prose if the old definition disappears entirely.
+- [ ] Update `FLRP.Reductions` Entry 6 and `docs/notes/flrp-rp2-catalog.md` § 4.7 to point at the canonical definition.
+- [ ] While there: consider whether the exactness caveat on `card` (it bounds the carrier from above, so this is minimality of *certified* cardinalities) deserves a `FiniteAlgebra` with an exact enumeration, or stays a documented approximation.
+
+## Acceptance criteria
+
+- [ ] `make check` green; no definition in the tree has the degenerate quantifier shape.
+- [ ] Blocked until #506 and #507 land, so the edit does not collide with review fixes.
+
+Follow-up to #459 / #507.  Part of #451.
+
+---
+
+### Issue M6-18: Minimal normal subgroups exist in finite groups (well-founded descent) (#510)
+
+**Labels**: `enhancement`, `milestone-6-flrp`, `flrp-research`
+
+## Description
+
+Prove that **every nontrivial normal subgroup of a finite group contains a minimal one**, by well-founded descent on order, and discharge the hypothesis it currently stands in for.
+
+This single fact is the last finiteness gap in the parachute structure theory.  It is assumed twice today, both times as an explicit argument and never as a postulate:
+
++  RP-1 (#506) threads it as the `M` parameter of `GroupParachute.Structure.Minimal` — the minimal normal subgroup whose centralizer Lemma 3.7 (i) computes (`docs/notes/flrp-rp1-parachutes.md` § 4, fourth assumption);
++  RP-2 (#507) threads it as `MinimalNormalDescent`, the antecedent of the enforced property in catalog Entries 1–3, so that the quantifier over normal subgroups in `𝒢₃` and `𝒢₄` is not silently narrowed (`docs/notes/flrp-rp2-catalog.md` § 4.2).
+
+Discharging it turns those entries into the note's statements verbatim.
+
+## Tasks
+
+- [ ] Decide the finiteness interface: `FiniteAlgebra` on the underlying algebra gives a decidable setoid equality and a surjective enumeration, from which a *measure* on equality-respecting subgroups (the number of enumerated elements satisfying a decidable membership predicate) is computable — note this needs the Layer-D presentation of the subgroup (decidable membership), exactly as `Intervalᵈ` does; a semantic-only subgroup has no computable order.
+- [ ] Well-founded descent: a strictly decreasing chain of nontrivial normal subgroups terminates, using `Data.Nat.Induction`'s `<`-well-foundedness on the measure.
+- [ ] Conclude `MinimalNormalDescent` for a finite group with decidably presented normal subgroups, and instantiate RP-1's `Minimal` module from it.
+- [ ] Update the two design notes and drop the antecedent from catalog Entries 1–3.
+
+## Acceptance criteria
+
+- [ ] Type-checks under `--safe`, no postulates; the Layer-D requirement (if any) is stated explicitly per ADR-008 rather than smuggled in.
+- [ ] `FLRP.Reductions` Entries 1–3 read `cfIE 𝒢ᵢ ⊕ᵖ-Lattice` with no conditional antecedent, for finite groups.
+
+Follow-up to #458 / #459.  Part of #451.
+
+---
+
+### Issue M6-19: Certify `M₆` as an interval: discharge Entry 5 vacuity by computation (#511)
+
+**Labels**: `enhancement`, `milestone-6-flrp`, `flrp-research`
+
+## Description
+
+Discharge the **group representability of `M₆`** by computation instead of importing it, so that the non-vacuity of RP-2's Entry 5 becomes a theorem.
+
+The vacuity discipline of the enforcement catalog (#507) requires every entry to track whether its enforcing lattice is known to be group representable, since a lattice that is no interval enforces *everything* (`not-representable→IE`).  Entry 5 (`𝒢₁`, neither alternating nor symmetric, IE via `M₆`) currently imports its witness as the hypothesis `M₆-representable`, justified by the folklore construction quoted in `docs/notes/flrp-rp2-catalog.md` § 3: for a prime power `q`, `M_{q+1}` is the subspace lattice of a two-dimensional space `V` over `F_q`, realized as the interval `[K , V ⋊ K]` where `K ≅ F_q^*` acts by scalars.
+
+For `q = 5` the witness group has order `25 · 4 = 100` and the interval has 8 elements — small enough for the WP-6 certificate pipeline, and it would be the first *group-side* certificate in the catalog.
+
+## Tasks
+
+- [ ] GAP side (`scripts/gap/flrp/`): emit `V ⋊ F₅^*` of order 100 with the scalar action, the subgroup `K`, and the interval `[K , G]`; check `[K , G] ≅ M₆` there first.
+- [ ] Certificate side: the interval is a congruence lattice by `FLRP.Bridge` (`Con (𝒢 ↷ 𝒢/K) ≅ [K , 𝒢]`), so the existing algebra-side certificate schema applies to the coset action on the 25 cosets; alternatively certify the interval directly if that is cheaper.
+- [ ] Agda side: check the emitted certificate and derive `GroupRepresentable M[ 6 ]`, then instantiate `Entry-𝒢₁.nongiant-nonvacuous` with it in place of the hypothesis.
+- [ ] Record in the survey note that Entry 5's vacuity datum is discharged, and note that Entry 4's (`M₇` in `A₃₁`, index `30!/10`) is out of computational reach and stays an import.
+
+## Acceptance criteria
+
+- [ ] `GroupRepresentable M[ 6 ]` is inhabited in the library with no new assumption, and Entry 5's non-vacuity no longer takes `M₆-representable` as an argument.
+- [ ] The emitter and its golden test live under `scripts/` with a Makefile target, per `CLAUDE.md`.
+
+Follow-up to #459 / #507; uses the WP-6 pipeline (#457) and the WP-3 bridge.  Part of #451.
+
+---
+
+### Issue M6-20: Solvability and the alternating/symmetric predicates (#512)
+
+**Labels**: `enhancement`, `milestone-6-flrp`, `flrp-research`
+
+## Description
+
+Define **solvability** and **being an alternating or symmetric group** in the library, turning four RP-2 catalog entries from schemas into statements.
+
+`FLRP.Reductions` (#507) parameterizes Entries 4, 5, 7, and 8 by an abstract group predicate together with the facts their sources supply about it, because neither notion is definable in the library today (`docs/notes/flrp-rp2-catalog.md` § 4.8).  The schemas instantiate unchanged once the predicates exist, and the exercise made explicit which properties are actually used: for solvability, only H-closure and the `Mₙ` exclusion.
+
+Solvability additionally closes an RP-1 open item: the second half of the note's Lemma 3.7 (ii), "a group with a nonabelian minimal normal subgroup is nonsolvable" — the sharper structural fact (`Minimal.nonabelian`) is already proved (#506).
+
+## Tasks
+
+- [ ] **Solvability**: the derived series (commutator subgroups iterated) or a subnormal abelian series; prove the class closed under homomorphic images (this is exactly `Entry-𝒢₀.SolvableHClosed`), and that a group with a nonabelian minimal normal subgroup is nonsolvable.
+- [ ] **`Aₙ` and `Sₙ`**: the symmetric group on `Fin n` exists in embryo (`Examples.Classical.Groups.SymmetricGroup3`); generalize to `Sym (Fin n)` and the alternating subgroup, and define `AltOrSym 𝒢` as "isomorphic to `Aₙ` or `Sₙ` for some `n`".  Prove H-closure (`Entry-𝒢₁.AltSymHClosed`): the quotients of `Aₙ`/`Sₙ` are again alternating or symmetric.
+- [ ] Instantiate the four catalog schemas at the new predicates and simplify the survey note § 4.8.
+- [ ] **Close the degree-`≤ 4` gap of Entry 5** (survey note § 3): Basile's Theorem D assumes degree at least 5, and the small cases were checked by hand, not machine-checked.  Note that the check is *not* vacuous — `[V₄ , S₄] ≅ M₄`, so `M₄` does occur in a symmetric group and only `M₆` (and higher counts outside `{1,2,3,5,7,11}`) is safe.  Either decide the small cases by computation over `Fin`-presented `Aₘ`/`Sₘ` for `m ≤ 4`, or restrict the imported hypothesis to degree `≥ 5` and compose Entry 5 with Entry 4 through "every alternating or symmetric group of degree `≤ 4` is solvable".
+
+## Acceptance criteria
+
+- [ ] Both predicates are defined in `Classical/` (reusable mathematics, roadmap § 6), not under `FLRP/`.
+- [ ] The two H-closure hypotheses of `FLRP.Reductions` are proved rather than assumed, and the entries no longer take an abstract predicate.
+
+Follow-up to #459 / #507; also closes an open item of #458.  Part of #451.
+
+---
+
+### Issue M6-21: Aschbacher's D∆ and signalizer theorems, specialized to parachutes (#513)
+
+**Labels**: `milestone-6-flrp`, `blocked-upstream`, `research-exploratory`, `flrp-research`
+
+## Description
+
+Obtain Aschbacher's `D∆` and signalizer-lattice papers and work out what they say about **minimal parachute representations**, then add the resulting entries to the RP-2 catalog.
+
+This is roadmap avenue B and the highest-value external entry still missing.  Parachutes have disconnected interiors, which is exactly the domain of Aschbacher's class `D∆`, so his reductions plausibly apply to them directly — but RP-2 **rejected** the entry rather than guess it (`docs/notes/flrp-rp2-catalog.md` § 5): the statements are inseparable from his own apparatus (`O_G(H)''`, `M_G(H)`, signalizer lattices), and transcribing them from secondary descriptions would produce exactly the plausible-sounding non-theorem the phase's discipline exists to prevent.  Specializing them to parachutes is research, not transcription.
+
+Sources needed (none reachable in the current environment; all paywalled, no preprints located):
+
++  M. Aschbacher, *On intervals in subgroup lattices of finite groups*, J. Amer. Math. Soc. 21 (2008), 809–830.
++  M. Aschbacher, *Signalizer lattices in finite groups*, Michigan Math. J. 58 (2009), 79–103.
++  M. Aschbacher, *Lower signalizer lattices in alternating and symmetric groups*, J. Group Theory 15 (2012), 151–225.
++  M. Aschbacher, *Overgroup lattices in finite groups of Lie type containing a parabolic*, J. Algebra 382 (2013), 71–99.
++  M. Aschbacher and J. Shareshian, *Restrictions on the structure of subgroup lattices of finite alternating and symmetric groups*, J. Algebra 322 (2009), 2449–2463 — cited by the note beside Basile for `𝒢₁`, currently named but **not consumed** by the catalog.
+
+One usable lead: §§ 2 of arXiv:1911.04516 (Lucchini–Moscatiello–Palcoux–Spiga) is a careful secondary presentation of Aschbacher's notation and of the overgroup results his program supplies, and is a reasonable entry point while the primary texts are being obtained.  This is also the avenue most likely to benefit from expert correspondence (roadmap § 5 B).
+
+## Tasks
+
+- [ ] Obtain the primary texts (library access or correspondence).
+- [ ] State the `D∆` hypothesis and the minimal-representation conclusion precisely enough to write down, in the vocabulary of `FLRP.Enforceable`; expect a min-IE disjunction ("`G` almost simple, or a signalizer lattice arises").
+- [ ] Decide what it says when the lattice is a parachute with two big canopies, where RP-1 already forces a unique nonabelian minimal normal subgroup with trivial centralizer and `NH = G` (Lemma 3.7) — the two structure theories should either compose or conflict, and either outcome is informative.
+- [ ] Add the resulting entries to `FLRP.Reductions` with their citations, and record verification status in the survey note § 3.  If a claim cannot be pinned down from the primary text, leave it rejected in § 5 rather than approximating it.
+- [ ] Same treatment for Aschbacher–Shareshian, which would give Entry 5 a second independent source.
+
+## Acceptance criteria
+
+- [ ] Either new catalog entries whose statements are verified against the primary texts, or an updated § 5 explaining precisely which statement resisted formalization and why.
+
+Follow-up to #459 / #507.  Part of #451; roadmap avenue B.
+
+---
+
+### Issue M6-22: Normal subgroups and congruences of a group: the missing correspondence (#508)
+
+**Labels**: `enhancement`, `milestone-6-flrp`, `flrp-research`
+
+## Description
+
+Formalize the correspondence between **normal subgroups of a group and congruences of it**, and use it to identify the group-side monolith notion with the library's congruence-side one.
+
+`Classical.Structures.Group.MinimalNormal` (added by #507) defines `HasMonolithᵍ` — a least nontrivial normal subgroup — because the library has no way to say "this *group* is subdirectly irreducible" in the sense of `Setoid.Congruences.Monolith.IsSubdirectlyIrreducible`, which is a statement about `Con 𝑨`.  The RP-2 catalog's Entry 1 (`𝒢₂`) is therefore stated group-side, with the divergence recorded in `docs/notes/flrp-rp2-catalog.md` § 4.1.  This issue retires that divergence.
+
+The work is ordinary — no obstruction and no classical input — and it is reusable mathematics, so per roadmap § 6 it belongs in `Classical/Structures/Group/`, beside `FLRP.Bridge`'s Pálfy–Pudlák correspondence, not under `FLRP/`.
+
+## Tasks
+
+- [ ] From a normal subgroup `N`, the relation `x θ y ⟺ x y⁻¹ ∈ N` is a congruence of the group algebra: reflexivity, symmetry, transitivity, `≈`-respect, and compatibility with the three operations of `Sig-Group`.
+- [ ] From a congruence `θ`, the class `{x : x θ ε}` is an equality-respecting normal subgroup.
+- [ ] The two maps are monotone and mutually inverse (up to `≑` on congruences and mutual inclusion on subgroups), hence an order isomorphism `Con 𝑮 ≅ Normal(𝑮)`; nontriviality of the subgroup corresponds to `Nonzero` of the congruence.
+- [ ] Transport `HasMonolithᵍ` to `HasMonolith`, giving `IsSubdirectlyIrreducibleᵍ 𝒢 → IsSubdirectlyIrreducible (proj₁ 𝒢)`; the least-element form needed for `mono-least` is already available as `minimal-meets→least`.
+- [ ] Retire the `ᵍ` superscript in `MinimalNormal` (FLRP modules are exempt from the deprecation cycle, roadmap § 1, so the rename can be direct) and update the `𝒢₂` entry of `FLRP.Reductions` plus § 4.1 of the survey note.
+
+## Acceptance criteria
+
+- [ ] Type-checks under `--cubical-compatible --exact-split --safe` with no postulates.
+- [ ] `𝒢₂` of `FLRP.Reductions` is stated with the library's `IsSubdirectlyIrreducible`, and the survey note's § 4.1 divergence is replaced by a pointer to the bridge.
+
+Follow-up to #459 / #507.  Part of #451.
 
 <!-- END GENERATED: milestone-6 -->
 
