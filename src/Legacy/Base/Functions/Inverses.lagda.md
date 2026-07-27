@@ -18,14 +18,14 @@ module Legacy.Base.Functions.Inverses where
 
 -- Imports from Agda and the Agda Standard Library ---------------------------------------------
 open import Agda.Primitive    using () renaming ( Set to Type )
-open import Data.Product      using ( _,_ ; Σ-syntax ; ∃-syntax )
+open import Data.Product      using ( _,_ ; Σ-syntax )
 open import Level             using ( Level ; _⊔_ )
 open import Relation.Binary.PropositionalEquality
                               using ( _≡_ ; sym ; refl )
 open import Relation.Unary    using ( Pred ; _∈_ )
 
 -- Imports from agda-algebras ----------------------------------------------------------------
-open import Overture.Basic using ( ∣_∣ )
+open import Overture.Basic using ( ∃-syntax ; ∣_∣ )
 
 private variable a b : Level
 ```
@@ -49,10 +49,10 @@ module _ {A : Type a}{B : Type b} where
  open Image_∋_
 
  Range : (A → B) → Pred B (a ⊔ b)
- Range f b = ∃[ a ] (f a) ≡ b
+ Range f b = ∃[ a ∈ A ] (f a) ≡ b
 
  range : (A → B) → Type (a ⊔ b)
- range f = Σ[ b ∈ B ] ∃[ a ] (f a) ≡ b
+ range f = Σ[ b ∈ B ] ∃[ a ∈ A ] (f a) ≡ b
 
  Image⊆Range : (f : A → B) → ∀ b → Image f ∋ b → b ∈ Range f
  Image⊆Range f b (eq a x) = a , (sym x)

@@ -141,31 +141,35 @@ infixl 30 _∙_
 
 #### Sigma types
 
-The library uses the standard library's `∃[ x ] B`{.AgdaFunction} for an existential
-whose domain is inferred.  The local `∃-syntax`{.AgdaFunction} below duplicates it
-and is deprecated; it is kept only so that a client importing it from here still
-compiles.
+The standard library's `∃[ x ] B`{.AgdaFunction} leaves the domain of
+`x`{.AgdaBound} to inference, which reads as vague where a mathematician would
+write `∃ x ∈ A, B`.  `∃-syntax`{.AgdaFunction} is the alternative that displays
+it — `∃[ x ∈ A ] B`{.AgdaFunction}, with `A`{.AgdaBound} the *type* of
+`x`{.AgdaBound} — so the domain is stated rather than left to the reader.  It
+denotes the same type as `Σ[ x ∈ A ] B`{.AgdaFunction}, read "there exists an
+`x` in `A` such that `B`" rather than "the type of pairs"; write whichever says
+what is meant.
 
-Its notation used to read `∃[ x ∈ A ] B`, which was a trap: `A`{.AgdaBound} is not
-an argument of `∃-syntax`{.AgdaFunction} — the domain is implicit — so Agda parsed
-`A` as a *literal token* of the notation.  Use sites therefore had to spell the
-letter `A` whatever their domain was actually called, and the `∈ A` conveyed
-nothing.  The notation now matches the standard library's.
+`A`{.AgdaBound} is an *explicit argument*, which is what makes the notation
+honest: a `syntax` declaration's right-hand side may only mention names bound on
+its left, and anything else in it is a literal token.  Declaring this notation
+over the implicit-domain `∃`{.AgdaFunction} would therefore turn `A` into a
+token every use site had to spell verbatim, whatever its domain was called.
 
 ```agda
 infix 2 ∃-syntax
 
-∃-syntax : ∀ {A : Type a} → (A → Type b) → Set (a ⊔ b)
-∃-syntax = ∃
+∃-syntax : (A : Type a) → (A → Type b) → Type (a ⊔ b)
+∃-syntax A = ∃ {A = A}
 
-syntax ∃-syntax (λ x → B) = ∃[ x ] B
+syntax ∃-syntax A (λ x → B) = ∃[ x ∈ A ] B
 
-{-# WARNING_ON_USAGE ∃-syntax
-"`Overture.Basic.∃-syntax` is deprecated; use `∃-syntax` from `Data.Product`,
- whose notation `∃[ x ] B` this one now matches.  Its former notation
- `∃[ x ∈ A ] B` parsed `A` as a literal token rather than as the domain, since
- the domain of `∃` is implicit.  Retained for one deprecation cycle."
-#-}
+private
+  -- Canary: the domain is bound by the notation, so *any* type may stand to the
+  -- right of `∈` — the point of the declaration.  (Under a declaration that left
+  -- the domain implicit, `A` would be a literal token and this would not parse.)
+  _ : {X : Type a} {P : X → Type b} → (∃[ x ∈ X ] P x) → Σ[ x ∈ X ] P x
+  _ = λ z → z
 ```
 
 
