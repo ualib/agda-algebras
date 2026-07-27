@@ -71,7 +71,7 @@ open import Data.Nat.Base                  using  ( ℕ ; _≤_ ; _<_ ; z≤n ; 
 open import Data.Nat.Properties            using  ( m≤n⇒m≤1+n ; n<1+n ; <-trans
                                                   ; ≤-<-trans ; n≮n )
 open import Data.Product                   using  ( _×_ ; _,_ ; Σ-syntax ; proj₁ ; proj₂ )
-open import Data.Sum.Base                  using  ( inj₁ ; inj₂ )
+open import Data.Sum.Base                  using  ( [_,_]′ )
 open import Level                          using  ( Level ; _⊔_ ; 0ℓ ; lower )
 open import Relation.Binary                using  ( Setoid ; IsEquivalence )
 open import Relation.Nullary               using  ( ¬_ ; Dec ; yes ; no )
@@ -176,6 +176,15 @@ module _ {𝓞 𝓥 : Level}{𝑆 : Signature 𝓞 𝓥}{𝑨 : Algebra {𝑆 = 
 
   count : DecCon 𝑨 ℓ → ℕ
   count d = length (filter (_∈? d) pairs)
+
+  -- Containment *on the enumerated carrier*, and its decision procedure.  Naming
+  -- the predicate lets the maximality proof below take the decision as an
+  -- ordinary argument instead of splitting on it with `with`.
+  _⊆ᶜ_ : DecCon 𝑨 ℓ → DecCon 𝑨 ℓ → Type ℓ
+  d ⊆ᶜ e = ∀ i j → ConRel d (enum i) (enum j) → ConRel e (enum i) (enum j)
+
+  _⊆ᶜ?_ : (d e : DecCon 𝑨 ℓ) → Dec (d ⊆ᶜ e)
+  d ⊆ᶜ? e = all? (λ i → all? (λ j → ((i , j) ∈? d) →-dec ((i , j) ∈? e)))
 ```
 
 A congruence contained in another relates no more pairs (`count-mono`); if the
@@ -263,9 +272,9 @@ maximum `count`; `count`-maximality is `⊆`-maximality, by `count-mono`/`count-
     Θ-dec = argmax count (witness Δ) a≢bCons
 
     Θ-dec∈filtered : Θ-dec ∈ a≢bCons
-    Θ-dec∈filtered with argmax-sel count (witness Δ) a≢bCons
-    ... | inj₁ eq = subst (_∈ a≢bCons) (sym eq) Δ∈a≢bCons
-    ... | inj₂ ∈f = ∈f
+    Θ-dec∈filtered =
+      [ (λ eq → subst (_∈ a≢bCons) (sym eq) Δ∈a≢bCons) , (λ ∈f → ∈f) ]′
+        (argmax-sel count (witness Δ) a≢bCons)
 
     Θ : Con 𝑨 ℓ
     Θ = proj₁ Θ-dec
@@ -284,24 +293,30 @@ count.  The witness of properness is extracted from the *decidable* failure of
 carrier-containment.
 
 ```agda
-    Θ-max : ((d , pd) : DecCon 𝑨 ℓ) → (d , pd) ∈ a≢bCons → Θ ⊆ d → d ⊆ Θ
-    Θ-max d d∈f Θ⊆d with all? (λ i → all? (λ j → ((i , j) ∈? d) →-dec ((i , j) ∈? Θ-dec)))
-    ... | yes h = carrier-lift (proj₁ d) Θ h
-    ... | no ¬h = ⊥-elim (n≮n (count d) (≤-<-trans (Θ-max-count d d∈f) cΘ<cd))
+    Θ-max-of : (d : DecCon 𝑨 ℓ) → d ∈ a≢bCons → Θ ⊆ proj₁ d
+             → Dec (d ⊆ᶜ Θ-dec) → proj₁ d ⊆ Θ
+    Θ-max-of d d∈f Θ⊆d (yes h)  = carrier-lift (proj₁ d) Θ h
+    Θ-max-of d d∈f Θ⊆d (no ¬h)  =
+      ⊥-elim (n≮n (count d) (≤-<-trans (Θ-max-count d d∈f) cΘ<cd))
       where
-      ¬hj = proj₂ (¬∀⟶∃¬ card _ (λ i → all? (λ j → (i , j) ∈? d  →-dec (i , j) ∈? Θ-dec )) ¬h)
+      -- The two existential witnesses, each extracted once and shared.
+      exi = ¬∀⟶∃¬ card _ (λ i → all? (λ j → (i , j) ∈? d →-dec (i , j) ∈? Θ-dec)) ¬h
 
-      i₀ j₀ : Fin card
-      i₀ = proj₁ (¬∀⟶∃¬ card _ (λ i → all? (λ j → (i , j) ∈? d →-dec (i , j) ∈? Θ-dec)) ¬h)
-      j₀ = proj₁ (¬∀⟶∃¬ card _ (λ j → (i₀ , j) ∈? d →-dec (i₀ , j) ∈? Θ-dec) ¬hj)
+      i₀ : Fin card
+      i₀ = proj₁ exi
 
+      exj = ¬∀⟶∃¬ card _ (λ j → (i₀ , j) ∈? d →-dec (i₀ , j) ∈? Θ-dec) (proj₂ exi)
 
-      ¬impl = proj₂ (¬∀⟶∃¬ card _ (λ j → (i₀ , j) ∈? d →-dec (i₀ , j) ∈? Θ-dec) ¬hj)
+      j₀ : Fin card
+      j₀ = proj₁ exj
 
-      split = ¬→-split ((i₀ , j₀) ∈? d) ¬impl
+      split = ¬→-split ((i₀ , j₀) ∈? d) (proj₂ exj)
 
       cΘ<cd : count Θ-dec < count d
       cΘ<cd = count-strict Θ-dec d i₀ j₀ Θ⊆d (proj₁ split) (proj₂ split)
+
+    Θ-max : ((d , pd) : DecCon 𝑨 ℓ) → (d , pd) ∈ a≢bCons → Θ ⊆ d → d ⊆ Θ
+    Θ-max d d∈f Θ⊆d = Θ-max-of d d∈f Θ⊆d (d ⊆ᶜ? Θ-dec)
 ```
 
 #### Subdirect irreducibility of the maximal quotient
@@ -345,13 +360,22 @@ hence `ψ`, relates `a , b`, i.e. contains the principal congruence.
       φ = Q→A ψ
       Θ⊆φ : Θ ⊆ φ
       Θ⊆φ = reflexive (proj₂ ψ)
+      -- The representative of φ in `cons`, and its three certificates.
+      rep      = complete φ
+      d        = proj₁ rep
+      d∈cons   = proj₁ (proj₂ rep)
+      φ⊆d      = proj₁ (proj₂ (proj₂ rep))
+      d⊆φ      = proj₂ (proj₂ (proj₂ rep))
+
+      -- Does d relate a and b?  If not, maximality of Θ collapses ψ to zero.
+      ψab-of : Dec (ConRel d a b) → proj₁ ψ a b
+      ψab-of (yes dab)  = d⊆φ dab
+      ψab-of (no ¬dab)  = ⊥-elim (nz (⊆-trans {θ = φ}{φ = proj₁ d}{ψ = Θ} φ⊆d
+                            (Θ-max d (∈-filter⁺ notRel? d∈cons ¬dab)
+                                     (⊆-trans {θ = Θ}{φ = φ}{ψ = proj₁ d} Θ⊆φ φ⊆d))))
+
       ψab : proj₁ ψ a b
-      ψab with complete φ
-      ... | d , d∈cons , φ⊆d , d⊆φ with proj₂ d a b
-      ...   | yes dab = d⊆φ dab
-      ...   | no ¬dab = ⊥-elim (nz (⊆-trans {θ = φ}{φ = proj₁ d}{ψ = Θ} φ⊆d
-                          (Θ-max d (∈-filter⁺ notRel? d∈cons ¬dab)
-                                   (⊆-trans {θ = Θ}{φ = φ}{ψ = proj₁ d} Θ⊆φ φ⊆d))))
+      ψab = ψab-of (proj₂ d a b)
       R⊆ψ : ∀ {x y} → Rₐᵦ x y → proj₁ ψ x y
       R⊆ψ (refl , refl) = ψab
 
@@ -378,10 +402,12 @@ member related them, they would be equal.  This is where decidable `≈` closes 
     Θfam : I → Con 𝑨 ℓ
     Θfam (a , b , a≢b) = Θ a b a≢b
 
+    separates-of : (x y : 𝕌[ 𝑨 ]) → ((i : I) → proj₁ (Θfam i) x y) → Dec (x ≈ y) → x ≈ y
+    separates-of x y h (yes x≈y)  = x≈y
+    separates-of x y h (no  x≢y)  = ⊥-elim (¬Θab x y x≢y (h (x , y , x≢y)))
+
     separates : Separates Θfam
-    separates {x}{y} h with x ≟ y
-    ... | yes x≈y = x≈y
-    ... | no  x≢y = ⊥-elim (¬Θab x y x≢y (h (x , y , x≢y)))
+    separates {x} {y} h = separates-of x y h (x ≟ y)
 
     si : (i : I) → IsSubdirectlyIrreducible (𝑨 ╱ Θfam i)
     si (a , b , a≢b) = SI-Q a b a≢b
