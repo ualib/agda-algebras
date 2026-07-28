@@ -352,9 +352,11 @@ def parse_syntax_decl(code_line: str) -> Optional[tuple[str, frozenset[str]]]:
     The literal tokens are those of the notation that are not bound on the left of
     the ``=``.  A declaration whose notation is all placeholders yields ``None``:
     there would be nothing to look for.  A declaration whose notation mentions a
-    name that is *not* among its parameters (``∃-syntax`` in ``Overture.Basic``
-    does) yields an over-strict entry, which simply never matches; the ``Foo[``
-    fallback in :func:`is_used` then applies, so the outcome is still correct."""
+    name that is *not* among its parameters yields an over-strict entry — such a
+    name is a literal token as far as Agda is concerned, and no use site can
+    contain it — which simply never matches; the ``Foo[`` fallback in
+    :func:`is_used` then applies, so the outcome is still correct.  (A `syntax`
+    declaration in that shape is usually a mistake in the declaration itself.)"""
     m = _SYNTAX_DECL.match(code_line)
     if m is None:
         return None
@@ -369,7 +371,13 @@ def harvest_syntax_notations(sources: Iterable[tuple[Path, str]]) -> dict[str, f
     global here rather than per-module: two modules declaring the same
     syntax-backing name are rare, and on collision we keep the *intersection* of
     the literal tokens, which can only make a name easier to count as used —
-    the safe direction for a gate that must not raise false alarms."""
+    the safe direction for a gate that must not raise false alarms.
+
+    The same bare-name keying is a known limitation: when a corpus module and a
+    library outside the corpus both export ``Foo-syntax`` with *different*
+    notations, an import of the outside one is judged by the corpus notation, so
+    a redundant import of the twin can go unreported.  The failure direction is
+    again under-reporting, never a false alarm."""
     found: dict[str, frozenset[str]] = {}
     for _, text in sources:
         for line in file_code_lines(text):

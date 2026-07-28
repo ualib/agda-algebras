@@ -69,7 +69,7 @@ open import Data.Empty                              using  ( ⊥ )
 open import Data.Fin.Base                           using  ( Fin )
 open import Data.Nat.Base renaming ( _≤_ to _≤ⁿ_ )  using  ( ℕ ; _+_ )
 open import Data.Product                            using  ( _,_ ; _×_ ; Σ-syntax
-                                                           ; ∃-syntax ; proj₁ ; proj₂ )
+                                                           ; proj₁ ; proj₂ )
 open import Data.Unit.Base                          using  ( tt )
 open import Function                                using  ( _∘_ )
 open import Level         renaming ( suc to lsuc )  using  ( Level ; 0ℓ ; _⊔_
