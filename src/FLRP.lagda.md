@@ -110,6 +110,7 @@ open import FLRP.Bridge         public
 open import FLRP.Representable  public
 open import FLRP.Assumptions    public
 open import FLRP.Closure        public
+open import FLRP.KurzweilInterval public
 open import FLRP.LayerBridge    public
 open import FLRP.Certificates   public
 open import FLRP.L7EqSix        public

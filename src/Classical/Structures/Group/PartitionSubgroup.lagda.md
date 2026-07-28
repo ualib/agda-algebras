@@ -90,7 +90,7 @@ power, together with the diagonal of [Classical.Structures.Group.Diagonal][].
 ```agda
 module PartitionSubgroups (n : ℕ) (𝒢 : Group α ρ) where
 
-  open GroupPower (Fin n) 𝒢
+  open GroupPower (Fin n) 𝒢 public
   open DiagonalSubgroup (Fin n) 𝒢 public
 
   private
