@@ -67,9 +67,11 @@ open import Classical.Theories.Group        using  ( Eq-Group ; Th-Group
                                                    ; assoc ; idˡ ; idʳ ; invˡ ; invʳ )
 open import Classical.Theories.Monoid       using  ( Th-Monoid )
                                             renaming ( assoc to assocᵐ ; idˡ to idˡᵐ ; idʳ to idʳᵐ )
+open import Overture.Operations             using  ( Op )
 open import Overture.Terms                  using  ( Term ; ℊ ; node )
 open import Overture.Signatures             using  ( ArityOf ; OperationSymbolsOf )
-open import Setoid.Algebras.Basic           using  ( Algebra ; _^_ ; 𝔻[_] ; 𝕌[_] )
+open import Setoid.Algebras.Basic           using  ( Algebra ; _^_ ; 𝔻[_] ; 𝕌[_]
+                                                   ; mkAlgebra )
 open import Setoid.Terms                    using  ( module Environment )
 
 open import Setoid.Varieties.EquationalLogic using ( _⊧_≈_ )
@@ -340,4 +342,64 @@ eqsToGroup _·_ e i ·-assoc ·-idˡ ·-idʳ ·-invˡ ·-invʳ = opsToBareGroup 
   proof idʳ   ρ = ·-idʳ   (ρ 0F)
   proof invˡ  ρ = ·-invˡ  (ρ 0F)
   proof invʳ  ρ = ·-invʳ  (ρ 0F)
+```
+
+#### Setoid-level group builders
+
+`eqsToGroup`{.AgdaFunction} covers carriers with propositional equality; group
+constructions whose carrier is a bona fide setoid — the wreath product of
+[Classical.Structures.Group.Wreath][], whose equality is pointwise-and-pairwise —
+need the general form, exactly as the lattice constructions need
+`setoidEqsToLattice`{.AgdaFunction} of [Classical.Structures.Lattice.Basic][].
+`setoidOpsToBareGroup`{.AgdaFunction} assembles the `Sig-Group` algebra from a
+carrier setoid, the three operations, and their congruence proofs (which the
+propositional case got for free from `cong₂`{.AgdaFunction});
+`setoidEqsToGroup`{.AgdaFunction} adds the five group equations, now stated over
+the setoid equality `≈`.
+
+The interpretation clauses *apply* the argument tuple (`a 0F · a 1F` rather than
+routing through `pair`{.AgdaFunction}), so each equation of `Th-Group` evaluates
+definitionally to its curried form and the satisfaction proof consumes the curried
+hypotheses directly — the same reduction discipline as in
+`eqsToGroup`{.AgdaFunction} above.
+
+```agda
+module _ (𝐷 : Setoid α ρ) where
+  open Setoid 𝐷 using ( _≈_ ) renaming ( Carrier to D ; refl to ≈refl )
+
+  setoidOpsToBareGroup : (_·_ : D → D → D) (e : D) (i : D → D)
+    → (∀ {x y u v} → x ≈ y → u ≈ v → (x · u) ≈ (y · v))
+    → (∀ {x y} → x ≈ y → i x ≈ i y)
+    → Algebra {𝑆 = Sig-Group} α ρ
+  setoidOpsToBareGroup _·_ e i ·-cong i-cong = mkAlgebra 𝐷 interp interp-congruence
+    where
+    interp : (o : OperationSymbolsOf Sig-Group) → Op (ArityOf Sig-Group o) D
+    interp ∙-Op   a = a 0F · a 1F
+    interp ε-Op   a = e
+    interp ⁻¹-Op  a = i (a 0F)
+
+    interp-congruence : ∀ o {u v : ArityOf Sig-Group o → D}
+      → (∀ j → u j ≈ v j) → interp o u ≈ interp o v
+    interp-congruence ∙-Op   eq = ·-cong (eq 0F) (eq 1F)
+    interp-congruence ε-Op   eq = ≈refl
+    interp-congruence ⁻¹-Op  eq = i-cong (eq 0F)
+
+  setoidEqsToGroup : (_·_ : D → D → D) (e : D) (i : D → D)
+    → (·-cong     : ∀ {x y u v} → x ≈ y → u ≈ v → (x · u) ≈ (y · v))
+    → (i-cong     : ∀ {x y} → x ≈ y → i x ≈ i y)
+    → (·-assoc-≈  : ∀ a b c → ((a · b) · c) ≈ (a · (b · c)))
+    → (·-idˡ-≈    : ∀ a → (e · a) ≈ a)
+    → (·-idʳ-≈    : ∀ a → (a · e) ≈ a)
+    → (·-invˡ-≈   : ∀ a → (i a · a) ≈ e)
+    → (·-invʳ-≈   : ∀ a → (a · i a) ≈ e)
+    → Group α ρ
+  setoidEqsToGroup _·_ e i ·-cong i-cong ·-assoc-≈ ·-idˡ-≈ ·-idʳ-≈ ·-invˡ-≈ ·-invʳ-≈ =
+    setoidOpsToBareGroup _·_ e i ·-cong i-cong , proof
+    where
+    proof : setoidOpsToBareGroup _·_ e i ·-cong i-cong ⊨ᵍᵖ Th-Group
+    proof assoc η = ·-assoc-≈  (η 0F) (η 1F) (η 2F)
+    proof idˡ   η = ·-idˡ-≈    (η 0F)
+    proof idʳ   η = ·-idʳ-≈    (η 0F)
+    proof invˡ  η = ·-invˡ-≈   (η 0F)
+    proof invʳ  η = ·-invʳ-≈   (η 0F)
 ```
