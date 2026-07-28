@@ -47,8 +47,6 @@ hypothesis where the FLRP program consumes it ([FLRP.KurzweilInterval][]).
 
 module Classical.Structures.Group.PartitionSubgroup where
 
-open import Agda.Primitive using () renaming ( Set to Type )
-
 -- Imports from the Agda Standard Library ---------------------------------------
 open import Data.Bool.Base      using ( if_then_else_ )
 open import Data.Empty          using ( ⊥-elim )
@@ -56,8 +54,8 @@ open import Data.Fin.Base       using ( Fin )
 open import Data.Fin.Patterns   using ( 0F ; 1F )
 open import Data.Fin.Properties using ( _≟_ )
 open import Data.Nat.Base       using ( ℕ )
-open import Data.Product        using ( _,_ ; proj₁ ; proj₂ )
-open import Level               using ( Level ; _⊔_ )
+open import Data.Product        using ( _,_ ; proj₁ )
+open import Level               using ( Level )
 open import Relation.Binary     using ( Setoid )
 open import Relation.Binary.Definitions           using ( _Respects_ )
 open import Relation.Binary.PropositionalEquality using ( _≡_ ; refl ; sym ; trans
@@ -67,7 +65,7 @@ open import Relation.Nullary.Decidable  using ( does ; dec-true ; dec-false )
 open import Relation.Unary              using ( Pred ; _∈_ ; _⊆_ )
 
 -- Imports from the Agda Universal Algebra Library ------------------------------
-open import Classical.Signatures.Group             using  ( ∙-Op ; ε-Op ; ⁻¹-Op )
+open import Classical.Signatures.Group             using  ( ∙-Op ; ⁻¹-Op )
 open import Classical.Structures.Group.Basic       using  ( Group ; module Group-Op )
 open import Classical.Structures.Group.Diagonal    using  ( module DiagonalSubgroup )
 open import Classical.Structures.Group.Power       using  ( module GroupPower )
@@ -98,7 +96,7 @@ module PartitionSubgroups (n : ℕ) (𝒢 : Group α ρ) where
     𝑷 = proj₁ ⨅ᵍ-Group
 
   open Setoid 𝔻[ 𝑮 ] using ( reflexive )
-    renaming ( _≈_ to _≈₁_ ; refl to refl₁ ; sym to sym₁ ; trans to trans₁ )
+    renaming ( _≈_ to _≈₁_ ; sym to sym₁ ; trans to trans₁ )
   open Setoid 𝔻[ 𝑷 ] using () renaming ( _≈_ to _≈ₚ_ )
   open Group-Op 𝒢 using () renaming ( ε to ε₁ )
 

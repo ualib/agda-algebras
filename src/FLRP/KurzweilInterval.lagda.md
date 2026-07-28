@@ -78,11 +78,10 @@ open import Classical.Structures.Group.PartitionSubgroup using  ( module Partiti
 open import Classical.Structures.Lattice.Dual            using  ( module LatticeDual
                                                                 ; dualLattice )
 open import Classical.Structures.Lattice.Partitions      using  ( EqLattice ; _⊑_
-                                                                ; _≈ᵖ_ ; ⊑→≤ ; ≤→⊑ )
+                                                                ; ⊑→≤ ; ≤→⊑ )
 open import FLRP.Enforceable    using  ( module UpperInterval ; IntervalIso
                                        ; GroupRepresentable )
 open import FLRP.Problem        using  ( ConIso )
-open import Order.Iso           using  ( OrderIso )
 open import Setoid.Algebras     using  ( 𝕌[_] ; 𝔻[_] )
 open import Setoid.Congruences.Certificates.Schema  using  ( ParentVec )
 ```
