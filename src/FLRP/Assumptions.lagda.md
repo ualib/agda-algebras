@@ -75,6 +75,15 @@ partition subgroup `K_π` — the surjectivity half of Kurzweil's lemma
 `KurzweilSurjectivityAt`{.AgdaFunction}, in the witness-producing form defined
 by [FLRP.KurzweilInterval][].
 
+**Entry 5**: Kurzweil's wreath interval.  For a core-free representation
+`[H , G] ≅ 𝑳` of a lattice with two distinct elements and a finite nonabelian
+simple `S`, the wreath product `U = S ≀ G` over the coset action of `G` on
+`G/H` carries the dual lattice as an upper interval, `[D Ḡ , U] ≅ 𝑳′`, over
+the diagonal-based subgroup `D Ḡ` — with the enumerated coset action packaged
+as data.  It is registered as `KurzweilWreathIntervalAt`{.AgdaFunction}, in
+the record-producing form defined by [FLRP.WreathNoGo][], whose Lemma 3.3
+consumes it twice.
+
 The module is structured as *per-assumption statement definitions* (rather than one
 monolithic record) precisely so that entries can be appended without disturbing one
 another, and downstream results take whichever entry they need as an ordinary
@@ -103,6 +112,7 @@ open import Classical.Structures.Group.Basic      using  ( Group )
 open import Classical.Structures.Lattice.Dual     using  ( dualLattice )
 open import FLRP.Enforceable                      using  ( GroupFLRP-Statement )
 open import FLRP.KurzweilInterval                 using  ( module KurzweilInterval )
+open import FLRP.WreathNoGo                       using  ( KurzweilWreathInterval )
 open import FLRP.Problem                          using  ( FLRP-Statement )
 open import FLRP.Representable                    using  ( Representableᵈ )
 open import Overture                              using  ( 𝓞 ; 𝓥 ; Signature )
@@ -351,6 +361,80 @@ remaining classical delta.
 -- finite nonabelian simple group; consumers instantiate it there.
 KurzweilSurjectivityAt : Group 0ℓ 0ℓ → ℕ → Type (lsuc 0ℓ)
 KurzweilSurjectivityAt 𝒮 n = KurzweilInterval.KurzweilSurjectivity 𝒮 n
+```
+
+#### Entry 5: Kurzweil's wreath interval
+
+**Kurzweil's wreath-interval theorem**: let `H` be a core-free subgroup of a
+finite group `G` of index `n = |G : H| ≥ 2`, let `S` be a finite nonabelian
+simple group, and let `U = S ≀ G = Sⁿ ⋊ G` be the wreath product over the
+action of `G` on the `n` cosets of `H`.  Then the interval `[D Ḡ , U]` of
+`Sub(U)` above the diagonal-based subgroup `D Ḡ` is isomorphic to the *dual*
+of `[H , G]` (H. Kurzweil, *Endliche Gruppen mit vielen Untergruppen*,
+J. reine angew. Math. 356 (1985) 140–160 — the same article behind Entries 2
+and 4; the note's Lemma 3.3 cites both this and the `[D , Sⁿ] ≅ Eq(n)′`
+special case to it without reproof).
+
++  **Meaning**.  `KurzweilWreathIntervalAt`{.AgdaFunction} `𝒮` says: every
+   core-free representation `[H , G] ≅ 𝑳` of a lattice with two distinct
+   elements extends to a `WreathIntervalData`{.AgdaRecord} package — the
+   enumerated coset action of `G` (a `RightAction`{.AgdaRecord} on
+   `Fin (2 + m)` satisfying the pointed `IsCosetAction`{.AgdaRecord}
+   specification for `H`) together with the interval isomorphism
+   `[D Ḡ , 𝒮 ≀ G] ≅ 𝑳′` — the record-producing form defined by
+   [FLRP.WreathNoGo][], which is precisely what its double-application proof
+   of Lemma 3.3 consumes.
+
++  **What is bundled, and why**.  The entry packages *two* classically
+   unproblematic steps of different characters.  The interval isomorphism is
+   the real citation: Kurzweil's theorem, whose formalization needs the
+   normal-subgroup structure theory of `Sⁿ` (Entry 4's retirement) extended
+   to the twisted product.  The existence of the enumerated coset action is
+   elementary finiteness bookkeeping — enumerate the finitely many cosets
+   and read the translation action through the enumeration — which the
+   library cannot yet perform for lack of finite coset-enumeration
+   machinery; it is *provable* mathematics awaiting infrastructure, not an
+   imported theorem, and it is bundled here so that the entry hands Lemma
+   3.3 exactly Kurzweil's setup.  What is *not* bundled is any core-freeness
+   or faithfulness claim: faithfulness of the packaged action is derived
+   from core-freeness through the proved kernel–core correspondence of
+   [Classical.Structures.Group.IndexAction][], and core-freeness of `D Ḡ`
+   is the proved preservation theorem of
+   [Classical.Structures.Group.Wreath][].
+
++  **Side conditions**.  The statement type is defined for an arbitrary
+   `𝒮 : Group 0ℓ 0ℓ`, and the classical theorem asserts the instances where
+   `𝒮` is *finite nonabelian simple* and the represented group is finite;
+   consumers must instantiate it there.  Nonabelian simplicity stays in
+   prose exactly as in Entry 4 (issue #512 owns simplicity predicates); the
+   finiteness of `G` stays in prose exactly as in the finiteness discipline
+   of [FLRP.Enforceable][] (`GroupRepresentable`{.AgdaRecord} deliberately
+   carries no finiteness).  The two-distinct-elements hypothesis is *not* a
+   side condition but a necessary one: a trivial lattice forces `H = G`, a
+   one-point coset space, and `D Ḡ = U`, where the conclusion fails.
+
++  **Status and retirement path**.  A classically proven theorem imported
+   pending formalization, with a split path: (i) the coset-enumeration half
+   retires on finite-index machinery (enumerate `G/H`, transport the
+   `CosetAction`{.AgdaModule} of [Classical.Structures.Group.GSet][] through
+   the enumeration), which is routine; (ii) the interval-isomorphism half
+   retires on the structure theory that also retires Entry 4, extended from
+   the power `Sⁿ` to the wreath `Sⁿ ⋊ G` — real group theory.  Retiring the
+   entry upgrades Lemma 3.3 (`cfIE-must-have-wreaths`{.AgdaFunction}) and
+   its corollaries with no change to consumers.
+
++  **Layer**.  Layer S, on the respecting interval `Interval≈`{.AgdaFunction}
+   of [FLRP.Enforceable][], like Entry 4; the packaged coset action is
+   `Fin`-indexed and therefore already decidable data, so a formal proof is
+   expected to land at Layer D directly.
+
+```agda
+-- Entry 5, per-instance form: every core-free representation of a lattice
+-- with two distinct elements extends to Kurzweil's wreath-interval package.
+-- Classically true for 𝒮 a finite nonabelian simple group and finite
+-- representations; consumers instantiate it there.
+KurzweilWreathIntervalAt : Group 0ℓ 0ℓ → Type (lsuc 0ℓ)
+KurzweilWreathIntervalAt 𝒮 = KurzweilWreathInterval 𝒮
 ```
 
 --------------------------------------
