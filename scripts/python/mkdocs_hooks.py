@@ -130,10 +130,56 @@ def on_files(files, config):
     return files
 
 
+# --- Landing-page corpus stats, kept current at build time -------------------
+# docs/index.md advertises "<N> literate modules, <M>k lines of Agda".  Rather
+# than let those drift, the hook recomputes them from the tree and substitutes
+# them into the `<!-- ualib:stat:… -->` markers on that one page.  It is a single
+# pass over the ~280 canonical modules (~0.5 s), run only when rendering index.md.
+SRC = Path("src")
+STAT = re.compile(r"<!-- ualib:stat:(\w+) -->.*?<!-- /ualib:stat:\1 -->")
+
+
+def _agda_loc(text: str) -> int:
+    """Lines inside the module's ```agda fenced blocks — its actual Agda code
+    (the hidden import scaffolding counts; prose and the fence lines do not)."""
+    n, in_agda = 0, False
+    for line in text.splitlines():
+        stripped = line.lstrip()
+        if stripped.startswith("```"):
+            if in_agda:
+                in_agda = False
+            elif stripped[3:].strip().lower().startswith("agda"):
+                in_agda = True
+            continue
+        if in_agda:
+            n += 1
+    return n
+
+
+def _corpus_stats() -> tuple[int, int]:
+    """(literate-module count, Agda-code lines) over src/ minus the frozen
+    Legacy/ tree — the canonical library the landing page advertises."""
+    mods = [p for p in SRC.rglob("*.lagda.md")
+            if p.relative_to(SRC).parts[0] != "Legacy"]
+    loc = sum(_agda_loc(p.read_text(encoding="utf-8")) for p in mods)
+    return len(mods), loc
+
+
+def _fill_corpus_stats(markdown: str) -> str:
+    """Replace the landing page's stat markers with freshly counted values."""
+    mods, loc = _corpus_stats()
+    values = {"modules": str(mods), "loc": f"{round(loc / 1000)}k"}
+    log.info(f"📊  corpus stats: {values['modules']} modules, {values['loc']} lines of Agda")
+    return STAT.sub(lambda m: values.get(m.group(1), m.group(0)), markdown)
+
+
 def on_page_markdown(markdown: str, *, page=None, config=None, files=None) -> str:
     global _done
     _done += 1
     where = f"[{_done}/{_total}]" if _total else f"[{_done}]"
+
+    if getattr(getattr(page, "file", None), "src_uri", None) == "index.md":
+        markdown = _fill_corpus_stats(markdown)
 
     out: list[str] = []
     in_code = False

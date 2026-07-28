@@ -27,8 +27,12 @@ every commit.
 </div>
 
 <div class="ualib-stats">
-  <div class="ualib-stat"><span class="ualib-stat__num">283</span><span class="ualib-stat__label">literate modules</span></div>
-  <div class="ualib-stat"><span class="ualib-stat__num">38k</span><span class="ualib-stat__label">lines of Agda</span></div>
+  <!-- The two figures below are recomputed from the src/ tree on every build by
+       scripts/python/mkdocs_hooks.py (via the ualib:stat markers).  The values
+       here are only a fallback for non-MkDocs (e.g. GitHub) views — do not
+       hand-tune them; run `make site` and they refresh. -->
+  <div class="ualib-stat"><span class="ualib-stat__num"><!-- ualib:stat:modules -->302<!-- /ualib:stat:modules --></span><span class="ualib-stat__label">literate modules</span></div>
+  <div class="ualib-stat"><span class="ualib-stat__num"><!-- ualib:stat:loc -->60k<!-- /ualib:stat:loc --></span><span class="ualib-stat__label">lines of Agda</span></div>
   <div class="ualib-stat"><span class="ualib-stat__num">100%</span><span class="ualib-stat__label">machine-checked</span></div>
   <div class="ualib-stat"><span class="ualib-stat__num">2.8.0</span><span class="ualib-stat__label">Agda · stdlib 2.3</span></div>
 </div>
