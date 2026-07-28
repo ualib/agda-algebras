@@ -10,34 +10,32 @@ author: "the agda-algebras development team"
 
 This is the [Classical.Structures.Group.Congruences][] module of the [Agda Universal Algebra Library][].
 
-For a group `𝒢`{.AgdaBound}, the congruences of the underlying `Sig-Group`-algebra and
-the normal subgroups of `𝒢`{.AgdaBound} are the same thing.  This module proves it, as
-an order isomorphism `Con 𝑮 ℓ ≅ NormalSubgroup ℓ`{.AgdaFunction}, and identifies the
-congruence-side notion of a **nonzero** congruence with the subgroup-side notion of a
-**nontrivial** normal subgroup.
+The normal subgroups of a group `𝒢` correspond to the congruences of the underlying
+`Sig-Group`-algebra.  This module establishes this correpondence, as an order
+isomorphism of lattices `Con 𝑮 ℓ ≅ NormalSubgroup ℓ`.
 
 The correspondence has two mutually inverse, order-preserving maps.
 
-+  **`N ↦ θ_N`** (`congruenceOf`{.AgdaFunction}).  A normal subgroup `N`{.AgdaBound}
-   maps to the relation `NormalRel N`{.AgdaFunction}, defined by
-   `x θ_N y ⟺ x ∙ y ⁻¹ ∈ N`.  We prove it is an equivalence containing the setoid
-   equality — for that, `N`{.AgdaBound} being an equality-respecting subgroup is
-   enough — and that it is compatible with the three operations of
-   `Sig-Group`{.AgdaFunction}, which is where normality is consumed.
++  **`N ↦ θ_N`** (`congruenceOf`{.AgdaFunction}).  A normal subgroup `N` maps to the
+   relation `NormalRel`{.AgdaFunction}` N`, defined by `x θ_N y ⟺ x ∙ y ⁻¹ ∈ N`.
+   We prove that this is an equivalence containing the setoid equality (for which
+   `N`{.AgdaBound} being an equality-respecting subgroup is enough) and
+   compatible with the three operations of `Sig-Group`{.AgdaFunction}, which is where
+   normality is consumed.
 
 +  **`θ ↦ N_θ`** (`normalOf`{.AgdaFunction}).  A congruence `θ`{.AgdaBound} maps to
-   the `θ`-class of the identity — `IdentityClass`{.AgdaFunction} `θ`{.AgdaBound}, the
-   predicate `{ x ∣ x θ ε }`.  We prove it is an equality-respecting subgroup and that
-   it is normal.
+   the `θ`-class of the identity; we define the latter as
+   `IdentityClass`{.AgdaFunction} `θ`{.AgdaBound}, which represents the predicate
+   `{ x ∣ x θ ε }`.  We prove it is a normal, equality-respecting subgroup.
 
 The two maps are monotone and mutually inverse — up to `≑`{.AgdaFunction} on
 congruences and mutual inclusion on normal subgroups — so together they are an
 `OrderIso`{.AgdaRecord} of [Order.Iso][].
 
 This is the bridge that `Classical.Structures.Group.MinimalNormal` was written
-without: it lets the library's `IsSubdirectlyIrreducible`{.AgdaFunction} of
-[Setoid.Congruences.Monolith][] — a statement about `Con 𝑨`{.AgdaFunction} — be applied
-to a group, whose subdirect irreducibility the group theorist states as "there is a
+without: it lets us apply the library's `IsSubdirectlyIrreducible`{.AgdaFunction} of
+[Setoid.Congruences.Monolith][] — a statement about `Con 𝑨`{.AgdaFunction} — to a
+group, whose subdirect irreducibility the group theorist states as "there is a
 least nontrivial normal subgroup".  The final step of that identification,
 `HasMonolithᵍ → HasMonolith`, is deliberately *not* taken here; see **What this module
 does not do** below.
@@ -83,7 +81,7 @@ mechanized version has to make.
    proved, so that "the correspondence is with the *normal* subgroups" is a theorem of
    the module and not a claim its prose makes on the development's behalf.
 
-**On the choice of relation.**  `x ∙ y ⁻¹ ∈ N` is the *right*-coset relation of
+**On the choice of relation**.  `x ∙ y ⁻¹ ∈ N` is the *right*-coset relation of
 `N`{.AgdaBound}, whereas `Coset._∼_`{.AgdaFunction} of
 [Classical.Structures.Group.Cosets][] — the relation [FLRP.Bridge][] uses — is the
 *left*-coset relation `x ⁻¹ ∙ y ∈ N`.  For a general subgroup the two need not agree;
@@ -91,7 +89,7 @@ for a normal subgroup they do, which we prove (`rel→coset`{.AgdaFunction},
 `coset→rel`{.AgdaFunction}) rather than assume, so that either presentation may be used
 downstream.
 
-**What this module does not do.**  Issue #508 also asks that
+**What this module does not do**.  Issue #508 also asks that
 `HasMonolithᵍ`{.AgdaFunction} of `Classical.Structures.Group.MinimalNormal` be
 transported to `HasMonolith`{.AgdaFunction}, that the `ᵍ` superscript be retired, and
 that `𝒢₂` of `FLRP.Reductions` be restated.  Those steps are held back until the pull
@@ -110,8 +108,7 @@ open import Agda.Primitive using () renaming ( Set to Type )
 
 -- Imports from the Agda Standard Library ---------------------------------------
 open import Data.Fin.Patterns             using  ( 0F ; 1F )
-open import Data.Product                  using  ( _,_ ; _×_ ; Σ-syntax
-                                                 ; proj₁ ; proj₂ )
+open import Data.Product                  using  ( _,_ ; _×_ ; Σ-syntax ; proj₁ )
 open import Level                         using  ( Level ; _⊔_ ; suc )
 open import Relation.Binary               using  ( Setoid ; IsEquivalence )
                                           renaming ( Rel to BinaryRel )
@@ -165,7 +162,7 @@ module GroupCongruences {α ρ : Level} (𝒢 : Group α ρ) where
                                        ; idˡ-law ; idʳ-law ; invˡ-law ; invʳ-law )
   open GroupProperties ⟨ 𝒢 ⟩ᵍᵖ  using  ( ε⁻¹≈ε ; ⁻¹-involutive ; ⁻¹-anti-homo-∙
                                        ; \\-leftDividesʳ )
-  open Conj 𝒢                   using  ( conj ; conj-ε ; IsNormal )
+  open Conj 𝒢                   using  ( cong-syntax ; conj-ε ; IsNormal )
 ```
 
 #### Four facts of group arithmetic
@@ -227,14 +224,14 @@ construction on either side.
 
   -- The underlying predicate of a normal subgroup ...
   set : NormalSubgroup ℓ → Pred G ℓ
-  set = proj₁
+  set (N , _ , _) = N
 
   -- ... and its two proof components.
   set-isSubgroup : (𝑵 : NormalSubgroup ℓ) → IsSubgroup 𝒢 (set 𝑵)
-  set-isSubgroup 𝑵 = proj₁ (proj₂ 𝑵)
+  set-isSubgroup (_ , isSubgroup , _) = isSubgroup
 
   set-normal : (𝑵 : NormalSubgroup ℓ) → IsNormal (set 𝑵)
-  set-normal 𝑵 = proj₂ (proj₂ 𝑵)
+  set-normal (_ , _ , isNormal) = isNormal
 
   infix 4 _≤ⁿ_ _≈ⁿ_
 
@@ -414,35 +411,30 @@ tuples, with no interpretation bridge needed — the curried accessors of
 those tuples.
 
 ```agda
-  module ConNormal {ℓ : Level} (θ : Con 𝑮 ℓ) where
+  module ConNormal {ℓ : Level} ((_θ_ , θcon) : Con 𝑮 ℓ) where
 
-    infix 4 _≐_
+    θ-refl : ∀ {x} → x θ x
+    θ-refl = IsEquivalence.refl (is-equivalence θcon)
 
-    _≐_ : BinaryRel G ℓ
-    _≐_ = proj₁ θ
-
-    ≐-refl : ∀ {x} → x ≐ x
-    ≐-refl = IsEquivalence.refl (is-equivalence (proj₂ θ))
-
-    ≐-trans : ∀ {x y z} → x ≐ y → y ≐ z → x ≐ z
-    ≐-trans = IsEquivalence.trans (is-equivalence (proj₂ θ))
+    θ-trans : ∀ {x y z} → x θ y → y θ z → x θ z
+    θ-trans = IsEquivalence.trans (is-equivalence θcon)
 
     -- A congruence relates ≈-equal elements.
-    ≐-reflexive : ∀ {x y} → x ≈ y → x ≐ y
-    ≐-reflexive = reflexive (proj₂ θ)
+    θ-reflexive : ∀ {x y} → x ≈ y → x θ y
+    θ-reflexive = reflexive θcon
 
     -- Compatibility with the curried multiplication ...
-    ≐-∙ : ∀ {x y u v} → x ≐ y → u ≐ v → (x ∙ u) ≐ (y ∙ v)
-    ≐-∙ {x} {y} {u} {v} p q =
-      is-compatible (proj₂ θ) ∙-Op {pair x u} {pair y v} (λ { 0F → p ; 1F → q })
+    θ-∙ : ∀ {x y u v} → x θ y → u θ v → (x ∙ u) θ (y ∙ v)
+    θ-∙ {x} {y} {u} {v} p q =
+      is-compatible θcon ∙-Op {pair x u} {pair y v} (λ { 0F → p ; 1F → q })
 
     -- ... and with the curried inverse.
-    ≐-⁻¹ : ∀ {x y} → x ≐ y → x ⁻¹ ≐ y ⁻¹
-    ≐-⁻¹ {x} {y} p = is-compatible (proj₂ θ) ⁻¹-Op {λ _ → x} {λ _ → y} (λ _ → p)
+    θ-⁻¹ : ∀ {x y} → x θ y → (x ⁻¹) θ (y ⁻¹)
+    θ-⁻¹ {x} {y} p = is-compatible θcon ⁻¹-Op {λ _ → x} {λ _ → y} (λ _ → p)
 
     -- Hence conjugation by any element preserves the congruence.
-    ≐-conj : ∀ g {x y} → x ≐ y → conj g x ≐ conj g y
-    ≐-conj g p = ≐-∙ (≐-∙ ≐-refl p) ≐-refl
+    θ-conj : ∀ g {x y} → x θ y → x ^ g θ y ^ g
+    θ-conj g p = θ-∙ (θ-∙ θ-refl p) θ-refl
 ```
 
 The class of the identity is an equality-respecting subgroup, and it is normal.
@@ -453,21 +445,21 @@ compatibility fact followed by a `≈`-step that renormalizes the right-hand sid
 ```agda
     -- The θ-class of the identity.
     IdentityClass : Pred G ℓ
-    IdentityClass x = x ≐ ε
+    IdentityClass x = x θ ε
 
     -- It respects the setoid equality, because a congruence contains it.
     IdentityClass-respects : IdentityClass Respects _≈_
-    IdentityClass-respects x≈y p = ≐-trans (≐-reflexive (≈sym x≈y)) p
+    IdentityClass-respects x≈y p = θ-trans (θ-reflexive (≈sym x≈y)) p
 
     IdentityClass-ε : ε ∈ IdentityClass
-    IdentityClass-ε = ≐-refl
+    IdentityClass-ε = θ-refl
 
     IdentityClass-∙ : ∀ {x y} → x ∈ IdentityClass → y ∈ IdentityClass
       → x ∙ y ∈ IdentityClass
-    IdentityClass-∙ p q = ≐-trans (≐-∙ p q) (≐-reflexive (idˡ-law ε))
+    IdentityClass-∙ p q = θ-trans (θ-∙ p q) (θ-reflexive (idˡ-law ε))
 
     IdentityClass-⁻¹ : ∀ {x} → x ∈ IdentityClass → x ⁻¹ ∈ IdentityClass
-    IdentityClass-⁻¹ p = ≐-trans (≐-⁻¹ p) (≐-reflexive ε⁻¹≈ε)
+    IdentityClass-⁻¹ p = θ-trans (θ-⁻¹ p) (θ-reflexive ε⁻¹≈ε)
 
     -- The identity class is an equality-respecting subgroup ...
     IdentityClass-isSubgroup : IsSubgroup 𝒢 IdentityClass
@@ -476,7 +468,7 @@ compatibility fact followed by a `≈`-step that renormalizes the right-hand sid
 
     -- ... and it is normal, since conjugation fixes the identity.
     IdentityClass-normal : IsNormal IdentityClass
-    IdentityClass-normal g p = ≐-trans (≐-conj g p) (≐-reflexive (conj-ε g))
+    IdentityClass-normal g p = θ-trans (θ-conj g p) (θ-reflexive (conj-ε g))
 ```
 
 The backward map of the correspondence packages the class with its two proofs.
@@ -510,7 +502,7 @@ congruence, its identity class is normal by
   congruence→normal : {ℓ : Level} (N : Pred G ℓ) → IsSubgroup 𝒢 N
     →  IsCongruence 𝑮 (NormalRel N) → IsNormal N
   congruence→normal N N-sg isCon g {x} x∈N =
-    respects  (∙ε⁻¹ (conj g x))
+    respects  (∙ε⁻¹ (x ^ g))
               (ConNormal.IdentityClass-normal (NormalRel N , isCon) g
                 (respects (≈sym (∙ε⁻¹ x)) x∈N))
     where open IsSubgroup N-sg using ( respects )
@@ -565,12 +557,12 @@ the right by `y ⁻¹` converts it back through `invʳ-law`{.AgdaFunction}.
 
     -- From (x ∙ y ⁻¹) θ ε derive x θ y.
     fwd : congruenceOf (normalOf θ) ⊑ θ
-    fwd {x} {y} p = ≐-trans  (≐-reflexive (≈sym (∙⁻¹∙ x y)))
-                             (≐-trans (≐-∙ p ≐-refl) (≐-reflexive (idˡ-law y)))
+    fwd {x} {y} p = θ-trans  (θ-reflexive (≈sym (∙⁻¹∙ x y)))
+                             (θ-trans (θ-∙ p θ-refl) (θ-reflexive (idˡ-law y)))
 
     -- From x θ y derive (x ∙ y ⁻¹) θ ε.
     bwd : θ ⊑ congruenceOf (normalOf θ)
-    bwd {x} {y} p = ≐-trans (≐-∙ p (≐-refl {y ⁻¹})) (≐-reflexive (invʳ-law y))
+    bwd {x} {y} p = θ-trans (θ-∙ p (θ-refl {y ⁻¹})) (θ-reflexive (invʳ-law y))
 ```
 
 On normal subgroups, `N_{θ_N} ≈ⁿ N`: an element `x`{.AgdaBound} lies in `N_{θ_N}` when
@@ -687,7 +679,7 @@ proof usually wants one of them directly rather than the negated form.
   con-below-trivial→below-diagonal : (θ : Con 𝑮 ℓ)
     →  BelowTrivial (set (normalOf θ)) → BelowDiagonal 𝑮 θ
   con-below-trivial→below-diagonal θ N⊆1 {x} {y} p =
-    ∙⁻¹≈ε→≈ (N⊆1 (≐-trans (≐-∙ p (≐-refl {y ⁻¹})) (≐-reflexive (invʳ-law y))))
+    ∙⁻¹≈ε→≈ (N⊆1 (θ-trans (θ-∙ p (θ-refl {y ⁻¹})) (θ-reflexive (invʳ-law y))))
     where open ConNormal θ
 ```
 
