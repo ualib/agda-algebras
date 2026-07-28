@@ -80,6 +80,16 @@ Two standing warnings apply to everything under this namespace.
    join least-ness proved against arbitrary equivalence relations via bounded
    alternating chains (issue #484; session note `docs/notes/flrp-l7-eq6.md`).
 
++  [FLRP.WreathNoGo][] — the RP-4 **wreath no-go**: the note's Lemma 3.3 by
+   the double Kurzweil construction (a property cf-IE by a group-representable
+   lattice has wreath products `S ≀ Ū` over every admissible base), with the
+   core-freeness preservation proved in [Classical.Structures.Group.Wreath][]
+   and the coset action's faithfulness derived from core-freeness; the
+   omission corollary for wreath-omitting classes; the joint-wreath-richness
+   constraint on a contradictory pair; and the statement of RP-4's dead-end
+   question, reduced formally to statement (C).  Consumes Entry 5 of the
+   assumptions registry; design note `docs/notes/flrp-rp4-wreath.md`.
+
 +  [FLRP.Reductions][] — the RP-2 **enforcement catalog**: the literature's
    "an interval of this shape forces a group of this kind" theorems, each recast
    as a precise (cf-/min-)IE statement, with the vacuity discipline tracked
@@ -112,6 +122,7 @@ open import FLRP.Assumptions    public
 open import FLRP.Closure        public
 open import FLRP.KurzweilInterval public
 open import FLRP.LayerBridge    public
+open import FLRP.WreathNoGo     public
 open import FLRP.Certificates   public
 open import FLRP.L7EqSix        public
 ```
