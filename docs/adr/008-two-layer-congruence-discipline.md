@@ -22,18 +22,18 @@ Keep the semantic congruence layer unchanged; build a first-class decidable laye
 
 ## Consequences
 
-+  **Positive.**  Certificates (WP-6) and positive representability results become constructive and computable; in particular the two-element chain, unprovably representable at Layer S under `--safe`, is representable at Layer D with no axioms.
-+  **Positive.**  The classical content of "finite algebra" is auditable at a single site rather than smeared through the development, implementing the assumption-registry discipline of the FLRP roadmap.
-+  **Positive.**  Layer D is arguably the faithful formalization of the informal FLRP: the finite algebras of Pálfy–Pudlák and of UACalc computations are exactly the finite finitary objects with concretely presented congruences.
-+  **Negative.**  Some statements exist in both S and D forms and must be kept in sync, and the bridge lemma is a standing maintenance obligation.
-+  **Negative.**  The constructive completeness proof enumerates exponentially many candidate tables; it exists to discharge the theorem, and practical congruence lists are supplied by certificates instead.
-+  **Neutral.**  The WP-1 no-go theorem remains true and useful at Layer S; nothing at Layer D contradicts it.
++  **Positive**.  Certificates (WP-6) and positive representability results become constructive and computable; in particular the two-element chain, unprovably representable at Layer S under `--safe`, is representable at Layer D with no axioms.
++  **Positive**.  The classical content of "finite algebra" is auditable at a single site rather than smeared through the development, implementing the assumption-registry discipline of the FLRP roadmap.
++  **Positive**.  Layer D is arguably the faithful formalization of the informal FLRP: the finite algebras of Pálfy–Pudlák and of UACalc computations are exactly the finite finitary objects with concretely presented congruences.
++  **Negative**.  Some statements exist in both S and D forms and must be kept in sync, and the bridge lemma is a standing maintenance obligation.
++  **Negative**.  The constructive completeness proof enumerates exponentially many candidate tables; it exists to discharge the theorem, and practical congruence lists are supplied by certificates instead.
++  **Neutral**.  The WP-1 no-go theorem remains true and useful at Layer S; nothing at Layer D contradicts it.
 
 ## Alternatives considered
 
-+  **Restrict `Con` to Bool-valued or generator-presented relations.**  Rejected: kernels of homomorphisms into arbitrary setoids would cease to be congruences, breaking quotients, the isomorphism theorems, and HSP, and infinite algebras would lose their congruence theory entirely.
-+  **Adopt classical axioms globally.**  Rejected: the library is `--safe` and postulate-free by policy, and machine-checked constructive content is a stated corpus goal (M8).
-+  **Work only at Layer S, parameterizing every result by classical hypotheses.**  Rejected: every computation (certificate checking, small worked examples) would then carry a classical hypothesis it does not need; Layer D keeps the computable fragment axiom-free.
++  **Restrict `Con` to Bool-valued or generator-presented relations**.  Rejected: kernels of homomorphisms into arbitrary setoids would cease to be congruences, breaking quotients, the isomorphism theorems, and HSP, and infinite algebras would lose their congruence theory entirely.
++  **Adopt classical axioms globally**.  Rejected: the library is `--safe` and postulate-free by policy, and machine-checked constructive content is a stated corpus goal (M8).
++  **Work only at Layer S, parameterizing every result by classical hypotheses**.  Rejected: every computation (certificate checking, small worked examples) would then carry a classical hypothesis it does not need; Layer D keeps the computable fragment axiom-free.
 
 ## References
 

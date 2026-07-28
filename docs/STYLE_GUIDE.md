@@ -437,7 +437,7 @@ When you *do* introduce new notation, add it in a table above in the same PR.
 variable 𝓞 𝓥 : Level
 ```
 
-**Using `𝓞` or `𝓥` for anything else is a bug.**
+**Using `𝓞` or `𝓥` for anything else is a bug**.
 
 Every signature-parametrized module imports these by name from `Overture`.  Never re-declare them as `variable` in a downstream module.
 

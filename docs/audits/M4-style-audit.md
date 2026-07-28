@@ -32,7 +32,7 @@ rg -n '∥' src --glob '!src/Legacy/**'   # 132 hits / 32 files
 
 The migration target is the *bracket projection* `∣_∣` / `∥_∥` defined in `Overture.Basic` (and the prose that names it), per the `STYLE_GUIDE` Projections table, which already marks `∣_∣` "deprecated: replace with `proj₁` in v3.0".  The glyph `∣` (U+2223 DIVIDES) is overloaded, so the raw count includes false positives that must **not** be rewritten.
 
-**Carve-outs (legitimate non-projection uses of the glyph; leave untouched).**
+**Carve-outs (legitimate non-projection uses of the glyph; leave untouched)**.
 
 +  `_∣≈_` — the compatibility predicate defined in `Setoid.Congruences.Basic` (`𝑨 ∣≈ R`).  18 occurrences across 8 files (`rg -n '∣≈' src --glob '!src/Legacy/**'`): `Setoid/Congruences/{Basic,Lattice,Generation,CompleteLattice}`, `Setoid/Homomorphisms/Kernels`, `Examples/Setoid/FiniteQuotient`, `Examples/FunctionTypeBijections`, `Overture/Relations`.
 +  `Setoid/Complexity/CSP.lagda.md` — all 9 `∣` are mathematical prose, not Agda: cardinality `∣ 𝑎𝑠 ∣` and the polymorphism notation `∣: ⃖ R`, `F ⃗ ∣:`.  This file imports no bracket projection.
@@ -48,12 +48,12 @@ rg -n '∣ [^∣]* ∣' src --glob '!src/Legacy/**' --glob '!src/Setoid/Complexi
 evaluated against the definition site and the `_∣≈_` operator only.  This
 refinement is the kind of guide-vs-reality gap #369 exists to reconcile.
 
-**Substitution rules.**
+**Substitution rules**.
 
 +  Signature components: `∣ 𝑆 ∣` → `OperationSymbolsOf 𝑆`, `∥ 𝑆 ∥ f` → `ArityOf 𝑆 f` (the long forms from `Overture.Signatures`, already canonical in `Classical/`).
 +  All other Σ-projections: `∣ e ∣` → `proj₁ e`, `∥ e ∥` → `proj₂ e` (stdlib `Data.Product`).
 
-**Definition and special-case sites (handle individually, not by sed).**
+**Definition and special-case sites (handle individually, not by sed)**.
 
 | File | Role | Action |
 |------|------|--------|
@@ -63,11 +63,11 @@ refinement is the kind of guide-vs-reality gap #369 exists to reconcile.
 | `Setoid/Homomorphisms/Properties.lagda.md` | dead `renaming (proj₁ to fst ; proj₂ to snd)` | collapse the no-op rename while migrating (see § 2b) |
 | `Demos/HSP.lagda.md:126-129` | self-contained local `∣_∣` / `∥_∥` (= `fst` / `snd`) | judgment call — see note below |
 
-**`Demos/HSP.lagda.md` (self-contained).**  HSP is a single-file reproduction of the Birkhoff HSP theorem and defines its own `∣_∣` / `∥_∥` (lines 126-129) and `_̂_` (line 378) rather than importing them, so it trips no deprecation warning. #267 nonetheless lists `Demos/` as a live tree in scope, and the #367/#368 acceptance greps do not exempt it, so the default is to migrate HSP's local definitions and 61 `∣` / 26 `∥` / 13 `_̂_` call-sites to `proj₁` / `proj₂` / `_^_`.  Because this rewrites a pedagogical artifact that mirrors a published paper, it is called out here for an explicit decision before #367/#368 touch it.
+**`Demos/HSP.lagda.md` (self-contained)**.  HSP is a single-file reproduction of the Birkhoff HSP theorem and defines its own `∣_∣` / `∥_∥` (lines 126-129) and `_̂_` (line 378) rather than importing them, so it trips no deprecation warning. #267 nonetheless lists `Demos/` as a live tree in scope, and the #367/#368 acceptance greps do not exempt it, so the default is to migrate HSP's local definitions and 61 `∣` / 26 `∥` / 13 `_̂_` call-sites to `proj₁` / `proj₂` / `_^_`.  Because this rewrites a pedagogical artifact that mirrors a published paper, it is called out here for an explicit decision before #367/#368 touch it.
 
 **Decision**. Leave `Demos/HSP.lagda.md` untouched as a frozen historical artifact so that references in the paper are not broken.
 
-**Import sites bringing in `∣_∣` / `∥_∥` (each needs per-file `using`-list surgery).**
+**Import sites bringing in `∣_∣` / `∥_∥` (each needs per-file `using`-list surgery)**.
 
 `Demos/ContraX`, `Overture/Signatures`, `Overture/Terms`, `Setoid/Algebras/Basic`, `Setoid/Algebras/Products`, `Setoid/Congruences/Basic`, `Setoid/Congruences/Generation`, `Setoid/Functions/Inverses`, `Setoid/Homomorphisms/{Basic,Factor,HomomorphicImages,Isomorphisms,Kernels,Noether,Products,Properties}`, `Setoid/Relations/Quotients`, `Setoid/Subalgebras/{Properties,Subalgebras,Subuniverses}`, `Setoid/Terms/{Basic,Operations,Properties}`.
 

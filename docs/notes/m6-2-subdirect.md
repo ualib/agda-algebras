@@ -88,16 +88,16 @@ home: they were posed in the session's kick-off text, which was never committed,
 "the brief" that earlier drafts of this note cited is not a document anyone can open.
 Cite this section instead.
 
-+  **Option (a) — assume it, precisely.**  State the theorem relative to an explicit
++  **Option (a) — assume it, precisely**.  State the theorem relative to an explicit
    choice principle taken as a *module parameter*, so the assumption is named and
    type-checked and nothing is postulated.  **Taken**, in M6-2 (#272, PR #418); see the
    next section.
-+  **Option (b) — discharge it where it is constructive.**  In the finite/decidable
++  **Option (b) — discharge it where it is constructive**.  In the finite/decidable
    case, where `≈` is decidable, find the maximal separating congruence by search over a
    finite congruence lattice, and so *prove* what option (a) assumes.  **Done later**, in
    M6-8 (#419): `Setoid.Subalgebras.Subdirect.Finite`, design note
    [`m6-8-finite-birkhoff.md`](m6-8-finite-birkhoff.md).
-+  **Option (c) — state and defer.**  Record the theorem as a checked `Type` without
++  **Option (c) — state and defer**.  Record the theorem as a checked `Type` without
    proving it, in the style of `FLRP-Statement` of `FLRP.Problem`.  **Not taken**: (a)
    both states the assumption *and* proves the theorem from it, which (c) does not.
 

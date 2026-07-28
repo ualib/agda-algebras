@@ -149,7 +149,7 @@ recorded so a successor can pick it up.
 `Setoid.Varieties.Maltsev.Permutability` (next to its statement); see the design note
 [`m6-4-free-bridge.md`](m6-4-free-bridge.md).  The plan below is the recipe they execute.
 
-*A congruence-permutable variety has a Maltsev term.*  Construction (Burris–Sankappanavar
+*A congruence-permutable variety has a Maltsev term*.  Construction (Burris–Sankappanavar
 Thm. 12.2): work in the relatively free algebra `𝔽 = 𝔽[ Fin 3 ]` on three generators
 `x , y , z` (`Setoid.Varieties.SoundAndComplete`), which is a model of `ℰ`
 (`satisfies`), hence congruence-permutable by hypothesis.  Take the principal
@@ -179,7 +179,7 @@ Maltsev term has three variables — recorded here to forestall confusion.)
 
 ### Jónsson's theorem (`Jonsson-Statement`)
 
-*A variety is CD iff it has Jónsson terms for some `n`.*  The "terms ⟹ CD" direction is
+*A variety is CD iff it has Jónsson terms for some `n`* .  The "terms ⟹ CD" direction is
 the lattice computation that the Jónsson chain forces the distributive inequality
 `θ ∧ (φ ∨ ψ) ≤ (θ ∧ φ) ∨ (θ ∧ ψ)`; the "CD ⟹ terms" direction is the free-algebra
 construction on three generators, reading the `dᵢ` off the congruence
@@ -188,7 +188,7 @@ same free-algebra/`Cg`-vs-derivability bridge that the Maltsev converse needs.
 
 ### Day's theorem (`Day-Statement`)
 
-*A variety is CM iff it has Day terms for some `n`.*  Same shape as Jónsson, with the
+*A variety is CM iff it has Day terms for some `n`*.  Same shape as Jónsson, with the
 quaternary Day chain and the modular law in place of distributivity; this is the
 direction of most interest to the FLRP, and is the natural next concrete target once the
 free-algebra/`Cg` bridge is in place.

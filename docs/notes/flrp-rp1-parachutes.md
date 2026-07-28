@@ -103,7 +103,7 @@ No result in this phase is postulated.  Four hypotheses are threaded as ordinary
 
 +  **`Statement-C` of `FLRP.Enforceable`** is phrased over `FiniteLattice` families and is therefore not literally the conclusion proved here (which is phrased over `Lattice` families with explicit extremum and decision data).  The two differ exactly by the finite-presentation transport of § 4.  Reconciling them is bookkeeping, and worth doing when that transport lands.
 
-+  **The parachute of a family of `FiniteLattice`s as a `FiniteLattice`.**  See § 4; this is the transport that closes the previous two items at once.
++  **The parachute of a family of `FiniteLattice`s as a `FiniteLattice`**.  See § 4; this is the transport that closes the previous two items at once.
 
 ## 6.  Wreath Lemma 3.3 — deferred to RP-4
 
