@@ -27,7 +27,8 @@ See [`docs/GITHUB_PROJECT.md`](docs/GITHUB_PROJECT.md) for the milestone roadmap
 git clone https://github.com/ualib/agda-algebras.git
 cd agda-algebras
 nix develop
-make check
+make check        # the library and the frozen Legacy tree
+make check-all    # ... plus the FLRP certificate census (slower)
 ```
 
 This pins Agda 2.8.0 and standard-library 2.3 automatically via the repository's flake.  See [`INSTALL.md`](INSTALL.md) for a walkthrough and non-Nix alternatives.
@@ -45,7 +46,7 @@ Standard [fork-and-pull-request](https://gist.github.com/Chaser324/ce0505fbed06b
 1.  Fork the repository to your GitHub account.
 2.  Clone your fork and create a topic branch: `git checkout -b NNN-short-description`, where `NNN` is the issue number you're addressing.
 3.  Make commits that each do one coherent thing.  Each commit message should have a single-line summary followed by an explanatory paragraph when the change is non-trivial.  Reference the issue in the commit message with `Part of #NNN`.
-4.  Run `make check` locally.  Your PR must type-check.
+4.  Run `make check` locally.  Your PR must type-check.  If you touched anything under `src/FLRP/Certificates/` or the certificate checkers it uses (`FLRP.Certificates`, `Setoid.Congruences.Certificates`), run `make check-all` — the certificate census is a separate tier with its own CI job, so `make check` alone will not catch breakage there.
 5.  Open a pull request against `master`.  The PR title should match the issue title (e.g. `[M1-3] Add community-health files`).
 6.  Be prepared to iterate based on review feedback.
 

@@ -8,16 +8,29 @@
 # agda-algebras.agda-lib.
 #
 # Primary targets:
-#   make              Regenerate src/Everything.agda from the current tree.
-#   make check        Type-check the entire library (what CI runs).
-#   make test         Alias for `make check`.
-#   make site         Build the MkDocs documentation site (in ./site/).
-#   make serve        Preview the docs site locally (http://127.0.0.1:8000).
-#   make profile      Type-check with Agda profiling enabled.
-#   make clean        Remove .agdai artifacts and the generated Everything.
+#   make                     Regenerate the aggregators from the current tree.
+#   make check               Type-check the library and the Legacy tree.
+#   make check-certificates  Type-check the small-lattice certificate census.
+#   make check-all           Both of the above — everything under src/.
+#   make test                Alias for `make check`.
+#   make site                Build the MkDocs documentation site (in ./site/).
+#   make serve               Preview the docs site locally (http://127.0.0.1:8000).
+#   make profile             Type-check with Agda profiling enabled.
+#   make clean               Remove .agdai artifacts and the generated aggregators.
+#
+# The three tiers (issue #515):
+#   +  Everything.agda              the canonical library.
+#   +  EverythingLegacy.agda        the frozen Legacy/ tree.
+#   +  EverythingCertificates.agda  the small-lattice representation
+#      certificates of `src/FLRP/Certificates/SmallLatticeReps/` — generated
+#      artifacts specific to the FLRP research track and the fin-lat-rep
+#      manuscript, which cost 44% of a clean full type-check (175 s of 395 s,
+#      measured with `agda --profile=modules`).  No module imports them, so
+#      they are checked by their own aggregator and their own CI job rather
+#      than on every `make check`.  `make check-all` is the whole tree.
 #
 # Notes:
-#   +  Everything.agda is a PHONY target — always regenerated — so that
+#   +  The aggregators are PHONY targets — always regenerated — so that
 #      adding or removing a module is picked up without the user having
 #      to remember.
 #   +  We use `find` rather than `git ls-tree` so that untracked-but-present
@@ -28,7 +41,7 @@
 #      where a path segment happens to contain the substring `agda`.
 # =============================================================================
 
-.PHONY: default all check test clean site serve serve-full html agda-md site-full profile project-plan unused-imports unused-imports-test check-links check-links-test gen-links flrp-test flrp-slr gap-smoke Everything.agda
+.PHONY: default all check check-certificates check-all test clean site serve serve-full html agda-md site-full profile project-plan unused-imports unused-imports-test check-links check-links-test gen-links flrp-test flrp-slr gap-smoke Everything.agda EverythingLegacy.agda EverythingCertificates.agda
 
 # -- Configuration -----------------------------------------------------------
 SRCDIR    := src
@@ -37,12 +50,29 @@ RTS_OPTS  := +RTS -M6G -A128M -RTS
 AGDA_OPTS ?=
 REPO      ?= ualib/agda-algebras
 
+# The certificate census: generated representation certificates for the FLRP
+# research track (issue #515).  Excluded from Everything.agda and checked by
+# EverythingCertificates.agda instead.
+CERTDIR   := $(SRCDIR)/FLRP/Certificates/SmallLatticeReps
+
 # -- Targets -----------------------------------------------------------------
 
-default: Everything.agda
+# Bare `make` refreshes every tier's index, so that adding or removing a module
+# anywhere is picked up in one command.  The individual check targets depend on
+# just the aggregators they need.
+default: Everything.agda EverythingLegacy.agda EverythingCertificates.agda
 
-# The canonical library aggregator.  Excludes Legacy/.  Feeds HTML rendering
-# and is the natural entry point for downstream consumers.
+# On the OPTIONS pragma the three aggregators emit: `--exact-split` is
+# deliberately absent.  It constrains *definitions* (it requires a definition's
+# clauses to hold as definitional equalities), and an aggregator contains
+# nothing but imports, so the flag has nothing to check here.  It is neither
+# infective nor coinfective, so omitting it does not weaken the modules being
+# imported: each library module carries `--exact-split` in its own header and is
+# checked under it.  All three aggregators therefore share one pragma.
+
+# The canonical library aggregator.  Excludes Legacy/ and the certificate
+# census (see the tier note in the header).  Feeds HTML rendering and is the
+# natural entry point for downstream consumers.
 Everything.agda:
 	@echo "target: $@"
 	@{ \
@@ -54,7 +84,9 @@ Everything.agda:
 	      \( -name '*.lagda.md' -o -name '*.agda' \) \
 	      ! -name 'Everything.agda' \
 	      ! -name 'EverythingLegacy.agda' \
+	      ! -name 'EverythingCertificates.agda' \
 	      ! -path '$(SRCDIR)/Legacy/*' \
+	      ! -path '$(CERTDIR)/*' \
 	    | sed -e 's|^$(SRCDIR)/||' \
 	          -e 's|\.lagda\.md$$||' \
 	          -e 's|\.agda$$||' \
@@ -91,10 +123,51 @@ EverythingLegacy.agda:
 	} > $(SRCDIR)/EverythingLegacy.agda
 	@echo "  wrote $(SRCDIR)/EverythingLegacy.agda ($$(grep -c '^import' $(SRCDIR)/EverythingLegacy.agda) modules)"
 
+# CI gate over the certificate census.  These are generated representation
+# certificates for the FLRP research track and the fin-lat-rep manuscript: no
+# module imports them, they are 44% of a clean full type-check, and they grow
+# with the census (issues #483, #485).  They are checked by their own target and
+# their own CI job so that `make check` stays fast for everyone else, and they
+# are still rendered to HTML so the published site keeps their pages.
+# See issue #515.
+EverythingCertificates.agda:
+	@echo "target: $@"
+	@{ \
+	  echo "{-# OPTIONS --cubical-compatible --safe #-}"; \
+	  echo ""; \
+	  echo "-- This file exists to gate CI on the small-lattice certificate census."; \
+	  echo "-- It is NOT part of the canonical library aggregator; see issue #515."; \
+	  echo ""; \
+	  echo "module EverythingCertificates where"; \
+	  echo ""; \
+	  find $(CERTDIR) \
+	      \( -name '*.lagda.md' -o -name '*.agda' \) \
+	    | sed -e 's|^$(SRCDIR)/||' \
+	          -e 's|\.lagda\.md$$||' \
+	          -e 's|\.agda$$||' \
+	          -e 's|/|.|g' \
+	          -e 's|^|import |' \
+	    | LC_ALL=C sort; \
+	} > $(SRCDIR)/EverythingCertificates.agda
+	@echo "  wrote $(SRCDIR)/EverythingCertificates.agda ($$(grep -c '^import' $(SRCDIR)/EverythingCertificates.agda) modules)"
+
 check test: Everything.agda EverythingLegacy.agda
 	@echo "target: $@"
 	$(AGDA) $(RTS_OPTS) $(AGDA_OPTS) $(SRCDIR)/Everything.agda
 	$(AGDA) $(RTS_OPTS) $(AGDA_OPTS) $(SRCDIR)/EverythingLegacy.agda
+
+# The certificate tier on its own (what the dedicated CI job runs).
+check-certificates: EverythingCertificates.agda
+	@echo "target: $@"
+	$(AGDA) $(RTS_OPTS) $(AGDA_OPTS) $(SRCDIR)/EverythingCertificates.agda
+
+# Everything under src/, in one command.  Use this before a release, and when
+# touching anything the certificates depend on (the checkers of
+# `Setoid.Congruences.Certificates` and `FLRP.Certificates`).
+check-all:
+	@echo "target: $@"
+	$(MAKE) check
+	$(MAKE) check-certificates
 
 # Build the documentation site (ADR-007).  MkDocs reads the `.lagda.md`
 # sources directly via scripts/python/mkdocs_gen_library.py.  Output goes to
@@ -136,17 +209,22 @@ serve-full:
 # hyperlinks, Everything.html as the index.  Standalone in ./html (gitignored);
 # gen-files also publishes it at /classic/ and points the highlighted code's
 # stdlib links there.  Type-checks (warm .agdai cache makes it quick).
-html: Everything.agda EverythingLegacy.agda
+# All three tiers are rendered: the published site must keep every page it has
+# today, certificates included, even though they are not in the library
+# aggregator (issue #515).
+html: Everything.agda EverythingLegacy.agda EverythingCertificates.agda
 	@echo "target: $@"
 	$(AGDA) $(RTS_OPTS) $(AGDA_OPTS) --html --html-dir=html $(SRCDIR)/Everything.agda
 	$(AGDA) $(RTS_OPTS) $(AGDA_OPTS) --html --html-dir=html $(SRCDIR)/EverythingLegacy.agda
+	$(AGDA) $(RTS_OPTS) $(AGDA_OPTS) --html --html-dir=html $(SRCDIR)/EverythingCertificates.agda
 
 # Highlighted Markdown for embedding in the MkDocs pages (#3a).
-agda-md: Everything.agda EverythingLegacy.agda
+agda-md: Everything.agda EverythingLegacy.agda EverythingCertificates.agda
 	@echo "target: $@"
 	rm -rf $(AGDA_HTML)/md
 	$(AGDA) $(RTS_OPTS) $(AGDA_OPTS) --html --html-highlight=code --html-dir=$(AGDA_HTML)/md $(SRCDIR)/Everything.agda
 	$(AGDA) $(RTS_OPTS) $(AGDA_OPTS) --html --html-highlight=code --html-dir=$(AGDA_HTML)/md $(SRCDIR)/EverythingLegacy.agda
+	$(AGDA) $(RTS_OPTS) $(AGDA_OPTS) --html --html-highlight=code --html-dir=$(AGDA_HTML)/md $(SRCDIR)/EverythingCertificates.agda
 
 # The fully-featured published site.  Recursive make keeps the steps ordered
 # even under `make -j`.
@@ -175,7 +253,8 @@ profile: Everything.agda
 clean:
 	@echo "target: $@"
 	find . -name '*.agdai' -delete
-	rm -f $(SRCDIR)/Everything.agda $(SRCDIR)/EverythingLegacy.agda
+	rm -f $(SRCDIR)/Everything.agda $(SRCDIR)/EverythingLegacy.agda \
+	      $(SRCDIR)/EverythingCertificates.agda
 	rm -rf site html .agda-html .cache
 
 # Regenerate the issue listings in docs/GITHUB_PROJECT.md from current
