@@ -187,6 +187,7 @@
 [Classical.Structures.Group.Dedekind]: /Classical/Structures/Group/Dedekind/
 [Classical.Structures.Group.GSet]: /Classical/Structures/Group/GSet/
 [Classical.Structures.Group.NormalCore]: /Classical/Structures/Group/NormalCore/
+[Classical.Structures.Group.NormalSubgroupLattice]: /Classical/Structures/Group/NormalSubgroupLattice/
 [Classical.Structures.Group.Product]: /Classical/Structures/Group/Product/
 [Classical.Structures.Group.SubgroupLattice]: /Classical/Structures/Group/SubgroupLattice/
 [Classical.Structures.Group.Subgroups]: /Classical/Structures/Group/Subgroups/
@@ -564,6 +565,7 @@
 [Classical/Structures/Group/Dedekind.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Group/Dedekind.lagda.md
 [Classical/Structures/Group/GSet.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Group/GSet.lagda.md
 [Classical/Structures/Group/NormalCore.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Group/NormalCore.lagda.md
+[Classical/Structures/Group/NormalSubgroupLattice.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Group/NormalSubgroupLattice.lagda.md
 [Classical/Structures/Group/Product.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Group/Product.lagda.md
 [Classical/Structures/Group/SubgroupLattice.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Group/SubgroupLattice.lagda.md
 [Classical/Structures/Group/Subgroups.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Group/Subgroups.lagda.md

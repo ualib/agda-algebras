@@ -26,6 +26,7 @@ open import Classical.Structures.Group.Cosets public
 open import Classical.Structures.Group.Dedekind public
 open import Classical.Structures.Group.GSet public
 open import Classical.Structures.Group.NormalCore public
+open import Classical.Structures.Group.NormalSubgroupLattice public
 open import Classical.Structures.Group.Product public
 open import Classical.Structures.Group.Subgroups public
 open import Classical.Structures.Group.SubgroupLattice public

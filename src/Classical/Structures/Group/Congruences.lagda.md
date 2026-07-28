@@ -11,8 +11,19 @@ author: "the agda-algebras development team"
 This is the [Classical.Structures.Group.Congruences][] module of the [Agda Universal Algebra Library][].
 
 The normal subgroups of a group `𝒢` correspond to the congruences of the underlying
-`Sig-Group`-algebra.  This module establishes this correpondence, as an order
-isomorphism of lattices `Con 𝑮 ℓ ≅ NormalSubgroup ℓ`.
+`Sig-Group`-algebra.  This module establishes that correspondence as an **order
+isomorphism of posets**, between the congruence poset `(Con 𝑮 ℓ , ≑ , ⊑)` of
+[Setoid.Congruences.Lattice][] and the poset `(NormalSubgroup ℓ , ≈ⁿ , ≤ⁿ)` of normal
+subgroups under inclusion, which is built here.
+
+Both sides carry more structure than a poset: at the absorbing level `L` the
+congruences form a complete lattice ([Setoid.Congruences.CompleteLattice][]).  The
+corresponding **isomorphism of complete lattices** is
+[Classical.Structures.Group.NormalSubgroupLattice][], which stands on the poset
+isomorphism proved here.  The split is deliberate: the correspondence below holds at
+*every* relation level, whereas a lattice needs the single absorbing level at which
+the join — a *generated* congruence — stays put, so bundling them would have narrowed
+the theorem to the level the lattice happens to need.
 
 The correspondence has two mutually inverse, order-preserving maps.
 
@@ -44,17 +55,19 @@ Four points about the formal statement deserve to be recorded up front, because 
 case the informal slogan "congruences are normal subgroups" conceals a choice that the
 mechanized version has to make.
 
-+  **The correspondence is level-uniform, not level-collapsing**.  It is an
-   isomorphism `Con 𝑮 ℓ ≅ NormalSubgroup ℓ`{.AgdaFunction} for each *fixed* relation
-   level `ℓ`{.AgdaBound}, since `NormalRel`{.AgdaFunction} of a `Pred G ℓ` is a
-   `BinaryRel G ℓ` and `IdentityClass`{.AgdaFunction} of a `Con 𝑮 ℓ` is a `Pred G ℓ`.
-   It says nothing about congruences at one level versus normal subgroups at another.
-   The instance the monolith needs is `ℓ = ρ`, where the congruence side is the `Con 𝑮 ρ`
-   of `IsMonolith`{.AgdaRecord} and the subgroup side contains
-   `trivialSubgroup`{.AgdaFunction}, itself a `Subgroup ρ`.  A consumer that wants to
-   compose with the subgroup *lattice* must instead take `ℓ = α ⊔ ℓ₀`, the predicate
-   level `L` at which `GroupSublattice 𝒢 ℓ₀`{.AgdaModule} of
-   [Classical.Structures.Group.SubgroupLattice][] holds its elements.
++  **The correspondence is level-uniform, not level-collapsing**.  It relates
+   `Con 𝑮 ℓ`{.AgdaFunction} to `NormalSubgroup ℓ`{.AgdaFunction} for each *fixed*
+   relation level `ℓ`{.AgdaBound}, since `NormalRel`{.AgdaFunction} of a `Pred G ℓ` is
+   a `BinaryRel G ℓ` and `IdentityClass`{.AgdaFunction} of a `Con 𝑮 ℓ` is a
+   `Pred G ℓ`.  It says nothing about congruences at one level versus normal subgroups
+   at another.  Three instances matter downstream: `ℓ = ρ`, where the congruence side
+   is the `Con 𝑮 ρ` of `IsMonolith`{.AgdaRecord} and the subgroup side contains
+   `trivialSubgroup`{.AgdaFunction}, itself a `Subgroup ρ`; `ℓ = α ⊔ ρ ⊔ ℓ₀`, the
+   absorbing level of the congruence lattice, which is where
+   [Classical.Structures.Group.NormalSubgroupLattice][] instantiates it; and
+   `ℓ = α ⊔ ℓ₀`, the predicate level `L` at which `GroupSublattice 𝒢 ℓ₀`{.AgdaModule}
+   of [Classical.Structures.Group.SubgroupLattice][] holds its elements, for a
+   consumer that wants to compose with the *subgroup* lattice.
 
 +  **Equality on each side is mutual containment, not propositional equality**.  On the
    congruence side this is `_≑_`{.AgdaFunction} of [Setoid.Congruences.Lattice][], for
@@ -108,10 +121,12 @@ open import Agda.Primitive using () renaming ( Set to Type )
 
 -- Imports from the Agda Standard Library ---------------------------------------
 open import Data.Fin.Patterns             using  ( 0F ; 1F )
-open import Data.Product                  using  ( _,_ ; _×_ ; Σ-syntax ; proj₁ )
+open import Data.Product                  using  ( _,_ ; _×_ ; Σ-syntax ; proj₁ ; swap )
 open import Level                         using  ( Level ; _⊔_ ; suc )
-open import Relation.Binary               using  ( Setoid ; IsEquivalence )
+open import Relation.Binary               using  ( Setoid ; IsEquivalence
+                                                 ; IsPartialOrder )
                                           renaming ( Rel to BinaryRel )
+open import Relation.Binary.Bundles       using  ( Poset )
 open import Relation.Binary.Definitions   using  ( _Respects_ )
 open import Relation.Nullary              using  ( ¬_ )
 open import Relation.Unary                using  ( Pred ; _∈_ ; _⊆_ )
@@ -162,7 +177,7 @@ module GroupCongruences {α ρ : Level} (𝒢 : Group α ρ) where
                                        ; idˡ-law ; idʳ-law ; invˡ-law ; invʳ-law )
   open GroupProperties ⟨ 𝒢 ⟩ᵍᵖ  using  ( ε⁻¹≈ε ; ⁻¹-involutive ; ⁻¹-anti-homo-∙
                                        ; \\-leftDividesʳ )
-  open Conj 𝒢                   using  ( cong-syntax ; conj-ε ; IsNormal )
+  open Conj 𝒢                   using  ( conj ; conj-ε ; IsNormal )
 ```
 
 #### Four facts of group arithmetic
@@ -242,6 +257,58 @@ construction on either side.
   -- ... and the equivalence of mutual inclusion it is antisymmetric over.
   _≈ⁿ_ : NormalSubgroup ℓ → NormalSubgroup ℓ → Type (α ⊔ ℓ)
   𝑴 ≈ⁿ 𝑵 = 𝑴 ≤ⁿ 𝑵 × 𝑵 ≤ⁿ 𝑴
+```
+
+Calling the correspondence an *order* isomorphism presupposes that both sides really
+are ordered, so the partial-order laws are proved rather than assumed.  They are the
+laws of `_⊆_`{.AgdaFunction} on predicates, and antisymmetry holds by construction:
+`_≈ⁿ_`{.AgdaFunction} *is* mutual inclusion.  This mirrors
+`⊆-isPartialOrder`{.AgdaFunction} and `Con-Poset`{.AgdaFunction} on the congruence
+side, down to the same implicit-argument discipline — `_≤ⁿ_`{.AgdaFunction} is a
+defined relation, not an injective type former, so Agda cannot recover the endpoint
+arguments of the helper lemmas from the expected field types and they are forwarded by
+hand.
+
+```agda
+  ≤ⁿ-refl : {𝑵 : NormalSubgroup ℓ} → 𝑵 ≤ⁿ 𝑵
+  ≤ⁿ-refl p = p
+
+  ≤ⁿ-trans : {𝑳 𝑴 𝑵 : NormalSubgroup ℓ} → 𝑳 ≤ⁿ 𝑴 → 𝑴 ≤ⁿ 𝑵 → 𝑳 ≤ⁿ 𝑵
+  ≤ⁿ-trans 𝑳≤𝑴 𝑴≤𝑵 p = 𝑴≤𝑵 (𝑳≤𝑴 p)
+
+  ≈ⁿ-refl : {𝑵 : NormalSubgroup ℓ} → 𝑵 ≈ⁿ 𝑵
+  ≈ⁿ-refl = (λ p → p) , (λ p → p)
+
+  ≈ⁿ-sym : {𝑴 𝑵 : NormalSubgroup ℓ} → 𝑴 ≈ⁿ 𝑵 → 𝑵 ≈ⁿ 𝑴
+  ≈ⁿ-sym = swap
+
+  ≈ⁿ-trans : {𝑳 𝑴 𝑵 : NormalSubgroup ℓ} → 𝑳 ≈ⁿ 𝑴 → 𝑴 ≈ⁿ 𝑵 → 𝑳 ≈ⁿ 𝑵
+  ≈ⁿ-trans (𝑳≤𝑴 , 𝑴≤𝑳) (𝑴≤𝑵 , 𝑵≤𝑴) = (λ p → 𝑴≤𝑵 (𝑳≤𝑴 p)) , (λ p → 𝑴≤𝑳 (𝑵≤𝑴 p))
+
+  ≈ⁿ-isEquivalence : IsEquivalence (_≈ⁿ_ {ℓ})
+  ≈ⁿ-isEquivalence {ℓ} = record
+    { refl   = λ {𝑵} → ≈ⁿ-refl {ℓ} {𝑵}
+    ; sym    = λ {𝑴} {𝑵} → ≈ⁿ-sym {ℓ} {𝑴} {𝑵}
+    ; trans  = λ {𝑳} {𝑴} {𝑵} → ≈ⁿ-trans {ℓ} {𝑳} {𝑴} {𝑵}
+    }
+
+  ≤ⁿ-isPartialOrder : IsPartialOrder (_≈ⁿ_ {ℓ}) _≤ⁿ_
+  ≤ⁿ-isPartialOrder {ℓ} = record
+    { isPreorder = record  { isEquivalence  = ≈ⁿ-isEquivalence {ℓ}
+                           ; reflexive      = proj₁
+                           ; trans          = λ {𝑳} {𝑴} {𝑵} → ≤ⁿ-trans {ℓ} {𝑳} {𝑴} {𝑵}
+                           }
+    ; antisym = _,_
+    }
+
+  -- The poset of normal subgroups, the counterpart of `Con-Poset` of
+  -- [Setoid.Congruences.Lattice][].
+  NormalSubgroup-Poset : (ℓ : Level) → Poset (α ⊔ ρ ⊔ suc ℓ) (α ⊔ ℓ) (α ⊔ ℓ)
+  NormalSubgroup-Poset ℓ = record  { Carrier         = NormalSubgroup ℓ
+                                   ; _≈_             = _≈ⁿ_
+                                   ; _≤_             = _≤ⁿ_
+                                   ; isPartialOrder  = ≤ⁿ-isPartialOrder
+                                   }
 ```
 
 #### The relation attached to a subgroup
@@ -433,7 +500,7 @@ those tuples.
     θ-⁻¹ {x} {y} p = is-compatible θcon ⁻¹-Op {λ _ → x} {λ _ → y} (λ _ → p)
 
     -- Hence conjugation by any element preserves the congruence.
-    θ-conj : ∀ g {x y} → x θ y → x ^ g θ y ^ g
+    θ-conj : ∀ g {x y} → x θ y → conj g x θ conj g y
     θ-conj g p = θ-∙ (θ-∙ θ-refl p) θ-refl
 ```
 
@@ -502,7 +569,7 @@ congruence, its identity class is normal by
   congruence→normal : {ℓ : Level} (N : Pred G ℓ) → IsSubgroup 𝒢 N
     →  IsCongruence 𝑮 (NormalRel N) → IsNormal N
   congruence→normal N N-sg isCon g {x} x∈N =
-    respects  (∙ε⁻¹ (x ^ g))
+    respects  (∙ε⁻¹ (conj g x))
               (ConNormal.IdentityClass-normal (NormalRel N , isCon) g
                 (respects (≈sym (∙ε⁻¹ x)) x∈N))
     where open IsSubgroup N-sg using ( respects )
