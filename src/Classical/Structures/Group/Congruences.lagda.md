@@ -500,7 +500,7 @@ those tuples.
 
     -- Hence conjugation by any element preserves the congruence.
     θ-conj : ∀ g {x y} → x θ y → x ^ g θ y ^ g
-    θ-conj g p = θ-∙ (θ-∙ θ-refl p) θ-refl
+    θ-conj g {x} {y} p = θ-∙ (θ-∙ (θ-refl {x = g}) p) (θ-refl {x = g ⁻¹})
 ```
 
 The class of the identity is an equality-respecting subgroup, and it is normal.
