@@ -187,6 +187,7 @@
 [Classical.Structures.Group.Dedekind]: /Classical/Structures/Group/Dedekind/
 [Classical.Structures.Group.Diagonal]: /Classical/Structures/Group/Diagonal/
 [Classical.Structures.Group.GSet]: /Classical/Structures/Group/GSet/
+[Classical.Structures.Group.IndexAction]: /Classical/Structures/Group/IndexAction/
 [Classical.Structures.Group.MinimalNormal]: /Classical/Structures/Group/MinimalNormal/
 [Classical.Structures.Group.NormalCore]: /Classical/Structures/Group/NormalCore/
 [Classical.Structures.Group.NormalSubgroupLattice]: /Classical/Structures/Group/NormalSubgroupLattice/
@@ -195,6 +196,7 @@
 [Classical.Structures.Group.Product]: /Classical/Structures/Group/Product/
 [Classical.Structures.Group.SubgroupLattice]: /Classical/Structures/Group/SubgroupLattice/
 [Classical.Structures.Group.Subgroups]: /Classical/Structures/Group/Subgroups/
+[Classical.Structures.Group.Wreath]: /Classical/Structures/Group/Wreath/
 [Classical.Structures.Interpret]: /Classical/Structures/Interpret/
 [Classical.Structures.Lattice]: /Classical/Structures/Lattice/
 [Classical.Structures.Lattice.Basic]: /Classical/Structures/Lattice/Basic/
@@ -392,6 +394,7 @@
 [FLRP.Problem]: /FLRP/Problem/
 [FLRP.Reductions]: /FLRP/Reductions/
 [FLRP.Representable]: /FLRP/Representable/
+[FLRP.WreathNoGo]: /FLRP/WreathNoGo/
 
 <!-- ===== Module sources on GitHub ===== -->
 [Overture.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Overture.lagda.md
@@ -572,6 +575,7 @@
 [Classical/Structures/Group/Dedekind.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Group/Dedekind.lagda.md
 [Classical/Structures/Group/Diagonal.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Group/Diagonal.lagda.md
 [Classical/Structures/Group/GSet.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Group/GSet.lagda.md
+[Classical/Structures/Group/IndexAction.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Group/IndexAction.lagda.md
 [Classical/Structures/Group/MinimalNormal.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Group/MinimalNormal.lagda.md
 [Classical/Structures/Group/NormalCore.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Group/NormalCore.lagda.md
 [Classical/Structures/Group/NormalSubgroupLattice.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Group/NormalSubgroupLattice.lagda.md
@@ -580,6 +584,7 @@
 [Classical/Structures/Group/Product.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Group/Product.lagda.md
 [Classical/Structures/Group/SubgroupLattice.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Group/SubgroupLattice.lagda.md
 [Classical/Structures/Group/Subgroups.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Group/Subgroups.lagda.md
+[Classical/Structures/Group/Wreath.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Group/Wreath.lagda.md
 [Classical/Structures/Interpret.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Interpret.lagda.md
 [Classical/Structures/Lattice.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Lattice.lagda.md
 [Classical/Structures/Lattice/Basic.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Lattice/Basic.lagda.md
@@ -777,6 +782,7 @@
 [FLRP/Problem.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/Problem.lagda.md
 [FLRP/Reductions.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/Reductions.lagda.md
 [FLRP/Representable.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/Representable.lagda.md
+[FLRP/WreathNoGo.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/WreathNoGo.lagda.md
 
 <!-- ===== Architecture Decision Records ===== -->
 [ADR-000]: /adr/000-template/
