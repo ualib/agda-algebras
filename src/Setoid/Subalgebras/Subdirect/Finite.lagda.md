@@ -12,15 +12,16 @@ This is the [Setoid.Subalgebras.Subdirect.Finite][] module of the [Agda Universa
 
 [Setoid.Subalgebras.Subdirect.BirkhoffSI][] proved the *choice-free core* of
 Birkhoff's subdirect representation theorem and stated the general theorem
-`Birkhoff-subdirect` *relative to* the choice principle `SubdirectSIRep 𝑨` — the
-existence, for every algebra, of a separating family of congruences whose quotients
-are subdirectly irreducible.
+`Birkhoff-subdirect` *relative to* the choice principle `SubdirectSIRep 𝑨`.
+
+Recall, the theorem asserts the existence, for every algebra, of a separating family
+of congruences whose quotients are subdirectly irreducible.
 
 Producing that family for an arbitrary algebra is a Zorn's-lemma step (a congruence
 maximal among those excluding a given pair), which is incompatible with a
 postulate-free formalization in constructive type theory.
 
-This module discharges that parameter for a class of *finite* algebras: it constructs
+This module discharges that parameter for a class of *finite* algebras; it constructs
 `SubdirectSIRep 𝑨` outright, with no choice and no postulate, and feeds it to the
 choice-free reduction `SIRep→Representable`.[^1]
 
@@ -70,8 +71,9 @@ open import Data.List.Relation.Unary.Any   using  ( here ; there )
 open import Data.Nat.Base                  using  ( ℕ ; _≤_ ; _<_ ; z≤n ; s≤s )
 open import Data.Nat.Properties            using  ( m≤n⇒m≤1+n ; n<1+n ; <-trans
                                                   ; ≤-<-trans ; n≮n )
-open import Data.Product                   using  ( _×_ ; _,_ ; Σ-syntax ; proj₁ ; proj₂ )
+open import Data.Product                   using  ( _×_ ; _,_ ; proj₁ ; proj₂ ; ∃-syntax )
 open import Data.Sum.Base                  using  ( [_,_]′ )
+open import Function                       using  ( _∘_ )
 open import Level                          using  ( Level ; _⊔_ ; 0ℓ ; lower )
 open import Relation.Binary                using  ( Setoid ; IsEquivalence )
 open import Relation.Nullary               using  ( ¬_ ; Dec ; yes ; no )
@@ -84,7 +86,7 @@ open import Data.List.Membership.Propositional.Properties
   using ( ∈-filter⁺ ; ∈-filter⁻ ; ∈-cartesianProduct⁺ ; ∈-allFin )
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
-open import Overture                       using  ( 𝓞 ; 𝓥 ; Signature ; 𝑆 )
+open import Overture                       using  ( 𝓞 ; 𝓥 ; Signature ; 𝑆 ; ∃-syntax )
 open import Setoid.Algebras.Basic          using  ( Algebra ; 𝕌[_] ; 𝔻[_] )
 open import Setoid.Algebras.Finite         using  ( FiniteAlgebra ; 𝟏
                                                   ; 𝟏-FiniteAlgebra )
@@ -93,7 +95,7 @@ open import Setoid.Congruences.Basic       using  ( Con ; mkcon ; is-equivalence
 open import Setoid.Congruences.Finite      using  ( ConRel ; 𝟏-FiniteCongruences
                                                   ; FiniteCongruences ; DecCon )
 open import Setoid.Congruences.Generation  using  ( Cg ; Cg-least ; base )
-open import Setoid.Congruences.Lattice     using  ( _⊆_ ; ⊆-trans )
+open import Setoid.Congruences.Lattice     using  ( _⊆_ ; ⊆-trans ; _≑_ )
 open import Setoid.Congruences.Monolith    using  ( IsSubdirectlyIrreducible ; Nonzero
                                                   ; mono-nonzero ; mono-least )
 
@@ -160,7 +162,7 @@ carrier enumeration.
 module _ {𝓞 𝓥 : Level}{𝑆 : Signature 𝓞 𝓥}{𝑨 : Algebra {𝑆 = 𝑆} α ρ} (𝑭 : FiniteAlgebra 𝑨) (𝑪 : FiniteCongruences 𝑨) where
   open FiniteAlgebra 𝑭
   open FiniteCongruences 𝑪
-  open Setoid 𝔻[ 𝑨 ] using ( _≈_ ) renaming ( sym to ≈sym )
+  open Setoid 𝔻[ 𝑨 ] using ( _≈_ ) renaming ( Carrier to A ; sym to ≈sym )
 
   ℓ : Level
   ℓ = 𝓞 ⊔ 𝓥 ⊔ α ⊔ ρ
@@ -251,7 +253,7 @@ maximum `count`; `count`-maximality is `⊆`-maximality, by `count-mono`/`count-
   Δ : Con 𝑨 ℓ
   Δ = 𝟘[ 𝑨 ] {ℓ}
 
-  module _ (a b : 𝕌[ 𝑨 ]) (a≢b : ¬ (a ≈ b)) where
+  module _ (a b : A) (a≢b : ¬ (a ≈ b)) where
 
     -- The congruences of `cons` that do not relate a and b.
     notRel? : (d : DecCon 𝑨 ℓ) → Dec (¬ ConRel d a b)
@@ -293,29 +295,32 @@ count.  The witness of properness is extracted from the *decidable* failure of
 carrier-containment.
 
 ```agda
-    Θ-max-of : (d : DecCon 𝑨 ℓ) → d ∈ a≢bCons → Θ ⊆ proj₁ d
-             → Dec (d ⊆ᶜ Θ-dec) → proj₁ d ⊆ Θ
-    Θ-max-of d d∈f Θ⊆d (yes h)  = carrier-lift (proj₁ d) Θ h
+    Θ-max-of :  ((δ , δcon) : DecCon 𝑨 ℓ) → (δ , δcon) ∈ a≢bCons
+      → Θ ⊆ δ → Dec ((δ , δcon) ⊆ᶜ Θ-dec) → δ ⊆ Θ
+    Θ-max-of (δ , _) d∈f Θ⊆d (yes h)  = carrier-lift δ Θ h
     Θ-max-of d d∈f Θ⊆d (no ¬h)  =
       ⊥-elim (n≮n (count d) (≤-<-trans (Θ-max-count d d∈f) cΘ<cd))
       where
       -- The two existential witnesses, each extracted once and shared.
+      exi : ∃[ i ] ¬ (∀ j → ConRel d (enum i) (enum j) → ConRel Θ-dec (enum i) (enum j))
       exi = ¬∀⟶∃¬ card _ (λ i → all? (λ j → (i , j) ∈? d →-dec (i , j) ∈? Θ-dec)) ¬h
 
       i₀ : Fin card
-      i₀ = proj₁ exi
+      i₀ = exi .proj₁
 
+      exj : ∃[ j ] ¬ (ConRel d (enum i₀) (enum j) → ConRel Θ-dec (enum i₀) (enum j))
       exj = ¬∀⟶∃¬ card _ (λ j → (i₀ , j) ∈? d →-dec (i₀ , j) ∈? Θ-dec) (proj₂ exi)
 
       j₀ : Fin card
-      j₀ = proj₁ exj
+      j₀ = exj .proj₁
 
-      split = ¬→-split ((i₀ , j₀) ∈? d) (proj₂ exj)
+      split : ConRel d (enum i₀) (enum j₀) × ¬ ConRel Θ-dec (enum i₀) (enum j₀)
+      split = ¬→-split ((i₀ , j₀) ∈? d) (exj .proj₂)
 
       cΘ<cd : count Θ-dec < count d
-      cΘ<cd = count-strict Θ-dec d i₀ j₀ Θ⊆d (proj₁ split) (proj₂ split)
+      cΘ<cd = count-strict Θ-dec d i₀ j₀ Θ⊆d (split .proj₁) (split .proj₂)
 
-    Θ-max : ((d , pd) : DecCon 𝑨 ℓ) → (d , pd) ∈ a≢bCons → Θ ⊆ d → d ⊆ Θ
+    Θ-max : ((δ , δcon) : DecCon 𝑨 ℓ) → (δ , δcon) ∈ a≢bCons → Θ ⊆ δ → δ ⊆ Θ
     Θ-max d d∈f Θ⊆d = Θ-max-of d d∈f Θ⊆d (d ⊆ᶜ? Θ-dec)
 ```
 
@@ -327,13 +332,14 @@ the underlying relation, equivalence proof, and compatibility carry over verbati
 quotient equality `Θ` is exactly the containment `Θ ⊆ ·`.  `Q→A` records this.
 
 ```agda
-    Q : Algebra {𝑆 = 𝑆} α ℓ
+    Q : Algebra α ℓ
     Q = 𝑨 ╱ Θ
 
     Q→A : Con Q ℓ → Con 𝑨 ℓ
-    Q→A ψ = proj₁ ψ , mkcon r (is-equivalence (proj₂ ψ)) (is-compatible (proj₂ ψ))
-      where r : ∀ {x y} → x ≈ y → proj₁ ψ x y
-            r e = reflexive (proj₂ ψ) (reflexive (proj₂ Θ) e)
+    Q→A (ψ , ψcon) = ψ , mkcon r (is-equivalence ψcon) (is-compatible ψcon)
+      where
+      r : ∀ {x y} → x ≈ y → ψ x y
+      r = reflexive ψcon ∘ reflexive (Θ .proj₂)
 ```
 
 The monolith of `Q` is the principal congruence generated by the single pair
@@ -344,44 +350,48 @@ the least nonzero congruence: any nonzero `ψ` of `Q` corresponds to a congruenc
 hence `ψ`, relates `a , b`, i.e. contains the principal congruence.
 
 ```agda
-    Rₐᵦ : 𝕌[ 𝑨 ] → 𝕌[ 𝑨 ] → Type α
+    Rₐᵦ : A → A → Type α
     Rₐᵦ x y = (x ≡ a) × (y ≡ b)
 
     μ : Con Q ℓ
     μ = Cg {𝑨 = Q} Rₐᵦ
 
     μ-nonzero : Nonzero Q μ
-    μ-nonzero below = ¬Θab (below (base {𝑨 = Q} (refl , refl)))
+    μ-nonzero below = ¬Θab (below (base (refl , refl)))
 
     μ-least : (ψ : Con Q ℓ) → Nonzero Q ψ → μ ⊆ ψ
-    μ-least ψ nz = Cg-least {𝑨 = Q} {R = Rₐᵦ} ψ R⊆ψ
+    μ-least Ψ@(ψ , ψcon) nz = Cg-least Ψ R⊆ψ
       where
       φ : Con 𝑨 ℓ
-      φ = Q→A ψ
+      φ = Q→A Ψ
+
       Θ⊆φ : Θ ⊆ φ
-      Θ⊆φ = reflexive (proj₂ ψ)
+      Θ⊆φ = reflexive ψcon
+
       -- The representative of φ in `cons`, and its three certificates.
-      rep      = complete φ
-      d        = proj₁ rep
-      d∈cons   = proj₁ (proj₂ rep)
-      φ⊆d      = proj₁ (proj₂ (proj₂ rep))
-      d⊆φ      = proj₂ (proj₂ (proj₂ rep))
+      rep : ∃[ d ∈ DecCon 𝑨 _ ] (d ∈ cons × φ ≑ d .proj₁)
+      rep = complete φ
 
       -- Does d relate a and b?  If not, maximality of Θ collapses ψ to zero.
-      ψab-of : Dec (ConRel d a b) → proj₁ ψ a b
-      ψab-of (yes dab)  = d⊆φ dab
-      ψab-of (no ¬dab)  = ⊥-elim (nz (⊆-trans {θ = φ}{φ = proj₁ d}{ψ = Θ} φ⊆d
-                            (Θ-max d (∈-filter⁺ notRel? d∈cons ¬dab)
-                                     (⊆-trans {θ = Θ}{φ = φ}{ψ = proj₁ d} Θ⊆φ φ⊆d))))
+      ψab-of : ((p , _) : ∃[ (δ , δdec) ∈ DecCon 𝑨 _ ] ((δ , δdec) ∈ cons × φ ≑ δ) )
+        → Dec (ConRel p a b) → ψ a b
+      ψab-of (_ , _ , _ , d⊆φ ) (yes dab)  = d⊆φ dab
+      ψab-of ((δ , δdec) , d∈cons , φ⊆d , d⊆φ ) (no ¬dab) =
+        ⊥-elim (nz (⊆-trans {θ = φ}{φ = δ}{ψ = Θ} φ⊆d (δ⊆Θ Θ⊆δ)))
+          where
+          Θ⊆δ : Θ ⊆ δ
+          Θ⊆δ = ⊆-trans {θ = Θ}{φ = φ}{ψ = δ} Θ⊆φ φ⊆d
 
-      ψab : proj₁ ψ a b
-      ψab = ψab-of (proj₂ d a b)
-      R⊆ψ : ∀ {x y} → Rₐᵦ x y → proj₁ ψ x y
-      R⊆ψ (refl , refl) = ψab
+          δ⊆Θ : Θ ⊆ δ → δ ⊆ Θ
+          δ⊆Θ = Θ-max (δ , δdec) (∈-filter⁺ notRel? d∈cons ¬dab)
+
+      R⊆ψ : ∀ {x y} → Rₐᵦ x y → ψ x y
+      R⊆ψ (refl , refl) = ψab-of rep (proj₂ (proj₁ rep) a b)
+
 
     SI-Q : IsSubdirectlyIrreducible Q
-    SI-Q = (a , b , ¬Θab)
-         , (μ , record { mono-nonzero = μ-nonzero ; mono-least = μ-least })
+    SI-Q = (a , b , ¬Θab) , μ , record  { mono-nonzero = μ-nonzero
+                                        ; mono-least = μ-least }
 ```
 
 #### Assembling the representation and the theorem
@@ -397,12 +407,12 @@ member related them, they would be equal.  This is where decidable `≈` closes 
   finiteSubdirectSIRep = I , Θfam , separates , si
     where
     I : Type (α ⊔ ρ)
-    I = Σ[ a ∈ 𝕌[ 𝑨 ] ] Σ[ b ∈ 𝕌[ 𝑨 ] ] ¬ (a ≈ b)
+    I = ∃[ a ] ∃[ b ] ¬ a ≈ b
 
     Θfam : I → Con 𝑨 ℓ
     Θfam (a , b , a≢b) = Θ a b a≢b
 
-    separates-of : (x y : 𝕌[ 𝑨 ]) → ((i : I) → proj₁ (Θfam i) x y) → Dec (x ≈ y) → x ≈ y
+    separates-of : (x y : A) → ((i : I) → proj₁ (Θfam i) x y) → Dec (x ≈ y) → x ≈ y
     separates-of x y h (yes x≈y)  = x≈y
     separates-of x y h (no  x≢y)  = ⊥-elim (¬Θab x y x≢y (h (x , y , x≢y)))
 
@@ -443,4 +453,4 @@ the maximal-congruence search — is the natural next addition.
 
 --------------------------------------
 
-[^1]: This is option (b) of the design note `docs/notes/m6-2-subdirect.md`.
+[^1]: This is Option b of the design note [`docs/notes/m6-2-subdirect.md`](docs/notes/m6-2-subdirect.md).
