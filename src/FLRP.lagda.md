@@ -80,11 +80,20 @@ Two standing warnings apply to everything under this namespace.
    join least-ness proved against arbitrary equivalence relations via bounded
    alternating chains (issue #484; session note `docs/notes/flrp-l7-eq6.md`).
 
++  [FLRP.Reductions][] — the RP-2 **enforcement catalog**: the literature's
+   "an interval of this shape forces a group of this kind" theorems, each recast
+   as a precise (cf-/min-)IE statement, with the vacuity discipline tracked
+   entry by entry.  Entries 1–3 (the note's classes `𝒢₂`, `𝒢₃`, `𝒢₄`) are
+   *derived* from the parachute theorems; Entries 4–8 import their sources'
+   theorems as named hypotheses (Pálfy–Pudlák, Feit, Köhler, Basile, DeMeo's
+   `L7` analysis, Lucchini–Moscatiello–Palcoux–Spiga).  The module also proves
+   the note's Lemma 3.1, exposes the vacuity theorem
+   `not-representable→IE`, and repairs `minIE` as `MinimallyIE`; the survey note
+   is `docs/notes/flrp-rp2-catalog.md`.
+
 **Planned submodules** (per § 6 of the roadmap).
 
-+  `FLRP.Closure` (closure properties of the representable class);
-+  `FLRP.Intervals` (intervals in subgroup lattices and core-free normalization);
-+  `FLRP.Reductions` (the catalog of reduction theorems).
++  `FLRP.Intervals` (intervals in subgroup lattices and core-free normalization).
 
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
@@ -96,6 +105,7 @@ open import FLRP.Enforceable    public
 open import FLRP.Parachute      public
 open import FLRP.Parachute.Representation public
 open import FLRP.Parachute.Theorems       public
+open import FLRP.Reductions     public
 open import FLRP.Bridge         public
 open import FLRP.Representable  public
 open import FLRP.Assumptions    public

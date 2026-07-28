@@ -186,6 +186,7 @@
 [Classical.Structures.Group.Cosets]: /Classical/Structures/Group/Cosets/
 [Classical.Structures.Group.Dedekind]: /Classical/Structures/Group/Dedekind/
 [Classical.Structures.Group.GSet]: /Classical/Structures/Group/GSet/
+[Classical.Structures.Group.MinimalNormal]: /Classical/Structures/Group/MinimalNormal/
 [Classical.Structures.Group.NormalCore]: /Classical/Structures/Group/NormalCore/
 [Classical.Structures.Group.NormalSubgroupLattice]: /Classical/Structures/Group/NormalSubgroupLattice/
 [Classical.Structures.Group.Product]: /Classical/Structures/Group/Product/
@@ -384,6 +385,7 @@
 [FLRP.Parachute.Representation]: /FLRP/Parachute/Representation/
 [FLRP.Parachute.Theorems]: /FLRP/Parachute/Theorems/
 [FLRP.Problem]: /FLRP/Problem/
+[FLRP.Reductions]: /FLRP/Reductions/
 [FLRP.Representable]: /FLRP/Representable/
 
 <!-- ===== Module sources on GitHub ===== -->
@@ -564,6 +566,7 @@
 [Classical/Structures/Group/Cosets.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Group/Cosets.lagda.md
 [Classical/Structures/Group/Dedekind.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Group/Dedekind.lagda.md
 [Classical/Structures/Group/GSet.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Group/GSet.lagda.md
+[Classical/Structures/Group/MinimalNormal.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Group/MinimalNormal.lagda.md
 [Classical/Structures/Group/NormalCore.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Group/NormalCore.lagda.md
 [Classical/Structures/Group/NormalSubgroupLattice.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Group/NormalSubgroupLattice.lagda.md
 [Classical/Structures/Group/Product.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Group/Product.lagda.md
@@ -762,6 +765,7 @@
 [FLRP/Parachute/Representation.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/Parachute/Representation.lagda.md
 [FLRP/Parachute/Theorems.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/Parachute/Theorems.lagda.md
 [FLRP/Problem.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/Problem.lagda.md
+[FLRP/Reductions.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/Reductions.lagda.md
 [FLRP/Representable.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/Representable.lagda.md
 
 <!-- ===== Architecture Decision Records ===== -->

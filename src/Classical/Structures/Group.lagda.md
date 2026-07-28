@@ -25,6 +25,7 @@ open import Classical.Structures.Group.Conjugation public
 open import Classical.Structures.Group.Cosets public
 open import Classical.Structures.Group.Dedekind public
 open import Classical.Structures.Group.GSet public
+open import Classical.Structures.Group.MinimalNormal public
 open import Classical.Structures.Group.NormalCore public
 open import Classical.Structures.Group.NormalSubgroupLattice public
 open import Classical.Structures.Group.Product public
