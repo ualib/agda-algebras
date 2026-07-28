@@ -3757,7 +3757,7 @@ Full design: `docs/notes/flrp-wp6-freese-certificates.md`.  Guiding principle: *
 
 ---
 
-### Issue M6-13g: FLRP RP-1: formalize the IE framework end-to-end (parachute theorems) (#458)
+### Issue M6-13g: FLRP RP-1: formalize the IE framework end-to-end (parachute theorems) (#458, closed)
 
 **Labels**: `milestone-6-flrp`, `research-exploratory`, `flrp-research`
 
