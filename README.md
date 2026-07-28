@@ -9,7 +9,7 @@
 
 A formalization of universal algebra in [Agda][], built on the [Agda standard library][].  The library defines algebras, homomorphisms, congruences, terms, varieties, and the equational logic that underlies them, with a fully constructive proof of [Birkhoff's HSP theorem](https://agda-algebras.universalalgebra.org/Setoid/Varieties/HSP/#proof-of-the-hsp-theorem) at the centre.  It is being developed both as a working substrate for research in universal algebra and as a high-quality training corpus of Agda proofs for machine learning on formal mathematics.
 
-> **Status.** Version 3.0 is under active reconstruction on `master`.  The library currently targets Agda 2.8.0 and standard-library 2.3.  Expect breaking changes until 3.0 is released; see [`docs/GITHUB_PROJECT.md`](docs/GITHUB_PROJECT.md) for the milestone plan and [`CHANGELOG.md`](CHANGELOG.md) for what has landed so far.
+> **Status**.  Version 3.0 is under active reconstruction on `master`.  The library currently targets Agda 2.8.0 and standard-library 2.3.  Expect breaking changes until 3.0 is released; see [`docs/GITHUB_PROJECT.md`](docs/GITHUB_PROJECT.md) for the milestone plan and [`CHANGELOG.md`](CHANGELOG.md) for what has landed so far.
 
 The **previous** version (called `UALib`, built against [TypeTopology](https://github.com/martinescardo/TypeTopology)) is no longer maintained but remains available:
 

@@ -97,4 +97,4 @@ module _ (sirep : (𝑨 : Algebra {𝑆 = 𝑆} α ρ) → SubdirectSIRep 𝑨 �
 
 -------------------------------
 
-[^1]: This is called "option (a)" in the design brief `docs/notes/m6-2-subdirect.md`; that document also describes alternatives (finite/decidable search, and the rationale) to be explored in other submodules of [Setoid.Subalgebras.Subdirect](/Setoid/Subalgebras/Subdirect/).
+[^1]: This is "option (a)" of the design note `docs/notes/m6-2-subdirect.md`, § *The three options for a choice-dependent theorem*, which states all three and records which was taken: (b), discharging the parameter by search when `≈` is decidable, is `Setoid.Subalgebras.Subdirect.Finite`; (c), state-and-defer, was not taken.

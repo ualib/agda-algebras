@@ -23,10 +23,10 @@ Community members are encouraged to engage in the following behaviors:
 
 The following behaviors are unacceptable within our community:
 
-+  **Engaging in bigotry.**  Expressing animosity toward or derogating people based on a social characteristic, as described in the Pledge above, will not be tolerated.
-+  **Harassing others.**  Harassment includes sustained or willful disruption; stalking; publishing private information without permission; sexual attention or contact without clear consent; trolling, insulting, or derogatory comments; and sustained disruption of community discussion.
-+  **Abusing power.**  Power includes institutional, social, and informal power.  Manipulation, coercion, retaliation, and exploitation of power imbalances are unacceptable.
-+  **Endangering others.**  Threats, incitement of violence, and doxxing are unacceptable.
++  **Engaging in bigotry**.  Expressing animosity toward or derogating people based on a social characteristic, as described in the Pledge above, will not be tolerated.
++  **Harassing others**.  Harassment includes sustained or willful disruption; stalking; publishing private information without permission; sexual attention or contact without clear consent; trolling, insulting, or derogatory comments; and sustained disruption of community discussion.
++  **Abusing power**.  Power includes institutional, social, and informal power.  Manipulation, coercion, retaliation, and exploitation of power imbalances are unacceptable.
++  **Endangering others**.  Threats, incitement of violence, and doxxing are unacceptable.
 
 ## Reporting an Issue
 

@@ -71,10 +71,10 @@ classes `λ i → a`, and equality in `⨅ (λ i → 𝑨 ╱ θ i)` at that tup
 with a `refl`-checked `IsInjective (proj₁ natmap) ≡ Separates` (propositional `≡`) — and
 `natmap-injective = id`.  Likewise `coord 𝑨╱ natmap i` reduces to the canonical
 projection `πepi 𝒾𝒹 (θ i)`, so its surjectivity is `IsEpi.isSurjective` of that epi
-verbatim.  This is the formal content of the brief's "injectivity is exactly *the meet is
-the diagonal*".
+verbatim.  This is the formal content of the slogan *injectivity is exactly "the meet is
+the diagonal"*.
 
-## The choice decision for Birkhoff (option (a))
+## The three options for a choice-dependent theorem
 
 Birkhoff's subdirect representation theorem needs, for each pair `a ≢ b`, a congruence
 **maximal** among those not relating `a , b`.  Such a congruence is completely
@@ -82,13 +82,37 @@ meet-irreducible, so its quotient is subdirectly irreducible, and the family of 
 (over all distinct pairs) meets to the diagonal.  Producing the maximal congruence is a
 Zorn's-lemma step: incompatible with postulate-free `--safe`.
 
-The brief offered three ways to handle this; we took **(a)**: state the theorem relative
-to an explicit choice principle taken as a module parameter.  Concretely
+Three ways to handle that were put to the M6-2 session, and the rest of this repository
+refers to them by letter.  They are reproduced here because this section is their only
+home: they were posed in the session's kick-off text, which was never committed, so
+"the brief" that earlier drafts of this note cited is not a document anyone can open.
+Cite this section instead.
+
++  **Option (a) — assume it, precisely**.  State the theorem relative to an explicit
+   choice principle taken as a *module parameter*, so the assumption is named and
+   type-checked and nothing is postulated.  **Taken**, in M6-2 (#272, PR #418); see the
+   next section.
++  **Option (b) — discharge it where it is constructive**.  In the finite/decidable
+   case, where `≈` is decidable, find the maximal separating congruence by search over a
+   finite congruence lattice, and so *prove* what option (a) assumes.  **Done later**, in
+   M6-8 (#419): `Setoid.Subalgebras.Subdirect.Finite`, design note
+   [`m6-8-finite-birkhoff.md`](m6-8-finite-birkhoff.md).
++  **Option (c) — state and defer**.  Record the theorem as a checked `Type` without
+   proving it, in the style of `FLRP-Statement` of `FLRP.Problem`.  **Not taken**: (a)
+   both states the assumption *and* proves the theorem from it, which (c) does not.
+
+Note that "option (a)/(b)" is overloaded across the design notes — `m6-3-maltsev-conditions.md`
+and the certificate notes each enumerate their own — so cite the note along with the letter.
+
+## The choice decision for Birkhoff (option (a))
+
+We took **(a)**: state the theorem relative to an explicit choice principle taken as a
+module parameter.  Concretely
 `Birkhoff-subdirect` abstracts over `sirep : (𝑨 : Algebra α ρ) → SubdirectSIRep 𝑨 ℓ ι`
 and derives `SubdirectlyRepresentable 𝑨` for every `𝑨`.  The choice-free half — *given
 the SI quotients with meet `0ᴬ`, you get the subdirect embedding* — is `SIRep→Representable`
 and is proved unconditionally, so the theorem reduces to *exactly* the choice-dependent
-existence claim `∀ 𝑨 → SubdirectSIRep 𝑨`, as the brief asks.
+existence claim `∀ 𝑨 → SubdirectSIRep 𝑨`, which is what option (a) asks for.
 
 Why `SubdirectSIRep` (a separating SI-family) rather than the more atomic "for each
 `a ≢ b`, a separating cmi congruence" as the parameter?  Because turning the per-pair
@@ -98,11 +122,9 @@ Indexing by distinct pairs, the separation proof for a fixed `a , b` must inspec
 `a ≈ b` needs `≈` to be stable (decidable equality, or a double-negation elimination).
 That stability is precisely the classical input, so we fold it into the parameter and
 take the directly-usable `SubdirectSIRep` — a separating family in the constructively
-strong sense — as the assumption.  Option (b) (the finite/decidable case, where `≈` *is*
-decidable and the maximal separating congruence is found by search over a finite
-congruence lattice) is the natural way to *discharge* this parameter constructively for
-finite algebras; it is left as a follow-up.  We did not take option (c) (state-and-defer
-as a checked `Type`), since (a) both states the assumption and proves the theorem from it.
+strong sense — as the assumption.  Option (b) is the natural way to *discharge* this
+parameter constructively for finite algebras, and was left as a follow-up (it became
+M6-8); option (c) was not taken, for the reason given with the list above.
 
 ## The monolith characterization and its converse
 

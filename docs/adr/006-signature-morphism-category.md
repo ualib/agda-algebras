@@ -48,9 +48,9 @@ Two decisions are forced before any of [M4-5][] can proceed, because they fix th
 
 Decision 3 placed `reduct` in `Classical.Structures.Reduct`, and the reduct functor and reduct-invariance results were realized in `Classical/` too, on the rule that "anything whose object map is `reduct` must live in `Classical/` — a `Setoid.* → Classical.*` import would be a cycle."  [M4-16][] (#403) reverses the placement, for two reasons.
 
-+  **Conceptual.**  Reducts, signature morphisms, and varieties are *universal algebra* — they range over arbitrary signatures.  `Classical/` is the tradition of specific structures (groups, rings, fields), each studied over one fixed signature, where reducts play little role.  So the reduct development belongs in the `Setoid/` foundation.
++  **Conceptual**.  Reducts, signature morphisms, and varieties are *universal algebra* — they range over arbitrary signatures.  `Classical/` is the tradition of specific structures (groups, rings, fields), each studied over one fixed signature, where reducts play little role.  So the reduct development belongs in the `Setoid/` foundation.
 
-+  **Technical — the cycle rule was circular.**  `reduct` imports only `Overture.*` and `Setoid.Algebras.Basic`; it depends on nothing in `Classical/`.  The "`Setoid → Classical` cycle" existed *only because* `reduct` was parked in `Classical/`.  Moving the root down removes the obstruction entirely, and reunifies the M4-5 functorial layer — most of which (`Overture.Signatures.Morphisms`, `Setoid.Signatures.Functor`, the `Setoid.Categories.*` vocabulary, `Overture.Terms.Translation`, `Setoid.Terms.*`) already lives in `Setoid/` / `Overture/`; only the reduct-touching modules were stranded in `Classical/`.
++  **Technical — the cycle rule was circular**.  `reduct` imports only `Overture.*` and `Setoid.Algebras.Basic`; it depends on nothing in `Classical/`.  The "`Setoid → Classical` cycle" existed *only because* `reduct` was parked in `Classical/`.  Moving the root down removes the obstruction entirely, and reunifies the M4-5 functorial layer — most of which (`Overture.Signatures.Morphisms`, `Setoid.Signatures.Functor`, the `Setoid.Categories.*` vocabulary, `Overture.Terms.Translation`, `Setoid.Terms.*`) already lives in `Setoid/` / `Overture/`; only the reduct-touching modules were stranded in `Classical/`.
 
 The relocations:
 

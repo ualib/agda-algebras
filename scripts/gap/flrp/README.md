@@ -6,9 +6,9 @@ The group-theory engine of the FLRP computational campaign (tracker #483, roadma
 
 This tree is the group-side mirror of the WP-6 emitter tree `scripts/python/flrp/`.  The two families divide labour cleanly:
 
-+  **GAP is the untrusted group engine.**  It computes intervals, cosets, and versions, and emits *deterministic JSON artifacts* — nothing more.  Its raw logs stay in a scratchpad, out of `src/` and out of git (roadmap § 6).
-+  **Python owns the lattice bookkeeping.**  A thin bridge reuses the one canonical implementation already in `scripts/python/flrp/` — `eqsearch.tables_from_leq` for meet/join tables, `lattice.py` for the isomorphism test, `emit_agda.py` for certificate emission — rather than re-deriving any of it in GAP.
-+  **Agda re-checks everything.**  A found interval enters the library only as an Agda-checked `Representableᵈ` witness: for indices within the renderer's literal cap, by dumping the coset action into a claim file for `emit_agda.py` (the direct-certificate route); for larger indices, through the WP-3 bridge `FLRP.Bridge` (issue #454, merged).
++  **GAP is the untrusted group engine**.  It computes intervals, cosets, and versions, and emits *deterministic JSON artifacts* — nothing more.  Its raw logs stay in a scratchpad, out of `src/` and out of git (roadmap § 6).
++  **Python owns the lattice bookkeeping**.  A thin bridge reuses the one canonical implementation already in `scripts/python/flrp/` — `eqsearch.tables_from_leq` for meet/join tables, `lattice.py` for the isomorphism test, `emit_agda.py` for certificate emission — rather than re-deriving any of it in GAP.
++  **Agda re-checks everything**.  A found interval enters the library only as an Agda-checked `Representableᵈ` witness: for indices within the renderer's literal cap, by dumping the coset action into a claim file for `emit_agda.py` (the direct-certificate route); for larger indices, through the WP-3 bridge `FLRP.Bridge` (issue #454, merged).
 
 ## The environment
 

@@ -453,4 +453,4 @@ the maximal-congruence search — is the natural next addition.
 
 --------------------------------------
 
-[^1]: This is Option b of the design note [`docs/notes/m6-2-subdirect.md`](docs/notes/m6-2-subdirect.md).
+[^1]: This is option (b) of the design note `docs/notes/m6-2-subdirect.md`, § *The three options for a choice-dependent theorem*: discharging M6-2's choice parameter by search, where `≈` is decidable, instead of assuming it.

@@ -19,16 +19,16 @@ Expand with additional paragraphs only if the decision has internal structure �
 
 List the effects of the decision.  Positive, negative, and neutral.  Be honest about the costs; ADRs are read by future contributors who will live with those costs.
 
-+  **Positive consequence.**
-+  **Negative consequence.**
++  **Positive consequence**.
++  **Negative consequence**.
 +  **Neutral consequence** (a fact that follows from the decision but is neither good nor bad).
 
 ## Alternatives considered
 
 Briefly list the other options that were on the table and the reason each was rejected.  The purpose is not to re-argue the decision but to reassure readers that the rejected options were genuinely considered.
 
-+  **Alternative A.**  Brief description.  Rejected because …
-+  **Alternative B.**  Brief description.  Rejected because …
++  **Alternative A**.  Brief description.  Rejected because …
++  **Alternative B**.  Brief description.  Rejected because …
 
 ## References
 

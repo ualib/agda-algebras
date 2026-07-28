@@ -121,11 +121,11 @@ make check               # should run to completion without errors
 
 ## Troubleshooting
 
-**Agda can't find standard-library.** Inside `nix develop`, the shell writes a project-local libraries file that should Just Work. Outside the Nix shell, verify that `~/.config/agda/libraries` references your standard-library 2.3 installation (note that older Agda versions used `~/.agda/libraries`; 2.8.0 uses `~/.config/agda/` but falls back to `~/.agda/` for backward compatibility).
+**Agda can't find standard-library**.  Inside `nix develop`, the shell writes a project-local libraries file that should Just Work. Outside the Nix shell, verify that `~/.config/agda/libraries` references your standard-library 2.3 installation (note that older Agda versions used `~/.agda/libraries`; 2.8.0 uses `~/.config/agda/` but falls back to `~/.agda/` for backward compatibility).
 
-**Warnings about `UnsupportedIndexedMatch`.** These are expected on some of our own pattern-matching definitions under `--cubical-compatible` and are suppressed at the library level via a flag in `agda-algebras.agda-lib`. They do not indicate bugs.
+**Warnings about `UnsupportedIndexedMatch`**.  These are expected on some of our own pattern-matching definitions under `--cubical-compatible` and are suppressed at the library level via a flag in `agda-algebras.agda-lib`. They do not indicate bugs.
 
-**Build is slow.** The library is large and uses computationally expensive features (`--cubical-compatible` implies full unfolding). A full `make check` is ~5 minutes on a modern laptop. Incremental rebuilds (changing one module) are much faster thanks to Agda's interface-file caching.
+**Build is slow**.  The library is large and uses computationally expensive features (`--cubical-compatible` implies full unfolding). A full `make check` is ~5 minutes on a modern laptop. Incremental rebuilds (changing one module) are much faster thanks to Agda's interface-file caching.
 
 For other issues, please [open a GitHub issue](https://github.com/ualib/agda-algebras/issues).
 
