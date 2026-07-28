@@ -44,6 +44,7 @@ module Order.Iso where
 open import Agda.Primitive using () renaming ( Set to Type )
 
 -- Imports from the Agda Standard Library ---------------------------------------
+open import Function         using ( _∘_ )
 open import Level            using ( Level ; _⊔_ )
 open import Relation.Binary  using () renaming ( Rel to BinaryRel )
 ```
@@ -65,3 +66,49 @@ record OrderIso
     to∘from    : ∀ u → to (from u) ≈₂ u
     from∘to    : ∀ x → from (to x) ≈₁ x
 ```
+
+#### Composition
+
+Order isomorphisms compose.  The round trips of the composite pass the inner
+round trip through the outer maps, which is sound only *up to the middle
+equivalence* — so composition asks for two congruence witnesses (the second
+map's `to` and the first map's `from` respect the middle equivalence) and for
+transitivity of the two end equivalences.  These are not derivable from the
+raw relations, but every instance has them: for setoid-valued orders they are
+the setoid laws, and for containment-style orders (congruences, intervals,
+partitions) they are monotonicity applied to the two directions of the
+equivalence.  Nothing is assumed of the middle relations beyond what the two
+isomorphisms already state.
+
+```agda
+module _
+  {a b c ℓ₁ ℓ₂ m₁ m₂ n₁ n₂ : Level}
+  {A : Type a} {B : Type b} {C : Type c}
+  {_≈₁_ : BinaryRel A ℓ₁} {_≤₁_ : BinaryRel A ℓ₂}
+  {_≈₂_ : BinaryRel B m₁} {_≤₂_ : BinaryRel B m₂}
+  {_≈₃_ : BinaryRel C n₁} {_≤₃_ : BinaryRel C n₂}
+  where
+
+  -- Composition of order isomorphisms, given the two congruence witnesses at
+  -- the middle equivalence and transitivity at the ends.
+  OrderIso-trans :
+      (F : OrderIso _≈₁_ _≤₁_ _≈₂_ _≤₂_) (G : OrderIso _≈₂_ _≤₂_ _≈₃_ _≤₃_)
+    → (∀ {x y} → x ≈₂ y → OrderIso.to G x ≈₃ OrderIso.to G y)
+    → (∀ {x y} → x ≈₂ y → OrderIso.from F x ≈₁ OrderIso.from F y)
+    → (∀ {x y z} → x ≈₁ y → y ≈₁ z → x ≈₁ z)
+    → (∀ {x y z} → x ≈₃ y → y ≈₃ z → x ≈₃ z)
+    → OrderIso _≈₁_ _≤₁_ _≈₃_ _≤₃_
+  OrderIso-trans F G G-to-cong F-from-cong ≈₁-trans ≈₃-trans = record
+    { to         = G.to ∘ F.to
+    ; from       = F.from ∘ G.from
+    ; to-mono    = G.to-mono ∘ F.to-mono
+    ; from-mono  = F.from-mono ∘ G.from-mono
+    ; to∘from    = λ u → ≈₃-trans (G-to-cong (F.to∘from (G.from u))) (G.to∘from u)
+    ; from∘to    = λ x → ≈₁-trans (F-from-cong (G.from∘to (F.to x))) (F.from∘to x)
+    }
+    where
+    module F = OrderIso F
+    module G = OrderIso G
+```
+
+--------------------------------------
