@@ -53,9 +53,9 @@ open import Data.Sum.Base        using ( _⊎_ ; inj₁ ; inj₂ )
 open import Data.Unit.Base       using ( tt )
 open import Data.Vec.Base        using ( _∷_ ; [] )
 open import Function             using (_∘_)
-open import Level                using ( Level ; 0ℓ ; _⊔_ ; lift ; lower )
+open import Level                using ( 0ℓ ; lift ; lower )
                                  renaming ( suc to lsuc )
-open import Relation.Binary      using ( Setoid ) renaming ( Rel to BinaryRel )
+open import Relation.Binary      using ( Setoid )
 open import Relation.Binary.PropositionalEquality
                                  using ( _≡_ ; refl ; sym ; trans ; subst ; module ≡-Reasoning)
 open import Relation.Nullary     using ( ¬_ ; yes ; no )
@@ -84,36 +84,15 @@ classical lattice carries its meet order from [Classical.Properties.Lattice][].
 
 The right notion of "the same lattice" for two such posets is an **order isomorphism**:
 a pair of monotone maps that are mutually inverse up to the respective equivalences.
-
-Because both maps are monotone and the round trips are the identity up to `≈`, an
-order isomorphism transports every existing infimum and supremum, so isomorphic
-posets carry the same lattice (indeed, complete-lattice) structure; this is why no
-separate preservation clauses for meet and join are needed.
-
-`OrderIso`{.AgdaRecord} states this for raw relations, so it applies uniformly to
-setoid-valued and propositional orders.  It is kept here, next to its first use; once
-the group-theoretic side of the program needs it (work package WP-3,
-`Con (G ↷ G/H) ≅ [H , G]`), it should migrate to the `Order/` tree beside
-[Order.CompleteLattice][].
-
-(The standard library's `IsOrderIsomorphism`{.AgdaRecord} packages one map with
-surjectivity instead of an explicit inverse; the two presentations are
-interconvertible, and the inverse-pair form is the convenient one for transporting
-structure.)
+That is `OrderIso`{.AgdaRecord}, which this module introduced next to its first use
+and which now lives in [Order.Iso][], the migration its original note anticipated:
+[Classical.Structures.Group.Congruences][] needs it below the FLRP tree, for the
+correspondence between the congruences of a group and its normal subgroups.  It is
+re-exported here, so every existing consumer that imports it from this module is
+unaffected.
 
 ```agda
-record OrderIso
-  {a b ℓ₁ ℓ₂ m₁ m₂ : Level}
-  {A : Type a} {B : Type b}
-  (_≈₁_ : BinaryRel A ℓ₁) (_≤₁_ : BinaryRel A ℓ₂)
-  (_≈₂_ : BinaryRel B m₁) (_≤₂_ : BinaryRel B m₂) : Type (a ⊔ b ⊔ ℓ₁ ⊔ ℓ₂ ⊔ m₁ ⊔ m₂) where
-  field
-    to         : A → B
-    from       : B → A
-    to-mono    : ∀ {x y} → x ≤₁ y → to x ≤₂ to y
-    from-mono  : ∀ {u v} → u ≤₂ v → from u ≤₁ from v
-    to∘from    : ∀ u → to (from u) ≈₂ u
-    from∘to    : ∀ x → from (to x) ≈₁ x
+open import Order.Iso public using ( OrderIso )
 ```
 
 #### Congruence lattices versus classical lattices

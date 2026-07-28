@@ -95,7 +95,7 @@ module Complements {α ρ : Level} (𝒢 : Group α ρ) where
   open Group-Op 𝒢
   open GroupProperties ⟨ 𝒢 ⟩ᵍᵖ  using ( ⁻¹-involutive ; ⁻¹-anti-homo-∙ )
   open Complex 𝒢 using ( _∙ᶜ_ ; mem-∙ᶜ ; ∙ᶜ-respects ; ∙ᶜ-mono ; subgroup-∙ᶜ-idem )
-  open Conjugate 𝒢 using ( cong-syntax ; IsNormal )
+  open Conjugate 𝒢 using ( conj-syntax ; IsNormal )
 ```
 
 A member of one factor is a member of the product, provided the *other* factor

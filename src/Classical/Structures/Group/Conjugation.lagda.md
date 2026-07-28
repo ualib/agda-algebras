@@ -98,12 +98,12 @@ module Conjugate {α ρ : Level} (𝒢 : Group α ρ) where
   conj : G → G → G
   conj g x = g ∙ x ∙ g ⁻¹
 
-  infixl 30 cong-syntax
+  infixl 30 conj-syntax
 
-  cong-syntax : G → G → G
-  cong-syntax = conj
+  conj-syntax : G → G → G
+  conj-syntax = conj
 
-  syntax cong-syntax g x = x ^ g
+  syntax conj-syntax g x = x ^ g
 
   -- Conjugation is a congruence in the conjugated element ...
   conj-cong : ∀ g {x y} → x ≈ y → x ^ g ≈ y ^ g

@@ -25,4 +25,5 @@ module Order where
 
 open import Order.CompleteLattice public
 open import Order.Interval public
+open import Order.Iso public
 ```

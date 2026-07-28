@@ -346,7 +346,7 @@ NO_NOTATIONS: SyntaxNotations = MappingProxyType({})
 
 
 def parse_syntax_decl(code_line: str) -> Optional[tuple[str, frozenset[str]]]:
-    """``syntax cong-syntax g x = x ^ g`` -> ``("cong-syntax", {"^"})``, and
+    """``syntax conj-syntax g x = x ^ g`` -> ``("conj-syntax", {"^"})``, and
     ``syntax Σ-syntax A (λ x → B) = Σ[ x ∈ A ] B`` -> ``("Σ-syntax", {"Σ[", "∈", "]"})``.
 
     The literal tokens are those of the notation that are not bound on the left of
