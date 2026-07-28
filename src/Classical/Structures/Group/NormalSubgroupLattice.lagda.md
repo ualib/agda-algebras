@@ -95,7 +95,7 @@ open import Relation.Unary                using  ( Pred ; _∈_ )
 -- Imports from the Agda Universal Algebra Library ------------------------------
 open import Classical.Structures.Group.Basic        using  ( Group )
 open import Classical.Structures.Group.Congruences  using  ( module GroupCongruences )
-open import Classical.Structures.Group.Conjugation  using  ( module Conj )
+open import Classical.Structures.Group.Conjugation  using  ( module Conjugate )
 open import Classical.Structures.Group.Subgroups    using  ( IsSubgroup ; mkIsSubgroup
                                                            ; trivialSubgroup )
 open import Order.CompleteLattice                   using  ( CompleteLattice )
@@ -120,7 +120,7 @@ module NormalSubgroupLattice {α ρ : Level} (𝒢 : Group α ρ) (ℓ₀ : Leve
     G = 𝕌[ 𝑮 ]
 
   open Setoid 𝔻[ 𝑮 ]  using ( _≈_ ) renaming ( sym to ≈sym )
-  open Conj 𝒢         using ( IsNormal )
+  open Conjugate 𝒢         using ( IsNormal )
   open GroupCongruences 𝒢
 
   -- The absorbing level of the congruence lattice of the group algebra; the two
@@ -193,8 +193,7 @@ The same argument, indexwise, gives the infinitary meet.  It stays at level
   ⋂ⁿ-lower : {I : Type ℓ₀} (𝒩 : I → Nrmᴸ) (i : I) → ⋂ⁿ 𝒩 ≤ⁿ 𝒩 i
   ⋂ⁿ-lower 𝒩 i p = p i
 
-  ⋂ⁿ-greatest : {I : Type ℓ₀} (𝒩 : I → Nrmᴸ) (𝑷 : Nrmᴸ)
-    →  (∀ i → 𝑷 ≤ⁿ 𝒩 i) → 𝑷 ≤ⁿ ⋂ⁿ 𝒩
+  ⋂ⁿ-greatest : {I : Type ℓ₀} (𝒩 : I → Nrmᴸ) (𝑷 : Nrmᴸ) →  (∀ i → 𝑷 ≤ⁿ 𝒩 i) → 𝑷 ≤ⁿ ⋂ⁿ 𝒩
   ⋂ⁿ-greatest 𝒩 𝑷 h p i = h i p
 ```
 
@@ -266,18 +265,18 @@ non-injectivity discipline of [Setoid.Congruences.Lattice][].)
     φ = congruenceOf 𝑵
 
     upperˡ : 𝑴 ≤ⁿ (𝑴 ∨ⁿ 𝑵)
-    upperˡ p = normalOf-mono {L} {θ} {θ ∨ φ} (∨-upperˡ θ φ)
+    upperˡ p = normalOf-mono θ (θ ∨ φ) (∨-upperˡ θ φ)
                  (proj₂ (normalOf∘congruenceOf 𝑴) p)
 
     upperʳ : 𝑵 ≤ⁿ (𝑴 ∨ⁿ 𝑵)
-    upperʳ p = normalOf-mono {L} {φ} {θ ∨ φ} (∨-upperʳ θ φ)
+    upperʳ p = normalOf-mono φ (θ ∨ φ) (∨-upperʳ θ φ)
                  (proj₂ (normalOf∘congruenceOf 𝑵) p)
 
     least : (𝑷 : Nrmᴸ) → 𝑴 ≤ⁿ 𝑷 → 𝑵 ≤ⁿ 𝑷 → (𝑴 ∨ⁿ 𝑵) ≤ⁿ 𝑷
     least 𝑷 𝑴≤𝑷 𝑵≤𝑷 p = proj₁ (normalOf∘congruenceOf 𝑷)
-      (normalOf-mono {L} {θ ∨ φ} {congruenceOf 𝑷}
-        (∨-least θ φ (congruenceOf 𝑷)  (congruenceOf-mono {L} {𝑴} {𝑷} 𝑴≤𝑷)
-                                       (congruenceOf-mono {L} {𝑵} {𝑷} 𝑵≤𝑷))
+      (normalOf-mono (θ ∨ φ) (congruenceOf 𝑷)
+        (∨-least θ φ (congruenceOf 𝑷)  (congruenceOf-mono 𝑴 𝑷 𝑴≤𝑷)
+                                       (congruenceOf-mono 𝑵 𝑷 𝑵≤𝑷))
         p)
 ```
 
@@ -291,16 +290,16 @@ congruence side's `⋁`{.AgdaFunction}.
 
   ⋁ⁿ-upper : {I : Type ℓ₀} (𝒩 : I → Nrmᴸ) (i : I) → 𝒩 i ≤ⁿ ⋁ⁿ 𝒩
   ⋁ⁿ-upper 𝒩 i p =
-    normalOf-mono  {L} {congruenceOf (𝒩 i)} {⋁ 𝑮 ℓ₀ (λ j → congruenceOf (𝒩 j))}
+    normalOf-mono  (congruenceOf (𝒩 i)) (⋁ 𝑮 ℓ₀ (λ j → congruenceOf (𝒩 j)))
                    (⋁-upper 𝑮 ℓ₀ (λ j → congruenceOf (𝒩 j)) i)
                    (proj₂ (normalOf∘congruenceOf (𝒩 i)) p)
 
   ⋁ⁿ-least : {I : Type ℓ₀} (𝒩 : I → Nrmᴸ) (𝑷 : Nrmᴸ)
     →  (∀ i → 𝒩 i ≤ⁿ 𝑷) → ⋁ⁿ 𝒩 ≤ⁿ 𝑷
   ⋁ⁿ-least 𝒩 𝑷 h p = proj₁ (normalOf∘congruenceOf 𝑷)
-    (normalOf-mono  {L} {⋁ 𝑮 ℓ₀ (λ j → congruenceOf (𝒩 j))} {congruenceOf 𝑷}
+    (normalOf-mono  (⋁ 𝑮 ℓ₀ (λ j → congruenceOf (𝒩 j))) (congruenceOf 𝑷)
                     (⋁-least 𝑮 ℓ₀ (λ j → congruenceOf (𝒩 j)) (congruenceOf 𝑷)
-                      (λ i → congruenceOf-mono {L} {𝒩 i} {𝑷} (h i)))
+                      (λ i → congruenceOf-mono (𝒩 i) 𝑷 (h i)))
                     p)
 ```
 
@@ -421,7 +420,7 @@ congruence join in both arguments, which we prove here because
 
   -- Joins are preserved.
   normalOf-∨ : (θ φ : Con 𝑮 L) → normalOf (θ ∨ φ) ≈ⁿ (normalOf θ ∨ⁿ normalOf φ)
-  normalOf-∨ θ φ = normalOf-cong {L} {θ ∨ φ} {θ' ∨ φ'}
+  normalOf-∨ θ φ = normalOf-cong (θ ∨ φ) (θ' ∨ φ')
     (  ∨-mono θ φ θ' φ'  (proj₂ (congruenceOf∘normalOf θ)) (proj₂ (congruenceOf∘normalOf φ))
     ,  ∨-mono θ' φ' θ φ  (proj₁ (congruenceOf∘normalOf θ)) (proj₁ (congruenceOf∘normalOf φ))
     )
@@ -432,7 +431,7 @@ congruence join in both arguments, which we prove here because
 
   normalOf-⋁ : {I : Type ℓ₀} (f : I → Con 𝑮 L)
     →  normalOf (⋁ 𝑮 ℓ₀ f) ≈ⁿ ⋁ⁿ (λ i → normalOf (f i))
-  normalOf-⋁ f = normalOf-cong {L} {⋁ 𝑮 ℓ₀ f} {⋁ 𝑮 ℓ₀ f'}
+  normalOf-⋁ f = normalOf-cong (⋁ 𝑮 ℓ₀ f) (⋁ 𝑮 ℓ₀ f')
     (  ⋁-mono f f'  (λ i → proj₂ (congruenceOf∘normalOf (f i)))
     ,  ⋁-mono f' f  (λ i → proj₁ (congruenceOf∘normalOf (f i)))
     )

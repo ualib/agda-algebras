@@ -147,8 +147,8 @@ def test_syntax_backed_name_genuinely_unused() -> None:
 # --------------------------------------------------------------------------- #
 
 def test_parse_syntax_decl_operator() -> None:
-    assert ui.parse_syntax_decl("  syntax cong-syntax g x = x ^ g") == (
-        "cong-syntax", frozenset({"^"}))
+    assert ui.parse_syntax_decl("  syntax conj-syntax g x = x ^ g") == (
+        "conj-syntax", frozenset({"^"}))
 
 
 def test_parse_syntax_decl_bracket() -> None:
@@ -163,28 +163,28 @@ def test_parse_syntax_decl_not_a_declaration() -> None:
 
 def test_harvest_syntax_notations() -> None:
     text = block(
-        "cong-syntax : G → G → G",
-        "cong-syntax = conj",
-        "syntax cong-syntax g x = x ^ g",
+        "conj-syntax : G → G → G",
+        "conj-syntax = conj",
+        "syntax conj-syntax g x = x ^ g",
     )
     assert ui.harvest_syntax_notations([(Path("C.lagda.md"), text)]) == {
-        "cong-syntax": frozenset({"^"})}
+        "conj-syntax": frozenset({"^"})}
 
 
 def test_syntax_notation_used() -> None:
     text = block(
-        "open import M using ( cong-syntax )",
+        "open import M using ( conj-syntax )",
         "foo : x ^ g ≈ y",
     )
-    assert flagged_with(text, {"cong-syntax": frozenset({"^"})}) == {}
+    assert flagged_with(text, {"conj-syntax": frozenset({"^"})}) == {}
 
 
 def test_syntax_notation_unused() -> None:
     text = block(
-        "open import M using ( cong-syntax )",
+        "open import M using ( conj-syntax )",
         "foo = bar",
     )
-    assert flagged_with(text, {"cong-syntax": frozenset({"^"})}) == {"M": ("cong-syntax",)}
+    assert flagged_with(text, {"conj-syntax": frozenset({"^"})}) == {"M": ("conj-syntax",)}
 
 
 def test_syntax_notation_partially_present_is_unused() -> None:

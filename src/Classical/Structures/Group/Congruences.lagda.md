@@ -139,7 +139,7 @@ open import Classical.Bundles.Group                 using  ( ⟨_⟩ᵍᵖ )
 open import Classical.Operations                    using  ( pair )
 open import Classical.Signatures.Group              using  ( ∙-Op ; ε-Op ; ⁻¹-Op )
 open import Classical.Structures.Group.Basic        using  ( Group ; module Group-Op )
-open import Classical.Structures.Group.Conjugation  using  ( module Conj )
+open import Classical.Structures.Group.Conjugation  using  ( module Conjugate )
 open import Classical.Structures.Group.Cosets       using  ( module Coset )
 open import Classical.Structures.Group.Subgroups    using  ( IsSubgroup ; mkIsSubgroup
                                                            ; trivialSubgroup
@@ -177,7 +177,7 @@ module GroupCongruences {α ρ : Level} (𝒢 : Group α ρ) where
                                        ; idˡ-law ; idʳ-law ; invˡ-law ; invʳ-law )
   open GroupProperties ⟨ 𝒢 ⟩ᵍᵖ  using  ( ε⁻¹≈ε ; ⁻¹-involutive ; ⁻¹-anti-homo-∙
                                        ; \\-leftDividesʳ )
-  open Conj 𝒢                   using  ( conj ; conj-ε ; IsNormal )
+  open Conjugate 𝒢                   using  ( conj-syntax ; conj-ε ; IsNormal )
 ```
 
 #### Four facts of group arithmetic
@@ -492,15 +492,14 @@ those tuples.
 
     -- Compatibility with the curried multiplication ...
     θ-∙ : ∀ {x y u v} → x θ y → u θ v → (x ∙ u) θ (y ∙ v)
-    θ-∙ {x} {y} {u} {v} p q =
-      is-compatible θcon ∙-Op {pair x u} {pair y v} (λ { 0F → p ; 1F → q })
+    θ-∙ {x} {y} {u} {v} p q = is-compatible θcon ∙-Op λ { 0F → p ; 1F → q }
 
     -- ... and with the curried inverse.
     θ-⁻¹ : ∀ {x y} → x θ y → (x ⁻¹) θ (y ⁻¹)
-    θ-⁻¹ {x} {y} p = is-compatible θcon ⁻¹-Op {λ _ → x} {λ _ → y} (λ _ → p)
+    θ-⁻¹ p = is-compatible θcon ⁻¹-Op (λ _ → p)
 
     -- Hence conjugation by any element preserves the congruence.
-    θ-conj : ∀ g {x y} → x θ y → conj g x θ conj g y
+    θ-conj : ∀ g {x y} → x θ y → x ^ g θ y ^ g
     θ-conj g p = θ-∙ (θ-∙ θ-refl p) θ-refl
 ```
 
@@ -569,7 +568,7 @@ congruence, its identity class is normal by
   congruence→normal : {ℓ : Level} (N : Pred G ℓ) → IsSubgroup 𝒢 N
     →  IsCongruence 𝑮 (NormalRel N) → IsNormal N
   congruence→normal N N-sg isCon g {x} x∈N =
-    respects  (∙ε⁻¹ (conj g x))
+    respects  (∙ε⁻¹ (x ^ g))
               (ConNormal.IdentityClass-normal (NormalRel N , isCon) g
                 (respects (≈sym (∙ε⁻¹ x)) x∈N))
     where open IsSubgroup N-sg using ( respects )
@@ -582,12 +581,12 @@ monotonicity is immediate in each direction.
 
 ```agda
   -- The congruence-to-subgroup map is monotone.
-  normalOf-mono : {θ φ : Con 𝑮 ℓ} → θ ⊑ φ → normalOf θ ≤ⁿ normalOf φ
-  normalOf-mono θ⊑φ p = θ⊑φ p
+  normalOf-mono : (θ φ : Con 𝑮 ℓ) → θ ⊑ φ → normalOf θ ≤ⁿ normalOf φ
+  normalOf-mono _ _ θ⊑φ p = θ⊑φ p
 
   -- The subgroup-to-congruence map is monotone.
-  congruenceOf-mono : {𝑴 𝑵 : NormalSubgroup ℓ} → 𝑴 ≤ⁿ 𝑵 → congruenceOf 𝑴 ⊑ congruenceOf 𝑵
-  congruenceOf-mono 𝑴≤𝑵 p = 𝑴≤𝑵 p
+  congruenceOf-mono : (𝑴 𝑵 : NormalSubgroup ℓ) → 𝑴 ≤ⁿ 𝑵 → congruenceOf 𝑴 ⊑ congruenceOf 𝑵
+  congruenceOf-mono _ _ 𝑴≤𝑵 p = 𝑴≤𝑵 p
 ```
 
 `OrderIso`{.AgdaRecord} asks only for monotonicity, not for the maps to be well defined
@@ -598,14 +597,14 @@ monotonicity twice suffices.
 
 ```agda
   -- Both maps respect the equivalences of the two sides.
-  normalOf-cong : {θ φ : Con 𝑮 ℓ} → θ ≑ φ → normalOf θ ≈ⁿ normalOf φ
-  normalOf-cong {ℓ} {θ} {φ} (θ⊑φ , φ⊑θ) =
-    normalOf-mono {ℓ} {θ} {φ} θ⊑φ , normalOf-mono {ℓ} {φ} {θ} φ⊑θ
+  normalOf-cong : (θ φ : Con 𝑮 ℓ) → θ ≑ φ → normalOf θ ≈ⁿ normalOf φ
+  normalOf-cong  θ φ (θ⊑φ , φ⊑θ) =
+    normalOf-mono θ φ θ⊑φ , normalOf-mono φ θ φ⊑θ
 
-  congruenceOf-cong : {𝑴 𝑵 : NormalSubgroup ℓ}
+  congruenceOf-cong : (𝑴 𝑵 : NormalSubgroup ℓ)
     →  𝑴 ≈ⁿ 𝑵 → congruenceOf 𝑴 ≑ congruenceOf 𝑵
-  congruenceOf-cong {ℓ} {𝑴} {𝑵} (𝑴≤𝑵 , 𝑵≤𝑴) =
-    congruenceOf-mono {ℓ} {𝑴} {𝑵} 𝑴≤𝑵 , congruenceOf-mono {ℓ} {𝑵} {𝑴} 𝑵≤𝑴
+  congruenceOf-cong 𝑴 𝑵 (𝑴≤𝑵 , 𝑵≤𝑴) =
+    congruenceOf-mono 𝑴 𝑵 𝑴≤𝑵 , congruenceOf-mono 𝑵 𝑴 𝑵≤𝑴
 ```
 
 #### Mutual inverseness
@@ -673,8 +672,8 @@ Agda cannot recover them from the field types.)
   normal-congruence-iso ℓ = record
     { to         = normalOf
     ; from       = congruenceOf
-    ; to-mono    = λ {θ} {φ} → normalOf-mono {ℓ} {θ} {φ}
-    ; from-mono  = λ {𝑴} {𝑵} → congruenceOf-mono {ℓ} {𝑴} {𝑵}
+    ; to-mono    = λ {θ} {φ} → normalOf-mono θ φ
+    ; from-mono  = λ {𝑴} {𝑵} → congruenceOf-mono 𝑴 𝑵
     ; to∘from    = normalOf∘congruenceOf
     ; from∘to    = congruenceOf∘normalOf
     }
@@ -692,8 +691,8 @@ congruence poset of its underlying algebra — the form a representability argum
   normal-congruence-iso⁻¹ ℓ = record
     { to         = congruenceOf
     ; from       = normalOf
-    ; to-mono    = λ {𝑴} {𝑵} → congruenceOf-mono {ℓ} {𝑴} {𝑵}
-    ; from-mono  = λ {θ} {φ} → normalOf-mono {ℓ} {θ} {φ}
+    ; to-mono    = λ {𝑴} {𝑵} → congruenceOf-mono 𝑴 𝑵
+    ; from-mono  = λ {θ} {φ} → normalOf-mono θ φ
     ; to∘from    = congruenceOf∘normalOf
     ; from∘to    = normalOf∘congruenceOf
     }
