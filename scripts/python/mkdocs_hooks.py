@@ -134,9 +134,12 @@ def on_files(files, config):
 # docs/index.md advertises "<N> literate modules, <M>k lines of Agda".  Rather
 # than let those drift, the hook recomputes them from the tree and substitutes
 # them into the `<!-- ualib:stat:… -->` markers on that one page.  It is a single
-# pass over the ~280 canonical modules (~0.5 s), run only when rendering index.md.
+# pass over the canonical (non-Legacy) modules — a few hundred files, ~50 ms —
+# run only when rendering index.md, so it adds nothing meaningful to the build.
 SRC = Path("src")
-STAT = re.compile(r"<!-- ualib:stat:(\w+) -->.*?<!-- /ualib:stat:\1 -->")
+# DOTALL so the markers keep matching even if index.md is reformatted with the
+# open/close comments on separate lines; the \1 backreference pins each pair.
+STAT = re.compile(r"<!-- ualib:stat:(\w+) -->.*?<!-- /ualib:stat:\1 -->", re.DOTALL)
 
 
 def _agda_loc(text: str) -> int:
@@ -168,7 +171,9 @@ def _corpus_stats() -> tuple[int, int]:
 def _fill_corpus_stats(markdown: str) -> str:
     """Replace the landing page's stat markers with freshly counted values."""
     mods, loc = _corpus_stats()
-    values = {"modules": str(mods), "loc": f"{round(loc / 1000)}k"}
+    # Half-up rounding to thousands (round() would round ties to even, e.g.
+    # 60_500 → "60k"; readers of a "…k" stat expect 60_500 → "61k").
+    values = {"modules": str(mods), "loc": f"{(loc + 500) // 1000}k"}
     log.info(f"📊  corpus stats: {values['modules']} modules, {values['loc']} lines of Agda")
     return STAT.sub(lambda m: values.get(m.group(1), m.group(0)), markdown)
 
