@@ -51,13 +51,15 @@ free constructive data reconstitutes the full semantic
 `FiniteCongruences`{.AgdaRecord}, so the assumption is exactly the classical delta
 between the two layers, no more, no less.
 
-**Entry 2**: Kurzweil–Netter duality.  The class of representable lattices is
-closed under dualization — proved by Kurzweil (1985) for intervals in solvable
-groups and by Netter (1986) in general, the latter possibly never published.  The
-closure toolkit of work package WP-5 ([FLRP.Closure][]) proves product and
-ordinal-sum closure outright; duality enters as this registry's second entry,
-`KurzweilNetterDuality`{.AgdaFunction}, an explicit hypothesis pending a formal
-reproof.[^3]
+**Entry 2** (*retired*): Kurzweil–Netter duality.  The class of representable
+lattices is closed under dualization — proved by Kurzweil (1985) for intervals
+in solvable groups and by Netter (1986) in general, the latter possibly never
+published.  Registered here as `KurzweilNetterDuality`{.AgdaFunction} while a
+formal reproof was pending, the entry is **retired as an assumption**: issue
+#502's [FLRP.KurzweilNetter.Duality][] proves the statement outright from the
+properties of the base group the argument actually uses, the only remaining
+classical ingredient being Entry 4.  The statement types remain here as the
+theorem's canonical name.[^3]
 
 **Entry 3**: the Pálfy–Pudlák theorem.  Every finite lattice is a congruence
 lattice of a finite algebra *if and only if* every finite lattice is an interval in
@@ -206,14 +208,14 @@ transitivity.
       φ≑e = d≑e .proj₁ ∘ φ≑d .proj₁ , φ≑d .proj₂ ∘ d≑e .proj₂
 ```
 
-#### Entry 2: Kurzweil–Netter duality
+#### Entry 2: Kurzweil–Netter duality (retired)
 
 The **theorem of Kurzweil and Netter**: if a finite lattice is representable as
 the congruence lattice of a finite algebra, then so is its dual.  Kurzweil proved
 the group-interval case (H. Kurzweil, *Endliche Gruppen mit vielen Untergruppen*,
 J. reine angew. Math. 356 (1985) 140–160); his student Netter proved the general
 statement (R. Netter, 1986), in an article that may never have been published.
-The argument this library targets is the one presented in
+The formalized argument is the one presented in
 `docs/papers/fin-lat-rep/SmallLatticeReps.tex` § "Lattice duals: the theorem of
 Kurzweil and Netter", following Pálfy's 2009 lectures: represent the dual of
 `Eq(n)` as the interval `[D , Sⁿ]` in the subgroup lattice of a power of a
@@ -225,36 +227,40 @@ algebra with lifted operations.
    decidable representation of `𝑳`{.AgdaBound}, one can produce a decidable
    representation of `dualLattice 𝑳`{.AgdaFunction}
    ([Classical.Structures.Lattice.Dual][]).  The ∀-form
-   `KurzweilNetterDuality`{.AgdaFunction} is the full theorem.  The per-lattice
-   form is the useful granularity downstream: a consumer may assume duality at
-   exactly the lattice it dualizes (the small-lattice census, issue #485, needs it
-   only at the certified partners of its two dual entries).
+   `KurzweilNetterDuality`{.AgdaFunction} is the full theorem.
 
-+  **Source and status**.  Unlike Entry 1 — an axiom-calibrated *bridge* whose
-   strength is pinned between WLEM and LEM — this entry is a *classically proven
-   theorem* imported pending formalization.  Its proof route needs the powers
-   `Sⁿ` of a finite simple group, the interval `[D , Sⁿ]`, and the transitive
-   G-set congruence bridge of work package WP-3, none of which is formalized yet;
-   when the stretch goal of issue #456 lands, this entry retires and
-   `dual-Representableᵈ`{.AgdaFunction} of [FLRP.Closure][] becomes a theorem.
++  **Status: retired as an assumption** (issue #502).
+   `kurzweilNetterDuality`{.AgdaFunction} of [FLRP.KurzweilNetter.Duality][]
+   *proves* `KurzweilNetterDuality`{.AgdaFunction} outright, parameterized by
+   the properties of the base group the argument actually uses — a finite
+   carrier with decidable equality, a nontriviality witness, and Entry 4's
+   surjectivity family — and `dual-Representableᵈ`{.AgdaFunction} of
+   [FLRP.Closure][] is rewired to that theorem.  Nothing consumes this entry
+   as a hypothesis any more; the definitions below remain as the canonical
+   *statement* of the theorem (they are its conclusion's type).  The residual
+   classical content is exactly Entry 4 (retirement tracked by issue #522)
+   plus the instantiation of `𝒮` at a concrete finite nonabelian simple group
+   (tracked separately; `A₅` needs the simplicity predicates of issue #512).
 
-+  **Layer**.  The entry is registered at Layer D (`Representableᵈ`{.AgdaRecord}),
++  **Layer**.  The statement is at Layer D (`Representableᵈ`{.AgdaRecord}),
    the program's working notion per [ADR-008][]; the classical statement is the
-   Layer-S reading, and the two coincide classically through Entry 1.  A formal
-   Kurzweil–Netter proof would in any case produce the Layer-D form: the
-   construction is finite and explicit.
+   Layer-S reading, and the two coincide classically through Entry 1.  As
+   anticipated at registration, the formal proof produces the Layer-D form
+   directly: the construction is finite and explicit.
 
 +  **Size**.  The construction represents the dual on an algebra of
    `|S|ⁿ⁻¹ ≥ 60ⁿ⁻¹` elements (for an `n`-element original), which is why the
-   census keeps dual entries assumption-conditional rather than materializing
-   concrete certificate algebras.
+   census keeps dual entries conditional rather than materializing concrete
+   certificate algebras: the theorem makes their *statements* assumption-free
+   (modulo Entry 4) without bringing the certificates in reach.
 
 ```agda
--- Entry 2, per-lattice form: a decidable representation of 𝑳 yields one of its dual.
+-- Entry 2, per-lattice form: a decidable representation of 𝑳 yields one of its
+-- dual.  Proved by FLRP.KurzweilNetter.Duality; retained as the statement type.
 KurzweilNetterDualityAt : Lattice → Type (lsuc 0ℓ)
 KurzweilNetterDualityAt 𝑳 = Representableᵈ 𝑳 → Representableᵈ (dualLattice 𝑳)
 
--- The full theorem of Kurzweil (1985) and Netter (1986), as an explicit hypothesis.
+-- The theorem of Kurzweil (1985) and Netter (1986), as a statement.
 KurzweilNetterDuality : Type (lsuc 0ℓ)
 KurzweilNetterDuality = (𝑳 : Lattice) → KurzweilNetterDualityAt 𝑳
 ```
@@ -364,7 +370,10 @@ KurzweilSurjectivityAt 𝒮 n = KurzweilInterval.KurzweilSurjectivity 𝒮 n
       decidable representability outright in [FLRP.Closure][] and registered
       duality here as Entry 2 (see
       [`docs/notes/flrp-research-roadmap.md`](docs/notes/flrp-research-roadmap.md) § 7
-      and GitHub [Issue #456](https://github.com/ualib/agda-algebras/issues/456).
+      and GitHub [Issue #456](https://github.com/ualib/agda-algebras/issues/456)).
+      The work package's stretch goal — the formal reproof — landed with GitHub
+      [Issue #502](https://github.com/ualib/agda-algebras/issues/502), retiring
+      the entry.
 
 [^4]: Registered by **RP-1** (GitHub
       [Issue #458](https://github.com/ualib/agda-algebras/issues/458)), which needs it
