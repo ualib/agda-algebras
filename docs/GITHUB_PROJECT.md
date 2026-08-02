@@ -669,7 +669,7 @@ This is repo-infrastructure and docs-governance hygiene, so it belongs in milest
 
 ---
 
-### Issue M1-13: Tier the type-check: the paper-specific certificates are 44% of a clean build (#515)
+### Issue M1-13: Tier the type-check: the paper-specific certificates are 44% of a clean build (#515, closed)
 
 **Labels**: `enhancement`, `milestone-1-infra`, `ci`, `flrp-research`
 
@@ -3774,7 +3774,7 @@ Depends on WP-2 and WP-4.  Part of #451; roadmap § 4.
 
 ---
 
-### Issue M6-13h: FLRP RP-2: the enforcement catalog (#459)
+### Issue M6-13h: FLRP RP-2: the enforcement catalog (#459, closed)
 
 **Labels**: `milestone-6-flrp`, `research-exploratory`, `flrp-research`
 
@@ -4016,11 +4016,11 @@ Build GAP scripts that hunt for a given finite lattice as an upper interval `[H,
 
 ## Tasks
 
-- [ ] Scripted search: given a target lattice (JSON format shared with #486), scan a configurable slice of the SmallGroups library for upper intervals `[H, G]` isomorphic to it, with core-free normalization of `H` and lattice-isomorphism testing on the interval; record `(G, H, interval, isomorphism witness)` as JSON artifacts under the `scripts/flrp/` conventions, raw logs outside `src/` per roadmap § 6.
-- [ ] Transitive-degree scan for `L7` (with #484): for each `TransitiveGroup(n, k)` with point stabilizer `H`, starting at degree `n = 8`, test `[H, G] ≅ L7`; by the manuscript's § 5 transitivity theorem, a degree-by-degree exhaustion settles existence of minimal representations of that size.
-- [ ] Reproduce and script the manuscript's concrete claims: `SmallGroup(216,153)` as the smallest group with a pentagonal upper interval (the manuscript's TODO appendix), the `L11` filter-ideal construction, and the interval data behind `L14`, `L16`, `L20` for #485.
-- [ ] Import route into Agda: coordinate with the WP-3 bridge (#454) so a found interval becomes `Representableᵈ` via `Con(G ↷ G/H) ≅ [H, G]`; for small indices, alternatively dump the coset algebra's operation tables into `cg2.py` for a direct certificate.
-- [ ] Environment: GAP is not in the flake; document a pinned GAP setup, and provide it by specifying a new nix devshell in flake.nix that provides GAP and the SmallGroups library, so runs are reproducible; note the library versions in every emitted artifact.
+- [x] Scripted search: given a target lattice (JSON format shared with #486), scan a configurable slice of the SmallGroups library for upper intervals `[H, G]` isomorphic to it, with core-free normalization of `H` and lattice-isomorphism testing on the interval; record `(G, H, interval, isomorphism witness)` as JSON artifacts under the `scripts/flrp/` conventions, raw logs outside `src/` per roadmap § 6.
+- [x] Transitive-degree scan for `L7` (with #484): for each `TransitiveGroup(n, k)` with point stabilizer `H`, starting at degree `n = 8`, test `[H, G] ≅ L7`; by the manuscript's § 5 transitivity theorem, a degree-by-degree exhaustion settles existence of minimal representations of that size.
+- [x] Reproduce and script the manuscript's concrete claims: `SmallGroup(216,153)` as the smallest group with a pentagonal upper interval (the manuscript's TODO appendix), the `L11` filter-ideal construction, and the interval data behind `L14`, `L16`, `L20` for #485.
+- [x] Import route into Agda: coordinate with the WP-3 bridge (#454) so a found interval becomes `Representableᵈ` via `Con(G ↷ G/H) ≅ [H, G]`; for small indices, alternatively dump the coset algebra's operation tables into `cg2.py` for a direct certificate.
+- [x] Environment: GAP is not in the flake; document a pinned GAP setup, and provide it by specifying a new nix devshell in flake.nix that provides GAP and the SmallGroups library, so runs are reproducible; note the library versions in every emitted artifact.
 
 ## Acceptance criteria
 
@@ -4345,7 +4345,7 @@ Follow-up to #459 / #507.  Part of #451; roadmap avenue B.
 
 ---
 
-### Issue M6-22: Normal subgroups and congruences of a group: the missing correspondence (#508)
+### Issue M6-22: Normal subgroups and congruences of a group: the missing correspondence (#508, closed)
 
 **Labels**: `enhancement`, `milestone-6-flrp`, `flrp-research`
 
@@ -4371,6 +4371,215 @@ The work is ordinary — no obstruction and no classical input — and it is reu
 - [ ] `𝒢₂` of `FLRP.Reductions` is stated with the library's `IsSubdirectlyIrreducible`, and the survey note's § 4.1 divergence is replaced by a pointer to the bridge.
 
 Follow-up to #459 / #507.  Part of #451.
+
+---
+
+### Issue M6-23: Powers, diagonals, and the interval `[D , Sⁿ]` (#521)
+
+**Labels**: `enhancement`, `milestone-6-flrp`, `flrp-research`
+
+## Description
+
+Build the group infrastructure that Kurzweil's construction needs — the power `Sⁿ` of a group, its diagonal subgroup `D`, and the interval `[D , Sⁿ]` — once, in `Classical/`, so that both FLRP consumers import the same definitions: RP-4's wreath no-go (#461, Lemma 3.3 of the vendored note `docs/papers/flrp/ieprops/`) and the Kurzweil–Netter duality proof (#502, WP-5 stretch).  Reusable mathematics lands in the `Classical/` tree per roadmap § 6; the FLRP-facing interval packaging composes with `FLRP.Enforceable`'s `UpperInterval` / `IntervalIso`, the interval presentation everything downstream expects.
+
+The mathematical target is Kurzweil's lemma (`lem:latt-duals` of `docs/papers/fin-lat-rep/SmallLatticeReps.tex`, discussed in DeMeo's thesis § 2.2): for `S` a finite nonabelian simple group, the interval `[D , Sⁿ]` in `Sub(Sⁿ)` is isomorphic to `Eq(n)′`, the dual of the partition lattice of an `n`-element set.  Both written sources prove only the order-reversing embedding `π ↦ K_π = { y ∣ ker π ≤ ker y }`; the surjectivity half — every subgroup between `D` and `Sⁿ` is such a `K_π`, the step where nonabelian simplicity enters — is cited to Kurzweil's 1985 article and not reproved.  The formal treatment mirrors that split honestly:
+
++  everything the sources actually prove is formalized unconditionally — the power, the diagonal, the partition subgroups with their membership characterizations, the partition lattice `Eq(n)` itself as a level-0 equational `Lattice` (on the Freese normal-form parent vectors of `Setoid.Congruences.Certificates.Schema`, which are exactly the idempotent decreasing maps `IC(n)` the sources use), and the dual order-embedding `Eq(n) → [D , Sⁿ]`;
++  surjectivity is registered as `FLRP.Assumptions` Entry 4 in the established per-entry style (statement, source and citation, status, layer, retirement path), stated so that it hands the consumer the partition witness; the assembled `IntervalIso [D , Sⁿ] ≅ Eq(n)′` is then a proved theorem conditional on the entry, and retiring the entry (a follow-up issue: the normal-subgroup structure of powers of a nonabelian simple group, plus the induction over blocks) upgrades it with no change to consumers.
+
+## Tasks
+
+- [ ] The indexed product `⨅ᵍ` of groups and the power `_^ᵍ_` (carrier `Fin n → S`, pointwise operations), generalizing the binary `_×ᵍ_` of `Classical.Structures.Group.Product` rather than duplicating it; satisfaction transfers by `⊧-P-invar` of `Setoid.Varieties.Properties`.  Coordinate projections and pointwise descriptions of the curried operations.
+- [ ] The diagonal `D = { (s , … , s) }` as an equality-respecting subgroup of `Sⁿ`, with its membership characterization.
+- [ ] The partition lattice `Eq(n)` as a `Classical.Small.Structures.Lattice`, order-first on normal-form parent vectors: kernel-inclusion order, computable meet and join, lattice laws derived from the order, and the `dualLattice` instance.
+- [ ] Partition subgroups `K_π` with `D ≤ K_π ≤ Sⁿ`, the membership characterization `y ∈ K_π ⟺ ker π ⊆ ker y`, and the dual order-embedding (order-reversal in both directions; the reflection direction consumes nontriviality of `S`).
+- [ ] The interval `[D , Sⁿ]` as an `UpperInterval` instance, and the conditional theorem assembling `IntervalIso (Sⁿ) D (dualLattice (Eq n))` from Entry 4.
+- [ ] `FLRP.Assumptions` Entry 4: Kurzweil interval surjectivity, per-entry documentation and retirement path.
+- [ ] Consumer interface sanity check: state (as type definitions, not proofs) the signatures RP-4 (#461) and Kurzweil–Netter (#502) will call, and confirm they typecheck against what was built.
+
+## Acceptance criteria
+
+- [ ] Type-checks under `--cubical-compatible --exact-split --safe` with no postulates; classical inputs enter only through the named Entry 4 hypothesis.
+- [ ] `make check`, `make unused-imports`, and `make check-links` (after `make gen-links`) are green.
+
+Consumers: #461, #502.  Part of #451; roadmap §§ 2, 6.
+
+---
+
+### Issue M6-24: Kurzweil surjectivity: every subgroup in `[D , Sⁿ]` is a partition subgroup (retire Assumptions Entry 4) (#522)
+
+**Labels**: `enhancement`, `milestone-6-flrp`, `flrp-research`
+
+## Description
+
+Prove **Kurzweil surjectivity** — for a finite nonabelian simple group `S`, every subgroup of `Sⁿ` containing the diagonal `D` is a partition subgroup `K_π` — and retire Entry 4 of `FLRP.Assumptions` per its documented retirement path.  This is the *onto* half of Kurzweil's lemma `[D , Sⁿ] ≅ Eq(n)′`; the dual order embedding and the conditional isomorphism `kurzweilIntervalIso` landed with #521, so discharging this entry upgrades the isomorphism to an unconditional theorem at simple instantiations, with no change to consumers (#461, #502).
+
+The missing mathematics is the normal-subgroup structure theory of powers of a nonabelian simple group.  The classical argument (Kurzweil 1985; Pálfy's 2009 lectures): the kernel meet `π` of a subgroup `U ∈ [D , Sⁿ]` satisfies `U = K_π`, by showing each block column `{ c_B(s) ∣ s ∈ S }` lies in `U` — the set `N_B = { s ∣ c_B(s) ∈ U }` is normal in `S` by conjugating with diagonal elements, so by simplicity it is trivial or everything, and nontriviality of `N_B` is where nonabelianness enters (normal subgroups of `Sᵐ` are partial products, so a surjection `Sᵐ → S` is a coordinate followed by an automorphism, which the diagonal forces to be the identity).
+
+## Prerequisites
+
++  A simplicity predicate for groups (issue #512 owns the alternating/symmetric and solvability predicates; simplicity in the "every normal subgroup is trivial or full" form can land there or here).
++  `Classical.Structures.Group.{Power, Diagonal, PartitionSubgroup}` and `FLRP.KurzweilInterval` from #521.
+
+## Tasks
+
+- [ ] Normal subgroups of a finite power `Sⁿ` of a nonabelian simple group are the partial products (the commutator argument: a normal subgroup with a nontrivial `i`-th coordinate contains the full `i`-th factor).
+- [ ] A subgroup of `Sⁿ` containing the diagonal collapses blockwise: with `π` its kernel meet, each block column lies in it.
+- [ ] Assemble `KurzweilSurjectivityAt 𝒮 n` for `𝒮` simple nonabelian, at Layer S; derive the Layer-D reading over decidable interval elements.
+- [ ] Retire Entry 4: deprecate `KurzweilSurjectivityAt` as a hypothesis, rewire `kurzweilIntervalIso` and `eqDual-groupRepresentable`, and update the registry documentation.
+
+## Acceptance criteria
+
+- [ ] Type-checks under `--cubical-compatible --exact-split --safe` with no postulates; the nonabelian-simple side condition of Entry 4 becomes a formal hypothesis rather than prose.
+
+Follow-up to #521.  Feeds #461 and #502; part of #451.
+
+---
+
+### Issue M6-25: L16 erratum: the printed Sub(C2.A6) interval does not reproduce — and three parked census entries are duals of certified ones (#529)
+
+**Labels**: `milestone-6-flrp`, `research-exploratory`, `flrp-research`
+
+## Description
+
+Two findings about the `L16` entry of the SmallLatticeReps § 6 catalog, one negative and one positive.  The negative one extends erratum E2 of `docs/notes/flrp-slr-census.md`; the positive one settles `L16`'s census status outright and, in passing, two other parked entries.  All numbering is the **manuscript's** (`docs/papers/fin-lat-rep/SmallLatticeReps.tex`, 2016-06-10 draft); the dictionary is `docs/notes/flrp-slr-naming.md`.
+
+## 1. The printed group representation does not reproduce (E2, extended)
+
+The manuscript prints, for `L16` (covers `0 ≺ 1, 2`; `1 ≺ 3, 4, 5`; `2, 3, 4, 5 ≺ 6`):
+
+> Upper interval in Sub(`C_2.A_6`), algebra of size 180
+
+That asserts a subgroup `H ≤ C2.A6` of index 180 — so `|H| = 4` in a group of order 720 — with `[H, C2.A6] ≅ L16`.  Both readings of `C2.A6` fail, and the failure is not a near miss:
+
++  **`C2.A6 = 2.A6 = SL(2,9)`** (the ATLAS double cover, the reading of E2).  A single conjugacy class of index-180 subgroups; its interval has **38** elements.
++  **`C2 × A6`** (the split reading, checked here for the first time).  Index-180 classes give intervals of sizes **16, 28, 38** — no seven-element interval at all.
+
+Stronger, and independent of which group was meant: **no finite group has an upper interval `≅ L16` of index ≤ 16.**  The transitive-groups scan settles every index it covers, because a counterexample of index `n` can be taken core-free (if `N = Core_G(H) ≠ 1` then `[H/N, G/N] ≅ [H, G]` at the same index), hence is a faithful transitive action of degree `n`; degrees 4, 6, 8, 9, 10, 12, 14, 15, 16 were scanned exhaustively — 2340 transitive groups, 1954 of them at degree 16 — and every prime degree is a free negative (transitive of prime degree ⇒ primitive ⇒ two-element interval).  The `Eq(n)` uniform-partition filter (#494) agrees independently: `L16` has **no** uniform copy in `Eq(n)` for `n ≤ 10`, so no transitive G-set of those degrees can have it as a congruence lattice.
+
+Either the group or the index is wrong in the printed entry; this issue does not guess which.
+
+## 2. `L16` is the dual of `L17` — and so are two other parked entries
+
+`L16 ≅ dual(L17)`, verified by exhaustive order-isomorphism search over the committed stanzas (`L16` is not self-dual).  `L17` is **certified** in this library (`FLRP.Certificates.SmallLatticeReps.SLR17`, from the manuscript's own 12-element algebra `B17`), so `L16` is representable through `dual-Representableᵈ` of `FLRP.Closure.Basic`, conditional on `FLRP.Assumptions` Entry 2 (Kurzweil–Netter) — exactly the route the census already uses for `L18` and `L22`.  **`L16` therefore needs no group representation at all** to leave the parked list; the erratum above concerns only the manuscript's stated construction.
+
+Sweeping the same test across every parked entry turns up two more:
+
+| parked entry | dual is | census status today |
+|---|---|---|
+| `L14` | `L15` (certified, `SLR15`) | group representation, `Sub(A6)` index 90 — reproduced, but parked on the WP-3 bridge |
+| `L16` | `L17` (certified, `SLR17`) | group representation, `Sub(C2.A6)` — **does not reproduce** |
+| `L20` | `L21` (certified, `SLR21`) | filter-ideal in `SmallGroup(216,153)`; the draft prints no explicit construction |
+| `L18` | `L19` (certified) | already recorded as a dual |
+| `L22` | `L23` (certified) | already recorded as a dual |
+| `L10`, `L11`, `L28` | self-dual | duality gives nothing new |
+
+The manuscript lists dual pairs adjacently (14/15, 16/17, 18/19, 20/21, 22/23), so the pairing looks deliberate; the census and `FLRP.Closure.Basic` simply track it for only two of the five pairs.
+
+## Tasks
+
+- [ ] Extend erratum E2 in `docs/notes/flrp-slr-census.md` with the `C2 × A6` result, the index-≤-16 non-existence, and the `Eq(n)` uniform-filter cross-check; commit the GAP artifacts under `scripts/gap/flrp/out/`.
+- [ ] Record the duality finding in the census: reclassify `L14`, `L16`, `L20` as assumption-conditional duals of `SLR15`, `SLR17`, `SLR21`, keeping the group-representation notes as the (independent) second route for `L14`.
+- [ ] Update the payoff prose in `src/FLRP/Closure/Basic.lagda.md`, which names only `L18` and `L22` as the census's dual entries — five of the seven parked entries are duals of certified ones.
+- [ ] Consider a `bin/sweep_smallgroups.g` driver: `FLRP_ScanSmallGroups` exists in `lib/search.g` with no command-line front end, which is why the searches above had to go through `find_interval.g` and `scan_transitive.g`.
+- [ ] Optional, if cheap: push the transitive scan past degree 16 to sharpen the non-existence bound (degree 18 has 983 groups, 20 has 1117, 24 has 25000 — the last is likely out of reach), and note that `scan_transitive.g` hard-codes `L7` naming and output paths while its prescreen (interval size 7) serves any seven-element target — worth parameterizing.
+- [ ] Report the erratum upstream to https://github.com/UniversalAlgebra/fin-lat-rep alongside E1, with the suggested repair: cite duality with `L17` (as the draft already does for `L18` and `L22`), or supply a corrected group and index.
+
+## Acceptance criteria
+
+- [ ] The census records `L16`'s status as settled-by-duality, with the failed group representation logged as an erratum rather than a pending search.
+- [ ] Every claim above is reproducible from committed artifacts and documented commands.
+
+Part of #483; follows up the census of #485 and the GAP engine of #487.  The duality route retires unconditionally when #502 discharges Entry 2.
+
+---
+
+### Issue M6-25: Instantiate Kurzweil–Netter duality at a concrete simple group (A₅) (#527)
+
+**Labels**: 
+
+## Description
+
+The formal Kurzweil–Netter duality proof of #502 (`FLRP.KurzweilNetter.Duality`) is deliberately *parameterized* by the base group rather than instantiated: `KurzweilNetterProof` takes a group `𝒮` together with exactly the properties the argument uses — a `FiniteAlgebra` witness (finite carrier, decidable equality), a nontriviality witness `s₀` with `¬ (s₀ ≈ ε)`, and the Kurzweil-surjectivity family `(n : ℕ) → KurzweilSurjectivityAt 𝒮 n` (Assumptions Entry 4).  Nonabelianness and simplicity of `𝒮` enter the mathematics only through Entry 4, so no simplicity predicate occurs in the formal development.
+
+This issue tracks the instantiation at a concrete finite nonabelian simple group, canonically `A₅`, so that `kurzweilNetterDuality` (and `dual-Representableᵈ` of `FLRP.Closure`) can be consumed with no group-shaped parameter at all.
+
+## Tasks
+
++  Construct `A₅` as a `Group 0ℓ 0ℓ` with a `FiniteAlgebra` witness (a Cayley-table presentation on `Fin 60`, or the even permutations of `Fin 5`), and exhibit a nontrivial element.
++  Either supply Entry 4 for `A₅` — blocked on #522 in general form, or provable directly for the specific group — or thread the per-group hypothesis to the census consumers explicitly.
++  Provide the specialized corollary `kurzweilNetterDuality-A₅ : ((n : ℕ) → KurzweilSurjectivityAt A₅ n) → KurzweilNetterDuality`, collapsing to the unconditional theorem once #522 lands.
+
+## Relations
+
++  #502 provides the parameterized theorem this issue instantiates.
++  #522 retires Entry 4, the surjectivity family the instantiation must supply.
++  #512 owns the solvability and alternating/symmetric predicates; simplicity of `A₅` as a *stated property* belongs there, but is not needed for this instantiation — only Entry 4 is.
+
+## Acceptance criteria
+
++  A concrete group value instantiates `KurzweilNetterProof` under `--safe` with no postulate, with any remaining hypothesis being exactly Entry 4 at that group.
+
+---
+
+### Issue M6-26: Formalize Snow's filter-ideal lemma, and use it to represent L11 and L16 unconditionally (#530)
+
+**Labels**: `enhancement`, `milestone-6-flrp`, `research-exploratory`, `flrp-research`
+
+## Description
+
+Formalize the **union-of-a-filter-and-an-ideal** closure lemma — Snow's theorem, in the direct form the manuscript proves — and apply it to the two census entries whose manuscript representations are filter-ideal constructions.  The payoff is that `L11` and `L16` become representable **unconditionally**: no Kurzweil–Netter assumption (Entry 2, needed for the duality route of #529) and no emitted certificate at carrier 60 or 216.
+
+The lemma (`lemma:union-filter-ideal` of `docs/papers/fin-lat-rep/SmallLatticeReps.tex` § "Union of a filter and ideal"; Snow, Algebra Universalis 43 (2000), reproved there directly rather than via primitive positive formulas):
+
+> Let `X` be a finite set.  If `L ≤ Eq(X)` is representable and `L₀ ≤ L` is a sublattice with universe `α↑ ∪ β↓`, then `L₀` is representable.
+
+Its proof is four lines and entirely constructive, which is what makes this worth formalizing.  Writing `λ(L) = { f ∈ Xˣ ∣ f respects every θ ∈ L }`, representability of `L` means `L = Con ⟨X , λ(L)⟩`.  Given `θ ∈ L \ L₀`, pick `(a,b) ∈ α \ θ` and `(u,v) ∈ θ \ β`, and define the **two-valued** map `h(x) = a` if `x ∈ u/β`, else `b`.  Then `β ≤ ker h`, so `h` respects everything below `β`; and `(a,b) ∈ γ` for every `γ ≥ α`, so `h` respects everything above `α`.  Hence `h ∈ λ(L₀)` violates `θ`.  Since `λ(L) ⊆ λ(L₀)`, every `θ ∉ L₀` is violated by something in `λ(L₀)`, i.e. `L₀ = Con ⟨X , λ(L₀)⟩`.
+
+No search, no enumeration, no fixpoint — the same "witness, not decision" shape as the WP-6 checkers, and a good fit for `--safe` Agda.
+
+## The concrete witnesses
+
++  **`L16`** — found by a search over all groups of order ≤ 100 (the *only* configuration in that range).  In `Sub(A5)` take `H = C3` (index 20):
+
+   ```text
+   [C3 , A5]  =  { C3 , S3 , A4 , A4′ , A5 }  ≅  M3
+   ```
+
+   (the two `A4`s are the alternating subgroups containing that `C3`, the `S3` is its normalizer; GAP's `IntermediateSubgroups` reports exactly three middles with no containments among them).  Take `K = C5`: it lies in none of the three middles, meets each trivially, and joins each to `A5`.  So
+
+   ```text
+   L16  ≅  [C3 , A5]  ∪  [1 , C5]        inside Sub(A5),
+   ```
+
+   a filter-ideal union, with ambient set `X = A5` — an algebra of size **60**, against the erroneous 180 of the printed entry (#529).
++  **`L11`** — the manuscript's own construction, already reproduced by the #487 engine (`scripts/gap/flrp/out/l11_filter_ideal_216_153.json`): the pentagon filter `[H , G] ≅ N5` in `SmallGroup(216,153)` together with the order-3 minimal subgroup `K` below `β` but below neither `α` nor `γ`.  Ambient set of size 216.
+
+## Why the ambient lattice is closed, without waiting on #501
+
+The lemma needs the ambient `L ≤ Eq(X)` to satisfy `L = Con ⟨X , λ(L)⟩`.  In general that follows from the unary-reduction theorem (#501, open), but **both instances here avoid it**: the ambient is `Sub(G)` presented as the left-coset partitions of `X = G`, and `Con ⟨G , right translations⟩ ≅ Sub(G)` is the WP-3 bridge (#454, merged) at `H = 1`.  So `Inv(λ(L)) ⊆ Inv({right translations}) = Sub(G) = L`, and closedness is immediate.  Recording this because it decides the dependency order: this issue does **not** block on #501.
+
+## Tasks
+
+- [ ] The `λ` operator and the concrete representability predicate for a set of equivalence relations on a finite set — the "closed" notion `L = Con ⟨X , λ(L)⟩` (this is exactly what `eqsearch.py`'s closure test computes engine-side, so the naming should match the tooling's).
+- [ ] Filters and ideals of a lattice, and the fact that `α↑ ∪ β↓` is always a sublattice (one line each way: `x ∧ y ≤ y ≤ β` and `x ∨ y ≥ x ≥ α`).
+- [ ] The lemma itself, following the manuscript's proof; the `h` construction is a two-valued map defined by a decidable `β`-class membership test, so it should be smooth over a finite carrier.
+- [ ] Bridge to `Representableᵈ`: a closed `L₀ ≤ Eq(X)` yields the unary algebra `⟨X , λ(L₀)⟩` with `Con ≅ L₀`.  Check whether `Classical.Structures.Unary` (from the WP-6 pilot) already provides the algebra side.
+- [ ] The `Sub(G)` ambient: instantiate the WP-3 bridge at `H = 1` to get `Sub(G)` as a closed sublattice of `Eq(G)`; state it as a reusable lemma in `Classical/`, not under `FLRP/`.
+- [ ] Apply to `L16` (the `A5` data above) and `L11` (the committed `SmallGroup(216,153)` data), producing `Representableᵈ` witnesses; update `docs/notes/flrp-slr-census.md` and the tally.
+- [ ] GAP side: promote the ad-hoc probe into `bin/find_filter_ideal.g` — given a target filter shape and an ideal length, hunt for `(G, H, K)` — and commit the `A5` artifact in the `flrp-gap-filter-ideal v1` format that `bin/filter_ideal_216.g` already uses.
+- [ ] Cross-check with the manuscript's derivation: it obtains **adjoined ordinal sums** as a corollary of this lemma (`α = β = 1_{L₁} × 0_{L₂}` inside `L₁ × L₂`).  `FLRP.Closure` proves ordinal-sum closure directly (#456), so deriving it a second way is a free consistency check on both.
+
+## Scope note
+
+An alternative route is to emit a 60-element certificate for `⟨A5 , λ(L₀)⟩` through the WP-6 pipeline, but that needs the renderer's `Fin`-literal cap lifted past 31 and the type-check cost at carrier 60 is untested (27.9 s at carrier 19, growing with the `n²` trace tables).  The abstract route above avoids both, and is the reason to prefer formalizing the lemma over brute-forcing the instance.
+
+## Acceptance criteria
+
+- [ ] The lemma type-checks under `--cubical-compatible --exact-split --safe` with no postulates and no registry assumption.
+- [ ] `L11` and `L16` are `Representableᵈ` in the library without Entry 2, and the census records them as certified by the filter-ideal route.
+
+Part of #483; relates to #529 (which currently parks `L16` on the conditional duality route) and to the manuscript's `L17`/`L20` entries, which use the same method.
 
 <!-- END GENERATED: milestone-6 -->
 
