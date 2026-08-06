@@ -67,6 +67,14 @@ is used: exhibiting a finite lattice that is no interval refutes the group-side
 statement, hence the algebra-side one.  It is registered as
 `PalfyPudlak`{.AgdaFunction}.[^4]
 
+**Entry 4**: Kurzweil interval surjectivity.  For a finite *nonabelian simple*
+group `S`, every subgroup between the diagonal `D` and the full power `Sⁿ` is a
+partition subgroup `K_π` — the surjectivity half of Kurzweil's lemma
+`[D , Sⁿ] ≅ Eq(n)′`, whose dual-embedding half is proved outright in
+[Classical.Structures.Group.PartitionSubgroup][].  It is registered as
+`KurzweilSurjectivityAt`{.AgdaFunction}, in the witness-producing form defined
+by [FLRP.KurzweilInterval][].
+
 The module is structured as *per-assumption statement definitions* (rather than one
 monolithic record) precisely so that entries can be appended without disturbing one
 another, and downstream results take whichever entry they need as an ordinary
@@ -82,6 +90,7 @@ open import Agda.Primitive using () renaming ( Set to Type )
 
 -- Imports from the Agda Standard Library ---------------------------------------
 open import Data.List.Membership.Propositional    using  ( _∈_ )
+open import Data.Nat.Base                         using  ( ℕ )
 open import Data.Product                          using  ( _×_ ; _,_ ; Σ-syntax
                                                          ; proj₁ ; proj₂ )
 open import Function                              using  (_∘_)
@@ -90,8 +99,10 @@ open import Level                                 using  ( Level ; _⊔_ ; 0ℓ 
 
 -- Imports from the Agda Universal Algebra Library ------------------------------
 open import Classical.Small.Structures.Lattice    using  ( Lattice )
+open import Classical.Structures.Group.Basic      using  ( Group )
 open import Classical.Structures.Lattice.Dual     using  ( dualLattice )
 open import FLRP.Enforceable                      using  ( GroupFLRP-Statement )
+open import FLRP.KurzweilInterval                 using  ( module KurzweilInterval )
 open import FLRP.Problem                          using  ( FLRP-Statement )
 open import FLRP.Representable                    using  ( Representableᵈ )
 open import Overture                              using  ( 𝓞 ; 𝓥 ; Signature )
@@ -287,6 +298,59 @@ Algebra Universalis 11 (1980) 22–27) states the equivalence of
 -- Entry 3: statement (A) of Pálfy–Pudlák implies statement (B).
 PalfyPudlak : Type (lsuc 0ℓ)
 PalfyPudlak = FLRP-Statement → GroupFLRP-Statement
+```
+
+#### Entry 4: Kurzweil interval surjectivity
+
+**Kurzweil's surjectivity lemma**: if `S` is a finite nonabelian simple group,
+then every subgroup of `Sⁿ` containing the diagonal `D` is a partition subgroup
+`K_π = { y ∣ ker π ≤ ker y }`.  This is the *onto* half of the isomorphism
+`[D , Sⁿ] ≅ Eq(n)′` (H. Kurzweil, *Endliche Gruppen mit vielen Untergruppen*,
+J. reine angew. Math. 356 (1985) 140–160 — the same article behind Entry 2's
+group-interval case); the write-ups this library follows
+(`docs/papers/fin-lat-rep/SmallLatticeReps.tex` § "Lattice duals", Lemma
+`lem:latt-duals`, and DeMeo's thesis § 2.2) prove the dual order embedding and
+cite the surjectivity without reproof.  The embedding half is *proved* in
+[Classical.Structures.Group.PartitionSubgroup][]; this entry is exactly the
+remaining classical delta.
+
++  **Meaning**.  `KurzweilSurjectivityAt`{.AgdaFunction} `𝒮` `n` says: every
+   element of the respecting upper interval `[D , Sⁿ]` (an
+   `Interval≈`{.AgdaFunction} of the `UpperInterval`{.AgdaModule} at the
+   diagonal) is extensionally `K_π` for a *produced* partition `π` — the Σ-form
+   defined in [FLRP.KurzweilInterval][], which is precisely what the inverse map
+   of `kurzweilIntervalIso`{.AgdaFunction} consumes.
+
++  **Side condition**.  The statement type is defined for an arbitrary
+   `𝒮 : Group 0ℓ 0ℓ` — and for arbitrary `𝒮` it is *false* (for `S = ℤ₃` and
+   `n = 3` the tuples with `x₀ x₂ = x₁²` form a non-partition subgroup above the
+   diagonal).  The classical theorem asserts the instances where `𝒮` is finite
+   nonabelian simple, and consumers must instantiate it there; the side
+   condition stays in prose because the library does not yet define simplicity
+   predicates (issue #512 owns them), and making it formal is part of this
+   entry's retirement.
+
++  **Status and retirement path**.  A classically proven theorem imported
+   pending formalization.  The missing mathematics is the normal-subgroup
+   structure theory of powers of a nonabelian simple group (normal subgroups of
+   `Sⁿ` are partial products; subdirect subgroups containing the diagonal
+   collapse blockwise), a follow-up flagged in issue #521.  On completion this
+   entry retires, `kurzweilIntervalIso`{.AgdaFunction} holds outright at simple
+   instantiations, and the Kurzweil–Netter route of issue #502 loses one of its
+   two imported steps toward retiring Entry 2.
+
++  **Layer**.  Layer S, on the respecting interval `Interval≈`{.AgdaFunction}.
+   Over a decidable interval element (`Intervalᵈ`{.AgdaFunction}) with a finite
+   base group the partition is computable as the kernel meet of the member
+   tuples, so a formal proof is expected to produce the Layer-D reading
+   directly, mirroring Entry 2's layer note.
+
+```agda
+-- Entry 4, per-instance form: every subgroup in [D , Sⁿ] is a partition
+-- subgroup, with the partition produced as data.  Classically true for 𝒮 a
+-- finite nonabelian simple group; consumers instantiate it there.
+KurzweilSurjectivityAt : Group 0ℓ 0ℓ → ℕ → Type (lsuc 0ℓ)
+KurzweilSurjectivityAt 𝒮 n = KurzweilInterval.KurzweilSurjectivity 𝒮 n
 ```
 
 --------------------------------------

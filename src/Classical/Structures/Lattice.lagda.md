@@ -20,6 +20,7 @@ open import Classical.Structures.Lattice.DistributiveLattice  public
 open import Classical.Structures.Lattice.Dual                 public
 open import Classical.Structures.Lattice.OrdinalSum           public
 open import Classical.Structures.Lattice.Parachute            public
+open import Classical.Structures.Lattice.Partitions           public
 open import Classical.Structures.Lattice.Product              public
 
 ```

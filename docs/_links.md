@@ -185,10 +185,13 @@
 [Classical.Structures.Group.Conjugation]: /Classical/Structures/Group/Conjugation/
 [Classical.Structures.Group.Cosets]: /Classical/Structures/Group/Cosets/
 [Classical.Structures.Group.Dedekind]: /Classical/Structures/Group/Dedekind/
+[Classical.Structures.Group.Diagonal]: /Classical/Structures/Group/Diagonal/
 [Classical.Structures.Group.GSet]: /Classical/Structures/Group/GSet/
 [Classical.Structures.Group.MinimalNormal]: /Classical/Structures/Group/MinimalNormal/
 [Classical.Structures.Group.NormalCore]: /Classical/Structures/Group/NormalCore/
 [Classical.Structures.Group.NormalSubgroupLattice]: /Classical/Structures/Group/NormalSubgroupLattice/
+[Classical.Structures.Group.PartitionSubgroup]: /Classical/Structures/Group/PartitionSubgroup/
+[Classical.Structures.Group.Power]: /Classical/Structures/Group/Power/
 [Classical.Structures.Group.Product]: /Classical/Structures/Group/Product/
 [Classical.Structures.Group.SubgroupLattice]: /Classical/Structures/Group/SubgroupLattice/
 [Classical.Structures.Group.Subgroups]: /Classical/Structures/Group/Subgroups/
@@ -199,6 +202,7 @@
 [Classical.Structures.Lattice.Dual]: /Classical/Structures/Lattice/Dual/
 [Classical.Structures.Lattice.OrdinalSum]: /Classical/Structures/Lattice/OrdinalSum/
 [Classical.Structures.Lattice.Parachute]: /Classical/Structures/Lattice/Parachute/
+[Classical.Structures.Lattice.Partitions]: /Classical/Structures/Lattice/Partitions/
 [Classical.Structures.Lattice.Product]: /Classical/Structures/Lattice/Product/
 [Classical.Structures.Magma]: /Classical/Structures/Magma/
 [Classical.Structures.Monoid]: /Classical/Structures/Monoid/
@@ -379,6 +383,7 @@
 [FLRP.Closure.OrdinalSum]: /FLRP/Closure/OrdinalSum/
 [FLRP.Closure.Product]: /FLRP/Closure/Product/
 [FLRP.Enforceable]: /FLRP/Enforceable/
+[FLRP.KurzweilInterval]: /FLRP/KurzweilInterval/
 [FLRP.L7EqSix]: /FLRP/L7EqSix/
 [FLRP.LayerBridge]: /FLRP/LayerBridge/
 [FLRP.Parachute]: /FLRP/Parachute/
@@ -565,10 +570,13 @@
 [Classical/Structures/Group/Conjugation.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Group/Conjugation.lagda.md
 [Classical/Structures/Group/Cosets.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Group/Cosets.lagda.md
 [Classical/Structures/Group/Dedekind.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Group/Dedekind.lagda.md
+[Classical/Structures/Group/Diagonal.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Group/Diagonal.lagda.md
 [Classical/Structures/Group/GSet.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Group/GSet.lagda.md
 [Classical/Structures/Group/MinimalNormal.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Group/MinimalNormal.lagda.md
 [Classical/Structures/Group/NormalCore.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Group/NormalCore.lagda.md
 [Classical/Structures/Group/NormalSubgroupLattice.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Group/NormalSubgroupLattice.lagda.md
+[Classical/Structures/Group/PartitionSubgroup.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Group/PartitionSubgroup.lagda.md
+[Classical/Structures/Group/Power.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Group/Power.lagda.md
 [Classical/Structures/Group/Product.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Group/Product.lagda.md
 [Classical/Structures/Group/SubgroupLattice.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Group/SubgroupLattice.lagda.md
 [Classical/Structures/Group/Subgroups.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Group/Subgroups.lagda.md
@@ -579,6 +587,7 @@
 [Classical/Structures/Lattice/Dual.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Lattice/Dual.lagda.md
 [Classical/Structures/Lattice/OrdinalSum.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Lattice/OrdinalSum.lagda.md
 [Classical/Structures/Lattice/Parachute.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Lattice/Parachute.lagda.md
+[Classical/Structures/Lattice/Partitions.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Lattice/Partitions.lagda.md
 [Classical/Structures/Lattice/Product.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Lattice/Product.lagda.md
 [Classical/Structures/Magma.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Magma.lagda.md
 [Classical/Structures/Monoid.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Monoid.lagda.md
@@ -759,6 +768,7 @@
 [FLRP/Closure/OrdinalSum.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/Closure/OrdinalSum.lagda.md
 [FLRP/Closure/Product.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/Closure/Product.lagda.md
 [FLRP/Enforceable.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/Enforceable.lagda.md
+[FLRP/KurzweilInterval.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/KurzweilInterval.lagda.md
 [FLRP/L7EqSix.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/L7EqSix.lagda.md
 [FLRP/LayerBridge.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/LayerBridge.lagda.md
 [FLRP/Parachute.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/Parachute.lagda.md
