@@ -136,7 +136,6 @@ import Relation.Binary.Reasoning.Setoid as SetoidReasoning
 
 -- Imports from the Agda Universal Algebra Library ------------------------------
 open import Classical.Bundles.Group                 using  ( ⟨_⟩ᵍᵖ )
-open import Classical.Operations                    using  ( pair )
 open import Classical.Signatures.Group              using  ( ∙-Op ; ε-Op ; ⁻¹-Op )
 open import Classical.Structures.Group.Basic        using  ( Group ; module Group-Op )
 open import Classical.Structures.Group.Conjugation  using  ( module Conjugate )

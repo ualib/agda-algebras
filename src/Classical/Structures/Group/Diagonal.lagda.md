@@ -42,15 +42,14 @@ open import Agda.Primitive using () renaming ( Set to Type )
 
 -- Imports from the Agda Standard Library ---------------------------------------
 open import Data.Fin.Patterns   using ( 0F ; 1F )
-open import Data.Product        using ( Σ-syntax ; _,_ ; proj₁ ; proj₂ )
+open import Data.Product        using ( Σ-syntax ; _,_ ; proj₁ )
 open import Level               using ( Level ; _⊔_ )
 open import Relation.Binary     using ( Setoid )
 open import Relation.Binary.Definitions   using ( _Respects_ )
 open import Relation.Unary      using ( Pred ; _∈_ )
 
 -- Imports from the Agda Universal Algebra Library ------------------------------
-open import Classical.Signatures.Group          using  ( Sig-Group ; ∙-Op ; ε-Op
-                                                       ; ⁻¹-Op )
+open import Classical.Signatures.Group          using  ( ∙-Op ; ⁻¹-Op )
 open import Classical.Structures.Group.Basic    using  ( Group ; module Group-Op )
 open import Classical.Structures.Group.Power    using  ( module GroupPower )
 open import Classical.Structures.Group.Subgroups
@@ -121,7 +120,6 @@ the pointwise descriptions, and applies the membership hypothesis coordinatewise
   Diag-isSubgroup : IsSubgroup ⨅ᵍ-Group Diag
   Diag-isSubgroup = mkIsSubgroup ⨅ᵍ-Group Diag-respects ∙-closed ε-closed ⁻¹-closed
     where
-    open Group-Op 𝒢         using () renaming ( _∙_ to _∙₁_ ; ε to ε₁ ; _⁻¹ to _⁻¹₁ )
     open Group-Op ⨅ᵍ-Group  using () renaming ( _∙_ to _∙ₚ_ ; ε to εₚ ; _⁻¹ to _⁻¹ₚ )
 
     ∙-closed : ∀ {x y} → x ∈ Diag → y ∈ Diag → (x ∙ₚ y) ∈ Diag
