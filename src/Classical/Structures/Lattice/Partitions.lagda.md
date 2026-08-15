@@ -547,10 +547,14 @@ greatest.  For `n ≡ 0` the two coincide on the empty vector.
 ⊥ᵉ-minimum {n} pv {i} {j} e =
   cong (parent pv) (trans (sym (parent-tab (λ k → k) i)) (trans e (parent-tab (λ k → k) j)))
 
+-- Any two indices lie in the one block of ⊤ᵉ.
+⊤ᵉ-related : (n : ℕ) (i j : Fin n) → SameBlock (⊤ᵉ n) i j
+⊤ᵉ-related (suc m) i j =
+  trans (parent-tab (λ _ → Fin.zero) i) (sym (parent-tab (λ _ → Fin.zero) j))
+
 ⊤ᵉ-maximum : (n : ℕ) (pv : ParentVec n) → pv ⊑ ⊤ᵉ n
 ⊤ᵉ-maximum zero     pv {()}
-⊤ᵉ-maximum (suc m)  pv {i} {j} _ =
-  trans (parent-tab (λ _ → Fin.zero) i) (sym (parent-tab (λ _ → Fin.zero) j))
+⊤ᵉ-maximum (suc m)  pv {i} {j} _ = ⊤ᵉ-related (suc m) i j
 ```
 
 #### The refinement order is the meet order of the lattice
