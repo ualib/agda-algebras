@@ -116,6 +116,8 @@ open import FLRP.Enforceable    using  ( ComplementHClosed ; CoreFree
                                        ; cfIE→IE-Statement ; minIE
                                        ; module UpperInterval )
 open import FLRP.Parachute      using  ( module GroupParachute )
+
+import Classical.Structures.Group.MinimalNormalDescent as Descent
 open import FLRP.Parachute.Theorems  using  ( module ParachuteTheorems )
 open import FLRP.Problem        using  ( chain₂-lattice ; OrderIso )
 open import Setoid.Algebras     using  ( 𝕌[_] ; 𝔻[_] ; FiniteAlgebra )
@@ -452,12 +454,11 @@ this is the note's form.)
 
 One hypothesis is threaded through all three entries and named here rather than
 smuggled in.  **Minimal-normal descent**: every nontrivial normal subgroup of a
-*finite* group contains a minimal one.  This follows from finiteness by well-founded
-descent on order, which the library does not yet have; RP-1 threads it as a module
-parameter of `Structure.Minimal`{.AgdaModule}, and the catalog threads it as a
-property of the group being constrained — so the quantifier over normal subgroups in
-`𝒢₃` and `𝒢₄` is *not* silently dropped.  Every finite group satisfies it, so on the
-note's universe of discourse the entries below say exactly what the note says.
+*finite* group contains a minimal one.  RP-1 threads it as a module parameter of
+`Structure.Minimal`{.AgdaModule}, and the catalog threads it as a property of the group
+being constrained — so the quantifier over normal subgroups in `𝒢₃` and `𝒢₄` is *not*
+silently dropped.  Every finite group satisfies it, so on the note's universe of
+discourse the entries below say exactly what the note says.
 
 ```agda
 -- Minimal-normal descent: a consequence of finiteness, threaded explicitly.
@@ -467,6 +468,30 @@ MinimalNormalDescent 𝒢 =
   → Σ[ M ∈ Pred 𝕌[ proj₁ 𝒢 ] 0ℓ ] (IsMinimalNormal M × M ⊆ N)
   where open MinimalNormal 𝒢 0ℓ
 ```
+
+It is no longer an unproved fact.  [Classical.Structures.Group.MinimalNormalDescent][]
+proves the descent for a finite group, by well-founded recursion on the order of a
+subgroup, with normal closures of single elements as the descending chain; what remains
+is a *presentation* hypothesis, not a group-theoretic one.  Minimality quantifies over
+every normal subgroup, including those whose membership cannot be decided, and the
+no-go `minimal→DNE`{.AgdaFunction} of that module shows the unrestricted reading is
+equivalent to double-negation elimination.  So the property below is discharged for a
+finite group exactly when its normal subgroups are decidably presented — the group-side
+reading of `complete`{.AgdaField} of `FiniteCongruences`{.AgdaRecord}, which the
+two-layer note (`docs/notes/flrp-two-layer-congruences.md`) already identifies as the
+library's single Layer-S bridge.
+
+```agda
+-- Descent is a theorem for a finite group with decidably presented normal subgroups.
+finite-MinimalNormalDescent : (𝒢 : Group 0ℓ 0ℓ)(𝑭 : FiniteAlgebra (proj₁ 𝒢))
+  →  Descent.MinimalNormalDescent.DecidablyPresented 𝒢 𝑭 → MinimalNormalDescent 𝒢
+finite-MinimalNormalDescent =
+  Descent.MinimalNormalDescent.minimal-normal-descent-sem
+```
+
+The antecedent of Entries 1–3 is therefore no longer a *conjecture* of finite group
+theory but a layer-crossing datum, and the entries retire the moment a consumer
+supplies it — for a concrete certificate, by computation.
 
 #### Entries 1–3: the parachute classes
 
