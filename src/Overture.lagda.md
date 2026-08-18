@@ -40,6 +40,7 @@ open import Overture.Basic       public
 open import Overture.Signatures  public
 open import Overture.Operations  public
 open import Overture.Relations   public
+open import Overture.Counting    public
 open import Overture.Functions   public
 open import Overture.Terms       public
 open import Overture.Adjunction  public
