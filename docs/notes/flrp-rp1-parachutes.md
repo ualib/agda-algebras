@@ -93,7 +93,7 @@ No result in this phase is postulated.  Four hypotheses are threaded as ordinary
 
 +  **A finite presentation of the parachute**: a `FiniteLattice` isomorphic to `⊕ᵖ-Lattice`.  Needed *only* in the last step of the meta-theorem, because statement (B) is quantified over `Fin`-presented lattices.  Every concrete instance supplies it by computation; the general transport (enumerate a finite setoid lattice, rebuild its operation tables, and transport the eight equations) is routine and unformalized.  It is the cheapest of the four to discharge and the natural next task.
 
-+  **A minimal normal subgroup** (in `Structure.Minimal`): existence follows from finiteness by well-founded descent, which the library does not have yet.  Only Lemma 3.7's centralizer half depends on it; the propagation theorem, Theorem 3.6, Corollary 3.8, and the meta-theorem do not.
++  **A minimal normal subgroup** (in `Structure.Minimal`): existence follows from finiteness by well-founded descent.  Only Lemma 3.7's centralizer half depends on it; the propagation theorem, Theorem 3.6, Corollary 3.8, and the meta-theorem do not.  **Status: proved** by M6-18 (#510), `Classical.Structures.Group.MinimalNormalDescent` — see `docs/notes/m6-18-minimal-normal-descent.md`.  The parameter is not yet *discharged* here, and the reason is presentational rather than mathematical: `Structure.Minimal` uses its minimality parameter in exactly one place, at `M ∩ K` for an interval element `K`, and the descent theorem's minimality applies to a competitor whose nontriviality is *witnessed* — which for `M ∩ K` means deciding membership in `K`.  So discharging it is the Layer-D pass over RP-1's interval data (`Intervalᵈ` in place of `Interval≈`), not further group theory.
 
 ## 5.  Open items
 
