@@ -11,35 +11,29 @@ author: "the agda-algebras development team"
 This is the [Classical.Structures.Group.PartitionSubgroup][] module of the [Agda Universal Algebra Library][].
 
 For the finite power `𝒢 ^ᵍ n` of [Classical.Structures.Group.Power][] and a
-partition `π` of the index set — a `ParentVec`{.AgdaFunction} read through its
-kernel, as in [Classical.Structures.Lattice.Partitions][] — the **partition
-subgroup** is the set of tuples constant on the blocks of `π`:
+partition `π` of the index set, the **partition subgroup** is the set of tuples
+constant on the blocks of `π`:
 
-$$K_\pi \;=\; \{\, y \in S^n \mid \ker \pi \leq \ker y \,\}.$$
+    Kπ = { y ∈ Gⁿ | ∀ i j → ker π ≤ ker y }
+       = { y ∈ Gⁿ | ∀ i j → π i j → y i ≈ y j }.
 
-These are the subgroups Kurzweil's construction is about (issue #521; the sources
-write `K_f` or `f̂[Sⁿ]` for `f` an idempotent decreasing map presenting `π`):
-every `K_π` is an equality-respecting subgroup sandwiched between the diagonal
-`D = K_⊤` and the full power `Sⁿ = K_⊥`, and the assignment `π ↦ K_π` reverses
-the refinement order — a finer partition imposes fewer constancy constraints,
-hence a larger subgroup.
 
-The delicate lemma is **order reflection**: if `K_ρ ⊆ K_π` then `π ⊑ ρ`.  Its
-proof is the one place the base group must be *nontrivial*: for indices `i , j`
-in distinct `ρ`-blocks, the indicator tuple that is `s` on the `ρ`-block of `i`
-and `ε` elsewhere lies in `K_ρ`, so it lies in `K_π`; if `π` related `i` and `j`
-the indicator would identify `s` with `ε`.  The hypothesis enters as an explicit
-witness `s` with `¬ (s ≈ ε)` — the constructive, positive form of nontriviality
-(the negative form `Nontrivial`{.AgdaFunction} of
-[Classical.Structures.Group.MinimalNormal][] supplies no witness to build the
-indicator from).  Membership in a `ρ`-block is decided by the parent lookups, so
-the reflection is fully constructive.
+This is an equality-respecting subgroup of the power, sandwiched between the diagonal
+`D = K⊤` and the full power `Gⁿ = K⊥`, and the assignment `π ↦ Kπ` reverses the
+refinement order — a finer partition imposes fewer constancy constraints, hence a
+larger subgroup.
 
-Together, monotonicity and reflection make `π ↦ K_π` a *dual order embedding* of
-the partition lattice `Eq(n)` into the interval `[D , Sⁿ]` of the subgroup
-lattice; that `K` is also *onto* the interval when the base group is a
-nonabelian simple group is Kurzweil's lemma, registered as an explicit
-hypothesis where the FLRP program consumes it ([FLRP.KurzweilInterval][]).
+The delicate lemma is *order reflection*: if `Kρ ⊆ Kπ` then `π ⊑ ρ`.
+Its proof is the one place the base group must be *nontrivial*.  Indeed, for indices
+`i , j` in distinct `ρ`-blocks, the indicator tuple that is `s` on the `ρ`-block of
+`i` and `ε` elsewhere lies in `Kρ`, so it lies in `Kπ`; if `π i j`, then the
+indicator would identify `s` with `ε`.  The hypothesis enters as an explicit
+witness `s` with `¬ s ≈ ε` — the constructive, positive form of nontriviality.[^1]
+Membership in a `ρ`-block is decided by the parent lookups, so the reflection is
+fully constructive.
+
+Together, monotonicity and reflection make `π ↦ Kπ` a *dual order embedding* of the
+partition lattice `Eq(n)` into the interval `[D , Gⁿ]` of the subgroup lattice.[^2]
 
 <!--
 ```agda
@@ -55,6 +49,7 @@ open import Data.Fin.Patterns   using ( 0F ; 1F )
 open import Data.Fin.Properties using ( _≟_ )
 open import Data.Nat.Base       using ( ℕ )
 open import Data.Product        using ( _,_ ; proj₁ )
+open import Function            using ( id )
 open import Level               using ( Level )
 open import Relation.Binary     using ( Setoid )
 open import Relation.Binary.Definitions           using ( _Respects_ )
@@ -82,7 +77,7 @@ private variable α ρ : Level
 
 #### The partition subgroup predicate
 
-`PartitionSubgroups`{.AgdaModule} `n` `𝒢` packages the family `K` for a fixed
+`PartitionSubgroups`{.AgdaModule}` n 𝒢` packages the family `K` for a fixed
 power, together with the diagonal of [Classical.Structures.Group.Diagonal][].
 
 ```agda
@@ -92,17 +87,16 @@ module PartitionSubgroups (n : ℕ) (𝒢 : Group α ρ) where
   open DiagonalSubgroup (Fin n) 𝒢 public
 
   private
-    𝑮 = proj₁ 𝒢
-    𝑷 = proj₁ ⨅ᵍ-Group
+    𝑮 = 𝒢 .proj₁
+    Π𝑮 = ⨅ᵍ-Group .proj₁
 
-  open Setoid 𝔻[ 𝑮 ] using ( reflexive )
-    renaming ( _≈_ to _≈₁_ ; sym to sym₁ ; trans to trans₁ )
-  open Setoid 𝔻[ 𝑷 ] using () renaming ( _≈_ to _≈ₚ_ )
-  open Group-Op 𝒢 using () renaming ( ε to ε₁ )
+  open Setoid 𝔻[ 𝑮 ] using (reflexive ; _≈_) renaming (sym to ≈sym ; trans to ≈trans)
+  open Setoid 𝔻[ Π𝑮 ] using () renaming ( _≈_ to _≈ᴵ_ )
+  open Group-Op 𝒢 using ( ε )
 
   -- Membership: the tuple is constant on every block of the partition.
-  K : ParentVec n → Pred 𝕌[ 𝑷 ] ρ
-  K pv x = ∀ {i j} → SameBlock pv i j → x i ≈₁ x j
+  K : ParentVec n → Pred 𝕌[ Π𝑮 ] ρ
+  K pv x = ∀ {i j} → SameBlock pv i j → x i ≈ x j
 ```
 
 Every `K pv` is an equality-respecting subgroup, by the same coordinatewise
@@ -110,32 +104,32 @@ rewriting as for the diagonal.
 
 ```agda
   -- K pv respects the pointwise equality of the power.
-  K-respects : (pv : ParentVec n) → K pv Respects _≈ₚ_
-  K-respects pv {x} {y} e k {i} {j} sb = trans₁ (sym₁ (e i)) (trans₁ (k sb) (e j))
+  K-respects : (pv : ParentVec n) → K pv Respects _≈ᴵ_
+  K-respects pv e k {i} {j} sb = ≈trans (≈sym (e i)) (≈trans (k sb) (e j))
 
   -- K pv is closed under the power operations, hence a respecting subgroup.
   K-isSubgroup : (pv : ParentVec n) → IsSubgroup ⨅ᵍ-Group (K pv)
   K-isSubgroup pv = mkIsSubgroup ⨅ᵍ-Group (K-respects pv) ∙-closed ε-closed ⁻¹-closed
     where
-    open Group-Op ⨅ᵍ-Group  using () renaming ( _∙_ to _∙ₚ_ ; ε to εₚ ; _⁻¹ to _⁻¹ₚ )
+    open Group-Op ⨅ᵍ-Group  using () renaming ( _∙_ to _⊗_ ; ε to e ; _⁻¹ to inv )
 
-    ∙-closed : ∀ {x y} → x ∈ K pv → y ∈ K pv → (x ∙ₚ y) ∈ K pv
+    ∙-closed : ∀ {x y} → x ∈ K pv → y ∈ K pv → x ⊗ y ∈ K pv
     ∙-closed {x} {y} kx ky {i} {j} sb =
-      trans₁  (∙ₚ-pointwise x y i)
-              (trans₁  (interp-cong 𝑮 ∙-Op (λ { 0F → kx sb ; 1F → ky sb }))
-                       (sym₁ (∙ₚ-pointwise x y j)))
+      ≈trans  (⊗-pointwise x y i)
+              (≈trans  (interp-cong 𝑮 ∙-Op λ { 0F → kx sb ; 1F → ky sb })
+                       (≈sym (⊗-pointwise x y j)))
 
-    ε-closed : εₚ ∈ K pv
-    ε-closed {i} {j} _ = trans₁ (εₚ-pointwise i) (sym₁ (εₚ-pointwise j))
+    ε-closed : e ∈ K pv
+    ε-closed {i} {j} _ = ≈trans (e-pointwise i) (≈sym (e-pointwise j))
 
-    ⁻¹-closed : ∀ {x} → x ∈ K pv → (x ⁻¹ₚ) ∈ K pv
+    ⁻¹-closed : ∀ {x} → x ∈ K pv → inv x ∈ K pv
     ⁻¹-closed {x} kx {i} {j} sb =
-      trans₁  (⁻¹ₚ-pointwise x i)
-              (trans₁  (interp-cong 𝑮 ⁻¹-Op (λ { 0F → kx sb }))
-                       (sym₁ (⁻¹ₚ-pointwise x j)))
+      ≈trans  (inv-pointwise x i)
+              (≈trans  (interp-cong 𝑮 ⁻¹-Op λ { 0F → kx sb })
+                       (≈sym (inv-pointwise x j)))
 ```
 
-#### The sandwich `D ≤ K_π ≤ Sⁿ`
+#### The sandwich `D ≤ Kπ ≤ Sⁿ`
 
 Diagonal tuples are constant outright, so they lie in every partition subgroup;
 the one-block partition recovers the diagonal exactly, and the discrete
@@ -154,11 +148,11 @@ partition imposes no constraint at all.
   Diag⊆K⊤ = Diag⊆K (⊤ᵉ n)
 
   -- The discrete partition constrains nothing: K ⊥ᵉ is the full power.
-  K⊥-full : (x : 𝕌[ 𝑷 ]) → x ∈ K (⊥ᵉ n)
+  K⊥-full : (x : 𝕌[ Π𝑮 ]) → x ∈ K (⊥ᵉ n)
   K⊥-full x {i} {j} sb = reflexive (cong x discrete)
     where
     discrete : i ≡ j
-    discrete = trans (sym (parent-tab (λ k → k) i)) (trans sb (parent-tab (λ k → k) j))
+    discrete = trans (sym (parent-tab id i)) (trans sb (parent-tab id j))
 ```
 
 #### Order reversal
@@ -181,42 +175,50 @@ contradiction `s ≈ ε`.
 
 ```agda
   -- Reflection: K pw ⊆ K pu implies pu ⊑ pw, for a nontrivial base group.
-  K-reflects : (s : 𝕌[ 𝑮 ]) → ¬ (s ≈₁ ε₁) → {pu pw : ParentVec n}
+  K-reflects : (s : 𝕌[ 𝑮 ]) → ¬ (s ≈ ε) → {pu pw : ParentVec n}
     → K pw ⊆ K pu → pu ⊑ pw
   K-reflects s s≉ε {pu} {pw} incl {i} {j} sbu = decide (parent pw i ≟ parent pw j)
     where
     -- The indicator of the pw-block of i.
-    ind : 𝕌[ 𝑷 ]
-    ind k = if does (parent pw k ≟ parent pw i) then s else ε₁
+    ind : 𝕌[ Π𝑮 ]
+    ind k = if does (parent pw k ≟ parent pw i) then s else ε
 
     -- The indicator is constant on pw-blocks, so it lies in K pw.
     ind∈Kpw : ind ∈ K pw
     ind∈Kpw {k} {l} sb =
-      reflexive (cong (λ t → if does (t ≟ parent pw i) then s else ε₁) sb)
+      reflexive (cong (λ t → if does (t ≟ parent pw i) then s else ε) sb)
 
     decide : Dec (SameBlock pw i j) → SameBlock pw i j
     decide (yes e)   = e
     decide (no ¬e)   = ⊥-elim (s≉ε s≈ε)
       where
       ind-i : ind i ≡ s
-      ind-i = cong (λ b → if b then s else ε₁) (dec-true (parent pw i ≟ parent pw i) refl)
+      ind-i = cong (λ b → if b then s else ε) (dec-true (parent pw i ≟ parent pw i) refl)
 
-      ind-j : ind j ≡ ε₁
-      ind-j = cong  (λ b → if b then s else ε₁)
+      ind-j : ind j ≡ ε
+      ind-j = cong  (λ b → if b then s else ε)
                     (dec-false (parent pw j ≟ parent pw i) (λ e → ¬e (sym e)))
 
-      s≈ε : s ≈₁ ε₁
-      s≈ε = trans₁  (reflexive (sym ind-i))
-                    (trans₁ (incl ind∈Kpw sbu) (reflexive ind-j))
+      s≈ε : s ≈ ε
+      s≈ε = ≈trans  (reflexive (sym ind-i))
+                    (≈trans (incl ind∈Kpw sbu) (reflexive ind-j))
 ```
 
-Reflection upgrades mutual inclusion of partition subgroups to equality of
-partitions — the injectivity of `π ↦ K_π`, in the setoid sense.
+Reflection upgrades mutual inclusion of partition subgroups to equality of partitions
+— the injectivity of `π ↦ Kπ`, in the setoid sense.
 
 ```agda
   -- Mutual inclusion of partition subgroups gives equal partitions.
-  K-injective : (s : 𝕌[ 𝑮 ]) → ¬ (s ≈₁ ε₁) → {pu pw : ParentVec n}
+  K-injective : (s : 𝕌[ 𝑮 ]) → ¬ s ≈ ε → {pu pw : ParentVec n}
     → K pw ⊆ K pu → K pu ⊆ K pw → pu ≈ᵖ pw
   K-injective s s≉ε {pu} {pw} wu uw =
     K-reflects s s≉ε {pu = pu} {pw = pw} wu , K-reflects s s≉ε {pu = pw} {pw = pu} uw
 ```
+
+[^1]: The negative form `Nontrivial`{.AgdaFunction} of
+      [Classical.Structures.Group.MinimalNormal][] supplies no witness to build the
+      indicator from.
+
+[^2]: `K` is also *onto* the interval if `G` is a nonabelian simple group; this is
+      **Kurzweil's lemma**, registered as an explicit hypothesis where the FLRP
+      program consumes it ([FLRP.KurzweilInterval][]).
