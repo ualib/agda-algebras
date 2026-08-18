@@ -101,6 +101,7 @@ open import Classical.Structures.Group.GSet                    public
 open import Classical.Structures.Group.IndexAction             public
 open import Classical.Structures.Group.MaximalSubgroup         public
 open import Classical.Structures.Group.MinimalNormal           public
+open import Classical.Structures.Group.MinimalNormalDescent    public
 open import Classical.Structures.Group.NormalClosure           public
 open import Classical.Structures.Group.NormalCore              public
 open import Classical.Structures.Group.NormalSubgroupLattice   public
