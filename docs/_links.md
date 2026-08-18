@@ -381,6 +381,7 @@
 [FLRP.Enforceable]: /FLRP/Enforceable/
 [FLRP.L7EqSix]: /FLRP/L7EqSix/
 [FLRP.LayerBridge]: /FLRP/LayerBridge/
+[FLRP.MinimalNormalDescent]: /FLRP/MinimalNormalDescent/
 [FLRP.Parachute]: /FLRP/Parachute/
 [FLRP.Parachute.Representation]: /FLRP/Parachute/Representation/
 [FLRP.Parachute.Theorems]: /FLRP/Parachute/Theorems/

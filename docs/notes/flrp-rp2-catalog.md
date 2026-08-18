@@ -82,7 +82,7 @@ What the bridge needs, for whoever picks it up: from a normal subgroup `N`, the 
 
 ### 4.2  Minimal-normal descent is threaded, not dropped
 
-RP-1's Lemma 3.7 machinery takes a *minimal normal subgroup* as a module parameter, because its existence follows from finiteness by well-founded descent, which the library does not yet have.  Entries 1–3 must therefore be honest about it, and the tempting shortcut — stating the classes only for groups that come equipped with a minimal normal subgroup — would quietly weaken the quantifier over normal subgroups.
+RP-1's Lemma 3.7 machinery takes a *minimal normal subgroup* as a module parameter, because its existence follows from finiteness by well-founded descent.  That descent is now formalized — `minimalNormalᵈ` of `FLRP.MinimalNormalDescent` (issue #510) — but at Layer D and against an abstract finite group, so Entries 1–3 must still be honest about it: the tempting shortcut — stating the classes only for groups that come equipped with a minimal normal subgroup — would quietly weaken the quantifier over normal subgroups.  The retirement path is now concrete: instantiate the entries for a group carrying the finiteness data (`FiniteAlgebra` plus a complete list of Layer-D normal subgroups) and the `AllNormalDecidable` bridge, at which point `minimalNormalDescent` discharges the `MinimalNormalDescent` antecedent and the entries read as the note's statements.  That wiring is the remaining step of #510.
 
 The decision: the hypothesis is a *named property of the group being constrained*, `MinimalNormalDescent` ("every nontrivial normal subgroup contains a minimal one"), and it appears as the **antecedent of the enforced property**:
 

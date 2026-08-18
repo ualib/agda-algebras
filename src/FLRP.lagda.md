@@ -91,6 +91,12 @@ Two standing warnings apply to everything under this namespace.
    `not-representable→IE`, and repairs `minIE` as `MinimallyIE`; the survey note
    is `docs/notes/flrp-rp2-catalog.md`.
 
++  [FLRP.MinimalNormalDescent][] — **minimal normal subgroups exist in finite
+   groups**, by well-founded descent on a `FiniteAlgebra`-derived measure.  This
+   discharges the finiteness hypothesis RP-1 and RP-2 thread as an argument (the
+   catalog's `MinimalNormalDescent`); it is stated at Layer D, with a named
+   `AllNormalDecidable` bridge to the semantic consumer (issue #510).
+
 **Planned submodules** (per § 6 of the roadmap).
 
 +  `FLRP.Intervals` (intervals in subgroup lattices and core-free normalization).
@@ -106,6 +112,7 @@ open import FLRP.Parachute      public
 open import FLRP.Parachute.Representation public
 open import FLRP.Parachute.Theorems       public
 open import FLRP.Reductions     public
+open import FLRP.MinimalNormalDescent public
 open import FLRP.Bridge         public
 open import FLRP.Representable  public
 open import FLRP.Assumptions    public
