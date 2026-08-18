@@ -18,6 +18,9 @@ instances:[^1]
 
 +  `Sig-Lattice`{.AgdaFunction} ([Classical.Signatures.Lattice][]): two binary
    operation symbols; both halves of the witness are finite case splits.
++  `Sig-Group`{.AgdaFunction} ([Classical.Signatures.Group][]): three operation
+   symbols, of arities two, zero, and one — the first signature here with a symbol
+   of every arity below three.
 +  `Sig-Unary A`{.AgdaFunction} ([Classical.Signatures.Unary][]): one unary symbol
    per element of `A`; the witness is exactly an enumeration of `A`.
 
@@ -58,6 +61,7 @@ open import Level                        using ( Level )
 open import Relation.Binary.PropositionalEquality using ( _≡_ ; refl )
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
+open import Classical.Signatures.Group    using ( Sig-Group ; ∙-Op ; ε-Op ; ⁻¹-Op )
 open import Classical.Signatures.Lattice  using ( Sig-Lattice ; ∧-Op ; ∨-Op )
 open import Classical.Signatures.Unary    using ( Sig-Unary )
 open import Setoid.Congruences.ChainJoin  using ( Finitary )
@@ -87,6 +91,34 @@ Sig-Lattice-FiniteSignature .opEnum (suc zero)   = ∨-Op
 Sig-Lattice-FiniteSignature .opEnum-sur ∧-Op     = zero , refl
 Sig-Lattice-FiniteSignature .opEnum-sur ∨-Op     = suc zero , refl
 Sig-Lattice-FiniteSignature .finitary            = Sig-Lattice-Finitary
+```
+
+#### The group signature is finite finitary
+
+The three group operation symbols have arities `Fin 2`, `Fin 0`, and `Fin 1`, each
+already of the shape `Finitary`{.AgdaFunction} asks for, so the arity half is again
+the identity bijection once per symbol.  This is the witness that lets the decidable
+generated congruence of [Setoid.Congruences.Presented.Decidable][] — and hence the
+normal closure of [Classical.Structures.Group.NormalClosure][] — be formed over a
+finite group.
+
+```agda
+-- Each group operation symbol has finite arity (2, 0, and 1 respectively).
+Sig-Group-Finitary : Finitary Sig-Group
+Sig-Group-Finitary ∙-Op   = 2 , ↔-id _
+Sig-Group-Finitary ε-Op   = 0 , ↔-id _
+Sig-Group-Finitary ⁻¹-Op  = 1 , ↔-id _
+
+-- The group signature is finite finitary.
+Sig-Group-FiniteSignature : FiniteSignature Sig-Group
+Sig-Group-FiniteSignature .opCard                    = 3
+Sig-Group-FiniteSignature .opEnum zero               = ∙-Op
+Sig-Group-FiniteSignature .opEnum (suc zero)         = ε-Op
+Sig-Group-FiniteSignature .opEnum (suc (suc zero))   = ⁻¹-Op
+Sig-Group-FiniteSignature .opEnum-sur ∙-Op           = zero , refl
+Sig-Group-FiniteSignature .opEnum-sur ε-Op           = suc zero , refl
+Sig-Group-FiniteSignature .opEnum-sur ⁻¹-Op          = suc (suc zero) , refl
+Sig-Group-FiniteSignature .finitary                  = Sig-Group-Finitary
 ```
 
 #### The unary signature over an enumerated symbol type
