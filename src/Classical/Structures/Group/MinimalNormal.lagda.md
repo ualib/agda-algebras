@@ -31,7 +31,11 @@ of [FLRP.Reductions][] needs, and nothing else:
    prove) into the least-element form the algebra-side
    `IsMonolith`{.AgdaRecord} of [Setoid.Congruences.Monolith][] uses;
 +  `abelian→⊆-centralizer`{.AgdaFunction} — an abelian subgroup lies inside its own
-   centralizer, so a normal subgroup with trivial centralizer is nonabelian.
+   centralizer, so a normal subgroup with trivial centralizer is nonabelian;
++  `Witnessed`{.AgdaFunction} and `IsMinimalNormalʷ`{.AgdaRecord} — the *witnessed*
+   readings of nontriviality and of minimality, which is what a constructive
+   existence proof for minimal normal subgroups can deliver
+   ([Classical.Structures.Group.MinimalNormalDescent][]).
 
 Two presentation notes.
 
@@ -85,7 +89,7 @@ module MinimalNormal {α ρ : Level} (𝒢 : Group α ρ) (ℓ₀ : Level) where
     G = 𝕌[ 𝑮 ]
 
   open Setoid 𝔻[ 𝑮 ]  using  ( _≈_ )
-  open Group-Op 𝒢     using  ( _∙_ )
+  open Group-Op 𝒢     using  ( _∙_ ; ε )
   open Centralizer 𝒢  using  ( C[_] )
   open Conjugate 𝒢         using  ( IsNormal )
   open GroupSublattice 𝒢 ℓ₀  using  ( L ; subgroup→Subᴸ ; ∧-isSubgroup )
@@ -172,6 +176,63 @@ Note that no witness is extracted anywhere: `Nontrivial (M ∩ N)` and
     proj₂ (M-min .minimal  (M ∩ N)
                            (∩-isNormalSubgroup (M-min .normalSubgroup) N-nsg)
                            proj₁ (meets N N-nsg N-nontriv) z)
+```
+
+#### Witnessed nontriviality, and minimality against witnessed subgroups
+
+`Nontrivial`{.AgdaFunction} is stated negatively, and that is the right choice for
+the arguments above; but a *proof* that a minimal normal subgroup exists cannot
+consume it.  Over a finite group one recovers a witness for a normal subgroup whose
+membership is decidable, and for no other: `witness`{.AgdaFunction} of
+[Classical.Structures.Group.MinimalNormalDescent][] does the finite search, and the
+no-go theorem of that module shows the unrestricted passage from
+`Nontrivial`{.AgdaFunction} to `Witnessed`{.AgdaFunction} is equivalent to
+double-negation elimination.  So the two readings are named apart here.
+
+```agda
+  -- N is nontrivial, witnessed: some member of N is not the identity.
+  Witnessed : Pred G L → Type (α ⊔ ρ ⊔ L)
+  Witnessed N = Σ[ y ∈ G ] (y ∈ N × ¬ (y ≈ ε))
+
+  -- A witness refutes containment in the trivial subgroup.
+  witnessed→nontrivial : {N : Pred G L} → Witnessed N → Nontrivial N
+  witnessed→nontrivial (_ , y∈N , y≉ε) N⊆Triv = y≉ε (N⊆Triv y∈N)
+```
+
+The matching reading of minimality quantifies over the normal subgroups that come
+with a witness.  It is *not* a weakening of `IsMinimalNormal`{.AgdaRecord} in the
+domain of quantification — the subgroups it ranges over are arbitrary, with no
+decidability assumed — only in the *form* of their nontriviality hypothesis.
+
+```agda
+  record IsMinimalNormalʷ (M : Pred G L) : Type (α ⊔ ρ ⊔ lsuc L) where
+    field
+      normalSubgroupʷ  : IsNormalSubgroup M
+      witnessedʷ       : Witnessed M
+      minimalʷ         : (N : Pred G L) → IsNormalSubgroup N
+                       → N ⊆ M → Witnessed N → M ⊆ N
+
+  open IsMinimalNormalʷ public
+```
+
+The gap between the two records is one named principle, and naming it keeps the
+classical content in a single place rather than spread over the consumers.
+
+```agda
+  -- Every nontrivial normal subgroup has a witness.
+  WitnessedNontriviality : Type (α ⊔ ρ ⊔ lsuc L)
+  WitnessedNontriviality =
+    (N : Pred G L) → IsNormalSubgroup N → Nontrivial N → Witnessed N
+
+  -- Granted that principle, witnessed minimality is minimality.
+  minimalʷ→minimal : WitnessedNontriviality → {M : Pred G L}
+    →  IsMinimalNormalʷ M → IsMinimalNormal M
+  minimalʷ→minimal wit M-min = record
+    { normalSubgroup  = M-min .normalSubgroupʷ
+    ; nontrivial      = witnessed→nontrivial (M-min .witnessedʷ)
+    ; minimal         = λ N N-nsg N⊆M N-nontriv →
+                          M-min .minimalʷ N N-nsg N⊆M (wit N N-nsg N-nontriv)
+    }
 ```
 
 #### Monoliths and subdirect irreducibility
