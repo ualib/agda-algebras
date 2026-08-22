@@ -51,7 +51,9 @@ import argparse
 import json
 import re
 import sys
+import time
 from collections import Counter
+from itertools import groupby
 from dataclasses import dataclass, replace
 from enum import Enum
 from pathlib import Path
@@ -340,6 +342,15 @@ def _logical_items(lines: Iterable[tuple[int, str]]) -> list[_Item]:
     scope stack in :func:`_walk`; this pass only has to stop swallowing lines at
     the right moment, so it tracks the in-progress item's own column and
     whether a ``where`` has closed it off.
+
+    Only the *newly added* line is searched for ``where``, never the accumulated
+    item.  The two are equivalent — parts are stripped and joined with a space,
+    so no token can straddle the boundary, and the negative lookbehind is
+    satisfied by both a space and a start-of-string — but searching the
+    accumulation is quadratic in the item's length, which the FLRP certificate
+    modules punish severely: a single list literal there runs to thousands of
+    lines and is one logical item.  Measured over ``src/``, the accumulating
+    form cost 38 s of a 41 s run.
     """
     items: list[_Item] = []
     start, indent, parts, done = 0, -1, [], True
@@ -349,7 +360,7 @@ def _logical_items(lines: Iterable[tuple[int, str]]) -> list[_Item]:
         col = _indent_of(line)
         if not done and col > indent:
             parts.append(line.strip())
-            if _WHERE.search(" ".join(parts)):
+            if _WHERE.search(line):
                 items.append(_Item(start, indent, " ".join(parts)))
                 done = True
             continue
@@ -715,6 +726,47 @@ def to_record(definition: Definition) -> dict:
 # Driver
 # =============================================================================
 
+@dataclass(frozen=True)
+class Progress:
+    """Where the run narrates itself.
+
+    Effectful edge: nothing below :func:`main` constructs or calls one.  Lines go
+    to *stderr* so that ``--json`` keeps stdout clean and pipeable, and each
+    carries the elapsed time so a slow subtree is visible as it happens rather
+    than inferred afterwards.
+    """
+
+    quiet: bool
+    started: float
+
+    def note(self, message: str) -> None:
+        if not self.quiet:
+            sys.stderr.write(f"[{time.monotonic() - self.started:6.2f}s] {message}\n")
+            sys.stderr.flush()
+
+
+def analyze_subtrees(
+    texts: list[tuple[Path, str]], progress: Progress
+) -> list[FileReport]:
+    """Analyze every module, narrating one line per subtree as it completes.
+
+    Grouping the work by subtree is what makes the narration useful: 307 modules
+    at roughly three seconds is too fast for per-file lines to be readable, and a
+    single line at the end says nothing while the run is happening.
+    """
+    ordered = sorted(texts, key=lambda pair: (subtree_of(pair[0].as_posix()),
+                                              pair[0].as_posix()))
+    reports: list[FileReport] = []
+    for subtree, group in groupby(ordered, key=lambda pair: subtree_of(pair[0].as_posix())):
+        batch = [analyze_text(path, text) for path, text in group]
+        reports.extend(batch)
+        defs = sum(len(r.definitions) for r in batch)
+        gaps = sum(1 for r in batch for d in r.definitions if d.status in GAP_STATUSES)
+        progress.note(f"  {subtree:<12} {len(batch):>4} modules  {defs:>5} definitions  "
+                      f"{gaps:>4} without prose")
+    return reports
+
+
 def read_all(files: list[Path]) -> tuple[list[tuple[Path, str]], list[tuple[Path, PipelineError]]]:
     """IO boundary: read every file in the Result monad, splitting successes
     from failures so a bad read is reported rather than raised."""
@@ -746,19 +798,34 @@ def build_parser() -> argparse.ArgumentParser:
                              "only shrink while #268 is worked through per subtree")
     parser.add_argument("--exit-zero", action="store_true",
                         help="always exit 0 (do not signal gaps via exit status)")
+    parser.add_argument("--quiet", "-q", action="store_true",
+                        help="suppress the progress log on stderr")
     return parser
 
 
 def main(argv: list[str]) -> int:
     args = build_parser().parse_args(argv)
+    progress = Progress(quiet=args.quiet, started=time.monotonic())
+
+    targets = ", ".join(args.paths)
+    progress.note(f"scanning {targets}"
+                  f"{'' if args.include_legacy else ' (excluding the frozen Legacy tree)'}")
     files = gather_files([Path(p) for p in args.paths], args.include_legacy)
     if not files:
         sys.stderr.write("error: no .lagda.md files found\n")
         return 2
+    progress.note(f"discovered {len(files)} literate module(s)")
+
     texts, failures = read_all(files)
     for path, error in failures:
         sys.stderr.write(f"error: {path}: {error}\n")
-    reports = [analyze_text(path, text) for path, text in texts]
+    progress.note(f"read {len(texts)} file(s), "
+                  f"{sum(len(text) for _, text in texts) // 1024} KiB")
+
+    reports = analyze_subtrees(texts, progress)
+    progress.note(f"analyzed {len(reports)} module(s), "
+                  f"{sum(len(r.definitions) for r in reports)} public definition(s)")
+    progress.note("report follows on stdout" if args.json else "writing report")
 
     if args.json:
         for report in reports:

@@ -178,6 +178,24 @@ def test_multi_line_declaration_head() -> None:
     )) == ["R", "next"]
 
 
+def test_where_found_after_a_long_continuation() -> None:
+    # Guards the linear-scan optimisation in _logical_items: only the newly
+    # added line is searched for `where`, never the accumulated item (which was
+    # quadratic and cost 38 s of a 41 s corpus run).  A `where` arriving after
+    # many continuation lines must still open its block, so the definition that
+    # follows at the outer indent is not swallowed into it.
+    long_tail = ["      , item{}".format(i) for i in range(200)]
+    assert names(block(
+        "module _ where",
+        "  table : List Nat",
+        "  table = big",
+        *long_tail,
+        "    where big = []",
+        "  after : Set",
+        "  after = A",
+    )) == ["table", "after"]
+
+
 def test_two_names_in_one_signature() -> None:
     assert names(block("f g : Set", "f = A", "g = A")) == ["f", "g"]
 
