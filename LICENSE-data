@@ -1,0 +1,64 @@
+Additional Permission for Machine-Extracted Representations of agda-algebras
+===========================================================================
+
+Copyright 2018-2026 William DeMeo and the agda-algebras development team.
+
+This file GRANTS ADDITIONAL PERMISSIONS.  It takes nothing away.  This
+repository is licensed in parts: the source code under src/ under the Apache
+License 2.0 (see LICENSE), the documentation under docs/ under CC BY 4.0 (see
+LICENSE-docs).  Neither is changed by this file.  If this file did not exist, everything it permits would still
+be permitted under Apache-2.0 — with attribution obligations that this file
+makes optional for one narrow class of artifact.
+
+
+What this covers
+----------------
+
+"Extracted Representations" means data mechanically derived from this library's
+source by a tool, rather than written by a person, and not usable as a
+substitute for the source itself.  Specifically:
+
+  + type signatures and proof terms as rendered by Agda's own internal
+    representation or pretty printer (as distinct from the surface syntax a
+    human wrote);
+  + names, module paths, and qualified names;
+  + dependency, import, and reference metadata;
+  + structural encodings of types (abstract syntax trees);
+  + counts, distributions, digests, and any other statistics computed over the
+    above;
+  + corpora, indices, embeddings, and datasets assembled from the above.
+
+It does NOT cover the source files under src/ themselves, in whole or in part,
+nor the literate prose interleaved with the code in those files, nor the
+documentation under docs/.  Those keep the licenses named above.
+
+
+The grant
+---------
+
+Any person obtaining Extracted Representations of this library may use,
+redistribute, and build upon them under EITHER
+
+  (a) the Apache License 2.0, the license of this library's source code
+      (see LICENSE); OR
+  (b) the CC0 1.0 Universal Public Domain Dedication
+      (https://creativecommons.org/publicdomain/zero/1.0/),
+
+at that person's option.  This explicitly includes use as training,
+fine-tuning, retrieval, or evaluation data for machine-learning models, and
+includes redistribution of such data as part of a larger corpus under that
+corpus's own terms.
+
+
+Why
+---
+
+A corpus extracted from a formal library is a derivative work of that library,
+so without a statement like this one a downstream consumer has to reason about
+Apache-2.0 attribution obligations for every row of a dataset that may contain
+millions of them.  Apache-2.0 permits the use; it is the per-row bookkeeping
+that discourages it.  Option (b) removes that bookkeeping.
+
+We would nonetheless rather be cited than not.  A citation is requested, not
+required, under option (b): see CITATION.cff, and please name the commit the
+data was extracted from so the extraction can be reproduced.
