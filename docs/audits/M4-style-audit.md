@@ -15,11 +15,14 @@ This is the audit deliverable for [M4-1d] (issue #370), the scripted sweep of th
 | 1c | Code-fence blank-line-after-opener    | 222              | 51      | #372             |
 | 2a | Bare `open import` without `using`    | aggregators only | —       | none (compliant) |
 | 2b | Cosmetic `renaming`                   | 1 dead rename    | 1       | #367             |
-| 3  | Minimal module headers                | heuristic        | —       | M4-2 (#268)      |
-| 4  | HTML `<a id=…>` heading anchors       | 300              | 111     | M4-2 (#268)      |
+| 3  | Minimal module headers                | 50 (was: heuristic) | 50   | M4-2 (#268)      |
+| 3b | Undocumented public definitions       | 201 of 3247      | —       | M4-2 (#268)      |
+| 4  | HTML `<a id=…>` heading anchors       | 37 (was: 300)    | 1       | **done** (#387)  |
 | 5  | `is-x` predicate / synonym pairs      | 0 violations     | —       | none (clean)     |
 
 The raw `∣` and `∥` glyph counts overcount the migration target; the carve-outs are itemized in § 1a.  Findings 3 and 4 change only prose and rendered HTML, not compiled code, so they are out of M4-1 scope and tracked under M4-2; they are inventoried here because #370 asks the audit to enumerate them.
+
++  **Re-checked 2026-08-21** against `master` at `7bbe7b9d`, for the M4-2 work.  Findings 3 and 4 have both moved since the 2026-06-04 baseline and are restated below with current counts; finding 3b is new.  Findings 1a–2c and 5 were not re-run.
 
 ## 1. Notation
 
@@ -122,15 +125,42 @@ The `STYLE_GUIDE` "Group imports by origin" rule (builtin, then stdlib, then `ag
 
 ## 3. Minimal module headers (M4-2 / #268)
 
-Detection heuristic: a module whose entire prose body between the YAML front-matter and the first ```` ```agda ```` fence is the single boilerplate sentence "This is the [X][] module of the [Agda Universal Algebra Library][]", with no theoretical-background or motivation paragraph.  Precise enumeration requires reading each module's prose and is therefore folded into the M4-2 per-subtree PRs (which rewrite headers anyway); this audit flags the dimension rather than the per-file list, since header prose changes no compiled code and is out of [M4-1] scope.
+Detection heuristic: a module whose entire prose body between the YAML front-matter and the first ```` ```agda ```` fence is the single boilerplate sentence "This is the [X][] module of the [Agda Universal Algebra Library][]", with no theoretical-background or motivation paragraph.  The 2026-06-04 baseline flagged the dimension without enumerating it, on the grounds that precise enumeration requires reading each module's prose.
 
-## 4. HTML heading anchors (M4-2 / #268)
+That is no longer necessary: `scripts/python/docstring_audit.py` parses the literate structure directly and enumerates it.
 
 ```
-rg -n '<a id=' src --glob '!src/Legacy/**'   # 300 hits / 111 files
+make docstrings          # per-subtree table, then the per-file list
 ```
 
-The `STYLE_GUIDE` "Section headings" rule forbids wrapping headings in `<a id="…">…</a>`; MkDocs slugifies headings automatically.  300 such anchors remain across 111 live-tree files (≈ 90 within `Setoid/`, matching the #370 estimate).  Heaviest offenders: `Demos/HSP` (37), `Overture/Preface` (11), `Overture/Basic` (9), `Overture/Relations` (8), `Classical/Structures/{Ring,Lattice}` (8, 7), `Setoid/Varieties/{Properties,Preservation}` (7), `Classical/Structures/{Monoid,Group}` (6).  Anchor removal is mechanical but prose-only; it is [M4-2] work and is inventoried here only because #370 asks for the count.
+**50 of 307 live modules** open with no prose beyond the boilerplate sentence: 42 boilerplate-only, 7 with a heading and no paragraph, and 1 (`Examples/Structures/Signatures`) with nothing at all.  The list is printed by the command above rather than duplicated here, so it cannot drift.
+
+A boilerplate *header* does not imply an undocumented *module*: `Overture/Signatures` is on this list yet carries a full "Theoretical background" section and has 3 of its 4 definitions documented.  Findings 3 and 3b measure different things and should be read separately.
+
+## 3b. Undocumented public definitions (M4-2 / #268)
+
+New in the 2026-08-21 re-check.  This is the dimension the #268 acceptance criterion is actually about, and no earlier audit counted it — a `grep`-based count is not possible, because the corpus documents definitions in Markdown *outside* the ```` ```agda ```` fences and almost every definition is indented inside an anonymous `module _ … where`.
+
+```
+make docstrings          # the ratcheted gate
+make docstrings-list     # every gap, by file and line
+```
+
+Across the live trees there are **3247 public definitions in 307 modules**.  Under the lenient reading — the definition's fence carries no real prose at all — **201** are undocumented.  Under the style guide's literal "immediately above" reading (`--strict`, which also counts a definition sharing a documented fence with an earlier one) the figure is 1969.  By subtree, lenient: `Classical` 102, `Setoid` 65, `Examples` 30, `Overture` 3, `FLRP` 1, `Order` 0, `Exercises` 0.
+
+Two side-findings from the same traversal.  **49 declarations sit inside hidden `<!-- ```agda … ``` -->` preamble fences**, so Agda exports them but no rendered page shows them: `Classical.Equations` (`app₀`, `app₁`, `app₂`), `Classical.Structures.Lattice.Parachute` (15 lemma abbreviations), and the `FLRP` `SLR*` certificates (31 `pattern` declarations).  And the parser reports **zero** items it cannot classify across all 307 modules, so the counts above have no known blind spot.
+
+## 4. HTML heading anchors (M4-2 / #268) — done
+
+```
+rg -n '<a id=' src --glob '!src/Legacy/**'   # was 300 / 111 files; now 37 / 1 file
+```
+
+The `STYLE_GUIDE` "Section headings" rule forbids wrapping headings in `<a id="…">…</a>`; MkDocs slugifies headings automatically.  The 2026-06-04 baseline found 300 such anchors across 111 live-tree files.  Issue #387 cleared them in two passes — `Setoid/` (93 anchors / 43 files), then the remaining live trees (170 anchors) — using `scripts/python/remove_heading_anchors.py`, which keeps an id explicitly as `{#id}` whenever it is cross-referenced and its auto-slug would differ.
+
+**37 anchors remain, all in `src/Examples/Demos/HSP.lagda.md`**, which the script excludes by name.  That module is a frozen artifact mirroring the published TYPES 2021 paper, whose section anchors may be linked from outside this repository, so its anchors are deliberately retained.  The exemption is a decision, not an oversight: removing them would mean accepting that external deep links may break.
+
+Cross-references were re-verified on 2026-08-21.  All **15** in-page `](#…)` targets under `src/` resolve: 11 in `HSP` — which resolve *through* the retained `<a id=>` anchors, which is precisely why they are retained — 3 in `Setoid.Varieties.Properties`, and 1 in `Classical.Structures.Lattice.OrdinalSum`.  The `#algebraic-invariance` link that the `Setoid/` sweep left dangling was fixed by `1db7b7e4`.  Nothing further is outstanding under this finding.
 
 ## 5. Naming (clean)
 
