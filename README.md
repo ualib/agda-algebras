@@ -102,12 +102,13 @@ For questions about mathematical content or larger design changes, please open a
 
 ## Licensing
 
-agda-algebras is dual-licensed to match the dual nature of the project.
+agda-algebras is licensed to match the several natures of the project.
 
 +  **Source code** (under `src/`) is licensed under the [Apache License 2.0](./LICENSE), a permissive industry-standard software license compatible with essentially all other open-source licenses and with commercial use.
 +  **Documentation, papers, and tutorials** (under `docs/`) are licensed under the [Creative Commons Attribution 4.0 International License](./LICENSE-docs), the standard license for academic-style written material; it permits sharing and adaptation with attribution.
++  **Machine-extracted representations** of the library — type signatures, proof terms as Agda renders them, names, dependency metadata, structural encodings, statistics, and corpora built from these — carry an [additional permission](./LICENSE-data): they may be used under Apache-2.0 or under [CC0-1.0](https://creativecommons.org/publicdomain/zero/1.0/), at the recipient's option.  This is a grant, not a restriction; it exists so that using this library as machine-learning training or retrieval data does not require per-row attribution bookkeeping.  Citation is requested rather than required in that case — see [Citing](#citing).
 
-If you are redistributing or building on agda-algebras, please respect both licenses for their respective parts of the repository.
+If you are redistributing or building on agda-algebras, please respect these licenses for their respective parts of the repository.
 
 ---
 
