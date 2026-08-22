@@ -53,7 +53,8 @@ class Fence:
     ``open_line`` / ``close_line`` are 1-based line numbers of the fence
     delimiters themselves; ``body`` is the code between them.  ``prose`` is the
     run of lines between the previous fence (or the YAML front matter) and this
-    fence's opener, with HTML-comment delimiter lines removed.
+    fence's opener, reduced to what actually renders — text inside HTML
+    comments is dropped (see :func:`visible_prose`).
     """
 
     open_line: int
@@ -68,23 +69,34 @@ class Fence:
         return self.open_line + 1
 
 
-def _strip_comment_delimiters(line: str) -> str:
-    """Drop ``<!--`` / ``-->`` markers from a prose line, keeping any text that
-    shares the line (the corpus has both solo delimiters around hidden fences
-    and single-line ``<!-- note -->`` asides)."""
-    return line.replace(_COMMENT_OPEN, " ").replace(_COMMENT_CLOSE, " ")
+def visible_prose(line: str, inside: bool) -> tuple[str, bool]:
+    """The part of a prose line that *renders*, and the comment state after it.
 
+    Text inside ``<!-- … -->`` is dropped, not merely unwrapped.  Keeping it
+    would let an HTML comment count as documentation, and the corpus prescribes
+    ``<!-- TODO(#268): … -->`` as the marker for prose that could *not* yet be
+    written — exactly the thing that must not satisfy a coverage check.  Text
+    sharing the line outside the comment is kept, so a paragraph followed by an
+    ``<!-- aside -->`` still counts.
 
-def _comment_depth_after(inside: bool, line: str) -> bool:
-    """Are we inside an HTML comment after this prose line?  ``<!--`` and
-    ``-->`` are not nestable in HTML, so a boolean suffices; a line carrying
-    both (``<!-- aside -->``) leaves the state unchanged."""
-    tail = line.rsplit(_COMMENT_CLOSE, 1)[-1] if _COMMENT_CLOSE in line else line
-    if _COMMENT_OPEN in tail:
-        return True
-    if _COMMENT_CLOSE in line:
-        return False
-    return inside
+    HTML comments do not nest, so a boolean carries the state across lines.
+    """
+    out: list[str] = []
+    index = 0
+    while index < len(line):
+        if inside:
+            close = line.find(_COMMENT_CLOSE, index)
+            if close < 0:
+                return "".join(out), True
+            index, inside = close + len(_COMMENT_CLOSE), False
+        else:
+            open_at = line.find(_COMMENT_OPEN, index)
+            if open_at < 0:
+                out.append(line[index:])
+                return "".join(out), False
+            out.append(line[index:open_at])
+            index, inside = open_at + len(_COMMENT_OPEN), True
+    return "".join(out), inside
 
 
 def strip_front_matter(lines: tuple[str, ...]) -> tuple[str, ...]:
@@ -116,7 +128,7 @@ def fences(text: str) -> tuple[Fence, ...]:
     in_fence = False
     open_line = 0
     hidden = False
-    prose_start = 0
+    pending: list[str] = []
     for index, line in enumerate(lines):
         if in_fence:
             if _FENCE_CLOSE.match(line):
@@ -125,17 +137,15 @@ def fences(text: str) -> tuple[Fence, ...]:
                     close_line=index + 1,
                     hidden=hidden,
                     body=tuple(lines[open_line + 1:index]),
-                    prose=strip_front_matter(tuple(
-                        _strip_comment_delimiters(p)
-                        for p in lines[prose_start:open_line])),
+                    prose=strip_front_matter(tuple(pending)),
                 ))
-                in_fence = False
-                prose_start = index + 1
+                in_fence, pending = False, []
             continue
         if _FENCE_OPEN.match(line):
             in_fence, open_line, hidden = True, index, in_comment
             continue
-        in_comment = _comment_depth_after(in_comment, line)
+        rendered, in_comment = visible_prose(line, in_comment)
+        pending.append(rendered)
     return tuple(out)
 
 

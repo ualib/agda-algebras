@@ -349,6 +349,79 @@ def test_module_prose_is_the_prose_before_the_first_fence() -> None:
 
 
 # --------------------------------------------------------------------------- #
+# Scope threading across fences (review of #537)
+# --------------------------------------------------------------------------- #
+
+def test_named_submodule_scope_survives_a_fence_break() -> None:
+    # A fence boundary is a Markdown event, not an Agda one.  A submodule left
+    # open at the end of one block still qualifies what follows in the next.
+    text = (block("module Sub where", "  x : Set", "  x = A")
+            + "\nSome prose.\n\n" + block("  y : Set", "  y = A"))
+    assert [d.qname for d in analyze(text).definitions] == \
+        ["T.M.Sub", "T.M.Sub.x", "T.M.Sub.y"]
+
+
+def test_private_block_survives_a_fence_break() -> None:
+    # The case that mattered in the live trees: four Setoid.Operations.Properties
+    # lemmas inside a `private` section split across fences were being counted
+    # as public API.
+    text = (block("private", "  hidden₁ : Set", "  hidden₁ = A")
+            + "\nProse in between.\n\n" + block("  hidden₂ : Set", "  hidden₂ = A"))
+    assert names(text) == []
+
+
+def test_record_body_survives_a_fence_break() -> None:
+    text = (block("record R : Set where", "  field f : Set")
+            + "\nProse.\n\n" + block("  derived : Set", "  derived = f"))
+    assert names(text) == ["R"]
+
+
+def test_dedent_after_a_fence_break_closes_the_scope() -> None:
+    # Threading must not keep a scope open past its layout end.
+    text = (block("module Sub where", "  x : Set", "  x = A")
+            + "\nProse.\n\n" + block("top : Set", "top = A"))
+    assert [d.qname for d in analyze(text).definitions] == \
+        ["T.M.Sub", "T.M.Sub.x", "T.M.top"]
+
+
+def test_file_module_header_does_not_capture_top_level_definitions() -> None:
+    # `module T.M where` at column 0 is followed by column-0 declarations, so
+    # its layout block is empty and must be discarded rather than threaded.
+    text = hidden("module T.M where") + block("x : Set", "x = A")
+    assert [d.qname for d in analyze(text).definitions] == ["T.M.x"]
+
+
+# --------------------------------------------------------------------------- #
+# HTML comments are not documentation (review of #537)
+# --------------------------------------------------------------------------- #
+
+def test_html_comment_does_not_count_as_prose() -> None:
+    # The prescribed fallback for prose that cannot yet be written must not
+    # satisfy the coverage check.
+    text = "<!-- TODO(#268): needs the author's mathematics -->\n\n" + \
+        block("foo : Set", "foo = A")
+    assert statuses(text) == {"foo": "undocumented"}
+
+
+def test_multi_line_html_comment_does_not_count_as_prose() -> None:
+    text = "<!--\nA long note that is not rendered.\n-->\n\n" + block("foo : Set", "foo = A")
+    assert statuses(text) == {"foo": "undocumented"}
+
+
+def test_visible_text_beside_a_comment_still_counts() -> None:
+    text = "A real paragraph. <!-- an aside -->\n\n" + block("foo : Set", "foo = A")
+    assert statuses(text) == {"foo": "documented"}
+
+
+def test_prose_before_a_hidden_fence_still_carries() -> None:
+    # The reason comment handling is delicate: the preamble fence is itself
+    # wrapped in <!-- … -->, and prose above it must survive.
+    text = ("A real paragraph.\n\n" + hidden("module T.M where")
+            + block("foo : Set", "foo = A"))
+    assert statuses(text) == {"foo": "documented"}
+
+
+# --------------------------------------------------------------------------- #
 # Named coverage: does the prose mention the definition it sits above?
 # --------------------------------------------------------------------------- #
 
@@ -489,6 +562,26 @@ def test_line_numbers_point_into_the_literate_source() -> None:
     text = "Prose line.\n\n" + block("foo : Set", "foo = A")
     # 1: prose, 2: blank, 3: fence opener, 4: the declaration.
     assert analyze(text).definitions[0].line == 4
+
+
+def test_hidden_declarations_appear_in_the_harvest() -> None:
+    # The summary advertises them; --json must actually emit them, flagged.
+    report = analyze(hidden("module T.M where", "helper : Set", "helper = A")
+                     + "Prose.\n\n" + block("x : Set", "x = A"))
+    assert [d.name for d in report.hidden_defs] == ["helper"]
+    assert da.to_record(report.hidden_defs[0], None, True)["hidden"] is True
+    assert da.to_record(report.definitions[0], None, False)["hidden"] is False
+
+
+def test_blocked_measurements_fail_regardless_of_the_ratchet() -> None:
+    args = da.build_parser().parse_args(["--max-gaps", "999"])
+    assert da._exit_code(args, gaps=0, blocked=()) == 0
+    assert da._exit_code(args, gaps=0, blocked=("T.lagda.md: unreadable",)) == 1
+
+
+def test_exit_zero_overrides_blocked_measurements() -> None:
+    args = da.build_parser().parse_args(["--exit-zero"])
+    assert da._exit_code(args, gaps=99, blocked=("x",)) == 0
 
 
 # --------------------------------------------------------------------------- #

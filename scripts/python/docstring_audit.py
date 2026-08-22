@@ -414,18 +414,27 @@ class _Decl:
 
 
 def _walk(
-    items: list[_Item], seen: frozenset[str]
-) -> tuple[list[_Decl], list[tuple[int, str]], frozenset[str]]:
+    items: list[_Item], seen: frozenset[str], stack: tuple[Frame, ...] = ()
+) -> tuple[list[_Decl], list[tuple[int, str]], frozenset[str], tuple[Frame, ...]]:
     """Walk the logical items under Agda's layout rule, collecting the
     standalone public declarations and the items the parser declined.
+
+    Two pieces of state are threaded in and out, because a fence boundary is a
+    Markdown event and not an Agda one — a scope opened in one code block
+    routinely continues in the next.
 
     ``seen`` carries the names already declared in this module, which is what
     distinguishes a *clause* from a declaration: ``f x with e``, ``f x ()``, and
     ``f (suc n) = …`` all begin with a name that has a signature above them.
-    Threading it across fences matters because a definition's clauses can be
-    split across code blocks.
+
+    ``stack`` carries the open layout blocks.  Without it a ``module Sub where``
+    left open at the end of a fence is forgotten, so the definitions continuing
+    beneath it in the next fence lose their namespace — the wrong ``qname``, and
+    ``qname`` is the join key for the corpus of #275 — and a ``private`` block
+    split the same way would present its declarations as public.  Both occur:
+    75 fences in the live trees end with a named module or a ``private`` block
+    still open.
     """
-    stack: tuple[Frame, ...] = ()
     decls: list[_Decl] = []
     unparsed: list[tuple[int, str]] = []
     for item in items:
@@ -433,7 +442,7 @@ def _walk(
         decls.extend(found)
         unparsed.extend(skipped)
         seen = seen | {n for d in found for n in d.names}
-    return decls, unparsed, seen
+    return decls, unparsed, seen, stack
 
 
 def _classify(
@@ -727,8 +736,10 @@ def analyze_text(path: Path, text: str) -> FileReport:
     # comment blocks" asks for.
     module_prose = classify_prose(blocks[0].prose) if blocks else Prose.NONE
     seen: frozenset[str] = frozenset()
+    stack: tuple[Frame, ...] = ()
     for index, fence in enumerate(blocks):
-        decls, skipped, seen = _walk(_logical_items(_fence_lines(fence)), seen)
+        decls, skipped, seen, stack = _walk(
+            _logical_items(_fence_lines(fence)), seen, stack)
         prose = prose_of.get(index, ())
         kind = classify_prose(prose)
         # Every name a declaration introduces gets its own record, but they
@@ -896,7 +907,8 @@ def render_gaps(reports: list[FileReport], statuses: frozenset[Status]) -> list[
     return lines
 
 
-def to_record(definition: Definition, usage: Optional[UsageIndex] = None) -> dict:
+def to_record(definition: Definition, usage: Optional[UsageIndex] = None,
+              hidden: bool = False) -> dict:
     """A harvest record: the prose this repository holds, keyed so it joins to
     the Agda-internal (type, term) corpus of issue #275 on ``qname``."""
     return {
@@ -912,6 +924,7 @@ def to_record(definition: Definition, usage: Optional[UsageIndex] = None) -> dic
         "prose_kind": definition.prose_kind.value,
         "status": definition.status.value,
         "named_in_prose": definition.named,
+        "hidden": hidden,
         **({} if usage is None else {"used": usage.used(definition),
                                      "name_is_ambiguous": definition.name in usage.ambiguous}),
     }
@@ -1020,6 +1033,11 @@ def main(argv: list[str]) -> int:
     texts, failures = read_all(files)
     for path, error in failures:
         sys.stderr.write(f"error: {path}: {error}\n")
+    # A file that could not be read contributes no definitions and so no gaps.
+    # Left unreported in the exit status, that silently lowers the count the
+    # ratchet is comparing against, which is the one thing a coverage gate must
+    # never do.
+    blocked = tuple(f"{path} could not be read: {error}" for path, error in failures)
     progress.note(f"read {len(texts)} file(s), "
                   f"{sum(len(text) for _, text in texts) // 1024} KiB")
 
@@ -1037,9 +1055,15 @@ def main(argv: list[str]) -> int:
 
     if args.json:
         for report in reports:
-            for definition in report.definitions:
-                print(json.dumps(to_record(definition, usage), ensure_ascii=False))
-        return 0
+            # Hidden-fence declarations are excluded from the audit's counts but
+            # not from the harvest: Agda exports them, so a corpus consumer wants
+            # them, flagged.  Merged by source line so a module reads in order.
+            records = ([(d.line, d, False) for d in report.definitions]
+                       + [(d.line, d, True) for d in report.hidden_defs])
+            for _, definition, hidden in sorted(records, key=lambda r: r[0]):
+                print(json.dumps(to_record(definition, usage, hidden),
+                                 ensure_ascii=False))
+        return _exit_code(args, gaps=0, blocked=())
 
     statuses = STRICT_GAP_STATUSES if args.strict else GAP_STATUSES
     print("\n".join(render_table(tally(reports, usage), usage is not None)))
@@ -1067,15 +1091,38 @@ def main(argv: list[str]) -> int:
             print(f"  {path}:{line}: {text}")
         if len(unparsed) > 20:
             print(f"  … and {len(unparsed) - 20} more")
-    return _exit_code(args, gaps)
+    # An item the parser cannot classify vanishes from the totals, taking any
+    # gap it represented with it, so a newly unsupported declaration form could
+    # *lower* the measured count while coverage got worse.  The tally is at zero
+    # across the live trees, so holding it there costs nothing and closes that
+    # hole.  It is a separate failure from the ratchet, and not governed by it.
+    blocked += tuple(f"{path}:{line}: unclassified declaration: {text}"
+                     for path, line, text in unparsed)
+    return _exit_code(args, gaps, blocked)
 
 
-def _exit_code(args: argparse.Namespace, gaps: int) -> int:
-    """Turn the gap count into an exit status.  With ``--max-gaps`` the run is a
-    ratchet — green while the backlog does not grow — which is what lets CI
-    enforce the rule before the backlog reaches zero."""
+def _exit_code(args: argparse.Namespace, gaps: int,
+               blocked: tuple[str, ...] = ()) -> int:
+    """Turn the audit into an exit status.
+
+    Two independent reasons to fail.  ``blocked`` holds conditions that make the
+    measurement itself untrustworthy — a file that could not be read, an item the
+    parser could not classify — and these fail regardless of ``--max-gaps``,
+    because a ratchet compared against a corrupted count is worse than no
+    ratchet.  ``gaps`` is the coverage backlog, governed by the ratchet.
+    ``--exit-zero`` opts out of both.
+    """
     if args.exit_zero:
         return 0
+    if blocked:
+        sys.stderr.write(
+            f"\n✗ the audit could not measure {len(blocked)} item(s), so its "
+            f"counts are not trustworthy:\n")
+        for reason in blocked[:20]:
+            sys.stderr.write(f"  {reason}\n")
+        if len(blocked) > 20:
+            sys.stderr.write(f"  … and {len(blocked) - 20} more\n")
+        return 1
     if args.max_gaps is not None:
         if gaps > args.max_gaps:
             sys.stderr.write(
