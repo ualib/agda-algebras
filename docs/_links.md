@@ -789,6 +789,7 @@
 [ADR-007]: /adr/007-mkdocs-rendering-pipeline/
 [ADR-008]: /adr/008-two-layer-congruence-discipline/
 [ADR-009]: /adr/009-signature-genericity-generalized-variables/
+[ADR-010]: /adr/010-documentation-coverage-policy/
 
 <!-- ===== External links ===== -->
 [Classical.Structures.DistributiveLattice]: /Classical/Structures/Lattice/DistributiveLattice/

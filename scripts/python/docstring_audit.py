@@ -69,6 +69,14 @@ if str(_SCRIPT_DIR) not in sys.path:
 from _utils import PipelineError  # noqa: E402
 from _utils.file_ops import read_text  # noqa: E402
 from _utils.literate import Fence, clean_code_lines, fences, gather_files  # noqa: E402
+from _utils.agda_names import (  # noqa: E402
+    NO_NOTATIONS,
+    SyntaxNotations,
+    code_tokens,
+    harvest_syntax_notations,
+    is_used,
+    name_parts,
+)
 
 
 # =============================================================================
@@ -136,6 +144,25 @@ class Definition:
     position_in_fence: int   # 1-based rank among the public definitions in it
     signature: str           # the declaration text, whitespace-normalized
     prose: str               # the preceding prose block, verbatim
+
+    @property
+    def named(self) -> bool:
+        """Is this definition *mentioned by name* in the prose above its fence?
+
+        The weaker sibling of ``status``.  A fence can carry a real paragraph
+        that never mentions half the definitions under it, which is the common
+        way documentation drifts away from the code it sits above.  Prose that
+        genuinely describes a definition almost always names it, so this is a
+        cheap drift detector — not a quality measure, since it is satisfied by
+        merely listing names.
+        """
+        if not self.prose:
+            return False
+        if self.name in self.prose:
+            return True
+        # A mixfix name is written applied in prose: `_∘_` appears as `∘`.
+        parts = name_parts(self.name)
+        return bool(parts) and all(p in self.prose for p in parts)
 
     @property
     def qname(self) -> str:
@@ -486,6 +513,125 @@ def _classify(
 
 
 # =============================================================================
+# Usage: is a definition referenced anywhere in the corpus?
+# =============================================================================
+
+@dataclass(frozen=True)
+class UsageIndex:
+    """Which modules reference which names, corpus-wide.
+
+    "Used" means the name occurs at a *use site* — inside a term or a type —
+    rather than only in an ``import``/``open`` statement, which is why import
+    statements are dropped before tokenising.  A definition counts as used when
+    some other module references it, or when its own module does so outside the
+    definition's own signature and clauses; self-recursion alone is therefore
+    not use.
+
+    The analysis is textual and its one real inaccuracy is name collision: two
+    modules declaring the same short name cannot be told apart, so a use of
+    either makes both look used.  ``ambiguous`` records precisely those names,
+    so the figure can be reported with its own error bar rather than quietly
+    overstated.
+    """
+
+    #: token -> the modules whose non-import code contains it
+    modules_by_token: dict[str, frozenset[str]]
+    #: module -> token -> the heads of the items in which it occurs
+    heads_by_token: dict[str, dict[str, frozenset[str]]]
+    #: module -> every non-import token (the fallback path)
+    by_module: dict[str, frozenset[str]]
+    #: names declared in more than one module
+    ambiguous: frozenset[str]
+    notations: SyntaxNotations
+
+    def _used_elsewhere(self, name: str, home: str) -> bool:
+        """Referenced by some module other than the one that declares it.
+
+        ``is_used`` is a disjunction over a handful of candidate spellings for
+        every name except a ``syntax``-backed one, where it is a conjunction over
+        the notation's literals.  The disjunctive case is answered from the
+        inverted index in a few lookups; the handful of ``-syntax`` names fall
+        back to scanning modules, which is affordable because there are seven of
+        them in the corpus.
+        """
+        if name.endswith("-syntax"):
+            return any(module != home and is_used(name, tokens, self.notations)
+                       for module, tokens in self.by_module.items())
+        candidates = {name, name.lstrip("_"), name.rstrip("_")}
+        if "_" in name:
+            candidates |= set(name_parts(name))
+        return any(self.modules_by_token.get(c, frozenset()) - {home}
+                   for c in candidates if c)
+
+    def _used_at_home(self, name: str, home: str) -> bool:
+        """Referenced within its own module, by something other than itself.
+
+        The token set is rebuilt excluding the items the name owns — its
+        signature and its clauses — rather than subtracting that name's tokens
+        from the module's, which would also delete tokens that other items
+        happen to share, and would delete the name itself, making a local use
+        undetectable.
+        """
+        heads = self.heads_by_token.get(home, {})
+        local = frozenset(token for token, owners in heads.items() if owners - {name})
+        return is_used(name, local, self.notations)
+
+    def used(self, definition: Definition) -> bool:
+        """Is this definition referenced outside its own declaration?"""
+        return (self._used_elsewhere(definition.name, definition.module)
+                or self._used_at_home(definition.name, definition.module))
+
+
+_IMPORT_LINE = re.compile(r"^\s*(?:open\s+import|import|open)\b")
+_CLAUSE_LINE = re.compile(r"^\s*(?:using|renaming|hiding|public|as)\b")
+
+
+def _item_tokens(items: list[_Item]) -> list[tuple[str, frozenset[str]]]:
+    """``(head token, tokens)`` for each item that is not an import statement."""
+    out: list[tuple[str, frozenset[str]]] = []
+    for item in items:
+        if _IMPORT_LINE.match(item.text) or _CLAUSE_LINE.match(item.text):
+            continue
+        words = item.text.split()
+        if words:
+            out.append((words[0], code_tokens(item.text)))
+    return out
+
+
+def build_usage_index(
+    texts: list[tuple[Path, str]], reports: list[FileReport]
+) -> UsageIndex:
+    """Index the whole corpus once, so each definition's usage is a lookup.
+
+    A corpus-wide pass is unavoidable: a name declared in one module is normally
+    used in another, and a ``syntax`` declaration anywhere changes what a use
+    site looks like everywhere.  ``reports`` is threaded in rather than
+    recomputed, since the caller has already analyzed every module.
+    """
+    notations = harvest_syntax_notations(texts)
+    modules_by_token: dict[str, set[str]] = {}
+    heads_by_token: dict[str, dict[str, frozenset[str]]] = {}
+    by_module: dict[str, frozenset[str]] = {}
+    for path, text in texts:
+        mod = module_name(path)
+        pairs = _item_tokens([it for fence in fences(text)
+                              for it in _logical_items(_fence_lines(fence))])
+        per_token: dict[str, frozenset[str]] = {}
+        for head, tokens in pairs:
+            for token in tokens:
+                per_token[token] = per_token.get(token, frozenset()) | {head}
+                modules_by_token.setdefault(token, set()).add(mod)
+        heads_by_token[mod] = per_token
+        by_module[mod] = frozenset(per_token)
+    declared = Counter(d.name for r in reports for d in r.definitions)
+    return UsageIndex(
+        modules_by_token={k: frozenset(v) for k, v in modules_by_token.items()},
+        heads_by_token=heads_by_token, by_module=by_module,
+        ambiguous=frozenset(n for n, c in declared.items() if c > 1),
+        notations=notations)
+
+
+# =============================================================================
 # Prose classification
 # =============================================================================
 
@@ -626,10 +772,14 @@ def subtree_of(path: str) -> str:
 
 @dataclass(frozen=True)
 class Tally:
-    """Definition counts for one subtree, by status."""
+    """Definition counts for one subtree, by status, plus the two softer
+    measures: how many definitions their own prose names, and how many are
+    referenced anywhere in the corpus."""
 
     subtree: str
     counts: Counter
+    named: int = 0
+    used: int = 0
 
     @property
     def total(self) -> int:
@@ -644,14 +794,22 @@ class Tally:
         return sum(self.counts[s] for s in GAP_STATUSES)
 
 
-def tally(reports: Iterable[FileReport]) -> list[Tally]:
+def tally(reports: Iterable[FileReport],
+          usage: Optional[UsageIndex] = None) -> list[Tally]:
     """Per-subtree status counts, ordered by how much work each subtree needs."""
     by_subtree: dict[str, Counter] = {}
+    named: Counter = Counter()
+    used: Counter = Counter()
     for report in reports:
-        bucket = by_subtree.setdefault(subtree_of(report.path), Counter())
+        key = subtree_of(report.path)
+        bucket = by_subtree.setdefault(key, Counter())
         for definition in report.definitions:
             bucket[definition.status] += 1
-    return sorted((Tally(name, counts) for name, counts in by_subtree.items()),
+            named[key] += definition.named
+            if usage is not None:
+                used[key] += usage.used(definition)
+    return sorted((Tally(name, counts, named[name], used[name])
+                   for name, counts in by_subtree.items()),
                   key=lambda t: (-t.gaps, -t.total, t.subtree))
 
 
@@ -660,25 +818,59 @@ def _row(cells: tuple[str, ...], widths: tuple[int, ...]) -> str:
                      for i, (c, w) in enumerate(zip(cells, widths)))
 
 
-def render_table(tallies: list[Tally]) -> list[str]:
-    """The per-subtree summary table: the answer to "how big is #268?"."""
-    headers = ("subtree", "defs", "documented", "grouped", "heading", "boiler", "none", "gaps")
-    rows = [
-        (t.subtree, str(t.total), str(t.documented),
-         str(t.counts[Status.GROUPED]), str(t.counts[Status.HEADING_ONLY]),
-         str(t.counts[Status.BOILERPLATE]), str(t.counts[Status.UNDOCUMENTED]),
-         str(t.gaps))
-        for t in tallies
-    ]
-    total = Tally("TOTAL", sum((t.counts for t in tallies), Counter()))
-    rows.append((total.subtree, str(total.total), str(total.documented),
-                 str(total.counts[Status.GROUPED]), str(total.counts[Status.HEADING_ONLY]),
-                 str(total.counts[Status.BOILERPLATE]), str(total.counts[Status.UNDOCUMENTED]),
-                 str(total.gaps)))
+def _pct(part: int, whole: int) -> str:
+    return f"{100 * part // whole}%" if whole else "-"
+
+
+def render_table(tallies: list[Tally], with_usage: bool) -> list[str]:
+    """The per-subtree summary table: the answer to "how big is #268?".
+
+    The last two columns are softer than the rest and are read differently.
+
+    ``named`` is the share of definitions that the prose above their own fence
+    mentions by name.  It is a drift indicator, not a gate: a fence can carry a
+    fine paragraph that never mentions half the definitions beneath it.
+
+    ``used`` is the share referenced somewhere in the live trees, and it is the
+    guide to where documentation effort pays off — a heavily-used definition is
+    one many readers will meet.  It is *not* a dead-code measure.  In a proof
+    library an unreferenced definition is usually a terminal result: a theorem
+    that is the point in itself (the ``roundtrip-*`` faithfulness lemmas of
+    ``Classical/Bundles/`` are the clearest case), an example, or an entry point
+    used only by consumers outside this repository.
+    """
+    headers = ("subtree", "defs", "documented", "grouped", "heading", "boiler",
+               "none", "gaps", "named", "used")
+
+    def cells(t: Tally) -> tuple[str, ...]:
+        return (t.subtree, str(t.total), str(t.documented),
+                str(t.counts[Status.GROUPED]), str(t.counts[Status.HEADING_ONLY]),
+                str(t.counts[Status.BOILERPLATE]), str(t.counts[Status.UNDOCUMENTED]),
+                str(t.gaps), _pct(t.named, t.total),
+                _pct(t.used, t.total) if with_usage else "-")
+
+    rows = [cells(t) for t in tallies]
+    total = Tally("TOTAL", sum((t.counts for t in tallies), Counter()),
+                  sum(t.named for t in tallies), sum(t.used for t in tallies))
+    rows.append(cells(total))
     widths = tuple(max(len(r[i]) for r in (headers, *rows)) for i in range(len(headers)))
     sep = "  ".join("-" * w for w in widths)
     return [_row(headers, widths), sep,
             *(_row(r, widths) for r in rows[:-1]), sep, _row(rows[-1], widths)]
+
+
+def render_unused(reports: list[FileReport], usage: UsageIndex) -> list[str]:
+    """Definitions nothing in the live trees references.
+
+    Read as a prompt, not a verdict: most are terminal results or examples, some
+    are entry points for consumers outside this repository, and a few are dead.
+    """
+    dead = [d for r in reports for d in r.definitions if not usage.used(d)]
+    lines = [f"\n{len(dead)} definition(s) not referenced anywhere in the live trees:"]
+    for d in sorted(dead, key=lambda d: (d.path, d.line)):
+        flag = "  [name is ambiguous]" if d.name in usage.ambiguous else ""
+        lines.append(f"  {d.path}:{d.line}  {d.kind.value:9s} {d.name}{flag}")
+    return lines
 
 
 def render_modules(reports: list[FileReport]) -> list[str]:
@@ -704,7 +896,7 @@ def render_gaps(reports: list[FileReport], statuses: frozenset[Status]) -> list[
     return lines
 
 
-def to_record(definition: Definition) -> dict:
+def to_record(definition: Definition, usage: Optional[UsageIndex] = None) -> dict:
     """A harvest record: the prose this repository holds, keyed so it joins to
     the Agda-internal (type, term) corpus of issue #275 on ``qname``."""
     return {
@@ -719,6 +911,9 @@ def to_record(definition: Definition) -> dict:
         "prose": definition.prose,
         "prose_kind": definition.prose_kind.value,
         "status": definition.status.value,
+        "named_in_prose": definition.named,
+        **({} if usage is None else {"used": usage.used(definition),
+                                     "name_is_ambiguous": definition.name in usage.ambiguous}),
     }
 
 
@@ -798,6 +993,12 @@ def build_parser() -> argparse.ArgumentParser:
                              "only shrink while #268 is worked through per subtree")
     parser.add_argument("--exit-zero", action="store_true",
                         help="always exit 0 (do not signal gaps via exit status)")
+    parser.add_argument("--no-usage", action="store_true",
+                        help="skip the corpus-wide usage analysis (the `used` "
+                             "column); it needs a second pass over every file")
+    parser.add_argument("--unused", action="store_true",
+                        help="list the definitions nothing in the live trees "
+                             "references (terminal results and examples, mostly)")
     parser.add_argument("--quiet", "-q", action="store_true",
                         help="suppress the progress log on stderr")
     return parser
@@ -825,16 +1026,25 @@ def main(argv: list[str]) -> int:
     reports = analyze_subtrees(texts, progress)
     progress.note(f"analyzed {len(reports)} module(s), "
                   f"{sum(len(r.definitions) for r in reports)} public definition(s)")
+
+    usage: Optional[UsageIndex] = None
+    if not args.no_usage:
+        usage = build_usage_index(texts, reports)
+        progress.note(f"indexed usage across {len(usage.by_module)} module(s); "
+                      f"{len(usage.ambiguous)} name(s) declared in more than one "
+                      f"module and so not attributable")
     progress.note("report follows on stdout" if args.json else "writing report")
 
     if args.json:
         for report in reports:
             for definition in report.definitions:
-                print(json.dumps(to_record(definition), ensure_ascii=False))
+                print(json.dumps(to_record(definition, usage), ensure_ascii=False))
         return 0
 
     statuses = STRICT_GAP_STATUSES if args.strict else GAP_STATUSES
-    print("\n".join(render_table(tally(reports))))
+    print("\n".join(render_table(tally(reports, usage), usage is not None)))
+    if args.unused and usage is not None:
+        print("\n".join(render_unused(reports, usage)))
     if args.modules:
         print()
         print("\n".join(render_modules(reports)))

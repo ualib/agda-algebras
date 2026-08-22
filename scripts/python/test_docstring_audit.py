@@ -349,6 +349,103 @@ def test_module_prose_is_the_prose_before_the_first_fence() -> None:
 
 
 # --------------------------------------------------------------------------- #
+# Named coverage: does the prose mention the definition it sits above?
+# --------------------------------------------------------------------------- #
+
+def test_named_when_prose_mentions_the_definition() -> None:
+    text = "`foo`{.AgdaFunction} is the thing.\n\n" + block("foo : Set", "foo = A")
+    assert analyze(text).definitions[0].named
+
+
+def test_not_named_when_prose_does_not_mention_it() -> None:
+    text = "Some general remarks about the theme.\n\n" + block("foo : Set", "foo = A")
+    assert not analyze(text).definitions[0].named
+
+
+def test_named_covers_a_mixfix_written_applied() -> None:
+    # `_∘_` is written `∘` in prose; every part must appear.
+    text = "Composition `∘` chains two maps.\n\n" + block("_∘_ : Set", "_∘_ = A")
+    assert analyze(text).definitions[0].named
+
+
+def test_named_is_false_without_prose() -> None:
+    assert not analyze(block("foo : Set", "foo = A")).definitions[0].named
+
+
+# --------------------------------------------------------------------------- #
+# Usage: is a definition referenced anywhere?
+# --------------------------------------------------------------------------- #
+
+def _usage(*pairs: tuple[str, str]):
+    """Build a usage index over an ad-hoc corpus of (path, text)."""
+    texts = [(Path(p), s) for p, s in pairs]
+    reports = [da.analyze_text(p, s) for p, s in texts]
+    return da.build_usage_index(texts, reports), reports
+
+
+def _by_name(reports):
+    return {d.name: d for r in reports for d in r.definitions}
+
+
+def test_used_by_another_module() -> None:
+    usage, reports = _usage(
+        ("src/T/A.lagda.md", block("foo : Set", "foo = A")),
+        ("src/T/B.lagda.md", block("bar : Set", "bar = foo")),
+    )
+    assert usage.used(_by_name(reports)["foo"])
+
+
+def test_used_within_its_own_module() -> None:
+    usage, reports = _usage(
+        ("src/T/A.lagda.md", block("foo : Set", "foo = A", "bar : Set", "bar = foo")),
+    )
+    assert usage.used(_by_name(reports)["foo"])
+
+
+def test_self_recursion_is_not_use() -> None:
+    usage, reports = _usage(
+        ("src/T/A.lagda.md", block("foo : Nat → Set", "foo (suc n) = foo n", "foo zero = A")),
+    )
+    assert not usage.used(_by_name(reports)["foo"])
+
+
+def test_definition_referenced_by_nothing_is_unused() -> None:
+    usage, reports = _usage(
+        ("src/T/A.lagda.md", block("foo : Set", "foo = A")),
+        ("src/T/B.lagda.md", block("bar : Set", "bar = B")),
+    )
+    assert not usage.used(_by_name(reports)["foo"])
+
+
+def test_mention_in_an_import_list_is_not_use() -> None:
+    # `open import T.A using ( foo )` brings the name in; that is not a use site.
+    usage, reports = _usage(
+        ("src/T/A.lagda.md", block("foo : Set", "foo = A")),
+        ("src/T/B.lagda.md", block("open import T.A using ( foo )", "bar : Set", "bar = B")),
+    )
+    assert not usage.used(_by_name(reports)["foo"])
+
+
+def test_ambiguous_names_are_recorded() -> None:
+    usage, _ = _usage(
+        ("src/T/A.lagda.md", block("dup : Set", "dup = A")),
+        ("src/T/B.lagda.md", block("dup : Set", "dup = B")),
+    )
+    assert "dup" in usage.ambiguous
+
+
+def test_usage_appears_in_the_harvest_record() -> None:
+    usage, reports = _usage(
+        ("src/T/A.lagda.md", "Prose about `foo`.\n\n" + block("foo : Set", "foo = A")),
+        ("src/T/B.lagda.md", block("bar : Set", "bar = foo")),
+    )
+    record = da.to_record(_by_name(reports)["foo"], usage)
+    assert record["used"] is True
+    assert record["named_in_prose"] is True
+    assert record["name_is_ambiguous"] is False
+
+
+# --------------------------------------------------------------------------- #
 # Reporting
 # --------------------------------------------------------------------------- #
 

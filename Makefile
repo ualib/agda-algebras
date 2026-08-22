@@ -41,7 +41,7 @@
 #      where a path segment happens to contain the substring `agda`.
 # =============================================================================
 
-.PHONY: default all check check-certificates check-all test clean site serve serve-full html agda-md site-full profile project-plan unused-imports unused-imports-test check-links check-links-test gen-links docstrings docstrings-test docstrings-list docstrings-json flrp-test flrp-slr gap-smoke Everything.agda EverythingLegacy.agda EverythingCertificates.agda
+.PHONY: default all check check-certificates check-all test clean site serve serve-full html agda-md site-full profile project-plan unused-imports unused-imports-test check-links check-links-test gen-links docstrings docstrings-test docstrings-list docstrings-unused docstrings-json flrp-test flrp-slr gap-smoke Everything.agda EverythingLegacy.agda EverythingCertificates.agda
 
 # -- Configuration -----------------------------------------------------------
 SRCDIR    := src
@@ -304,13 +304,20 @@ gen-links:
 	python3 scripts/python/gen_links.py
 
 # Audit the prose block attached to every public definition (STYLE_GUIDE
-# § "Every public definition has a prose comment block", issue #268).  A grep
-# cannot do this: the corpus documents definitions in Markdown *outside* the
-# ```agda fences, so the check has to parse literate structure and Agda's layout
-# rule.  `make docstrings` is the CI gate and holds the line at
-# DOCSTRING_MAX_GAPS; `make docstrings-list` names every gap; `make
-# docstrings-json` harvests (qname, prose) records for the training corpus
-# (issue #275).  Run `make docstrings-test` for the analyzer's own test suite.
+# § "Every public definition has a prose comment block", issue #268, ADR-010).
+# A grep cannot do this: the corpus documents definitions in Markdown *outside*
+# the ```agda fences, so the check has to parse literate structure and Agda's
+# layout rule.  The report's last two columns are advisory rather than gated --
+# `named` is the share of definitions their own prose mentions by name, `used`
+# the share referenced anywhere in the live trees (which is where documentation
+# effort pays off, not a dead-code measure: a terminal theorem is correctly
+# unreferenced).
+#   docstrings         the CI gate; holds the line at DOCSTRING_MAX_GAPS
+#   docstrings-list    name every definition missing a prose block
+#   docstrings-unused  name every definition nothing references
+#   docstrings-json    harvest (qname, prose, used) records for the training
+#                      corpus (issue #275)
+#   docstrings-test    the analyzer's own test suite
 docstrings:
 	@echo "target: $@"
 	python3 scripts/python/docstring_audit.py --modules --max-gaps $(DOCSTRING_MAX_GAPS) $(SRCDIR)
@@ -318,6 +325,10 @@ docstrings:
 docstrings-list:
 	@echo "target: $@"
 	python3 scripts/python/docstring_audit.py --list --exit-zero $(SRCDIR)
+
+docstrings-unused:
+	@echo "target: $@"
+	python3 scripts/python/docstring_audit.py --unused --exit-zero $(SRCDIR)
 
 docstrings-json:
 	@echo "target: $@"
