@@ -1,0 +1,818 @@
+#!/usr/bin/env python3
+"""
+File: scripts/python/docstring_audit.py
+
+Description: Audit (and harvest) the prose block attached to every public
+  definition in the literate Agda corpus.
+
+  ``docs/STYLE_GUIDE.md`` § "Every public definition has a prose comment block"
+  requires that a public definition carry "a prose comment block immediately
+  above it", and that in a ``.lagda.md`` module that prose be "Markdown
+  preceding the code fence (not ``-- |`` comments inside it)".  Issue #268 asks
+  for a "grep-based audit" enforcing this.  A grep cannot do it: the library
+  holds essentially no ``-- |`` comments, so a comment-grep reports the whole
+  corpus as undocumented, while a prose-grep cannot tell which definition a
+  paragraph belongs to.  The check has to understand literate structure —
+  prose outside the fences, definitions inside them — and Agda's layout rule,
+  because almost every definition in this corpus is *indented* inside an
+  anonymous ``module _ … where``, not at column 0.
+
+  The same traversal answers the inverse question.  "Which public definitions
+  have no preceding prose?" and "what is the prose preceding each public
+  definition?" are one walk over the corpus, so this module exposes both: an
+  ``audit`` report (issue #268) and a ``--json`` harvest whose records join to
+  the Agda-internal corpus of issue #275 on ``qname``.  An Agda-internal
+  extractor sees types and terms but cannot see Markdown; the prose is what
+  this repository uniquely holds.
+
+Design Principles:
+  Pure core, effectful shell.  ``analyze_text`` is a total function from file
+  text to a tuple of ``Definition`` records; every classification decision is a
+  pure function of the parse.  Reading files, printing, and exit codes happen
+  only in ``main`` and its immediate helpers.
+
+  The parser errs toward *under*-reporting a definition rather than
+  misattributing prose: a construct it cannot classify is counted in the
+  ``unparsed`` tally and named in the report, so a blind spot is visible rather
+  than silently absorbed into a clean score.
+
+Usage::
+
+    python3 scripts/python/docstring_audit.py                  # audit src/
+    python3 scripts/python/docstring_audit.py src/Setoid       # one subtree
+    python3 scripts/python/docstring_audit.py --list           # name every gap
+    python3 scripts/python/docstring_audit.py --strict         # fail on `grouped` too
+    python3 scripts/python/docstring_audit.py --json src       # harvest for #275
+    python3 scripts/python/docstring_audit.py --modules        # per-module prose audit
+"""
+from __future__ import annotations
+
+import argparse
+import json
+import re
+import sys
+from collections import Counter
+from dataclasses import dataclass, replace
+from enum import Enum
+from pathlib import Path
+from typing import Iterable, Optional
+
+# Import the shared functional utilities the way the sibling scripts do: make
+# this file's directory importable, then pull in the Result monad, the pure
+# file-reading wrapper, and the literate front end.
+_SCRIPT_DIR = Path(__file__).resolve().parent
+if str(_SCRIPT_DIR) not in sys.path:
+    sys.path.insert(0, str(_SCRIPT_DIR))
+
+from _utils import PipelineError  # noqa: E402
+from _utils.file_ops import read_text  # noqa: E402
+from _utils.literate import Fence, clean_code_lines, fences, gather_files  # noqa: E402
+
+
+# =============================================================================
+# Immutable data model
+# =============================================================================
+
+class Kind(Enum):
+    """What sort of declaration a definition is."""
+
+    SIGNATURE = "signature"    # `name : type` — function, value, or type family
+    RECORD = "record"          # `record Name … where`
+    DATA = "data"              # `data Name … where`
+    MODULE = "module"          # a *named* submodule (a public namespace)
+    PATTERN = "pattern"        # `pattern Name … = …`
+
+
+class Prose(Enum):
+    """What the prose run preceding a fence amounts to."""
+
+    PARAGRAPH = "paragraph"      # at least one real paragraph of prose
+    BOILERPLATE = "boilerplate"  # only "This is the [X][] module of the [AUA Library][]"
+    HEADING = "heading"          # only heading lines (and blanks)
+    NONE = "none"                # nothing at all
+
+
+class Status(Enum):
+    """A definition's documentation status.
+
+    ``DOCUMENTED`` is the style guide's bar met exactly: the definition opens a
+    fence and a real paragraph sits immediately above that fence.  ``GROUPED``
+    is the common near-miss — a documented fence holding several definitions,
+    where the block plausibly covers them all but does not sit "immediately
+    above" each.  The remaining three are unambiguous gaps.
+    """
+
+    DOCUMENTED = "documented"
+    GROUPED = "grouped"
+    HEADING_ONLY = "heading-only"
+    BOILERPLATE = "boilerplate"
+    UNDOCUMENTED = "undocumented"
+
+
+#: Statuses that fail the acceptance criterion under the default (lenient)
+#: reading: the definition's fence carries no real prose at all.
+GAP_STATUSES = frozenset({Status.HEADING_ONLY, Status.BOILERPLATE, Status.UNDOCUMENTED})
+
+#: Additionally failing under ``--strict``: the style guide's literal
+#: "immediately above" wording, which a shared block does not satisfy.
+STRICT_GAP_STATUSES = GAP_STATUSES | {Status.GROUPED}
+
+
+@dataclass(frozen=True)
+class Definition:
+    """One public definition and the prose block that introduces it."""
+
+    module: str          # dotted module name, from the path under src/
+    path: str            # repo-relative path of the .lagda.md file
+    line: int            # 1-based line of the declaration head
+    name: str            # the declared name, as written (may be mixfix)
+    namespace: tuple[str, ...]   # enclosing *named* submodules, outermost first
+    kind: Kind
+    status: Status
+    prose_kind: Prose
+    fence_index: int         # 0-based index of the fence among the file's fences
+    position_in_fence: int   # 1-based rank among the public definitions in it
+    signature: str           # the declaration text, whitespace-normalized
+    prose: str               # the preceding prose block, verbatim
+
+    @property
+    def qname(self) -> str:
+        """The fully qualified name — the join key with the Agda-internal
+        corpus of issue #275."""
+        return ".".join((self.module, *self.namespace, self.name))
+
+
+@dataclass(frozen=True)
+class FileReport:
+    """Everything the audit learned about one module."""
+
+    path: str
+    module: str
+    definitions: tuple[Definition, ...]
+    module_prose: Prose      # the prose introducing the module's first fence
+    hidden_defs: tuple[Definition, ...]   # declarations inside hidden fences
+    unparsed: tuple[tuple[int, str], ...]  # (line, text) the parser declined
+
+
+# =============================================================================
+# Agda layout: the scope stack
+# =============================================================================
+
+class Block(Enum):
+    """A layout block, classified by what it does to the publicness of the
+    declarations inside it."""
+
+    MODULE = "module"            # named or anonymous — public scope continues
+    RECORD = "record"            # body holds members and fields, not free defs
+    DATA = "data"                # body holds constructors
+    PRIVATE = "private"          # everything inside is module-private
+    LOCAL = "local"              # a definition's `where` body, or `let`
+    FIELD = "field"              # record field block
+    POSTULATE = "postulate"      # items are signatures, and are public
+    VARIABLE = "variable"        # generalized variables, not definitions
+    TRANSPARENT = "transparent"  # mutual / abstract / instance / macro
+
+
+#: Keywords that open a layout block all by themselves.
+_BLOCK_KEYWORDS: dict[str, Block] = {
+    "private": Block.PRIVATE,
+    "field": Block.FIELD,
+    "postulate": Block.POSTULATE,
+    "variable": Block.VARIABLE,
+    "mutual": Block.TRANSPARENT,
+    "abstract": Block.TRANSPARENT,
+    "instance": Block.TRANSPARENT,
+    "macro": Block.TRANSPARENT,
+}
+
+#: Blocks that make the declarations inside them non-public, or not standalone
+#: definitions at all.  ``RECORD``/``DATA``/``FIELD`` members are public API,
+#: but they are documented by their record's or datatype's own prose block —
+#: Markdown cannot be interleaved between a record's fields.
+_OPAQUE = frozenset({
+    Block.PRIVATE, Block.LOCAL, Block.FIELD, Block.VARIABLE,
+    Block.RECORD, Block.DATA,
+})
+
+#: Line-initial keywords that are declarations of something other than a
+#: definition, and so are never reported.
+_NON_DEFINITION_HEADS = frozenset({
+    "open", "import", "infix", "infixl", "infixr", "syntax",
+    "constructor", "eta-equality", "no-eta-equality", "inductive",
+    "coinductive", "overlap", "using", "renaming", "hiding", "public",
+    "unquoteDecl", "unquoteDef", "primitive",
+})
+
+
+@dataclass(frozen=True)
+class Frame:
+    """An open layout block.  ``indent`` is the column its items start at, or
+    ``-1`` while the block is *pending* — opened by a keyword or a ``where``
+    whose first item has not been seen yet, so its column is not yet known.
+    ``opener`` is the column of the item that opened the block, which is what
+    decides whether the block turns out to have any items at all."""
+
+    kind: Block
+    indent: int
+    opener: int
+    name: Optional[str] = None   # for Block.MODULE: the submodule's name, if named
+
+
+def _indent_of(line: str) -> int:
+    """Column of the first non-space character (the line must be non-blank)."""
+    return len(line) - len(line.lstrip())
+
+
+def _resolve_pending(stack: tuple[Frame, ...], indent: int) -> tuple[Frame, ...]:
+    """Settle every block that is still waiting for its first item.
+
+    A pending block owns the next line only if that line is indented deeper
+    than the item that opened it.  Otherwise the block is empty and is
+    discarded — the case that matters is a definition whose ``where`` body was
+    written inline (``f x = e where open M``), which opens a block that the
+    following sibling definition must not be swallowed into.
+    """
+    while stack and stack[-1].indent < 0:
+        if indent > stack[-1].opener:
+            return (*stack[:-1], replace(stack[-1], indent=indent))
+        stack = stack[:-1]
+    return stack
+
+
+def _close_to(stack: tuple[Frame, ...], indent: int) -> tuple[Frame, ...]:
+    """Pop every block whose items are indented deeper than this line: layout
+    closes a block as soon as a line appears to the left of its items."""
+    while stack and 0 <= stack[-1].indent > indent:
+        stack = stack[:-1]
+    return stack
+
+
+def _settle(stack: tuple[Frame, ...], indent: int) -> tuple[Frame, ...]:
+    """Bring the scope stack to the state a line at ``indent`` sees.
+
+    Resolution runs on both sides of the close: before, so a block claims the
+    line that is its first item; after, so a block whose inner blocks just
+    closed — and which this line turns out not to belong to — is discarded
+    rather than left open over the rest of the file.
+    """
+    return _resolve_pending(_close_to(_resolve_pending(stack, indent), indent), indent)
+
+
+def _is_public(stack: tuple[Frame, ...]) -> bool:
+    """A declaration is a *standalone public definition* when no enclosing block
+    hides it (``private``, a ``where`` body, a ``let``) and none makes it a
+    member of something else (a record body, a field block, a variable block)."""
+    return not any(f.kind in _OPAQUE for f in stack)
+
+
+def _namespace(stack: tuple[Frame, ...]) -> tuple[str, ...]:
+    """The chain of enclosing *named* submodules.  Anonymous ``module _`` frames
+    contribute nothing: their contents are exported into the parent scope."""
+    return tuple(f.name for f in stack if f.kind is Block.MODULE and f.name)
+
+
+# =============================================================================
+# Declaration recognition
+# =============================================================================
+
+# `where` as a standalone token, and everything before it.
+_WHERE = re.compile(r"(?<![\w'-])where(?![\w'-])")
+# A type signature: one or more names, then a colon delimited by whitespace.
+# Agda requires the space before `:` (a bare `:` may be part of a mixfix name),
+# which makes this a reliable split point.
+_SIGNATURE = re.compile(r"^(?P<names>\S+(?:\s+\S+)*?)\s+:\s")
+# `record R …`, `data D …`, `module M …`, `pattern p …`
+_HEADED = re.compile(r"^(record|data|module|pattern)(?![\w'-])\s*(?P<rest>.*)$")
+# A name token: anything not a delimiter.  Mixfix names (`_∘_`, `∣_∣`, `⨅`) are
+# ordinary tokens; parentheses and braces are not part of a name.
+_NAME_OK = re.compile(r"^[^\s(){}@;.]+$")
+
+
+def _split_where(text: str) -> tuple[str, Optional[str]]:
+    """Split a declaration at its ``where``: the head, and the block's inline
+    first item if the source put one on the same line (``… where foo = bar``).
+    Returns ``(head, None)`` when there is no ``where``."""
+    match = _WHERE.search(text)
+    if not match:
+        return text, None
+    tail = text[match.end():].strip()
+    return text[:match.start()].rstrip(), (tail if tail else "")
+
+
+def _declared_names(head: str) -> tuple[str, ...]:
+    """The names a type signature declares.  Agda allows ``f g : T`` to declare
+    two names at once, so this returns a tuple.  Returns ``()`` when the text is
+    not a signature the tool is willing to claim."""
+    match = _SIGNATURE.match(head)
+    if not match:
+        return ()
+    names = tuple(match.group("names").split())
+    return names if all(_NAME_OK.match(n) for n in names) else ()
+
+
+def _headed_name(rest: str) -> Optional[str]:
+    """The name introduced by ``record`` / ``data`` / ``module`` / ``pattern``.
+    ``None`` for the anonymous ``module _``, which names no namespace."""
+    first = rest.split()[0] if rest.split() else ""
+    return None if first in ("_", "") else first
+
+
+# =============================================================================
+# The parse
+# =============================================================================
+
+@dataclass(frozen=True)
+class _Item:
+    """One logical declaration: the physical line it starts on, the column it
+    starts at, and its text with continuation lines folded in."""
+
+    line: int
+    indent: int
+    text: str
+
+
+def _logical_items(lines: Iterable[tuple[int, str]]) -> list[_Item]:
+    """Fold Agda's continuation lines into logical items.
+
+    A line indented deeper than the item in progress continues it — *unless*
+    the item has already reached its ``where``, which opens a nested block whose
+    contents are items in their own right.  Everything else is decided by the
+    scope stack in :func:`_walk`; this pass only has to stop swallowing lines at
+    the right moment, so it tracks the in-progress item's own column and
+    whether a ``where`` has closed it off.
+    """
+    items: list[_Item] = []
+    start, indent, parts, done = 0, -1, [], True
+    for lineno, line in lines:
+        if not line.strip():
+            continue
+        col = _indent_of(line)
+        if not done and col > indent:
+            parts.append(line.strip())
+            if _WHERE.search(" ".join(parts)):
+                items.append(_Item(start, indent, " ".join(parts)))
+                done = True
+            continue
+        if not done:
+            items.append(_Item(start, indent, " ".join(parts)))
+        start, indent, parts, done = lineno, col, [line.strip()], False
+        if _WHERE.search(line):
+            items.append(_Item(start, indent, " ".join(parts)))
+            done = True
+    if not done:
+        items.append(_Item(start, indent, " ".join(parts)))
+    return items
+
+
+@dataclass(frozen=True)
+class _Decl:
+    """A recognized declaration, before prose is attached."""
+
+    line: int
+    names: tuple[str, ...]
+    kind: Kind
+    namespace: tuple[str, ...]
+    text: str
+
+
+def _walk(
+    items: list[_Item], seen: frozenset[str]
+) -> tuple[list[_Decl], list[tuple[int, str]], frozenset[str]]:
+    """Walk the logical items under Agda's layout rule, collecting the
+    standalone public declarations and the items the parser declined.
+
+    ``seen`` carries the names already declared in this module, which is what
+    distinguishes a *clause* from a declaration: ``f x with e``, ``f x ()``, and
+    ``f (suc n) = …`` all begin with a name that has a signature above them.
+    Threading it across fences matters because a definition's clauses can be
+    split across code blocks.
+    """
+    stack: tuple[Frame, ...] = ()
+    decls: list[_Decl] = []
+    unparsed: list[tuple[int, str]] = []
+    for item in items:
+        stack, found, skipped = _classify(_settle(stack, item.indent), item, seen)
+        decls.extend(found)
+        unparsed.extend(skipped)
+        seen = seen | {n for d in found for n in d.names}
+    return decls, unparsed, seen
+
+
+def _classify(
+    stack: tuple[Frame, ...], item: _Item, seen: frozenset[str] = frozenset()
+) -> tuple[tuple[Frame, ...], list[_Decl], list[tuple[int, str]]]:
+    """Classify one logical item, returning the updated scope stack, any public
+    declarations it introduces, and any text the parser declined to judge."""
+    text = item.text.strip()
+    if not text:
+        return stack, [], []
+    first = text.split()[0]
+
+    # A block keyword (`private`, `field`, `postulate`, …) opens a block.  When
+    # the source puts the block's first item on the same line (`private
+    # variable`), recurse into the remainder at its own column.
+    if first in _BLOCK_KEYWORDS:
+        stack = (*stack, Frame(_BLOCK_KEYWORDS[first], -1, item.indent))
+        rest = text[len(first):].strip()
+        if rest:
+            # `private variable`, `private postulate`: the inner block opens too,
+            # and both blocks take the *outer* column as their opener, because
+            # that is the column their items will be measured against.
+            return _classify(stack, replace(item, text=rest), seen)
+        return stack, [], []
+
+    head, inline = _split_where(text)
+    public = _is_public(stack)
+    namespace = _namespace(stack)
+
+    headed = _HEADED.match(head)
+    if headed:
+        keyword, rest = headed.group(1), headed.group("rest")
+        name = _headed_name(rest)
+        kind = {"record": Kind.RECORD, "data": Kind.DATA,
+                "module": Kind.MODULE, "pattern": Kind.PATTERN}[keyword]
+        block = {"record": Block.RECORD, "data": Block.DATA,
+                 "module": Block.MODULE}.get(keyword)
+        # `module M where` and `pattern p = …` differ: only the former opens a
+        # block.  A `record`/`data` with no `where` is a forward declaration.
+        if block is not None and inline is not None:
+            stack = (*stack, Frame(block, -1, item.indent,
+                                   name if block is Block.MODULE else None))
+        # An anonymous `module _` introduces a scope, not a definition.  A named
+        # submodule is itself public API; `module M = N …` is an application,
+        # which names a namespace but declares nothing new to document.
+        emit = public and name is not None and not (
+            kind is Kind.MODULE and "=" in rest.split("where")[0]
+        )
+        found = [_Decl(item.line, (name,), kind, namespace, head)] if emit else []
+        return stack, found, []
+
+    if first in _NON_DEFINITION_HEADS:
+        return stack, [], []
+
+    names = _declared_names(head)
+    if names:
+        # A signature inside a `postulate` block is still a public definition;
+        # one inside a record body, a field block, or `private` is not.
+        found = [_Decl(item.line, names, Kind.SIGNATURE, namespace, head)] if public else []
+        # `f x = e where …` — the `where` body is local to the definition.
+        if inline is not None:
+            stack = (*stack, Frame(Block.LOCAL, -1, item.indent))
+        return stack, found, []
+
+    # An equation (`f x = e`), a clause of an already-declared name (`f x with
+    # e`, an absurd `f x ()`), a clause continuation (`... | p`), or something
+    # the parser does not recognize.  Equations and clauses are not reported —
+    # the style guide requires an explicit type signature on every public
+    # definition, so the signature is the declaration.  Anything else at a
+    # public item position is a genuine blind spot and is surfaced as one.
+    if inline is not None:
+        stack = (*stack, Frame(Block.LOCAL, -1, item.indent))
+    is_clause = "=" in head or first in seen or first.startswith("...")
+    if public and not is_clause and not head.startswith("_"):
+        return stack, [], [(item.line, text[:120])]
+    return stack, [], []
+
+
+# =============================================================================
+# Prose classification
+# =============================================================================
+
+# The boilerplate header sentence the M4 audit's finding 3 flags: a module whose
+# entire prose body is "This is the [X][] module of the [AUA Library][]".
+_BOILERPLATE = re.compile(
+    r"^\s*This is the .{0,120}? module of the \[Agda Universal Algebra Library\]",
+    re.IGNORECASE,
+)
+_HEADING = re.compile(r"^\s{0,3}#{1,6}\s")
+# Structure, not prose: a kramdown/pandoc attribute line, a horizontal rule, or
+# an HTML tag alone on its line …
+_NON_PROSE = re.compile(r"^\s*(\{[:#][^}]*\}|-{3,}|\*{3,}|<[^>]+>)\s*$")
+# … and a link-reference definition, whose target runs to end of line.  These
+# are how the corpus defines its cross-links (ADR-007); they render as nothing.
+_LINK_DEF = re.compile(r"^ {0,3}\[[^\]]+\]:\s+\S")
+
+
+def classify_prose(lines: Iterable[str]) -> Prose:
+    """What a run of Markdown lines amounts to as documentation."""
+    body = [ln for ln in lines if ln.strip()]
+    if not body:
+        return Prose.NONE
+    paragraphs = [ln for ln in body
+                  if not _HEADING.match(ln) and not _NON_PROSE.match(ln)
+                  and not _LINK_DEF.match(ln)]
+    if not paragraphs:
+        return Prose.HEADING
+    if all(_BOILERPLATE.match(ln) for ln in paragraphs):
+        return Prose.BOILERPLATE
+    return Prose.PARAGRAPH
+
+
+def status_for(prose_kind: Prose, position: int) -> Status:
+    """A definition's status, from the prose on its fence and its rank in it."""
+    if prose_kind is Prose.NONE:
+        return Status.UNDOCUMENTED
+    if prose_kind is Prose.HEADING:
+        return Status.HEADING_ONLY
+    if prose_kind is Prose.BOILERPLATE:
+        return Status.BOILERPLATE
+    return Status.DOCUMENTED if position == 1 else Status.GROUPED
+
+
+# =============================================================================
+# Per-file analysis
+# =============================================================================
+
+def module_name(path: Path) -> str:
+    """The dotted Agda module name a path under ``src/`` denotes."""
+    parts = path.as_posix().split("src/", 1)[-1]
+    return parts[: -len(".lagda.md")].replace("/", ".")
+
+
+def rendered_prose(blocks: tuple[Fence, ...]) -> dict[int, tuple[str, ...]]:
+    """The prose a *reader* sees above each visible fence.
+
+    A hidden ``<!-- … -->`` preamble fence renders as nothing, so prose written
+    above it sits, on the rendered page, immediately above the next visible code
+    block.  Attribution therefore accumulates prose across hidden fences: each
+    visible fence gets every prose line since the previous *visible* fence.
+    Without this, the corpus idiom — module header, hidden preamble, first
+    definitions — would report every module's opening definitions as having no
+    prose at all, which is not what the page shows.
+    """
+    out: dict[int, tuple[str, ...]] = {}
+    pending: tuple[str, ...] = ()
+    for index, fence in enumerate(blocks):
+        pending = pending + fence.prose
+        if not fence.hidden:
+            out[index] = pending
+            pending = ()
+    return out
+
+
+def _fence_lines(fence: Fence) -> list[tuple[int, str]]:
+    """A fence's body as ``(1-based file line, cleaned Agda text)`` pairs, with
+    comments and string literals blanked."""
+    cleaned = clean_code_lines(list(fence.body))
+    return [(fence.body_start + i, line) for i, line in enumerate(cleaned)]
+
+
+def analyze_text(path: Path, text: str) -> FileReport:
+    """The whole audit for one literate module, as a pure function of its text."""
+    mod = module_name(path)
+    blocks = fences(text)
+    prose_of = rendered_prose(blocks)
+    visible: list[Definition] = []
+    hidden: list[Definition] = []
+    unparsed: list[tuple[int, str]] = []
+    # The module's own header prose is whatever precedes its first fence,
+    # hidden or not — that is the block STYLE_GUIDE § "Module headers have
+    # comment blocks" asks for.
+    module_prose = classify_prose(blocks[0].prose) if blocks else Prose.NONE
+    seen: frozenset[str] = frozenset()
+    for index, fence in enumerate(blocks):
+        decls, skipped, seen = _walk(_logical_items(_fence_lines(fence)), seen)
+        prose = prose_of.get(index, ())
+        kind = classify_prose(prose)
+        # Every name a declaration introduces gets its own record, but they
+        # share a rank: `f g : T` is one prose-block-worth of definition.
+        rank = 0
+        for decl in decls:
+            # The file's own `module M where` header declares no new name.  It
+            # is written either fully qualified or as the final segment alone.
+            if decl.kind is Kind.MODULE and not decl.namespace \
+                    and decl.names[0] in (mod, mod.rsplit(".", 1)[-1]):
+                continue
+            rank += 1
+            for name in decl.names:
+                record = Definition(
+                    module=mod, path=path.as_posix(), line=decl.line, name=name,
+                    namespace=decl.namespace, kind=decl.kind,
+                    status=status_for(kind, rank), prose_kind=kind,
+                    fence_index=index, position_in_fence=rank,
+                    signature=decl.text, prose="\n".join(prose).strip(),
+                )
+                (hidden if fence.hidden else visible).append(record)
+        if not fence.hidden:
+            unparsed.extend(skipped)
+    return FileReport(
+        path=path.as_posix(), module=mod, definitions=tuple(visible),
+        module_prose=module_prose, hidden_defs=tuple(hidden),
+        unparsed=tuple(unparsed),
+    )
+
+
+# =============================================================================
+# Reporting
+# =============================================================================
+
+def subtree_of(path: str) -> str:
+    """The top-level subtree a module belongs to (``Setoid``, ``Classical``, …);
+    top-level umbrella modules are grouped under ``(top level)``."""
+    rest = path.split("src/", 1)[-1]
+    return rest.split("/")[0] if "/" in rest else "(top level)"
+
+
+@dataclass(frozen=True)
+class Tally:
+    """Definition counts for one subtree, by status."""
+
+    subtree: str
+    counts: Counter
+
+    @property
+    def total(self) -> int:
+        return sum(self.counts.values())
+
+    @property
+    def documented(self) -> int:
+        return self.counts[Status.DOCUMENTED]
+
+    @property
+    def gaps(self) -> int:
+        return sum(self.counts[s] for s in GAP_STATUSES)
+
+
+def tally(reports: Iterable[FileReport]) -> list[Tally]:
+    """Per-subtree status counts, ordered by how much work each subtree needs."""
+    by_subtree: dict[str, Counter] = {}
+    for report in reports:
+        bucket = by_subtree.setdefault(subtree_of(report.path), Counter())
+        for definition in report.definitions:
+            bucket[definition.status] += 1
+    return sorted((Tally(name, counts) for name, counts in by_subtree.items()),
+                  key=lambda t: (-t.gaps, -t.total, t.subtree))
+
+
+def _row(cells: tuple[str, ...], widths: tuple[int, ...]) -> str:
+    return "  ".join(c.rjust(w) if i else c.ljust(w)
+                     for i, (c, w) in enumerate(zip(cells, widths)))
+
+
+def render_table(tallies: list[Tally]) -> list[str]:
+    """The per-subtree summary table: the answer to "how big is #268?"."""
+    headers = ("subtree", "defs", "documented", "grouped", "heading", "boiler", "none", "gaps")
+    rows = [
+        (t.subtree, str(t.total), str(t.documented),
+         str(t.counts[Status.GROUPED]), str(t.counts[Status.HEADING_ONLY]),
+         str(t.counts[Status.BOILERPLATE]), str(t.counts[Status.UNDOCUMENTED]),
+         str(t.gaps))
+        for t in tallies
+    ]
+    total = Tally("TOTAL", sum((t.counts for t in tallies), Counter()))
+    rows.append((total.subtree, str(total.total), str(total.documented),
+                 str(total.counts[Status.GROUPED]), str(total.counts[Status.HEADING_ONLY]),
+                 str(total.counts[Status.BOILERPLATE]), str(total.counts[Status.UNDOCUMENTED]),
+                 str(total.gaps)))
+    widths = tuple(max(len(r[i]) for r in (headers, *rows)) for i in range(len(headers)))
+    sep = "  ".join("-" * w for w in widths)
+    return [_row(headers, widths), sep,
+            *(_row(r, widths) for r in rows[:-1]), sep, _row(rows[-1], widths)]
+
+
+def render_modules(reports: list[FileReport]) -> list[str]:
+    """Modules whose own header prose is missing or boilerplate — the M4 audit's
+    finding 3, enumerated rather than estimated."""
+    weak = [r for r in reports if r.module_prose in (Prose.BOILERPLATE, Prose.NONE, Prose.HEADING)]
+    lines = [f"{len(weak)} of {len(reports)} modules have no real header prose:"]
+    for report in sorted(weak, key=lambda r: (r.module_prose.value, r.path)):
+        lines.append(f"  [{report.module_prose.value:11s}] {report.path}")
+    return lines
+
+
+def render_gaps(reports: list[FileReport], statuses: frozenset[Status]) -> list[str]:
+    """Every public definition whose status is in ``statuses``, grouped by file."""
+    lines: list[str] = []
+    for report in reports:
+        gaps = [d for d in report.definitions if d.status in statuses]
+        if not gaps:
+            continue
+        lines.append(f"\n{report.path}  ({len(gaps)} undocumented)")
+        lines.extend(f"  {d.line:5d}  [{d.status.value:12s}] {d.kind.value:9s} {d.name}"
+                     for d in gaps)
+    return lines
+
+
+def to_record(definition: Definition) -> dict:
+    """A harvest record: the prose this repository holds, keyed so it joins to
+    the Agda-internal (type, term) corpus of issue #275 on ``qname``."""
+    return {
+        "qname": definition.qname,
+        "module": definition.module,
+        "name": definition.name,
+        "namespace": list(definition.namespace),
+        "file": definition.path,
+        "line": definition.line,
+        "kind": definition.kind.value,
+        "signature": definition.signature,
+        "prose": definition.prose,
+        "prose_kind": definition.prose_kind.value,
+        "status": definition.status.value,
+    }
+
+
+# =============================================================================
+# Driver
+# =============================================================================
+
+def read_all(files: list[Path]) -> tuple[list[tuple[Path, str]], list[tuple[Path, PipelineError]]]:
+    """IO boundary: read every file in the Result monad, splitting successes
+    from failures so a bad read is reported rather than raised."""
+    reads = [(f, read_text(f)) for f in files]
+    return ([(f, r.unwrap()) for f, r in reads if r.is_ok],
+            [(f, r.unwrap_err()) for f, r in reads if r.is_err])
+
+
+def build_parser() -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser(
+        description="Audit the prose block attached to every public definition "
+                    "in the literate Agda corpus (issue #268).")
+    parser.add_argument("paths", nargs="*", default=["src"],
+                        help="files or directories (default: src)")
+    parser.add_argument("--include-legacy", action="store_true",
+                        help="also scan src/Legacy (frozen; skipped by default)")
+    parser.add_argument("--list", action="store_true",
+                        help="name every undocumented definition, not just the counts")
+    parser.add_argument("--modules", action="store_true",
+                        help="list modules whose own header prose is missing or boilerplate")
+    parser.add_argument("--strict", action="store_true",
+                        help="also count `grouped` definitions as gaps (the style "
+                             "guide's literal 'immediately above' reading)")
+    parser.add_argument("--json", action="store_true",
+                        help="emit one harvest record per definition (issue #275)")
+    parser.add_argument("--max-gaps", type=int, default=None, metavar="N",
+                        help="fail only when the gap count exceeds N.  This is the "
+                             "ratchet CI pins to today's count, so the backlog can "
+                             "only shrink while #268 is worked through per subtree")
+    parser.add_argument("--exit-zero", action="store_true",
+                        help="always exit 0 (do not signal gaps via exit status)")
+    return parser
+
+
+def main(argv: list[str]) -> int:
+    args = build_parser().parse_args(argv)
+    files = gather_files([Path(p) for p in args.paths], args.include_legacy)
+    if not files:
+        sys.stderr.write("error: no .lagda.md files found\n")
+        return 2
+    texts, failures = read_all(files)
+    for path, error in failures:
+        sys.stderr.write(f"error: {path}: {error}\n")
+    reports = [analyze_text(path, text) for path, text in texts]
+
+    if args.json:
+        for report in reports:
+            for definition in report.definitions:
+                print(json.dumps(to_record(definition), ensure_ascii=False))
+        return 0
+
+    statuses = STRICT_GAP_STATUSES if args.strict else GAP_STATUSES
+    print("\n".join(render_table(tally(reports))))
+    if args.modules:
+        print()
+        print("\n".join(render_modules(reports)))
+    if args.list:
+        print("\n".join(render_gaps(reports, statuses)))
+
+    hidden = sum(len(r.hidden_defs) for r in reports)
+    unparsed = [(r.path, line, text) for r in reports for line, text in r.unparsed]
+    total = sum(len(r.definitions) for r in reports)
+    gaps = sum(1 for r in reports for d in r.definitions if d.status in statuses)
+    print(f"\nScanned {len(reports)} modules, {total} public definitions: "
+          f"{gaps} without a prose block "
+          f"({'strict' if args.strict else 'lenient'} reading).")
+    if hidden:
+        print(f"{hidden} declaration(s) inside hidden preamble fences "
+              f"(not counted; run with --json to see them).")
+    if unparsed:
+        print(f"{len(unparsed)} item(s) the parser declined to classify:")
+        for path, line, text in unparsed[:20]:
+            print(f"  {path}:{line}: {text}")
+        if len(unparsed) > 20:
+            print(f"  … and {len(unparsed) - 20} more")
+    return _exit_code(args, gaps)
+
+
+def _exit_code(args: argparse.Namespace, gaps: int) -> int:
+    """Turn the gap count into an exit status.  With ``--max-gaps`` the run is a
+    ratchet — green while the backlog does not grow — which is what lets CI
+    enforce the rule before the backlog reaches zero."""
+    if args.exit_zero:
+        return 0
+    if args.max_gaps is not None:
+        if gaps > args.max_gaps:
+            sys.stderr.write(
+                f"\n✗ {gaps} definitions without a prose block exceeds the "
+                f"agreed ceiling of {args.max_gaps}.\n"
+                f"  Document the new definitions, or lower the ceiling in the "
+                f"Makefile if you have cleared some.\n")
+            return 1
+        if gaps < args.max_gaps:
+            print(f"✓ under the ceiling of {args.max_gaps}; lower DOCSTRING_MAX_GAPS "
+                  f"in the Makefile to {gaps} to lock the gain in.")
+        return 0
+    return 0 if not gaps else 1
+
+
+if __name__ == "__main__":
+    raise SystemExit(main(sys.argv[1:]))

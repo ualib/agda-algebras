@@ -41,7 +41,7 @@
 #      where a path segment happens to contain the substring `agda`.
 # =============================================================================
 
-.PHONY: default all check check-certificates check-all test clean site serve serve-full html agda-md site-full profile project-plan unused-imports unused-imports-test check-links check-links-test gen-links flrp-test flrp-slr gap-smoke Everything.agda EverythingLegacy.agda EverythingCertificates.agda
+.PHONY: default all check check-certificates check-all test clean site serve serve-full html agda-md site-full profile project-plan unused-imports unused-imports-test check-links check-links-test gen-links docstrings docstrings-test docstrings-list docstrings-json flrp-test flrp-slr gap-smoke Everything.agda EverythingLegacy.agda EverythingCertificates.agda
 
 # -- Configuration -----------------------------------------------------------
 SRCDIR    := src
@@ -49,6 +49,12 @@ AGDA      ?= agda
 RTS_OPTS  := +RTS -M6G -A128M -RTS
 AGDA_OPTS ?=
 REPO      ?= ualib/agda-algebras
+
+# The docstring-coverage ratchet (issue #268).  `make docstrings` fails only
+# when the number of public definitions lacking a prose block exceeds this
+# ceiling, so the backlog can only shrink while the per-subtree prose PRs land.
+# Lower it whenever a PR clears definitions; never raise it.
+DOCSTRING_MAX_GAPS ?= 201
 
 # The certificate census: generated representation certificates for the FLRP
 # research track (issue #515).  Excluded from Everything.agda and checked by
@@ -296,6 +302,30 @@ check-links-test:
 gen-links:
 	@echo "target: $@"
 	python3 scripts/python/gen_links.py
+
+# Audit the prose block attached to every public definition (STYLE_GUIDE
+# § "Every public definition has a prose comment block", issue #268).  A grep
+# cannot do this: the corpus documents definitions in Markdown *outside* the
+# ```agda fences, so the check has to parse literate structure and Agda's layout
+# rule.  `make docstrings` is the CI gate and holds the line at
+# DOCSTRING_MAX_GAPS; `make docstrings-list` names every gap; `make
+# docstrings-json` harvests (qname, prose) records for the training corpus
+# (issue #275).  Run `make docstrings-test` for the analyzer's own test suite.
+docstrings:
+	@echo "target: $@"
+	python3 scripts/python/docstring_audit.py --modules --max-gaps $(DOCSTRING_MAX_GAPS) $(SRCDIR)
+
+docstrings-list:
+	@echo "target: $@"
+	python3 scripts/python/docstring_audit.py --list --exit-zero $(SRCDIR)
+
+docstrings-json:
+	@echo "target: $@"
+	python3 scripts/python/docstring_audit.py --json $(SRCDIR)
+
+docstrings-test:
+	@echo "target: $@"
+	python3 scripts/python/test_docstring_audit.py
 
 # Test the FLRP certificate emitter (scripts/python/flrp/): engine unit tests, a
 # Python mirror of the Agda checker's obligations as a regression tripwire,

@@ -105,6 +105,16 @@ if str(_SCRIPT_DIR) not in sys.path:
 
 from _utils import Result, PipelineError  # noqa: E402
 from _utils.file_ops import read_text, write_text  # noqa: E402
+# The literate front end (fence extraction, comment lexer, file discovery) is
+# shared with docstring_audit.py, so it lives in _utils rather than here.
+from _utils.literate import (  # noqa: E402
+    clean_code_lines,
+    expand_target,
+    extract_agda_lines,
+    file_code_lines,
+    gather_files,
+    scan_line,
+)
 
 
 # =============================================================================
@@ -209,111 +219,6 @@ class FileReport:
     open_ended: tuple[OpenEnded, ...]
     analyzed: int                  # number of analyzable statements examined
     public: int                    # number of public statements skipped
-
-
-# =============================================================================
-# Literate extraction:  .lagda.md text -> one Agda line per source line
-# =============================================================================
-
-_FENCE_OPEN = re.compile(r"^```\s*(?:agda\b|\{[^}]*\.agda[^}]*\})\s*$")
-_FENCE_CLOSE = re.compile(r"^```\s*$")
-
-
-def _fence_step(inside: bool, line: str) -> bool:
-    """State transition for the code-fence scanner: are we inside a code block
-    *after* this line?  HTML comments are invisible to Agda, so blocks hidden
-    inside ``<!-- … -->`` are treated as code, exactly as Agda type-checks them."""
-    if inside:
-        return not bool(_FENCE_CLOSE.match(line))
-    return bool(_FENCE_OPEN.match(line))
-
-
-def extract_agda_lines(text: str) -> list[str]:
-    """Return one entry per source line: the line's Agda code, or ``''`` for
-    prose and fence lines.  Numbering is preserved so diagnostics point at the
-    real line in the ``.lagda.md`` file."""
-    lines = text.split("\n")
-    # inside_before[i] = were we inside a code block before processing line i?
-    inside_before = list(accumulate(lines, _fence_step, initial=False))[:-1]
-    return [
-        line if (inside and not _FENCE_CLOSE.match(line)) else ""
-        for inside, line in zip(inside_before, lines)
-    ]
-
-
-# =============================================================================
-# Lexer:  blank out comments and string literals, preserving layout
-# =============================================================================
-
-# Characters that may continue an operator token after ``--``; if the run of
-# dashes is followed by one of these, ``--`` is part of an operator, not a
-# comment (e.g. ``-->``).  Otherwise ``--`` starts a line comment.
-_SYMBOL_CHARS = frozenset("-!#$%&*+./<=>?@\\^|~:")
-
-
-def _line_comment_at(line: str, i: int) -> bool:
-    """Does a line comment start at position ``i``?  Mirrors Agda's rule: a
-    maximal run of ``-`` (length >= 2) followed by a non-symbol char or EOL."""
-    if line[i : i + 2] != "--":
-        return False
-    j = i
-    while j < len(line) and line[j] == "-":
-        j += 1
-    nxt = line[j] if j < len(line) else ""
-    return nxt == "" or nxt not in _SYMBOL_CHARS
-
-
-def scan_line(block_depth: int, line: str) -> tuple[int, str]:
-    """Blank comments and string literals in one line, threading the nesting
-    depth of ``{- … -}`` block comments across lines.  Replacement preserves
-    length so that column positions and later tokenisation are unaffected.
-
-    Note: ASCII ``'`` is a legal identifier character in Agda (primed names such
-    as ``cong'``), and character literals do not occur in this corpus, so ``'``
-    is left untouched rather than risk eating a name.  Pragmas ``{-# … #-}`` are
-    blanked along with ordinary block comments.
-    """
-    out: list[str] = []
-    depth = block_depth
-    in_string = False
-    i, n = 0, len(line)
-    while i < n:
-        two = line[i : i + 2]
-        c = line[i]
-        if depth > 0:                       # inside a block comment / pragma
-            if two == "{-":
-                depth += 1; out.append("  "); i += 2
-            elif two == "-}":
-                depth -= 1; out.append("  "); i += 2
-            else:
-                out.append(" "); i += 1
-        elif in_string:                     # inside a "..." literal
-            if c == "\\" and i + 1 < n:
-                out.append("  "); i += 2
-            elif c == '"':
-                in_string = False; out.append(" "); i += 1
-            else:
-                out.append(" "); i += 1
-        elif two == "{-":                   # block comment / pragma opens
-            depth += 1; out.append("  "); i += 2
-        elif _line_comment_at(line, i):     # line comment to EOL
-            out.append(" " * (n - i)); break
-        elif c == '"':                      # string opens
-            in_string = True; out.append(" "); i += 1
-        else:
-            out.append(c); i += 1
-    return depth, "".join(out)
-
-
-def clean_code_lines(agda_lines: list[str]) -> list[str]:
-    """Blank comments/strings across a whole file, line by line."""
-    depths = list(accumulate(agda_lines, lambda d, ln: scan_line(d, ln)[0], initial=0))
-    return [scan_line(d, ln)[1] for d, ln in zip(depths[:-1], agda_lines)]
-
-
-def file_code_lines(text: str) -> list[str]:
-    """Full front end: ``.lagda.md`` text -> comment-free Agda, line-numbered."""
-    return clean_code_lines(extract_agda_lines(text))
 
 
 # =============================================================================
@@ -941,25 +846,6 @@ def summary_tables(reports: list[FileReport], top: int) -> list[str]:
 # =============================================================================
 # Driver
 # =============================================================================
-
-def expand_target(p: Path, include_legacy: bool) -> list[Path]:
-    """A path argument -> the ``.lagda.md`` files it denotes.  Explicitly named
-    files are always honoured; directory walks skip frozen ``Legacy/`` unless
-    asked to include it."""
-    if p.is_file():
-        return [p]
-    if p.is_dir():
-        return [
-            q
-            for q in sorted(p.rglob("*.lagda.md"))
-            if include_legacy or "/Legacy/" not in q.as_posix()
-        ]
-    return []
-
-
-def gather_files(paths: list[Path], include_legacy: bool) -> list[Path]:
-    return sorted({f for p in paths for f in expand_target(p, include_legacy)})
-
 
 def read_all(files: list[Path]) -> tuple[list[tuple[Path, str]], list[tuple[Path, PipelineError]]]:
     """IO boundary: read every file (in the Result monad), splitting the successes
