@@ -9,6 +9,10 @@ author: "agda-algebras development team"
 
 This is the [Setoid.Algebras.Basic][] module of the [Agda Universal Algebra Library][].
 
+An **algebra over a signature** `𝑆`{.AgdaGeneralizable} is a setoid — a carrier type together with an equivalence relation on it — equipped with an interpretation of every operation symbol of `𝑆`{.AgdaGeneralizable} as a function on that carrier which *respects* the equivalence.  That last clause is the entire difference from the type-based development: on a setoid an operation is not a bare function but a `Func`{.AgdaRecord}, a function bundled with a proof that it sends related arguments to related results.  Carrying the proof inside the structure is what makes quotients cheap: a quotient algebra is the *same* carrier under a coarser equivalence, so forming one needs neither quotient types nor an axiom.  That matters here, because the library is `--safe --cubical-compatible`, where function extensionality is unavailable — see the discussion at `mkAlgebra`{.AgdaFunction} below for where the cost reappears.
+
+This module is the canonical entry point for the `Setoid/` tree.  It defines the `Algebra`{.AgdaRecord} record, two smart constructors for building one from an ordinary interpretation function, the operation-interpretation operator `_^_`{.AgdaFunction}, and the universe-lifting operations that let algebras at different levels be compared.  For indexed products see [Setoid.Algebras.Products][]; for finite algebras, [Setoid.Algebras.Finite][]; for reducts to a smaller signature, [Setoid.Algebras.Reduct][].  Congruences and the quotients they generate are in [Setoid.Congruences.Basic][], and structure-preserving maps between algebras in [Setoid.Homomorphisms.Basic][].
+
 <!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
@@ -32,6 +36,10 @@ open import Setoid.Signatures    using ( ⟨_⟩ )
 private variable α ρ ι : Level
 ```
 -->
+
+`ov`{.AgdaFunction} names the level arithmetic that classes of algebras keep needing: `ov α = 𝓞 ⊔ 𝓥 ⊔ lsuc α`.  A membership condition on algebras is seldom a statement about one carrier; it quantifies over algebras themselves — `H`, `S` and `P` of [Setoid.Varieties.Closure][] each say "there is an algebra in `𝒦` such that …" — and `Algebra α ρ`{.AgdaRecord} is a type one universe above its carrier, which is precisely what `Level-of-Alg`{.AgdaFunction} below computes.  Such a condition therefore lands at `lsuc α`, and since it also mentions operation symbols and arities it joins `𝓞`{.AgdaGeneralizable} and `𝓥`{.AgdaGeneralizable}.  Abbreviating that join keeps the closure operators' level expressions readable: `Pred (Algebra α ρ) (ov α)` is the recurring shape of a class, and `class-product`{.AgdaFunction} of [Setoid.Algebras.Products][] builds an algebra at `ov (α ⊔ ρ)`.
+
+The same `lsuc` is what forces `Term`{.AgdaDatatype} to raise levels, `Term X : Type (ov χ)` for `X : Type χ`, and so what makes the term construction a *relative* monad rather than a monad; see [Setoid.Terms.Monad][].
 
 ```agda
 ov : {𝓞 𝓥 : Level}{𝑆 : Signature 𝓞 𝓥} → Level → Level
@@ -86,13 +94,16 @@ record Algebra {𝑆 : Signature 𝓞 𝓥} α ρ : Type (𝓞 ⊔ 𝓥 ⊔ lsuc
 open Algebra
 ```
 
-The next three definitions are merely syntactic sugar that we sometimes use to make
-the code more readable.
+`𝔻[_]`{.AgdaFunction} is the *domain* of an algebra: the setoid `⟨A, ≈⟩` underlying it, carrier and equivalence together.  It is the projection to reach for whenever the equality matters — stating that a map is a `Func`{.AgdaRecord} between two algebras, or opening a `Setoid`{.AgdaRecord} to name its `_≈_`.
 
 ```agda
 𝔻[_] : Algebra {𝑆 = 𝑆} α ρ →  Setoid α ρ
 𝔻[ 𝑨 ] = Domain 𝑨
+```
 
+`𝕌[_]`{.AgdaFunction} forgets one step further, to the bare carrier type.  Mathematically it is the underlying-set functor from algebras to sets, minus the equality: `𝕌[ 𝑨 ]` is what an element of `𝑨`{.AgdaGeneralizable} *is*, with no record of when two such elements count as equal.  Use it where a plain type is wanted — the codomain of an operation, as in `_^_`{.AgdaFunction} just below — and `𝔻[_]`{.AgdaFunction} everywhere the equality is needed.
+
+```agda
 -- Forgetful functor: returns the carrier of (the domain of) 𝑨, forgetting its structure.
 𝕌[_] : Algebra {𝑆 = 𝑆} α ρ →  Type α
 𝕌[ 𝑨 ] = Setoid.Carrier 𝔻[ 𝑨 ]
@@ -169,14 +180,19 @@ mkAlgebraₚ : (A : Type α)
 mkAlgebraₚ A f cong-f = mkAlgebra (≡.setoid A) f cong-f
 ```
 
-Sometimes we want to extract the universe level of a given algebra or its carrier.
-The following functions provide that information.
+Sometimes a level has to be named that is only implicit in an algebra's type.  Because Agda's universes are non-cumulative, an algebra cannot be silently reused at a larger level; the two projections below recover the levels so that a caller can state the lifting it needs.
+
+`Level-of-Alg`{.AgdaFunction} returns the level of the *algebra type* itself, `𝓞 ⊔ 𝓥 ⊔ lsuc (α ⊔ ρ)` — one universe above both the carrier and the equality, since `Algebra α ρ`{.AgdaRecord} is a record containing a `Setoid α ρ`{.AgdaRecord}.
 
 ```agda
 -- The universe level of an algebra
 Level-of-Alg : {α ρ 𝓞 𝓥 : Level}{𝑆 : Signature 𝓞 𝓥} → Algebra {𝑆 = 𝑆} α ρ → Level
 Level-of-Alg {α = α}{ρ}{𝓞}{𝓥} _ = 𝓞 ⊔ 𝓥 ⊔ lsuc (α ⊔ ρ)
+```
 
+`Level-of-Carrier`{.AgdaFunction} returns just `α`, the level of the carrier — the argument to give `Lift-Alg`{.AgdaFunction} when only the elements, and not the equality, need to move up.
+
+```agda
 -- The universe level of the carrier of an algebra
 Level-of-Carrier : {α ρ 𝓞 𝓥  : Level}{𝑆 : Signature 𝓞 𝓥} → Algebra {𝑆 = 𝑆} α ρ → Level
 Level-of-Carrier {α = α} _ = α
@@ -184,6 +200,12 @@ Level-of-Carrier {α = α} _ = α
 
 
 #### Level lifting setoid algebra types
+
+Agda's universes are *non-cumulative*: an inhabitant of `Type α` is not thereby an inhabitant of `Type (α ⊔ ℓ)`, so two algebras built at different levels cannot simply be compared, and a theorem proved about `Algebra α ρ`{.AgdaRecord} does not automatically apply to `Algebra (α ⊔ ℓ) ρ`{.AgdaRecord}.  This bites constantly in universal algebra, where the closure operators of [Setoid.Varieties.Closure][] move between levels at every step.  The remedy is to *lift* an algebra explicitly, and the reason the remedy costs nothing mathematically is that a lifted algebra is isomorphic to the original: [Setoid.Homomorphisms.Isomorphisms][] proves `Lift-≅ : 𝑨 ≅ Lift-Alg 𝑨 ℓ ρ`, so isomorphism classes are closed under lifting and every isomorphism-invariant property survives it.
+
+An algebra carries two independent levels — the carrier's `α` and the equality's `ρ` — so there are two liftings, and they are kept separate.
+
+`Lift-Algˡ`{.AgdaFunction} raises the *carrier* level, from `α` to `α ⊔ ℓ`, leaving the equality where it is.  The carrier becomes `Lift ℓ ∣A∣` and two lifted elements are related exactly when the elements underneath them were, so the equivalence is transported unchanged.
 
 ```agda
 module _ {𝑆 : Signature 𝓞 𝓥}(𝑨 : Algebra {𝑆 = 𝑆} α ρ)(ℓ : Level) where
@@ -200,8 +222,11 @@ module _ {𝑆 : Signature 𝓞 𝓥}(𝑨 : Algebra {𝑆 = 𝑆} α ρ)(ℓ : 
             }
   Lift-Algˡ .Interp ⟨$⟩ (f , la) = lift $ (f ^ 𝑨) (lower ∘ la)
   Lift-Algˡ .Interp .≈cong (refl , la=lb) = ≈cong (Interp 𝑨) (refl , la=lb)
+```
 
+`Lift-Algʳ`{.AgdaFunction} is the mirror image: it raises the level of the *equality*, from `ρ` to `ρ ⊔ ℓ`, and leaves the carrier alone.  The relation becomes `Lift ℓ ∘₂ _≈₁_`, a proposition-level lift of the original, and the equivalence proofs are re-wrapped accordingly.
 
+```agda
   Lift-Algʳ : Algebra {𝑆 = 𝑆} α (ρ ⊔ ℓ)
   Lift-Algʳ .Domain =
     record  { Carrier = ∣A∣
@@ -213,7 +238,11 @@ module _ {𝑆 : Signature 𝓞 𝓥}(𝑨 : Algebra {𝑆 = 𝑆} α ρ)(ℓ : 
             }
   Lift-Algʳ .Interp ⟨$⟩ (f , la) = (f ^ 𝑨) la
   Lift-Algʳ .Interp .≈cong (refl , la≡lb) = lift $ ≈cong (Interp 𝑨) (≡.refl , (lower ∘ la≡lb))
+```
 
+`Lift-Alg`{.AgdaFunction} composes the two, raising both levels at once, and is the form almost every caller wants: given target increments `ℓ₀` and `ℓ₁` it produces an algebra at `(α ⊔ ℓ₀, ρ ⊔ ℓ₁)`.  It is the operation the closure operators use to bring a class and a candidate algebra to a common level; `Lift-≅`{.AgdaFunction} of [Setoid.Homomorphisms.Isomorphisms][] is the isomorphism that makes the move harmless.
+
+```agda
 Lift-Alg : (𝑨 : Algebra {𝑆 = 𝑆} α ρ)(ℓ₀ ℓ₁ : Level) → Algebra {𝑆 = 𝑆} (α ⊔ ℓ₀) (ρ ⊔ ℓ₁)
 Lift-Alg 𝑨 ℓ₀ = Lift-Algʳ (Lift-Algˡ 𝑨 ℓ₀)
 ```
