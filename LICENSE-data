@@ -3,10 +3,10 @@ Additional Permission for Machine-Extracted Representations of agda-algebras
 
 Copyright 2018-2026 William DeMeo and the agda-algebras development team.
 
-This file GRANTS ADDITIONAL PERMISSIONS.  It takes nothing away.  The source
-code under src/ remains licensed under the Apache License 2.0 (see LICENSE),
-and the documentation under docs/ remains licensed under CC BY 4.0 (see
-LICENSE-docs).  If this file did not exist, everything it permits would still
+This file GRANTS ADDITIONAL PERMISSIONS.  It takes nothing away.  This
+repository is licensed in parts: the source code under src/ under the Apache
+License 2.0 (see LICENSE), the documentation under docs/ under CC BY 4.0 (see
+LICENSE-docs).  Neither is changed by this file.  If this file did not exist, everything it permits would still
 be permitted under Apache-2.0 — with attribution obligations that this file
 makes optional for one narrow class of artifact.
 
@@ -39,7 +39,8 @@ The grant
 Any person obtaining Extracted Representations of this library may use,
 redistribute, and build upon them under EITHER
 
-  (a) the Apache License 2.0, as for the rest of this repository; OR
+  (a) the Apache License 2.0, the license of this library's source code
+      (see LICENSE); OR
   (b) the CC0 1.0 Universal Public Domain Dedication
       (https://creativecommons.org/publicdomain/zero/1.0/),
 

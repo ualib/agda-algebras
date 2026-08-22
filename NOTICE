@@ -7,10 +7,15 @@ scripts/python/utils/ directory at SHA 664b919.  The vendored copies live at
 scripts/python/_utils/ in this repository.  See the provenance headers at
 the top of each file for per-file attribution.
 
-That vendored code is licensed under the Apache License 2.0, the license of
-the project it came from; this repository is likewise licensed under the Apache
-License 2.0.  See LICENSE.
+That vendored code is licensed under the Apache License 2.0, the license of the
+project it came from, and it sits among this repository's Apache-2.0 material.
 
-Machine-extracted representations of this library carry an additional
-permission allowing use under Apache-2.0 or CC0-1.0 at the recipient's option.
-See LICENSE-data.
+This repository is licensed in parts, not as a whole:
+
+  src/ and the other source code   Apache License 2.0        LICENSE
+  docs/                            CC BY 4.0                 LICENSE-docs
+  machine-extracted                Apache-2.0 or CC0-1.0,    LICENSE-data
+  representations                  at the recipient's option
+
+LICENSE-data grants an additional permission; it takes nothing away from the
+licenses above.
