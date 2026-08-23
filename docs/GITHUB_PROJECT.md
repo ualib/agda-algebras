@@ -2125,7 +2125,7 @@ A scripted sweep of the live trees for `STYLE_GUIDE.md` violations, producing a 
 +  [ ] Notation: residual `∣_∣` / `∥_∥` / `_̂_` outside `Legacy/`.
 +  [ ] Imports: bare `open import` without `using`; cosmetic `renaming`; non-alphabetical groups.
 +  [ ] Headers: modules whose header is only YAML + the one-line "This is the … module" (feeds M4-2).
-+  [ ] Anchors: `<a id=…>` occurrences (feeds M4-2; ≈ 90 across `Setoid/`).
++  [ ] Anchors: `<a id=…>` occurrences (feeds M4-1g; ≈ 90 across `Setoid/`).
 +  [ ] Naming: any `is-x` predicate forms or synonym pairs (expected: none in `Setoid/`).
 +  [ ] Emit `docs/audits/M4-style-audit.md` with per-file findings.
 
@@ -2186,13 +2186,13 @@ Part of the M4-1 umbrella (#267).
 
 ---
 
-### Issue M4-2: Remove HTML <a id> heading anchors (rely on kramdown auto-slugs) (#387, closed)
+### Issue M4-1g: Remove HTML <a id> heading anchors (rely on kramdown auto-slugs) (#387, closed)
 
 **Labels**: 
 
 ## Description
 
-Split out of the M4 style audit (`docs/audits/M4-style-audit.md`, finding 4) — the docstring pass #268 is a *different* M4-2 task.  The `docs/STYLE_GUIDE.md` § Section headings rule says headings should be plain ATX, not wrapped in `<a id="…">…</a>`; the renderer (Jekyll + kramdown) auto-generates a slug id from each heading.  The audit found **~300 such anchors across 111 files**.  Pursue per-subtree, starting with `Setoid/` (~93 anchors / 43 files).
+Split out of the M4 style audit (`docs/audits/M4-style-audit.md`, finding 4).  The `docs/STYLE_GUIDE.md` § Section headings rule says headings should be plain ATX, not wrapped in `<a id="…">…</a>`; the renderer (Jekyll + kramdown) auto-generates a slug id from each heading.  The audit found **~300 such anchors across 111 files**.  Pursue per-subtree, starting with `Setoid/` (~93 anchors / 43 files).
 
 ## Algorithm (per anchor `<level> <a id="TAG">TEXT</a>`)
 
@@ -2226,17 +2226,398 @@ Part of Milestone 4 (style and naming uniformity sweep); see also the umbrella #
 
 ## Description
 
-Every record, type family, and top-level function in the public API should have a prose comment block explaining what it is, when to use it, and cross-references to related definitions.  Long-tail task; pursue in small per-module PRs.
+Every record, type family, and top-level function in the public API should have a prose comment block explaining what it is, when to use it, and cross-references to related definitions.  Long-tail task; pursued as the per-subtree sub-issues below.
+
+## Where it stands
+
+Measured by `make docstrings` (#537) over the live trees: **3247 public definitions in 307 modules**, of which **201** sit under a fence carrying no real prose, and **50** modules open with nothing beyond the boilerplate "This is the [X][] module of the …" sentence.
+
+`make docstrings` is a ratchet pinned at `DOCSTRING_MAX_GAPS`, so the count can only fall.  Each sub-issue lowers it.
 
 ## Tasks
 
-- [ ] Walk every public module in `Setoid/` and add missing docstrings.
-- [ ] Walk every public module in `Classical/` and add missing docstrings.
-- [ ] Enforce via a linter or review checklist.
+- [ ] #539 — Setoid/Algebras and Setoid/Homomorphisms (25 gaps, 10 headers)
+- [ ] #540 — Setoid/Subalgebras (23, 5)
+- [ ] #541 — Setoid/Varieties, Congruences, Terms, Categories (11, 9)
+- [ ] #542 — Setoid/Functions, Setoid/Relations, Setoid barrels (6, 5)
+- [ ] #543 — Classical/Structures, root and Lattice (34, 1)
+- [ ] #544 — Classical/Structures/Group (31, 1)
+- [ ] #545 — Classical/Bundles, Signatures, rest of Classical (37, 1)
+- [ ] #546 — Examples (30, 8)
+- [ ] #547 — Overture, FLRP, Exercises, top-level barrels (4, 10)
+
+Done: #537 (the audit tool, the baseline, the CI ratchet) · #538 (exemplar: `Setoid.Algebras.Basic`) · #387 (the `<a id>` anchor sweep).
 
 ## Acceptance criteria
 
-- [ ] `grep`-based audit finds zero public definitions without a preceding comment block.
+- [ ] `make docstrings` reports **0** definitions without a prose block, with `DOCSTRING_MAX_GAPS` at 0.
+- [ ] No module opens with only the boilerplate sentence.
+
+The original criterion said a "`grep`-based audit".  A grep cannot do this — the corpus has no `-- |` docstrings, prose lives in Markdown outside the fences, and almost every definition is indented inside an anonymous `module _ … where`.  `scripts/python/docstring_audit.py` parses literate structure and Agda's layout rule instead; it is validated against Agda's own scope checker.
+
+## Open decision: which bar
+
++  **Lenient** (the ratchet's measure, and the recommendation): every fence carries a real paragraph.  201 to clear.
++  **Strict** (`--strict`): the style guide's literal "immediately above" — one definition per fence.  1969 to clear, and it fragments indented module bodies, which works against reading the library as a narrative.
++  **Named coverage** (a third measure, proposed): every public definition is *mentioned by name* in the prose attached to its fence.  Currently 19% repo-wide; #538 hits 11/13 without having aimed at it, because prose that describes a definition tends to name it.
+
+Recommendation: gate on lenient, track named coverage as the quality target, reject strict.  Rationale is that strict enforces *layout* rather than content — 1969 paragraphs each restating a type signature would satisfy it — whereas named coverage is what makes per-definition prose extractable for #275 while leaving the page readable as prose.
+
+## Conventions for a docstring PR
+
+Every sub-issue follows these; they are recorded once here rather than repeated nine times.
+
++  **The rule** is `docs/STYLE_GUIDE.md` § "Every public definition has a prose comment block" and § "Module headers have comment blocks".  Prose is **Markdown before the code fence**, never `-- |` inside it.  A comment that only restates the type signature fails the bar.
++  **The tool**: `make docstrings-list` names every gap; `python3 scripts/python/docstring_audit.py <path> --list --exit-zero` scopes it to a subtree; `--strict` shows the other reading.
++  **The exemplar** is #538.  Copy its shape: what the definition is mathematically, when a reader reaches for it, two or three cross-references.
++  **Module headers**: keep the `This is the [X][] module of the …` line and add paragraphs after it, as `Setoid.Terms.Monad` and `Classical.Structures.Lattice.OrdinalSum` do.
++  **Ground the prose or mark it TODO.**  Write only what is supported by the definition itself, by prose the library already contains, or by a source actually read.  Where the mathematics needs the author, leave `<!-- TODO(#268): … -->` saying what would be needed.  In the PR, name the paragraphs that are the agent's and the ones it is least sure of.  A short list of "I could not write this one, and here is why" is a better deliverable than plausible-sounding filler.
++  **Cross-references** are reference-style (`[Setoid.Algebras.Products][]`); the label must already exist in `docs/_links.md` or `make check-links` fails.
++  **Style**: `+` bullets, two spaces after a sentence-ending period, one paragraph per source line, kramdown attribute spans for Agda names.  Do not reflow pre-existing wrapped paragraphs.
++  **Verify, do not assert**: the Agda extracted from the fences must be byte-identical to `master` for every file touched; type-check each modified module; `make check-links` and `make docstrings` green.  If a prose edit changes compiled code, something is wrong.
++  **Out of scope**: `src/Legacy/**`, any change to Agda code, reformatting, and editing `docs/STYLE_GUIDE.md`.
+
+---
+
+### Issue M4-2a: Docstrings: Setoid/Algebras and Setoid/Homomorphisms (#539)
+
+**Labels**: `documentation`, `milestone-4-style`, `help-wanted`
+
+## Scope
+
+`src/Setoid/Algebras/ src/Setoid/Homomorphisms/`
+
+The heart of the Setoid tree and the first thing a new reader meets.  `Setoid.Algebras.Basic` is already done by #538 and is the pattern to follow.
+
+| measure | count |
+|---|---|
+| modules | 14 |
+| public definitions | 116 |
+| **definitions with no prose on their fence** | **25** |
+| modules with a boilerplate-only or heading-only header | 10 |
+| (reference) definitions failing the strict reading | 73 |
+
+Sized for one PR.
+
+## Done when
+
++  `python3 scripts/python/docstring_audit.py src/Setoid/Algebras/ --exit-zero` reports **0** gaps in scope.
++  Every module in scope opens with prose beyond the boilerplate sentence.
++  `DOCSTRING_MAX_GAPS` in the `Makefile` is lowered by the number cleared.
+
+## How
+
+**Conventions, tooling, grounding discipline and the verification checklist are in #268** — read that first; they are not repeated here.  Exemplar: #538.
+
+> Counts assume the lenient bar (every fence carries real prose), the recommendation on #268.  If the strict bar is adopted instead, this issue grows from 25 to 73 and should be re-split.
+
+---
+
+Sub-issue of #268.  Tooling: #537.
+
+---
+
+### Issue M4-2b: Docstrings: Setoid/Subalgebras (#540)
+
+**Labels**: `documentation`, `milestone-4-style`, `help-wanted`
+
+## Scope
+
+`src/Setoid/Subalgebras/`
+
+Self-contained and gap-dense: subuniverses, generation, subdirect products.  A good second subtree, once the convention from #538 has settled.
+
+| measure | count |
+|---|---|
+| modules | 10 |
+| public definitions | 145 |
+| **definitions with no prose on their fence** | **23** |
+| modules with a boilerplate-only or heading-only header | 5 |
+| (reference) definitions failing the strict reading | 100 |
+
+Sized for one PR.
+
+## Done when
+
++  `python3 scripts/python/docstring_audit.py src/Setoid/Subalgebras/ --exit-zero` reports **0** gaps in scope.
++  Every module in scope opens with prose beyond the boilerplate sentence.
++  `DOCSTRING_MAX_GAPS` in the `Makefile` is lowered by the number cleared.
+
+## How
+
+**Conventions, tooling, grounding discipline and the verification checklist are in #268** — read that first; they are not repeated here.  Exemplar: #538.
+
+> Counts assume the lenient bar (every fence carries real prose), the recommendation on #268.  If the strict bar is adopted instead, this issue grows from 23 to 100 and should be re-split.
+
+---
+
+Sub-issue of #268.  Tooling: #537.
+
+---
+
+### Issue M4-2c: Docstrings: Setoid/Varieties, Congruences, Terms, Categories (#541)
+
+**Labels**: `documentation`, `milestone-4-style`, `help-wanted`
+
+## Scope
+
+`src/Setoid/Varieties/ src/Setoid/Congruences/ src/Setoid/Terms/ src/Setoid/Categories/`
+
+Few gaps for their size, because the HSP-adjacent modules already carry good prose.  Mostly header work plus a scattering of undocumented fences.  `Examples/Demos/HSP.lagda.md` is a rich source of grounded prose for the Varieties material.
+
+| measure | count |
+|---|---|
+| modules | 53 |
+| public definitions | 632 |
+| **definitions with no prose on their fence** | **11** |
+| modules with a boilerplate-only or heading-only header | 9 |
+| (reference) definitions failing the strict reading | 370 |
+
+Sized for one PR.
+
+## Done when
+
++  `python3 scripts/python/docstring_audit.py src/Setoid/Varieties/ --exit-zero` reports **0** gaps in scope.
++  Every module in scope opens with prose beyond the boilerplate sentence.
++  `DOCSTRING_MAX_GAPS` in the `Makefile` is lowered by the number cleared.
+
+## How
+
+**Conventions, tooling, grounding discipline and the verification checklist are in #268** — read that first; they are not repeated here.  Exemplar: #538.
+
+> Counts assume the lenient bar (every fence carries real prose), the recommendation on #268.  If the strict bar is adopted instead, this issue grows from 11 to 370 and should be re-split.
+
+---
+
+Sub-issue of #268.  Tooling: #537.
+
+---
+
+### Issue M4-2d: Docstrings: Setoid/Functions, Setoid/Relations, and the Setoid barrels (#542)
+
+**Labels**: `documentation`, `milestone-4-style`, `help-wanted`
+
+## Scope
+
+`src/Setoid/Functions/ src/Setoid/Relations/ src/Setoid.lagda.md`
+
+Small, and mostly header work.  The barrel modules hold no definitions but several open with boilerplate; a barrel's header is the natural place to say what the theme is and which submodule to reach for.
+
+| measure | count |
+|---|---|
+| modules | 20 |
+| public definitions | 123 |
+| **definitions with no prose on their fence** | **6** |
+| modules with a boilerplate-only or heading-only header | 5 |
+| (reference) definitions failing the strict reading | 82 |
+
+Sized for one PR.
+
+## Done when
+
++  `python3 scripts/python/docstring_audit.py src/Setoid/Functions/ --exit-zero` reports **0** gaps in scope.
++  Every module in scope opens with prose beyond the boilerplate sentence.
++  `DOCSTRING_MAX_GAPS` in the `Makefile` is lowered by the number cleared.
+
+## How
+
+**Conventions, tooling, grounding discipline and the verification checklist are in #268** — read that first; they are not repeated here.  Exemplar: #538.
+
+> Counts assume the lenient bar (every fence carries real prose), the recommendation on #268.  If the strict bar is adopted instead, this issue grows from 6 to 82 and should be re-split.
+
+---
+
+Sub-issue of #268.  Tooling: #537.
+
+---
+
+### Issue M4-2e: Docstrings: Classical/Structures (root and Lattice) (#543)
+
+**Labels**: `documentation`, `milestone-4-style`, `help-wanted`
+
+## Scope
+
+`src/Classical/Structures/ (excluding Group/, which is #544)`
+
+The quintuple pattern (ADR-002) makes these highly repetitive, so one well-written structure can be adapted across the rest.  Do that deliberately: adapt, do not paste.
+
+| measure | count |
+|---|---|
+| modules | 19 |
+| public definitions | 337 |
+| **definitions with no prose on their fence** | **34** |
+| modules with a boilerplate-only or heading-only header | 1 |
+| (reference) definitions failing the strict reading | 240 |
+
+Sized for one or two PRs; split by directory if the diff runs long.
+
+## Done when
+
++  `python3 scripts/python/docstring_audit.py src/Classical/Structures/ --exit-zero` reports **0** gaps in scope.
++  Every module in scope opens with prose beyond the boilerplate sentence.
++  `DOCSTRING_MAX_GAPS` in the `Makefile` is lowered by the number cleared.
+
+## How
+
+**Conventions, tooling, grounding discipline and the verification checklist are in #268** — read that first; they are not repeated here.  Exemplar: #538.
+
+> Counts assume the lenient bar (every fence carries real prose), the recommendation on #268.  If the strict bar is adopted instead, this issue grows from 34 to 240 and should be re-split.
+
+---
+
+Sub-issue of #268.  Tooling: #537.
+
+---
+
+### Issue M4-2f: Docstrings: Classical/Structures/Group (#544)
+
+**Labels**: `documentation`, `milestone-4-style`, `help-wanted`
+
+## Scope
+
+`src/Classical/Structures/Group/`
+
+Split from the rest of `Classical/Structures` purely on size.  The group-theoretic material feeds the FLRP research track, so cross-references into `FLRP/` are worth getting right.
+
+| measure | count |
+|---|---|
+| modules | 20 |
+| public definitions | 310 |
+| **definitions with no prose on their fence** | **31** |
+| modules with a boilerplate-only or heading-only header | 1 |
+| (reference) definitions failing the strict reading | 202 |
+
+Sized for one or two PRs; split by directory if the diff runs long.
+
+## Done when
+
++  `python3 scripts/python/docstring_audit.py src/Classical/Structures/Group/ --exit-zero` reports **0** gaps in scope.
++  Every module in scope opens with prose beyond the boilerplate sentence.
++  `DOCSTRING_MAX_GAPS` in the `Makefile` is lowered by the number cleared.
+
+## How
+
+**Conventions, tooling, grounding discipline and the verification checklist are in #268** — read that first; they are not repeated here.  Exemplar: #538.
+
+> Counts assume the lenient bar (every fence carries real prose), the recommendation on #268.  If the strict bar is adopted instead, this issue grows from 31 to 202 and should be re-split.
+
+---
+
+Sub-issue of #268.  Tooling: #537.
+
+---
+
+### Issue M4-2g: Docstrings: Classical/Bundles, Signatures, and the rest of Classical (#545)
+
+**Labels**: `documentation`, `milestone-4-style`, `help-wanted`
+
+## Scope
+
+`src/Classical/Bundles/ src/Classical/Signatures/ src/Classical/Theories/ src/Classical/Small/ src/Classical/Categories/ src/Classical/Properties/ src/Classical/Interpretations/ src/Classical.lagda.md`
+
+Gap-dense but shallow.  Each bundle module is a stdlib-interop view and wants a short paragraph naming the `Algebra.Bundles` record it matches and why the view exists.  `Classical/Categories/` is the exception — the categorical framing needs real intent, so mark it TODO rather than guessing.
+
+| measure | count |
+|---|---|
+| modules | 57 |
+| public definitions | 242 |
+| **definitions with no prose on their fence** | **37** |
+| modules with a boilerplate-only or heading-only header | 1 |
+| (reference) definitions failing the strict reading | 154 |
+
+Sized for one or two PRs; split by directory if the diff runs long.
+
+## Done when
+
++  `python3 scripts/python/docstring_audit.py src/Classical/Bundles/ --exit-zero` reports **0** gaps in scope.
++  Every module in scope opens with prose beyond the boilerplate sentence.
++  `DOCSTRING_MAX_GAPS` in the `Makefile` is lowered by the number cleared.
+
+## How
+
+**Conventions, tooling, grounding discipline and the verification checklist are in #268** — read that first; they are not repeated here.  Exemplar: #538.
+
+> Counts assume the lenient bar (every fence carries real prose), the recommendation on #268.  If the strict bar is adopted instead, this issue grows from 37 to 154 and should be re-split.
+
+---
+
+Sub-issue of #268.  Tooling: #537.
+
+---
+
+### Issue M4-2h: Docstrings: Examples (#546)
+
+**Labels**: `documentation`, `milestone-4-style`, `help-wanted`
+
+## Scope
+
+`src/Examples/`
+
+Demonstration modules.  Prose should say what the example demonstrates and which theorem or definition it exercises, not re-describe the construction.  `Examples/Demos/HSP.lagda.md` is the frozen TYPES 2021 artifact — leave its prose and its `<a id>` anchors alone (see #387).
+
+| measure | count |
+|---|---|
+| modules | 41 |
+| public definitions | 442 |
+| **definitions with no prose on their fence** | **30** |
+| modules with a boilerplate-only or heading-only header | 8 |
+| (reference) definitions failing the strict reading | 272 |
+
+Sized for one or two PRs; split by directory if the diff runs long.
+
+## Done when
+
++  `python3 scripts/python/docstring_audit.py src/Examples/ --exit-zero` reports **0** gaps in scope.
++  Every module in scope opens with prose beyond the boilerplate sentence.
++  `DOCSTRING_MAX_GAPS` in the `Makefile` is lowered by the number cleared.
+
+## How
+
+**Conventions, tooling, grounding discipline and the verification checklist are in #268** — read that first; they are not repeated here.  Exemplar: #538.
+
+> Counts assume the lenient bar (every fence carries real prose), the recommendation on #268.  If the strict bar is adopted instead, this issue grows from 30 to 272 and should be re-split.
+
+---
+
+Sub-issue of #268.  Tooling: #537.
+
+---
+
+### Issue M4-2i: Docstrings: Overture, FLRP, Exercises, and the top-level barrels (#547)
+
+**Labels**: `documentation`, `milestone-4-style`, `help-wanted`
+
+## Scope
+
+`src/Overture/ src/FLRP/ src/Exercises/ src/agda-algebras.lagda.md`
+
+Only 4 gaps but 10 weak headers, so almost entirely module-header work.  **`FLRP/` needs William's research context** — the parachute, Kurzweil–Netter and Snow material encodes a live research programme that cannot be reconstructed from the types.  Prefer deferring the FLRP headers to a follow-up over guessing.
+
+| measure | count |
+|---|---|
+| modules | 73 |
+| public definitions | 900 |
+| **definitions with no prose on their fence** | **4** |
+| modules with a boilerplate-only or heading-only header | 10 |
+| (reference) definitions failing the strict reading | 476 |
+
+Sized for one PR.
+
+## Done when
+
++  `python3 scripts/python/docstring_audit.py src/Overture/ --exit-zero` reports **0** gaps in scope.
++  Every module in scope opens with prose beyond the boilerplate sentence.
++  `DOCSTRING_MAX_GAPS` in the `Makefile` is lowered by the number cleared.
+
+## How
+
+**Conventions, tooling, grounding discipline and the verification checklist are in #268** — read that first; they are not repeated here.  Exemplar: #538.
+
+> Counts assume the lenient bar (every fence carries real prose), the recommendation on #268.  If the strict bar is adopted instead, this issue grows from 4 to 476 and should be re-split.
+
+---
+
+Sub-issue of #268.  Tooling: #537.
 
 ---
 
@@ -4374,7 +4755,7 @@ Follow-up to #459 / #507.  Part of #451.
 
 ---
 
-### Issue M6-23: Powers, diagonals, and the interval `[D , Sⁿ]` (#521)
+### Issue M6-23: Powers, diagonals, and the interval `[D , Sⁿ]` (#521, closed)
 
 **Labels**: `enhancement`, `milestone-6-flrp`, `flrp-research`
 
@@ -5214,6 +5595,83 @@ Wire `agda-deps` (or the agda-html-derived approach) into the dev environment, r
 
 +  The module constellation (`docs/constellation.md`), PR #427, ADR-007.
 +  [omelkonian/agda-dependencies](https://github.com/omelkonian/agda-dependencies).
+
+---
+
+### Issue M10-7: Self-host the remaining webfonts, and three colour tokens that miss WCAG AA (#531)
+
+**Labels**: `documentation`, `milestone-10-polish`
+
+Two findings from reading `stylesheets/custom.css` and the page source, while choosing a visual system for williamdemeo.github.io. That site is also MkDocs Material, so the fixes are the same shape in both places. Happy to open PRs for either.
+
+## 1. Three external font requests, two of which the site's own CSS overrides
+
+Every page currently emits, from Material's default `theme.font`:
+
+```html
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+<style>:root{--md-text-font:"Inter";--md-code-font:"Roboto Mono"}</style>
+```
+
+and `custom.css` line 31:
+
+```css
+@import url("https://cdn.jsdelivr.net/gh/cormullion/juliamono/webfonts/juliamono.css");
+```
+
+But `custom.css` then overrides both variables (lines 73–75):
+
+```css
+--md-code-font: "JuliaMono", "JetBrains Mono", "Fira Code", "Cascadia Code", …
+--md-text-font: "InterVar", "Inter", -apple-system, BlinkMacSystemFont, …
+```
+
+So Roboto Mono is never selected, and Inter is served from Google while `inter-latin-wght-normal.woff2` is already self-hosted under `assets/fonts/`.  Space Grotesk, Geist (four weights) and Sora are self-hosted too — the site is most of the way there. What is left is:
+
++  `theme.font: false` in `mkdocs.yml`, which removes the preconnect and the Google Fonts stylesheet. The `--md-text-font` / `--md-code-font` values in `custom.css` already cover what those lines were providing.
++  Self-host JuliaMono rather than `@import`-ing it from jsDelivr.
+
+JuliaMono is the one that matters.  It is the only face in that stack with the Mathematical Alphanumeric Symbols block, so it is the only one that can render `𝑨 𝓤 𝑆 𝔸 𝕏 𝒦 𝓞 𝓥`.  Measured against the 1,952 non-ASCII characters `agda-input.el` names, and a 44-character probe drawn from real Agda:
+
+| Face | Glyphs | agda-input | Probe |
+| --- | --- | --- | --- |
+| **JuliaMono v0.63.2** | 11,191 | 92.8% | **44/44** |
+| Cascadia Code | 2,426 | 17.0% | 14/44 |
+| Fira Code | 1,551 | 19.3% | 24/44 |
+| JetBrains Mono | 976 | 14.7% | 21/44 |
+
+If jsDelivr is unreachable — blocked network, corporate proxy, or the CDN simply going away — the fallbacks silently take over and every universe level and bold-script letter on the site renders in a substitute face, mid-line.  The precedent is uncomfortably close to hand: williamdemeo.org loads Fira Code from `cdn.rawgit.com`, which shut down in 2019, so its intended monospace font has not rendered for years and nobody noticed, because nothing fails loudly.
+
+If it is useful, `scripts/python/build_fonts.py` in [williamdemeo/williamdemeo.github.io#70](https://github.com/williamdemeo/williamdemeo.github.io/pull/70) does exactly this job and would port over nearly unchanged.  It pins sources by SHA-256, subsets by Unicode block rather than by an enumerated character list, splits JuliaMono three ways by `unicode-range` (56 KB text / 253 KB symbols / 154 KB mathematical alphanumerics, so a page pays only for the notation it shows), and emits deterministic WOFF2.
+
+One warning from writing it, since it would bite anyone doing this by hand: subsetting against the characters `agda-input-translations` names is not enough.  The Agda input method *inherits* from Emacs' TeX method for everything it does not redefine, so `ℓ`, `Π` and the subscript digits are absent from that list and fall back mid-line.  Only a browser catches it — `CSS.getPlatformFontsForNode` reports which face actually rasterised each run of text.
+
+## 2. Three colour tokens do not clear WCAG AA as text
+
+Contrast ratios computed from `custom.css`'s own values:
+
+| Token | Value | Ratio | Against |
+| --- | --- | --- | --- |
+| `--md-default-fg-color--lighter` (light) | `#818bab` | **3.29:1** | `#fbfcff` |
+| `--md-default-fg-color--lighter` (dark) | `#6a7197` | **3.70:1** | `#15172e` |
+| `--md-accent-fg-color` (light) | `#fb6a00` | **2.86:1** | `#fbfcff` |
+
+AA is 4.5:1 for body text and 3:1 for large text. Material uses `--md-default-fg-color--lighter` for real text in several places — the footer copyright line and search-result metadata among them — and `--md-accent-fg-color` is the link hover colour, so it carries link text at the moment a reader is looking straight at it.
+
+The coral needs no change in dark, where it is 7.34:1 on `#0c0e1d`.  It is only on paper that a saturated orange cannot carry text.
+
+Values that keep the hue and clear AA:
+
+| Token | Now | Suggested | After |
+| --- | --- | --- | --- |
+| `--md-default-fg-color--lighter` light | `#818bab` | `#626b88` | 5.15:1 |
+| `--md-default-fg-color--lighter` dark | `#6a7197` | `#8189af` | 5.14:1 |
+| `--md-accent-fg-color` light | `#fb6a00` | `#b34b00` | 5.22:1 |
+
+These are the values that palette is running under on williamdemeo.github.io, where it is kept as a switchable alternative system — so the adjusted set is already checked on every build by an audit that walks every text element in both themes and composites the background up the ancestor chain.
+
+Everything above comes from `stylesheets/custom.css` and the served HTML as of 2026-08-02; I was not able to run a network trace against the live site from my environment, so the request-level claims are read from the source rather than measured.
 
 <!-- END GENERATED: milestone-10 -->
 
