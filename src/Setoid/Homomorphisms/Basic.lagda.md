@@ -9,6 +9,37 @@ author: "agda-algebras development team"
 
 This is the [Setoid.Homomorphisms.Basic][] module of the [Agda Universal Algebra Library][].
 
+A **homomorphism** from `𝑨` to `𝑩` is a setoid function `h : 𝔻[ 𝑨 ] ⟶ 𝔻[ 𝑩 ]`
+between the domains of the two algebras that is *compatible* with every basic
+operation: for each operation symbol `f` and each tuple `a` of arguments,
+`h ⟨$⟩ (f ^ 𝑨) a` and `(f ^ 𝑩) λ x → h ⟨$⟩ a x` are related by the equality of `𝑩`.
+
+Two things distinguish this from an ordinary type-based definition, where
+compatibility is an identification `h ((f ^ 𝑨) a) ≡ (f ^ 𝑩) (h ∘ a)`.
+
+1.  The map is a setoid function, so it carries its own congruence proof and
+    cannot fail to send equal arguments to equal results.
+2.  Compatibility is asserted up to the equality *of the codomain*, not up to
+    propositional equality; that is what lets `𝑩` be a quotient algebra (the same
+    carrier under a coarser equivalence) with no special quotient type and no
+    appeal to extensionality.
+
+This module defines the compatibility predicates, the homomorphism type
+`hom`{.AgdaFunction} and its predicate form `IsHom`{.AgdaRecord}, the injective
+and surjective variants (monomorphisms and epimorphisms) in both of those forms,
+the translations between them, and the identity homomorphism `𝒾𝒹`{.AgdaFunction}.
+Everything else the library proves about homomorphisms is built on these,
+including the following:
+
++  **composition**, `⊙-hom`{.AgdaFunction}, and the homomorphisms that witness
+   **universe lifting** in [Setoid.Homomorphisms.Properties][];
++  **the kernel** of a homomorphism as a congruence, and the **quotient** it
+   determines in [Setoid.Homomorphisms.Kernels][];
++  **isomorphism**, `_≅_`{.AgdaRecord}, given by a pair of mutually inverse
+   homomorphisms in [Setoid.Homomorphisms.Isomorphisms][];
++  **the first homomorphism theorem** in [Setoid.Homomorphisms.Noether][];
++  **factoring** one homomorphism through another in
+   [Setoid.Homomorphisms.Factor][].
 
 <!--
 ```agda
@@ -33,6 +64,20 @@ private variable
   α β ρᵃ ρᵇ : Level
 ```
 -->
+
+The homomorphism type is built in four steps.  `compatible-map-op`{.AgdaFunction}
+says that a setoid function `h` commutes with *one* operation symbol `f`;
+`compatible-map`{.AgdaFunction} quantifies that over all operation symbols;
+`IsHom`{.AgdaRecord} packages the resulting property as a record with the single
+field `compatible`{.AgdaField} and the constructor
+`mkIsHom`{.AgdaInductiveConstructor}; and `hom`{.AgdaFunction} is the type of
+homomorphisms proper.  An inhabitant of `hom 𝑨 𝑩` is therefore a pair `(h , p)`: a
+setoid function `h` from the domain of `𝑨` to that of `𝑩`, together with a proof
+that `h` is compatible.
+
+`mkhom`{.AgdaFunction} is the smart constructor for that pair, so a caller who has
+`h` and a `compatible-map`{.AgdaFunction} proof never has to write the `Σ`-pair
+and the `IsHom`{.AgdaRecord} record by hand.
 
 ```agda
 module _ {𝑆 : Signature 𝓞 𝓥} (𝑨 : Algebra {𝑆 = 𝑆} α ρᵃ)(𝑩 : Algebra β ρᵇ) where
@@ -60,6 +105,27 @@ module _ {𝑆 : Signature 𝓞 𝓥} (𝑨 : Algebra {𝑆 = 𝑆} α ρᵃ)(�
 ```
 
 #### Monomorphisms and epimorphisms
+
+A **monomorphism** is an injective homomorphism and an **epimorphism** is a
+surjective one.  Each comes in the two forms `hom`{.AgdaFunction} does:
+
++  the predicates `IsMon`{.AgdaRecord} and `IsEpi`{.AgdaRecord}, whose fields pair
+   the homomorphism property with `IsInjective`{.AgdaFunction} or
+   `IsSurjective`{.AgdaFunction};
++  the bundled types `mon`{.AgdaFunction} and `epi`{.AgdaFunction}, which pair a
+   setoid function with such a proof.
+
+Both predicates export a `HomReduct`{.AgdaFunction} that forgets the extra
+condition, and `mon→hom`{.AgdaFunction} and `epi→hom`{.AgdaFunction} apply it to
+the bundled forms.
+
+`mon→intohom`{.AgdaFunction} and `epi→ontohom`{.AgdaFunction} regroup the same
+data the other way, as a `hom`{.AgdaFunction} paired with the injectivity or the
+surjectivity of its underlying map.  That regrouping earns a name because the two
+resulting types are, by definition, `_IsSubalgebraOf_`{.AgdaFunction} of
+[Setoid.Subalgebras.Basic][] and `_IsHomImageOf_`{.AgdaFunction} of
+[Setoid.Homomorphisms.HomomorphicImages][]; so these are the functions that turn a
+monomorphism into a subalgebra and an epimorphism into a homomorphic image.
 
 ```agda
   record IsMon (h : 𝔻[ 𝑨 ] ⟶ 𝔻[ 𝑩 ]) : Type (𝓞 ⊔ 𝓥 ⊔ α ⊔ ρᵃ ⊔ β ⊔ ρᵇ) where

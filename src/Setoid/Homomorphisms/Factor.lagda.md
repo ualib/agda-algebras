@@ -9,6 +9,19 @@ author: "agda-algebras development team"
 
 This is the [Setoid.Homomorphisms.Factor][] module of the [Agda Universal Algebra Library][].
 
+If a homomorphism `h` out of `𝑨` is surjective and identifies no more pairs of
+elements than another homomorphism `g` out of `𝑨` does, then `g` factors through
+`h`: there is a homomorphism `φ` from the codomain of `h` to the codomain of `g`
+such that `g = φ ∘ h`.  The hypothesis and the commuting triangle are spelled out
+below.[^1]
+
+`HomFactor`{.AgdaFunction} produces the factor `φ` together with the equation that
+makes the triangle commute, and `HomFactorEpi`{.AgdaFunction} strengthens `φ` to
+an epimorphism when `g` is surjective as well.  Both take a right inverse `h⁻¹` of
+`h` (`SurjInv`{.AgdaFunction} of [Setoid.Functions.Surjective][]) and set
+`φ = g ∘ h⁻¹`; the kernel hypothesis is what makes that choice-independent, and it
+is also what the congruence proof of `φ` is built from.
+
 <!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
@@ -36,7 +49,9 @@ private variable α ρᵃ β ρᵇ γ ρᶜ : Level
 ```
 -->
 
-If `g : hom 𝑨 𝑩`, `h : hom 𝑨 𝑪`, `h` is surjective, and `ker h ⊆ ker g`, then there exists `φ : hom 𝑪 𝑩` such that `g = φ ∘ h` so the following diagram commutes:
+If `g : hom 𝑨 𝑩`, `h : hom 𝑨 𝑪`, `h` is surjective, and `ker h ⊆ ker g`, then
+there exists `φ : hom 𝑪 𝑩` such that `g = φ ∘ h`, so the following diagram
+commutes:
 
     𝑨 --- h -->> 𝑪
      \         .
@@ -107,7 +122,7 @@ module _  {𝑆 : Signature 𝓞 𝓥} {𝑨 : Algebra {𝑆 = 𝑆} α ρᵃ} {
     φhom .compatible = φcomp
 ```
 
-If, in addition, `g` is surjective, then so will be the factor `φ`.
+If, in addition, `g` is surjective, then so is the factor `φ`.
 
 ```agda
   HomFactorEpi :  kernelRel _≈₃_ h ⊆ kernelRel _≈₂_ g
@@ -134,3 +149,9 @@ If, in addition, `g` is surjective, then so will be the factor `φ`.
     φepi .isHom = φ .proj₂
     φepi .isSurjective = epic-factor gfunc hfunc φmap gE gφh
 ```
+
+---
+
+[^1]: This is the step that puts the relatively free algebra inside a product in the
+      proof of Birkhoff's theorem: the homomorphism `hom𝔽ℭ` of [Setoid.Varieties.HSP][]
+      is obtained from `HomFactor`{.AgdaFunction}.
