@@ -9,6 +9,21 @@ author: "the agda-algebras development team"
 
 This is the [Setoid.Relations.Quotients][] module of the [Agda Universal Algebra Library][].
 
+Quotienting is where the setoid formulation pays for itself.  A quotient of a
+setoid by an equivalence relation keeps the same carrier and changes only the
+equality, so it needs neither a quotient type nor any axiom: `_/_`{.AgdaFunction}
+takes a type together with an `Equivalence`{.AgdaRecord} bundle and returns the
+setoid whose equality *is* that relation, and `Quotient`{.AgdaFunction} is the type
+of its classes.
+
+The module also supplies what makes quotients reachable in practice:
+`ker-IsEquivalence`{.AgdaFunction}, that the kernel of a setoid function is an
+equivalence relation, so that every kernel may be quotiented by; and the
+machinery of equivalence classes and blocks.  The algebraic counterpart, where the
+quotient must respect the operations as well, is `_╱_`{.AgdaFunction} of
+[Setoid.Congruences.Basic][].
+
+
 <!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
