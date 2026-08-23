@@ -9,6 +9,10 @@ author: "agda-algebras development team"
 
 This is the [Setoid.Homomorphisms.Products][] module of the [Agda Universal Algebra Library][].
 
+This module records the homomorphisms that come with a product.  `⨅-hom-co`{.AgdaFunction} is the induced map into one: a family of homomorphisms out of a single algebra `𝑨`, one for each index, assembles into a single homomorphism from `𝑨` to the product, whose `i`-th coordinate is the `i`-th member of the family.  `⨅-hom`{.AgdaFunction} takes a family of homomorphisms `𝒜 i → ℬ i` to their product `⨅ 𝒜 → ⨅ ℬ`, and `⨅-proj`{.AgdaFunction} is the coordinate projection `⨅ 𝒜 → 𝒜 i`.
+
+All three are defined coordinatewise, and their compatibility proofs are inherited coordinatewise from the factors, because that is how `⨅`{.AgdaFunction} of [Setoid.Algebras.Products][] interprets the operations in the first place.  `⨅-hom-co`{.AgdaFunction} is the one that does real work later: the proof of Birkhoff's theorem in [Setoid.Varieties.HSP][] uses it to build the homomorphism `homℭ` from the term algebra into the product `ℭ` that the whole argument turns on.
+
 <!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}

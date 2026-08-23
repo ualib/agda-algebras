@@ -1,6 +1,6 @@
 ---
 layout: default
-title : Setoid."Homomorphisms.Properties module (Agda Universal Algebra Library)"
+title : "Setoid.Homomorphisms.Properties module (Agda Universal Algebra Library)"
 date : "2021-09-13"
 author: "agda-algebras development team"
 ---
@@ -8,6 +8,10 @@ author: "agda-algebras development team"
 #### Properties of Homomorphisms of Algebras
 
 This is the [Setoid.Homomorphisms.Properties][] module of the [Agda Universal Algebra Library][].
+
+This module collects what follows from the definition of a homomorphism alone, before any theory: that homomorphisms and epimorphisms compose, that a relation contained in the kernel of a homomorphism has its generated congruence contained there too, and that the universe liftings and lowerings of an algebra are homomorphisms, surjective in the lifting direction.
+
+The lifting results are the ones most used.  Agda's universes are not cumulative, so an algebra at one level cannot be reused at a larger one; `Lift-Alg`{.AgdaFunction} of [Setoid.Algebras.Basic][] moves it, and the homomorphisms defined here (`ToLift`{.AgdaFunction}, `FromLift`{.AgdaFunction}, `Lift-hom`{.AgdaFunction} and their one-sided variants) are what make the move harmless.  [Setoid.Homomorphisms.Isomorphisms][] assembles them into `Lift-≅`{.AgdaFunction}, and the closure operators of [Setoid.Varieties.Closure][] rely on them at every change of level.
 
 <!--
 ```agda
@@ -41,6 +45,10 @@ private variable
 -->
 
 ##### Composition of homs
+
+The composite of two homomorphisms is a homomorphism, and the composite of two epimorphisms is an epimorphism.  `⊙-is-hom`{.AgdaFunction} is the predicate form: from `IsHom 𝑨 𝑩 g` and `IsHom 𝑩 𝑪 h` it proves `IsHom 𝑨 𝑪 (h ⊙ g)`, by transitivity through two steps, first pushing `g`'s compatibility across `h` with `cong h`, then applying `h`'s own compatibility.  `⊙-is-epi`{.AgdaFunction} adds surjectivity of the composite, which is `⊙-IsSurjective`{.AgdaFunction} of [Setoid.Functions.Surjective][].
+
+`⊙-hom`{.AgdaFunction} and `⊙-epi`{.AgdaFunction} are the bundled forms.  All four take their arguments in *diagrammatic* order, the map out of `𝑨` first and the map out of `𝑩` second, although the underlying composition `_⊙_`{.AgdaFunction} of [Setoid.Functions.Basic][] is written right to left; so `⊙-hom f g` is read as "`f`, then `g`".
 
 ```agda
 module _

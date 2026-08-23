@@ -9,6 +9,9 @@ author: "agda-algebras development team"
 
 This is the [Setoid.Algebras.Products][] module of the [Agda Universal Algebra Library][].
 
+The **product** of an indexed family of algebras is formed coordinatewise: its carrier is the dependent function type over the index, its equality is pointwise, and each operation symbol is interpreted by applying the corresponding operation in every factor.  This module defines that product, `⨅`{.AgdaFunction}; the machinery for taking the product of a *class* of algebras rather than of an indexed family; and the one nontrivial fact about products proved here, that the coordinate projections out of a product are surjective when the index type has decidable equality and every factor is nonempty.
+
+Products are one of the three closure operations `H`, `S`, `P` whose composite `V` defines a variety, so this module is used throughout [Setoid.Varieties.Closure][] and in the proof of Birkhoff's theorem in [Setoid.Varieties.HSP][].  Homomorphisms into and out of a product are in [Setoid.Homomorphisms.Products][], and `⨅≅`{.AgdaFunction} of [Setoid.Homomorphisms.Isomorphisms][] shows that products of isomorphic families are isomorphic.
 
 <!--
 ```agda
@@ -42,6 +45,10 @@ open Algebra
 ```
 -->
 
+`⨅ 𝒜`{.AgdaFunction} is the **product** of the family `𝒜 : I → Algebra α ρ`.  Its carrier is the dependent product `∀ i → 𝕌[ 𝒜 i ]` of the carriers of the factors; two elements are equal exactly when they agree in every coordinate; and the interpretation of an operation symbol `f` is the tuple of interpretations of `f` in the factors, `(f ^ ⨅ 𝒜) a i = (f ^ 𝒜 i) (flip a i)`.  Reflexivity, symmetry and transitivity are inherited coordinatewise, and so is the congruence proof for `Interp`{.AgdaField}.
+
+Both levels of the result absorb the level `ι` of the index type, since the carrier is a function out of `I` and the equality is an `I`-indexed conjunction.  A product therefore sits at the join of its factors' levels with the level of its index, and correspondingly `P`{.AgdaFunction} of [Setoid.Varieties.Closure][] states membership up to isomorphism, as `𝑩 ≅ ⨅ 𝒜`, which leaves `𝑩` its own pair of levels.
+
 ```agda
 ⨅ : {I : Type ι }(𝒜 : I → Algebra {𝑆 = 𝑆} α ρ) → Algebra {𝑆 = 𝑆} (α ⊔ ι) (ρ ⊔ ι)
 
@@ -62,6 +69,9 @@ cong (Interp (⨅ {I} 𝒜)) (refl , f=g ) = λ i → cong  (Interp (𝒜 i)) (r
 
 #### Products of classes of Algebras
 
+A class of algebras is given as a predicate `𝒦 : Pred (Algebra α ρ) _`, not as an indexed family, so `⨅`{.AgdaFunction} cannot be applied to it directly; and the dependent product over the predicate is not what is wanted either, since `∀ 𝑨 → 𝑨 ∈ 𝒦` asserts that *every* algebra belongs to `𝒦`.  The remedy is to take the class itself as the index: `ℑ`{.AgdaFunction} is the type of pairs `(𝑨 , p)` with `p : 𝑨 ∈ 𝒦`, `𝔄`{.AgdaFunction} sends such a pair to its first component, and `class-product`{.AgdaFunction} is `⨅ 𝔄`, the product of all the members of `𝒦`.
+
+Indexing by proofs rather than by algebras means that an algebra carrying two membership proofs contributes two identical factors; the result is a product of members of `𝒦` regardless.  The variant that indexes by an environment as well appears as `ℑ⁺`, `𝔄⁺` and `ℭ` in [Setoid.Varieties.HSP][].
 
 ```agda
 module _ {𝑆 : Signature 𝓞 𝓥}{𝒦 : Pred (Algebra {𝑆 = 𝑆} α ρ) (ov {𝑆 = 𝑆} α)} where

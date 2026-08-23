@@ -9,6 +9,10 @@ author: "agda-algebras development team"
 
 This is the [Setoid.Homomorphisms.Factor][] module of the [Agda Universal Algebra Library][].
 
+Factoring is what turns a surjection into a quotient.  If a homomorphism `h` out of `𝑨` is surjective and identifies no more pairs of elements than another homomorphism `g` out of `𝑨` does, then `g` factors through `h`: there is a `φ` from the codomain of `h` to the codomain of `g` with `g = φ ∘ h`.  The hypothesis and the commuting triangle are spelled out below.  This is the step that puts the relatively free algebra inside a product in the proof of Birkhoff's theorem: the homomorphism `hom𝔽ℭ` of [Setoid.Varieties.HSP][] is obtained from `HomFactor`{.AgdaFunction}.
+
+`HomFactor`{.AgdaFunction} produces the factor `φ` together with the equation that makes the triangle commute, and `HomFactorEpi`{.AgdaFunction} strengthens `φ` to an epimorphism when `g` is surjective as well.  Both take a right inverse `h⁻¹` of `h` (`SurjInv`{.AgdaFunction} of [Setoid.Functions.Surjective][]) and set `φ = g ∘ h⁻¹`; the kernel hypothesis is what makes that choice-independent, and it is also what the congruence proof of `φ` is built from.
+
 <!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}

@@ -1,13 +1,17 @@
 ---
 layout: default
-title : "Setoid.Homomorphisms.Isomoprhisms module (The Agda Universal Algebra Library)"
+title : "Setoid.Homomorphisms.Isomorphisms module (The Agda Universal Algebra Library)"
 date : "2021-09-15"
 author: "agda-algebras development team"
 ---
 
 #### Isomorphisms of setoid algebras
 
-This is the [Setoid.Homomorphisms.Factor][] module of the [Agda Universal Algebra Library][].
+This is the [Setoid.Homomorphisms.Isomorphisms][] module of the [Agda Universal Algebra Library][].
+
+Two algebras are **isomorphic**, written `𝑨 ≅ 𝑩`, when there are homomorphisms in both directions that are mutually inverse up to the setoid equalities of the two domains.  The record `_≅_`{.AgdaRecord} carries exactly that data in its fields `to`{.AgdaField}, `from`{.AgdaField}, `to∼from`{.AgdaField} and `from∼to`{.AgdaField}, and derives from it that each direction is both injective and surjective.
+
+Beyond the definition, this module proves that `_≅_`{.AgdaRecord} is an equivalence relation (`≅-refl`{.AgdaFunction}, `≅-sym`{.AgdaFunction}, `≅-trans`{.AgdaFunction}), that a bijective homomorphism is an isomorphism (`Bijective→≅`{.AgdaFunction}), and that products of isomorphic families are isomorphic (`⨅≅`{.AgdaFunction}).  The result the rest of the library leans on is `Lift-≅`{.AgdaFunction}: an algebra is isomorphic to each of its universe liftings, so isomorphism classes are closed under lifting and every isomorphism-invariant property survives a change of level.
 
 <!--
 ```agda

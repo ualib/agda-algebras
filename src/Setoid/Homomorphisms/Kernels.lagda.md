@@ -9,6 +9,10 @@ author: "agda-algebras development team"
 
 This is the [Setoid.Homomorphisms.Kernels][] module of the [Agda Universal Algebra Library][].
 
+The **kernel** of a homomorphism `h : hom 𝑨 𝑩` is the relation on the carrier of `𝑨` that holds of `a₀` and `a₁` when `h a₀` and `h a₁` are equal in `𝑩`.  It is an equivalence relation because it is the pullback of one along `h`, which is `kerRelOfEquiv`{.AgdaFunction} of [Overture.Relations][]; what this module adds is that it is also compatible with the basic operations, hence a congruence, so that the quotient by it is again an algebra.  `HomKerComp`{.AgdaFunction} is the compatibility proof, `kercon`{.AgdaFunction} is the congruence, and `kerquo`{.AgdaFunction}, also written `ker[ 𝑨 ⇒ 𝑩 ] h`, is the quotient.
+
+The module also supplies the homomorphisms that go with a quotient: `πepi`{.AgdaFunction} is the canonical projection of `𝑨` onto `𝑨 ╱ θ`, for any congruence `θ`, presented as an epimorphism; `πhom`{.AgdaFunction} is its homomorphism reduct; `πker`{.AgdaFunction} is the special case that projects onto a kernel quotient; and `ker-in-con`{.AgdaFunction} says the kernel of `πhom θ` is contained in `θ`.  Together with the congruences of [Setoid.Congruences][], these are the terms in which the first homomorphism theorem of [Setoid.Homomorphisms.Noether][] is stated.
+
 <!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
