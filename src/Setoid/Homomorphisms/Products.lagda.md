@@ -9,9 +9,18 @@ author: "agda-algebras development team"
 
 This is the [Setoid.Homomorphisms.Products][] module of the [Agda Universal Algebra Library][].
 
-This module records the homomorphisms that come with a product.  `⨅-hom-co`{.AgdaFunction} is the induced map into one: a family of homomorphisms out of a single algebra `𝑨`, one for each index, assembles into a single homomorphism from `𝑨` to the product, whose `i`-th coordinate is the `i`-th member of the family.  `⨅-hom`{.AgdaFunction} takes a family of homomorphisms `𝒜 i → ℬ i` to their product `⨅ 𝒜 → ⨅ ℬ`, and `⨅-proj`{.AgdaFunction} is the coordinate projection `⨅ 𝒜 → 𝒜 i`.
+This module defines some of the homomorphisms associated with a product.
 
-All three are defined coordinatewise, and their compatibility proofs are inherited coordinatewise from the factors, because that is how `⨅`{.AgdaFunction} of [Setoid.Algebras.Products][] interprets the operations in the first place.  `⨅-hom-co`{.AgdaFunction} is the one that does real work later: the proof of Birkhoff's theorem in [Setoid.Varieties.HSP][] uses it to build the homomorphism `homℭ` from the term algebra into the product `ℭ` that the whole argument turns on.
++  `⨅-hom-co`{.AgdaFunction} is the induced map into a product: a family of homomorphisms out
+   of a single algebra `𝑨`, one for each index, assembles into a single homomorphism
+   from `𝑨` to the product;
++  `⨅-hom`{.AgdaFunction} takes a family of homomorphisms `𝒜 i → ℬ i` to their
+   product, `⨅ 𝒜 → ⨅ ℬ`;
++  `⨅-proj`{.AgdaFunction} is the coordinate projection `⨅ 𝒜 → 𝒜 i`.
+
+All three are defined coordinatewise, and their compatibility proofs are inherited
+coordinatewise from the factors, because that is how `⨅`{.AgdaFunction} of
+[Setoid.Algebras.Products][] interprets the operations in the first place.[^1]
 
 <!--
 ```agda
@@ -59,20 +68,10 @@ module _ {𝑆 : Signature 𝓞 𝓥} {𝑨 : Algebra {𝑆 = 𝑆} α ρ } {I :
     hhom .compatible = λ i → 𝒽 i .proj₂ .compatible
 ```
 
-The family `𝒽` of homomorphisms inhabits the dependent type `Π i ꞉ I , hom 𝑨 (ℬ i)`.
-The syntax we use to represent this type is available to us because of the way `-Π`
-is defined in the [Type Topology][] library.  We like this syntax because it is very
-close to the notation one finds in the standard type theory literature.  However, we
-could equally well have used one of the following alternatives, which may be closer
-to "standard Agda" syntax:
-
-`Π λ i → hom 𝑨 (ℬ i)` or `(i : I) → hom 𝑨 (ℬ i)` or `∀ i → hom 𝑨 (ℬ i)`.
-
-The foregoing generalizes easily to the case in which the domain is also a product of
-a family of algebras. That is, if we are given `𝒜 : I → Algebra α 𝑆` and
-`ℬ : I → Algebra β 𝑆` (two families of `𝑆`-algebras), and
-`𝒽 :  Π i ꞉ I , hom (𝒜 i)(ℬ i)` (a family of homomorphisms), then we can construct
-a homomorphism from `⨅ 𝒜` to `⨅ ℬ` in the following natural way.
+If we are given `𝒜 : I → Algebra α 𝑆` and `ℬ : I → Algebra β 𝑆`
+(two families of `𝑆`-algebras), then a family `𝒽` of homomorphisms inhabits the
+dependent type `∀ (i : I) → hom (𝒜 i) (ℬ i)`, from which we construct a homomorphism
+from `⨅ 𝒜` to `⨅ ℬ` in the following natural way.
 
 ```agda
 module _  {𝑆 : Signature 𝓞 𝓥} {I : Type 𝓘} (𝒜 : I → Algebra {𝑆 = 𝑆} α ρ) where
@@ -87,6 +86,7 @@ module _  {𝑆 : Signature 𝓞 𝓥} {I : Type 𝓘} (𝒜 : I → Algebra {�
     isHom : IsHom (⨅ 𝒜) (⨅ ℬ) F
     isHom .compatible = λ i → 𝒽 i .proj₂ .compatible
 ```
+
 
 #### Projection out of products
 
@@ -106,3 +106,10 @@ The projection of a product algebra onto its `i`-th factor is a homomorphism.
 
 We could prove a more general result involving projections onto multiple factors, but
 so far the single-factor result has sufficed.
+
+---
+
+[^1]: `⨅-hom-co`{.AgdaFunction} does real work later: the proof of Birkhoff's theorem
+      in [Setoid.Varieties.HSP][] uses it to build the homomorphism `homℭ` from the
+      term algebra into the product `ℭ` that the whole argument turns on.
+

@@ -100,6 +100,10 @@ respect to a congruence relation `θ` of `𝑨` plays an important role. This qu
 is typically denoted by `𝑨 / θ` and Agda allows us to define and express quotients
 using this standard notation.
 
+(Note that the forward-slash we use to denote the quotient is produced by typing
+`\---` (in the Agda input method); it is a unicode character, and it is not the
+ascii forward-slash that appears in the preceeding paragraph.)
+
 ```agda
 module _ {𝑆 : Signature 𝓞 𝓥}  where
   open Algebra  using ( Domain ; Interp )
@@ -168,3 +172,6 @@ elements are related.
     𝟙-isEquiv : IsEquivalence (λ (_ _ : 𝕌[ 𝑨 ]) → Lift ℓ ⊤)
     𝟙-isEquiv = record { refl = lift tt ; sym = λ _ → lift tt ; trans = λ _ _ → lift tt }
 ```
+
+---
+

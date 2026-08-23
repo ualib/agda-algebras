@@ -9,9 +9,31 @@ author: "agda-algebras development team"
 
 This is the [Setoid.Homomorphisms.Isomorphisms][] module of the [Agda Universal Algebra Library][].
 
-Two algebras are **isomorphic**, written `𝑨 ≅ 𝑩`, when there are homomorphisms in both directions that are mutually inverse up to the setoid equalities of the two domains.  The record `_≅_`{.AgdaRecord} carries exactly that data in its fields `to`{.AgdaField}, `from`{.AgdaField}, `to∼from`{.AgdaField} and `from∼to`{.AgdaField}, and derives from it that each direction is both injective and surjective.
+Two algebras are **isomorphic**, written `𝑨 ≅ 𝑩`, when there are homomorphisms in
+both directions that are mutually inverse up to the setoid equalities of the two
+domains.
 
-Beyond the definition, this module proves that `_≅_`{.AgdaRecord} is an equivalence relation (`≅-refl`{.AgdaFunction}, `≅-sym`{.AgdaFunction}, `≅-trans`{.AgdaFunction}), that a bijective homomorphism is an isomorphism (`Bijective→≅`{.AgdaFunction}), and that products of isomorphic families are isomorphic (`⨅≅`{.AgdaFunction}).  The result the rest of the library leans on is `Lift-≅`{.AgdaFunction}: an algebra is isomorphic to each of its universe liftings, so isomorphism classes are closed under lifting and every isomorphism-invariant property survives a change of level.
+The record `_≅_`{.AgdaRecord} carries exactly that data in its fields
+`to`{.AgdaField}, `from`{.AgdaField}, `to∼from`{.AgdaField} and
+`from∼to`{.AgdaField}, and derives from it that each direction is both injective
+and surjective.
+
+Beyond the definition, this module proves the following:
+
++  `_≅_`{.AgdaRecord} is an equivalence relation:
+   + `≅-refl`{.AgdaFunction}: isomorphism is reflexive;
+   + `≅-sym`{.AgdaFunction}: isomorphism is symmetric;
+   + `≅-trans`{.AgdaFunction}: isomorphism is transitive;
++  `≅toInjective`{.AgdaFunction}: the forward map of an isomorphism is injective;
++  `≅fromInjective`{.AgdaFunction}: the inverse map of an isomorphism is injective;
++  `Bijective→≅`{.AgdaFunction}: a bijective homomorphism is an isomorphism;
++  `⨅≅`{.AgdaFunction}: products of isomorphic families are isomorphic;
++  `Lift-≅`{.AgdaFunction}`: an algebra is isomorphic to each of its universe
+   liftings.
+
+`Lift-≅`{.AgdaFunction} implies that isomorphism classes are closed under lifting
+and every isomorphism-invariant property survives a change of universe level;
+the library leans on this fact heavily.
 
 <!--
 ```agda
@@ -133,27 +155,27 @@ open _≅_
   ν : ∀ a → g .proj₁ ⟨$⟩ (f .proj₁ ⟨$⟩ a) ≈₁ a
   ν a = trans₁ (cong (from ab .proj₁) (from∼to bc (to ab .proj₁ ⟨$⟩ a))) (from∼to ab a)
 
-module _ {𝑨 : Algebra {𝑆 = 𝑆} α ρᵃ}{𝑩 : Algebra {𝑆 = 𝑆} β ρᵇ} where
-  -- The "to" map of an isomorphism is injective.
-  ≅toInjective : (φ : 𝑨 ≅ 𝑩) → IsInjective (proj₁ (to φ))
-  ≅toInjective (mkiso (f , _) (g , _) _ g∼f){a}{b} fafb = Goal
-    where
-    open Setoid 𝔻[ 𝑨 ] using ( _≈_ ; sym ; trans )
-    lem1 : a ≈ g ⟨$⟩ (f ⟨$⟩ a)
-    lem1 = sym (g∼f a)
+-- The "to" map of an isomorphism is injective.
+≅toInjective : {𝑨 : Algebra {𝑆 = 𝑆} α ρᵃ}{𝑩 : Algebra {𝑆 = 𝑆} β ρᵇ}
+  (φ : 𝑨 ≅ 𝑩) → IsInjective (proj₁ (to φ))
+≅toInjective {𝑨 = 𝑨} (mkiso (f , _) (g , _) _ g∼f){a}{b} fafb = Goal
+  where
+  open Setoid 𝔻[ 𝑨 ] using ( _≈_ ; sym ; trans )
+  lem1 : a ≈ g ⟨$⟩ (f ⟨$⟩ a)
+  lem1 = sym (g∼f a)
 
-    lem2 : g ⟨$⟩ (f ⟨$⟩ a) ≈ g ⟨$⟩ (f ⟨$⟩ b)
-    lem2 = cong g fafb
+  lem2 : g ⟨$⟩ (f ⟨$⟩ a) ≈ g ⟨$⟩ (f ⟨$⟩ b)
+  lem2 = cong g fafb
 
-    lem3 : g ⟨$⟩ (f ⟨$⟩ b) ≈ b
-    lem3 = g∼f b
+  lem3 : g ⟨$⟩ (f ⟨$⟩ b) ≈ b
+  lem3 = g∼f b
 
-    Goal : a ≈ b
-    Goal = trans lem1 (trans lem2 lem3)
+  Goal : a ≈ b
+  Goal = trans lem1 (trans lem2 lem3)
 
- -- The "from" map of an isomorphism is injective.
-≅fromInjective : {𝑨 : Algebra {𝑆 = 𝑆} α ρᵃ} {𝑩 : Algebra {𝑆 = 𝑆} β ρᵇ} (φ : 𝑨 ≅ 𝑩)
-  → IsInjective (from φ .proj₁)
+-- The "from" map of an isomorphism is injective.
+≅fromInjective : {𝑨 : Algebra {𝑆 = 𝑆} α ρᵃ} {𝑩 : Algebra {𝑆 = 𝑆} β ρᵇ}
+  (φ : 𝑨 ≅ 𝑩) → IsInjective (from φ .proj₁)
 ≅fromInjective φ = ≅toInjective (≅-sym φ)
 ```
 
@@ -163,15 +185,16 @@ module _ {𝑨 : Algebra {𝑆 = 𝑆} α ρᵃ}{𝑩 : Algebra {𝑆 = 𝑆} β
 Building an algebra directly (as a `record` whose `Interp` field is written out by
 hand) and building one with the `mkAlgebra`{.AgdaFunction} smart constructor of
 [Setoid.Algebras.Basic][] produce *isomorphic* algebras, provided the two agree on
-their carrier and their operations.  The witnessing isomorphism is the identity map:
-the only content is that the operations match, so the homomorphism condition in each
-direction is exactly the pointwise hypothesis `ops≈` (read forwards, then backwards).
+their carrier and their operations.  The witnessing isomorphism is the identity
+map: the only content is that the operations match, so the homomorphism condition
+in each direction is exactly the pointwise hypothesis `ops≈` (read forwards, then
+backwards).  This is the content of `≅-mkAlgebra`{.AgdaFunction}.
 
 Concretely, an algebra `𝑨`{.AgdaBound} is isomorphic to the algebra
-`mkAlgebra 𝔻[ 𝑨 ] f cong-f` built on `𝑨`{.AgdaBound}'s *own* domain from any
-operations `f`{.AgdaBound} that agree with `𝑨`{.AgdaBound}'s interpretation pointwise.
-The bespoke `cong-f`{.AgdaBound} demanded by the smart constructor plays no role in the
-isomorphism — only the operations do — so it is accepted but never inspected.
+`mkAlgebra 𝔻[ 𝑨 ] f cong-f` built on the domain of `𝑨`{.AgdaBound} from any
+operations `f`{.AgdaBound} that agree with those of `𝑨`{.AgdaBound} (interpreted
+pointwise).  The bespoke `cong-f`{.AgdaBound} required by the smart constructor
+plays no role in the isomorphism; only the operations do.
 
 ```agda
 module _ {𝑨 : Algebra {𝑆 = 𝑆} α ρᵃ} where
@@ -197,14 +220,16 @@ algebra: instantiating `≅-mkAlgebra`{.AgdaFunction} at `𝑨 = mkAlgebra 𝔻[
 shows directly that two `mkAlgebra`{.AgdaFunction} algebras on the same domain with
 pointwise-equal operations are isomorphic, with no extra work.
 
+
 #### A bijective homomorphism is an isomorphism
 
-A homomorphism that is both injective and surjective is an isomorphism.  The witness
-is the surjective right inverse `g = SurjInv h`, which is a *two-sided* inverse because
-`h` is injective; and `g` is again a homomorphism — to see `g (f b) ≈ f (g ∘ b)` it
-suffices, by injectivity of `h`, to compare the `h`-images, where `h ∘ g` cancels.
-This is the converse of `≅toInjective`/`toIsSurjective` and lets one promote a
-bijective `hom` to an `_≅_` without exhibiting the inverse homomorphism by hand.
+A homomorphism that is both injective and surjective is an isomorphism.  The
+witness is the surjective right inverse `g = SurjInv h`, which is a *two-sided*
+inverse because `h` is injective; and `g` is again a homomorphism.  To see
+`g (f b) ≈ f (g ∘ b)` it suffices, by injectivity of `h`, to compare the
+`h`-images, where `h ∘ g` cancels.  This is the converse of
+`≅toInjective`/`toIsSurjective` and lets us promote a bijective `hom` to an `_≅_`
+without exhibiting the inverse homomorphism by hand.
 
 ```agda
 module _ {𝑨 : Algebra {𝑆 = 𝑆} α ρᵃ}{𝑩 : Algebra {𝑆 = 𝑆} β ρᵇ} where
@@ -240,9 +265,9 @@ module _ {𝑨 : Algebra {𝑆 = 𝑆} α ρᵃ}{𝑩 : Algebra {𝑆 = 𝑆} β
 ```
 
 Fortunately, the lift operation preserves isomorphism (i.e., it's an *algebraic
-invariant*). As our focus is universal algebra, this is important and is what
-makes the lift operation a workable solution to the technical problems that arise
-from the noncumulativity of Agda's universe hierarchy.
+invariant*).  As our focus is universal algebra, this makes the lift operation a
+workable solution to the technical problems that arise from the noncumulativity of
+Agda's universe hierarchy.
 
 ```agda
 module _ {𝑨 : Algebra {𝑆 = 𝑆} α ρᵃ}{ℓ : Level} where
@@ -356,7 +381,13 @@ module _
 
     A≅B : ⨅ 𝒜 ≅ ⨅ ℬ
     A≅B = mkiso (ϕ , ϕhom) (ψ , ψhom) ϕ∼ψ ψ∼ϕ
+```
 
+The remainder of this module proves a collection of facts, needed elsewhere in the
+library, establishing isomorphisms between various liftings and lowerings of product
+algebras.
+
+```agda
 module _ {𝓘 : Level}{I : Type 𝓘} {𝒜 : I → Algebra {𝑆 = 𝑆} α ρᵃ} where
 
   ⨅≅⨅ℓ : ∀ {ℓ} → ⨅ 𝒜 ≅ ⨅ (λ i → Lift-Alg (𝒜 (lower{ℓ = ℓ} i)) ℓ ℓ)
