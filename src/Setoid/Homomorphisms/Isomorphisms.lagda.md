@@ -28,7 +28,7 @@ Beyond the definition, this module proves the following:
 +  `≅fromInjective`{.AgdaFunction}: the inverse map of an isomorphism is injective;
 +  `Bijective→≅`{.AgdaFunction}: a bijective homomorphism is an isomorphism;
 +  `⨅≅`{.AgdaFunction}: products of isomorphic families are isomorphic;
-+  `Lift-≅`{.AgdaFunction}`: an algebra is isomorphic to each of its universe
++  `Lift-≅`{.AgdaFunction}: an algebra is isomorphic to each of its universe
    liftings.
 
 `Lift-≅`{.AgdaFunction} implies that isomorphism classes are closed under lifting

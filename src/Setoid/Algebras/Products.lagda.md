@@ -65,7 +65,7 @@ open Algebra
 carrier is the dependent product `∀ i → 𝕌[ 𝒜 i ]` of the carriers of the factors;
 two elements are equal exactly when they agree in every coordinate; and the
 interpretation of an operation symbol `f` is the tuple of interpretations of `f`
-in the factors, `(f ^ ⨅ 𝒜) a i = (f ^ 𝒜 i) (flip a i)`.[^1]
+in the factors, `(f ^ ⨅ 𝒜) a i = (f ^ 𝒜 i) (flip a i)`.
 
 The types involved in the expression `(f ^ ⨅ 𝒜) a i = (f ^ 𝒜 i) (flip a i)` are
 the following:

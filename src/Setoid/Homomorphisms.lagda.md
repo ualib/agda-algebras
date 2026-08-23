@@ -17,13 +17,13 @@ algebras.
 
 +  [Setoid.Homomorphisms.Basic][]: `hom`{.AgdaFunction}, `mon`{.AgdaFunction},
    `epi`{.AgdaFunction}, their predicate forms, and the identity homomorphism;
-+  [Setoid.Homomorphisms.Properties][]: composition, and for the homomorphisms
++  [Setoid.Homomorphisms.Properties][]: composition, and the homomorphisms
    that witness universe lifting;
 +  [Setoid.Homomorphisms.Kernels][]: the kernel congruence
    `kercon`{.AgdaFunction}, the quotient `kerquo`{.AgdaFunction}, and the
    canonical projection `πepi`{.AgdaFunction};
 +  [Setoid.Homomorphisms.Products][]: the homomorphism into a product induced by a
-   family of homomorphisms, and for the coordinate projections out of one;
+   family of homomorphisms, and the coordinate projections out of one;
 +  [Setoid.Homomorphisms.Noether][]: the first homomorphism theorem;
 +  [Setoid.Homomorphisms.Factor][]: `HomFactor`{.AgdaFunction} (a homomorphism
    factors through any surjective homomorphism whose kernel is contained in its own);
