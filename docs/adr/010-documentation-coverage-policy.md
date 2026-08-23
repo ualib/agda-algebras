@@ -13,7 +13,7 @@ Documentation here serves two audiences at once.  A human reading the library sh
 The decision resolves that tension by refusing to chop the pages.  Concretely:
 
 +  **Every code fence carries a real paragraph.**  This is the enforced bar, checked in CI, and the one the nine sub-issues of [#268][] close.  A "real" paragraph means prose about the mathematics; a heading alone, the boilerplate `This is the [X][] module of the …` sentence alone, and an empty run all fail.
-+  **One definition per fence is explicitly rejected** as a repository-wide rule.  It enforces layout rather than content — 1963 paragraphs each restating a type signature would satisfy it — and it destroys the narrative reading that makes the library usable as an exposition of universal algebra.
++  **One definition per fence is explicitly rejected** as a repository-wide rule.  It enforces layout rather than content — 1952 paragraphs each restating a type signature would satisfy it — and it destroys the narrative reading that makes the library usable as an exposition of universal algebra.
 +  **Per-definition prose is recovered by extraction, not by fragmentation.**  A prose block that *names* the definitions beneath it can be split per definition mechanically; a set of disconnected paragraphs cannot be reassembled into a narrative.  The derivation runs from the narrative to the reference, never the reverse, so the narrative is the source of truth and the extractor does the work.
 +  **Two advisory measures are reported but not gated**: how many definitions their own prose *names*, and how many are *used* anywhere in the library.  The first detects prose that has drifted away from the code beneath it.  The second says where documentation effort pays off.
 +  **Enforcement is a ratchet, not a wall.**  `make docstrings` fails only when the count of undocumented definitions rises above a ceiling recorded in the `Makefile`, so the rule is enforced from the day it lands and the backlog can only shrink.
@@ -24,9 +24,9 @@ The state of the corpus when this ADR was accepted, from `make docstrings`, is a
 
 | measure | value |
 |---|---|
-| public definitions, in 307 live modules | 3239 |
+| public definitions, in 307 live modules | 3226 |
 | definitions whose fence carries no real prose (the enforced bar) | 201 |
-| definitions failing the rejected one-per-fence bar | 1963 |
+| definitions failing the rejected one-per-fence bar | 1952 |
 | definitions their own prose mentions by name (advisory) | 19% |
 | definitions referenced somewhere in the live trees (advisory) | 80% |
 | modules opening with nothing beyond the boilerplate sentence | 50 |
@@ -39,7 +39,7 @@ Three things made that request impossible to satisfy as written, and forced a de
 
 **The check cannot be a grep.**  The library holds essentially no `-- |` docstrings, so a comment-grep reports the whole corpus as undocumented; and a prose-grep cannot tell which definition a paragraph belongs to.  Worse, almost every definition in the corpus is *indented* inside an anonymous `module _ … where`, so even a structural tool that looked only at column 0 would find almost nothing.  Checking the rule requires parsing literate structure and Agda's layout rule together, which is what `scripts/python/docstring_audit.py` ([#537][]) does.
 
-**"Immediately above" is ambiguous, and the two readings differ by an order of magnitude.**  In a literate file prose can only precede a *fence*, and a fence may hold many definitions.  Read leniently — the fence carries prose — 201 definitions are undocumented.  Read literally — the prose must sit immediately above *this* definition, so each definition needs its own fence — 1963 do.  The second reading is not merely more work; it changes what the library is, because satisfying it means breaking every multi-definition code block, including blocks indented inside a shared `module _ … where`.
+**"Immediately above" is ambiguous, and the two readings differ by an order of magnitude.**  In a literate file prose can only precede a *fence*, and a fence may hold many definitions.  Read leniently — the fence carries prose — 201 definitions are undocumented.  Read literally — the prose must sit immediately above *this* definition, so each definition needs its own fence — 1952 do.  The second reading is not merely more work; it changes what the library is, because satisfying it means breaking every multi-definition code block, including blocks indented inside a shared `module _ … where`.
 
 **The library is also meant to read as an exposition.**  `Examples/Demos/HSP.lagda.md` is the published TYPES 2021 paper as a literate module, and much of `Setoid/` is written in the same register.  A future "universal algebra textbook" presentation is a plausible derived asset.  A rule that fragments every page into one-definition blocks forecloses that, and forecloses it in the direction that is hard to undo.
 
@@ -74,7 +74,7 @@ Enforce prose per *fence*, keep the pages narrative, and recover per-definition 
 
 ## Alternatives considered
 
-+  **One definition per fence, repository-wide** (the literal reading of the style guide).  Rejected because it enforces layout rather than content, costs 1963 blocks against 201, and destroys the narrative reading.  It is not rejected as a *local* choice: `Setoid.Algebras.Basic` ([#538][]) meets it, and modules that are genuinely reference material may do the same.
++  **One definition per fence, repository-wide** (the literal reading of the style guide).  Rejected because it enforces layout rather than content, costs 1952 blocks against 201, and destroys the narrative reading.  It is not rejected as a *local* choice: `Setoid.Algebras.Basic` ([#538][]) meets it, and modules that are genuinely reference material may do the same.
 +  **One definition per fence, with a textbook presentation derived later.**  Rejected because the derivation does not run in that direction.  Reference to narrative requires inventing connective tissue, ordering, and motivation — precisely the human-authored part.  Narrative to reference is mechanical whenever the prose names its definitions, so the narrative is the better source of truth.
 +  **`-- |` docstrings inside the fences**, as most Agda and Haskell projects use.  Rejected by ADR-004 and the style guide already: the literate format exists so that prose is first-class Markdown, and in-fence comments render poorly and serve the corpus worse.
 +  **A hard CI gate with no ratchet.**  Rejected because it would fail every unrelated pull request until 201 prose blocks were written, which in practice means the check is disabled instead.

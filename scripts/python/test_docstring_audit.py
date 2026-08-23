@@ -245,6 +245,12 @@ def test_clauses_are_not_definitions() -> None:
     assert report.unparsed == ()
 
 
+def test_anonymous_assertions_are_not_definitions() -> None:
+    # `_ : T` / `_ = refl` is Agda's compile-time assertion idiom; it declares
+    # no name, and counting it mints duplicate qnames.
+    assert names(block("_ : A ≡ B", "_ = refl", "real : Set", "real = A")) == ["real"]
+
+
 def test_mixfix_names() -> None:
     assert names(block("_∘_ : Set", "_∘_ = A", "∣_∣ : Set", "∣_∣ = A")) == ["_∘_", "∣_∣"]
 

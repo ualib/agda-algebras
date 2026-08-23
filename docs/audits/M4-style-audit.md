@@ -16,7 +16,7 @@ This is the audit deliverable for [M4-1d] (issue #370), the scripted sweep of th
 | 2a | Bare `open import` without `using`    | aggregators only | —       | none (compliant) |
 | 2b | Cosmetic `renaming`                   | 1 dead rename    | 1       | #367             |
 | 3  | Minimal module headers                | 50 (was: heuristic) | 50   | M4-2 (#268)      |
-| 3b | Undocumented public definitions       | 201 of 3239      | —       | M4-2 (#268)      |
+| 3b | Undocumented public definitions       | 201 of 3226      | —       | M4-2 (#268)      |
 | 4  | HTML `<a id=…>` heading anchors       | 37 (was: 300)    | 1       | **done** (#387)  |
 | 5  | `is-x` predicate / synonym pairs      | 0 violations     | —       | none (clean)     |
 
@@ -146,7 +146,7 @@ make docstrings          # the ratcheted gate
 make docstrings-list     # every gap, by file and line
 ```
 
-Across the live trees there are **3239 public definitions in 307 modules**.  Under the lenient reading — the definition's fence carries no real prose at all — **201** are undocumented.  Under the style guide's literal "immediately above" reading (`--strict`, which also counts a definition sharing a documented fence with an earlier one) the figure is 1963.  By subtree, lenient: `Classical` 102, `Setoid` 65, `Examples` 30, `Overture` 3, `FLRP` 1, `Order` 0, `Exercises` 0.
+Across the live trees there are **3226 public definitions in 307 modules**.  Under the lenient reading — the definition's fence carries no real prose at all — **201** are undocumented.  Under the style guide's literal "immediately above" reading (`--strict`, which also counts a definition sharing a documented fence with an earlier one) the figure is 1952.  By subtree, lenient: `Classical` 102, `Setoid` 65, `Examples` 30, `Overture` 3, `FLRP` 1, `Order` 0, `Exercises` 0.
 
 Two side-findings from the same traversal.  **49 declarations sit inside hidden `<!-- ```agda … ``` -->` preamble fences**, so Agda exports them but no rendered page shows them: `Classical.Equations` (`app₀`, `app₁`, `app₂`), `Classical.Structures.Lattice.Parachute` (15 lemma abbreviations), and the `FLRP` `SLR*` certificates (31 `pattern` declarations).  And the parser reports **zero** items it cannot classify across all 307 modules, so the counts above have no known blind spot.
 

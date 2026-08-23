@@ -2230,7 +2230,7 @@ Every record, type family, and top-level function in the public API should have 
 
 ## Where it stands
 
-Measured by `make docstrings` (#537) over the live trees: **3239 public definitions in 307 modules**, of which **201** sit under a fence carrying no real prose, and **50** modules open with nothing beyond the boilerplate "This is the [X][] module of the …" sentence.
+Measured by `make docstrings` (#537) over the live trees: **3226 public definitions in 307 modules**, of which **201** sit under a fence carrying no real prose, and **50** modules open with nothing beyond the boilerplate "This is the [X][] module of the …" sentence.
 
 `make docstrings` is a ratchet pinned at `DOCSTRING_MAX_GAPS` (201) and `DOCSTRING_MAX_WEAK_HEADERS` (50), so both counts can only fall.  The policy and its reasoning are recorded in ADR-010.  Each sub-issue lowers it.
 
@@ -2258,10 +2258,10 @@ The original criterion said a "`grep`-based audit".  A grep cannot do this — t
 ## Open decision: which bar
 
 +  **Lenient** (the ratchet's measure, and the recommendation): every fence carries a real paragraph.  201 to clear.
-+  **Strict** (`--strict`): the style guide's literal "immediately above" — one definition per fence.  1963 to clear, and it fragments indented module bodies, which works against reading the library as a narrative.
++  **Strict** (`--strict`): the style guide's literal "immediately above" — one definition per fence.  1952 to clear, and it fragments indented module bodies, which works against reading the library as a narrative.
 +  **Named coverage** (a third measure, proposed): every public definition is *mentioned by name* in the prose attached to its fence.  Currently 19% repo-wide; #538 hits 11/13 without having aimed at it, because prose that describes a definition tends to name it.
 
-Recommendation: gate on lenient, track named coverage as the quality target, reject strict.  Rationale is that strict enforces *layout* rather than content — 1963 paragraphs each restating a type signature would satisfy it — whereas named coverage is what makes per-definition prose extractable for #275 while leaving the page readable as prose.
+Recommendation: gate on lenient, track named coverage as the quality target, reject strict.  Rationale is that strict enforces *layout* rather than content — 1952 paragraphs each restating a type signature would satisfy it — whereas named coverage is what makes per-definition prose extractable for #275 while leaving the page readable as prose.
 
 ## Conventions for a docstring PR
 
@@ -2330,10 +2330,10 @@ Self-contained and gap-dense: subuniverses, generation, subdirect products.  A g
 | measure | count |
 |---|---|
 | modules | 10 |
-| public definitions | 145 |
+| public definitions | 144 |
 | **definitions with no prose on their fence** | **23** |
 | modules with a boilerplate-only or heading-only header | 5 |
-| (reference) definitions failing the strict reading | 100 |
+| (reference) definitions failing the strict reading | 99 |
 
 Sized for one PR.
 
@@ -2347,7 +2347,7 @@ Sized for one PR.
 
 **Conventions, tooling, grounding discipline and the verification checklist are in #268** — read that first; they are not repeated here.  Exemplar: #538.
 
-> Counts assume the lenient bar (every fence carries real prose), the recommendation on #268.  If the strict bar is adopted instead, this issue grows from 23 to 100 and should be re-split.
+> Counts assume the lenient bar (every fence carries real prose), the recommendation on #268.  If the strict bar is adopted instead, this issue grows from 23 to 99 and should be re-split.
 
 ---
 
@@ -2406,10 +2406,10 @@ Small, and mostly header work.  The barrel modules hold no definitions but sever
 | measure | count |
 |---|---|
 | modules | 20 |
-| public definitions | 115 |
+| public definitions | 104 |
 | **definitions with no prose on their fence** | **6** |
 | modules with a boilerplate-only or heading-only header | 5 |
-| (reference) definitions failing the strict reading | 76 |
+| (reference) definitions failing the strict reading | 66 |
 
 Sized for one PR.
 
@@ -2423,7 +2423,7 @@ Sized for one PR.
 
 **Conventions, tooling, grounding discipline and the verification checklist are in #268** — read that first; they are not repeated here.  Exemplar: #538.
 
-> Counts assume the lenient bar (every fence carries real prose), the recommendation on #268.  If the strict bar is adopted instead, this issue grows from 6 to 76 and should be re-split.
+> Counts assume the lenient bar (every fence carries real prose), the recommendation on #268.  If the strict bar is adopted instead, this issue grows from 6 to 66 and should be re-split.
 
 ---
 
@@ -2444,7 +2444,7 @@ The quintuple pattern (ADR-002) makes these highly repetitive, so one well-writt
 | measure | count |
 |---|---|
 | modules | 19 |
-| public definitions | 337 |
+| public definitions | 336 |
 | **definitions with no prose on their fence** | **34** |
 | modules with a boilerplate-only or heading-only header | 1 |
 | (reference) definitions failing the strict reading | 240 |

@@ -336,12 +336,19 @@ def _split_where(text: str) -> tuple[str, Optional[str]]:
 def _declared_names(head: str) -> tuple[str, ...]:
     """The names a type signature declares.  Agda allows ``f g : T`` to declare
     two names at once, so this returns a tuple.  Returns ``()`` when the text is
-    not a signature the tool is willing to claim."""
+    not a signature the tool is willing to claim.
+
+    A bare ``_`` is not a name.  ``_ : T`` followed by ``_ = refl`` is Agda's
+    idiom for a compile-time assertion — the corpus uses it to check that two
+    deciders agree — and it declares nothing.  Counting them would inflate the
+    definition total and, worse, mint duplicate ``qname``s, which is the key the
+    harvest of #275 joins on.
+    """
     match = _SIGNATURE.match(head)
     if not match:
         return ()
-    names = tuple(match.group("names").split())
-    return names if all(_NAME_OK.match(n) for n in names) else ()
+    names = tuple(n for n in match.group("names").split() if n != "_")
+    return names if names and all(_NAME_OK.match(n) for n in names) else ()
 
 
 def _headed_name(rest: str) -> Optional[str]:
