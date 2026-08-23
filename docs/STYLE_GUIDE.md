@@ -617,11 +617,27 @@ Every module under `src/` is a literate-Agda file (`.lagda.md`); see [File forma
 
 `.lagda.md` files give us first-class natural-language sections; use them.  Reserve in-code comments for syntax-adjacent annotations: argument-level type clarifications, termination justifications, naming choices a reader needs while reading that line.  Module-level framing, definition-level exposition, and motivating discussion all belong in the surrounding Markdown prose, not in `-- |` blocks inside code fences.  The corpus serves both human readers and downstream ML training; prose-as-Markdown serves both better than prose-as-line-comments.
 
-### Don't hard-wrap prose
+### Wrapping prose
 
-Markdown paragraphs are written without artificial line breaks: one paragraph is one line in the source.  Editors and viewers (GitHub diff view, Jekyll-rendered HTML, modern terminals) soft-wrap to viewport width.  Hard-wrapping at a fixed column turns one-word edits into multi-line diffs as the wrap has to be redone, and competes badly with the long inline code spans common in this library (e.g., `Π[ t ∈ ((i : I) → J → 𝒜 i) ] eval-REL R t`).
+Either form is acceptable.  A paragraph may be a single source line, left to soft-wrap to the viewport, or hard-wrapped at a fixed column; most of the corpus wraps at roughly 80.  What is *not* acceptable is mixing the two inside one file: the choice is per file, so match what the file already does, and leave an unwrapped file unwrapped.
 
-The convention applies to paragraph prose only.  Bullet items and numbered list items get one line each (the line break is structural, not cosmetic).  YAML front matter and link-reference blocks follow their own per-entry-per-line conventions.
+Neither form is mandated because the trade-off is real in both directions.  An unwrapped paragraph keeps a one-word edit to a one-line diff, and never collides with the long inline code spans common in this library (e.g., `Π[ t ∈ ((i : I) → J → 𝒜 i) ] eval-REL R t`).  A wrapped paragraph is legible in a narrow editor and reviewable in a side-by-side diff, which is why most of the library reads that way.
+
+**Do not reflow a paragraph you are not otherwise changing**, in either direction.  Rewrapping turns an unrelated edit into a whole-paragraph diff and buries the substantive change.
+
+Bullet items and numbered list items may wrap as well; indent the continuation lines to align with the item's text, so that the list structure survives in the source.  YAML front matter and link-reference blocks keep their own per-entry-per-line conventions.
+
+#### Where a wrap does damage
+
+Pages render through Python-Markdown under MkDocs (see [ADR-007](adr/007-mkdocs-rendering-pipeline.md)), which does not treat a single newline as a line break, so wrapping is safe in general.  Three breaks are not, and the first two fail silently in the source while being obvious on the page.  They are the following:
+
++  **Never break between an inline code span and its attribute list**.  `attr_list` requires them adjacent, so `` `Algebra` `` followed by a newline and then `{.AgdaRecord}` emits `<code>Algebra</code>` with the braces as literal text.  Since attribute spans are how every Agda name in the corpus is marked up, this is the costliest of the three.
++  **Never break inside a reference-style link's label at a point where the label has no space**.  Wrapping `[Setoid.Algebras.Products][]` mid-name yields the label `Setoid.Algebras. Products`, which matches no definition in `docs/_links.md` and renders literally.  Breaking at a space the label already contains is fine: `[Agda Universal Algebra Library][]` may be wrapped between any two of its words.
++  **Avoid breaking inside an inline code span**.  It does render, because the newline collapses to a space, but it leaves the span unfindable by `grep` and by the tooling that reads these spans, including the corpus extractor of [#275](https://github.com/ualib/agda-algebras/issues/275).
+
+### Hard-wrapping is still wrong in GitHub bodies
+
+The section above governs files in the repository.  Pull request descriptions, issue descriptions, and review comments are a different renderer: GitHub enables hard line breaks in those fields, so every newline in the source becomes a `<br>` and wrapped text displays ragged.  Write one line per paragraph and per bullet item there, and let GitHub do the wrapping.
 
 ### The `docs/` tree: notes versus papers
 
