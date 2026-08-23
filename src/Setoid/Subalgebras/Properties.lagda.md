@@ -9,6 +9,18 @@ author: "agda-algebras development team"
 
 This is the [Setoid.Subalgebras.Properties][] module of the [Agda Universal Algebra Library][].
 
+This module establishes the order-theoretic facts about `_≤_`{.AgdaFunction} that
+the rest of the library relies on: that it is a preorder, that isomorphism
+refines it in either direction, that it survives universe lifting, and that it is
+preserved by products.
+
+The preorder is stated with respect to isomorphism rather than equality
+(`≤-preorder`{.AgdaFunction}), which is the only sensible choice, since mutual
+embeddings do not make two algebras equal.  The universe-lifting group is the
+part used most often, for the reason recorded in [Setoid.Algebras.Basic][]:
+Agda's universes are not cumulative, so a `≤` established at one level has to be
+transported explicitly before it can be used at another.
+
 <!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
@@ -124,6 +136,27 @@ iso→injective 𝑨 (mkiso f g f∼g g∼f) {x} {y} fxfy =
 
 #### Lifts of subalgebras of setoid algebras
 
+Ten lemmas of one shape: transport a `≤` or a `≥` across the isomorphism between
+an algebra and its lift.  Each is a single application of one of the mixed
+transitivity lemmas above to one of the `Lift-≅`{.AgdaFunction} isomorphisms of
+[Setoid.Homomorphisms.Isomorphisms][], which is the concrete sense in which
+universe lifting costs nothing here.
+
+The suffix says which level moves, following `Lift-Algˡ`{.AgdaFunction},
+`Lift-Algʳ`{.AgdaFunction} and `Lift-Alg`{.AgdaFunction} of
+[Setoid.Algebras.Basic][]: `ˡ` raises the level of the carrier, `ʳ` the level of
+the equality, and the unadorned name raises both.
+
++  `≤-Liftˡ`{.AgdaFunction}, `≤-Liftʳ`{.AgdaFunction} and
+   `≤-Lift`{.AgdaFunction} lift the algebra on the right of `≤`, the larger one;
++  `≥-Liftˡ`{.AgdaFunction}, `≥-Liftʳ`{.AgdaFunction} and
+   `≥-Lift`{.AgdaFunction} do the same for `≥`, which lifts the smaller one;
++  `Lift-≤-Liftˡ`{.AgdaFunction}, `Lift-≤-Liftʳ`{.AgdaFunction} and
+   `Lift-≤-Lift`{.AgdaFunction} lift both algebras at once, and are literally the
+   composition of the two groups above;
++  `Lift-is-sub`{.AgdaFunction} is the class-relative version: lifting an algebra
+   does not disturb its being a subalgebra of some member of `𝒦`.
+
 ```agda
 Lift-is-sub : {𝒦 : Pred (Algebra {𝑆 = 𝑆} α ρᵃ)(ov {𝑆 = 𝑆} α)} {𝑩 : Algebra {𝑆 = 𝑆} β ρᵇ} {ℓ : Level}
   → 𝑩 ≤c 𝒦 → (Lift-Algˡ 𝑩 ℓ) ≤c 𝒦
@@ -161,6 +194,17 @@ module _ {𝑨 : Algebra {𝑆 = 𝑆} α ρᵃ}{𝑩 : Algebra {𝑆 = 𝑆} β
 ```
 
 #### Products of subalgebras
+
+`⨅-≤`{.AgdaFunction} is the compatibility of the subalgebra relation with
+products: if `ℬ i ≤ 𝒜 i` for every index `i`, then `⨅ ℬ ≤ ⨅ 𝒜`.  The embedding is
+assembled coordinatewise from the given ones, and injectivity is coordinatewise
+too, because two elements of a product are equal exactly when they agree in every
+coordinate.
+
+Small as it is, this is the load-bearing step of `PS⊆SP`{.AgdaFunction} in
+[Setoid.Varieties.Preservation][], where a product of subalgebras has to be
+recognised as a subalgebra of a product so that `S`{.AgdaFunction} and
+`P`{.AgdaFunction} can be interchanged.
 
 ```agda
 module _ {I : Type ι}{𝒜 : I → Algebra {𝑆 = 𝑆} α ρᵃ}{ℬ : I → Algebra {𝑆 = 𝑆} β ρᵇ} where

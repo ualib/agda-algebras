@@ -9,6 +9,20 @@ author: "agda-algebras development team"
 
 This is the [Setoid.Subalgebras.Basic][] module of the [Agda Universal Algebra Library][].
 
+`𝑨` is a **subalgebra** of `𝑩`, written `𝑨 ≤ 𝑩`, just in case `𝑨` can be
+*homomorphically embedded* in `𝑩`: there is a homomorphism from `𝑨` to `𝑩` whose
+underlying map is injective.  Note what that does not say.  Nothing requires the
+carrier of `𝑨` to be a subset of the carrier of `𝑩`; a subalgebra is an algebra
+together with an embedding, so `_≤_`{.AgdaFunction} is reflexive and transitive
+but not antisymmetric, and [Setoid.Subalgebras.Properties][] accordingly proves it
+a *preorder* with respect to isomorphism rather than an order.
+
+This module defines the relation and the several ways of packaging it: as a
+record bundling both algebras, as a Σ-type over the smaller algebra with the
+larger one fixed, and relative to a whole class rather than to a single algebra.
+The class-relative form `_≤c_`{.AgdaFunction} is the one the closure operator
+`S`{.AgdaFunction} of [Setoid.Varieties.Closure][] is built from, which is why it
+lives here rather than there.
 
 <!--
 ```agda
@@ -35,6 +49,31 @@ open import Setoid.Homomorphisms
 private variable α ρᵃ β ρᵇ ℓ : Level
 ```
 -->
+
+The relation comes in two directions and three packagings.
+
++  `_IsSubalgebraOf_`{.AgdaFunction}, with the infix alias `_≤_`{.AgdaFunction},
+   is the relation itself: `𝑨 ≤ 𝑩` is the type of pairs `(h , inj)` with
+   `h : hom 𝑨 𝑩` and `inj` a proof that the underlying map of `h` is injective.
++  `_IsSupalgebraOf_`{.AgdaFunction}, aliased `_≥_`{.AgdaFunction}, is the
+   converse, and is *definitionally* the same type read the other way round:
+   `𝑨 ≥ 𝑩` and `𝑩 ≤ 𝑨` both unfold to an injective homomorphism from `𝑩` into
+   `𝑨`.
++  `mon→≤`{.AgdaFunction} turns a monomorphism into a proof of the subalgebra
+   relation.  It is immediate, because `mon→intohom`{.AgdaFunction} of
+   [Setoid.Homomorphisms.Basic][] already produces exactly this type.
++  `SubalgebraOf`{.AgdaRecord} bundles both algebras and the proof into a single
+   record.  `Subalgebra`{.AgdaFunction} instead fixes the larger algebra and
+   collects the smaller one with its embedding, so an inhabitant of
+   `Subalgebra 𝑨` is a pair `(𝑩 , p)` with `p : 𝑩 ≤ 𝑨`.
++  `IsSubalgebraREL`{.AgdaFunction} and `SubalgebraREL`{.AgdaRecord} are meant to
+   say that a given binary relation on algebras *is* the subalgebra relation.  As
+   written they do not say that: `IsSubalgebraREL R` never mentions its argument
+   `R`, and instead asserts `∀ {𝑨} {𝑩} → 𝑨 ≤ 𝑩`.  So inhabiting
+   `SubalgebraREL R` would require an injective homomorphism between *every* pair
+   of algebras at the levels in question, which no `R` can supply.  Nothing in
+   the library uses either name.  They are described rather than repaired here,
+   since repairing them means changing Agda.
 
 ```agda
 _≥_   -- alias for supalgebra (aka overalgebra)

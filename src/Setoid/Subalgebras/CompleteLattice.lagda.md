@@ -144,6 +144,18 @@ componentwise), and the join is the subuniverse *generated* by the union.
 
 #### The lattice
 
+With the partial order and both binary bounds in hand, the lattice structure is
+just assembly.  `Sub-isLattice`{.AgdaFunction} packages
+`≤-isPartialOrder`{.AgdaFunction}, `∨-supremum`{.AgdaFunction} and
+`∧-infimum`{.AgdaFunction} as the standard library's `IsLattice`{.AgdaRecord}, and
+`Sub-Lattice`{.AgdaFunction} bundles that together with the carrier and the two
+operations as a `Lattice`{.AgdaRecord}.
+
+Building the lattice order-first, from the infimum and supremum rather than from
+the lattice identities, is deliberate.  The standard library derives the
+absorption and associativity laws, and their congruences, from the order, so none
+of them has to be proved here.
+
 ```agda
   Sub-isLattice : IsLattice _≈_ _≤_ _∨_ _∧_
   Sub-isLattice = record  { isPartialOrder  = ≤-isPartialOrder
@@ -234,6 +246,19 @@ because `I` is `ℓ₀`-small.
 ```
 
 #### The complete lattice
+
+`Sub-CompleteLattice`{.AgdaFunction} is the same data extended with the
+infinitary meet and join and their four universal properties, presented as the
+`CompleteLattice`{.AgdaRecord} record of [Order.CompleteLattice][].
+
+Completeness is where subuniverses are better behaved than subalgebras, and the
+asymmetry between the two infinitary operations shows why.  An arbitrary
+intersection of subuniverses is again a subuniverse, so `⨅`{.AgdaFunction} is the
+intersection itself and both `⨅-lower`{.AgdaFunction} and
+`⨅-greatest`{.AgdaFunction} are pointwise.  A union of subuniverses need not be
+one, so `⨆`{.AgdaFunction} has to generate from the union, and its universal
+property `⨆-least`{.AgdaFunction} correspondingly goes through
+`sgIsSmallest`{.AgdaFunction}.
 
 ```agda
   Sub-CompleteLattice : CompleteLattice (α ⊔ ov {𝑆 = 𝑆} L) (α ⊔ L) (α ⊔ L) ℓ₀
