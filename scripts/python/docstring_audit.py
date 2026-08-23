@@ -1098,8 +1098,12 @@ def main(argv: list[str]) -> int:
 
     statuses = STRICT_GAP_STATUSES if args.strict else GAP_STATUSES
     print("\n".join(render_table(tally(reports, usage), usage is not None)))
-    if args.unused and usage is not None:
-        print("\n".join(render_unused(reports, usage)))
+    if args.unused:
+        if usage is None:
+            sys.stderr.write("warning: --unused needs the usage analysis that "
+                             "--no-usage disables; no list produced.\n")
+        else:
+            print("\n".join(render_unused(reports, usage)))
     if args.modules:
         print()
         print("\n".join(render_modules(reports)))

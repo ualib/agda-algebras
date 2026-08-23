@@ -323,6 +323,16 @@ def test_front_matter_is_not_prose() -> None:
     assert statuses(text) == {"foo": "undocumented"}
 
 
+def test_a_later_horizontal_rule_is_not_front_matter() -> None:
+    # `---` opening a *later* prose run is a horizontal rule.  Treating it as a
+    # front-matter delimiter would swallow the paragraph after it, up to the
+    # next rule — and the live trees hold 23 such rules.
+    text = ('---\nlayout: default\n---\n\n' + block("a : Set", "a = A")
+            + "\n---\n\nA real paragraph about b.\n\n---\n\n"
+            + block("b : Set", "b = A"))
+    assert statuses(text)["b"] == "documented"
+
+
 def test_front_matter_does_not_mask_boilerplate() -> None:
     text = ('---\nlayout: default\n---\n\n#### H\n\nThis is the [T.M][] module of '
             'the [Agda Universal Algebra Library][].\n\n'

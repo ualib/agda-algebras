@@ -105,6 +105,11 @@ def strip_front_matter(lines: tuple[str, ...]) -> tuple[str, ...]:
     Every module opens with Jekyll/MkDocs front matter (STYLE_GUIDE § "Jekyll/
     MkDocs YAML frontmatter").  It is metadata, never prose, so it must not
     count as the documentation preceding the first code fence.
+
+    Apply this only to a run of lines that starts at the top of the file.  A
+    ``---`` elsewhere is a horizontal rule, and there are 23 of them in the live
+    trees; treating one as an opening delimiter would silently swallow the prose
+    up to the next rule.
     """
     if not lines or lines[0].strip() != "---":
         return lines
@@ -137,7 +142,10 @@ def fences(text: str) -> tuple[Fence, ...]:
                     close_line=index + 1,
                     hidden=hidden,
                     body=tuple(lines[open_line + 1:index]),
-                    prose=strip_front_matter(tuple(pending)),
+                    # Only the file's opening run can hold front matter; a
+                    # later `---` is a horizontal rule (see strip_front_matter).
+                    prose=(strip_front_matter(tuple(pending)) if not out
+                           else tuple(pending)),
                 ))
                 in_fence, pending = False, []
             continue
