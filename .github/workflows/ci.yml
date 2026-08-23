@@ -187,6 +187,34 @@ jobs:
           make check-links
 
   # ---------------------------------------------------------------------------
+  # Docstring coverage.  Pure-Python, like the link check.  STYLE_GUIDE
+  # § "Every public definition has a prose comment block" is the rule; because
+  # the corpus documents definitions in Markdown *outside* the ```agda fences,
+  # enforcing it needs a literate-and-layout-aware parse rather than a grep.
+  # The job is a ratchet: it holds the gap count at DOCSTRING_MAX_GAPS so the
+  # backlog of issue #268 can only shrink.  See `make docstrings`.
+  # ---------------------------------------------------------------------------
+  docstrings:
+    name: Docstring coverage
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Every public definition has a prose block (ratcheted)
+        run: |
+          set -euxo pipefail
+          make docstrings-test
+          make docstrings
+
+  # ---------------------------------------------------------------------------
   # Aggregate status: a single stable required-check name for branch
   # protection.  Uses `if: always()` so that skipped/conditional jobs added
   # in the future don't block the gate.
@@ -196,12 +224,12 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 2
     if: always()
-    needs: [check, certificates, link-check]
+    needs: [check, certificates, link-check, docstrings]
     steps:
       - name: Verify all required jobs passed
         run: |
           set -euxo pipefail
-          results=( "${{ needs.check.result }}" "${{ needs.certificates.result }}" "${{ needs.link-check.result }}" )
+          results=( "${{ needs.check.result }}" "${{ needs.certificates.result }}" "${{ needs.link-check.result }}" "${{ needs.docstrings.result }}" )
           for r in "${results[@]}"; do
             if [ "$r" = "failure" ] || [ "$r" = "cancelled" ]; then
               echo "A required job ended with result: $r"

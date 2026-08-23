@@ -105,6 +105,27 @@ if str(_SCRIPT_DIR) not in sys.path:
 
 from _utils import Result, PipelineError  # noqa: E402
 from _utils.file_ops import read_text, write_text  # noqa: E402
+# The literate front end (fence extraction, comment lexer, file discovery) is
+# shared with docstring_audit.py, so it lives in _utils rather than here.
+from _utils.literate import (  # noqa: E402
+    clean_code_lines,
+    expand_target,
+    extract_agda_lines,
+    file_code_lines,
+    gather_files,
+    scan_line,
+)
+# Tokenisation and the "is this name used?" predicate are shared with
+# docstring_audit.py's usage analysis, so they live in _utils too.
+from _utils.agda_names import (  # noqa: E402
+    NO_NOTATIONS,
+    SyntaxNotations,
+    code_tokens,
+    harvest_syntax_notations,
+    is_used,
+    name_parts,
+    parse_syntax_decl,
+)
 
 
 # =============================================================================
@@ -212,216 +233,8 @@ class FileReport:
 
 
 # =============================================================================
-# Literate extraction:  .lagda.md text -> one Agda line per source line
-# =============================================================================
-
-_FENCE_OPEN = re.compile(r"^```\s*(?:agda\b|\{[^}]*\.agda[^}]*\})\s*$")
-_FENCE_CLOSE = re.compile(r"^```\s*$")
-
-
-def _fence_step(inside: bool, line: str) -> bool:
-    """State transition for the code-fence scanner: are we inside a code block
-    *after* this line?  HTML comments are invisible to Agda, so blocks hidden
-    inside ``<!-- … -->`` are treated as code, exactly as Agda type-checks them."""
-    if inside:
-        return not bool(_FENCE_CLOSE.match(line))
-    return bool(_FENCE_OPEN.match(line))
-
-
-def extract_agda_lines(text: str) -> list[str]:
-    """Return one entry per source line: the line's Agda code, or ``''`` for
-    prose and fence lines.  Numbering is preserved so diagnostics point at the
-    real line in the ``.lagda.md`` file."""
-    lines = text.split("\n")
-    # inside_before[i] = were we inside a code block before processing line i?
-    inside_before = list(accumulate(lines, _fence_step, initial=False))[:-1]
-    return [
-        line if (inside and not _FENCE_CLOSE.match(line)) else ""
-        for inside, line in zip(inside_before, lines)
-    ]
-
-
-# =============================================================================
-# Lexer:  blank out comments and string literals, preserving layout
-# =============================================================================
-
-# Characters that may continue an operator token after ``--``; if the run of
-# dashes is followed by one of these, ``--`` is part of an operator, not a
-# comment (e.g. ``-->``).  Otherwise ``--`` starts a line comment.
-_SYMBOL_CHARS = frozenset("-!#$%&*+./<=>?@\\^|~:")
-
-
-def _line_comment_at(line: str, i: int) -> bool:
-    """Does a line comment start at position ``i``?  Mirrors Agda's rule: a
-    maximal run of ``-`` (length >= 2) followed by a non-symbol char or EOL."""
-    if line[i : i + 2] != "--":
-        return False
-    j = i
-    while j < len(line) and line[j] == "-":
-        j += 1
-    nxt = line[j] if j < len(line) else ""
-    return nxt == "" or nxt not in _SYMBOL_CHARS
-
-
-def scan_line(block_depth: int, line: str) -> tuple[int, str]:
-    """Blank comments and string literals in one line, threading the nesting
-    depth of ``{- … -}`` block comments across lines.  Replacement preserves
-    length so that column positions and later tokenisation are unaffected.
-
-    Note: ASCII ``'`` is a legal identifier character in Agda (primed names such
-    as ``cong'``), and character literals do not occur in this corpus, so ``'``
-    is left untouched rather than risk eating a name.  Pragmas ``{-# … #-}`` are
-    blanked along with ordinary block comments.
-    """
-    out: list[str] = []
-    depth = block_depth
-    in_string = False
-    i, n = 0, len(line)
-    while i < n:
-        two = line[i : i + 2]
-        c = line[i]
-        if depth > 0:                       # inside a block comment / pragma
-            if two == "{-":
-                depth += 1; out.append("  "); i += 2
-            elif two == "-}":
-                depth -= 1; out.append("  "); i += 2
-            else:
-                out.append(" "); i += 1
-        elif in_string:                     # inside a "..." literal
-            if c == "\\" and i + 1 < n:
-                out.append("  "); i += 2
-            elif c == '"':
-                in_string = False; out.append(" "); i += 1
-            else:
-                out.append(" "); i += 1
-        elif two == "{-":                   # block comment / pragma opens
-            depth += 1; out.append("  "); i += 2
-        elif _line_comment_at(line, i):     # line comment to EOL
-            out.append(" " * (n - i)); break
-        elif c == '"':                      # string opens
-            in_string = True; out.append(" "); i += 1
-        else:
-            out.append(c); i += 1
-    return depth, "".join(out)
-
-
-def clean_code_lines(agda_lines: list[str]) -> list[str]:
-    """Blank comments/strings across a whole file, line by line."""
-    depths = list(accumulate(agda_lines, lambda d, ln: scan_line(d, ln)[0], initial=0))
-    return [scan_line(d, ln)[1] for d, ln in zip(depths[:-1], agda_lines)]
-
-
-def file_code_lines(text: str) -> list[str]:
-    """Full front end: ``.lagda.md`` text -> comment-free Agda, line-numbered."""
-    return clean_code_lines(extract_agda_lines(text))
-
-
-# =============================================================================
 # Tokenisation and usage detection
 # =============================================================================
-
-# Token delimiters: whitespace and the characters Agda always treats as
-# separators.  Notably ``_`` , ``,`` and ``[ ]`` are NOT delimiters — they occur
-# inside ordinary names (``_,_``, ``[]``, ``if_then_else_``).
-_DELIM = re.compile(r"[\s(){};.@\"⦃⦄]+")
-# A "word": a module path, alias, or argument token (keeps dots, commas, etc.).
-_WORD = re.compile(r"[^\s(){};]+")
-
-
-def code_tokens(code: str) -> frozenset[str]:
-    """The set of name tokens appearing in a blob of code."""
-    return frozenset(t for t in _DELIM.split(code) if t)
-
-
-# A ``syntax`` declaration: ``syntax NAME <params> = <notation>``.  The notation
-# is arbitrary, so the only way to know what a syntax-backing name looks like at
-# its use sites is to read the declaration.
-_SYNTAX_DECL = re.compile(r"^\s*syntax\s+(\S+)\s+(.*?)\s*=\s*(\S.*)$")
-
-# What a syntax-backing name looks like in code: its declared notation's literal
-# tokens (the ones that are not argument placeholders).
-SyntaxNotations = Mapping[str, frozenset[str]]
-
-NO_NOTATIONS: SyntaxNotations = MappingProxyType({})
-
-
-def parse_syntax_decl(code_line: str) -> Optional[tuple[str, frozenset[str]]]:
-    """``syntax conj-syntax g x = x ^ g`` -> ``("conj-syntax", {"^"})``, and
-    ``syntax Σ-syntax A (λ x → B) = Σ[ x ∈ A ] B`` -> ``("Σ-syntax", {"Σ[", "∈", "]"})``.
-
-    The literal tokens are those of the notation that are not bound on the left of
-    the ``=``.  A declaration whose notation is all placeholders yields ``None``:
-    there would be nothing to look for.  A declaration whose notation mentions a
-    name that is *not* among its parameters yields an over-strict entry — such a
-    name is a literal token as far as Agda is concerned, and no use site can
-    contain it — which simply never matches; the ``Foo[`` fallback in
-    :func:`is_used` then applies, so the outcome is still correct.  (A `syntax`
-    declaration in that shape is usually a mistake in the declaration itself.)"""
-    m = _SYNTAX_DECL.match(code_line)
-    if m is None:
-        return None
-    name, params, notation = m.group(1), m.group(2), m.group(3)
-    bound = code_tokens(params)
-    literals = frozenset(t for t in code_tokens(notation) if t not in bound)
-    return (name, literals) if literals else None
-
-
-def harvest_syntax_notations(sources: Iterable[tuple[Path, str]]) -> dict[str, frozenset[str]]:
-    """Collect every ``syntax`` declaration in the scanned corpus.  Names are
-    global here rather than per-module: two modules declaring the same
-    syntax-backing name are rare, and on collision we keep the *intersection* of
-    the literal tokens, which can only make a name easier to count as used —
-    the safe direction for a gate that must not raise false alarms.
-
-    The same bare-name keying is a known limitation: when a corpus module and a
-    library outside the corpus both export ``Foo-syntax`` with *different*
-    notations, an import of the outside one is judged by the corpus notation, so
-    a redundant import of the twin can go unreported.  The failure direction is
-    again under-reporting, never a false alarm."""
-    found: dict[str, frozenset[str]] = {}
-    for _, text in sources:
-        for line in file_code_lines(text):
-            decl = parse_syntax_decl(line)
-            if decl is None:
-                continue
-            name, literals = decl
-            found[name] = found[name] & literals if name in found else literals
-    return {n: lits for n, lits in found.items() if lits}
-
-
-def name_parts(name: str) -> tuple[str, ...]:
-    """The non-empty parts of a (possibly mixfix) name: ``_∙_`` -> ``('∙',)``."""
-    return tuple(p for p in name.split("_") if p)
-
-
-def is_used(name: str, toks: frozenset[str], notations: SyntaxNotations = NO_NOTATIONS) -> bool:
-    """Is ``name`` used, given the set of tokens from a module's code?  A mixfix
-    name is used when its full form or any of its operator parts appears.
-
-    A name of the form ``Foo-syntax`` backs an Agda ``syntax`` declaration and so
-    never appears verbatim at its use site; what appears is the declared notation.
-    ``notations`` maps such a name to the literal tokens of its notation, harvested
-    from the corpus by :func:`harvest_syntax_notations`, and the name counts as used
-    when all of them appear.  Failing that, the common ``Foo[`` shape is recognised,
-    which covers standard-library names such as ``Σ-syntax`` whose declaration is
-    outside the corpus."""
-    if name in toks:
-        return True
-    if name.endswith("-syntax"):
-        literals = notations.get(name)
-        if literals is not None and literals <= toks:
-            return True
-        if (name[: -len("-syntax")] + "[") in toks:
-            return True
-    # Operator sections keep one hole glued to the name: `_⊨ˢᵍ_` used as
-    # `(_⊨ˢᵍ Th)` tokenises to `_⊨ˢᵍ`, and `(x ∙_)` to `∙_`.
-    if {name.lstrip("_"), name.rstrip("_")} & toks:
-        return True
-    parts = name_parts(name)
-    if "_" in name and parts != (name,):
-        return any(p in toks for p in parts)
-    return False
-
 
 def dotted_prefixes(path: str) -> frozenset[str]:
     """Every dotted prefix of a module path: ``A.B.C`` -> {A, A.B, A.B.C}.  These
@@ -434,6 +247,10 @@ def dotted_prefixes(path: str) -> frozenset[str]:
 # =============================================================================
 # Statement collection:  group physical lines into logical statements
 # =============================================================================
+
+# A "word": a module path, alias, or argument token (keeps dots, commas, etc.).
+# Used only for taking import statements apart, hence not in _utils.agda_names.
+_WORD = re.compile(r"[^\s(){};]+")
 
 _IMPORT_START = re.compile(r"\s*(?:open\s+import|import|open)\b")
 _CLAUSE_CONT = re.compile(r"\s*(?:using|renaming|hiding|public|as)\b")
@@ -941,25 +758,6 @@ def summary_tables(reports: list[FileReport], top: int) -> list[str]:
 # =============================================================================
 # Driver
 # =============================================================================
-
-def expand_target(p: Path, include_legacy: bool) -> list[Path]:
-    """A path argument -> the ``.lagda.md`` files it denotes.  Explicitly named
-    files are always honoured; directory walks skip frozen ``Legacy/`` unless
-    asked to include it."""
-    if p.is_file():
-        return [p]
-    if p.is_dir():
-        return [
-            q
-            for q in sorted(p.rglob("*.lagda.md"))
-            if include_legacy or "/Legacy/" not in q.as_posix()
-        ]
-    return []
-
-
-def gather_files(paths: list[Path], include_legacy: bool) -> list[Path]:
-    return sorted({f for p in paths for f in expand_target(p, include_legacy)})
-
 
 def read_all(files: list[Path]) -> tuple[list[tuple[Path, str]], list[tuple[Path, PipelineError]]]:
     """IO boundary: read every file (in the Result monad), splitting the successes

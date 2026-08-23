@@ -41,7 +41,7 @@
 #      where a path segment happens to contain the substring `agda`.
 # =============================================================================
 
-.PHONY: default all check check-certificates check-all test clean site serve serve-full html agda-md site-full profile project-plan unused-imports unused-imports-test check-links check-links-test gen-links flrp-test flrp-slr gap-smoke Everything.agda EverythingLegacy.agda EverythingCertificates.agda
+.PHONY: default all check check-certificates check-all test clean site serve serve-full html agda-md site-full profile project-plan unused-imports unused-imports-test check-links check-links-test gen-links docstrings docstrings-test docstrings-list docstrings-unused docstrings-json flrp-test flrp-slr gap-smoke Everything.agda EverythingLegacy.agda EverythingCertificates.agda
 
 # -- Configuration -----------------------------------------------------------
 SRCDIR    := src
@@ -49,6 +49,15 @@ AGDA      ?= agda
 RTS_OPTS  := +RTS -M6G -A128M -RTS
 AGDA_OPTS ?=
 REPO      ?= ualib/agda-algebras
+
+# The docstring-coverage ratchet (issue #268).  `make docstrings` fails only
+# when the number of public definitions lacking a prose block exceeds this
+# ceiling, so the backlog can only shrink while the per-subtree prose PRs land.
+# Lower it whenever a PR clears definitions; never raise it.
+DOCSTRING_MAX_GAPS ?= 201
+# The other half of the bar ADR-010 states: modules whose header is only the
+# boilerplate sentence.  Ratcheted the same way; never raise it.
+DOCSTRING_MAX_WEAK_HEADERS ?= 50
 
 # The certificate census: generated representation certificates for the FLRP
 # research track (issue #515).  Excluded from Everything.agda and checked by
@@ -296,6 +305,43 @@ check-links-test:
 gen-links:
 	@echo "target: $@"
 	python3 scripts/python/gen_links.py
+
+# Audit the prose block attached to every public definition (STYLE_GUIDE
+# § "Every public definition has a prose comment block", issue #268, ADR-010).
+# A grep cannot do this: the corpus documents definitions in Markdown *outside*
+# the ```agda fences, so the check has to parse literate structure and Agda's
+# layout rule.  The report's last two columns are advisory rather than gated --
+# `named` is the share of definitions their own prose mentions by name, `used`
+# the share referenced anywhere in the live trees (which is where documentation
+# effort pays off, not a dead-code measure: a terminal theorem is correctly
+# unreferenced).
+#   docstrings         the CI gate; holds both halves of the bar ADR-010 states,
+#                      at DOCSTRING_MAX_GAPS and DOCSTRING_MAX_WEAK_HEADERS
+#   docstrings-list    name every definition missing a prose block
+#   docstrings-unused  name every definition nothing references
+#   docstrings-json    harvest (qname, prose, used) records for the training
+#                      corpus (issue #275)
+#   docstrings-test    the analyzer's own test suite
+docstrings:
+	@echo "target: $@"
+	python3 scripts/python/docstring_audit.py --modules --max-gaps $(DOCSTRING_MAX_GAPS) \
+	  --max-weak-headers $(DOCSTRING_MAX_WEAK_HEADERS) $(SRCDIR)
+
+docstrings-list:
+	@echo "target: $@"
+	python3 scripts/python/docstring_audit.py --list --exit-zero $(SRCDIR)
+
+docstrings-unused:
+	@echo "target: $@"
+	python3 scripts/python/docstring_audit.py --unused --exit-zero $(SRCDIR)
+
+docstrings-json:
+	@echo "target: $@"
+	python3 scripts/python/docstring_audit.py --json $(SRCDIR)
+
+docstrings-test:
+	@echo "target: $@"
+	python3 scripts/python/test_docstring_audit.py
 
 # Test the FLRP certificate emitter (scripts/python/flrp/): engine unit tests, a
 # Python mirror of the Agda checker's obligations as a regression tripwire,

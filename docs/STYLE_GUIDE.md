@@ -580,7 +580,7 @@ proof = begin
 
 ### Every public definition has a prose comment block
 
-This is non-negotiable for public API.  A public definition — anything re-exported from a barrel module, anything documented in the user-facing literate-Agda files — has a prose comment block immediately above it.  In a literate `.lagda.md` module that prose is Markdown preceding the code fence (not `-- |` comments inside it); e.g.,
+This is non-negotiable for public API.  A public definition — anything re-exported from a barrel module, anything documented in the user-facing literate-Agda files — is introduced by a prose comment block.  In a literate `.lagda.md` module that prose is Markdown preceding the code fence (not `-- |` comments inside it); e.g.,
 
 `hom 𝑨 𝑩` is the type of homomorphisms from `𝑨` to `𝑩`.  A homomorphism is a setoid function on carriers that respects every operation of the signature: for every operation symbol `𝑓`, the map commutes with `𝑓 ^ 𝑨` and `𝑓 ^ 𝑩`.  See also `IsHom` for the predicate form, `∘-hom` for composition, and `Setoid.Homomorphisms.Isomorphisms` for the isomorphism variant.
 
@@ -588,6 +588,10 @@ This is non-negotiable for public API.  A public definition — anything re-expo
 hom : (𝑨 : Algebra α ρᵃ) (𝑩 : Algebra β ρᵇ) → Type _
 hom 𝑨 𝑩 = Σ (Domain 𝑨 ⟶ Domain 𝑩) (IsHom 𝑨 𝑩)
 ```
+
+The unit the rule attaches to is the **code fence**, not the individual definition: every fence is preceded by a real paragraph, and a fence may introduce a family of related definitions under one block.  One definition per fence is *not* required, and is deliberately not the repository-wide rule — see [ADR-010](adr/010-documentation-coverage-policy.md), which weighs it and rejects it, because that reading enforces layout rather than content and fragments pages that are meant to read as an exposition.  Where a block does cover several definitions it should mention each of them by name, so that a reader — and the corpus extractor of the training set — can tell which sentence belongs to which definition.
+
+`make docstrings` enforces this, and holds the count of undocumented definitions and boilerplate-only module headers at a ceiling that only ever falls.
 
 ### What a good comment block contains
 
