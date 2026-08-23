@@ -130,6 +130,20 @@ module _ {𝑆 : Signature 𝓞 𝓥}{α}{ρᵃ}{ι}{I : Type ι} where
 
 ##### Derivations in a context
 
+`E ⊢ Γ ▹ p ≈ q`{.AgdaDatatype} is the **derivability** relation of equational
+logic: the equation `p ≈ q`, between terms over the context `Γ`, is derivable from
+the set of equations `E`.  Its constructors *are* the rules of the logic, and
+there are only six of them: `hyp`{.AgdaInductiveConstructor} invokes an equation
+of `E`; `app`{.AgdaInductiveConstructor} is congruence, deriving equality of two
+applications of an operation symbol from equality of their arguments;
+`sub`{.AgdaInductiveConstructor} substitutes into a derivation; and
+`refl`{.AgdaInductiveConstructor}, `sym`{.AgdaInductiveConstructor} and
+`trans`{.AgdaInductiveConstructor} are the equivalence-relation rules.
+
+`⊢▹≈IsEquiv`{.AgdaFunction} packages that last group as an
+`IsEquivalence`{.AgdaRecord} for derivability in a fixed context, which is what
+allows derivations to be chained in equational-reasoning style.
+
 ```agda
 module _ {𝑆 : Signature 𝓞 𝓥}{χ ι : Level} where
 
@@ -147,6 +161,18 @@ module _ {𝑆 : Signature 𝓞 𝓥}{χ ι : Level} where
 ```
 
 ##### Soundness of the inference rules
+
+**Soundness** is the half of the correspondence that says whatever is derivable is
+true: in any algebra `𝑨` that models every equation of `E`, a derivation of
+`p ≈ q` yields a proof that `𝑨` satisfies `p ≈ q`.
+
+`sound`{.AgdaFunction} is the induction over derivations that establishes it, with
+one case per rule.  A hypothesis is discharged by the assumption `V` that
+`𝑨 ⊨ E`; congruence by `cong`{.AgdaField} of the interpretation; substitution by
+the `substitution`{.AgdaFunction} lemma of [Setoid.Terms.Basic][], which relates a
+substituted term to the same term under a reinterpreted environment; and the last
+three rules by the corresponding properties of `𝑨`'s own equality.  The converse,
+completeness, is proved further down this module.
 
 ```agda
 module Soundness

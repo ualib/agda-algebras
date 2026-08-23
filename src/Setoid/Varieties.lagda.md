@@ -9,6 +9,33 @@ author: "agda-algebras development team"
 
 This is the [Setoid.Varieties][] module of the [Agda Universal Algebra Library][].
 
+A **variety** is a class of `𝑆`-algebras closed under homomorphic images,
+subalgebras and arbitrary products.  Writing `H`, `S` and `P` for those three
+closure operators and `V` for the composite `H ∘ S ∘ P`, a class `𝒦` is a variety
+exactly when `V 𝒦 ⊆ 𝒦`.  Birkhoff's HSP theorem identifies the varieties with the
+*equationally definable* classes, and proving it constructively is what this
+subtree exists for.
+
+This is a barrel module: it declares nothing of its own and re-exports the
+following:
+
++  [Setoid.Varieties.Closure][]: the operators `H`, `S`, `P` and `V` themselves;
++  [Setoid.Varieties.EquationalLogic][] and [Setoid.Varieties.Interpretation][]:
+   equations, the satisfaction relation, and `Mod`{.AgdaFunction} and
+   `Th`{.AgdaFunction};
++  [Setoid.Varieties.SoundAndComplete][]: the derivation rules of equational
+   logic, with soundness and Birkhoff's completeness theorem;
++  [Setoid.Varieties.Preservation][] and [Setoid.Varieties.Invariance][]: that
+   each closure operator preserves identities, and that satisfaction is invariant
+   under the algebraic constructions;
++  [Setoid.Varieties.FreeAlgebras][] and [Setoid.Varieties.FreeSubstitution][]:
+   the relatively free algebra of a class;
++  [Setoid.Varieties.HSP][]: Birkhoff's variety theorem;
++  [Setoid.Varieties.Maltsev][]: Maltsev conditions, the equational
+   characterisations of congruence-lattice properties;
++  [Setoid.Varieties.Invariants][], [Setoid.Varieties.Properties][] and
+   [Setoid.Varieties.Reducts][]: the remaining supporting results.
+
 
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}

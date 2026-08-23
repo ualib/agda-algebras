@@ -9,6 +9,22 @@ author: "agda-algebras development team"
 
 This is the [Setoid.Terms.Properties][] module of the [Agda Universal Algebra Library][].
 
+This module proves that the term algebra is **free**.  Given an algebra `𝑨` and an
+arbitrary map `h : X → 𝕌[ 𝑨 ]` sending variables to elements,
+`free-lift`{.AgdaFunction} extends `h` to all of `𝑻 X` by structural recursion,
+`free-lift-func`{.AgdaFunction} shows the extension respects term equality, and
+`lift-hom`{.AgdaFunction} shows it is a homomorphism.  `free-unique`{.AgdaFunction}
+supplies the other half of the universal property: two homomorphisms out of
+`𝑻 X` that agree on the variables agree everywhere.
+
+Existence and uniqueness together are what let a term identity be checked one
+variable assignment at a time, and they are used at every step of the HSP
+development, where `𝑻 X`{.AgdaFunction} is mapped into each algebra of a class in
+turn.  `lift-of-epi-is-epi`{.AgdaFunction} records that surjectivity of the
+variable assignment survives the lift, which is how epimorphisms out of the term
+algebra are obtained.
+
+
 
 <!--
 ```agda

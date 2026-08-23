@@ -83,6 +83,17 @@ module _ {𝑆 : Signature 𝓞 𝓥}{X : Type χ} where
 
 #### Interpretation of terms in product algebras
 
+`interp-prod`{.AgdaFunction} says that interpreting a term in a product is the
+same as interpreting it in each factor and collecting the results: for every term
+`p` and every environment `ρ`, the value of `p` in `⨅ 𝒜` under `ρ` agrees, at each
+coordinate `i`, with the value of `p` in `𝒜 i` under the `i`-th component of `ρ`.
+
+This is the term-level counterpart of the way `⨅`{.AgdaFunction} of
+[Setoid.Algebras.Products][] interprets operation *symbols* in the first place,
+and the proof is the induction that says so: the variable case is reflexivity, and
+the operation case pushes the induction hypothesis through the product's
+`Interp`{.AgdaField}.
+
 ```agda
 module _ {X : Type χ }{I : Type ι}(𝒜 : I → Algebra {𝑆 = 𝑆} α ρᵃ) where
   open Algebra (⨅ 𝒜)      using (Interp)  renaming ( Domain to ⨅A )

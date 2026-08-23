@@ -9,6 +9,24 @@ author: "agda-algebras development team"
 
 This is the [Setoid.Congruences.Basic][] module of the [Agda Universal Algebra Library][].
 
+A **congruence** of `𝑨` is a binary relation on the carrier of `𝑨` that is an
+equivalence relation, contains the setoid equality of `𝑨`, and is *compatible*
+with the basic operations: applying an operation to argument tuples that are
+related coordinatewise gives related results.  The compatibility half is
+`_∣≈_`{.AgdaFunction}; `IsCongruence`{.AgdaRecord} adds the other two conditions,
+and `Con`{.AgdaFunction} is the bundled Σ-form that the rest of the library passes
+around, with `IsCongruence→Con`{.AgdaFunction} and
+`Con→IsCongruence`{.AgdaFunction} converting between them.
+
+The reason to require containment of the setoid equality is that a congruence has
+to be a relation on the *setoid*, not merely on its carrier: a quotient by a
+relation that split an equality class would not be well defined.  With that in
+hand `_╱_`{.AgdaFunction} forms the quotient algebra, which is the same carrier
+under the coarser equivalence, needing neither a quotient type nor
+extensionality.  Kernels of homomorphisms are the primary source of congruences;
+see [Setoid.Homomorphisms.Kernels][].
+
+
 <!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}

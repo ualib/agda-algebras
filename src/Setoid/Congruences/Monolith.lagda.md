@@ -192,6 +192,14 @@ meet were below the diagonal, so would `μ` be, contradicting `Nonzero μ`.
     μ⊆Δ p = ⋂θ⊆Δ (μ⊆⋂ p)
 ```
 
+The binary case of the same argument.  If `𝑨` has a monolith and both `θ` and `φ`
+are nonzero, then each of them contains the monolith, hence so does their meet,
+which is therefore nonzero as well.  `monolith⇒∧-irreducible`{.AgdaFunction}
+states exactly that: in the congruence lattice of a monolithic algebra the
+diagonal is meet-irreducible.  That is the fact adjacent to direct
+indecomposability, since a monolithic algebra admits no two nonzero congruences
+whose meet is the diagonal.
+
 ```agda
   -- The binary instance: the meet of two nonzero congruences is nonzero, i.e. `0ᴬ`
   -- is meet-irreducible.  This is the "directly-indecomposable-adjacent" fact: a

@@ -64,6 +64,14 @@ module _ (𝐂 : Category o ℓ e) where
 
 #### Restricting a functor to a full subcategory
 
+`FullSubcategoryF`{.AgdaFunction} restricts a functor along the full-subcategory
+construction.  Given `F : Functor 𝐂 𝐃` and predicates `P` on the objects of `𝐂`
+and `Q` on the objects of `𝐃`, the only new data required is a *transfer* proof
+that `F` sends `P`-objects to `Q`-objects.  On objects the restricted functor
+pairs `F₀`{.AgdaField} with that proof; on morphisms, on morphism equalities, and
+on the identity and composition laws it is literally `F`, because a full
+subcategory has exactly the morphisms of its ambient category.
+
 ```agda
 open Category using (Obj)
 module _

@@ -66,6 +66,19 @@ _≋_ {𝑨 = 𝑨} {𝑩} f g = ∀ (x : 𝕌[ 𝑨 ]) → Setoid._≈_ 𝔻[ �
 
 #### The category
 
+`Alg α ρ`{.AgdaFunction} is the **category of `𝑆`-algebras** at a fixed pair of
+levels: objects are algebras, morphisms are homomorphisms, and two morphisms are
+identified when they agree pointwise up to the codomain's equality, which is the
+`_≋_`{.AgdaFunction} defined above.
+
+Everything the `Category`{.AgdaRecord} record asks for is already to hand.  The
+identity is `𝒾𝒹`{.AgdaFunction} and composition is `⊙-hom`{.AgdaFunction} with its
+arguments flipped, since `⊙-hom`{.AgdaFunction} takes them in diagrammatic order
+while a category's `_∘_` does not.  Associativity and both unit laws hold on the
+nose under `_≋_`{.AgdaFunction}, so each is discharged by reflexivity of the
+codomain's equality; only `∘-resp-≈`{.AgdaField} needs an argument, and that
+argument is congruence of the underlying setoid functions.
+
 ```agda
 Alg : {𝑆 : Signature 𝓞 𝓥}(α ρ : Level) → Category (𝓞 ⊔ 𝓥 ⊔ lsuc (α ⊔ ρ)) (𝓞 ⊔ 𝓥 ⊔ α ⊔ ρ) (α ⊔ ρ)
 Alg {𝑆 = 𝑆} α ρ = record
