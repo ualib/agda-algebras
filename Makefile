@@ -315,7 +315,8 @@ gen-links:
 # the share referenced anywhere in the live trees (which is where documentation
 # effort pays off, not a dead-code measure: a terminal theorem is correctly
 # unreferenced).
-#   docstrings         the CI gate; holds the line at DOCSTRING_MAX_GAPS
+#   docstrings         the CI gate; holds both halves of the bar ADR-010 states,
+#                      at DOCSTRING_MAX_GAPS and DOCSTRING_MAX_WEAK_HEADERS
 #   docstrings-list    name every definition missing a prose block
 #   docstrings-unused  name every definition nothing references
 #   docstrings-json    harvest (qname, prose, used) records for the training

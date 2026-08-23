@@ -41,7 +41,7 @@ Usage::
     python3 scripts/python/docstring_audit.py                  # audit src/
     python3 scripts/python/docstring_audit.py src/Setoid       # one subtree
     python3 scripts/python/docstring_audit.py --list           # name every gap
-    python3 scripts/python/docstring_audit.py --strict         # fail on `grouped` too
+    python3 scripts/python/docstring_audit.py --strict         # diagnostic: one def per fence
     python3 scripts/python/docstring_audit.py --json src       # harvest for #275
     python3 scripts/python/docstring_audit.py --modules        # per-module prose audit
 """
@@ -105,11 +105,11 @@ class Prose(Enum):
 class Status(Enum):
     """A definition's documentation status.
 
-    ``DOCUMENTED`` is the style guide's bar met exactly: the definition opens a
-    fence and a real paragraph sits immediately above that fence.  ``GROUPED``
-    is the common near-miss — a documented fence holding several definitions,
-    where the block plausibly covers them all but does not sit "immediately
-    above" each.  The remaining three are unambiguous gaps.
+    ``DOCUMENTED`` is a definition that opens a fence carrying a real paragraph.
+    ``GROUPED`` is a definition sharing such a fence with an earlier one: the
+    block covers it, and under the bar ADR-010 adopts that is *acceptable*, not a
+    gap — a fence may introduce a family of related definitions under one block.
+    The remaining three are the gaps.
     """
 
     DOCUMENTED = "documented"
@@ -119,12 +119,14 @@ class Status(Enum):
     UNDOCUMENTED = "undocumented"
 
 
-#: Statuses that fail the acceptance criterion under the default (lenient)
-#: reading: the definition's fence carries no real prose at all.
+#: Statuses that fail the bar: the definition's fence carries no real prose at
+#: all.  This is *the* bar, per ADR-010 — the enforced one and the default.
 GAP_STATUSES = frozenset({Status.HEADING_ONLY, Status.BOILERPLATE, Status.UNDOCUMENTED})
 
-#: Additionally failing under ``--strict``: the style guide's literal
-#: "immediately above" wording, which a shared block does not satisfy.
+#: Additionally counted under ``--strict``: one definition per fence, which a
+#: shared block does not satisfy.  ADR-010 rejects this as the repository-wide
+#: bar — it enforces layout rather than content — so ``--strict`` is a
+#: diagnostic for sizing, never the gate.
 STRICT_GAP_STATUSES = GAP_STATUSES | {Status.GROUPED}
 
 
@@ -1020,8 +1022,11 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--modules", action="store_true",
                         help="list modules whose own header prose is missing or boilerplate")
     parser.add_argument("--strict", action="store_true",
-                        help="also count `grouped` definitions as gaps (the style "
-                             "guide's literal 'immediately above' reading)")
+                        help="diagnostic: also count `grouped` definitions as gaps, "
+                             "i.e. require one definition per fence.  ADR-010 "
+                             "considered and rejected that as the repository-wide "
+                             "bar; this shows what it would cost, and is never the "
+                             "gate")
     parser.add_argument("--json", action="store_true",
                         help="emit one harvest record per definition (issue #275)")
     parser.add_argument("--max-gaps", type=int, default=None, metavar="N",

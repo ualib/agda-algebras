@@ -146,7 +146,9 @@ make docstrings          # the ratcheted gate
 make docstrings-list     # every gap, by file and line
 ```
 
-Across the live trees there are **3226 public definitions in 307 modules**.  Under the lenient reading — the definition's fence carries no real prose at all — **201** are undocumented.  Under the style guide's literal "immediately above" reading (`--strict`, which also counts a definition sharing a documented fence with an earlier one) the figure is 1952.  By subtree, lenient: `Classical` 102, `Setoid` 65, `Examples` 30, `Overture` 3, `FLRP` 1, `Order` 0, `Exercises` 0.
+Across the live trees there are **3226 public definitions in 307 modules**, of which **201** sit under a fence carrying no real prose.  That is the bar [ADR-010](../adr/010-documentation-coverage-policy.md) adopts and `make docstrings` enforces.  By subtree: `Classical` 102, `Setoid` 65, `Examples` 30, `Overture` 3, `FLRP` 1, `Order` 0, `Exercises` 0.
+
+For comparison only, the one-definition-per-fence reading (`--strict`, which also counts a definition sharing a documented fence with an earlier one) would put the figure at 1952.  ADR-010 weighs and rejects that reading, so this number sizes a road not taken; it is not a backlog.
 
 Two side-findings from the same traversal.  **49 declarations sit inside hidden `<!-- ```agda … ``` -->` preamble fences**, so Agda exports them but no rendered page shows them: `Classical.Equations` (`app₀`, `app₁`, `app₂`), `Classical.Structures.Lattice.Parachute` (15 lemma abbreviations), and the `FLRP` `SLR*` certificates (31 `pattern` declarations).  And the parser reports **zero** items it cannot classify across all 307 modules, so the counts above have no known blind spot.
 

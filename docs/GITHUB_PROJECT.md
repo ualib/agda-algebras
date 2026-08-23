@@ -2255,13 +2255,13 @@ Done: #537 (the audit tool, the baseline, the CI ratchet) · #538 (exemplar: `Se
 
 The original criterion said a "`grep`-based audit".  A grep cannot do this — the corpus has no `-- |` docstrings, prose lives in Markdown outside the fences, and almost every definition is indented inside an anonymous `module _ … where`.  `scripts/python/docstring_audit.py` parses literate structure and Agda's layout rule instead; it is validated against Agda's own scope checker.
 
-## Open decision: which bar
+## The bar (decided)
 
-+  **Lenient** (the ratchet's measure, and the recommendation): every fence carries a real paragraph.  201 to clear.
-+  **Strict** (`--strict`): the style guide's literal "immediately above" — one definition per fence.  1952 to clear, and it fragments indented module bodies, which works against reading the library as a narrative.
-+  **Named coverage** (a third measure, proposed): every public definition is *mentioned by name* in the prose attached to its fence.  Currently 19% repo-wide; #538 hits 11/13 without having aimed at it, because prose that describes a definition tends to name it.
+Settled in [ADR-010](https://github.com/ualib/agda-algebras/blob/master/docs/adr/010-documentation-coverage-policy.md), and reflected in `docs/STYLE_GUIDE.md`:
 
-Recommendation: gate on lenient, track named coverage as the quality target, reject strict.  Rationale is that strict enforces *layout* rather than content — 1952 paragraphs each restating a type signature would satisfy it — whereas named coverage is what makes per-definition prose extractable for #275 while leaving the page readable as prose.
++  **The bar is per code fence.**  Every fence is preceded by a real paragraph, and every module opens with prose beyond the boilerplate sentence.  201 definitions and 50 module headers to clear; `make docstrings` enforces both, ratcheted.
++  **One definition per fence is rejected** as a repository-wide rule.  It would enforce layout rather than content — 1952 paragraphs each restating a type signature would satisfy it — and it fragments pages that are meant to read as an exposition of universal algebra.  `--strict` stays in the tool as a diagnostic for sizing, never as a gate.
++  **A block covering several definitions should name each of them**, so a reader, and the corpus extractor of #275, can tell which sentence belongs to which definition.  Reported as the `named` column (19% today); tracked, deliberately not gated.
 
 ## Conventions for a docstring PR
 
@@ -2295,7 +2295,6 @@ The heart of the Setoid tree and the first thing a new reader meets.  `Setoid.Al
 | public definitions | 116 |
 | **definitions with no prose on their fence** | **25** |
 | modules with a boilerplate-only or heading-only header | 10 |
-| (reference) definitions failing the strict reading | 73 |
 
 Sized for one PR.
 
@@ -2309,7 +2308,7 @@ Sized for one PR.
 
 **Conventions, tooling, grounding discipline and the verification checklist are in #268** — read that first; they are not repeated here.  Exemplar: #538.
 
-> Counts assume the lenient bar (every fence carries real prose), the recommendation on #268.  If the strict bar is adopted instead, this issue grows from 25 to 73 and should be re-split.
+> The bar is per code fence, settled in ADR-010: every fence carries a real paragraph, and every module opens with more than the boilerplate sentence.  One definition per fence was considered and **rejected**, so the `--strict` figure for this subtree (73) sizes a road not taken and is not a backlog.
 
 ---
 
@@ -2333,7 +2332,6 @@ Self-contained and gap-dense: subuniverses, generation, subdirect products.  A g
 | public definitions | 144 |
 | **definitions with no prose on their fence** | **23** |
 | modules with a boilerplate-only or heading-only header | 5 |
-| (reference) definitions failing the strict reading | 99 |
 
 Sized for one PR.
 
@@ -2347,7 +2345,7 @@ Sized for one PR.
 
 **Conventions, tooling, grounding discipline and the verification checklist are in #268** — read that first; they are not repeated here.  Exemplar: #538.
 
-> Counts assume the lenient bar (every fence carries real prose), the recommendation on #268.  If the strict bar is adopted instead, this issue grows from 23 to 99 and should be re-split.
+> The bar is per code fence, settled in ADR-010: every fence carries a real paragraph, and every module opens with more than the boilerplate sentence.  One definition per fence was considered and **rejected**, so the `--strict` figure for this subtree (99) sizes a road not taken and is not a backlog.
 
 ---
 
@@ -2371,7 +2369,6 @@ Few gaps for their size, because the HSP-adjacent modules already carry good pro
 | public definitions | 632 |
 | **definitions with no prose on their fence** | **11** |
 | modules with a boilerplate-only or heading-only header | 9 |
-| (reference) definitions failing the strict reading | 370 |
 
 Sized for one PR.
 
@@ -2385,7 +2382,7 @@ Sized for one PR.
 
 **Conventions, tooling, grounding discipline and the verification checklist are in #268** — read that first; they are not repeated here.  Exemplar: #538.
 
-> Counts assume the lenient bar (every fence carries real prose), the recommendation on #268.  If the strict bar is adopted instead, this issue grows from 11 to 370 and should be re-split.
+> The bar is per code fence, settled in ADR-010: every fence carries a real paragraph, and every module opens with more than the boilerplate sentence.  One definition per fence was considered and **rejected**, so the `--strict` figure for this subtree (370) sizes a road not taken and is not a backlog.
 
 ---
 
@@ -2409,7 +2406,6 @@ Small, and mostly header work.  The barrel modules hold no definitions but sever
 | public definitions | 104 |
 | **definitions with no prose on their fence** | **6** |
 | modules with a boilerplate-only or heading-only header | 5 |
-| (reference) definitions failing the strict reading | 66 |
 
 Sized for one PR.
 
@@ -2423,7 +2419,7 @@ Sized for one PR.
 
 **Conventions, tooling, grounding discipline and the verification checklist are in #268** — read that first; they are not repeated here.  Exemplar: #538.
 
-> Counts assume the lenient bar (every fence carries real prose), the recommendation on #268.  If the strict bar is adopted instead, this issue grows from 6 to 66 and should be re-split.
+> The bar is per code fence, settled in ADR-010: every fence carries a real paragraph, and every module opens with more than the boilerplate sentence.  One definition per fence was considered and **rejected**, so the `--strict` figure for this subtree (66) sizes a road not taken and is not a backlog.
 
 ---
 
@@ -2447,7 +2443,6 @@ The quintuple pattern (ADR-002) makes these highly repetitive, so one well-writt
 | public definitions | 336 |
 | **definitions with no prose on their fence** | **34** |
 | modules with a boilerplate-only or heading-only header | 1 |
-| (reference) definitions failing the strict reading | 240 |
 
 Sized for one or two PRs; split by directory if the diff runs long.
 
@@ -2461,7 +2456,7 @@ Sized for one or two PRs; split by directory if the diff runs long.
 
 **Conventions, tooling, grounding discipline and the verification checklist are in #268** — read that first; they are not repeated here.  Exemplar: #538.
 
-> Counts assume the lenient bar (every fence carries real prose), the recommendation on #268.  If the strict bar is adopted instead, this issue grows from 34 to 240 and should be re-split.
+> The bar is per code fence, settled in ADR-010: every fence carries a real paragraph, and every module opens with more than the boilerplate sentence.  One definition per fence was considered and **rejected**, so the `--strict` figure for this subtree (240) sizes a road not taken and is not a backlog.
 
 ---
 
@@ -2485,7 +2480,6 @@ Split from the rest of `Classical/Structures` purely on size.  The group-theoret
 | public definitions | 310 |
 | **definitions with no prose on their fence** | **31** |
 | modules with a boilerplate-only or heading-only header | 1 |
-| (reference) definitions failing the strict reading | 202 |
 
 Sized for one or two PRs; split by directory if the diff runs long.
 
@@ -2499,7 +2493,7 @@ Sized for one or two PRs; split by directory if the diff runs long.
 
 **Conventions, tooling, grounding discipline and the verification checklist are in #268** — read that first; they are not repeated here.  Exemplar: #538.
 
-> Counts assume the lenient bar (every fence carries real prose), the recommendation on #268.  If the strict bar is adopted instead, this issue grows from 31 to 202 and should be re-split.
+> The bar is per code fence, settled in ADR-010: every fence carries a real paragraph, and every module opens with more than the boilerplate sentence.  One definition per fence was considered and **rejected**, so the `--strict` figure for this subtree (202) sizes a road not taken and is not a backlog.
 
 ---
 
@@ -2523,7 +2517,6 @@ Gap-dense but shallow.  Each bundle module is a stdlib-interop view and wants a 
 | public definitions | 242 |
 | **definitions with no prose on their fence** | **37** |
 | modules with a boilerplate-only or heading-only header | 1 |
-| (reference) definitions failing the strict reading | 154 |
 
 Sized for one or two PRs; split by directory if the diff runs long.
 
@@ -2537,7 +2530,7 @@ Sized for one or two PRs; split by directory if the diff runs long.
 
 **Conventions, tooling, grounding discipline and the verification checklist are in #268** — read that first; they are not repeated here.  Exemplar: #538.
 
-> Counts assume the lenient bar (every fence carries real prose), the recommendation on #268.  If the strict bar is adopted instead, this issue grows from 37 to 154 and should be re-split.
+> The bar is per code fence, settled in ADR-010: every fence carries a real paragraph, and every module opens with more than the boilerplate sentence.  One definition per fence was considered and **rejected**, so the `--strict` figure for this subtree (154) sizes a road not taken and is not a backlog.
 
 ---
 
@@ -2561,7 +2554,6 @@ Demonstration modules.  Prose should say what the example demonstrates and which
 | public definitions | 442 |
 | **definitions with no prose on their fence** | **30** |
 | modules with a boilerplate-only or heading-only header | 8 |
-| (reference) definitions failing the strict reading | 272 |
 
 Sized for one or two PRs; split by directory if the diff runs long.
 
@@ -2575,7 +2567,7 @@ Sized for one or two PRs; split by directory if the diff runs long.
 
 **Conventions, tooling, grounding discipline and the verification checklist are in #268** — read that first; they are not repeated here.  Exemplar: #538.
 
-> Counts assume the lenient bar (every fence carries real prose), the recommendation on #268.  If the strict bar is adopted instead, this issue grows from 30 to 272 and should be re-split.
+> The bar is per code fence, settled in ADR-010: every fence carries a real paragraph, and every module opens with more than the boilerplate sentence.  One definition per fence was considered and **rejected**, so the `--strict` figure for this subtree (272) sizes a road not taken and is not a backlog.
 
 ---
 
@@ -2599,7 +2591,6 @@ Only 4 gaps but 10 weak headers, so almost entirely module-header work.  **`FLRP
 | public definitions | 900 |
 | **definitions with no prose on their fence** | **4** |
 | modules with a boilerplate-only or heading-only header | 10 |
-| (reference) definitions failing the strict reading | 476 |
 
 Sized for one PR.
 
@@ -2613,7 +2604,7 @@ Sized for one PR.
 
 **Conventions, tooling, grounding discipline and the verification checklist are in #268** — read that first; they are not repeated here.  Exemplar: #538.
 
-> Counts assume the lenient bar (every fence carries real prose), the recommendation on #268.  If the strict bar is adopted instead, this issue grows from 4 to 476 and should be re-split.
+> The bar is per code fence, settled in ADR-010: every fence carries a real paragraph, and every module opens with more than the boilerplate sentence.  One definition per fence was considered and **rejected**, so the `--strict` figure for this subtree (476) sizes a road not taken and is not a backlog.
 
 ---
 
