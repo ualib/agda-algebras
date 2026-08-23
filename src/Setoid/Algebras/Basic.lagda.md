@@ -61,7 +61,7 @@ private variable α ρ ι : Level
 ```
 -->
 
-ov`{.AgdaFunction} abbreviates the recurring level join `ov α = 𝓞 ⊔ 𝓥 ⊔ lsuc α`;
+`ov`{.AgdaFunction} abbreviates the recurring level join `ov α = 𝓞 ⊔ 𝓥 ⊔ lsuc α`;
 it combines the levels of operation symbols and arities with the successor of a
 caller-supplied level.  Abbreviating this join keeps many common level expressions
 readable.
