@@ -575,13 +575,46 @@ def test_hidden_declarations_appear_in_the_harvest() -> None:
 
 def test_blocked_measurements_fail_regardless_of_the_ratchet() -> None:
     args = da.build_parser().parse_args(["--max-gaps", "999"])
-    assert da._exit_code(args, gaps=0, blocked=()) == 0
-    assert da._exit_code(args, gaps=0, blocked=("T.lagda.md: unreadable",)) == 1
+    assert da._exit_code(args, gaps=0, weak_headers=0, blocked=()) == 0
+    assert da._exit_code(args, gaps=0, weak_headers=0,
+                         blocked=("T.lagda.md: unreadable",)) == 1
 
 
 def test_exit_zero_overrides_blocked_measurements() -> None:
     args = da.build_parser().parse_args(["--exit-zero"])
-    assert da._exit_code(args, gaps=99, blocked=("x",)) == 0
+    assert da._exit_code(args, gaps=99, weak_headers=99, blocked=("x",)) == 0
+
+
+def test_weak_headers_are_ratcheted_too() -> None:
+    # ADR-010 states two halves of the bar; both must reach the exit status, or
+    # a 51st boilerplate-only module lands green.
+    args = da.build_parser().parse_args(["--max-gaps", "999",
+                                         "--max-weak-headers", "50"])
+    assert da._exit_code(args, gaps=0, weak_headers=50) == 0
+    assert da._exit_code(args, gaps=0, weak_headers=51) == 1
+
+
+def test_a_multi_item_postulate_block_is_fully_recognised() -> None:
+    # A standalone layout opener must end its item, or its indented body folds
+    # into the opener as continuation lines and only the first name survives —
+    # silently, with nothing in the unparsed tally.
+    assert names(block("postulate", "  ax : Set", "  bx : Set")) == ["ax", "bx"]
+
+
+def test_a_multi_item_mutual_block_is_fully_recognised() -> None:
+    assert names(block("mutual", "  f : Set", "  f = A",
+                       "  g : Set", "  g = A")) == ["f", "g"]
+
+
+def test_a_multi_item_abstract_block_is_fully_recognised() -> None:
+    assert names(block("abstract", "  f : Set", "  f = A",
+                       "  g : Set", "  g = A")) == ["f", "g"]
+
+
+def test_a_standalone_opener_does_not_leak_its_block() -> None:
+    # …and the block still closes on dedent.
+    assert names(block("postulate", "  ax : Set", "top : Set", "top = A")) \
+        == ["ax", "top"]
 
 
 # --------------------------------------------------------------------------- #

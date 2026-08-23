@@ -306,6 +306,11 @@ def _namespace(stack: tuple[Frame, ...]) -> tuple[str, ...]:
 
 # `where` as a standalone token, and everything before it.
 _WHERE = re.compile(r"(?<![\w'-])where(?![\w'-])")
+# A line that *ends* by opening a layout block, so its indented body consists of
+# items in its own right rather than continuation lines of the opener.  `where`
+# is handled separately because it may carry its block's first item inline.
+_ENDS_OPENER = re.compile(
+    r"(?<![\w'-])(?:private|field|postulate|variable|mutual|abstract|instance|macro)\s*$")
 # A type signature: one or more names, then a colon delimited by whitespace.
 # Agda requires the space before `:` (a bare `:` may be part of a mixfix name),
 # which makes this a reliable split point.
@@ -350,6 +355,18 @@ def _headed_name(rest: str) -> Optional[str]:
 # The parse
 # =============================================================================
 
+def _opens_block(line: str) -> bool:
+    """Does this line end the declaration it belongs to by opening a block?
+
+    Either it contains a ``where``, or it ends with a standalone layout keyword.
+    The second case matters as much as the first: a bare ``postulate`` line
+    followed by two indented signatures would otherwise fold all three into one
+    logical item, and only the first signature would be recognised — silently,
+    with nothing in the ``unparsed`` tally to show for it.
+    """
+    return bool(_WHERE.search(line) or _ENDS_OPENER.search(line))
+
+
 @dataclass(frozen=True)
 class _Item:
     """One logical declaration: the physical line it starts on, the column it
@@ -387,14 +404,14 @@ def _logical_items(lines: Iterable[tuple[int, str]]) -> list[_Item]:
         col = _indent_of(line)
         if not done and col > indent:
             parts.append(line.strip())
-            if _WHERE.search(line):
+            if _opens_block(line):
                 items.append(_Item(start, indent, " ".join(parts)))
                 done = True
             continue
         if not done:
             items.append(_Item(start, indent, " ".join(parts)))
         start, indent, parts, done = lineno, col, [line.strip()], False
-        if _WHERE.search(line):
+        if _opens_block(line):
             items.append(_Item(start, indent, " ".join(parts)))
             done = True
     if not done:
@@ -1004,6 +1021,10 @@ def build_parser() -> argparse.ArgumentParser:
                         help="fail only when the gap count exceeds N.  This is the "
                              "ratchet CI pins to today's count, so the backlog can "
                              "only shrink while #268 is worked through per subtree")
+    parser.add_argument("--max-weak-headers", type=int, default=None, metavar="N",
+                        help="fail when more than N modules open with no prose "
+                             "beyond the boilerplate sentence.  The second half of "
+                             "the bar ADR-010 states, ratcheted the same way")
     parser.add_argument("--exit-zero", action="store_true",
                         help="always exit 0 (do not signal gaps via exit status)")
     parser.add_argument("--no-usage", action="store_true",
@@ -1051,6 +1072,14 @@ def main(argv: list[str]) -> int:
         progress.note(f"indexed usage across {len(usage.by_module)} module(s); "
                       f"{len(usage.ambiguous)} name(s) declared in more than one "
                       f"module and so not attributable")
+    # Computed before the report branches, because a measurement failure
+    # invalidates the harvest exactly as much as it invalidates the audit: a
+    # `docstrings-json` run that silently omits an unreadable module or an
+    # unclassified declaration would publish an incomplete corpus and exit 0.
+    unparsed = [(r.path, line, text) for r in reports for line, text in r.unparsed]
+    blocked += tuple(f"{path}:{line}: unclassified declaration: {text}"
+                     for path, line, text in unparsed)
+    weak_headers = sum(1 for r in reports if r.module_prose is not Prose.PARAGRAPH)
     progress.note("report follows on stdout" if args.json else "writing report")
 
     if args.json:
@@ -1063,7 +1092,9 @@ def main(argv: list[str]) -> int:
             for _, definition, hidden in sorted(records, key=lambda r: r[0]):
                 print(json.dumps(to_record(definition, usage, hidden),
                                  ensure_ascii=False))
-        return _exit_code(args, gaps=0, blocked=())
+        # A harvest is not a coverage gate, so documentation gaps do not fail it;
+        # measurement failures do.
+        return _exit_code(args, gaps=0, weak_headers=0, blocked=blocked)
 
     statuses = STRICT_GAP_STATUSES if args.strict else GAP_STATUSES
     print("\n".join(render_table(tally(reports, usage), usage is not None)))
@@ -1076,7 +1107,6 @@ def main(argv: list[str]) -> int:
         print("\n".join(render_gaps(reports, statuses)))
 
     hidden = sum(len(r.hidden_defs) for r in reports)
-    unparsed = [(r.path, line, text) for r in reports for line, text in r.unparsed]
     total = sum(len(r.definitions) for r in reports)
     gaps = sum(1 for r in reports for d in r.definitions if d.status in statuses)
     print(f"\nScanned {len(reports)} modules, {total} public definitions: "
@@ -1091,26 +1121,40 @@ def main(argv: list[str]) -> int:
             print(f"  {path}:{line}: {text}")
         if len(unparsed) > 20:
             print(f"  … and {len(unparsed) - 20} more")
-    # An item the parser cannot classify vanishes from the totals, taking any
-    # gap it represented with it, so a newly unsupported declaration form could
-    # *lower* the measured count while coverage got worse.  The tally is at zero
-    # across the live trees, so holding it there costs nothing and closes that
-    # hole.  It is a separate failure from the ratchet, and not governed by it.
-    blocked += tuple(f"{path}:{line}: unclassified declaration: {text}"
-                     for path, line, text in unparsed)
-    return _exit_code(args, gaps, blocked)
+    return _exit_code(args, gaps, weak_headers, blocked)
 
 
-def _exit_code(args: argparse.Namespace, gaps: int,
+def _ratchet(label: str, count: int, ceiling: Optional[int], knob: str) -> int:
+    """Compare one measure against its ceiling; 1 when it has risen above it.
+
+    Prints the nudge when the count comes in under, because a ceiling nobody
+    lowers stops being a ratchet and becomes a floor.
+    """
+    if ceiling is None:
+        return 0
+    if count > ceiling:
+        sys.stderr.write(
+            f"\n✗ {count} {label} exceeds the agreed ceiling of {ceiling}.\n"
+            f"  Document them, or lower {knob} in the Makefile if you have "
+            f"cleared some.\n")
+        return 1
+    if count < ceiling:
+        print(f"✓ {count} {label}, under the ceiling of {ceiling}; lower {knob} "
+              f"in the Makefile to {count} to lock the gain in.")
+    return 0
+
+
+def _exit_code(args: argparse.Namespace, gaps: int, weak_headers: int,
                blocked: tuple[str, ...] = ()) -> int:
     """Turn the audit into an exit status.
 
-    Two independent reasons to fail.  ``blocked`` holds conditions that make the
-    measurement itself untrustworthy — a file that could not be read, an item the
-    parser could not classify — and these fail regardless of ``--max-gaps``,
+    Three independent reasons to fail.  ``blocked`` holds conditions that make
+    the measurement itself untrustworthy — a file that could not be read, an item
+    the parser could not classify — and these fail regardless of any ceiling,
     because a ratchet compared against a corrupted count is worse than no
-    ratchet.  ``gaps`` is the coverage backlog, governed by the ratchet.
-    ``--exit-zero`` opts out of both.
+    ratchet.  The other two are the halves of the bar ADR-010 states: definitions
+    without a prose block, and modules without a real header.  Both are
+    ratcheted, and ``--exit-zero`` opts out of everything.
     """
     if args.exit_zero:
         return 0
@@ -1123,19 +1167,14 @@ def _exit_code(args: argparse.Namespace, gaps: int,
         if len(blocked) > 20:
             sys.stderr.write(f"  … and {len(blocked) - 20} more\n")
         return 1
-    if args.max_gaps is not None:
-        if gaps > args.max_gaps:
-            sys.stderr.write(
-                f"\n✗ {gaps} definitions without a prose block exceeds the "
-                f"agreed ceiling of {args.max_gaps}.\n"
-                f"  Document the new definitions, or lower the ceiling in the "
-                f"Makefile if you have cleared some.\n")
-            return 1
-        if gaps < args.max_gaps:
-            print(f"✓ under the ceiling of {args.max_gaps}; lower DOCSTRING_MAX_GAPS "
-                  f"in the Makefile to {gaps} to lock the gain in.")
-        return 0
-    return 0 if not gaps else 1
+    ratcheted = args.max_gaps is not None or args.max_weak_headers is not None
+    if ratcheted:
+        return max(
+            _ratchet("definitions without a prose block", gaps,
+                     args.max_gaps, "DOCSTRING_MAX_GAPS"),
+            _ratchet("modules without a real header", weak_headers,
+                     args.max_weak_headers, "DOCSTRING_MAX_WEAK_HEADERS"))
+    return 0 if not gaps and not weak_headers else 1
 
 
 if __name__ == "__main__":

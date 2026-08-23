@@ -55,6 +55,9 @@ REPO      ?= ualib/agda-algebras
 # ceiling, so the backlog can only shrink while the per-subtree prose PRs land.
 # Lower it whenever a PR clears definitions; never raise it.
 DOCSTRING_MAX_GAPS ?= 201
+# The other half of the bar ADR-010 states: modules whose header is only the
+# boilerplate sentence.  Ratcheted the same way; never raise it.
+DOCSTRING_MAX_WEAK_HEADERS ?= 50
 
 # The certificate census: generated representation certificates for the FLRP
 # research track (issue #515).  Excluded from Everything.agda and checked by
@@ -320,7 +323,8 @@ gen-links:
 #   docstrings-test    the analyzer's own test suite
 docstrings:
 	@echo "target: $@"
-	python3 scripts/python/docstring_audit.py --modules --max-gaps $(DOCSTRING_MAX_GAPS) $(SRCDIR)
+	python3 scripts/python/docstring_audit.py --modules --max-gaps $(DOCSTRING_MAX_GAPS) \
+	  --max-weak-headers $(DOCSTRING_MAX_WEAK_HEADERS) $(SRCDIR)
 
 docstrings-list:
 	@echo "target: $@"
