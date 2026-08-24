@@ -19,7 +19,7 @@ functions.  See `function-equality`{.AgdaFunction} of
 [Setoid.Relations.Discrete][] and, for homomorphisms, `_≋_`{.AgdaFunction} of
 [Setoid.Categories.Algebra][].
 
-Reach for the following:
+### Guide to the submodules of <span class="AgdaModule">Setoid.Functions</span>
 
 +  [Setoid.Functions.Basic][]: the identity, composition, and universe lifting of
    a setoid;
@@ -36,8 +36,6 @@ Reach for the following:
    and `IsInRange`{.AgdaFunction};
 +  [Setoid.Functions.Bijective][]: `IsBijective`{.AgdaFunction} as
    injective-and-surjective, with the inverse `BijInv`{.AgdaFunction}.
-
-
 
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}

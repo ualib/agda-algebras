@@ -23,7 +23,6 @@ machinery of equivalence classes and blocks.  The algebraic counterpart, where t
 quotient must respect the operations as well, is `_╱_`{.AgdaFunction} of
 [Setoid.Congruences.Basic][].
 
-
 <!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}

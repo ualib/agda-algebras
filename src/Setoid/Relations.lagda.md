@@ -17,7 +17,7 @@ carriers and "respects the equality" is stated separately as needed.  A congruen
 for instance, is required to contain the setoid equality exactly so that
 quotienting by it is well defined.
 
-Reach for the following:
+### Guide to the submodules of <span class="AgdaModule">Setoid.Relations</span>
 
 +  [Setoid.Relations.Discrete][]: binary relations, pointwise equality of setoid
    functions, image containment, and the kernel of a setoid function;
@@ -31,7 +31,6 @@ Reach for the following:
    `Reflexive`{.AgdaFunction}, `Symmetric`{.AgdaFunction},
    `Transitive`{.AgdaFunction} and their companions are in scope for anything
    that opens the barrel.
-
 
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
