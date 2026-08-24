@@ -10,20 +10,18 @@ author: "the agda-algebras development team"
 
 This is the [Setoid.Categories.FullSubcategory][] module of the [Agda Universal Algebra Library][].
 
-`FullSubcategory 𝐂 P` is the full subcategory of `𝐂` whose objects are the inhabitants of
-`Σ (Obj 𝐂) P` — an object of `𝐂` together with evidence that it satisfies `P` — and
-whose morphisms, hom-equality, identity, composition, and laws are inherited from `𝐂`
-unchanged.  This is exactly the shape of the theory-satisfying classical structures
-(`Semigroup α ρ = Σ[ 𝑨 ∈ Algebra α ρ ] 𝑨 ⊨ Th-Semigroup`, and likewise `Monoid`,
-`Group`, …); each is a full subcategory of the algebra category
-[`Alg`][Setoid.Categories.Algebra] of its signature, because a homomorphism between
-theory-satisfying algebras is just a homomorphism of the underlying algebras —
-satisfaction is a *property* of the objects, not structure on the morphisms.
+`FullSubcategory 𝐂 P` is the full subcategory of `𝐂` whose objects are the
+inhabitants of `Σ (Obj 𝐂) P` — an object of `𝐂` together with evidence that it
+satisfies `P` — and whose morphisms, hom-equality, identity, composition, and laws
+are inherited from `𝐂` unchanged.
 
-`FullSubcategoryF` restricts a functor along such predicates; given `F : 𝐂 ⟶ 𝐃` and a
-`transfer` of evidence `P A → Q (F₀ A)`, the functor maps the full subcategory on `P`
-to the one on `Q`, acting as `F` on morphisms.  The functor laws are inherited
-verbatim, since the hom-equalities are.
+This is exactly the shape of the theory-satisfying classical structures
+(`Semigroup α ρ = Σ[ 𝑨 ∈ Algebra α ρ ] 𝑨 ⊨ Th-Semigroup`, and likewise `Monoid`,
+`Group`, etc.).  Each is a full subcategory of the algebra category
+[`Alg`][Setoid.Categories.Algebra] of its signature, because a homomorphism
+between theory-satisfying algebras is just a homomorphism of the underlying
+algebras; satisfaction of laws is a property of the objects, not structure
+on the morphisms.
 
 <!--
 ```agda

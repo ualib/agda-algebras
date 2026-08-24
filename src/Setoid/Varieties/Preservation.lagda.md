@@ -7,10 +7,11 @@ author: "agda-algebras development team"
 
 ### Equation preservation for setoid algebras
 
-This is the [Setoid.Varieties.Preservation][] module of the [Agda Universal Algebra Library][] where we show
-that the classes \af H `𝒦`{.AgdaBound}, \af S `𝒦`{.AgdaBound}, \af P `𝒦`{.AgdaBound}, and \af V `𝒦`{.AgdaBound} all satisfy the
-same identities.
+This is the [Setoid.Varieties.Preservation][] module of the [Agda Universal Algebra Library][].
 
+This module proves that the classes `H`{.AgdaFunction}` 𝒦`{.AgdaBound},
+`S`{.AgdaFunction}` 𝒦`{.AgdaBound},  `P`{.AgdaFunction}` 𝒦`{.AgdaBound}, and
+`V`{.AgdaFunction}` 𝒦`{.AgdaBound} all satisfy the same identities.
 
 <!--
 ```agda

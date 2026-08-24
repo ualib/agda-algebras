@@ -30,7 +30,7 @@ Taking subalgebras is one of the three closure operations whose composite define
 a variety, and `S`{.AgdaFunction} of [Setoid.Varieties.Closure][] is defined
 directly in terms of the `_≤_`{.AgdaFunction} introduced here.
 
-Reach for the following:
+#### Guide to the submodules of <span class="AgdaModule">Setoid.Subalgebras</span>
 
 +  [Setoid.Subalgebras.Basic][]: the relation `_≤_`{.AgdaFunction}, its converse
    `_≥_`{.AgdaFunction}, the bundled `SubalgebraOf`{.AgdaRecord} and

@@ -11,15 +11,20 @@ author: "the agda-algebras development team"
 This is the [Setoid.Categories.Algebra][] module of the [Agda Universal Algebra Library][].
 
 `Alg 𝑆 α ρ` assembles the `𝑆`-algebras at levels `(α , ρ)` into a
-[`Category`][Setoid.Categories.Category]: objects are `Algebra α ρ`, homs are the
-setoid homomorphisms `hom` of [Setoid.Homomorphisms][], identity and composition are
-`𝒾𝒹` and `⊙-hom`, and the hom-equality `_≋_` is **pointwise** — two homomorphisms are
-equal when their underlying maps agree on every element, in the codomain's setoid
-equality.  This pointwise hom-setoid is exactly what `_≡_` cannot provide under
-`--safe`, and is why the `Category` record carries `_≈_` as a field.
+[`Category`][Setoid.Categories.Category]:
 
-The `assoc` and identity laws hold by the codomain's `refl` (the underlying maps are
-definitionally equal — `⊙-hom` is function composition, `𝒾𝒹` the identity map);
++  objects inhabit `Algebra α ρ`,
++  homs are the setoid homomorphisms `hom` of [Setoid.Homomorphisms][],
++  identity and composition are the `𝒾𝒹` and `⊙-hom` of [Setoid.Homomorphisms][]
++  the hom-equality `_≋_` is defined in this module and is *pointwise* equality:
+   two homomorphisms are equal when their underlying maps agree on every element,
+   in the codomain's setoid equality.
+
+Pointwise hom-setoid equality is exactly what `_≡_` cannot provide under `--safe`,
+and is why the `Category`{.AgdaRecord} record carries `_≈_`{.AgdaField} as a field.
+
+The associative and identity laws hold by the codomain's `refl` (the underlying
+maps are definitionally equal; `⊙-hom` is function composition, `𝒾𝒹` the identity map);
 `∘-resp-≈` is the one law with content, combining the codomain's `trans` with a hom's
 `cong`.
 
@@ -68,10 +73,10 @@ _≋_ {𝑨 = 𝑨} {𝑩} f g = ∀ (x : 𝕌[ 𝑨 ]) → Setoid._≈_ 𝔻[ �
 
 `Alg α ρ`{.AgdaFunction} is the **category of `𝑆`-algebras** at a fixed pair of
 levels: objects are algebras, morphisms are homomorphisms, and two morphisms are
-identified when they agree pointwise up to the codomain's equality, which is the
-`_≋_`{.AgdaFunction} defined above.
+identified when they agree pointwise up to the codomain's equality
+(`_≋_`{.AgdaFunction}, defined above).
 
-Everything the `Category`{.AgdaRecord} record asks for is already to hand.  The
+Everything the `Category`{.AgdaRecord} record asks for is already at hand.  The
 identity is `𝒾𝒹`{.AgdaFunction} and composition is `⊙-hom`{.AgdaFunction} with its
 arguments flipped, since `⊙-hom`{.AgdaFunction} takes them in diagrammatic order
 while a category's `_∘_` does not.  Associativity and both unit laws hold on the
