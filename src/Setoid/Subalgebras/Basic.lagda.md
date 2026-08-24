@@ -179,5 +179,10 @@ is (isomorphic to) a subalgebra of `𝑩`.
 ---
 
 [^1]: Note that we denote both the subalgebra and subuniverse relations by the
-      same symbol, `_≤_`{.AgdaFunction}.  Which one is meant in a given context is
-      determined by which module is imported in that context.
+      same symbol, `_≤_`{.AgdaFunction}.  The two do not collide, because the
+      subuniverse order lives inside the named module `Sublattice`{.AgdaModule} of
+      [Setoid.Subalgebras.CompleteLattice][], which qualifies it rather than
+      exporting it.  So importing the [Setoid.Subalgebras][] barrel gives the
+      subalgebra relation unqualified, and the subuniverse order becomes available
+      as `_≤_`{.AgdaFunction} only where `Sublattice`{.AgdaModule} is opened, as in
+      `open Sublattice 𝑨 ℓ₀`.
