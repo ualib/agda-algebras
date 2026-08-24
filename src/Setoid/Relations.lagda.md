@@ -26,7 +26,11 @@ Reach for the following:
 +  [Setoid.Relations.Continuous][]: relations of arbitrary arity, where the arity
    is an arbitrary type rather than a natural number, so that finite, countable
    and uncountable arities are handled uniformly;
-+  [Setoid.Relations.Properties][]: the remaining lemmas.
++  [Setoid.Relations.Properties][]: no results of its own, but a public
+   re-export of the standard library's `Relation.Binary.Definitions`, so that
+   `Reflexive`{.AgdaFunction}, `Symmetric`{.AgdaFunction},
+   `Transitive`{.AgdaFunction} and their companions are in scope for anything
+   that opens the barrel.
 
 
 ```agda

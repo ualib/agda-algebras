@@ -12,7 +12,7 @@ This is the [Setoid.Relations.Quotients][] module of the [Agda Universal Algebra
 Quotienting is where the setoid formulation pays for itself.  A quotient of a
 setoid by an equivalence relation keeps the same carrier and changes only the
 equality, so it needs neither a quotient type nor any axiom: `_/_`{.AgdaFunction}
-takes a type together with an `Equivalence`{.AgdaRecord} bundle and returns the
+takes a type together with an `Equivalence`{.AgdaFunction} bundle and returns the
 setoid whose equality *is* that relation, and `Quotient`{.AgdaFunction} is the type
 of its classes.
 

@@ -12,8 +12,14 @@ This is the [Setoid.Functions.Basic][] module of the [Agda Universal Algebra Lib
 A **setoid function** `A ⟶ B` is the standard library's `Func`{.AgdaRecord}: a map
 on carriers together with a proof that it respects the equalities of `A` and `B`.
 Carrying the proof inside the function is the move the whole `Setoid/` tree rests
-on, since it means no construction ever has to prove two *functions* equal, and so
-none of them needs function extensionality.
+on, but it is worth being precise about what it does.  `cong`{.AgdaField} says
+that *one* map sends related arguments to related results; it says nothing about
+when two maps are the same.  Where two functions do have to be compared, the
+library never asks for propositional equality of functions — which is what would
+require extensionality — but uses an explicitly pointwise relation instead:
+`function-equality`{.AgdaFunction} of [Setoid.Relations.Discrete][], and
+`_≋_`{.AgdaFunction} of [Setoid.Categories.Algebra][] for homomorphisms.  The two
+devices together are what keep the development extensionality-free.
 
 This module holds the primitives everything else is built from, and nothing
 deeper: the identity setoid function, composition, and the universe lifting of a
