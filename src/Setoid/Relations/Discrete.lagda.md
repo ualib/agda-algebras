@@ -9,6 +9,22 @@ author: "the agda-algebras development team"
 
 This is the [Setoid.Relations.Discrete][] module of the [Agda Universal Algebra Library][].
 
+"Discrete" here means *binary*, as opposed to the arbitrary-arity relations of
+[Setoid.Relations.Continuous][].
+
+The centre of the module is the **kernel** of a setoid function: the relation on
+the domain holding of two elements just when the function sends them to elements
+that are equal in the codomain.  It appears in three shapes, because three are
+wanted downstream: `fker`{.AgdaFunction} as a binary relation,
+`fkerPred`{.AgdaFunction} as a predicate on pairs, and `fkerlift`{.AgdaFunction}
+with its level raised.  Also here are `function-equality`{.AgdaFunction}, pointwise
+equality of setoid functions, and `Im_⊆_`{.AgdaFunction}, the assertion that a
+function's image lands inside a given subset.
+
+Kernels of *homomorphisms*, which are these kernels together with compatibility
+with the operations, are in [Setoid.Homomorphisms.Kernels][].
+
+
 <!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
