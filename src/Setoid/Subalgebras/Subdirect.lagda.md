@@ -11,12 +11,12 @@ author: "the agda-algebras development team"
 This is the [Setoid.Subalgebras.Subdirect][] module of the [Agda Universal Algebra Library][].
 
 A **subdirect product** of a family of algebras is a subalgebra of their product
-that still projects *onto* every factor.  The condition is what makes the notion
-useful: an arbitrary subalgebra of a product may ignore some coordinates
-entirely, whereas a subdirect product retains information about each one.
-Subdirect decompositions are how a single algebra is analysed into simpler pieces,
-and the pieces that cannot be decomposed further are the subdirectly irreducible
-algebras.
+that projects *onto* every factor.  The surjective-projections condition is what
+makes the notion useful: an arbitrary subalgebra of a product may ignore some
+coordinates entirely, whereas a subdirect product retains information about each
+one.  Subdirect decompositions are how a single algebra is analysed into simpler
+pieces, and the pieces that cannot be decomposed further are the subdirectly
+irreducible algebras.
 
 This is a barrel module, re-exporting the following:
 

@@ -9,10 +9,10 @@ author: "agda-algebras development team"
 
 This is the [Setoid.Subalgebras.Properties][] module of the [Agda Universal Algebra Library][].
 
-This module establishes the order-theoretic facts about `_≤_`{.AgdaFunction} that
-the rest of the library relies on: that it is a preorder, that isomorphism
-refines it in either direction, that it survives universe lifting, and that it is
-preserved by products.
+This module establishes the order-theoretic facts about the subalgebra relation
+`_≤_`{.AgdaFunction} that the rest of the library relies on: that it is a
+preorder, that isomorphism refines it in either direction, that it survives
+universe lifting, and that it is preserved by products.
 
 The preorder is stated with respect to isomorphism rather than equality
 (`≤-preorder`{.AgdaFunction}), which is the only sensible choice, since mutual
@@ -30,26 +30,26 @@ module Setoid.Subalgebras.Properties where
 open import Agda.Primitive using () renaming ( Set to Type )
 
 -- Imports from the Agda Standard Library -------------------------------------------
-open import Data.Product     using ( _,_ )
-open import Function         using ( _∘_ )  renaming ( Func to _⟶_ )
-open import Level            using ( Level ; _⊔_ )
-open import Relation.Binary  using ( Setoid )
-open import Relation.Unary   using ( Pred ; _⊆_ )
+open import Data.Product              using ( _,_ )
+open import Function                  using ( _∘_ )  renaming ( Func to _⟶_ )
+open import Level                     using ( Level ; _⊔_ )
+open import Relation.Binary           using ( Setoid )
+open import Relation.Unary            using ( Pred ; _⊆_ )
 import Relation.Binary.Structures as RelStructs
 
 import Relation.Binary.Reasoning.Setoid as SetoidReasoning
 
 -- Imports from the Agda Universal Algebra Library ----------------------------------
-open import Overture                          using  ( proj₁ ; proj₂ ; 𝓞 ; 𝓥 ; Signature ; 𝑆 )
-open import Setoid.Functions                  using  ( id-is-injective ; IsInjective ; ⊙-injective )
-open import Setoid.Algebras  using  ( Algebra ; Lift-Algˡ ; Lift-Algʳ
-                                                     ; Lift-Alg ; ov ; ⨅ ; 𝔻[_] )
-open import Setoid.Homomorphisms  using  ( hom ; IsHom ; 𝒾𝒹 ; ⊙-hom ; _≅_
-                                                     ; ≅toInjective ; ≅fromInjective
-                                                     ; mkiso ; ≅-sym ; ≅-refl ; ≅-trans
-                                                     ; Lift-≅ˡ ; Lift-≅ ; Lift-≅ʳ)
-open import Setoid.Subalgebras.Basic  using  ( _≤_ ; _≥_ ; _≤c_
-                                                     )
+open import Overture                  using  ( proj₁ ; proj₂ ; 𝓞 ; 𝓥 ; Signature ; 𝑆 )
+open import Setoid.Algebras           using  ( Algebra ; Lift-Algˡ ; Lift-Algʳ
+                                             ; Lift-Alg ; ov ; ⨅ ; 𝔻[_] )
+open import Setoid.Functions          using  ( id-is-injective ; IsInjective ; ⊙-injective )
+open import Setoid.Homomorphisms      using  ( hom ; IsHom ; 𝒾𝒹 ; ⊙-hom ; _≅_
+                                             ; ≅toInjective ; ≅fromInjective ; mkiso
+                                             ; ≅-sym ; ≅-refl ; ≅-trans
+                                             ; Lift-≅ˡ ; Lift-≅ ; Lift-≅ʳ)
+open import Setoid.Subalgebras.Basic  using  ( _≤_ ; _≥_ ; _≤c_ )
+
 private variable α ρᵃ β ρᵇ γ ρᶜ ι : Level
 ```
 -->
@@ -94,7 +94,7 @@ module _ {𝑨 : Algebra {𝑆 = 𝑆} α ρᵃ}{𝑩 : Algebra {𝑆 = 𝑆} β
   → 𝑨 ≤ 𝑩 → 𝑩 ≤c 𝒦 → 𝑨 ≤c 𝒦
 ≤→≤c→≤c A≤B sB = (proj₁ sB) , (proj₁ (proj₂ sB) , ≤-trans A≤B (proj₂ (proj₂ sB)))
 
-module _ {𝓞 𝓥 : Level}{𝑆 : Signature 𝓞 𝓥}{α ρᵃ ρ : Level} where
+module _ {𝑆 : Signature 𝓞 𝓥} {α ρᵃ ρ : Level} where
 
   open RelStructs {a = ov {𝑆 = 𝑆} (α ⊔ ρᵃ)} {ℓ = 𝓞 ⊔ 𝓥 ⊔ α ⊔ ρᵃ} (_≅_ {α = α}{ρᵃ = ρᵃ}{𝑆 = 𝑆})
   open IsPreorder
@@ -158,7 +158,9 @@ the equality, and the unadorned name raises both.
    does not disturb its being a subalgebra of some member of `𝒦`.
 
 ```agda
-Lift-is-sub : {𝒦 : Pred (Algebra {𝑆 = 𝑆} α ρᵃ)(ov {𝑆 = 𝑆} α)} {𝑩 : Algebra {𝑆 = 𝑆} β ρᵇ} {ℓ : Level}
+Lift-is-sub :
+  {𝒦 : Pred (Algebra {𝑆 = 𝑆} α ρᵃ)(ov {𝑆 = 𝑆} α)}
+  {𝑩 : Algebra β ρᵇ} {ℓ : Level}
   → 𝑩 ≤c 𝒦 → (Lift-Algˡ 𝑩 ℓ) ≤c 𝒦
 Lift-is-sub (𝑨 , (KA , B≤A)) = 𝑨 , (KA , A≥B×B≅C→A≥C B≤A Lift-≅ˡ)
 
@@ -207,7 +209,11 @@ recognised as a subalgebra of a product so that `S`{.AgdaFunction} and
 `P`{.AgdaFunction} can be interchanged.
 
 ```agda
-module _ {I : Type ι}{𝒜 : I → Algebra {𝑆 = 𝑆} α ρᵃ}{ℬ : I → Algebra {𝑆 = 𝑆} β ρᵇ} where
+module _
+  {I : Type ι}
+  {𝒜 : I → Algebra {𝑆 = 𝑆} α ρᵃ}
+  {ℬ : I → Algebra {𝑆 = 𝑆} β ρᵇ}
+  where
   open IsHom
 
   ⨅-≤ : (∀ i → ℬ i ≤ 𝒜 i) → ⨅ ℬ ≤ ⨅ 𝒜
