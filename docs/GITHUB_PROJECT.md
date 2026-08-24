@@ -2279,7 +2279,7 @@ Every sub-issue follows these; they are recorded once here rather than repeated 
 
 ---
 
-### Issue M4-2a: Docstrings: Setoid/Algebras and Setoid/Homomorphisms (#539)
+### Issue M4-2a: Docstrings: Setoid/Algebras and Setoid/Homomorphisms (#539, closed)
 
 **Labels**: `documentation`, `milestone-4-style`, `help-wanted`
 
@@ -2316,7 +2316,7 @@ Sub-issue of #268.  Tooling: #537.
 
 ---
 
-### Issue M4-2b: Docstrings: Setoid/Subalgebras (#540)
+### Issue M4-2b: Docstrings: Setoid/Subalgebras (#540, closed)
 
 **Labels**: `documentation`, `milestone-4-style`, `help-wanted`
 
@@ -3373,6 +3373,67 @@ open import Overture using (𝓞 ; 𝓥 ; Signature ; 𝑆 )
 ```
 
 still appears outside the start of the module, which is unnecessary when there's no top-level module parameter.  We can now move the import of Overture inside with the other imports, consistent with the repo-wide style convention.
+
+---
+
+### Issue M4-20: Validate kramdown attribute-span classes against Agda's own classification (#553)
+
+**Labels**: `documentation`, `milestone-4-style`, `ci`
+
+## The gap
+
+Every Agda name in the rendered corpus is marked up with a kramdown attribute span, `` `Algebra`{.AgdaRecord} ``, and `attr_list` turns the class into the CSS class that colours it.  `mkdocs.yml` calls `attr_list` "THE load-bearing one" for exactly this reason.
+
+**Nothing checks that the class is the right one.**  `check_links.py` validates reference-style links, `docstring_audit.py` validates prose coverage, and neither looks at span classes.  A span whose class disagrees with what Agda thinks the name is renders with the wrong highlighting, and no gate notices.
+
+This surfaced in review on #552, where Copilot caught `` `Equivalence`{.AgdaRecord} `` — `Equivalence A {ρ} = Σ[ r ∈ BinaryRel A ρ ] IsEquivalence r` is a Σ-type alias, so a function, not a record.  Looking for siblings found four more.
+
+## Four confirmed defects on master
+
+| file | span | actually |
+|---|---|---|
+| `Classical/Structures/Lattice/Parachute.lagda.md` (4 occurrences: 42, 65, 272, 594) | `` `_≤ᵖ_`{.AgdaFunction} `` | `data _≤ᵖ_ : P → P → Type (α ⊔ ρ)` at `:261` |
+| `Examples/Setoid/HSPCommutativeMonoid.lagda.md:101` | `` `𝒦₀`{.AgdaFunction} `` | `data 𝒦₀ : Pred (Algebra 0ℓ 0ℓ) 1ℓ` at `:78` |
+| `FLRP/Problem.lagda.md:121` | `` `Lattice-Order`{.AgdaRecord} `` | `module Lattice-Order …` at `Classical/Properties/Lattice.lagda.md:58` |
+| `FLRP/Representable.lagda.md:149` | `` `Signature`{.AgdaRecord} `` | `Signature 𝓞 𝓥 = Σ[ F ∈ Type 𝓞 ] (F → Type 𝓥)` at `Overture/Signatures.lagda.md:91` |
+
+The last is the same error class as the `Equivalence` one: a Σ-bundle type alias read as a record because it behaves like one.
+
+## Scale
+
+Measured over `src/**/*.lagda.md`: **2198 span occurrences**, **990 distinct (name, class) pairs**, across 11 classes.  The distribution is `AgdaFunction` 1404, `AgdaRecord` 257, `AgdaBound` 156, `AgdaInductiveConstructor` 112, `AgdaField` 110, `AgdaDatatype` 79, `AgdaModule` 73, and single digits of `AgdaGeneralizable`, `AgdaKeyword`, `AgdaPrimitiveType`, `AgdaSymbol`.
+
+`docstring_audit.py --json` already emits a `kind` per public definition — `signature` (3060), `module` (72), `record` (61), `data` (50), `pattern` (31) — so ground truth for a large fraction of spans is already computed and needs no new parser.
+
+## The naive design does not work, and this is the main finding
+
+Matching a span's name against the audit's `kind` **by name alone** produces 126 hits, of which only the 4 above are real.  The 122 false positives come in two shapes, and both are legitimate markup:
+
++  **`AgdaBound`, 94 hits.**  `` `N`{.AgdaBound} `` inside a paragraph refers to a *locally bound* variable.  That a top-level definition named `N` exists elsewhere is irrelevant, and marking the bound occurrence `.AgdaBound` is correct.
++  **`AgdaField`, 16 hits.**  `` `to∘from`{.AgdaField} `` names a record field, which is not a top-level definition at all — ADR-010 deliberately excludes fields, members and constructors from the audit's inventory — so the audit has no entry to compare against and a same-named function elsewhere produces a spurious hit.
+
+The rest are cross-module name collisions: `` `Lattice`{.AgdaRecord} `` in `Setoid/Subalgebras/CompleteLattice.lagda.md` is stdlib's `Relation.Binary.Lattice.Lattice`, a genuine record, while `Classical/Small/Structures/Lattice` defines an unrelated `Lattice` alias.  Same for `Group`, `List`, and the generalizable `𝑨`.
+
+So a useful checker needs **name resolution in the scope of the file the span sits in**, not a global name table.  A checker without it would emit 30 false positives for every real one and be switched off within a week — which is the outcome ADR-010 already warns about for un-ratcheted gates.
+
+## Two designs that could work
+
+1.  **Ask Agda.**  `agda --html` emits `<a class="Agda…">` spans with Agda's own classification, per file and per occurrence.  Rendering the corpus once and diffing our span classes against the highlighter's is the only approach that is right by construction, including for fields, constructors and bound variables.  Cost: an HTML build in CI, and a mapping from source positions to the generated anchors.
+2.  **Ask `agda-mcp`.**  `resolve_name` answers "what does this name resolve to *here*", scoped to a file, with provenance.  That is exactly the missing ingredient, and it handles the collisions.  Cost: it is a live interaction lane, so a whole-corpus sweep is one load per file, and the server is currently single-worktree (a `rootMismatch` guard refuses files from any other checkout).
+
+Design 1 is the better fit for a gate; design 2 is the better fit for a one-off sweep to clear the existing backlog.  They are not exclusive.
+
+## Done when
+
++  A checker under `scripts/python/` reports spans whose class disagrees with Agda's classification, with **zero false positives** on current master.
++  The four defects above are fixed, plus whatever the sweep adds.
++  A `Makefile` target and a CI job, following `check_links` / `docstring_audit` (see the `writing-a-corpus-linter` conventions), ratcheted if the backlog cannot be cleared in one pass.
++  Validated the way #537's audit was: against Agda's own answer, not against the checker's author's expectations.
+
+## Notes
+
++  Related: #537 (the docstring audit and its ratchet), ADR-010 (which fixes what counts as a public definition, and why fields and constructors are excluded), #275 (the corpus extractor, another consumer of correct span classification).
++  There is a second, cheaper unchecked-markup gap worth folding in or splitting out: **dangling footnote references**.  `[^1]` with no `[^1]:` definition renders as literal text and passes every gate.  Two exist on master, in `Overture/Basic.lagda.md` and `Classical/Structures/Group/Complexes.lagda.md`.  That one is a few lines of regex and needs no Agda at all.
 
 <!-- END GENERATED: milestone-4 -->
 
