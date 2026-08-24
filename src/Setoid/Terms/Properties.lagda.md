@@ -9,6 +9,26 @@ author: "agda-algebras development team"
 
 This is the [Setoid.Terms.Properties][] module of the [Agda Universal Algebra Library][].
 
+This module proves that the term algebra is **free**.
+
+Given an algebra `𝑨` and an arbitrary map `h : X → 𝕌[ 𝑨 ]` sending variables to
+elements,
+
++  `free-lift`{.AgdaFunction} extends `h` to all of `𝑻 X` by structural recursion,
++  `free-lift-func`{.AgdaFunction} shows the extension respects term equality,
++  `lift-hom`{.AgdaFunction} shows the extension is a homomorphism,
++  `free-unique`{.AgdaFunction} supplies the other half of the universal property:
+   two homomorphisms out of `𝑻 X` that agree on the variables agree everywhere.
+
+Together the last two are the universal property of `𝑻 X`{.AgdaFunction}: a map on
+variables extends to a homomorphism, and to only one.  The existence half is used
+in [Setoid.Varieties.HSP][] where `lift-hom`{.AgdaFunction} maps the term algebra
+into each algebra of a class.
+
+`free-unique`{.AgdaFunction} is a terminal result here, with no consumer in
+the live trees at present.  `lift-of-epi-is-epi`{.AgdaFunction} records that
+surjectivity of the variable assignment survives the lift, which is how
+epimorphisms out of the term algebra are obtained.
 
 <!--
 ```agda
@@ -51,9 +71,9 @@ algebras in the signature `𝑆`. That is, for every 𝑆-algebra `𝑨`, the fo
 1. Every function from `𝑋` to `𝕌[ 𝑨 ]` lifts to a homomorphism from `𝑻 X` to `𝑨`.
 2. The homomorphism that exists by item 1 is unique.
 
-We now prove this in [Agda][], starting with the fact that every map from `X` to
-`𝕌[ 𝑨 ]` lifts to a map from `𝕌[ 𝑻 X ]` to `𝕌[ 𝑨 ]` in a natural way, by induction
-on the structure of the given term.
+We now formalize this, starting with the fact that every map from `X` to `𝕌[ 𝑨 ]`
+lifts to a map from `𝕌[ 𝑻 X ]` to `𝕌[ 𝑨 ]` in a natural way, by induction on the
+structure of the given term.
 
 ```agda
 module _ {𝑆 : Signature 𝓞 𝓥}{𝑨 : Algebra {𝑆 = 𝑆} α ρ}(h : X → 𝕌[ 𝑨 ]) where

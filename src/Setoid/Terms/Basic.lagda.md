@@ -9,6 +9,29 @@ author: "agda-algebras development team"
 
 This is the [Setoid.Terms.Basic][] module of the [Agda Universal Algebra Library][].
 
+Terms themselves are inherited from [Overture.Terms][]; what this module adds is
+everything needed to treat them *as a setoid algebra*.
+
+`_≐_`{.AgdaDatatype} is the inductive equality of terms,
+`TermSetoid`{.AgdaFunction} bundles it, and `𝑻`{.AgdaFunction} is the resulting
+**term algebra**, whose operations are the term constructors themselves and so are
+trivially compatible with `_≐_`{.AgdaDatatype}.
+
+The rest is the machinery of interpretation.
+
++  `Sub`{.AgdaFunction} and `_[_]`{.AgdaFunction} are substitutions and their
+   action on terms;
++  `Env`{.AgdaFunction} is the setoid of environments, that is, assignments of
+   elements of an algebra to variables;
++  `⟦_⟧`{.AgdaFunction} is the value of a term in an environment, as a setoid
+   function so that it respects equality of environments;
++  `Equal`{.AgdaFunction} with `isEquiv`{.AgdaFunction} is the resulting notion of
+   two terms having the same value in a given algebra under every environment.
+
+The `substitution`{.AgdaFunction} lemma, that interpreting a substituted term is
+interpreting the original under a reinterpreted environment, is the workhorse of
+the soundness proof in [Setoid.Varieties.SoundAndComplete][].
+
 <!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
@@ -42,11 +65,11 @@ private variable
 
 #### Equality of terms
 
-We take a different approach here, using Setoids instead of quotient types.
-That is, we will define the collection of terms in a signature as a setoid
-with a particular equality-of-terms relation, which we must define.
-Ultimately we will use this to define the (absolutely free) term algebra
-as a Algebra whose carrier is the setoid of terms.
+The approach we take to equality of terms uses setoids instead of quotient types.
+That is, we will define the collection of terms in a signature as a setoid with a
+particular equality-of-terms relation, which we must define.  Ultimately we will
+use this to define the (absolutely free) term algebra as a `Algebra`{.AgdaRecord}
+whose carrier is the setoid of terms.
 
 ```agda
 module _ {𝑆 : Signature 𝓞 𝓥}{X : Type χ } where
@@ -133,9 +156,8 @@ module Environment {𝑆 : Signature 𝓞 𝓥}(𝑨 : Algebra {𝑆 = 𝑆} α 
   cong (Interp (EnvAlgebra X)) {f , a} {.f , b} (refl , aibi) x = cong InterpA (refl , λ i → aibi i x)
 ```
 
-
-Interpretation of terms is iteration on the W-type. The standard library offers `iter' (on sets), but we need this to be a setoid function.
-
+Interpretation of terms is iteration on the W-type.  The standard library offers
+`iter' (on sets), but we need this to be a setoid function.
 
 ```agda
   ⟦_⟧ : {X : Type χ}(t : Term {𝑆 = 𝑆} X) → Func (Env X) 𝔻[ 𝑨 ]

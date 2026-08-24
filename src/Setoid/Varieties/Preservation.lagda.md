@@ -7,10 +7,11 @@ author: "agda-algebras development team"
 
 ### Equation preservation for setoid algebras
 
-This is the [Setoid.Varieties.Preservation][] module of the [Agda Universal Algebra Library][] where we show
-that the classes \af H `𝒦`{.AgdaBound}, \af S `𝒦`{.AgdaBound}, \af P `𝒦`{.AgdaBound}, and \af V `𝒦`{.AgdaBound} all satisfy the
-same identities.
+This is the [Setoid.Varieties.Preservation][] module of the [Agda Universal Algebra Library][].
 
+This module proves that the classes `H`{.AgdaFunction}` 𝒦`{.AgdaBound},
+`S`{.AgdaFunction}` 𝒦`{.AgdaBound},  `P`{.AgdaFunction}` 𝒦`{.AgdaBound}, and
+`V`{.AgdaFunction}` 𝒦`{.AgdaBound} all satisfy the same identities.
 
 <!--
 ```agda
@@ -122,6 +123,15 @@ The converse of the foregoing result is almost too obvious to bother with. Nonet
 
 #### S preserves identities
 
+Identities are inherited by subalgebras, so a class and its subalgebra closure
+satisfy the same equations.  `S-id1`{.AgdaFunction} is the substantive direction
+and is immediate from `⊧-S-invar`{.AgdaFunction} of
+[Setoid.Varieties.Properties][]: an identity true in `𝑨` is true in anything
+embedded in `𝑨`.  `S-id2`{.AgdaFunction} is the converse, and holds for the same
+reason `H-id2`{.AgdaFunction} above does, namely that `S`{.AgdaFunction} is
+expansive: `𝒦 ⊆ S ℓ 𝒦` by `≤-reflexive`{.AgdaFunction}, so an identity holding
+throughout the closure holds in particular on `𝒦`.
+
 ```agda
   S-id1 : 𝒦 ⊫ (p ≈̇ q) → (S {β = α}{ρᵃ} ℓ 𝒦) ⊫ (p ≈̇ q)
   S-id1 σ .⊫-proof 𝑩 (𝑨 , kA , B≤A) = ⊧-S-invar{p = p}{q} (σ .⊫-proof 𝑨 kA) B≤A
@@ -131,6 +141,14 @@ The converse of the foregoing result is almost too obvious to bother with. Nonet
 ```
 
 #### P preserves identities
+
+The same for products, with one extra step.  `P-id1`{.AgdaFunction} combines
+`⊧-P-invar`{.AgdaFunction}, that a product of models is a model, with
+`⊧-I-invar`{.AgdaFunction}, that satisfaction transports across an isomorphism.
+The second is needed because membership in `P ℓ ι 𝒦` holds only *up to*
+isomorphism: an inhabitant supplies a family `𝒜` together with a proof
+`𝑨 ≅ ⨅ 𝒜`, not an equality.  `P-id2`{.AgdaFunction} is once more the
+expansiveness converse, this time by way of `P-expa`{.AgdaFunction}.
 
 ```agda
   P-id1 : ∀{ι} → 𝒦 ⊫ (p ≈̇ q) → P {β = α}{ρᵃ}ℓ ι 𝒦 ⊫ (p ≈̇ q)

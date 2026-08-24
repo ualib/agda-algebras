@@ -10,20 +10,21 @@ author: "the agda-algebras development team"
 
 This is the [Setoid.Congruences.Monolith][] module of the [Agda Universal Algebra Library][].
 
-[Setoid.Congruences.CompleteLattice][] organized the congruences of an algebra into a
-complete lattice with bottom `0ᴬ` (the diagonal) and top `1ᴬ`.  This module isolates
-the order-theoretic property at the heart of *subdirect irreducibility*: an algebra is
-**subdirectly irreducible** (SI) when it is nontrivial and `0ᴬ` has a unique cover — a
-**monolith**, the least congruence strictly above the diagonal.  Equivalently, `0ᴬ` is
+[Setoid.Congruences.CompleteLattice][] organized the congruences of an algebra
+into a complete lattice with bottom `0ᴬ` (the diagonal) and top `1ᴬ`.  This module
+isolates the order-theoretic property at the heart of *subdirect irreducibility*:
+an algebra is **subdirectly irreducible** (SI) when it is nontrivial and `0ᴬ` has
+a unique cover, which we call the **monolith**; it is the least congruence
+strictly above the diagonal.  In this situation we say that `0ᴬ` is
 *completely meet-irreducible*: it is not the meet of any family of strictly larger
 congruences.
 
 The development here is pure congruence theory and is fully constructive.  We work
-throughout with congruences at the algebra's own relation level `ρ`, so the diagonal
-`0ᴬ` is the setoid equality `_≈_ : Con 𝑨 ρ` and the monolith (when it exists) is a
-`Con 𝑨 ρ`.  The choice-dependent *existence* of subdirect SI-representations —
-Birkhoff's subdirect representation theorem — is built on top of this in
-[Setoid.Subalgebras.Subdirect][]; nothing here assumes it.
+throughout with congruences at the algebra's own relation level `ρ`, so the
+diagonal `0ᴬ` is the setoid equality `_≈_ : Con 𝑨 ρ` and the monolith (when it
+exists) inhabits `Con 𝑨 ρ` as well.  The choice-dependent *existence* of subdirect
+SI-representations (Birkhoff's subdirect representation theorem) is built on top
+of this in [Setoid.Subalgebras.Subdirect][]; nothing here assumes it.
 
 <!--
 ```agda
@@ -53,7 +54,7 @@ private variable α ρ ℓ : Level
 
 Fix an algebra `𝑨`.  It is **nontrivial** when its carrier has two elements that the
 setoid equality keeps apart; the degenerate (one-element) algebras are exactly the
-**trivial** ones, on which every two elements are equal.
+**trivial** ones.
 
 ```agda
 module _ (𝑨 : Algebra {𝑆 = 𝑆} α ρ) where
@@ -72,9 +73,9 @@ module _ (𝑨 : Algebra {𝑆 = 𝑆} α ρ) where
   trivial⇒¬nontrivial triv (a , b , a≢b) = a≢b (triv a b)
 ```
 
-A congruence is **below the diagonal** when it relates only `≈`-equal elements; this is
-exactly the assertion `θ ≑ 0ᴬ` (since `0ᴬ ⊆ θ` always holds), so its negation is the
-right notion of a **nonzero** (strictly-above-`0ᴬ`) congruence.
+A congruence is **below the diagonal** when it relates only `≈`-equal elements;
+this is exactly the assertion `θ ≑ 0ᴬ` (since `0ᴬ ⊆ θ` always holds), so its
+negation is the right notion of a **nonzero** (strictly-above-`0ᴬ`) congruence.
 
 ```agda
   -- θ relates only equal elements, i.e. θ ≑ 0ᴬ.
@@ -88,11 +89,11 @@ right notion of a **nonzero** (strictly-above-`0ᴬ`) congruence.
 
 #### The infinitary meet of a family of congruences
 
-For the completely-meet-irreducible characterization we need the meet (intersection)
-of a family of congruences.  This is the same intersection that
-[Setoid.Congruences.CompleteLattice][] packages (there as `⋀`, at the absorbing level
-`L`); here we take it at the algebra's own relation level `ℓ` for an `ℓ`-small index
-`I`, where it stays a `Con 𝑨 ℓ`.
+For the completely-meet-irreducible characterization we need the meet
+(intersection) of a family of congruences.  This is the same intersection that
+[Setoid.Congruences.CompleteLattice][] packages (there as `⋀`, at the absorbing
+level `L`); here we take it at the algebra's own relation level `ℓ` for an
+`ℓ`-small index `I`, where it stays a `Con 𝑨 ℓ`.
 
 ```agda
   ⋂ : {I : Type ℓ} → (I → Con 𝑨 ℓ) → Con 𝑨 ℓ
@@ -137,16 +138,18 @@ The monolith, when it exists, is unique up to mutual containment `≑`: two leas
 congruences are each below the other.
 
 ```agda
-  monolith-unique : (m m′ : HasMonolith) → proj₁ m ≑ proj₁ m′
+  monolith-unique : ((μ , _) (μ′ , _) : HasMonolith) → μ ≑ μ′
   monolith-unique (μ , mono) (μ′ , mono′) =
     mono-least mono  μ′ (mono-nonzero mono′) , mono-least mono′ μ  (mono-nonzero mono)
 ```
 
 #### Subdirect irreducibility
 
-An algebra is **subdirectly irreducible** when it is nontrivial and has a monolith.
-(The role of SI algebras in subdirect *representations* — Birkhoff's theorem that every
-algebra is a subdirect product of SI algebras — is developed in
+An algebra is **subdirectly irreducible** (SI) when it is nontrivial and has a
+monolith.
+
+The role of SI algebras in subdirect *representations* (Birkhoff's theorem that
+every algebra is a subdirect product of SI algebras) is developed in
 [Setoid.Subalgebras.Subdirect][].)
 
 ```agda
@@ -163,12 +166,13 @@ algebra is a subdirect product of SI algebras — is developed in
 
 #### The monolith characterization
 
-The substantive fact is that having a monolith makes `0ᴬ` **completely meet-irreducible**:
-whenever a family of congruences meets to the diagonal, some member is already the
-diagonal.  Constructively we state and prove the contrapositive — *if every member of a
-family is nonzero, then so is the meet* — which is the form actually used downstream and
-avoids extracting a witnessing index from a negated existential.  As with the monolith,
-the family ranges over congruences at the algebra's relation level `ρ`.
+The substantive fact is that having a monolith makes `0ᴬ`
+*completely meet-irreducible*: whenever a family of congruences meets to the
+diagonal, some member is already the diagonal.  Constructively we state and prove
+the contrapositive: *if every member of a family is nonzero, then so is the meet*.
+This is the form we actually use downstream and avoids extracting a witnessing
+index from a negated existential.  As with the monolith, the family ranges over
+congruences at the algebra's relation level `ρ`.
 
 ```agda
   -- 0ᴬ is completely meet-irreducible (contrapositive form).
@@ -192,10 +196,15 @@ meet were below the diagonal, so would `μ` be, contradicting `Nonzero μ`.
     μ⊆Δ p = ⋂θ⊆Δ (μ⊆⋂ p)
 ```
 
+**The binary case of the same argument**.  If `𝑨` has a monolith and both `θ` and
+`φ` are nonzero, then each of them contains the monolith, hence so does their meet,
+which is therefore nonzero as well.  `monolith⇒∧-irreducible`{.AgdaFunction}
+states exactly that: in the congruence lattice of a monolithic algebra the
+diagonal is meet-irreducible.
+
 ```agda
   -- The binary instance: the meet of two nonzero congruences is nonzero, i.e. `0ᴬ`
-  -- is meet-irreducible.  This is the "directly-indecomposable-adjacent" fact: a
-  -- monolithic algebra cannot have two nonzero congruences with diagonal meet.
+  -- is meet-irreducible.
   monolith⇒∧-irreducible :
     HasMonolith → (θ φ : Con 𝑨 ρ) → Nonzero θ → Nonzero φ → Nonzero (θ ∧ φ)
   monolith⇒∧-irreducible (μ , mono) θ φ nzθ nzφ θ∧φ⊆Δ = mono-nonzero mono μ⊆Δ
@@ -207,3 +216,7 @@ meet were below the diagonal, so would `μ` be, contradicting `Nonzero μ`.
     μ⊆Δ : BelowDiagonal μ
     μ⊆Δ p = θ∧φ⊆Δ (μ⊆θ p , μ⊆φ p)
 ```
+
+Since it cannot have two nonzero congruences that meet at the diagonal, a
+monolithic algebra is is subdirectly-indecomposable.  We formalize this fact in
+[Setoid.Subalgebras.Subdirect][].

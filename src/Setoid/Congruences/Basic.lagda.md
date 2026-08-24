@@ -9,6 +9,26 @@ author: "agda-algebras development team"
 
 This is the [Setoid.Congruences.Basic][] module of the [Agda Universal Algebra Library][].
 
+A **congruence** of an algebra `𝑨` is a binary relation on the carrier of `𝑨` that
+is an equivalence relation, contains the setoid equality of `𝑨`, and is *compatible*
+with the basic operations: applying an operation to argument tuples that are
+related coordinatewise gives related results.
+
+The compatibility half is `_∣≈_`{.AgdaFunction}; `IsCongruence`{.AgdaRecord} adds
+the other two conditions, and `Con`{.AgdaFunction} is the bundled Σ-form that the
+rest of the library passes around, with `IsCongruence→Con`{.AgdaFunction} and
+`Con→IsCongruence`{.AgdaFunction} converting between them.
+
+The reason to require containment of the setoid equality is that a congruence has
+to be an equivalence relation on the *setoid*, not merely on the carrier: a
+quotient by a relation that split an equality class would not be well defined.
+
+With the congruence in hand `_╱_`{.AgdaFunction} forms the quotient algebra, which
+is the same carrier under the coarser equivalence, needing neither a quotient type
+nor extensionality.  Kernels of homomorphisms are the primary source of congruences;
+see [Setoid.Homomorphisms.Kernels][].
+
+
 <!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
@@ -54,12 +74,9 @@ record type (`IsCongruence`) to represent the property of being a congruence, an
 we define a Sigma type (`Con`) to represent the type of congruences of a given
 algebra.
 
-Congruences should obviously contain the equality relation on the underlying
-setoid. That is, they must be reflexive. Unfortunately this doesn't come for free
-(e.g., as part of the definition of `IsEquivalence` on Setoid), so we must add the
-field `reflexive` to the definition of `IsCongruence`. (In fact, we should
-probably redefine equivalence relation on setoids to be reflexive with respect to
-the underlying setoid equality (and not just with respect to _≡_).)
+As mentioned above, congruences should contain the equality relation on the
+underlying setoid.  That is, they must be *reflexive*; hence, the `reflexive`
+field in the definition of `IsCongruence`.
 
 ```agda
 module _ {𝑆 : Signature 𝓞 𝓥} (𝑨 : Algebra {𝑆 = 𝑆} α ρ) where

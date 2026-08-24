@@ -9,8 +9,8 @@ author: "agda-algebras development team"
 
 This section presents the [Setoid.Terms.Operations][] module of the [Agda Universal Algebra Library][].
 
-Here we define *term operations* which are simply terms interpreted in a particular algebra, and we prove some compatibility properties of term operations.
-
+Here we define *term operations* which are simply terms interpreted in a
+particular algebra, and we prove some compatibility properties of term operations.
 
 <!--
 ```agda
@@ -34,7 +34,7 @@ import Relation.Binary.Reasoning.Setoid as SetoidReasoning
 open  import Overture                 using  ( OperationSymbolsOf ; ArityOf
                                              ; 𝓞 ; 𝓥 ; Signature ; 𝑆 )
 open  import Overture.Terms           using  ( Term )
-open  import Setoid.Algebras          using  ( Algebra ; _^_ ; ov ; ⨅ )
+open  import Setoid.Algebras          using  ( Algebra ; _^_ ; ov ; ⨅ ; 𝔻[_] ; 𝕌[_] )
 open  import Setoid.Homomorphisms     using  ( hom ; IsHom )
 open  import Setoid.Terms.Properties  using  ( free-lift )
 open  import Setoid.Terms.Basic       using  ( module Environment ; 𝑻 ; _≐_ ; ≐-isRefl )
@@ -48,18 +48,16 @@ private variable
 ```
 -->
 
-
 It turns out that the intepretation of a term is the same as the `free-lift`
 (modulo argument order and assuming function extensionality).
 
-
 ```agda
 module _ {𝑨 : Algebra {𝑆 = 𝑆} α ρᵃ} where
-  open Algebra 𝑨      using ( Interp )      renaming (Domain to A )
-  open Setoid A       using ( _≈_ ; refl )  renaming ( Carrier to ∣A∣ )
-  open Environment 𝑨  using ( ⟦_⟧ )
+  open Algebra 𝑨       using ( Interp )
+  open Setoid 𝔻[ 𝑨 ]   using ( _≈_ ; refl )
+  open Environment 𝑨   using ( ⟦_⟧ )
 
-  free-lift-interp :  (η : X → ∣A∣)(p : Term {𝑆 = 𝑆} X)
+  free-lift-interp :  (η : X → 𝕌[ 𝑨 ])(p : Term {𝑆 = 𝑆} X)
     → ⟦ p ⟧ ⟨$⟩ η ≈ (free-lift{𝑨 = 𝑨} η) p
 
   free-lift-interp η (ℊ x) = refl
@@ -83,6 +81,17 @@ module _ {𝑆 : Signature 𝓞 𝓥}{X : Type χ} where
 
 #### Interpretation of terms in product algebras
 
+`interp-prod`{.AgdaFunction} says that interpreting a term in a product is the
+same as interpreting it in each factor and collecting the results: for every term
+`p` and every environment `ρ`, the value of `p` in `⨅ 𝒜` under `ρ` agrees, at each
+coordinate `i`, with the value of `p` in `𝒜 i` under the `i`-th component of `ρ`.
+
+This is the term-level counterpart of the way `⨅`{.AgdaFunction} of
+[Setoid.Algebras.Products][] interprets operation *symbols* in the first place,
+and the proof is the induction that says so: the variable case is reflexivity, and
+the operation case pushes the induction hypothesis through the product's
+`Interp`{.AgdaField}.
+
 ```agda
 module _ {X : Type χ }{I : Type ι}(𝒜 : I → Algebra {𝑆 = 𝑆} α ρᵃ) where
   open Algebra (⨅ 𝒜)      using (Interp)  renaming ( Domain to ⨅A )
@@ -98,36 +107,34 @@ module _ {X : Type χ }{I : Type ι}(𝒜 : I → Algebra {𝑆 = 𝑆} α ρᵃ
 
 #### Compatibility of terms
 
-We now prove two important facts about term operations.  The first of these, which is
-used very often in the sequel, asserts that every term commutes with every
-homomorphism.
+We now prove the most important fact about term operations
+(`comm-hom-term`{.AgdaFunction}): every term commutes with every homomorphism.
 
 ```agda
-module _ {𝑆 : Signature 𝓞 𝓥}{𝑨 : Algebra {𝑆 = 𝑆} α ρᵃ}{𝑩 : Algebra {𝑆 = 𝑆} β ρᵇ}(hh : hom 𝑨 𝑩) where
-  open Algebra 𝑨      using () renaming (Domain to A )
-  open Setoid A       using () renaming ( Carrier to ∣A∣ )
-  open Algebra 𝑩      using () renaming (Domain to B ; Interp to Interp₂ )
-  open Setoid B       using ( _≈_ ; refl )
-  open Environment 𝑨  using () renaming ( ⟦_⟧ to ⟦_⟧₁ )
-  open Environment 𝑩  using () renaming ( ⟦_⟧ to ⟦_⟧₂ )
-  open SetoidReasoning B
+module _
+  {𝑆 : Signature 𝓞 𝓥}
+  {𝑨 : Algebra {𝑆 = 𝑆} α ρᵃ}
+  {𝑩 : Algebra {𝑆 = 𝑆} β ρᵇ}
+  ((h , hhom) : hom 𝑨 𝑩)
+  where
+
+  open Algebra 𝑩       using (Interp)
+  open Setoid 𝔻[ 𝑩 ]  using ( _≈_ ; refl )
+  open Environment 𝑨   using () renaming ( ⟦_⟧ to ⟦_⟧₁ )
+  open Environment 𝑩   using () renaming ( ⟦_⟧ to ⟦_⟧₂ )
+  open SetoidReasoning 𝔻[ 𝑩 ]
   open IsHom
 
-  private
-    h : A ⟶ B
-    h = proj₁ hh
-
-  comm-hom-term :
-    (t : Term {𝑆 = 𝑆} X) (a : X → ∣A∣) → h ⟨$⟩ (⟦ t ⟧₁ ⟨$⟩ a) ≈ ⟦ t ⟧₂ ⟨$⟩ λ i → h ⟨$⟩ a i
+  comm-hom-term : (t : Term {𝑆 = 𝑆} X) (a : X → 𝕌[ 𝑨 ])
+    → h ⟨$⟩ (⟦ t ⟧₁ ⟨$⟩ a) ≈ ⟦ t ⟧₂ ⟨$⟩ λ i → h ⟨$⟩ a i
 
   comm-hom-term (ℊ x) a = refl
   comm-hom-term (node f t) a = goal
     where
     goal : h ⟨$⟩ (⟦ node f t ⟧₁ ⟨$⟩ a) ≈ ⟦ node f t ⟧₂ ⟨$⟩ λ i → h ⟨$⟩ a i
     goal = begin
-      h ⟨$⟩ (⟦ node f t ⟧₁ ⟨$⟩ a)                  ≈⟨ compatible (proj₂ hh) ⟩
-      (f ^ 𝑩)(λ i → h ⟨$⟩ (⟦ t i ⟧₁ ⟨$⟩ a))        ≈⟨ cong Interp₂ (≡.refl , λ i → comm-hom-term (t i) a) ⟩
-      (f ^ 𝑩)(λ i → ⟦ t i ⟧₂ ⟨$⟩ λ j → h ⟨$⟩ a j)  ≈⟨ refl ⟩
+      h ⟨$⟩ (⟦ node f t ⟧₁ ⟨$⟩ a)                  ≈⟨ compatible (hhom) ⟩
+      (f ^ 𝑩)(λ i → h ⟨$⟩ (⟦ t i ⟧₁ ⟨$⟩ a))        ≈⟨ cong Interp (≡.refl , λ i → comm-hom-term (t i) a) ⟩
       ⟦ node f t ⟧₂ ⟨$⟩ (λ j → h ⟨$⟩ a j)          ∎
 ```
 
@@ -139,7 +146,7 @@ application of a substitution is represented as follows.
 ```agda
 _[_]s : {χ : Level}{X Y : Type χ} → Term {𝑆 = 𝑆} Y → (Y → X) → Term {𝑆 = 𝑆} X
 (ℊ y) [ σ ]s = ℊ (σ y)
-(node f t)  [ σ ]s = node f λ i → t i [ σ ]s
+(node f t) [ σ ]s = node f λ i → t i [ σ ]s
 ```
 
 Alternatively, we may want a substitution that replaces each variable symbol in `Y`,
