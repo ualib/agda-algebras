@@ -162,6 +162,6 @@ is (isomorphic to) a subalgebra of `𝑩`.
 
 ---
 
-[^1]: Note that we denote both the subalgebra and supalgebra relations by the
+[^1]: Note that we denote both the subalgebra and subuniverse relations by the
       same symbol, `_≤_`{.AgdaFunction}.  Which one is meant in a given context is
       determined by which module is imported in that context.
