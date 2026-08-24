@@ -74,6 +74,18 @@ commutativeSemigroup→semigroup (𝑨 , mod) = 𝑨 , λ { assoc → mod assoc�
 
 #### The `CommutativeSemigroup-Op` module
 
+`CommutativeSemigroup-Op 𝑪`{.AgdaModule} re-exports the semigroup interface —
+`_∙_`{.AgdaFunction}, `∙-cong`{.AgdaFunction}, `interp-node`{.AgdaFunction} and
+`assoc-law`{.AgdaFunction} — through the forgetful, and adds
+`equations`{.AgdaFunction}, the satisfaction witness, together with
+`comm-law`{.AgdaFunction}.
+
+Note which containment lemma is inherited here: this structure sits over
+`Sig-Magma`{.AgdaFunction}, whose single binary symbol needs only the one
+`interp-node`{.AgdaFunction}, where the monoid line has a separate lemma per
+operation symbol.  `comm-law`{.AgdaFunction} then reads
+`equations comm` between two applications of it.
+
 ```agda
 module CommutativeSemigroup-Op {α ρ : Level} (𝑪 : CommutativeSemigroup α ρ) where
   private 𝑨 = proj₁ 𝑪
@@ -94,6 +106,12 @@ module CommutativeSemigroup-Op {α ρ : Level} (𝑪 : CommutativeSemigroup α �
 ```
 
 #### `eqsToCommutativeSemigroup`
+
+`eqsToCommutativeSemigroup`{.AgdaFunction} builds a commutative semigroup from a
+carrier, a binary operation, and propositional associativity and commutativity.  It
+factors through `opsToMagma`{.AgdaFunction} — not `opsToBareMonoid`, since there is
+no identity element to supply — and both obligations reduce definitionally, so each
+is the given law read off at the environment components.
 
 ```agda
 eqsToCommutativeSemigroup : (A : Type α) (_·_ : A → A → A)

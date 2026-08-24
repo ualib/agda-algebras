@@ -90,6 +90,13 @@ _⊨ʳᵍ_ : (𝑨 : Algebra {𝑆 = Sig-Ring} α ρ) (ℰ : Eq-Ring → Term (F
 
 #### The type of rings
 
+`Ring α ρ`{.AgdaFunction} pairs an algebra over `Sig-Ring`{.AgdaFunction} with a
+proof of `Th-Ring`{.AgdaFunction}.  It is the widest structure in this tree: two
+binary operations, two constants and a unary inverse, with eleven equations
+relating them.  Because a ring is not an extension of any single weaker structure
+by equations alone, it has *two* reducts rather than one, additive and
+multiplicative, which the next section builds.
+
 ```agda
 Ring : (α ρ : Level) → Type (suc α ⊔ suc ρ)
 Ring α ρ = Σ[ 𝑨 ∈ Algebra {𝑆 = Sig-Ring} α ρ ] 𝑨 ⊨ʳᵍ Th-Ring

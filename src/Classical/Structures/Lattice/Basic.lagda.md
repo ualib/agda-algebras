@@ -113,6 +113,18 @@ _⊨ˡᵃ_ : (𝑨 : Algebra {𝑆 = Sig-Lattice} α ρ) (ℰ : Eq-Lattice → T
 
 #### The type of lattices
 
+`Lattice α ρ`{.AgdaFunction} pairs an algebra over `Sig-Lattice`{.AgdaFunction} with
+a proof of `Th-Lattice`{.AgdaFunction}.  Like a ring and unlike a semigroup it needs
+its own signature, since meet and join are two operations; and like a ring it has
+two reducts to the weaker structure rather than one, one per operation, which is
+what the next section constructs.
+
+This is the equational presentation of a lattice.  The order-theoretic presentation,
+where the two operations are recovered as infimum and supremum of a partial order,
+is the one [Setoid.Subalgebras.CompleteLattice][] and
+[Setoid.Congruences.CompleteLattice][] use; building order-first is cheaper when the
+order is what one has, since the standard library then derives the equations.
+
 ```agda
 Lattice : (α ρ : Level) → Type (suc α ⊔ suc ρ)
 Lattice α ρ = Σ[ 𝑨 ∈ Algebra {𝑆 = Sig-Lattice} α ρ ] 𝑨 ⊨ˡᵃ Th-Lattice

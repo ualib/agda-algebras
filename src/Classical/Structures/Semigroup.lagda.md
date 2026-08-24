@@ -132,6 +132,14 @@ _⊨_ : (𝑨 : Algebra {𝑆 = Sig-Magma} α ρ) (ℰ : Eq-Semigroup → Term (
 
 #### The type of semigroups
 
+`Semigroup α ρ`{.AgdaFunction} is a Σ-type: an algebra over the *magma* signature,
+paired with a proof that it satisfies `Th-Semigroup`{.AgdaFunction}.  There is no
+`Sig-Semigroup`, deliberately.  A semigroup is precisely a magma whose binary
+operation is associative, so the signature is inherited unchanged and the whole of
+the new content sits in the theory.  That division — signature from the weaker
+structure, new content as equations — is the shape ADR-002 fixes for every
+equation-bearing structure in this tree.
+
 ```agda
 Semigroup : (α ρ : Level) → Type (suc α ⊔ suc ρ)
 Semigroup α ρ = Σ[ 𝑨 ∈ Algebra {𝑆 = Sig-Magma} α ρ ] 𝑨 ⊨ Th-Semigroup

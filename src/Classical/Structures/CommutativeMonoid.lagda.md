@@ -56,6 +56,16 @@ CommutativeMonoid α ρ = Σ[ 𝑨 ∈ Algebra {𝑆 = Sig-Monoid} α ρ ] 𝑨 
 
 #### The forgetful projection to monoids
 
+`commutativeMonoid→monoid`{.AgdaFunction} keeps the algebra and discards
+commutativity.  Because a commutative monoid is a monoid with an extra *equation*
+rather than an extra operation, the signature does not change and no reduct is
+needed; what the function does is re-index the satisfaction witness, mapping each
+constructor of `Eq-Monoid`{.AgdaDatatype} to its counterpart in
+`Eq-CommutativeMonoid`{.AgdaDatatype}.  The `λ { assoc → mod assocᶜ ; … }` clause is
+exactly that renaming, and it is the cheap case of the pattern: contrast
+`monoid→semigroup`{.AgdaFunction} of [Classical.Structures.Monoid][], which must
+reduct and re-prove.
+
 ```agda
 commutativeMonoid→monoid : CommutativeMonoid α ρ → Monoid α ρ
 commutativeMonoid→monoid (𝑨 , mod) = 𝑨 , λ { assoc → mod assocᶜ
@@ -64,6 +74,18 @@ commutativeMonoid→monoid (𝑨 , mod) = 𝑨 , λ { assoc → mod assocᶜ
 ```
 
 #### The `CommutativeMonoid-Op` module
+
+`CommutativeMonoid-Op 𝑪`{.AgdaModule} inherits the whole monoid interface through the
+forgetful — `_∙_`{.AgdaFunction}, `ε`{.AgdaFunction}, the congruence, both
+containment lemmas and all three laws — and adds exactly one accessor of its own.
+`equations`{.AgdaFunction} is the new satisfaction witness, and
+`comm-law`{.AgdaFunction} is commutativity in curried form.
+
+That single addition is the point of the idiom: the inherited names are re-exported
+rather than restated, so opening this module gives the full monoid vocabulary plus
+commutativity, and the only proof written here is the one genuinely new law.  Its
+proof also shows why the containment lemmas were worth naming: `comm-law` is
+`equations comm` with `interp-node-∙`{.AgdaFunction} applied on each side.
 
 ```agda
 module CommutativeMonoid-Op {α ρ : Level} (𝑪 : CommutativeMonoid α ρ) where
@@ -85,6 +107,18 @@ module CommutativeMonoid-Op {α ρ : Level} (𝑪 : CommutativeMonoid α ρ) whe
 ```
 
 #### `eqsToCommutativeMonoid`
+
+`eqsToCommutativeMonoid`{.AgdaFunction} is the constructor a downstream user calls.
+It takes the raw data — a carrier, a binary operation, an identity element — and the
+four laws as *propositional* equations, and returns a `CommutativeMonoid α α`.
+
+The four proof obligations discharge by direct evaluation rather than by reasoning.
+Under `≡.setoid A` the setoid equality is propositional equality, and the
+interpretation of each term in `opsToBareMonoid`{.AgdaFunction} reduces
+definitionally to the corresponding application of `_·_`, so each clause is just the
+supplied law applied to the right environment components.  Factoring through
+`opsToBareMonoid`{.AgdaFunction} is also what makes the forgetful-agreement criterion
+of ADR-002 discharge by `refl`.
 
 ```agda
 eqsToCommutativeMonoid : (A : Type α) (_·_ : A → A → A) (e : A)

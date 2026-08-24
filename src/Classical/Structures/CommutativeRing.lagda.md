@@ -62,6 +62,14 @@ CommutativeRing α ρ = Σ[ 𝑨 ∈ Algebra {𝑆 = Sig-Ring} α ρ ] 𝑨 ⊨�
 
 #### The forgetful projection to rings
 
+`commutativeRing→ring`{.AgdaFunction} discards multiplicative commutativity.  As
+with the commutative monoid, the signature is unchanged and the work is re-indexing
+the satisfaction witness — but here the theory has eleven equations rather than
+three, so the clause is a table of eleven constructor renamings mapping each of
+`Eq-Ring`{.AgdaDatatype} to its `ᶜ`-suffixed counterpart in
+`Eq-CommutativeRing`{.AgdaDatatype}.  Long, but entirely mechanical: nothing is
+proved, only relabelled.
+
 ```agda
 commutativeRing→ring : CommutativeRing α ρ → Ring α ρ
 commutativeRing→ring (𝑨 , mod) = 𝑨 , λ  { +-assoc   → mod +-assocᶜ
@@ -78,6 +86,17 @@ commutativeRing→ring (𝑨 , mod) = 𝑨 , λ  { +-assoc   → mod +-assocᶜ
 ```
 
 #### The `CommutativeRing-Op` module
+
+`CommutativeRing-Op 𝑪`{.AgdaModule} inherits the entire ring interface through the
+forgetful: two operations with their units and the additive inverse, three
+congruences, five containment lemmas, and all eleven laws.  It adds
+`equations`{.AgdaFunction} and one new law, `·-comm-law`{.AgdaFunction}.
+
+The ratio is what makes the idiom worth having.  Twenty-three inherited names are
+re-exported by name and one law is proved, and that proof is the same three-step
+shape as `comm-law`{.AgdaFunction} in the commutative monoid and semigroup — the
+`equations ·-comm` step between two applications of the containment lemma for the
+relevant symbol, here `interp-node-·`{.AgdaFunction}.
 
 ```agda
 module CommutativeRing-Op {α ρ : Level} (𝑪 : CommutativeRing α ρ) where
@@ -101,6 +120,12 @@ module CommutativeRing-Op {α ρ : Level} (𝑪 : CommutativeRing α ρ) where
 ```
 
 #### `eqsToCommutativeRing`
+
+`eqsToCommutativeRing`{.AgdaFunction} is the largest constructor of the family: two
+binary operations, two constants, an additive inverse, and eleven propositional
+laws.  The eleven obligations discharge exactly as the smaller cases do, by
+definitional reduction under `≡.setoid A`, so the size of the signature costs
+argument count and nothing else.
 
 ```agda
 eqsToCommutativeRing : (A : Type α) (_+'_ : A → A → A) (0' : A) (-'_ : A → A) (_*'_ : A → A → A) (1' : A)

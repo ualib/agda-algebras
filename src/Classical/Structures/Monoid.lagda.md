@@ -98,6 +98,13 @@ _⊨ᵐᵒ_ : (𝑨 : Algebra {𝑆 = Sig-Monoid} α ρ) (ℰ : Eq-Monoid → Te
 
 #### The type of monoids
 
+`Monoid α ρ`{.AgdaFunction} pairs an algebra over `Sig-Monoid`{.AgdaFunction} with a
+proof of `Th-Monoid`{.AgdaFunction}.  Unlike `Semigroup`{.AgdaFunction}, this one
+does need its own signature: an identity element is a nullary *operation*, not an
+equation, so it cannot be added to the magma signature by theory alone.  That is
+why the reduct to magmas below is a genuine signature morphism rather than the
+identity.
+
 ```agda
 Monoid : (α ρ : Level) → Type (suc α ⊔ suc ρ)
 Monoid α ρ = Σ[ 𝑨 ∈ Algebra {𝑆 = Sig-Monoid} α ρ ] 𝑨 ⊨ᵐᵒ Th-Monoid
@@ -167,6 +174,26 @@ module _ (𝑴 : Monoid α ρ) where
 
 #### The `Monoid-Op` module
 
+`Monoid-Op 𝑴`{.AgdaModule} is the named-accessor module for a fixed monoid, opened
+at a use site so the laws read in ordinary infix form.  Unlike its predecessors it
+inherits nothing: `monoid→magma`{.AgdaFunction} is a reduct along a signature
+morphism rather than a projection, so the operations are rebuilt here directly from
+`Sig-Monoid`{.AgdaFunction}.  `_∙_`{.AgdaFunction} and `ε`{.AgdaFunction} are the
+curried binary and nullary operations, and `equations`{.AgdaFunction} is the
+satisfaction witness projected out of the Σ.
+
+The rest is the bridge between the two forms a law can take.  Equations in
+`Th-Monoid`{.AgdaFunction} are stated about *interpreted terms*, while a working
+algebraist wants them curried, and the two are not definitionally equal because
+`Fin n → A` has no η.  `∙-cong`{.AgdaFunction} is congruence of the interpreted
+operation; `interp-node-∙`{.AgdaFunction} and `interp-node-ε`{.AgdaFunction} are the
+containment lemmas that cross the gap, one per operation symbol; and
+`assoc-law`{.AgdaFunction}, `idˡ-law`{.AgdaFunction} and `idʳ-law`{.AgdaFunction}
+are the three laws in curried form, each obtained by wrapping the corresponding
+`equations` step in those lemmas.  `assoc-law`{.AgdaFunction} is
+`mn-assoc`{.AgdaFunction} from above, hoisted so that
+`monoid→semigroup`{.AgdaFunction} can consume it too.
+
 ```agda
 module Monoid-Op {α ρ : Level} (𝑴 : Monoid α ρ) where
   private 𝑨 = proj₁ 𝑴
@@ -208,6 +235,15 @@ module Monoid-Op {α ρ : Level} (𝑴 : Monoid α ρ) where
 ```
 
 #### The forgetful projection to semigroups
+
+`monoid→semigroup`{.AgdaFunction} forgets the identity element.  It is not a
+projection: the underlying algebra has to be reducted along the signature morphism
+first (`monoid→magma`{.AgdaFunction}), and then the associativity equation has to be
+re-proved *about the reduct*, since `Th-Semigroup`{.AgdaFunction} is stated over
+`Sig-Magma`{.AgdaFunction} and `equations`{.AgdaFunction} gives it over
+`Sig-Monoid`{.AgdaFunction}.  That transport is what the `where` block does, and it
+is why this forgetful is longer than the one-line `proj₁` of
+`semigroup→magma`{.AgdaFunction}.
 
 ```agda
 monoid→semigroup : Monoid α ρ → Semigroup α ρ

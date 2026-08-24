@@ -10,6 +10,34 @@ author: "the agda-algebras development team"
 
 This is the [Classical.Structures.Lattice][] module of the [Agda Universal Algebra Library][].
 
+This is a barrel module: it declares nothing of its own and re-exports the seven
+modules that develop lattices in the `Classical/` tree.  A lattice here is an
+algebra over `Sig-Lattice`{.AgdaFunction} satisfying `Th-Lattice`{.AgdaFunction},
+that is, the *equational* presentation; the order-theoretic presentation, in which
+meet and join are recovered as the infimum and supremum of a partial order, is what
+[Setoid.Subalgebras.CompleteLattice][] and [Setoid.Congruences.CompleteLattice][]
+build instead.
+
+Reach for the following:
+
++  [Classical.Structures.Lattice.Basic][]: the type `Lattice`{.AgdaFunction}
+   itself, the two magma reducts, and the named accessors;
++  [Classical.Structures.Lattice.DistributiveLattice][]: the same signature with
+   distributivity added to the theory;
++  [Classical.Structures.Lattice.Dual][]: meet and join exchanged.  Since
+   `Th-Lattice`{.AgdaFunction} is self-dual the construction needs no new equations,
+   and the double dual is definitionally the original;
++  [Classical.Structures.Lattice.Product][]: the direct product of two lattices,
+   coordinatewise;
++  [Classical.Structures.Lattice.OrdinalSum][]: one lattice stacked on another with
+   the top of the lower glued to the bottom of the upper, written `L ⊕ₐ M` in the
+   small-lattice-representations manuscript;
++  [Classical.Structures.Lattice.Parachute][]: a fresh bottom element beneath `n`
+   side-by-side canopies, the construction the FLRP work is built on;
++  [Classical.Structures.Lattice.Partitions][]: the partition lattice
+   `Eq(n)`{.AgdaFunction}, the equivalence relations on an `n`-element set ordered
+   by refinement.
+
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 

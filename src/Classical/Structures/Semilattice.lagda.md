@@ -78,6 +78,18 @@ semilattice→commutativeSemigroup (𝑨 , mod) = 𝑨 , λ { assoc → mod asso
 
 #### The `Semilattice-Op` module
 
+`Semilattice-Op 𝑺`{.AgdaModule} is the third link in the same chain, and it inherits
+from a structure that has itself inherited: `commutativeSemigroup→semigroup` is
+composed into the forgetful, so opening this module brings
+`assoc-law`{.AgdaFunction} down from `Semigroup-Op`{.AgdaModule} and
+`comm-law`{.AgdaFunction} from `CommutativeSemigroup-Op`{.AgdaModule} without either
+being restated.
+
+What is new is `equations`{.AgdaFunction} and `idem-law`{.AgdaFunction}, idempotency
+in curried form.  Its proof is the shortest of the family, needing only one
+containment step rather than two, because both arguments of the meet are the same
+term.
+
 ```agda
 module Semilattice-Op {α ρ : Level} (𝑺 : Semilattice α ρ) where
   private 𝑨 = proj₁ 𝑺
@@ -97,6 +109,12 @@ module Semilattice-Op {α ρ : Level} (𝑺 : Semilattice α ρ) where
 ```
 
 #### `eqsToSemilattice`
+
+`eqsToSemilattice`{.AgdaFunction} takes a carrier, a binary operation, and
+propositional associativity, commutativity and idempotency, and returns a
+`Semilattice α α` over `opsToMagma`{.AgdaFunction}.  As with the other constructors
+in this family every obligation reduces definitionally; the only difference from
+`eqsToCommutativeSemigroup`{.AgdaFunction} is the third law.
 
 ```agda
 eqsToSemilattice : (A : Type α) (_·_ : A → A → A)
