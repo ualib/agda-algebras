@@ -17,12 +17,14 @@ arbitrary map `h : X → 𝕌[ 𝑨 ]` sending variables to elements,
 supplies the other half of the universal property: two homomorphisms out of
 `𝑻 X` that agree on the variables agree everywhere.
 
-Existence and uniqueness together are what let a term identity be checked one
-variable assignment at a time, and they are used at every step of the HSP
-development, where `𝑻 X`{.AgdaFunction} is mapped into each algebra of a class in
-turn.  `lift-of-epi-is-epi`{.AgdaFunction} records that surjectivity of the
-variable assignment survives the lift, which is how epimorphisms out of the term
-algebra are obtained.
+Together these two are the universal property of `𝑻 X`{.AgdaFunction}: a map on
+variables extends to a homomorphism, and to only one.  The existence half is what
+gets used downstream — [Setoid.Varieties.HSP][] calls
+`lift-hom`{.AgdaFunction} to map the term algebra into each algebra of a class —
+while `free-unique`{.AgdaFunction} is a terminal result here, with no consumer in
+the live trees at present.  `lift-of-epi-is-epi`{.AgdaFunction} records that
+surjectivity of the variable assignment survives the lift, which is how
+epimorphisms out of the term algebra are obtained.
 
 
 
