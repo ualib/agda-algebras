@@ -88,6 +88,13 @@ _⊨ᵍᵖ_ : (𝑨 : Algebra {𝑆 = Sig-Group} α ρ) (ℰ : Eq-Group → Term
 
 #### The type of groups
 
+`Group α ρ`{.AgdaFunction} pairs an algebra over `Sig-Group`{.AgdaFunction} with a
+proof of `Th-Group`{.AgdaFunction}.  Like a monoid it needs its own signature rather
+than inheriting one, and for the same reason twice over: the identity is a nullary
+operation and the inverse is a unary one, and neither can be added to a weaker
+signature by equations alone.  The five equations of `Th-Group`{.AgdaFunction} are
+associativity, the two unit laws and the two inverse laws.
+
 ```agda
 Group : (α ρ : Level) → Type (suc α ⊔ suc ρ)
 Group α ρ = Σ[ 𝑨 ∈ Algebra {𝑆 = Sig-Group} α ρ ] 𝑨 ⊨ᵍᵖ Th-Group
@@ -160,6 +167,26 @@ module _ (𝑮 : Group α ρ) where
 ```
 
 #### The `Group-Op` module
+
+`Group-Op 𝑮`{.AgdaModule} is the named-accessor module for a fixed group, opened at a
+use site so that the laws read in ordinary notation.  It rebuilds the interface from
+`Sig-Group`{.AgdaFunction} directly rather than inheriting it, because the forgetful
+to monoids is a reduct along a signature morphism and so carries nothing down.
+
+The three operations come first, curried out of their interpretations:
+`_∙_`{.AgdaFunction}, `ε`{.AgdaFunction} and `_⁻¹`{.AgdaFunction}.
+`equations`{.AgdaFunction} is the satisfaction witness projected out of the Σ.  Then
+come the two congruences, `∙-cong`{.AgdaFunction} and `⁻¹-cong`{.AgdaFunction}, and
+the three containment lemmas `interp-node-∙`{.AgdaFunction},
+`interp-node-ε`{.AgdaFunction} and `interp-node-⁻¹`{.AgdaFunction} — one per
+operation symbol, each crossing the gap between a law stated about interpreted terms
+and the same law in curried form.
+
+The five laws follow: `assoc-law`{.AgdaFunction}, `idˡ-law`{.AgdaFunction},
+`idʳ-law`{.AgdaFunction}, `invˡ-law`{.AgdaFunction} and
+`invʳ-law`{.AgdaFunction}.  Each is its `equations` step wrapped in the containment
+lemmas for the symbols it mentions, so the inverse laws are the longest of the five:
+they mention all three operations.
 
 ```agda
 module Group-Op {α ρ : Level} (𝑮 : Group α ρ) where

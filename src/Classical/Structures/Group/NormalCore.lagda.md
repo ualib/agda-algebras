@@ -131,6 +131,24 @@ convenient one in proofs.
 
 #### The core is a normal subgroup contained in `H`
 
+The **normal core** of `H` is the intersection of all conjugates of `H`.  These four
+results are its defining properties, and together they say it is the largest normal
+subgroup that `H` contains.
+
++  `core-⊆`{.AgdaFunction}: the core sits inside `H`, obtained by instantiating the
+   conjugate at `g = ε`.
++  `core-isSubgroup`{.AgdaFunction}: it is an equality-respecting subgroup.  Respect
+   holds componentwise, and closure comes free from the subuniverse machinery, an
+   intersection of subuniverses being a subuniverse.
++  `core-normal`{.AgdaFunction}: it is normal, because conjugating a member by `g`
+   leaves every conjugate inside `H` — `conj k (conj g x)` is just the
+   `k ∙ g`-conjugate of `x`.
++  `core-greatest`{.AgdaFunction}: it is the greatest such, since any normal subset
+   of `H` lies inside every conjugate of `H` and hence inside the intersection.
+
+The last is what makes the core a *construction* rather than merely a subgroup: it
+is characterised by a universal property, so it is determined up to nothing at all.
+
 ```agda
   -- The core is contained in H (instantiate the conjugate at g = ε).
   core-⊆ : proj₁ core ⊆ H

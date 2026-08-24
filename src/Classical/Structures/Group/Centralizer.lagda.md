@@ -129,6 +129,16 @@ and conjugating that equation by `k` gives what is wanted.
 
 #### Normal subgroups meeting trivially centralize each other
 
+`normals-centralize`{.AgdaFunction} is the standard fact that two normal subgroups
+with trivial intersection commute elementwise: if `M` and `N` are normal and meet
+only in `ε`, then every element of `N` centralizes `M`.
+
+The proof is the classical commutator argument.  Given `n ∈ N` and `m ∈ M`, the
+commutator `(n m n⁻¹) m⁻¹` lies in `M` by normality of `M` and in `N` by normality
+of `N`, so the trivial-intersection hypothesis forces it to be `ε`, which is exactly
+`n m ≈ m n`.  It is the one place in this module where both normality hypotheses are
+used, and it is what makes an internal direct product decomposition possible.
+
 ```agda
   normals-centralize : {M : Pred G ℓ} {N : Pred G ℓ'}
     → IsSubgroup 𝒢 M → IsSubgroup 𝒢 N

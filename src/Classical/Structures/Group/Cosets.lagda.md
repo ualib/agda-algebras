@@ -118,6 +118,20 @@ products, since `(x ⁻¹ ∙ y) ∙ (y ⁻¹ ∙ z) ≈ x ⁻¹ ∙ z`.
 
 #### Compatibility lemmas
 
+Two facts are needed before the coset relation can be used as an equality.
+
+`≈⇒∼`{.AgdaFunction} says the group's own setoid equality refines the coset
+relation, which is what makes the quotient map well defined: equal elements land in
+the same coset.  `∼-congˡ`{.AgdaFunction} says left translation by any group element
+preserves the coset relation, which is what lets `g ∙_` descend to the coset space.
+
+Both are proved the same way, by supplying `respects`{.AgdaFunction} with an
+equality between the relevant `x ⁻¹ ∙ y` witnesses: for `≈⇒∼`{.AgdaFunction} that
+witness reduces to `ε` and membership follows from `ε-closed`{.AgdaFunction}, and for
+`∼-congˡ`{.AgdaFunction} the `g` cancels, so the translated witness equals the
+original.  `∼-congˡ`{.AgdaFunction} is what
+[Classical.Structures.Group.GSet][] uses to build the coset algebra.
+
 ```agda
   -- The setoid equality refines the coset equality (the quotient map is well defined).
   ≈⇒∼ : ∀ {x y} → x ≈ y → x ∼ y

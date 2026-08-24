@@ -60,6 +60,14 @@ AbelianGroup α ρ = Σ[ 𝑨 ∈ Algebra {𝑆 = Sig-Group} α ρ ] 𝑨 ⊨ᵃ
 
 #### The forgetful projection to groups
 
+`abelianGroup→group`{.AgdaFunction} discards commutativity.  Since an abelian group
+is a group with one extra *equation* and no extra operation, the signature is
+unchanged and no reduct is needed; the function keeps the algebra and re-indexes the
+satisfaction witness, mapping each constructor of `Eq-Group`{.AgdaDatatype} to its
+counterpart in `Eq-AbelianGroup`{.AgdaDatatype}.  This is the cheap shape of
+forgetful, the same one `commutativeMonoid→monoid`{.AgdaFunction} has, as against the
+reduct-and-re-prove shape of `monoid→semigroup`{.AgdaFunction}.
+
 ```agda
 abelianGroup→group : AbelianGroup α ρ → Group α ρ
 abelianGroup→group (𝑨 , mod) = 𝑨 , λ { assoc → mod assocᵃ
@@ -70,6 +78,15 @@ abelianGroup→group (𝑨 , mod) = 𝑨 , λ { assoc → mod assocᵃ
 ```
 
 #### The `AbelianGroup-Op` module
+
+`AbelianGroup-Op 𝑨`{.AgdaModule} inherits the whole group interface through the
+forgetful — three operations, both congruences, all three containment lemmas and all
+five laws — and adds two names: `equations`{.AgdaFunction}, the new satisfaction
+witness, and `comm-law`{.AgdaFunction}, commutativity in curried form.
+
+`comm-law`{.AgdaFunction} has the three-step shape every added law in this hierarchy
+has: `equations comm` between two applications of `interp-node-∙`{.AgdaFunction}, one
+for each side of the equation.
 
 ```agda
 module AbelianGroup-Op {α ρ : Level} (𝑨𝑩 : AbelianGroup α ρ) where
@@ -91,6 +108,13 @@ module AbelianGroup-Op {α ρ : Level} (𝑨𝑩 : AbelianGroup α ρ) where
 ```
 
 #### `eqsToAbelianGroup`
+
+`eqsToAbelianGroup`{.AgdaFunction} is the constructor a downstream user calls: a
+carrier, a binary operation, an identity, an inverse, and the six laws as
+*propositional* equations.  Every obligation discharges by definitional reduction,
+since under `≡.setoid A` the setoid equality is propositional equality and each
+interpreted term reduces to the corresponding application of the supplied
+operations.
 
 ```agda
 eqsToAbelianGroup : {A : Type α} (_·_ : A → A → A) (e : A) (i : A → A)
