@@ -33,7 +33,9 @@ Reach for the following:
 +  [Setoid.Subalgebras.CompleteLattice][]: the subuniverses of a fixed algebra,
    ordered by inclusion, as a complete lattice;
 +  [Setoid.Subalgebras.Subdirect][]: subdirect products, subdirect
-   irreducibility, and Birkhoff's subdirect representation theorem.
+   irreducibility, and Birkhoff's subdirect representation theorem, which is
+   proved relative to a choice principle in general and unconditionally for
+   finite algebras.
 
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}

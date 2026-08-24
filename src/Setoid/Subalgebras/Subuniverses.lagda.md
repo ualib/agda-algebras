@@ -23,11 +23,20 @@ facts that make generation usable are `sgIsSub`{.AgdaFunction}, that `Sg G` real
 is a subuniverse, and `sgIsSmallest`{.AgdaFunction}, that it is contained in every
 subuniverse containing `G`.  Also here: closure of subuniverses under arbitrary
 intersection (`⋂s`{.AgdaFunction}), which is what makes the lattice of
-[Setoid.Subalgebras.CompleteLattice][] complete; the term-based characterisation
-`TermImage`{.AgdaDatatype} with `sub-term-closed`{.AgdaFunction}, saying that a
-subuniverse is exactly a subset closed under the term operations; and
-`hom-unique`{.AgdaFunction}, that two homomorphisms agreeing on a generating set
-agree everywhere.
+[Setoid.Subalgebras.CompleteLattice][] complete; and `hom-unique`{.AgdaFunction},
+that two homomorphisms agreeing on a generating set agree everywhere.
+
+The term-level results are the remainder, and each is one directional implication
+rather than a characterisation.  `sub-term-closed`{.AgdaFunction} says a
+subuniverse is closed under the term operations: if every variable is sent into
+`B`, so is the value of any term.  `TermImage`{.AgdaDatatype} approaches the same
+ground from the other side, as the inductively defined set of values of terms with
+arguments drawn from `B`; `TermImageIsSub`{.AgdaFunction} shows it is a
+subuniverse, `B-onlyif-TermImageB`{.AgdaFunction} that it contains `B`, and
+`SgB-onlyif-TermImageB`{.AgdaFunction} that it therefore sits above `Sg B`.
+Neither converse is established here: closure under term operations is not turned
+back into membership in `Subuniverses`{.AgdaFunction}, and the reverse inclusion
+`TermImage B ⊆ Sg B` is not proved, so the two are not shown equal.
 
 <!--
 ```agda
