@@ -37,8 +37,10 @@ Reach for the following:
    `Subalgebra`{.AgdaFunction} forms, the class-relative `_≤c_`{.AgdaFunction},
    and `mon→≤`{.AgdaFunction};
 +  [Setoid.Subalgebras.Properties][]: that `_≤_`{.AgdaFunction} is a preorder,
-   how it interacts with isomorphism and with universe lifting, and that it is
-   preserved by products;
+   which is as far as it goes (mutual embeddings do not yield an isomorphism in
+   general, though they do for finite algebras); how `_≤_`{.AgdaFunction}
+   interacts with isomorphism and with universe lifting; and that it is preserved
+   by products;
 +  [Setoid.Subalgebras.Subuniverses][]: the subsets of a carrier closed under the
    operations, the subuniverse they generate, and the induction principle that
    makes generation usable;

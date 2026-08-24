@@ -22,13 +22,29 @@ our definition requires the carrier of a subalgebra of `𝑩` to be a subset of 
 carrier of `𝑩`.[^1]
 
 Our subalgebra relation `_≤_`{.AgdaFunction} is clearly reflexive and transitive,
-so it is at least a *preorder*.  Whether `_≤_`{.AgdaFunction} it is antisymmetric
-— that is, whether `𝑨 ≤ 𝑩`{.AgdaFunction} and `𝑩 ≤ 𝑨`{.AgdaFunction} imply `𝑨 ≈ 𝑩`
-— depends on what we mean by `≈` in the definition of asymmetry.  If `≈` means
-"on the nose" equality, then `_≤_` it is not antisymmetric; but that is arguably
-the wrong notion of equality on algebras.  If `≈` to means isomorphism, then
-`_≤_`{.AgdaFunction} is antisymmetric, and thus a partial order on (isomorphism
-classes of) algebras.
+so it is a *preorder*; that is exactly what [Setoid.Subalgebras.Properties][]
+proves, as `≤-preorder`{.AgdaFunction}, and it is the only order-theoretic fact
+about `_≤_`{.AgdaFunction} that this subtree establishes.
+
+It is not a partial order.  Antisymmetry would require that `𝑨 ≤ 𝑩` and `𝑩 ≤ 𝑨`
+imply `𝑨 ≈ 𝑩` for some suitable `≈`, and read as "on the nose" equality that
+plainly fails.  The tempting repair is to read `≈` as isomorphism, but that fails
+too: `𝑨 ≤ 𝑩` and `𝑩 ≤ 𝑨` supply injective homomorphisms in both directions, and a
+pair of injections is not an isomorphism.  Neither map need invert the other, and
+in general no isomorphism need exist at all — the free groups on two and on three
+generators embed in each other yet are not isomorphic, as their abelianizations
+`ℤ²` and `ℤ³` already show.  Extracting a bijection from two injections is
+Cantor–Bernstein, which is unavailable constructively, and the bijection it
+yields classically need not be a homomorphism.
+
+For **finite** algebras the repair does work, and that is the setting much of this
+library's later work lives in.  Mutual injections between finite carriers force
+equal cardinality; an injective map between finite sets of equal cardinality is
+surjective; and an injective, surjective homomorphism is an isomorphism, by
+`Bijective→≅`{.AgdaFunction} of [Setoid.Homomorphisms.Isomorphisms][].  So on
+finite algebras `_≤_`{.AgdaFunction} is antisymmetric up to isomorphism, hence a
+partial order on isomorphism classes.  That chain of reasoning is *not* formalized
+here; only `Bijective→≅`{.AgdaFunction}, its last step, is.
 
 This module defines the subalgebra relation `_≤_`{.AgdaFunction} and the several
 ways of packaging it: as a record bundling both algebras, as a Σ-type over the

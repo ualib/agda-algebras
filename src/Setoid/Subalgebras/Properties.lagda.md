@@ -137,10 +137,12 @@ iso→injective 𝑨 (mkiso f g f∼g g∼f) {x} {y} fxfy =
 #### Lifts of subalgebras of setoid algebras
 
 Ten lemmas of one shape: transport a `≤` or a `≥` across the isomorphism between
-an algebra and its lift.  Each is a single application of one of the mixed
-transitivity lemmas above to one of the `Lift-≅`{.AgdaFunction} isomorphisms of
-[Setoid.Homomorphisms.Isomorphisms][], which is the concrete sense in which
-universe lifting costs nothing here.
+an algebra and its lift.  The seven one-sided ones are each a single application
+of a mixed transitivity lemma from above to one of the `Lift-≅`{.AgdaFunction}
+isomorphisms of [Setoid.Homomorphisms.Isomorphisms][]; the three
+`Lift-≤-Lift`{.AgdaFunction} variants then compose two of those.  Either way no
+lemma is more than a line, which is the concrete sense in which universe lifting
+costs nothing here.
 
 The suffix says which level moves, following `Lift-Algˡ`{.AgdaFunction},
 `Lift-Algʳ`{.AgdaFunction} and `Lift-Alg`{.AgdaFunction} of
