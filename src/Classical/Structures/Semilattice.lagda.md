@@ -86,9 +86,11 @@ composed into the forgetful, so opening this module brings
 being restated.
 
 What is new is `equations`{.AgdaFunction} and `idem-law`{.AgdaFunction}, idempotency
-in curried form.  Its proof is the shortest of the family, needing only one
-containment step rather than two, because both arguments of the meet are the same
-term.
+in curried form.  Its proof is the shortest of the family, needing one containment
+step where `comm-law`{.AgdaFunction} needs two, and the reason is the shape of the
+equation rather than the repeated argument: `x ∙ x ≈ x` has a node only on the left,
+and the right-hand side is a bare variable whose interpretation is already `x`, so
+there is nothing to cross on that side.
 
 ```agda
 module Semilattice-Op {α ρ : Level} (𝑺 : Semilattice α ρ) where

@@ -136,9 +136,14 @@ _⊨_ : (𝑨 : Algebra {𝑆 = Sig-Magma} α ρ) (ℰ : Eq-Semigroup → Term (
 paired with a proof that it satisfies `Th-Semigroup`{.AgdaFunction}.  There is no
 `Sig-Semigroup`, deliberately.  A semigroup is precisely a magma whose binary
 operation is associative, so the signature is inherited unchanged and the whole of
-the new content sits in the theory.  That division — signature from the weaker
-structure, new content as equations — is the shape ADR-002 fixes for every
-equation-bearing structure in this tree.
+the new content sits in the theory.
+
+That is the *equation-only* case, and not the general rule: ADR-002 §5 has each
+structure characterised by its own pair `(Sig-X , Th-X)`, and reusing a weaker
+signature is available only when no operation symbols are added.
+`Monoid`{.AgdaFunction} in this same tree is the contrasting case — an identity
+element is a nullary operation, so it needs `Sig-Monoid`{.AgdaFunction} and a genuine
+signature morphism back to magmas.
 
 ```agda
 Semigroup : (α ρ : Level) → Type (suc α ⊔ suc ρ)

@@ -237,8 +237,9 @@ module Monoid-Op {α ρ : Level} (𝑴 : Monoid α ρ) where
 #### The forgetful projection to semigroups
 
 `monoid→semigroup`{.AgdaFunction} forgets the identity element.  It is not a
-projection: the underlying algebra has to be reducted along the signature morphism
-first (`monoid→magma`{.AgdaFunction}), and then the associativity equation has to be
+projection: the underlying algebra has to be replaced by its reduct along the
+signature morphism first (`monoid→magma`{.AgdaFunction}, built with
+`reductBy`{.AgdaFunction}), and then the associativity equation has to be
 re-proved *about the reduct*, since `Th-Semigroup`{.AgdaFunction} is stated over
 `Sig-Magma`{.AgdaFunction} and `equations`{.AgdaFunction} gives it over
 `Sig-Monoid`{.AgdaFunction}.  That transport is what the `where` block does, and it

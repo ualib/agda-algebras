@@ -370,9 +370,10 @@ affected meet or join).
 
 `∨ᵒ-cong`{.AgdaFunction} is the join half of the same argument, with the same
 sixteen-case structure and the same reason for each case: diagonal combinations are
-the component congruences, and combinations crossing the glue are absorbed, this
-time by the `⊤`-absorption lemmas rather than the `⊥`-absorption ones, since it is
-the top of the lower summand that a join can reach.
+the component congruences, and combinations crossing the glue are absorbed.  Both
+absorption families are used here, one per summand — the lower summand's
+`⊤`-absorptions where a join reaches its top, and the upper summand's
+`⊥`-absorptions where the other component is pinned at its bottom.
 
 ```agda
   ∨ᵒ-cong : ∀ {p q u v} → p ≈ᵍ q → u ≈ᵍ v → p ∨ᵒ u ≈ᵍ q ∨ᵒ v

@@ -25,8 +25,10 @@ Reach for the following:
 +  [Classical.Structures.Lattice.DistributiveLattice][]: the same signature with
    distributivity added to the theory;
 +  [Classical.Structures.Lattice.Dual][]: meet and join exchanged.  Since
-   `Th-Lattice`{.AgdaFunction} is self-dual the construction needs no new equations,
-   and the double dual is definitionally the original;
+   `Th-Lattice`{.AgdaFunction} is self-dual the construction needs no new equations.
+   Dualizing twice recovers each operation *pointwise*, but the involution is not
+   formalized there, because stating it as an equality of `Lattice`{.AgdaFunction}
+   values would need function extensionality and no consumer has required it;
 +  [Classical.Structures.Lattice.Product][]: the direct product of two lattices,
    coordinatewise;
 +  [Classical.Structures.Lattice.OrdinalSum][]: one lattice stacked on another with
