@@ -10,11 +10,14 @@ author: "the agda-algebras development team"
 This is the [Overture.Adjunction.Residuation][] module of the [Agda Universal Algebra Library][].
 
 A **residuation** between two posets is a pair of monotone maps `f : A → B` and
-`g : B → A` satisfying `a ≤ᴬ g (f a)` and `f (g b) ≤ᴮ b`: the same data as a
-Galois connection ([Overture.Adjunction.Galois][]) packaged as two inequalities
-rather than two implications.  The `Residuation` record bundles the maps, their
+`g : B → A` satisfying `a ≤ᴬ g (f a)` and `f (g b) ≤ᴮ b`; in the order-theoretic
+literature this is the inequality form of a monotone Galois connection, that is,
+an adjunction between posets.  The `Residuation` record bundles the maps, their
 monotonicity, and the two inequalities; the rest of the module proves each map is
-a weak inverse of the other.
+a weak inverse of the other.  It is a different bundle from the `Galois` record of
+[Overture.Adjunction.Galois][], whose two inequalities are both in the extensive
+direction and which carries no monotonicity fields; the two records are not
+interchangeable.
 
 <!--
 ```agda
