@@ -57,7 +57,7 @@ REPO      ?= ualib/agda-algebras
 DOCSTRING_MAX_GAPS ?= 67
 # The other half of the bar ADR-010 states: modules whose header is only the
 # boilerplate sentence.  Ratcheted the same way; never raise it.
-DOCSTRING_MAX_WEAK_HEADERS ?= 19
+DOCSTRING_MAX_WEAK_HEADERS ?= 12
 
 # The certificate census: generated representation certificates for the FLRP
 # research track (issue #515).  Excluded from Everything.agda and checked by

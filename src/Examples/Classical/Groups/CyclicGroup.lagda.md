@@ -45,6 +45,9 @@ open Polymorphic.Group-Op ℤ-group using ( _∙_ ; ε ; _⁻¹ )
 
 #### Acceptance checks
 
+`∙-is-+-group`, `ε-is-0-group`, and `⁻¹-is-neg-group` record that the accessors
+interpret to `_+_`, `0ℤ`, and negation on the nose, each discharged by `refl`.
+
 ```agda
 ∙-is-+-group : ∀ (a b : ℤ) → a ∙ b ≡ a + b
 ∙-is-+-group a b = refl

@@ -7,6 +7,12 @@ author: "agda-algebras development team"
 
 ### Examples of Structures
 
+This is the [Examples.Structures.Basic][] module of the [Agda Universal Algebra Library][].
+
+Two tiny worked examples of the general `structure` type of the frozen
+`Legacy.Base` tree, which packages operation symbols and relation symbols in one
+signature pair: a purely algebraic structure and a purely relational one.  The
+signatures come from [Examples.Structures.Signatures][].
 
 <!--
 ```agda
@@ -23,6 +29,11 @@ open import Legacy.Base.Structures          using ( structure )
 open import Examples.Structures.Signatures  using ( S001 ; S∅ ; S0001 )
 ```
 -->
+
+`SL` is a three-element meet semilattice presented as a `structure` with one binary
+operation symbol (`S001`) and no relation symbols (`S∅`).  The meet of two distinct
+elements is `𝟎`, so the induced order has bottom `𝟎` below the incomparable pair
+`𝟏`, `𝟐`.
 
 ```agda
 -- An example of a (purely) algebraic structure is a 3-element meet semilattice.

@@ -74,6 +74,12 @@ v4-inv x = x
 
 #### The group `V₄`
 
+As for `ℤ/3ℤ`, the five group axioms are decided over the finite carrier:
+`v4-group` hands `eqsToGroup` the operation, the identity `0F`, the inverse map,
+and `from-yes` of each of the five checkers.  If the table failed an axiom the
+corresponding decision would reduce to `no` and the definition would not
+type-check.
+
 ```agda
 v4-group : Group
 v4-group = eqsToGroup (Fin 4) _·_ 0F v4-inv
@@ -85,6 +91,10 @@ open Polymorphic.Group-Op v4-group using ( _∙_ ; ε ; _⁻¹ )
 ```
 
 #### `V₄` is abelian and has exponent 2
+
+`·-comm` is decided like the axioms.  Exponent 2 needs no separate lemma: the
+acceptance check `⁻¹-is-self` below records that the inverse accessor is the
+identity map on the nose.
 
 ```agda
 ·-comm : ∀ a b → a · b ≡ b · a

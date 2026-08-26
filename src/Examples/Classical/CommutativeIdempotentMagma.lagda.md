@@ -73,6 +73,11 @@ _·_ = ⟦ cim-table ⟧
 
 #### The magma `(Fin 4, _·_)`
 
+`cim-magma` packages the carrier and the tabulated operation as a small `Magma`
+through `opsToMagma`; a magma owes no equations, so the two arguments are the whole
+construction.  The `open` line names the accessor's curried operation `_∙_` for the
+acceptance checks below.
+
 ```agda
 cim-magma : Magma
 cim-magma = opsToMagma (Fin 4) _·_

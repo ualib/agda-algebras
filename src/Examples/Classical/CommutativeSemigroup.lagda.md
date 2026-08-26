@@ -6,9 +6,13 @@ date: "2026-05-24"
 author: "the agda-algebras development team"
 ---
 
-### Worked Example: `(ℕ, +, 0)` as a commutative semigroup
+### Worked example: `(ℕ, +)` as a commutative semigroup
 
 This is the [Examples.Classical.CommutativeSemigroup][] module of the [Agda Universal Algebra Library][].
+
+The natural numbers under addition, one theory up from
+[`Examples.Classical.Semigroup`][Examples.Classical.Semigroup]: the same carrier and
+operation, now additionally witnessing commutativity via stdlib's `+-comm`.
 
 <!--
 ```agda
@@ -25,6 +29,11 @@ open import Classical.Small.Structures.CommutativeSemigroup
 import Classical.Structures.CommutativeSemigroup as Polymorphic
 ```
 -->
+
+`ℕ-commutativeSemigroup` hands `eqsToCommutativeSemigroup` the carrier, the
+operation, and the two laws `+-assoc` and `+-comm`.  The acceptance check
+`∙-is-+-cs` records that the accessor's curried `_∙_` interprets to `_+_` on the
+nose, discharged by `refl`.
 
 ```agda
 ℕ-commutativeSemigroup : CommutativeSemigroup
