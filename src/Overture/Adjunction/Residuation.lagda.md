@@ -9,6 +9,13 @@ author: "the agda-algebras development team"
 
 This is the [Overture.Adjunction.Residuation][] module of the [Agda Universal Algebra Library][].
 
+A **residuation** between two posets is a pair of monotone maps `f : A → B` and
+`g : B → A` satisfying `a ≤ᴬ g (f a)` and `f (g b) ≤ᴮ b`: the same data as a
+Galois connection ([Overture.Adjunction.Galois][]) packaged as two inequalities
+rather than two implications.  The `Residuation` record bundles the maps, their
+monotonicity, and the two inequalities; the rest of the module proves each map is
+a weak inverse of the other.
+
 <!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
@@ -47,6 +54,11 @@ module _ (𝑨 : Poset a ιᵃ α)(𝑩 : Poset b ιᵇ β) where
 ```
 
 #### Basic properties of residual pairs
+
+With a residuation fixed, `_≈A_` and `_≈B_` are pointwise equality of functions
+into `A` and into `B`, each with respect to the corresponding poset's underlying
+equivalence.  They are the equalities in which the weak-inverse laws below are
+stated.
 
 ```agda
 -- open Residuation

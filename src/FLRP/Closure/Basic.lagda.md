@@ -8,7 +8,7 @@ author: "the agda-algebras development team"
 
 ### The closure toolkit for decidable representability
 
-This is the [FLRP.Closure][] module of the [Agda Universal Algebra Library][].
+This is the [FLRP.Closure.Basic][] module of the [Agda Universal Algebra Library][].
 
 The class of representable lattices is closed under a catalogue of operations
 (the roadmap's § 3; `docs/papers/fin-lat-rep/SmallLatticeReps.tex`, § Closure
