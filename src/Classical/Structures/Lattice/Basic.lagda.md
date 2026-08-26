@@ -10,48 +10,51 @@ author: "the agda-algebras development team"
 
 This is the [Classical.Structures.Lattice.Basic][] module of the [Agda Universal Algebra Library][].
 
-This module formalizes a lattice *as an equational algebra* (an algebra over
-`Sig-Lattice` satisfying `Th-Lattice`).  For the complementary *order-theoretic* view —
-a lattice as a poset with meets and joins, the form taken by the congruence and
-subalgebra lattices — see [Order.CompleteLattice][] (the two presentations are
-equivalent via a standard theorem).
+This module formalizes a lattice *as an equational algebra*, that is, an algebra
+over `Sig-Lattice` satisfying `Th-Lattice`.
+
+For the *order-theoretic* view of a lattice, as a poset with meets and joins (the
+form taken by the congruence and subalgebra lattices) see
+[Order.CompleteLattice][].  The two presentations are equivalent.
 
 A **lattice** inhabits the Σ-typed structure `Σ[ 𝑨 ∈ Algebra α ρ ] 𝑨 ⊨ Th-Lattice`
-over `Sig-Lattice`.  Lattice is the first structure in the [`Classical/`][Classical]
-tree with two *distinct* binary operation symbols (`∧-Op` and `∨-Op`); its
-signature is parallel to `Sig-Magma`, not an extension of it, and so it has
-*two* natural forgetful projections — one for each operation — both landing in
+over `Sig-Lattice`.
+
+`Lattice`{.AgdaFunction} is the first structure in [`Classical/`][Classical]
+with two distinct binary operation symbols (`∧-Op` and `∨-Op`); its signature is
+parallel to `Sig-Magma`, not an extension of it, and so it has two natural
+forgetful projections, one for each operation, both landing in
 [`Semilattice`][Classical.Structures.Semilattice].
 
-This module's prose adds the following conventions to the
-two-binary-symbols-with-eight-equations case beyond the
+This module's adds the following conventions beyond the
 [Monoid][Classical.Structures.Monoid] template:
 
-+  **Two reducts, one per operation**.  `lattice→meetMagma` and
-   `lattice→joinMagma` are the two container-morphism reducts
-   `Sig-Magma ↪ Sig-Lattice` that send `∙-Op` to `∧-Op` and `∨-Op` respectively,
-   with identity position maps.  Both are pure reducts (no laws needed); the
-   downstream `lattice→meetSemilattice` and `lattice→joinSemilattice` add
-   `Th-Semilattice` satisfaction on top via the curried-law pivot, exactly as
-   `monoid→semigroup` does for the single-operation case.
-+  **Eight standalone curried laws**.  Each of the eight equations in
-   `Th-Lattice` is exposed as a standalone curried-form lemma
-   (`lt-∧-assoc` through `lt-absorbʳ`) defined once in a
-   `module _ (𝑳 : Lattice α ρ)` block above the forgetfuls, so that both
-   `Lattice-Op` and each `lattice→<X>Semilattice` consume the same proof.
++  **Two reducts, one per operation**.
+
+   `lattice→meetMagma` and `lattice→joinMagma` are the two container-morphism
+   reducts `Sig-Magma ↪ Sig-Lattice` that send `∙-Op` to `∧-Op` and `∨-Op`
+   respectively, with identity position maps; both are pure reducts (no laws).
+
+   `lattice→meetSemilattice` and `lattice→joinSemilattice` add `Th-Semilattice`
+   satisfaction, just as `monoid→semigroup` does for the single-operation case.
+
++  **Eight standalone curried laws**.
+
+   Each of the eight equations in `Th-Lattice` is exposed as a standalone
+   lemma (`lt-∧-assoc` through `lt-absorbʳ`), so that both `Lattice-Op` and each
+   `lattice→<X>Semilattice` consume the same proof.
+
 +  **Direct curried accessors**.  `Lattice-Op` defines `_∧_` and `_∨_` directly
-   via `Curry₂ (∧-Op ^ 𝑨)` / `Curry₂ (∨-Op ^ 𝑨)` rather than inheriting through
-   either semilattice reduct, for the same reason Monoid does: the reduct's
-   position map re-indexes definitionally to the identity in both cases, but
-   keeping the accessors direct keeps every downstream `refl` independent of
-   that reduction.
+   rather than inheriting through either semilattice reduct, for the same reason
+   Monoid does: the reduct's position map re-indexes definitionally to the
+   identity in both cases, but keeping the accessors direct keeps every downstream
+   `refl` independent of that reduction.
+
 +  **No two-symbol bridge primitive**.  The absorption laws involve terms
-   nesting two operation symbols (e.g. `node ∧-Op (pair (ℊ 0F)
-   (node ∨-Op (pair (ℊ 0F) (ℊ 1F))))`), but the term-to-curried bridge is two
-   compositions of single-symbol `interp-cong` calls — one per operation —
-   exactly as `Monoid-Op`'s `interp-node-∙` is reused.  No new primitive in
-   `Classical.Structures.Interpret` is needed; the existing `interp-cong`
-   composes through the nesting.
+   nesting two operation symbols
+   (e.g., `node ∧-Op (pair (ℊ 0F) (node ∨-Op (pair (ℊ 0F) (ℊ 1F))))`);
+   No new primitive in `Classical.Structures.Interpret` is needed; the existing
+   `interp-cong` composes through the nesting.
 
 <!--
 ```agda
@@ -83,11 +86,13 @@ open import Classical.Signatures.Magma        using  ( Sig-Magma ; Op-Magma )
                                               renaming ( ∙-Op to ∙-Opᵐᵃ )
 open import Classical.Structures.Interpret    using  ( interp-cong )
 open import Classical.Structures.Semilattice  using  ( Semilattice ; _⊨ˢˡ_)
-open import Classical.Theories.Lattice        using  ( Eq-Lattice ; Th-Lattice ; ∧-assoc
-                                                     ; ∧-comm ; ∧-idem ; ∨-assoc ; ∨-comm
-                                                     ; ∨-idem ; absorbˡ ; absorbʳ )
+open import Classical.Theories.Lattice        using  ( Eq-Lattice ; Th-Lattice
+                                                     ; ∧-assoc ; ∧-comm ; ∧-idem
+                                                     ; ∨-assoc ; ∨-comm ; ∨-idem
+                                                     ; absorbˡ ; absorbʳ )
 open import Classical.Theories.Semilattice    using  ( Th-Semilattice )
-                                              renaming  ( assoc to assocˢˡ ; comm  to commˢˡ
+                                              renaming  ( assoc to assocˢˡ
+                                                        ; comm  to commˢˡ
                                                         ; idem  to idemˢˡ )
 open import Overture.Operations               using  ( Op )
 open import Overture.Terms                    using  ( Term ; ℊ ; node )
@@ -97,7 +102,7 @@ open import Setoid.Algebras.Basic             using  ( Algebra ; _^_ ; 𝔻[_] ;
 open import Setoid.Algebras.Reduct            using  ( reductBy )
 open import Setoid.Signatures                 using  ( ⟨_⟩ )
 open import Setoid.Terms                      using  ( module Environment )
-open import Setoid.Varieties.EquationalLogic using ( _⊧_≈_ )
+open import Setoid.Varieties.EquationalLogic  using  ( _⊧_≈_ )
 
 private variable α ρ : Level
 ```
@@ -181,27 +186,26 @@ module _ (𝑳 : Lattice α ρ) where
     _∨_ : 𝕌[ 𝑨 ] → 𝕌[ 𝑨 ] → 𝕌[ 𝑨 ]
     _∨_ = Curry₂ (∨-Op ^ 𝑨)
 
-    infixr 7 _∧_
-    infixr 6 _∨_
+    infixl 7 _∧_ _∨_
 
     interp-node-∧ : (s t : Term (Fin 3)) (η : Fin 3 → 𝕌[ 𝑨 ])
-                  → ⟦ node ∧-Op (pair s t) ⟧ ⟨$⟩ η ≈ (⟦ s ⟧ ⟨$⟩ η) ∧ (⟦ t ⟧ ⟨$⟩ η)
-    interp-node-∧ s t η = interp-cong 𝑨 ∧-Op (λ { 0F → ≈refl ; 1F → ≈refl })
+      → ⟦ node ∧-Op (pair s t) ⟧ ⟨$⟩ η ≈ ⟦ s ⟧ ⟨$⟩ η ∧ ⟦ t ⟧ ⟨$⟩ η
+    interp-node-∧ s t η = interp-cong 𝑨 ∧-Op λ { 0F → ≈refl ; 1F → ≈refl }
 
     interp-node-∨ : (s t : Term (Fin 3)) (η : Fin 3 → 𝕌[ 𝑨 ])
-                  → ⟦ node ∨-Op (pair s t) ⟧ ⟨$⟩ η ≈ (⟦ s ⟧ ⟨$⟩ η) ∨ (⟦ t ⟧ ⟨$⟩ η)
-    interp-node-∨ s t η = interp-cong 𝑨 ∨-Op (λ { 0F → ≈refl ; 1F → ≈refl })
+      → ⟦ node ∨-Op (pair s t) ⟧ ⟨$⟩ η ≈ ⟦ s ⟧ ⟨$⟩ η ∨ ⟦ t ⟧ ⟨$⟩ η
+    interp-node-∨ s t η = interp-cong 𝑨 ∨-Op λ { 0F → ≈refl ; 1F → ≈refl }
 
-    ∧-cong : ∀ {x y u v} → x ≈ y → u ≈ v → (x ∧ u) ≈ (y ∧ v)
-    ∧-cong x≈y u≈v = interp-cong 𝑨 ∧-Op (λ { 0F → x≈y ; 1F → u≈v })
+    ∧-cong : ∀ {x y u v} → x ≈ y → u ≈ v → x ∧ u ≈ y ∧ v
+    ∧-cong x≈y u≈v = interp-cong 𝑨 ∧-Op λ { 0F → x≈y ; 1F → u≈v }
 
-    ∨-cong : ∀ {x y u v} → x ≈ y → u ≈ v → (x ∨ u) ≈ (y ∨ v)
-    ∨-cong x≈y u≈v = interp-cong 𝑨 ∨-Op (λ { 0F → x≈y ; 1F → u≈v })
+    ∨-cong : ∀ {x y u v} → x ≈ y → u ≈ v → x ∨ u ≈ y ∨ v
+    ∨-cong x≈y u≈v = interp-cong 𝑨 ∨-Op λ { 0F → x≈y ; 1F → u≈v }
 
-  lt-∧-assoc : ∀ {x y z} → (x ∧ y) ∧ z ≈ x ∧ (y ∧ z)
+  lt-∧-assoc : ∀ {x y z} → x ∧ y ∧ z ≈ x ∧ (y ∧ z)
   lt-∧-assoc {x} {y} {z} = begin
-    (x ∧ y) ∧ z       ≈⟨ ∧-cong (≈sym (interp-node-∧ (ℊ 0F) (ℊ 1F) η)) ≈refl ⟩
-    ⟦ xy ⟧ ⟨$⟩ η ∧ z  ≈⟨ ≈sym (interp-node-∧ xy (ℊ 2F) η) ⟩
+    x ∧ y ∧ z         ≈˘⟨ ∧-cong (interp-node-∧ (ℊ 0F) (ℊ 1F) η) ≈refl ⟩
+    ⟦ xy ⟧ ⟨$⟩ η ∧ z  ≈˘⟨ interp-node-∧ xy (ℊ 2F) η ⟩
     ⟦ lhsT ⟧ ⟨$⟩ η    ≈⟨ proj₂ 𝑳 ∧-assoc η ⟩
     ⟦ rhsT ⟧ ⟨$⟩ η    ≈⟨ interp-node-∧ (ℊ 0F) yz η ⟩
     x ∧ ⟦ yz ⟧ ⟨$⟩ η  ≈⟨ ∧-cong ≈refl (interp-node-∧ (ℊ 1F) (ℊ 2F) η) ⟩
@@ -209,6 +213,7 @@ module _ (𝑳 : Lattice α ρ) where
     where
     η : Fin 3 → 𝕌[ 𝑨 ]
     η = λ { 0F → x ; 1F → y ; 2F → z }
+
     xy yz lhsT rhsT : Term (Fin 3)
     xy   = node ∧-Op (pair (ℊ 0F) (ℊ 1F))
     yz   = node ∧-Op (pair (ℊ 1F) (ℊ 2F))
@@ -219,18 +224,19 @@ module _ (𝑳 : Lattice α ρ) where
   lt-∧-comm {x} {y} =
     ≈trans  (≈sym (interp-node-∧ (ℊ 0F) (ℊ 1F) η))
             (≈trans (proj₂ 𝑳 ∧-comm η) (interp-node-∧ (ℊ 1F) (ℊ 0F) η))
-    where η : Fin 3 → 𝕌[ 𝑨 ]
-          η = λ { 0F → x ; 1F → y ; 2F → x }
+    where
+    η : Fin 3 → 𝕌[ 𝑨 ]
+    η = λ { 0F → x ; 1F → y ; 2F → x }
 
   lt-∧-idem : ∀ {x} → x ∧ x ≈ x
   lt-∧-idem {x} = ≈trans (≈sym (interp-node-∧ (ℊ 0F) (ℊ 0F) η)) (proj₂ 𝑳 ∧-idem η)
     where η : Fin 3 → 𝕌[ 𝑨 ]
           η = λ { 0F → x ; 1F → x ; 2F → x }
 
-  lt-∨-assoc : ∀ {x y z} → (x ∨ y) ∨ z ≈ x ∨ (y ∨ z)
+  lt-∨-assoc : ∀ {x y z} → x ∨ y ∨ z ≈ x ∨ (y ∨ z)
   lt-∨-assoc {x} {y} {z} = begin
-    (x ∨ y) ∨ z       ≈⟨ ∨-cong (≈sym (interp-node-∨ (ℊ 0F) (ℊ 1F) η)) ≈refl ⟩
-    ⟦ xy ⟧ ⟨$⟩ η ∨ z  ≈⟨ ≈sym (interp-node-∨ xy (ℊ 2F) η) ⟩
+    x ∨ y ∨ z         ≈˘⟨ ∨-cong (interp-node-∨ (ℊ 0F) (ℊ 1F) η) ≈refl ⟩
+    ⟦ xy ⟧ ⟨$⟩ η ∨ z  ≈˘⟨ interp-node-∨ xy (ℊ 2F) η ⟩
     ⟦ lhsT ⟧ ⟨$⟩ η    ≈⟨ proj₂ 𝑳 ∨-assoc η ⟩
     ⟦ rhsT ⟧ ⟨$⟩ η    ≈⟨ interp-node-∨ (ℊ 0F) yz η ⟩
     x ∨ ⟦ yz ⟧ ⟨$⟩ η  ≈⟨ ∨-cong ≈refl (interp-node-∨ (ℊ 1F) (ℊ 2F) η) ⟩
@@ -248,19 +254,21 @@ module _ (𝑳 : Lattice α ρ) where
   lt-∨-comm {x} {y} =
     ≈trans  (≈sym (interp-node-∨ (ℊ 0F) (ℊ 1F) η))
             (≈trans (proj₂ 𝑳 ∨-comm η) (interp-node-∨ (ℊ 1F) (ℊ 0F) η))
-    where η : Fin 3 → 𝕌[ 𝑨 ]
-          η = λ { 0F → x ; 1F → y ; 2F → x }
+    where
+    η : Fin 3 → 𝕌[ 𝑨 ]
+    η = λ { 0F → x ; 1F → y ; 2F → x }
 
   lt-∨-idem : ∀ {x} → x ∨ x ≈ x
   lt-∨-idem {x} = ≈trans (≈sym (interp-node-∨ (ℊ 0F) (ℊ 0F) η)) (proj₂ 𝑳 ∨-idem η)
-    where  η : Fin 3 → 𝕌[ 𝑨 ]
-           η = λ { 0F → x ; 1F → x ; 2F → x }
+    where
+    η : Fin 3 → 𝕌[ 𝑨 ]
+    η = λ { 0F → x ; 1F → x ; 2F → x }
 
   -- x ∧ (x ∨ y) ≈ x   (meet absorbs join)
   lt-absorbˡ : ∀ {x y} → x ∧ (x ∨ y) ≈ x
   lt-absorbˡ {x} {y} = begin
-    x ∧ (x ∨ y)        ≈⟨ ∧-cong ≈refl (≈sym (interp-node-∨ (ℊ 0F) (ℊ 1F) η)) ⟩
-    x ∧ ⟦ x∨y ⟧ ⟨$⟩ η  ≈⟨ ≈sym (interp-node-∧ (ℊ 0F) x∨y η) ⟩
+    x ∧ (x ∨ y)        ≈˘⟨ ∧-cong ≈refl (interp-node-∨ (ℊ 0F) (ℊ 1F) η) ⟩
+    x ∧ ⟦ x∨y ⟧ ⟨$⟩ η  ≈˘⟨ interp-node-∧ (ℊ 0F) x∨y η ⟩
     ⟦ lhsT ⟧ ⟨$⟩ η     ≈⟨ proj₂ 𝑳 absorbˡ η ⟩
     x                  ∎
     where
@@ -273,8 +281,8 @@ module _ (𝑳 : Lattice α ρ) where
   -- (x ∧ y) ∨ x ≈ x   (join absorbs meet, with x on the right of the outer ∨)
   lt-absorbʳ : ∀ {x y} → (x ∧ y) ∨ x ≈ x
   lt-absorbʳ {x} {y} = begin
-    (x ∧ y) ∨ x        ≈⟨ ∨-cong (≈sym (interp-node-∧ (ℊ 0F) (ℊ 1F) η)) ≈refl ⟩
-    ⟦ x∧y ⟧ ⟨$⟩ η ∨ x  ≈⟨ ≈sym (interp-node-∨ x∧y (ℊ 0F) η) ⟩
+    (x ∧ y) ∨ x        ≈˘⟨ ∨-cong (interp-node-∧ (ℊ 0F) (ℊ 1F) η) ≈refl ⟩
+    ⟦ x∧y ⟧ ⟨$⟩ η ∨ x  ≈˘⟨ interp-node-∨ x∧y (ℊ 0F) η ⟩
     ⟦ lhsT ⟧ ⟨$⟩ η     ≈⟨ proj₂ 𝑳 absorbʳ η ⟩
     x                  ∎
     where
@@ -298,8 +306,7 @@ module Lattice-Op {α ρ : Level} (𝑳 : Lattice α ρ) where
   open Setoid 𝔻[ 𝑨 ] using (_≈_) renaming (refl to ≈refl)
   open Environment 𝑨 using ( ⟦_⟧ )
 
-  infixr 7 _∧_
-  infixr 6 _∨_
+  infixl 7 _∧_ _∨_
 
   _∧_ : 𝕌[ 𝑨 ] → 𝕌[ 𝑨 ] → 𝕌[ 𝑨 ]
   _∧_ = Curry₂ (∧-Op ^ 𝑨)
@@ -324,7 +331,7 @@ module Lattice-Op {α ρ : Level} (𝑳 : Lattice α ρ) where
     → ⟦ node ∨-Op (pair s t) ⟧ ⟨$⟩ η ≈ ⟦ s ⟧ ⟨$⟩ η ∨ ⟦ t ⟧ ⟨$⟩ η
   interp-node-∨ s t = interp-cong 𝑨 ∨-Op λ { 0F → ≈refl ; 1F → ≈refl }
 
-  ∧-assoc-law : ∀ {x y z} → (x ∧ y) ∧ z ≈ x ∧ (y ∧ z)
+  ∧-assoc-law : ∀ {x y z} → x ∧ y ∧ z ≈ x ∧ (y ∧ z)
   ∧-assoc-law = lt-∧-assoc 𝑳
 
   ∧-comm-law : ∀ {x y} → x ∧ y ≈ y ∧ x
@@ -333,7 +340,7 @@ module Lattice-Op {α ρ : Level} (𝑳 : Lattice α ρ) where
   ∧-idem-law : ∀ {x} → x ∧ x ≈ x
   ∧-idem-law = lt-∧-idem 𝑳
 
-  ∨-assoc-law : ∀ {x y z} → (x ∨ y) ∨ z ≈ x ∨ (y ∨ z)
+  ∨-assoc-law : ∀ {x y z} → x ∨ y ∨ z ≈ x ∨ (y ∨ z)
   ∨-assoc-law = lt-∨-assoc 𝑳
 
   ∨-comm-law : ∀ {x y} → x ∨ y ≈ y ∨ x
@@ -483,21 +490,23 @@ eqsToLattice A _∧'_ _∨'_ ∧-assoc-≡ ∧-comm-≡ ∧-idem-≡ ∨-assoc-�
 #### Setoid-level lattice builders
 
 `eqsToLattice`{.AgdaFunction} covers carriers with propositional equality; the
-constructions that build one lattice out of others — the binary product, the dual,
+constructions that build one lattice out of others (the binary product, the dual,
 and the ordinal sum of [Classical.Structures.Lattice.Product][],
-[Classical.Structures.Lattice.Dual][], and [Classical.Structures.Lattice.OrdinalSum][]
-— produce *setoid* carriers, so they need the general form.
+[Classical.Structures.Lattice.Dual][], and
+[Classical.Structures.Lattice.OrdinalSum][]) produce *setoid* carriers, so they
+need the general form.
+
 `setoidOpsToBareLattice`{.AgdaFunction} assembles the `Sig-Lattice` algebra from a
 carrier setoid, two binary operations, and their congruence proofs (which the
 propositional case got for free from `cong₂`{.AgdaFunction});
 `setoidEqsToLattice`{.AgdaFunction} adds the eight equations, now stated over the
 setoid equality `≈`.
 
-The interpretation clauses *apply* the argument tuple (`a 0F ∧' a 1F` rather than
-routing through `pair`{.AgdaFunction}), so each equation of `Th-Lattice`
-evaluates definitionally to its curried form, and the satisfaction proof consumes the
-curried hypotheses directly — the same reduction discipline that makes
-`eqsToLattice`{.AgdaFunction}'s proof clauses one-liners.
+The interpretation clauses apply the argument tuple (`a 0F ∧' a 1F` rather than
+routing through `pair`{.AgdaFunction}), so each equation of `Th-Lattice` evaluates
+definitionally to its curried form, and the satisfaction proof consumes the
+curried hypotheses directly (the same reduction discipline that makes
+`eqsToLattice`{.AgdaFunction}'s proof clauses one-liners).
 
 ```agda
 module _ (𝐷 : Setoid α ρ) where

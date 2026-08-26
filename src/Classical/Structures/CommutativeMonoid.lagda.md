@@ -10,8 +10,12 @@ author: "the agda-algebras development team"
 
 This is the [Classical.Structures.CommutativeMonoid][] module of the [Agda Universal Algebra Library][].
 
-`Σ[ 𝑨 ∈ Algebra α ρ ] 𝑨 ⊨ Th-CommutativeMonoid` over `Sig-Monoid`.  An equation-only
-extension of Monoid: `commutativeMonoid→monoid` is a pure theory-reindex, and
+A **commutative monoid** is an inhabitant of the type
+`Σ[ 𝑨 ∈ Algebra α ρ ] 𝑨 ⊨ Th-CommutativeMonoid`, where `Algebra` is parameterized
+by the `Sig-Monoid` type.
+
+This module naturally codifies a commutative monoid as an equational extension of
+`Monoid`; `commutativeMonoid→monoid` is a pure theory-reindex, and
 `CommutativeMonoid-Op` inherits `_∙_`, `ε`, and all three monoid laws through it,
 adding `comm-law`.
 
@@ -21,8 +25,9 @@ adding `comm-law`.
 
 module Classical.Structures.CommutativeMonoid where
 
-open import Agda.Primitive                          using () renaming ( Set to Type )
+open import Agda.Primitive                         using () renaming ( Set to Type )
 
+-- Imports from the Agda Standard Library ---------------------------------------
 open import Data.Fin.Base                          using ( Fin )
 open import Data.Fin.Patterns                      using ( 0F ; 1F ; 2F )
 open import Data.Product                           using ( Σ-syntax ; _×_ ; _,_ ; proj₁ ; proj₂ )
@@ -30,14 +35,15 @@ open import Level                                  using ( Level ; _⊔_ ; suc )
 open import Relation.Binary                        using ( Setoid )
 open import Relation.Binary.PropositionalEquality  using ( _≡_ )
 
+-- Imports from the Agda Universal Algebra Library ------------------------------
 open import Classical.Signatures.Monoid            using ( Sig-Monoid )
 open import Classical.Structures.Monoid            using ( Monoid ; module Monoid-Op ; opsToBareMonoid )
 open import Classical.Theories.Monoid              using ( assoc ; idˡ ; idʳ )
 open import Classical.Theories.CommutativeMonoid   using ( Eq-CommutativeMonoid ; Th-CommutativeMonoid ; comm )
                                                    renaming ( assoc to assocᶜ ; idˡ to idˡᶜ ; idʳ to idʳᶜ )
 open import Overture.Terms {𝑆 = Sig-Monoid}        using (Term ; ℊ )
-open import Setoid.Algebras.Basic using ( Algebra ; 𝔻[_] ; 𝕌[_] )
-open import Setoid.Varieties.EquationalLogic using ( _⊧_≈_ )
+open import Setoid.Algebras.Basic                  using ( Algebra ; 𝔻[_] ; 𝕌[_] )
+open import Setoid.Varieties.EquationalLogic       using ( _⊧_≈_ )
 
 private variable α ρ : Level
 ```
@@ -47,11 +53,12 @@ private variable α ρ : Level
 
 ```agda
 infix 4 _⊨ᶜᵐᵒ_
+
 _⊨ᶜᵐᵒ_ : (𝑨 : Algebra {𝑆 = Sig-Monoid} α ρ) (ℰ : Eq-CommutativeMonoid → Term (Fin 3) × Term (Fin 3)) → Type (α ⊔ ρ)
 𝑨 ⊨ᶜᵐᵒ ℰ = ∀ i → 𝑨 ⊧ proj₁ (ℰ i) ≈ proj₂ (ℰ i)
 
 CommutativeMonoid : (α ρ : Level) → Type (suc α ⊔ suc ρ)
-CommutativeMonoid α ρ = Σ[ 𝑨 ∈ Algebra {𝑆 = Sig-Monoid} α ρ ] 𝑨 ⊨ᶜᵐᵒ Th-CommutativeMonoid
+CommutativeMonoid α ρ = Σ[ 𝑨 ∈ Algebra α ρ ] 𝑨 ⊨ᶜᵐᵒ Th-CommutativeMonoid
 ```
 
 #### The forgetful projection to monoids
@@ -68,16 +75,15 @@ reduct and re-prove.
 
 ```agda
 commutativeMonoid→monoid : CommutativeMonoid α ρ → Monoid α ρ
-commutativeMonoid→monoid (𝑨 , mod) = 𝑨 , λ { assoc → mod assocᶜ
-                                           ; idˡ   → mod idˡᶜ
-                                           ; idʳ   → mod idʳᶜ }
+commutativeMonoid→monoid (𝑨 , mod) =
+  𝑨 , λ { assoc → mod assocᶜ ; idˡ → mod idˡᶜ ; idʳ → mod idʳᶜ }
 ```
 
 #### The `CommutativeMonoid-Op` module
 
-`CommutativeMonoid-Op 𝑪`{.AgdaModule} inherits the whole monoid interface through the
-forgetful — `_∙_`{.AgdaFunction}, `ε`{.AgdaFunction}, the congruence, both
-containment lemmas and all three laws — and adds exactly one accessor of its own.
+`CommutativeMonoid-Op 𝑪`{.AgdaModule} inherits the whole monoid interface
+(`_∙_`{.AgdaFunction}, `ε`{.AgdaFunction}, the congruence, both
+containment lemmas and all three laws) and adds exactly one accessor of its own.
 `equations`{.AgdaFunction} is the new satisfaction witness, and
 `comm-law`{.AgdaFunction} is commutativity in curried form.
 
@@ -93,8 +99,8 @@ module CommutativeMonoid-Op {α ρ : Level} (𝑪 : CommutativeMonoid α ρ) whe
   open Setoid 𝔻[ 𝑨 ]
 
   open Monoid-Op (commutativeMonoid→monoid 𝑪) public
-    using ( _∙_ ; ε ; ∙-cong ; interp-node-∙ ; interp-node-ε
-          ; assoc-law ; idˡ-law ; idʳ-law )
+    using  ( _∙_ ; ε ; ∙-cong ; interp-node-∙ ; interp-node-ε
+           ; assoc-law ; idˡ-law ; idʳ-law )
 
   equations : 𝑨 ⊨ᶜᵐᵒ Th-CommutativeMonoid
   equations = proj₂ 𝑪
@@ -109,7 +115,7 @@ module CommutativeMonoid-Op {α ρ : Level} (𝑪 : CommutativeMonoid α ρ) whe
 #### `eqsToCommutativeMonoid`
 
 `eqsToCommutativeMonoid`{.AgdaFunction} is the constructor a downstream user calls.
-It takes the raw data — a carrier, a binary operation, an identity element — and the
+It takes the raw data (a carrier, a binary operation, an identity element) and the
 four laws as *propositional* equations, and returns a `CommutativeMonoid α α`.
 
 The four proof obligations discharge by direct evaluation rather than by reasoning.

@@ -72,8 +72,7 @@ module IntervalLattice {c ℓ₁ ℓ₂ : Level} (L : Lattice c ℓ₁ ℓ₂)
   _≤_ : Interval → Interval → Type ℓ₂
   x ≤ y = proj₁ x ≤ˣ proj₁ y
 
-  infixr 6 _∨_
-  infixr 7 _∧_
+  infixl 7 _∧_ _∨_
 
   -- Join and meet are those of L; both stay inside the interval.
   _∨_ : Interval → Interval → Interval

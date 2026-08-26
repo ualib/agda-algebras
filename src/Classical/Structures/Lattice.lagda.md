@@ -18,7 +18,7 @@ meet and join are recovered as the infimum and supremum of a partial order, is w
 [Setoid.Subalgebras.CompleteLattice][] and [Setoid.Congruences.CompleteLattice][]
 build instead.
 
-Reach for the following:
+### Guide to the submodules of <span class="AgdaModule">Classical.Structures.Lattice</span>
 
 +  [Classical.Structures.Lattice.Basic][]: the type `Lattice`{.AgdaFunction}
    itself, the two magma reducts, and the named accessors;

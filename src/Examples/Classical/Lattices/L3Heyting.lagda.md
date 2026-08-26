@@ -68,8 +68,7 @@ minimum, join is the maximum, and the implication `a ⇒ b` is the largest `x` w
 | 2   | 0 | 1 | 2 |   | 2   | 2 | 2 | 2 |   | 2   | 0 | 1 | 2 |
 
 ```agda
-infixr 7 _∧_
-infixr 6 _∨_
+infixl 7 _∧_ _∨_
 infixr 5 _⇒_
 
 ⊤ : Fin 3

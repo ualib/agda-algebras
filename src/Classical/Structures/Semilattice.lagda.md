@@ -10,7 +10,10 @@ author: "the agda-algebras development team"
 
 This is the [Classical.Structures.Semilattice][] module of the [Agda Universal Algebra Library][].
 
-A semilattice is `Σ[ 𝑨 ∈ Algebra α ρ ] 𝑨 ⊨ Th-Semilattice` over `Sig-Magma`.
+A **semilattice** is an inabitant of the type
+`Σ[ 𝑨 ∈ Algebra α ρ ] 𝑨 ⊨ Th-Semilattice`, where `Algebra` is parameterized by the
+`Sig-Magma` type.
+
 Equationally, a semilattice is an idempotent commutative semigroup: its theory
 extends `Th-CommutativeSemigroup` by the single `idem` equation.  The forgetful
 projection `semilattice→commutativeSemigroup` is therefore a pure theory-reindex

@@ -188,7 +188,7 @@ the underlying relation first, then bundle the `IsCongruence` proof.
     m-compatible : 𝑨 ∣≈ meetRel θ φ
     m-compatible 𝑓 uv = is-compatible θc 𝑓 (λ i → proj₁ (uv i))
                       , is-compatible φc 𝑓 (λ i → proj₂ (uv i))
-  infixr 7 _∧_
+  infixl 7 _∧_
 ```
 
 The meet is the *greatest lower bound* of its two arguments: it is below each of
