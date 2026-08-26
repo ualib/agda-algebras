@@ -26,6 +26,7 @@ module Examples.Classical where
 
 open import Examples.Classical.CommutativeIdempotentMagma public
 open import Examples.Classical.CommutativeMonoid public
+open import Examples.Classical.CommutativeRing public
 open import Examples.Classical.CommutativeSemigroup public
 open import Examples.Classical.Groups public
 open import Examples.Classical.Lattices public

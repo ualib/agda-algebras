@@ -9,12 +9,13 @@ author: "the agda-algebras development team"
 
 This is the [Examples][] module of the [Agda Universal Algebra Library][].
 
-This is the aggregator for the example tree: importing it type-checks every worked
-example in the library.  The submodules group the examples by flavour, as follows:
+This is the aggregator for the example tree.  The submodules group the examples by
+flavour, as follows:
 
-+  [Examples.Classical][] pairs one worked instance with each classical structure:
-   canonical first examples, finite groups from Cayley tables, the two-element
-   lattices, and deliberate failure modes such as a magma that is not a semigroup.
++  [Examples.Classical][] collects the worked instances of the classical
+   structures: canonical first examples, finite groups from Cayley tables, the
+   small lattices, and deliberate failure modes such as a magma that is not a
+   semigroup.
 +  [Examples.Demos][] collects self-contained demonstrations, among them the
    frozen literate artifact of the TYPES 2021 paper.
 +  [Examples.FunctionTypeBijections][] and [Examples.PolynomialFunctors][] are

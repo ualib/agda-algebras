@@ -98,8 +98,8 @@ s3-inv 5F = 5F
 
 The five group axioms are decided over the finite carrier: `s3-group` hands
 `eqsToGroup` the tabulated operation, the identity `0F`, the inverse map, and
-`from-yes` of each of the five checkers.  At `Fin 6` this is the largest decision
-the examples ask of the checkers (216 triples for associativity).
+`from-yes` of each of the five checkers.  At `Fin 6` the associativity decision
+alone ranges over 216 triples.
 
 ```agda
 s3-group : Group
