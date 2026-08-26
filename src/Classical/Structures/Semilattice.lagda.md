@@ -10,7 +10,10 @@ author: "the agda-algebras development team"
 
 This is the [Classical.Structures.Semilattice][] module of the [Agda Universal Algebra Library][].
 
-A semilattice is `Σ[ 𝑨 ∈ Algebra α ρ ] 𝑨 ⊨ Th-Semilattice` over `Sig-Magma`.
+A **semilattice** is an inabitant of the type
+`Σ[ 𝑨 ∈ Algebra α ρ ] 𝑨 ⊨ Th-Semilattice`, where `Algebra` is parameterized by the
+`Sig-Magma` type.
+
 Equationally, a semilattice is an idempotent commutative semigroup: its theory
 extends `Th-CommutativeSemigroup` by the single `idem` equation.  The forgetful
 projection `semilattice→commutativeSemigroup` is therefore a pure theory-reindex
@@ -78,6 +81,20 @@ semilattice→commutativeSemigroup (𝑨 , mod) = 𝑨 , λ { assoc → mod asso
 
 #### The `Semilattice-Op` module
 
+`Semilattice-Op 𝑺`{.AgdaModule} is the third link in the same chain, and it inherits
+from a structure that has itself inherited: `commutativeSemigroup→semigroup` is
+composed into the forgetful, so opening this module brings
+`assoc-law`{.AgdaFunction} down from `Semigroup-Op`{.AgdaModule} and
+`comm-law`{.AgdaFunction} from `CommutativeSemigroup-Op`{.AgdaModule} without either
+being restated.
+
+What is new is `equations`{.AgdaFunction} and `idem-law`{.AgdaFunction}, idempotency
+in curried form.  Its proof is the shortest of the family, needing one containment
+step where `comm-law`{.AgdaFunction} needs two, and the reason is the shape of the
+equation rather than the repeated argument: `x ∙ x ≈ x` has a node only on the left,
+and the right-hand side is a bare variable whose interpretation is already `x`, so
+there is nothing to cross on that side.
+
 ```agda
 module Semilattice-Op {α ρ : Level} (𝑺 : Semilattice α ρ) where
   private 𝑨 = proj₁ 𝑺
@@ -97,6 +114,12 @@ module Semilattice-Op {α ρ : Level} (𝑺 : Semilattice α ρ) where
 ```
 
 #### `eqsToSemilattice`
+
+`eqsToSemilattice`{.AgdaFunction} takes a carrier, a binary operation, and
+propositional associativity, commutativity and idempotency, and returns a
+`Semilattice α α` over `opsToMagma`{.AgdaFunction}.  As with the other constructors
+in this family every obligation reduces definitionally; the only difference from
+`eqsToCommutativeSemigroup`{.AgdaFunction} is the third law.
 
 ```agda
 eqsToSemilattice : (A : Type α) (_·_ : A → A → A)

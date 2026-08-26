@@ -10,12 +10,10 @@ author: "the agda-algebras development team"
 
 This is the [Classical.Structures.Semigroup][] module of the [Agda Universal Algebra Library][].
 
-A *semigroup* is a magma whose binary operation is associative.  Type-theoretically,
-this is the Σ-typed structure consisting of an `Sig-Magma`-algebra `𝑨` paired with a
+A **semigroup** is a magma whose binary operation is associative.  Type-theoretically,
+this is the Σ-typed structure consisting of a `Sig-Magma`-algebra `𝑨` paired with a
 proof that `𝑨` satisfies `Th-Semigroup`.  Mathematically: a semigroup *is* an
-algebra equipped with a proof that it satisfies the semigroup theory.  The Σ encodes
-that reading directly, per
-[ADR-002 v2 §5](../../docs/adr/002-classical-layer-design.md).
+algebra equipped with a proof that it satisfies the semigroup theory.
 
 This is the first concrete classical structure with a non-empty equational theory,
 and consequently this module's prose is normative for every subsequent
@@ -29,7 +27,7 @@ Specifically, the conventions documented and embodied here are as follows.
    `X α ρ = Σ[ 𝑨 ∈ Algebra α ρ ] 𝑨 ⊨ Th-X` lives in `Classical/Structures/X.lagda.md`
    over `open Setoid.Algebras {𝑆 = Sig-X}`.
 +  **`_⊨_` alias**.  Each structure file defines a local `_⊨_` with the codomain
-   *spelled out explicitly* — for Semigroup, `Eq-Semigroup → Term (Fin 3) × Term (Fin 3)`,
+   *spelled out explicitly*, for Semigroup, `Eq-Semigroup → Term (Fin 3) × Term (Fin 3)`,
    not `_`.  (The underscore lets Agda's unifier wander into the equational-logic
    substrate, where it produces error messages naming `Modᵗ` rather than the local
    alias.) The alias's body unfolds `Modᵗ Th-X` once at the point of use.
@@ -132,6 +130,19 @@ _⊨_ : (𝑨 : Algebra {𝑆 = Sig-Magma} α ρ) (ℰ : Eq-Semigroup → Term (
 
 #### The type of semigroups
 
+`Semigroup α ρ`{.AgdaFunction} is a Σ-type: an algebra over the *magma* signature,
+paired with a proof that it satisfies `Th-Semigroup`{.AgdaFunction}.  There is no
+`Sig-Semigroup`, deliberately.  A semigroup is precisely a magma whose binary
+operation is associative, so the signature is inherited unchanged and the whole of
+the new content sits in the theory.
+
+That is the *equation-only* case, and not the general rule: ADR-002 §5 has each
+structure characterised by its own pair `(Sig-X , Th-X)`, and reusing a weaker
+signature is available only when no operation symbols are added.
+`Monoid`{.AgdaFunction} in this same tree is the contrasting case — an identity
+element is a nullary operation, so it needs `Sig-Monoid`{.AgdaFunction} and a genuine
+signature morphism back to magmas.
+
 ```agda
 Semigroup : (α ρ : Level) → Type (suc α ⊔ suc ρ)
 Semigroup α ρ = Σ[ 𝑨 ∈ Algebra {𝑆 = Sig-Magma} α ρ ] 𝑨 ⊨ Th-Semigroup
@@ -155,10 +166,10 @@ out of the Σ).  Users `open Semigroup-Op 𝑺` at a use site to bring both into
 the binary operation is then available in infix form `a ∙ b`, mirroring the
 `open Semigroup S`-and-then-`a ∙ b` idiom of `Algebra.Bundles`.
 
-The pattern — *each `<Structure>-Op` module re-exports its immediate predecessor's
-`<Weaker>-Op` accessors through the forgetful projection, then adds new accessors
-for the equation-witness proofs* — is the normative inheritance idiom for the whole
-hierarchy.
+The pattern is as follows: *each `<Structure>-Op` module re-exports its immediate
+predecessor's `<Weaker>-Op` accessors through the forgetful projection, then adds
+new accessors for the equation-witness proofs*; this is the normative inheritance
+idiom for the whole hierarchy.
 
 ```agda
 module Semigroup-Op {α ρ : Level} (𝑺 : Semigroup α ρ) where
@@ -219,7 +230,7 @@ This is the canonical constructor for downstream users.  Given a carrier
 type `A`, a binary operation `_·_ : A → A → A`, and a propositional-equality
 associativity proof `·-assoc`, it returns a `Semigroup α α`.  The construction
 factors through `opsToMagma` so that the underlying-algebra portion is shared with
-the `Magma` constructor — this is what makes the forgetful agreement criterion
+the `Magma` constructor; this is what makes the forgetful agreement criterion
 `semigroup→magma ∘ eqsToSemigroup _·_ _ ≡ opsToMagma _·_` discharge by
 `refl`.
 

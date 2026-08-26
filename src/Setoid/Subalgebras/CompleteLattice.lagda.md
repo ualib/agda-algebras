@@ -117,8 +117,7 @@ The meet is the intersection of the underlying predicates (a subuniverse,
 componentwise), and the join is the subuniverse *generated* by the union.
 
 ```agda
-  infixr 7 _∧_
-  infixr 6 _∨_
+  infixl 7 _∧_ _∨_
 
   _∧_ : Subᴸ → Subᴸ → Subᴸ
   B ∧ C = (proj₁ B ∩ proj₁ C)
@@ -130,9 +129,7 @@ componentwise), and the join is the subuniverse *generated* by the union.
 
   -- The meet is the greatest lower bound.
   ∧-infimum : Infimum _≤_ _∧_
-  ∧-infimum B C =  (λ z → proj₁ z)
-                ,  (λ z → proj₂ z)
-                ,  λ D D≤B D≤C z → D≤B z , D≤C z
+  ∧-infimum B C =  proj₁ ,  proj₂ ,  λ D D≤B D≤C z → D≤B z , D≤C z
 
   -- The join is the least upper bound (upper bounds via `var`, universality via
   -- `sgIsSmallest`, since the union is below any subuniverse above both arguments).

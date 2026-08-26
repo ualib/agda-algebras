@@ -10,24 +10,25 @@ author: "the agda-algebras development team"
 
 This is the [Classical.Structures.Monoid][] module of the [Agda Universal Algebra Library][].
 
-A **monoid** inhabits the Σ-typed structure `Σ[ 𝑨 ∈ Algebra α ρ ] 𝑨 ⊨ Th-Monoid` over `Sig-Monoid`.
+A **monoid** is an inhabitant of the type `Σ[ 𝑨 ∈ Algebra α ρ ] 𝑨 ⊨ Th-Monoid`,
+where `Algebra` is parameterized by the `Sig-Monoid` type.
 
-Monoid is the first structure whose signature genuinely grows over its predecessor's
-(`Sig-Monoid` adds `ε-Op` to `Sig-Magma`), and consequently the first whose forgetful
-projection is not `proj₁` but a true *reduct*.
+The signature of `Monoid` genuinely grows over its predecessor's: `Sig-Monoid`
+adds `ε-Op` to `Sig-Magma`.  Consequently its forgetful projection is a true *reduct*.
 
-This module's prose is normative for every later signature-growing structure (Group,
-Ring, etc.); the conventions it adds to the Semigroup template are as follows.
+This module provides a model for signature-growing structures (like `Group`,
+`Ring`, etc.); the conventions it adds to the `Semigroup` template are as follows:
 
-+  **Direct curried accessors, not inherited-through-the-forgetful**.  Where
-   `Semigroup-Op` re-exported `_∙_` from `Magma-Op (semigroup→magma 𝑺)` — sound
-   because that forgetful functor is `proj₁`, so the magma's `∙` *is* the semigroup's
-   `∙` definitionally — `Monoid-Op` defines `_∙_ = Curry₂ (∙-Op ^ 𝑨)` and
-   `ε = Curry₀ (ε-Op ^ 𝑨)` directly over `Sig-Monoid`; the reduct `monoid→magma`
-   re-indexes arguments through the container morphism's position map, so the
-   reduct's `∙` agrees with the monoid's only up to that map's reduction; defining
-   the accessors directly keeps every downstream `refl` off that bet; each later
-   signature-growing structure follows suit.
++  **Direct curried accessors, not inherited-through-the-forgetful**.
+   `Semigroup-Op` re-exported `_∙_` from `Magma-Op (semigroup→magma 𝑺)`, which
+   is sound because that forgetful functor is `proj₁`, so the magma's `∙` *is* the
+   semigroup's `∙` definitionally.  `Monoid-Op`, on the other hand, defines
+   `_∙_ = Curry₂ (∙-Op ^ 𝑨)` and `ε = Curry₀ (ε-Op ^ 𝑨)` directly over
+   `Sig-Monoid`; the reduct `monoid→magma` re-indexes arguments through the
+   container morphism's position map, so the reduct's `∙` agrees with the monoid's
+   only up to that map's reduction; defining the accessors directly keeps every
+   downstream `refl` off that bet; each later signature-growing structure follows
+   suit.
 
 +  **Curried laws factored out above the forgetful**.  The curried associativity
    `mn-assoc` is proved once, standalone, before `monoid→semigroup`, because the
@@ -39,11 +40,10 @@ Ring, etc.); the conventions it adds to the Semigroup template are as follows.
 +  **The forgetful is a reduct**.  `monoid→semigroup` reducts the
    `Sig-Monoid`-algebra to a `Sig-Magma`-algebra (dropping `ε-Op` via the container
    morphism `∙-incl`) and discharges `Th-Semigroup` from `mn-assoc` by the
-   curried-law pivot — the monoid's curried associativity transfers to the reduct
+   curried-law pivot; the monoid's curried associativity transfers to the reduct
    verbatim (reduct preserves carrier, `≈`, and `∙`), and is re-inflated to the reduct's
    `Sig-Magma` associativity terms by the reduct's own `interp-node∙`; no
-   reduct-preserves-satisfaction term machinery is needed; see
-   [ADR-002 v2](../../docs/adr/002-classical-layer-design.md) §5, §9.
+   reduct-preserves-satisfaction term machinery is needed.[^1]
 
 <!--
 ```agda
@@ -98,9 +98,16 @@ _⊨ᵐᵒ_ : (𝑨 : Algebra {𝑆 = Sig-Monoid} α ρ) (ℰ : Eq-Monoid → Te
 
 #### The type of monoids
 
+`Monoid α ρ`{.AgdaFunction} pairs an algebra over `Sig-Monoid`{.AgdaFunction} with a
+proof of `Th-Monoid`{.AgdaFunction}.  Unlike `Semigroup`{.AgdaFunction}, this one
+does need its own signature: an identity element is a nullary *operation*, not an
+equation, so it cannot be added to the magma signature by theory alone.  That is
+why the reduct to magmas below is a genuine signature morphism rather than the
+identity.
+
 ```agda
 Monoid : (α ρ : Level) → Type (suc α ⊔ suc ρ)
-Monoid α ρ = Σ[ 𝑨 ∈ Algebra {𝑆 = Sig-Monoid} α ρ ] 𝑨 ⊨ᵐᵒ Th-Monoid
+Monoid α ρ = Σ[ 𝑨 ∈ Algebra α ρ ] 𝑨 ⊨ᵐᵒ Th-Monoid
 ```
 
 #### The reduct to magmas
@@ -167,6 +174,26 @@ module _ (𝑴 : Monoid α ρ) where
 
 #### The `Monoid-Op` module
 
+`Monoid-Op 𝑴`{.AgdaModule} is the named accessor module for a fixed monoid, opened
+at a use site so the laws read in ordinary infix form.  It inherits nothing:
+`monoid→magma`{.AgdaFunction} is a reduct along a signature morphism rather than a
+projection, so the operations are rebuilt here directly from
+`Sig-Monoid`{.AgdaFunction}.  `_∙_`{.AgdaFunction} and `ε`{.AgdaFunction} are the
+curried binary and nullary operations, and `equations`{.AgdaFunction} is the
+satisfaction witness projected out of the Σ.
+
+The rest is the bridge between the two forms a law can take.  Equations in
+`Th-Monoid`{.AgdaFunction} are stated about *interpreted terms*, while a working
+algebraist wants them curried, and the two are not definitionally equal because
+`Fin n → A` has no η.  `∙-cong`{.AgdaFunction} is congruence of the interpreted
+operation; `interp-node-∙`{.AgdaFunction} and `interp-node-ε`{.AgdaFunction} are the
+containment lemmas that cross the gap, one per operation symbol; and
+`assoc-law`{.AgdaFunction}, `idˡ-law`{.AgdaFunction} and `idʳ-law`{.AgdaFunction}
+are the three laws in curried form, each obtained by wrapping the corresponding
+`equations` step in those lemmas.  `assoc-law`{.AgdaFunction} is
+`mn-assoc`{.AgdaFunction} from above, hoisted so that
+`monoid→semigroup`{.AgdaFunction} can consume it too.
+
 ```agda
 module Monoid-Op {α ρ : Level} (𝑴 : Monoid α ρ) where
   private 𝑨 = proj₁ 𝑴
@@ -208,6 +235,16 @@ module Monoid-Op {α ρ : Level} (𝑴 : Monoid α ρ) where
 ```
 
 #### The forgetful projection to semigroups
+
+`monoid→semigroup`{.AgdaFunction} forgets the identity element.  It is not a
+projection: the underlying algebra has to be replaced by its reduct along the
+signature morphism first (`monoid→magma`{.AgdaFunction}, built with
+`reductBy`{.AgdaFunction}), and then the associativity equation has to be
+re-proved *about the reduct*, since `Th-Semigroup`{.AgdaFunction} is stated over
+`Sig-Magma`{.AgdaFunction} and `equations`{.AgdaFunction} gives it over
+`Sig-Monoid`{.AgdaFunction}.  That transport is what the `where` block does, and it
+is why this forgetful is longer than the one-line `proj₁` of
+`semigroup→magma`{.AgdaFunction}.
 
 ```agda
 monoid→semigroup : Monoid α ρ → Semigroup α ρ
@@ -256,14 +293,15 @@ through `mn-assoc 𝑴` in the middle.
 
 #### Homomorphism invariants
 
-Per the policy stated in [`Classical.Structures.Magma`][Classical.Structures.Magma], morphism invariants are
-theorems about the inherited `Sig-Monoid`-homomorphisms, not new record fields.  The
-inaugural instance is the one that prose names explicitly: *homomorphisms preserve
-the identity element*.  The proof needs only the homomorphism's compatibility at
-`ε-Op` — no monoid theory — so it is stated for raw `Sig-Monoid`-algebras, in the
-curried form (`Curry₀ (ε-Op ^ 𝑨)` is the distinguished element of `𝑨`) that
-downstream consumers use; the empty-arity tuple bridge is one `interp-cong` with the
-vacuous pointwise witness `λ ()`.
+Per the policy stated in
+[`Classical.Structures.Magma`][Classical.Structures.Magma], morphism invariants
+are theorems about the inherited `Sig-Monoid`-homomorphisms, not new record
+fields.  The inaugural instance is the one that prose names explicitly:
+*homomorphisms preserve the identity element*.  The proof needs only the
+homomorphism's compatibility at `ε-Op` (no monoid theory) so it is stated for raw
+`Sig-Monoid`-algebras, in the curried form (`Curry₀ (ε-Op ^ 𝑨)` is the
+distinguished element of `𝑨`) that downstream consumers use; the empty-arity tuple
+bridge is one `interp-cong` with the vacuous pointwise witness `λ ()`.
 
 ```agda
 module _ {α β ρᵃ ρᵇ : Level} {𝑨 : Algebra {𝑆 = Sig-Monoid} α ρᵃ} {𝑩 : Algebra {𝑆 = Sig-Monoid} β ρᵇ} where
@@ -305,14 +343,14 @@ opsToBareMonoid {A = A} _·_ e = expand-ε e
   expand-ε _ .Interp .cong {ε-Op , _} {.ε-Op , _} (refl , _) = Setoid.refl 𝔻[ 𝑩 ]
 ```
 
-That `expand-ε` is a *section* of the reduct — reducting the expansion recovers the
-original magma, carrier and interpretation on the nose — is a definitional fact,
+That `expand-ε` is a *section* of the reduct is a definitional fact,[^2]
 recorded here in the strict operation-level form of
-[`Setoid.Algebras.Reduct`][Setoid.Algebras.Reduct]'s functoriality laws.  This is the formal half of
-the section-versus-adjoint contrast of M4-5d: `expand-ε` *chooses* an existing
-element to interpret `ε-Op` (so the carrier is unchanged and the reduct round-trips),
-whereas the free expansion `adjoinUnit` of [`Classical.Categories.AdjoinUnit`][Classical.Categories.AdjoinUnit]
-*adjoins* a fresh element (enlarging the carrier) and is universal.
+[`Setoid.Algebras.Reduct`][Setoid.Algebras.Reduct]'s functoriality laws.  This is
+the formal half of the section-versus-adjoint contrast: `expand-ε` *chooses* an
+existing element to interpret `ε-Op` (so the carrier is unchanged and the reduct
+round-trips), whereas the free expansion `adjoinUnit` of
+[`Classical.Categories.AdjoinUnit`][Classical.Categories.AdjoinUnit] *adjoins* a
+fresh element (enlarging the carrier) and is universal.
 
 ```agda
 opsToBareMonoid-section : {A : Type α}
@@ -338,3 +376,9 @@ eqsToMonoid _·_ e ·-assoc ·-idˡ ·-idʳ = opsToBareMonoid _·_ e , proof
   proof idˡ ρ = ·-idˡ (ρ 0F)
   proof idʳ ρ = ·-idʳ (ρ 0F)
 ```
+
+---
+
+[^1]: See [ADR-002][] v2 §5 and §9.
+
+[^2]: Reducting the expansion recovers the original magma, carrier and interpretation on the nose.

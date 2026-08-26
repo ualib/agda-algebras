@@ -54,7 +54,10 @@ REPO      ?= ualib/agda-algebras
 # when the number of public definitions lacking a prose block exceeds this
 # ceiling, so the backlog can only shrink while the per-subtree prose PRs land.
 # Lower it whenever a PR clears definitions; never raise it.
-DOCSTRING_MAX_GAPS ?= 136
+DOCSTRING_MAX_GAPS ?= 102
+# The other half of the bar ADR-010 states: modules whose header is only the
+# boilerplate sentence.  Ratcheted the same way; never raise it.
+DOCSTRING_MAX_WEAK_HEADERS ?= 20
 # The other half of the bar ADR-010 states: modules whose header is only the
 # boilerplate sentence.  Ratcheted the same way; never raise it.
 DOCSTRING_MAX_WEAK_HEADERS ?= 21

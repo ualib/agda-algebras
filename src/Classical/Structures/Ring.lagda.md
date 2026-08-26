@@ -10,21 +10,26 @@ author: "the agda-algebras development team"
 
 This is the [Classical.Structures.Ring][] module of the [Agda Universal Algebra Library][].
 
-A **ring** inhabits the Σ-typed structure `Σ[ 𝑨 ∈ Algebra α ρ ] 𝑨 ⊨ Th-Ring` over
-`Sig-Ring`.  Ring is the first structure in the [`Classical/`][Classical] tree with
-*two* forgetful reducts that land in *different* structures: the additive triple
-`(+-Op, 0-Op, -Op)` reducts to an [`AbelianGroup`][Classical.Structures.Group.AbelianGroup]
-(`ring→abelianGroup`), and the multiplicative pair `(·-Op, 1-Op)` reducts to a
-[`Monoid`][Classical.Structures.Monoid] (`ring→monoid`).  Both are container-morphism
-reducts with identity position maps, discharging their target theory on the reduct by
-the curried-law-pivot pattern of `monoid→semigroup` / `group→monoid`.
+A **ring** is an inhabitant of the type `Σ[ 𝑨 ∈ Algebra α ρ ] 𝑨 ⊨ Th-Ring`, where
+`Algebra` is parameterized over the `Sig-Ring` type.
 
-This module follows the [Lattice][Classical.Structures.Lattice] precedent of factoring
-*every* defining equation into a standalone curried-form lemma in a
-`module _ (𝑹 : Ring α ρ)` block (the `rg-*` family) above the forgetfuls, so that
-`Ring-Op` and both reduct discharges consume one proof per law.  The additive `rg-+-*`
-lemmas are the [`Group`][Classical.Structures.Group]/`AbelianGroup` laws re-derived
-over `Sig-Ring`'s additive symbols; the multiplicative `rg-·-*` lemmas are the
+Ring has *two* forgetful reducts that land in *different* structures: the additive
+triple `(+-Op, 0-Op, -Op)` gives the [`AbelianGroup`][Classical.Structures.Group.AbelianGroup]
+reduct, `ring→abelianGroup`, and the multiplicative pair `(·-Op, 1-Op)` gives the
+[`Monoid`][Classical.Structures.Monoid] reduct `ring→monoid`.
+
+Both are container-morphism reducts with identity position maps, discharging their
+target theory on the reduct by the curried-law-pivot pattern of `monoid→semigroup`
+/ `group→monoid`.
+
+Just like [Lattice][Classical.Structures.Lattice], this module factors
+every defining equation into a standalone curried-form lemma (the `rg-*` family)
+above the forgetful projections, so that `Ring-Op` and both reducts
+consume one proof per law.
+
+The additive `rg-+-*` lemmas are the
+[`Group`][Classical.Structures.Group]/`AbelianGroup` laws re-derived over
+the additive symbols of `Sig-Ring`; the multiplicative `rg-·-*` lemmas are the
 `Monoid` laws over its multiplicative symbols; and `rg-distribˡ` / `rg-distribʳ` are
 the two cross-operation laws, whose terms nest `·-Op` and `+-Op` and so bridge through
 two single-symbol `interp-cong` compositions, exactly as Lattice's absorption laws do.
@@ -89,6 +94,13 @@ _⊨ʳᵍ_ : (𝑨 : Algebra {𝑆 = Sig-Ring} α ρ) (ℰ : Eq-Ring → Term (F
 ```
 
 #### The type of rings
+
+`Ring α ρ`{.AgdaFunction} pairs an algebra over `Sig-Ring`{.AgdaFunction} with a
+proof of `Th-Ring`{.AgdaFunction}.  It is the widest structure in this tree: two
+binary operations, two constants and a unary inverse, with eleven equations
+relating them.  Because a ring is not an extension of any single weaker structure
+by equations alone, it has *two* reducts rather than one, additive and
+multiplicative, which the next section builds.
 
 ```agda
 Ring : (α ρ : Level) → Type (suc α ⊔ suc ρ)

@@ -10,16 +10,17 @@ author: "the agda-algebras development team"
 
 This is the [Classical.Structures.Lattice.OrdinalSum][] module of the [Agda Universal Algebra Library][].
 
-The **adjoined ordinal sum** of lattices `𝓛₁`{.AgdaBound} and `𝓛₂`{.AgdaBound} stacks
-`𝓛₂`{.AgdaBound} on top of `𝓛₁`{.AgdaBound} and *glues* the top of `𝓛₁`{.AgdaBound}
-to the bottom of `𝓛₂`{.AgdaBound}: every element of the lower summand lies below
-every element of the upper one, and the two chosen extrema become a single element.
+The **adjoined ordinal sum** of lattices `𝓛₁`{.AgdaBound} and `𝓛₂`{.AgdaBound}
+stacks `𝓛₂`{.AgdaBound} on top of `𝓛₁`{.AgdaBound} and *glues* the top of
+`𝓛₁`{.AgdaBound} to the bottom of `𝓛₂`{.AgdaBound}; that is, every element of the
+lower summand lies below every element of the upper one, and the two chosen
+extrema become a single element.
 
-This is the operation denoted by `L ⊕ₐ M` in the small-lattice representations manuscript
+We denote this operation by `L ⊕ₐ M` in the small-lattice representations manuscript
 ([docs/papers/fin-lat-rep/SmallLatticeReps.tex](docs/papers/fin-lat-rep/SmallLatticeReps.tex),
 § Ordinal Sums).
 
-The *unglued* ordinal sum, in which the top of the lower summand is covered by the
+The (unglued) **ordinal sum**, in which the top of the lower summand is covered by the
 bottom of the upper, is the derived composite `(𝓛₁ ⊕ₐ chain₂) ⊕ₐ 𝓛₂`, gluing a
 two-element chain in the middle leaves exactly one covering edge, so the glued form
 is the module's single canonical primitive.
@@ -41,7 +42,7 @@ Because the sum glues at chosen extrema, the construction takes them as data: a
    along the two *retractions* that collapse the opposite summand to the basepoint.
 
    This pullback presentation makes reflexivity, symmetry, and transitivity
-   componentwise — no case analysis — and on each summand it restricts to the
+   componentwise (no case analysis) and on each summand it restricts to the
    original equivalence, while across summands it holds exactly at the glue.
 
    It is carried by a *record indexed by its two endpoints*, not by a defined
@@ -121,7 +122,7 @@ module GlueSetoid
   retractʳ (inj₂ y) = y
 
   -- Glued equality: both retractions agree.  A *record* indexed by the two
-  -- endpoints, not a defined relation — see the note below.
+  -- endpoints, not a defined relation; see the note below.
   record _≈ᵍ_ (x y : A ⊎ B) : Type (ρ ⊔ σ) where
     constructor _∧ᵍ_
     field
@@ -186,7 +187,7 @@ which are permanently stuck, for two independent reasons.
    η-expanded into components the way a `Σ`-typed one can.
 
 The sibling product construction ([Classical.Structures.Lattice.Product][]) defines
-its equivalence through `proj₁`/`proj₂`, which are just as non-injective — but there
+its equivalence through `proj₁`/`proj₂`, which are just as non-injective, but there
 `Σ`-η lets Agda solve the projected metas componentwise, so inference never breaks.
 The failure needs exactly the combination present here: defined relation,
 non-injective non-variable head, no η on the carrier.
@@ -208,7 +209,7 @@ parameterized-module applications) all infer.  The "canary" below fails to type-
 the moment that property is lost.[^4]
 
 The idiom generalizes: *any* relation defined by restriction along a non-injective
-map — including relations built downstream through these same retractions — should
+map, including relations built downstream through these same retractions, should
 be a record indexed by its endpoints rather than a definition.
 
 ```agda
@@ -311,8 +312,8 @@ universal properties themselves.
 
 **Meet and join**.
 
-A mixed meet lands in the lower summand and a mixed join in the
-upper one — the lower summand lies entirely below the upper.
+A mixed meet lands in the lower summand and a mixed join in the upper one; the
+lower summand lies entirely below the upper.
 
 ```agda
   _∧ᵒ_ : A⊎B → A⊎B → A⊎B
@@ -367,6 +368,13 @@ affected meet or join).
   ∧ᵒ-cong {inj₂ x} {inj₂ _} {inj₂ _} {inj₁ _} _         (fa ∧ᵍ fb)  = fa ∧ᵍ trans₂ (∧₂-cong refl₂ fb) (x∧⊥ x)
 ```
 -->
+
+`∨ᵒ-cong`{.AgdaFunction} is the join half of the same argument, with the same
+sixteen-case structure and the same reason for each case: diagonal combinations
+are the component congruences, and combinations crossing the glue are absorbed.
+Both absorption families are used here, one per summand; the lower summand's
+`⊤`-absorptions where a join reaches its top, and the upper summand's
+`⊥`-absorptions where the other component is pinned at its bottom.
 
 ```agda
   ∨ᵒ-cong : ∀ {p q u v} → p ≈ᵍ q → u ≈ᵍ v → p ∨ᵒ u ≈ᵍ q ∨ᵒ v

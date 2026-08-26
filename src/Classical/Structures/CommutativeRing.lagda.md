@@ -10,12 +10,16 @@ author: "the agda-algebras development team"
 
 This is the [Classical.Structures.CommutativeRing][] module of the [Agda Universal Algebra Library][].
 
-`Σ[ 𝑨 ∈ Algebra α ρ ] 𝑨 ⊨ Th-CommutativeRing` over `Sig-Ring`.  An equation-only
-extension of Ring, structurally identical to the way `CommutativeMonoid` extends
-`Monoid` and `AbelianGroup` extends `Group`: `commutativeRing→ring` is a pure
-theory-reindex (`proj₁` on the underlying algebra), and `CommutativeRing-Op` inherits
-the additive `(_+_, 0R, -_)`, the multiplicative `(_·_, 1R)`, and all eleven ring laws
-through it, adding `·-comm-law`.
+A **commutative ring** is an inhabitant of the type
+`Σ[ 𝑨 ∈ Algebra α ρ ] 𝑨 ⊨ Th-CommutativeRing`, where `Algebra` is parameterized by
+the `Sig-Ring` type.
+
+This module naturally codifies a commutative ring as an equational extension of
+Ring, the same way `CommutativeMonoid` extends `Monoid` and `AbelianGroup` extends
+`Group`: `commutativeRing→ring` is a pure theory-reindex (`proj₁` on the
+underlying algebra), and `CommutativeRing-Op` inherits the additive `(_+_, 0R,
+-_)`, the multiplicative `(_·_, 1R)`, and all eleven ring laws through it, adding
+`·-comm-law`.
 
 <!--
 ```agda
@@ -23,8 +27,10 @@ through it, adding `·-comm-law`.
 
 module Classical.Structures.CommutativeRing where
 
-open import Agda.Primitive                          using () renaming ( Set to Type )
+open import Agda.Primitive                         using () renaming ( Set to Type )
 
+
+-- Imports from the Agda Standard Library ---------------------------------------
 open import Data.Fin.Base                          using ( Fin )
 open import Data.Fin.Patterns                      using ( 0F ; 1F ; 2F )
 open import Data.Product                           using ( Σ-syntax ; _×_ ; _,_ ; proj₁ ; proj₂ )
@@ -32,18 +38,31 @@ open import Level                                  using ( Level ; _⊔_ ; suc )
 open import Relation.Binary                        using ( Setoid )
 open import Relation.Binary.PropositionalEquality  using ( _≡_ )
 
-open import Classical.Signatures.Ring              using ( Sig-Ring )
-open import Classical.Structures.Ring              using ( Ring ; module Ring-Op ; opsToBareRing )
-open import Classical.Theories.Ring                using ( +-assoc ; +-idˡ ; +-idʳ ; +-invˡ ; +-invʳ ; +-comm
-                                                         ; ·-assoc ; ·-idˡ ; ·-idʳ ; distribˡ ; distribʳ )
-open import Classical.Theories.CommutativeRing     using ( Eq-CommutativeRing ; Th-CommutativeRing ; ·-comm )
-                                                   renaming ( +-assoc to +-assocᶜ ; +-idˡ to +-idˡᶜ ; +-idʳ to +-idʳᶜ
-                                                            ; +-invˡ to +-invˡᶜ ; +-invʳ to +-invʳᶜ ; +-comm to +-commᶜ
-                                                            ; ·-assoc to ·-assocᶜ ; ·-idˡ to ·-idˡᶜ ; ·-idʳ to ·-idʳᶜ
-                                                            ; distribˡ to distribˡᶜ ; distribʳ to distribʳᶜ )
-open import Overture.Terms {𝑆 = Sig-Ring}          using ( Term ; ℊ )
-open import Setoid.Algebras.Basic   using ( Algebra ; 𝔻[_] ; 𝕌[_] )
-open import Setoid.Varieties.EquationalLogic using ( _⊧_≈_ )
+-- Imports from the Agda Universal Algebra Library ------------------------------
+open import Classical.Signatures.Ring            using  ( Sig-Ring )
+open import Classical.Structures.Ring            using  ( Ring ; module Ring-Op
+                                                        ; opsToBareRing )
+open import Classical.Theories.Ring              using  ( +-assoc ; +-idˡ ; +-idʳ
+                                                        ; +-invˡ ; +-invʳ ; +-comm
+                                                        ; ·-assoc ; ·-idˡ ; ·-idʳ
+                                                        ; distribˡ ; distribʳ )
+open import Classical.Theories.CommutativeRing   using  ( Eq-CommutativeRing
+                                                        ; Th-CommutativeRing
+                                                        ; ·-comm )
+                                                 renaming  ( +-assoc to +-assocᶜ
+                                                           ; +-idˡ to +-idˡᶜ
+                                                           ; +-idʳ to +-idʳᶜ
+                                                           ; +-invˡ to +-invˡᶜ
+                                                           ; +-invʳ to +-invʳᶜ
+                                                           ; +-comm to +-commᶜ
+                                                           ; ·-assoc to ·-assocᶜ
+                                                           ; ·-idˡ to ·-idˡᶜ
+                                                           ; ·-idʳ to ·-idʳᶜ
+                                                           ; distribˡ to distribˡᶜ
+                                                           ; distribʳ to distribʳᶜ )
+open import Overture.Terms {𝑆 = Sig-Ring}        using  ( Term ; ℊ )
+open import Setoid.Algebras.Basic                using  ( Algebra ; 𝔻[_] ; 𝕌[_] )
+open import Setoid.Varieties.EquationalLogic     using  ( _⊧_≈_ )
 
 private variable α ρ : Level
 ```
@@ -62,6 +81,14 @@ CommutativeRing α ρ = Σ[ 𝑨 ∈ Algebra {𝑆 = Sig-Ring} α ρ ] 𝑨 ⊨�
 
 #### The forgetful projection to rings
 
+`commutativeRing→ring`{.AgdaFunction} discards multiplicative commutativity.  As
+with the commutative monoid, the signature is unchanged and the work is re-indexing
+the satisfaction witness; but here the theory has eleven equations rather than
+three, so the clause is a table of eleven constructor renamings mapping each of
+`Eq-Ring`{.AgdaDatatype} to its `ᶜ`-suffixed counterpart in
+`Eq-CommutativeRing`{.AgdaDatatype}.  Long, but entirely mechanical: nothing is
+proved, only relabelled.
+
 ```agda
 commutativeRing→ring : CommutativeRing α ρ → Ring α ρ
 commutativeRing→ring (𝑨 , mod) = 𝑨 , λ  { +-assoc   → mod +-assocᶜ
@@ -78,6 +105,18 @@ commutativeRing→ring (𝑨 , mod) = 𝑨 , λ  { +-assoc   → mod +-assocᶜ
 ```
 
 #### The `CommutativeRing-Op` module
+
+`CommutativeRing-Op 𝑪`{.AgdaModule} inherits the entire ring interface through the
+forgetful: two operations with their units and the additive inverse, three
+congruences, five containment lemmas, and all eleven laws.  It adds
+`equations`{.AgdaFunction} and one new law, `·-comm-law`{.AgdaFunction}.
+
+The ratio is what makes the idiom worth having.  Twenty-four inherited names are
+re-exported (five operations and constants, three congruences, five containment
+lemmas and eleven laws) and one law is proved, and that proof is the same three-step
+shape as `comm-law`{.AgdaFunction} in the commutative monoid and semigroup; the
+`equations ·-comm` step between two applications of the containment lemma for the
+relevant symbol, here `interp-node-·`{.AgdaFunction}.
 
 ```agda
 module CommutativeRing-Op {α ρ : Level} (𝑪 : CommutativeRing α ρ) where
@@ -102,8 +141,16 @@ module CommutativeRing-Op {α ρ : Level} (𝑪 : CommutativeRing α ρ) where
 
 #### `eqsToCommutativeRing`
 
+`eqsToCommutativeRing`{.AgdaFunction} is the largest constructor of the family: two
+binary operations, two constants, an additive inverse, and twelve propositional
+laws (the ring's eleven, plus multiplicative commutativity).  All twelve obligations
+discharge exactly as the smaller cases do, by definitional reduction under
+`≡.setoid A`, so the size of the signature costs argument count and nothing else.
+
 ```agda
-eqsToCommutativeRing : (A : Type α) (_+'_ : A → A → A) (0' : A) (-'_ : A → A) (_*'_ : A → A → A) (1' : A)
+eqsToCommutativeRing :
+  (A : Type α)
+  (_+'_ : A → A → A) (0' : A) (-'_ : A → A) (_*'_ : A → A → A) (1' : A)
   → (+-assoc-≡ : ∀ a b c → (a +' b) +' c ≡ a +' (b +' c))
   → (+-idˡ-≡ : ∀ a → 0' +' a ≡ a) (+-idʳ-≡ : ∀ a → a +' 0' ≡ a)
   → (+-invˡ-≡ : ∀ a → (-' a) +' a ≡ 0') (+-invʳ-≡ : ∀ a → a +' (-' a) ≡ 0')
