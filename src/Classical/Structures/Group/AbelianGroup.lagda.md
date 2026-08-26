@@ -80,8 +80,8 @@ abelianGroup→group (𝑨 , mod) = 𝑨 , λ { assoc → mod assocᵃ
 #### The `AbelianGroup-Op` module
 
 `AbelianGroup-Op 𝑨`{.AgdaModule} inherits the whole group interface through the
-forgetful — three operations, both congruences, all three containment lemmas and all
-five laws — and adds two names: `equations`{.AgdaFunction}, the new satisfaction
+forgetful (three operations, both congruences, all three containment lemmas and all
+five laws) and adds two names: `equations`{.AgdaFunction}, the new satisfaction
 witness, and `comm-law`{.AgdaFunction}, commutativity in curried form.
 
 `comm-law`{.AgdaFunction} has the three-step shape every added law in this hierarchy

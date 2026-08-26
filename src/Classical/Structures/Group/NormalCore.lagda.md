@@ -141,13 +141,16 @@ subgroup that `H` contains.
    holds componentwise, and closure comes free from the subuniverse machinery, an
    intersection of subuniverses being a subuniverse.
 +  `core-normal`{.AgdaFunction}: it is normal, because conjugating a member by `g`
-   leaves every conjugate inside `H` — `conj k (conj g x)` is just the
+   leaves every conjugate inside `H`: `conj k (conj g x)` is just the
    `k ∙ g`-conjugate of `x`.
 +  `core-greatest`{.AgdaFunction}: it is the greatest such, since any normal subset
    of `H` lies inside every conjugate of `H` and hence inside the intersection.
 
 The last is what makes the core a *construction* rather than merely a subgroup: it
-is characterised by a universal property, so it is determined up to nothing at all.
+is characterised by a universal property, which determines it up to mutual
+inclusion.  Any two predicates with these four properties contain one another; in
+this intensional setting that is the strongest uniqueness on offer, since mutual
+inclusion does not make two predicates definitionally equal.
 
 ```agda
   -- The core is contained in H (instantiate the conjugate at g = ε).

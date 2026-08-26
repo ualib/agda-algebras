@@ -87,16 +87,17 @@ module CosetAction {α ρ : Level} (𝒢 : Group α ρ) {ℓ : Level}
 
 #### Action laws and transitivity
 
-The coset space is a `G`-set: `G` acts on `G/H` by left translation.  These three
-results are that action's laws, and each is a one-line consequence of a group law
-transported across `≈⇒∼`{.AgdaFunction}.
+The coset space is a `G`-set: `G` acts on `G/H` by left translation.  The first
+two results are the action laws; the third, transitivity, is not an axiom but a
+further property this particular action happens to have.  Each is a one-line
+consequence of a group law transported across `≈⇒∼`{.AgdaFunction}.
 
 +  `act-identity`{.AgdaFunction}: acting by `ε` does nothing, from
    `idˡ-law`{.AgdaFunction}.
 +  `act-compatible`{.AgdaFunction}: acting by `g ∙ h` is acting by `h` and then by
    `g`, from `assoc-law`{.AgdaFunction}.
 +  `act-transitive`{.AgdaFunction}: the action is transitive, and the witness is
-   explicit — `y ∙ x ⁻¹` carries the coset of `x` to that of `y`.
+   explicit: `y ∙ x ⁻¹` carries the coset of `x` to that of `y`.
 
 Transitivity is the substantive one: it says `G/H` is a single orbit, which is why a
 coset space is the model case of a transitive action.  That it is proved by

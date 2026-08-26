@@ -178,7 +178,7 @@ The three operations come first, curried out of their interpretations:
 `equations`{.AgdaFunction} is the satisfaction witness projected out of the Σ.  Then
 come the two congruences, `∙-cong`{.AgdaFunction} and `⁻¹-cong`{.AgdaFunction}, and
 the three containment lemmas `interp-node-∙`{.AgdaFunction},
-`interp-node-ε`{.AgdaFunction} and `interp-node-⁻¹`{.AgdaFunction} — one per
+`interp-node-ε`{.AgdaFunction} and `interp-node-⁻¹`{.AgdaFunction}, one per
 operation symbol, each crossing the gap between a law stated about interpreted terms
 and the same law in curried form.
 
