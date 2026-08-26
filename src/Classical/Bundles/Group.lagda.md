@@ -76,6 +76,13 @@ private variable α ρ : Level
 
 #### Stdlib bundle to core
 
+The reverse direction reassembles the bundle's carrier setoid, `_∙_`, `ε`, and
+`_⁻¹` into a `Sig-Group`-algebra and pairs it with a proof of `Th-Group`, each of
+the five equations extracted from the corresponding record field applied to the
+variables the environment supplies.  The interpretation has one clause per
+operation symbol, and congruence likewise: `∙-cong` and `⁻¹-cong` come from the
+bundle, and the nullary `ε-Op` case is the setoid's reflexivity.
+
 ```agda
 ⟪_⟫ᵍᵖ : stdlib-Group α ρ → Group α ρ
 ⟪ G ⟫ᵍᵖ = 𝑨 , λ { assoc ρ → G-assoc (ρ 0F) (ρ 1F) (ρ 2F)
@@ -103,6 +110,14 @@ private variable α ρ : Level
 ```
 
 #### Pointwise round-trip
+
+Both round-trips are definitional, stated pointwise per operation, three in each
+direction.  Going core to bundle and back, `roundtrip-cbc-∙-group`,
+`roundtrip-cbc-ε-group`, and `roundtrip-cbc-⁻¹-group` say the reassembled
+operations agree with the originals, each discharged by the group setoid's `refl`.
+Going bundle to core and back, `roundtrip-bcb-∙-group`, `roundtrip-bcb-ε-group`,
+and `roundtrip-bcb-⁻¹-group` state the same agreement on the bundle's own
+equivalence.
 
 ```agda
 module _ {𝑮 : Group α ρ} where

@@ -70,6 +70,13 @@ private variable α ρ : Level
 
 #### Stdlib bundle to core
 
+The reverse direction reassembles the bundle's carrier setoid, `_∙_`, and `ε` into a
+`Sig-Monoid`-algebra and pairs it with a proof of `Th-Monoid`, each equation
+extracted from the corresponding record field (`assoc`, `identityˡ`, `identityʳ`)
+applied to the variables the environment supplies.  The interpretation has one
+clause per operation symbol, and congruence likewise; the nullary `ε-Op` case is
+the setoid's reflexivity.
+
 ```agda
 ⟪_⟫ᵐᵒ : stdlib-Monoid α ρ → Monoid α ρ
 ⟪ M ⟫ᵐᵒ = 𝑨 , λ  { assoc ρ → M-assoc (ρ 0F) (ρ 1F) (ρ 2F)
@@ -93,6 +100,14 @@ private variable α ρ : Level
 ```
 
 #### Pointwise round-trip
+
+Both round-trips are definitional, stated pointwise per operation; the names read
+core-bundle-core and bundle-core-bundle.  Going core to bundle and back,
+`roundtrip-cbc-∙-mn` and `roundtrip-cbc-ε-mn` say the reassembled `_∙_` and `ε`
+agree with the originals, and `≈refl` discharges both because each side reduces to
+the same value.  Going bundle to core and back, `roundtrip-bcb-∙-mn` and
+`roundtrip-bcb-ε-mn` state the same agreement on the bundle's own equivalence,
+discharged by its `refl`.
 
 ```agda
 module _ {𝑴 : Monoid α ρ} where

@@ -88,6 +88,14 @@ private variable α ρ : Level
 
 #### Stdlib bundle to core
 
+The reverse direction reassembles the bundle's carrier setoid and five operations
+into a `Sig-Ring`-algebra and pairs it with a proof of `Th-Ring`, each of the
+eleven equations extracted from the corresponding record field applied to the
+variables the environment supplies.  The interpretation has one clause per
+operation symbol, and congruence likewise: `+-cong`, `*-cong`, and `-‿cong` come
+from the bundle, and the two nullary cases (`0-Op`, `1-Op`) are the setoid's
+reflexivity.
+
 ```agda
 ⟪_⟫ʳᵍ : stdlib-Ring α ρ → Ring α ρ
 ⟪ R ⟫ʳᵍ = 𝑨 , λ  { +-assoc   ρ → R-+assoc    (ρ 0F) (ρ 1F) (ρ 2F)
@@ -129,6 +137,15 @@ private variable α ρ : Level
 ```
 
 #### Pointwise round-trip
+
+Both round-trips are definitional, stated pointwise per operation, five in each
+direction.  Going core to bundle and back, `roundtrip-cbc-+-ring`,
+`roundtrip-cbc-·-ring`, `roundtrip-cbc-neg-ring`, `roundtrip-cbc-0-ring`, and
+`roundtrip-cbc-1-ring` say the reassembled operations and constants agree with the
+originals, each discharged by the ring setoid's `refl`.  Going bundle to core and
+back, `roundtrip-bcb-+-ring`, `roundtrip-bcb-·-ring`, `roundtrip-bcb-neg-ring`,
+`roundtrip-bcb-0-ring`, and `roundtrip-bcb-1-ring` state the same agreement on the
+bundle's own equivalence.
 
 ```agda
 module _ {𝑹 : Ring α ρ} where

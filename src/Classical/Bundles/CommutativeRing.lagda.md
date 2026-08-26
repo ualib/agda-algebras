@@ -85,6 +85,11 @@ private variable α ρ : Level
 
 #### Stdlib bundle to core
 
+As in the Ring bridge, the reverse direction reassembles a `Sig-Ring`-algebra from
+the bundle's carrier setoid and five operations; the difference is the theory.
+`Th-CommutativeRing` has twelve equations, the ring's eleven plus `·-comm`, and the
+extra clause is extracted from the bundle's `*-comm` field.
+
 ```agda
 ⟪_⟫ᶜʳᵍ : stdlib-CommutativeRing α ρ → CommutativeRing α ρ
 ⟪ R ⟫ᶜʳᵍ = 𝑨 , λ { +-assoc  ρ → R-+assoc   (ρ 0F) (ρ 1F) (ρ 2F)
@@ -125,6 +130,16 @@ private variable α ρ : Level
 ```
 
 #### Pointwise round-trip
+
+Both round-trips are definitional, stated pointwise per operation, five in each
+direction, exactly as for rings; commutativity adds an equation, not an operation,
+so no new round-trip statement arises.  Going core to bundle and back,
+`roundtrip-cbc-+-cr`, `roundtrip-cbc-·-cr`, `roundtrip-cbc-neg-cr`,
+`roundtrip-cbc-0-cr`, and `roundtrip-cbc-1-cr` say the reassembled operations and
+constants agree with the originals.  Going bundle to core and back,
+`roundtrip-bcb-+-cr`, `roundtrip-bcb-·-cr`, `roundtrip-bcb-neg-cr`,
+`roundtrip-bcb-0-cr`, and `roundtrip-bcb-1-cr` state the same agreement on the
+bundle's own equivalence.
 
 ```agda
 module _ {𝑪 : CommutativeRing α ρ} where

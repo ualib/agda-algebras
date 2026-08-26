@@ -86,6 +86,11 @@ ar-Magma ∙-Op = Fin 2
 
 #### The signature value
 
+`Sig-Magma` pairs `Op-Magma` with `ar-Magma`, and is the signature every `∙`-based
+structure in the `Classical/` tree builds on: `Semigroup` and its equation-only
+extensions reuse it unchanged, and richer signatures such as `Sig-Monoid` embed it
+by the inclusion that the forgetful functors ride.
+
 ```agda
 Sig-Magma : Signature 0ℓ 0ℓ
 Sig-Magma = Op-Magma , ar-Magma
