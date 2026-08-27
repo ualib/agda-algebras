@@ -11,16 +11,15 @@ author: "the agda-algebras development team"
 This is the [Classical.Structures.Group.Centralizer][] module of the [Agda Universal Algebra Library][].
 
 The **centralizer** `C_G(N)` of a subset `N` of a group `G` is the set of elements
-that commute with every member of `N`.  It is an equality-respecting subgroup, it is
-antitone in `N`, and it is *normal* whenever `N` is; these are the three facts the
-structure theory of parachute representations needs.[^1]
+that commute with every member of `N`.  It is a subgroup, it is antitone in `N`,
+and it is *normal* whenever `N` is.[^1]
 
 This module also proves the small commutator fact that drives subdirect
 irreducibility: *two normal subgroups that meet trivially centralize each other*.
 
 For `m ∈ M` and `n ∈ N` the commutator `n m n⁻¹ m⁻¹` lies in `M` (read it as
-`(n m n⁻¹) m⁻¹`, using normality of `M`) and in `N` (read it as `n (m n⁻¹ m⁻¹)`,
-using normality of `N`), hence is trivial, which is exactly `n m = m n`.
+`(n m n⁻¹) m⁻¹`, and use normality of `M`) and in `N` (similarly, read `n (m n⁻¹ m⁻¹)`),
+hence is trivial, which is exactly `n m = m n`.
 
 <!--
 ```agda
@@ -61,7 +60,8 @@ module Centralizer {α ρ : Level} (𝒢 : Group α ρ) where
   open SetoidReasoning 𝔻[ 𝑮 ]
   open Group-Op 𝒢     using  ( _∙_ ; ε ; _⁻¹ ; ∙-cong ; assoc-law
                              ; idˡ-law ; idʳ-law ; invˡ-law ; invʳ-law )
-  open Conjugate 𝒢         using  ( conj ; IsNormal ; conj-cong ; conj-∙-hom ; conj-conj⁻¹ )
+  open Conjugate 𝒢         using  ( conj ; IsNormal ; conj-cong ; conj-∙-hom
+                                  ; conj-conj⁻¹ ; conj-syntax)
 
   -- The centralizer of N: the elements commuting with every member of N.
   C[_] : Pred G ℓ → Pred G (α ⊔ ρ ⊔ ℓ)
@@ -72,9 +72,9 @@ module Centralizer {α ρ : Level} (𝒢 : Group α ρ) where
   C-isAntitone M⊆N g∈C x x∈M = g∈C x (M⊆N x∈M)
 ```
 
-The centralizer is an equality-respecting subgroup.  Closure under inversion is the
-only step with any content: from `g x = x g` one gets `g⁻¹ x = x g⁻¹` by conjugating
-the equation with `g⁻¹` on both sides.
+The centralizer is a subgroup.  Closure under inversion is the only step with any
+content: from `g x = x g` one gets `g⁻¹ x = x g⁻¹` by applying `g⁻¹` on the left
+and right of both sides.
 
 ```agda
   C-isSubgroup : (N : Pred G ℓ) → IsSubgroup 𝒢 C[ N ]
@@ -101,15 +101,15 @@ the equation with `g⁻¹` on both sides.
 
     ⁻¹-c : ∀ {g} → g ∈ C[ N ] → g ⁻¹ ∈ C[ N ]
     ⁻¹-c {g} g∈C x x∈N = begin
-      g ⁻¹ ∙ x                  ≈˘⟨ ∙-cong ≈refl (idʳ-law x) ⟩
-      g ⁻¹ ∙ (x ∙ ε)            ≈˘⟨ ∙-cong ≈refl (∙-cong ≈refl (invʳ-law g)) ⟩
-      g ⁻¹ ∙ (x ∙ (g ∙ g ⁻¹))   ≈˘⟨ ∙-cong ≈refl (assoc-law x g (g ⁻¹)) ⟩
-      g ⁻¹ ∙ (x ∙ g ∙ g ⁻¹)     ≈˘⟨ ∙-cong ≈refl (∙-cong (g∈C x x∈N) ≈refl) ⟩
-      g ⁻¹ ∙ (g ∙ x ∙ g ⁻¹)     ≈⟨ ∙-cong ≈refl (assoc-law g x (g ⁻¹)) ⟩
-      g ⁻¹ ∙ (g ∙ (x ∙ g ⁻¹))   ≈˘⟨ assoc-law (g ⁻¹) g (x ∙ g ⁻¹) ⟩
-      (g ⁻¹ ∙ g) ∙ (x ∙ g ⁻¹)   ≈⟨ ∙-cong (invˡ-law g) ≈refl ⟩
-      ε ∙ (x ∙ g ⁻¹)            ≈⟨ idˡ-law (x ∙ g ⁻¹) ⟩
-      x ∙ g ⁻¹                  ∎
+      g ⁻¹ ∙ x                 ≈˘⟨ ∙-cong ≈refl (idʳ-law x) ⟩
+      g ⁻¹ ∙ (x ∙ ε)           ≈˘⟨ ∙-cong ≈refl (∙-cong ≈refl (invʳ-law g)) ⟩
+      g ⁻¹ ∙ (x ∙ (g ∙ g ⁻¹))  ≈˘⟨ ∙-cong ≈refl (assoc-law x g (g ⁻¹)) ⟩
+      g ⁻¹ ∙ (x ∙ g ∙ g ⁻¹)    ≈˘⟨ ∙-cong ≈refl (∙-cong (g∈C x x∈N) ≈refl) ⟩
+      g ⁻¹ ∙ (x ^ g)           ≈⟨ ∙-cong ≈refl (assoc-law g x (g ⁻¹)) ⟩
+      g ⁻¹ ∙ (g ∙ (x ∙ g ⁻¹))  ≈˘⟨ assoc-law (g ⁻¹) g (x ∙ g ⁻¹) ⟩
+      (g ⁻¹ ∙ g) ∙ (x ∙ g ⁻¹)  ≈⟨ ∙-cong (invˡ-law g) ≈refl ⟩
+      ε ∙ (x ∙ g ⁻¹)           ≈⟨ idˡ-law (x ∙ g ⁻¹) ⟩
+      x ∙ g ⁻¹                 ∎
 ```
 
 The centralizer of a *normal* subgroup is normal: conjugating a centralizing element
@@ -119,15 +119,24 @@ and conjugating that equation by `k` gives what is wanted.
 ```agda
   C-isNormal : {N : Pred G ℓ} → IsNormal N → IsNormal C[ N ]
   C-isNormal N-normal k {g} g∈C x x∈N = begin
-    conj k g ∙ x                       ≈˘⟨ ∙-cong ≈refl (conj-conj⁻¹ k x) ⟩
-    conj k g ∙ conj k (conj (k ⁻¹) x)  ≈˘⟨ conj-∙-hom k g (conj (k ⁻¹) x) ⟩
-    conj k (g ∙ conj (k ⁻¹) x)         ≈⟨ conj-cong k (g∈C (conj (k ⁻¹) x) (N-normal (k ⁻¹) x∈N)) ⟩
-    conj k (conj (k ⁻¹) x ∙ g)         ≈⟨ conj-∙-hom k (conj (k ⁻¹) x) g ⟩
-    conj k (conj (k ⁻¹) x) ∙ conj k g  ≈⟨ ∙-cong (conj-conj⁻¹ k x) ≈refl ⟩
-    x ∙ conj k g                       ∎
+    g ^ k ∙ x                ≈˘⟨ ∙-cong ≈refl (conj-conj⁻¹ k x) ⟩
+    g ^ k ∙ (x ^ (k ⁻¹))^ k  ≈˘⟨ conj-∙-hom k g (x ^ (k ⁻¹)) ⟩
+    (g ∙ x ^ (k ⁻¹))^ k      ≈⟨ conj-cong k (g∈C (x ^ (k ⁻¹)) (N-normal (k ⁻¹) x∈N)) ⟩
+    (x ^ (k ⁻¹) ∙ g)^ k      ≈⟨ conj-∙-hom k (x ^ (k ⁻¹)) g ⟩
+    (x ^ (k ⁻¹))^ k ∙ g ^ k  ≈⟨ ∙-cong (conj-conj⁻¹ k x) ≈refl ⟩
+    x ∙ g ^ k                ∎
 ```
 
 #### Normal subgroups meeting trivially centralize each other
+
+Two normal subgroups with trivial intersection commute elementwise: if `M` and `N`
+are normal and meet at `(ε)`, then every element of `N` centralizes `M`.
+
+We formalize this standard fact in `normals-centralize`{.AgdaFunction};
+the proof is the classical commutator argument.  Given `n ∈ N` and `m ∈ M`, the
+commutator `(n m n⁻¹) m⁻¹` lies in `M` by normality of `M` and in `N` by normality
+of `N`, so the trivial-intersection hypothesis forces it to be `ε`, which is exactly
+`n m ≈ m n`.
 
 ```agda
   normals-centralize : {M : Pred G ℓ} {N : Pred G ℓ'}
@@ -149,11 +158,11 @@ and conjugating that equation by `k` gives what is wanted.
     w∈M = M∙ (M-nrm n m∈M) (M⁻¹ m∈M)
 
     -- ... and as n (m n⁻¹ m⁻¹).
-    w≈ : w ≈ n ∙ conj m (n ⁻¹)
+    w≈ : w ≈ n ∙ (n ⁻¹) ^ m
     w≈ = begin
       n ∙ m ∙ n ⁻¹ ∙ m ⁻¹    ≈⟨ ∙-cong (assoc-law n m (n ⁻¹)) ≈refl ⟩
       n ∙ (m ∙ n ⁻¹) ∙ m ⁻¹  ≈⟨ assoc-law n (m ∙ n ⁻¹) (m ⁻¹) ⟩
-      n ∙ (m ∙ n ⁻¹ ∙ m ⁻¹)  ∎
+      n ∙ (n ⁻¹) ^ m         ∎
 
     w∈N : w ∈ N
     w∈N = N-resp (≈sym w≈) (N∙ n∈N (N-nrm m (N⁻¹ n∈N)))
@@ -164,19 +173,19 @@ and conjugating that equation by `k` gives what is wanted.
     -- Cancelling m⁻¹ and then n⁻¹ from n m n⁻¹ m⁻¹ ≈ ε.
     step : n ∙ m ∙ n ⁻¹ ≈ m
     step = begin
-      n ∙ m ∙ n ⁻¹               ≈˘⟨ idʳ-law _ ⟩
-      n ∙ m ∙ n ⁻¹ ∙ ε           ≈˘⟨ ∙-cong ≈refl (invˡ-law m) ⟩
-      n ∙ m ∙ n ⁻¹ ∙ (m ⁻¹ ∙ m)  ≈˘⟨ assoc-law (n ∙ m ∙ n ⁻¹) (m ⁻¹) m ⟩
-      n ∙ m ∙ n ⁻¹ ∙ m ⁻¹ ∙ m    ≈⟨ ∙-cong w≈ε ≈refl ⟩
-      ε ∙ m                      ≈⟨ idˡ-law m ⟩
-      m                          ∎
+      m ^ n               ≈˘⟨ idʳ-law _ ⟩
+      m ^ n ∙ ε           ≈˘⟨ ∙-cong ≈refl (invˡ-law m) ⟩
+      m ^ n ∙ (m ⁻¹ ∙ m)  ≈˘⟨ assoc-law (m ^ n) (m ⁻¹) m ⟩
+      m ^ n ∙ m ⁻¹ ∙ m    ≈⟨ ∙-cong w≈ε ≈refl ⟩
+      ε ∙ m               ≈⟨ idˡ-law m ⟩
+      m                   ∎
 
     commute : n ∙ m ≈ m ∙ n
     commute = begin
       n ∙ m               ≈˘⟨ idʳ-law (n ∙ m) ⟩
       n ∙ m ∙ ε           ≈˘⟨ ∙-cong ≈refl (invˡ-law n) ⟩
       n ∙ m ∙ (n ⁻¹ ∙ n)  ≈˘⟨ assoc-law (n ∙ m) (n ⁻¹) n ⟩
-      n ∙ m ∙ n ⁻¹ ∙ n    ≈⟨ ∙-cong step ≈refl ⟩
+      m ^ n ∙ n           ≈⟨ ∙-cong step ≈refl ⟩
       m ∙ n               ∎
 ```
 

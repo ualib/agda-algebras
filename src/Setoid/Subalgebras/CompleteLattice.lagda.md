@@ -224,22 +224,22 @@ because `I` is `ℓ₀`-small.
 
 ```agda
   ⨅ : {I : Type ℓ₀} → (I → Subᴸ) → Subᴸ
-  ⨅ {I} 𝒜 = ⋂ I (λ i → proj₁ (𝒜 i))
-           , ⋂s {𝑨 = 𝑨} I {𝒜 = λ i → proj₁ (𝒜 i)} (λ i → proj₂ (𝒜 i))
+  ⨅ {I} 𝒜 = ⋂ I (λ i → 𝒜 i .proj₁)
+           , ⋂s {𝑨 = 𝑨} I {𝒜 = λ i → 𝒜 i .proj₁} (λ i → 𝒜 i .proj₂)
 
   ⨆ : {I : Type ℓ₀} → (I → Subᴸ) → Subᴸ
-  ⨆ {I} 𝒜 = Sg 𝑨 (⋃ I (λ i → proj₁ (𝒜 i))) , sgIsSub 𝑨
+  ⨆ {I} 𝒜 = Sg 𝑨 (⋃ I λ i → 𝒜 i .proj₁) , sgIsSub 𝑨
 
-  ⨅-lower : {I : Type ℓ₀} (𝒜 : I → Subᴸ) (i : I) → (⨅ 𝒜) ≤ (𝒜 i)
+  ⨅-lower : {I : Type ℓ₀} (𝒜 : I → Subᴸ) (i : I) → ⨅ 𝒜 ≤ 𝒜 i
   ⨅-lower 𝒜 i z = z i
 
-  ⨅-greatest : {I : Type ℓ₀} (𝒜 : I → Subᴸ) (D : Subᴸ) → (∀ i → D ≤ (𝒜 i)) → D ≤ (⨅ 𝒜)
+  ⨅-greatest : {I : Type ℓ₀} (𝒜 : I → Subᴸ) (D : Subᴸ) → (∀ i → D ≤ 𝒜 i) → D ≤ ⨅ 𝒜
   ⨅-greatest 𝒜 D D≤𝒜 z i = D≤𝒜 i z
 
-  ⨆-upper : {I : Type ℓ₀} (𝒜 : I → Subᴸ) (i : I) → (𝒜 i) ≤ (⨆ 𝒜)
+  ⨆-upper : {I : Type ℓ₀} (𝒜 : I → Subᴸ) (i : I) → 𝒜 i ≤ ⨆ 𝒜
   ⨆-upper 𝒜 i z = var (i , z)
 
-  ⨆-least : {I : Type ℓ₀} (𝒜 : I → Subᴸ) (D : Subᴸ) → (∀ i → (𝒜 i) ≤ D) → (⨆ 𝒜) ≤ D
+  ⨆-least : {I : Type ℓ₀} (𝒜 : I → Subᴸ) (D : Subᴸ) → (∀ i → 𝒜 i ≤ D) → ⨆ 𝒜 ≤ D
   ⨆-least 𝒜 D 𝒜≤D = sgIsSmallest 𝑨 (proj₁ D) (proj₂ D) (λ (i , z) → 𝒜≤D i z)
 ```
 

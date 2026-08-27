@@ -10,20 +10,21 @@ author: "the agda-algebras development team"
 
 This is the [Classical.Structures.Group.Cosets][] module of the [Agda Universal Algebra Library][].
 
-For a subgroup `H` of a group `𝑮`, two elements lie in the same **left coset**
-exactly when `x ⁻¹ ∙ y ∈ H`.  In the setoid discipline the coset space `G/H` is not
-a new carrier of equivalence classes but the *same* carrier with a coarser setoid
-equality: the relation `_∼_` just described.
+For a subgroup `H` of a group `𝑮`, we say that two elements, `x, y` in `𝑮`, lie in the same
+**left coset**, and we write `x ∼ y`, exactly when `x ⁻¹ ∙ y ∈ H`.
 
-This module proves `_∼_` is an equivalence relation — each axiom is one subgroup
-closure property plus one line of group arithmetic — and packages the quotient setoid
-`cosetSetoid`{.AgdaFunction} via the `_/_`{.AgdaFunction} construction of
+In the setoid discipline the coset space `G / H` is not a new carrier of
+equivalence classes but the *same* carrier with a coarser setoid equality: the
+relation `_∼_` just described.
+
+This module proves `_∼_` is an equivalence relation and packages the quotient
+setoid, `cosetSetoid`{.AgdaFunction}, via the `_/_`{.AgdaFunction} construction of
 [Setoid.Relations.Quotients][].
 
 Two further lemmas prepare the ground for the coset action of
-[Classical.Structures.Group.GSet][]: the original setoid equality refines the coset
-equality (`≈⇒∼`{.AgdaFunction}, well-definedness of the quotient map), and left
-translation by any group element preserves the coset equality
+[Classical.Structures.Group.GSet][]: the original setoid equality refines the
+coset equality (`≈⇒∼`{.AgdaFunction}, well-definedness of the quotient map), and
+left translation by any group element preserves the coset equality
 (`∼-congˡ`{.AgdaFunction}, which will be the congruence proof of the action).
 
 <!--
@@ -83,9 +84,9 @@ module Coset {α ρ : Level} (𝒢 : Group α ρ) {ℓ : Level}
 
 #### `_∼_` is an equivalence relation
 
-Reflexivity is `ε ∈ H` transported along `x ⁻¹ ∙ x ≈ ε`; symmetry is closure of `H`
-under inverses, since `(x ⁻¹ ∙ y) ⁻¹ ≈ y ⁻¹ ∙ x`; and transitivity is closure under
-products, since `(x ⁻¹ ∙ y) ∙ (y ⁻¹ ∙ z) ≈ x ⁻¹ ∙ z`.
++  Reflexivity is `ε ∈ H` transported along `x ⁻¹ ∙ x ≈ ε`.
++  Symmetry is closure of `H` under inverses, since `(x ⁻¹ ∙ y) ⁻¹ ≈ y ⁻¹ ∙ x`.
++  Transitivity is closure under products, since `(x ⁻¹ ∙ y) ∙ (y ⁻¹ ∙ z) ≈ x ⁻¹ ∙ z`.
 
 ```agda
   ∼-refl : ∀ {x} → x ∼ x
@@ -118,6 +119,21 @@ products, since `(x ⁻¹ ∙ y) ∙ (y ⁻¹ ∙ z) ≈ x ⁻¹ ∙ z`.
 
 #### Compatibility lemmas
 
+Two facts are needed before the coset relation can be used as an equality.
+
+`≈⇒∼`{.AgdaFunction} says the group's own setoid equality refines the coset
+relation, which is what makes the quotient map well defined: equal elements land
+in the same coset.  `∼-congˡ`{.AgdaFunction} says left translation by any group
+element preserves the coset relation, which is what lets `g ∙_` descend to the
+coset space.
+
+Both are proved the same way, by supplying `respects`{.AgdaFunction} with an
+equality between the relevant `x ⁻¹ ∙ y` witnesses: for `≈⇒∼`{.AgdaFunction} that
+witness reduces to `ε` and membership follows from `ε-closed`{.AgdaFunction}, and for
+`∼-congˡ`{.AgdaFunction} the `g` cancels, so the translated witness equals the
+original.  `∼-congˡ`{.AgdaFunction} is what
+[Classical.Structures.Group.GSet][] uses to build the coset algebra.
+
 ```agda
   -- The setoid equality refines the coset equality (the quotient map is well defined).
   ≈⇒∼ : ∀ {x y} → x ≈ y → x ∼ y
@@ -142,9 +158,7 @@ products, since `(x ⁻¹ ∙ y) ∙ (y ⁻¹ ∙ z) ≈ x ⁻¹ ∙ z`.
 
 The coset relation is decidable exactly when membership in `H`{.AgdaBound} is:
 whether `x ∼ y` is, definitionally, whether the single product `x ⁻¹ ∙ y` lies in
-`H`{.AgdaBound}.  This is the Layer-D decision procedure that sits beside the
-semantic relation, per the two-layer discipline (ADR-008; audit A2 of
-`docs/notes/flrp-wp7-audits.md`).
+`H`{.AgdaBound}.[^1]
 
 ```agda
   -- With decidable membership in H, the coset relation is decidable.
@@ -161,3 +175,9 @@ quotient construction of [Setoid.Relations.Quotients][].
   cosetSetoid : Setoid α ℓ
   cosetSetoid = G / ∼-equivalence
 ```
+
+---
+
+[^1]:  This is the Layer-D decision procedure that sits beside the semantic
+       relation, per the two-layer discipline ([ADR-008]; audit A2 of
+       `docs/notes/flrp-wp7-audits.md`).
