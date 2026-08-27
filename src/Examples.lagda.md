@@ -9,6 +9,23 @@ author: "the agda-algebras development team"
 
 This is the [Examples][] module of the [Agda Universal Algebra Library][].
 
+This is the aggregator for the example tree.  The submodules group the examples by
+flavour, as follows:
+
++  [Examples.Classical][] collects the worked instances of the classical
+   structures: canonical first examples, finite groups from Cayley tables, the
+   small lattices, and deliberate failure modes such as a magma that is not a
+   semigroup.
++  [Examples.Demos][] collects self-contained demonstrations, among them the
+   frozen literate artifact of the TYPES 2021 paper.
++  [Examples.FunctionTypeBijections][] and [Examples.PolynomialFunctors][] are
+   illustrative studies relocated out of the Legacy tree: n-ary function encodings
+   and their η-obstructions, and polynomial functors with W-types.
++  [Examples.Setoid][] exercises the generic `Setoid/` machinery directly: free
+   algebras, presentations, quotients, and Birkhoff's HSP theorem specialized to a
+   concrete algebra.
++  [Examples.Structures][] instantiates the general operations-and-relations
+   structures of the frozen Legacy tree.
 
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}

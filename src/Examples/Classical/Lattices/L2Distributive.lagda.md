@@ -55,6 +55,10 @@ Bool-absorbʳ-dl a b = trans (∨-comm (a ∧ b) a) (∨-absorbs-∧ a b)
 
 #### The distributive lattice `𝟚 = (Bool, _∧_, _∨_)` {#bool-distributive-lattice}
 
+`Bool-distributiveLattice` hands `eqsToDistributiveLattice` the same eight lattice
+equations as the `Lattice` example plus the two left-distributivity laws, ten in
+all.
+
 ```agda
 Bool-distributiveLattice : DistributiveLattice
 Bool-distributiveLattice = eqsToDistributiveLattice Bool _∧_ _∨_

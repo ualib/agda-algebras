@@ -94,6 +94,10 @@ open Polymorphic.Group-Op z3-group using ( _∙_ ; ε ; _⁻¹ )
 
 #### `ℤ/3ℤ` is abelian
 
+Commutativity is not among the five group axioms, so it is a separate result:
+`·-comm` is decided over the finite carrier exactly as the axioms were, by
+`from-yes` applied to `Commutative?`.
+
 ```agda
 ·-comm : ∀ a b → a · b ≡ b · a
 ·-comm = from-yes (Commutative? _·_)

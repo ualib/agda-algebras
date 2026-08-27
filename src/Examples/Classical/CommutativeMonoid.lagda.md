@@ -10,6 +10,12 @@ author: "the agda-algebras development team"
 
 This is the [Examples.Classical.CommutativeMonoid][] module of the [Agda Universal Algebra Library][].
 
+The natural numbers under addition and zero form the canonical commutative monoid;
+the contrast case is the deliberately non-commutative
+[`Examples.Classical.Monoid`][Examples.Classical.Monoid] on lists.  The construction
+is one line because `eqsToCommutativeMonoid` asks for exactly the four stdlib
+lemmas named below.
+
 <!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}

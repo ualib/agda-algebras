@@ -47,6 +47,9 @@ open Polymorphic.Monoid-Op list-monoid using ( _∙_ ; ε )
 
 #### Acceptance checks
 
+`∙-is-++-mn` and `ε-is-[]-mn` record that the accessor's curried operation and
+identity interpret to `_++_` and `[]` on the nose, both discharged by `refl`.
+
 ```agda
 ∙-is-++-mn : ∀ (xs ys : List ℕ) → xs ∙ ys ≡ xs ++ ys
 ∙-is-++-mn xs ys = refl

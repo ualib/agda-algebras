@@ -46,6 +46,9 @@ open Polymorphic.AbelianGroup-Op ℤ-abelianGroup using ( _∙_ ; ε ; _⁻¹ )
 
 #### Acceptance checks
 
+`∙-is-+-ag`, `ε-is-0-ag`, and `⁻¹-is-neg-ag` record that the accessors interpret to
+`_+_`, `0ℤ`, and negation on the nose, each discharged by `refl`.
+
 ```agda
 ∙-is-+-ag : ∀ (a b : ℤ) → a ∙ b ≡ a + b
 ∙-is-+-ag a b = refl

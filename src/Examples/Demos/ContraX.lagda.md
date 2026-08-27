@@ -7,6 +7,13 @@ author: "the agda-algebras development team"
 
 ### Inconsistency in first formalization attempt
 
+This is the [Examples.Demos.ContraX][] module of the [Agda Universal Algebra Library][].
+
+A cautionary counterexample kept from an early formalization attempt.  It is
+tempting to posit a surjection from an arbitrary context type onto every algebra's
+domain; this module shows the global form of that assumption is inconsistent, so
+any such surjection must be a hypothesis about a suitably chosen context, never a
+theorem about all of them.
 
 <!--
 ```agda
@@ -31,6 +38,13 @@ open import Setoid.Functions         using (IsSurjective ; Image_∋_)
 open Algebra
 ```
 -->
+
+`_↠_` packages a setoid function from `setoid X` into the algebra's domain together
+with a proof that it is surjective.  `myA` is the one-point setoid with the trivial
+equality, and `myAlg` an algebra on it whose interpretation Agda infers, the
+codomain being a one-point setoid.  `contradiction` refutes `∀ X 𝑨 → X ↠ 𝑨`:
+instantiating at the empty type and `myAlg`, the assumed surjection must witness
+the point in its image, and that witness is an element of `⊥`.
 
 ```agda
 _↠_ : Set → Algebra {𝑆 = 𝑆} 0ℓ 0ℓ → _
