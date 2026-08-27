@@ -10,29 +10,34 @@ author: "the agda-algebras development team"
 
 This is the [Classical.Structures.Group.GSet][] module of the [Agda Universal Algebra Library][].
 
-The transitive action of a group `G` on the coset space `G/H` is packaged here as an
-ordinary **unary algebra**: the signature is [`Sig-Unary`][Classical.Signatures.Unary]
-applied to the carrier of `G` — one operation symbol per group element, each of arity
-one — and the algebra's domain is the quotient setoid `cosetSetoid`{.AgdaFunction} of
-[Classical.Structures.Group.Cosets][].  The symbol `g` acts by left translation, `x ↦
-g ∙ x`, which respects the coset equality by `∼-congˡ`{.AgdaFunction}.
+The transitive action of a group `G` on the coset space `G / H` is packaged here
+as an ordinary *unary algebra*: the signature is
+[`Sig-Unary`][Classical.Signatures.Unary] applied to the carrier of `G`
+(one operation symbol per group element, each of arity one) and the algebra's
+domain is the quotient setoid `cosetSetoid`{.AgdaFunction} of
+[Classical.Structures.Group.Cosets][].  The symbol `g` acts by left translation,
+`x ↦ g ∙ x`, which respects the coset equality by `∼-congˡ`{.AgdaFunction}.
 
 This encoding is chosen so that the library's congruence machinery applies to the
-G-set *verbatim*: `cosetAlgebra`{.AgdaFunction} is an `Algebra`{.AgdaRecord} over an
-ordinary signature, so `Con cosetAlgebra` means exactly what it means for any
-algebra (the module ends with a private demonstration).[^1]
+G-set verbatim: `cosetAlgebra`{.AgdaFunction} is an `Algebra`{.AgdaRecord} over
+an ordinary signature, so `Con cosetAlgebra` means exactly what it means for any
+algebra.  (The module ends with a private demonstration.)[^1]
 
-**Note on the symbol set**.  Operation symbols form a *type* with propositional
+We occasionally write `G ↷ G / H` to denote that the group G acts on the coset
+space G / H, but we also use it to mean the algebra `cosetAlgebra`{.AgdaFunction}
+that encodes this action; the context should make clear which is intended.
+
+**Note on the symbol set**.  Operation symbols form a type with propositional
 equality, so two setoid-equal but distinct carrier elements give two symbols; they
-act identically on `G/H` (by `∼-congˡ` and `≈⇒∼`), and a signature is raw syntax,
+act identically on `G / H` (by `∼-congˡ` and `≈⇒∼`), and a signature is raw syntax,
 so this is harmless.
 
 The action laws are stated with the curried operations, which is no loss: by the
 definition of `mkAlgebra`{.AgdaFunction}, the interpretation of the symbol `g` at
 `x` is definitionally `g ∙ x`, so `act-identity`{.AgdaFunction} and
 `act-compatible`{.AgdaFunction} are literally the unit and compatibility laws of
-the action of `G` on `G/H`, and `act-transitive`{.AgdaFunction} says the action is
-transitive: any coset is reached from any other by some group element.
+the group action `G ↷ G / H`, and `act-transitive`{.AgdaFunction} says the action
+is transitive: any coset is reached from any other by some group element.
 
 <!--
 ```agda
@@ -78,7 +83,7 @@ module CosetAction {α ρ : Level} (𝒢 : Group α ρ) {ℓ : Level}
   open Coset 𝒢 H H-isSubgroup   using ( _∼_ ; ∼-congˡ ; ≈⇒∼ ; cosetSetoid )
   open GroupProperties ⟨ 𝒢 ⟩ᵍᵖ  using ( //-rightDividesˡ )
 
-  -- The algebra G ↷ G/H over the unary signature on the carrier of G:
+  -- The algebra G ↷ G / H over the unary signature on the carrier of G:
   -- the symbol g acts on the coset of x by left translation, g ∙ x.
 
   cosetAlgebra : Algebra {𝑆 = Sig-Unary G} α ℓ
@@ -87,10 +92,12 @@ module CosetAction {α ρ : Level} (𝒢 : Group α ρ) {ℓ : Level}
 
 #### Action laws and transitivity
 
-The coset space is a `G`-set: `G` acts on `G/H` by left translation.  The first
-two results are the action laws; the third, transitivity, is not an axiom but a
-further property this particular action happens to have.  Each is a one-line
-consequence of a group law transported across `≈⇒∼`{.AgdaFunction}.
+As explained above, the coset space is a `G`-set: `G` acts on `G / H` by left
+translation.  The first two results we prove are the action laws; the third,
+transitivity, is not an axiom but a further property this particular action
+happens to have.  Each is a one-line consequence of a group law transported across
+`≈⇒∼`{.AgdaFunction}.  (Recall, `≈⇒∼` says setoid equality refines coset equality:
+`∀ {x y} → x ≈ y → x ∼ y`.)
 
 +  `act-identity`{.AgdaFunction}: acting by `ε` does nothing, from
    `idˡ-law`{.AgdaFunction}.
@@ -99,10 +106,10 @@ consequence of a group law transported across `≈⇒∼`{.AgdaFunction}.
 +  `act-transitive`{.AgdaFunction}: the action is transitive, and the witness is
    explicit: `y ∙ x ⁻¹` carries the coset of `x` to that of `y`.
 
-Transitivity is the substantive one: it says `G/H` is a single orbit, which is why a
-coset space is the model case of a transitive action.  That it is proved by
-exhibiting the group element rather than by an existence argument is what keeps it
-usable computationally.
+Transitivity is the substantive one: it says `G / H` is a single orbit, which is
+why a coset space is the model case of a transitive action.  Since it is proved by
+exhibiting a witness, the group element, rather than by an existence argument, the
+result it usable computationally.
 
 ```agda
   -- The identity element acts as the identity on cosets.
@@ -118,17 +125,21 @@ usable computationally.
   act-transitive x y = y ∙ x ⁻¹ , ≈⇒∼ (//-rightDividesˡ x y)
 ```
 
+Note that `_∙_` has higher precedence than `_∼_`, so we could have written
+(ε ∙ x) ∼ x as `ε ∙ x ∼ x` without ambiguity.  Also, since `_∙_` is
+left-associative, we could have written `g ∙ h ∙ x ∼ g ∙ (h ∙ x)` in
+`act-compatible`{.AgdaFunction}.  We chose instead to make the laws readable even
+without thinking about precedence conventions or associativity handedness.
+
 #### Finiteness of the coset algebra
 
 Carrier finiteness of the coset algebra is inherited from the group.  The coset
 space is the *same* carrier under the coarser equality `_∼_`{.AgdaFunction}, so the
 group's surjective enumeration still hits every element (the finer `_≈_`{.AgdaFunction}
 refines `_∼_`{.AgdaFunction} by `≈⇒∼`{.AgdaFunction}), and decidable coset equality
-is exactly the decidability of `_∼_`{.AgdaFunction} — supplied by
+is exactly the decidability of `_∼_`{.AgdaFunction}, which is supplied by
 `∼-dec`{.AgdaFunction} of [Classical.Structures.Group.Cosets][] whenever membership
-in `H`{.AgdaBound} is decidable.  This discharges, constructively, the finiteness
-hypothesis of the Pálfy–Pudlák corollaries of [FLRP.Bridge][] (audit A2 of
-`docs/notes/flrp-wp7-audits.md` sketches precisely this argument).
+in `H`{.AgdaBound} is decidable.[^2]
 
 ```agda
   open FiniteAlgebra
@@ -146,9 +157,10 @@ hypothesis of the Pálfy–Pudlák corollaries of [FLRP.Bridge][] (audit A2 of
 #### The congruence machinery applies verbatim
 
 `cosetAlgebra` is an ordinary algebra, so its congruence lattice needs no new
-definitions — the demonstration below type-checks against the stock
-`Con`{.AgdaFunction} of [Setoid.Congruences.Basic][].  Work package WP-3 will show
-this type is isomorphic (as a lattice) to the interval `[H, G]` in `Sub(G)`.
+definitions.  The demonstration below type-checks against the stock
+`Con`{.AgdaFunction} of [Setoid.Congruences.Basic][].  We will eventually show
+that this type is isomorphic (as a lattice) to the interval `[H, G]` in
+`Sub(G)`.[^1]
 
 ```agda
   private
@@ -158,6 +170,10 @@ this type is isomorphic (as a lattice) to the interval `[H, G]` in `Sub(G)`.
 
 ---
 
-[^1]:  It is the object of the Pálfy–Pudlák bridge — work package WP-3 of the FLRP
-       program proves `Con (G ↷ G/H) ≅ [H, G]` about precisely this algebra (see
-       `docs/notes/flrp-research-roadmap.md` § 7).
+[^1]:  The `cosetAlgebra` algebra is the object of work package WP-3 of the FLRP
+       program in which we prove `Con (G ↷ G / H) ≅ [H, G]`.
+       (See `docs/notes/flrp-research-roadmap.md` § 7.)
+
+[^2]:  This discharges, constructively, the finiteness hypothesis of the
+       Pálfy–Pudlák corollaries of [FLRP.Bridge][].  (Audit A2 of
+       `docs/notes/flrp-wp7-audits.md` sketches precisely this argument.)

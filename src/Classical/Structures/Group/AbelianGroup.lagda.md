@@ -10,11 +10,14 @@ author: "the agda-algebras development team"
 
 This is the [Classical.Structures.Group.AbelianGroup][] module of the [Agda Universal Algebra Library][].
 
-`Σ[ 𝑨 ∈ Algebra α ρ ] 𝑨 ⊨ Th-AbelianGroup` over `Sig-Group`.  An equation-only
-extension of Group, structurally identical to the way `CommutativeMonoid` extends
-`Monoid`: `abelianGroup→group` is a pure theory-reindex (`proj₁` on the underlying
-algebra), and `AbelianGroup-Op` inherits `_∙_`, `ε`, `_⁻¹`, and all five group laws
-through it, adding `comm-law`.
+An **abelian group** is an inhabitant of the type
+`Σ[ 𝑨 ∈ Algebra α ρ ] 𝑨 ⊨ Th-AbelianGroup`, where `Algebra` is parameterized by
+the signature type `Sig-Group`.
+
+This is an equation-only extension of Group, structurally identical to the way
+`CommutativeMonoid` extends `Monoid`; that is, `abelianGroup→group` is a pure
+theory-reindex (`proj₁` on the underlying algebra), and `AbelianGroup-Op` inherits
+`_∙_`, `ε`, `_⁻¹`, and all five group laws through it, adding `comm-law`.
 
 <!--
 ```agda
@@ -55,56 +58,52 @@ _⊨ᵃᵍ_ : (𝑨 : Algebra {𝑆 = Sig-Group} α ρ) (ℰ : Eq-AbelianGroup �
 𝑨 ⊨ᵃᵍ ℰ = ∀ i → 𝑨 ⊧ proj₁ (ℰ i) ≈ proj₂ (ℰ i)
 
 AbelianGroup : (α ρ : Level) → Type (suc α ⊔ suc ρ)
-AbelianGroup α ρ = Σ[ 𝑨 ∈ Algebra {𝑆 = Sig-Group} α ρ ] 𝑨 ⊨ᵃᵍ Th-AbelianGroup
+AbelianGroup α ρ = Σ[ 𝑨 ∈ Algebra α ρ ] 𝑨 ⊨ᵃᵍ Th-AbelianGroup
 ```
 
 #### The forgetful projection to groups
 
-`abelianGroup→group`{.AgdaFunction} discards commutativity.  Since an abelian group
-is a group with one extra *equation* and no extra operation, the signature is
-unchanged and no reduct is needed; the function keeps the algebra and re-indexes the
-satisfaction witness, mapping each constructor of `Eq-Group`{.AgdaDatatype} to its
-counterpart in `Eq-AbelianGroup`{.AgdaDatatype}.  This is the cheap shape of
-forgetful, the same one `commutativeMonoid→monoid`{.AgdaFunction} has, as against the
-reduct-and-re-prove shape of `monoid→semigroup`{.AgdaFunction}.
+`abelianGroup→group`{.AgdaFunction} discards commutativity.  Since an abelian
+group is a group with one extra *equation* and no extra operations, the signature
+is unchanged and no reduct is needed; the function keeps the algebra and re-indexes
+the satisfaction witness, mapping each constructor of `Eq-Group`{.AgdaDatatype} to
+its counterpart in `Eq-AbelianGroup`{.AgdaDatatype}.  (This is the shape forgetful
+shape as that of `commutativeMonoid→monoid`{.AgdaFunction}, in contrast with the
+reduct-and-re-prove shape of `monoid→semigroup`{.AgdaFunction}.)
 
 ```agda
 abelianGroup→group : AbelianGroup α ρ → Group α ρ
-abelianGroup→group (𝑨 , mod) = 𝑨 , λ { assoc → mod assocᵃ
-                                     ; idˡ   → mod idˡᵃ
-                                     ; idʳ   → mod idʳᵃ
-                                     ; invˡ  → mod invˡᵃ
-                                     ; invʳ  → mod invʳᵃ }
+abelianGroup→group (𝑨 , mod) = 𝑨 , λ  { assoc → mod assocᵃ
+                                      ; idˡ   → mod idˡᵃ
+                                      ; idʳ   → mod idʳᵃ
+                                      ; invˡ  → mod invˡᵃ
+                                      ; invʳ  → mod invʳᵃ }
 ```
 
 #### The `AbelianGroup-Op` module
 
-`AbelianGroup-Op 𝑨`{.AgdaModule} inherits the whole group interface through the
-forgetful (three operations, both congruences, all three containment lemmas and all
-five laws) and adds two names: `equations`{.AgdaFunction}, the new satisfaction
-witness, and `comm-law`{.AgdaFunction}, commutativity in curried form.
-
-`comm-law`{.AgdaFunction} has the three-step shape every added law in this hierarchy
-has: `equations comm` between two applications of `interp-node-∙`{.AgdaFunction}, one
-for each side of the equation.
+`AbelianGroup-Op`{.AgdaModule}` 𝑨` inherits the whole group interface through the
+forgetful projection (three operations, both congruences, all three containment
+lemmas and all five laws) and adds two names: `equations`{.AgdaFunction}, the new
+satisfaction witness, and `comm-law`{.AgdaFunction}, commutativity in curried form.
 
 ```agda
-module AbelianGroup-Op {α ρ : Level} (𝑨𝑩 : AbelianGroup α ρ) where
-  private 𝑨 = proj₁ 𝑨𝑩
+module AbelianGroup-Op {α ρ : Level} ((𝑨 , laws) : AbelianGroup α ρ) where
   open Setoid 𝔻[ 𝑨 ]
 
-  open Group-Op (abelianGroup→group 𝑨𝑩) public
-    using ( _∙_ ; ε ; _⁻¹ ; ∙-cong ; ⁻¹-cong ; interp-node-∙ ; interp-node-ε ; interp-node-⁻¹
-          ; assoc-law ; idˡ-law ; idʳ-law ; invˡ-law ; invʳ-law )
-
-  equations : 𝑨 ⊨ᵃᵍ Th-AbelianGroup
-  equations = proj₂ 𝑨𝑩
+  open Group-Op (abelianGroup→group (𝑨 , laws)) public
+    using  ( _∙_ ; ε ; _⁻¹ ; ∙-cong ; ⁻¹-cong ; interp-node-∙ ; interp-node-ε
+           ; interp-node-⁻¹ ; assoc-law ; idˡ-law ; idʳ-law ; invˡ-law ; invʳ-law )
 
   comm-law : ∀ x y → x ∙ y ≈ y ∙ x
   comm-law x y = trans (sym (interp-node-∙ (ℊ 0F) (ℊ 1F) {η}))
-                       (trans (equations comm η) (interp-node-∙ (ℊ 1F) (ℊ 0F) {η}))
-    where η : Fin 3 → 𝕌[ 𝑨 ]
-          η = λ { 0F → x ; 1F → y ; 2F → x }
+                       (trans (laws comm η) (interp-node-∙ (ℊ 1F) (ℊ 0F) {η}))
+               -- the same three-step shape every added law in the hierarchy has:
+               -- `laws comm` between two applications of `interp-node-∙`, one
+               -- for each side of the equation.
+    where
+    η : Fin 3 → 𝕌[ 𝑨 ]
+    η = λ { 0F → x ; 1F → y ; 2F → x }
 ```
 
 #### `eqsToAbelianGroup`
