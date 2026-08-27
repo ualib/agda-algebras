@@ -10,13 +10,15 @@ author: "the agda-algebras development team"
 
 This is the [Classical.Bundles.Monoid][] module of the [Agda Universal Algebra Library][].
 
-The bidirectional bridge between the Σ-typed core of [`Classical.Structures.Monoid`][Classical.Structures.Monoid]
-and the record-typed `Algebra.Bundles.Monoid` in the standard library.  As with the
-Semigroup bridge, the round-trip is stated *pointwise* per
-[ADR-002 v2 §6](../../docs/adr/002-classical-layer-design.md); the curried laws
-`assoc-law`, `idˡ-law`, `idʳ-law` arrive ready-made from `Monoid-Op`, so each
-direction is a thin record-shuffle.  The only addition over the Semigroup bridge is
-the nullary `ε` field and the `ε-Op` clause of the reverse interpretation.
+Here we encode the bidirectional bridge between the Σ-typed core of
+[`Classical.Structures.Monoid`][Classical.Structures.Monoid]
+and the record-typed `Algebra.Bundles.Monoid` in the standard library.
+
+As with the `Semigroup` bridge, the round-trip is stated *pointwise*;[^1] the
+curried laws `assoc-law`, `idˡ-law`, `idʳ-law` arrive ready-made from `Monoid-Op`,
+so each direction is a thin record-shuffle.  The only addition over the
+`Semigroup` bridge is the nullary `ε` field and the `ε-Op` clause of the reverse
+interpretation.
 
 <!--
 ```agda
@@ -35,11 +37,11 @@ import Relation.Binary.PropositionalEquality as ≡
 open Func renaming ( to to _⟨$⟩_ )
 
 -- Imports from the Agda Universal Algebra Library --------------------------------
-open import Classical.Signatures.Monoid             using ( Sig-Monoid ; ∙-Op ; ε-Op )
-open import Classical.Structures.Monoid             using ( Monoid ; module Monoid-Op )
-open import Classical.Theories.Monoid               using ( assoc ; idˡ ; idʳ )
-open import Setoid.Algebras.Basic  using ( Algebra ; 𝕌[_] ; 𝔻[_] )
-open import Setoid.Signatures                       using ( ⟨_⟩ )
+open import Classical.Signatures.Monoid  using ( Sig-Monoid ; ∙-Op ; ε-Op )
+open import Classical.Structures.Monoid  using ( Monoid ; module Monoid-Op )
+open import Classical.Theories.Monoid    using ( assoc ; idˡ ; idʳ )
+open import Setoid.Algebras.Basic        using ( Algebra ; 𝕌[_] ; 𝔻[_] )
+open import Setoid.Signatures            using ( ⟨_⟩ )
 
 private variable α ρ : Level
 ```
@@ -49,8 +51,8 @@ private variable α ρ : Level
 
 ```agda
 ⟨_⟩ᵐᵒ : Monoid α ρ → stdlib-Monoid α ρ
-⟨ 𝑴 ⟩ᵐᵒ = record
-  { Carrier  = 𝕌[ 𝑨 ]
+⟨ 𝑴 , eqns ⟩ᵐᵒ = record
+  { Carrier  = 𝕌[ 𝑴 ]
   ; _≈_      = _≈_
   ; _∙_      = _∙_
   ; ε        = ε
@@ -63,12 +65,18 @@ private variable α ρ : Level
       }
   }
   where
-  𝑨 = proj₁ 𝑴
-  open Monoid-Op 𝑴
-  open Setoid 𝔻[ 𝑨 ]
+  open Monoid-Op (𝑴 , eqns)
+  open Setoid 𝔻[ 𝑴 ]
 ```
 
 #### Stdlib bundle to core
+
+The reverse direction reassembles the bundle's carrier setoid, `_∙_`, and `ε` into a
+`Sig-Monoid`-algebra and pairs it with a proof of `Th-Monoid`, each equation
+extracted from the corresponding record field (`assoc`, `identityˡ`, `identityʳ`)
+applied to the variables the environment supplies.  The interpretation has one
+clause per operation symbol, and congruence likewise; the nullary `ε-Op` case is
+the setoid's reflexivity.
 
 ```agda
 ⟪_⟫ᵐᵒ : stdlib-Monoid α ρ → Monoid α ρ
@@ -94,13 +102,23 @@ private variable α ρ : Level
 
 #### Pointwise round-trip
 
-```agda
-module _ {𝑴 : Monoid α ρ} where
-  open Monoid-Op 𝑴
-  open Setoid 𝔻[ proj₁ 𝑴 ] using (_≈_) renaming (refl to ≈refl)
-  open Monoid-Op ⟪ ⟨ 𝑴 ⟩ᵐᵒ ⟫ᵐᵒ renaming ( _∙_ to _∙'_ ; ε to ε' )
+Both round-trips are definitional, stated pointwise per operation; the names read
+core-bundle-core and bundle-core-bundle.
 
-  roundtrip-cbc-∙-mn : (a b : 𝕌[ proj₁ 𝑴 ]) → (a ∙' b) ≈ (a ∙ b)
+Going core to bundle and back, `roundtrip-cbc-∙-mn` and `roundtrip-cbc-ε-mn` say
+the reassembled `_∙_` and `ε` agree with the originals, and `≈refl` discharges
+both because each side reduces to the same value.
+
+Going bundle to core and back, `roundtrip-bcb-∙-mn` and `roundtrip-bcb-ε-mn` state
+the same agreement on the bundle's own equivalence, discharged by its `refl`.
+
+```agda
+module _ {(𝑴 , eqns) : Monoid α ρ} where
+  open Monoid-Op (𝑴 , eqns)
+  open Setoid 𝔻[ 𝑴 ] using (_≈_) renaming (refl to ≈refl)
+  open Monoid-Op ⟪ ⟨ 𝑴 , eqns ⟩ᵐᵒ ⟫ᵐᵒ renaming ( _∙_ to _∙'_ ; ε to ε' )
+
+  roundtrip-cbc-∙-mn : (a b : 𝕌[ 𝑴 ]) → a ∙' b ≈ a ∙ b
   roundtrip-cbc-∙-mn a b = ≈refl
 
   roundtrip-cbc-ε-mn : ε' ≈ ε
@@ -110,9 +128,13 @@ module _ {M : stdlib-Monoid α ρ} where
   open stdlib-Monoid M using ( _≈_ ; _∙_ ; ε ; refl ) renaming ( Carrier to A )
   open stdlib-Monoid ⟨ ⟪ M ⟫ᵐᵒ ⟩ᵐᵒ using () renaming ( _∙_ to _∙'_ ; ε to ε' )
 
-  roundtrip-bcb-∙-mn : (a b : A) → (a ∙ b) ≈ (a ∙' b)
+  roundtrip-bcb-∙-mn : (a b : A) → a ∙ b ≈ a ∙' b
   roundtrip-bcb-∙-mn a b = refl
 
   roundtrip-bcb-ε-mn : ε ≈ ε'
   roundtrip-bcb-ε-mn = refl
 ```
+
+---
+
+[^1]:  per [ADR-002] v2 §6.

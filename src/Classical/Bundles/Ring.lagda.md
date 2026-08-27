@@ -10,12 +10,12 @@ author: "the agda-algebras development team"
 
 This is the [Classical.Bundles.Ring][] module of the [Agda Universal Algebra Library][].
 
-The bidirectional bridge between the Σ-typed core of [`Classical.Structures.Ring`][Classical.Structures.Ring]
-and the record-typed `Algebra.Bundles.Ring` in the standard library.  The round-trip
-is stated *pointwise* per [ADR-002 v2 §6](../../docs/adr/002-classical-layer-design.md);
-the eleven curried laws arrive ready-made from `Ring-Op`, so the core-to-bundle
-direction is a (deeply nested) record-shuffle and the reverse direction is one
-`Func` plus the eleven equation clauses.
+Here we encode the bidirectional bridge between the Σ-typed core of
+[`Classical.Structures.Ring`][Classical.Structures.Ring] and the record-typed
+`Algebra.Bundles.Ring` in the standard library.  The round-trip is stated
+*pointwise*;[^1] the eleven curried laws arrive ready-made from `Ring-Op`, so the
+core-to-bundle direction is a (deeply nested) record-shuffle and the reverse
+direction is one `Func` plus the eleven equation clauses.
 
 <!--
 ```agda
@@ -34,14 +34,14 @@ import Relation.Binary.PropositionalEquality as ≡
 open Func renaming ( to to _⟨$⟩_ )
 
 -- Imports from the Agda Universal Algebra Library --------------------------------
-open import Classical.Signatures.Ring             using  ( Sig-Ring ; +-Op ; 0-Op
-                                                         ; -Op ; ·-Op ; 1-Op )
-open import Classical.Structures.Ring             using  ( Ring ; module Ring-Op )
-open import Classical.Theories.Ring               using  ( +-assoc ; +-idˡ ; +-idʳ ; +-invˡ
-                                                         ; +-invʳ ; +-comm ; ·-assoc ; ·-idˡ
-                                                         ; ·-idʳ ; distribˡ ; distribʳ )
-open import Setoid.Algebras.Basic  using  ( Algebra ; 𝕌[_] ; 𝔻[_] )
-open import Setoid.Signatures                     using  ( ⟨_⟩ )
+open import Classical.Signatures.Ring  using  ( Sig-Ring ; +-Op ; 0-Op
+                                              ; -Op ; ·-Op ; 1-Op )
+open import Classical.Structures.Ring  using  ( Ring ; module Ring-Op )
+open import Classical.Theories.Ring    using  ( +-assoc ; +-idˡ ; +-idʳ ; +-invˡ
+                                              ; +-invʳ ; +-comm ; ·-assoc ; ·-idˡ
+                                              ; ·-idʳ ; distribˡ ; distribʳ )
+open import Setoid.Algebras.Basic      using  ( Algebra ; 𝕌[_] ; 𝔻[_] )
+open import Setoid.Signatures          using  ( ⟨_⟩ )
 
 private variable α ρ : Level
 ```
@@ -51,8 +51,8 @@ private variable α ρ : Level
 
 ```agda
 ⟨_⟩ʳᵍ : Ring α ρ → stdlib-Ring α ρ
-⟨ 𝑹 ⟩ʳᵍ = record
-  { Carrier = 𝕌[ 𝑨 ]
+⟨ 𝑹 , eqns ⟩ʳᵍ = record
+  { Carrier = 𝕌[ 𝑹 ]
   ; _≈_     = _≈_
   ; _+_     = _+_
   ; _*_     = _·_
@@ -81,12 +81,19 @@ private variable α ρ : Level
       }
   }
   where
-  𝑨 = proj₁ 𝑹
-  open Ring-Op 𝑹
-  open Setoid 𝔻[ 𝑨 ]
+  open Ring-Op (𝑹 , eqns)
+  open Setoid 𝔻[ 𝑹 ]
 ```
 
 #### Stdlib bundle to core
+
+The reverse direction reassembles the bundle's carrier setoid and five operations
+into a `Sig-Ring`-algebra and pairs it with a proof of `Th-Ring`, each of the
+eleven equations extracted from the corresponding record field applied to the
+variables the environment supplies.  The interpretation has one clause per
+operation symbol, and congruence likewise: `+-cong`, `*-cong`, and `-‿cong` come
+from the bundle, and the two nullary cases (`0-Op`, `1-Op`) are the setoid's
+reflexivity.
 
 ```agda
 ⟪_⟫ʳᵍ : stdlib-Ring α ρ → Ring α ρ
@@ -130,23 +137,35 @@ private variable α ρ : Level
 
 #### Pointwise round-trip
 
-```agda
-module _ {𝑹 : Ring α ρ} where
-  open Ring-Op 𝑹
-  open Setoid 𝔻[ proj₁ 𝑹 ]
-  open Ring-Op ⟪ ⟨ 𝑹 ⟩ʳᵍ ⟫ʳᵍ renaming  ( _+_  to _+'_
-                                       ; _·_  to _·'_
-                                       ; -_   to -'_
-                                       ; 0R   to 0R'
-                                       ; 1R   to 1R' )
+Both round-trips are definitional, stated pointwise per operation, five in each
+direction.
 
-  roundtrip-cbc-+-ring : (a b : 𝕌[ proj₁ 𝑹 ]) → a +' b ≈ a + b
+Going core to bundle and back, `roundtrip-cbc-+-ring`, `roundtrip-cbc-·-ring`,
+`roundtrip-cbc-neg-ring`, `roundtrip-cbc-0-ring`, and `roundtrip-cbc-1-ring` say
+the reassembled operations and constants agree with the originals, each discharged
+by the ring setoid's `refl`.
+
+Going bundle to core and back, `roundtrip-bcb-+-ring`, `roundtrip-bcb-·-ring`,
+`roundtrip-bcb-neg-ring`, `roundtrip-bcb-0-ring`, and `roundtrip-bcb-1-ring` state
+the same agreement on the bundle's own equivalence.
+
+```agda
+module _ {(𝑹 , eqns) : Ring α ρ} where
+  open Ring-Op (𝑹 , eqns)
+  open Setoid 𝔻[ 𝑹 ]
+  open Ring-Op ⟪ ⟨ 𝑹 , eqns ⟩ʳᵍ ⟫ʳᵍ renaming  ( _+_  to _+'_
+                                              ; _·_  to _·'_
+                                              ; -_   to -'_
+                                              ; 0R   to 0R'
+                                              ; 1R   to 1R' )
+
+  roundtrip-cbc-+-ring : (a b : 𝕌[ 𝑹 ]) → a +' b ≈ a + b
   roundtrip-cbc-+-ring a b = refl
 
-  roundtrip-cbc-·-ring : (a b : 𝕌[ proj₁ 𝑹 ]) → a ·' b ≈ a · b
+  roundtrip-cbc-·-ring : (a b : 𝕌[ 𝑹 ]) → a ·' b ≈ a · b
   roundtrip-cbc-·-ring a b = refl
 
-  roundtrip-cbc-neg-ring : (a : 𝕌[ proj₁ 𝑹 ]) → -' a ≈ - a
+  roundtrip-cbc-neg-ring : (a : 𝕌[ 𝑹 ]) → -' a ≈ - a
   roundtrip-cbc-neg-ring a = refl
 
   roundtrip-cbc-0-ring : 0R' ≈ 0R
@@ -156,7 +175,10 @@ module _ {𝑹 : Ring α ρ} where
   roundtrip-cbc-1-ring = refl
 
 module _ {R : stdlib-Ring α ρ} where
-  open stdlib-Ring R using ( _≈_ ; _+_ ; _*_ ; -_ ; 0# ; 1# ; refl ) renaming ( Carrier to A )
+
+  open stdlib-Ring R  using ( _≈_ ; _+_ ; _*_ ; -_ ; 0# ; 1# ; refl )
+                      renaming ( Carrier to A )
+
   open stdlib-Ring ⟨ ⟪ R ⟫ʳᵍ ⟩ʳᵍ using () renaming  ( _+_ to _+'_
                                                     ; _*_ to _*'_
                                                     ; -_  to -'_
@@ -178,3 +200,7 @@ module _ {R : stdlib-Ring α ρ} where
   roundtrip-bcb-1-ring : 1# ≈ 1#'
   roundtrip-bcb-1-ring = refl
 ```
+
+---
+
+[^1]: per [ADR-002] v2 §6.
