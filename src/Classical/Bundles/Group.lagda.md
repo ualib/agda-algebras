@@ -10,14 +10,17 @@ author: "the agda-algebras development team"
 
 This is the [Classical.Bundles.Group][] module of the [Agda Universal Algebra Library][].
 
-The bidirectional bridge between the Σ-typed core of [`Classical.Structures.Group`][Classical.Structures.Group]
-and the record-typed `Algebra.Bundles.Group` in the standard library.  As with the
-Monoid bridge, the round-trip is stated *pointwise* per
-[ADR-002 v2 §6](../../docs/adr/002-classical-layer-design.md); the curried laws
-`assoc-law`, `idˡ-law`, `idʳ-law`, `invˡ-law`, `invʳ-law` arrive ready-made from
-`Group-Op`, so each direction is a thin record-shuffle.  The additions over the
-Monoid bridge are the unary `_⁻¹` field, the `⁻¹-Op` clause of the reverse
-interpretation, and the `inverse`/`⁻¹-cong` fields of `isGroup`.
+Here we encode the bidirectional bridge between the Σ-typed core of
+[`Classical.Structures.Group`][Classical.Structures.Group]
+and the record-typed `Algebra.Bundles.Group` in the standard library.
+
+As with the `Monoid` bridge, the round-trip is stated *pointwise*;[^1] the curried
+laws `assoc-law`, `idˡ-law`, `idʳ-law`, `invˡ-law`, `invʳ-law` arrive ready-made
+from `Group-Op`, so each direction is a thin record-shuffle.
+
+The additions over the `Monoid` bridge are the unary `_⁻¹` field, the `⁻¹-Op`
+clause of the reverse interpretation, and the `inverse`/`⁻¹-cong` fields of
+`isGroup`.
 
 <!--
 ```agda
@@ -36,11 +39,11 @@ import Relation.Binary.PropositionalEquality as ≡
 open Func renaming ( to to _⟨$⟩_ )
 
 -- Imports from the Agda Universal Algebra Library --------------------------------
-open import Classical.Signatures.Group             using ( Sig-Group ; ∙-Op ; ε-Op ; ⁻¹-Op )
-open import Classical.Structures.Group.Basic       using ( Group ; module Group-Op )
-open import Classical.Theories.Group               using ( assoc ; idˡ ; idʳ ; invˡ ; invʳ )
-open import Setoid.Algebras.Basic  using ( Algebra ; 𝕌[_] ; 𝔻[_] )
-open import Setoid.Signatures                      using  ( ⟨_⟩ )
+open import Classical.Signatures.Group        using ( Sig-Group ; ∙-Op ; ε-Op ; ⁻¹-Op )
+open import Classical.Structures.Group.Basic  using ( Group ; module Group-Op )
+open import Classical.Theories.Group          using ( assoc ; idˡ ; idʳ ; invˡ ; invʳ )
+open import Setoid.Algebras.Basic             using ( Algebra ; 𝕌[_] ; 𝔻[_] )
+open import Setoid.Signatures                 using ( ⟨_⟩ )
 
 private variable α ρ : Level
 ```
@@ -79,9 +82,11 @@ private variable α ρ : Level
 The reverse direction reassembles the bundle's carrier setoid, `_∙_`, `ε`, and
 `_⁻¹` into a `Sig-Group`-algebra and pairs it with a proof of `Th-Group`, each of
 the five equations extracted from the corresponding record field applied to the
-variables the environment supplies.  The interpretation has one clause per
-operation symbol, and congruence likewise: `∙-cong` and `⁻¹-cong` come from the
-bundle, and the nullary `ε-Op` case is the setoid's reflexivity.
+variables the environment supplies.
+
+The interpretation has one clause per operation symbol, and congruence likewise:
+`∙-cong` and `⁻¹-cong` come from the bundle, and the nullary `ε-Op` case is the
+setoid's reflexivity.
 
 ```agda
 ⟪_⟫ᵍᵖ : stdlib-Group α ρ → Group α ρ
@@ -112,38 +117,45 @@ bundle, and the nullary `ε-Op` case is the setoid's reflexivity.
 #### Pointwise round-trip
 
 Both round-trips are definitional, stated pointwise per operation, three in each
-direction.  Going core to bundle and back, `roundtrip-cbc-∙-group`,
-`roundtrip-cbc-ε-group`, and `roundtrip-cbc-⁻¹-group` say the reassembled
-operations agree with the originals, each discharged by the group setoid's `refl`.
+direction.
+
+Going core to bundle and back, `roundtrip-cbc-∙-group`, `roundtrip-cbc-ε-group`,
+and `roundtrip-cbc-⁻¹-group` say the reassembled operations agree with the
+originals, each discharged by the group setoid's `refl`.
+
 Going bundle to core and back, `roundtrip-bcb-∙-group`, `roundtrip-bcb-ε-group`,
 and `roundtrip-bcb-⁻¹-group` state the same agreement on the bundle's own
 equivalence.
 
 ```agda
-module _ {𝑮 : Group α ρ} where
-  open Group-Op 𝑮
-  open Setoid 𝔻[ proj₁ 𝑮 ]
-  open Group-Op ⟪ ⟨ 𝑮 ⟩ᵍᵖ ⟫ᵍᵖ renaming ( _∙_ to _∙'_ ; ε to ε' ; _⁻¹ to _⁻¹' )
+module _ {(𝑮 , eqns) : Group α ρ} where
+  open Group-Op (𝑮 , eqns)
+  open Setoid 𝔻[ 𝑮 ]
+  open Group-Op ⟪ ⟨ 𝑮 , eqns ⟩ᵍᵖ ⟫ᵍᵖ renaming ( _∙_ to _∙'_ ; ε to ε' ; _⁻¹ to _⁻¹' )
 
-  roundtrip-cbc-∙-group : (a b : 𝕌[ proj₁ 𝑮 ]) → (a ∙' b) ≈ (a ∙ b)
+  roundtrip-cbc-∙-group : (a b : 𝕌[ 𝑮 ]) → a ∙' b ≈ a ∙ b
   roundtrip-cbc-∙-group a b = refl
 
   roundtrip-cbc-ε-group : ε' ≈ ε
   roundtrip-cbc-ε-group = refl
 
-  roundtrip-cbc-⁻¹-group : (a : 𝕌[ proj₁ 𝑮 ]) → (a ⁻¹') ≈ (a ⁻¹)
+  roundtrip-cbc-⁻¹-group : (a : 𝕌[ 𝑮 ]) → a ⁻¹' ≈ a ⁻¹
   roundtrip-cbc-⁻¹-group a = refl
 
 module _ {G : stdlib-Group α ρ} where
   open stdlib-Group G using ( _≈_ ; _∙_ ; ε ; _⁻¹ ; refl ) renaming ( Carrier to A )
   open stdlib-Group ⟨ ⟪ G ⟫ᵍᵖ ⟩ᵍᵖ using () renaming ( _∙_ to _∙'_ ; ε to ε' ; _⁻¹ to _⁻¹' )
 
-  roundtrip-bcb-∙-group : (a b : A) → (a ∙ b) ≈ (a ∙' b)
+  roundtrip-bcb-∙-group : (a b : A) → a ∙ b ≈ a ∙' b
   roundtrip-bcb-∙-group a b = refl
 
   roundtrip-bcb-ε-group : ε ≈ ε'
   roundtrip-bcb-ε-group = refl
 
-  roundtrip-bcb-⁻¹-group : (a : A) → (a ⁻¹) ≈ (a ⁻¹')
+  roundtrip-bcb-⁻¹-group : (a : A) → a ⁻¹ ≈ a ⁻¹'
   roundtrip-bcb-⁻¹-group a = refl
 ```
+
+---
+
+[^1]: per [ADR-002] v2 §6.

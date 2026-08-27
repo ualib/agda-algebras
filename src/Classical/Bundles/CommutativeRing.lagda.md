@@ -10,8 +10,9 @@ author: "the agda-algebras development team"
 
 This is the [Classical.Bundles.CommutativeRing][] module of the [Agda Universal Algebra Library][].
 
-Mirror of the Ring bridge with the added `*-comm` field; over `Sig-Ring`.  This is the
-bridge whose round-trip on `ℤ` is exercised in
+This mirrors the `Ring` bridge, with the added `*-comm` field, over `Sig-Ring`.
+
+The round-trip on `ℤ` of this bridge is exercised in
 [`Examples.Classical.CommutativeRing`][Examples.Classical.CommutativeRing].
 
 <!--
@@ -46,8 +47,8 @@ private variable α ρ : Level
 
 ```agda
 ⟨_⟩ᶜʳᵍ : CommutativeRing α ρ → stdlib-CommutativeRing α ρ
-⟨ 𝑪 ⟩ᶜʳᵍ = record
-  { Carrier = 𝕌[ proj₁ 𝑪 ]
+⟨ 𝑪 , eqns ⟩ᶜʳᵍ = record
+  { Carrier = 𝕌[ 𝑪 ]
   ; _≈_     = _≈_
   ; _+_     = _+_
   ; _*_     = _·_
@@ -60,7 +61,8 @@ private variable α ρ : Level
               { isGroup = record
                   { isMonoid = record
                       { isSemigroup = record
-                          { isMagma = record { isEquivalence = isEquivalence ; ∙-cong = +-cong }
+                          { isMagma = record  { isEquivalence = isEquivalence
+                                              ; ∙-cong = +-cong }
                           ; assoc   = +-assoc-law
                           }
                       ; identity = +-idˡ-law , +-idʳ-law
@@ -79,13 +81,13 @@ private variable α ρ : Level
       }
   }
   where
-  open CommutativeRing-Op 𝑪
-  open Setoid 𝔻[ proj₁ 𝑪 ]
+  open CommutativeRing-Op (𝑪 , eqns)
+  open Setoid 𝔻[ 𝑪 ]
 ```
 
 #### Stdlib bundle to core
 
-As in the Ring bridge, the reverse direction reassembles a `Sig-Ring`-algebra from
+As in the `Ring` bridge, the reverse direction reassembles a `Sig-Ring`-algebra from
 the bundle's carrier setoid and five operations; the difference is the theory.
 `Th-CommutativeRing` has twelve equations, the ring's eleven plus `·-comm`, and the
 extra clause is extracted from the bundle's `*-comm` field.
@@ -133,27 +135,30 @@ extra clause is extracted from the bundle's `*-comm` field.
 
 Both round-trips are definitional, stated pointwise per operation, five in each
 direction, exactly as for rings; commutativity adds an equation, not an operation,
-so no new round-trip statement arises.  Going core to bundle and back,
-`roundtrip-cbc-+-cr`, `roundtrip-cbc-·-cr`, `roundtrip-cbc-neg-cr`,
-`roundtrip-cbc-0-cr`, and `roundtrip-cbc-1-cr` say the reassembled operations and
-constants agree with the originals.  Going bundle to core and back,
-`roundtrip-bcb-+-cr`, `roundtrip-bcb-·-cr`, `roundtrip-bcb-neg-cr`,
-`roundtrip-bcb-0-cr`, and `roundtrip-bcb-1-cr` state the same agreement on the
-bundle's own equivalence.
+so no new round-trip statement arises.
+
+Going core to bundle and back, `roundtrip-cbc-+-cr`, `roundtrip-cbc-·-cr`,
+`roundtrip-cbc-neg-cr`, `roundtrip-cbc-0-cr`, and `roundtrip-cbc-1-cr` say the
+reassembled operations and constants agree with the originals.
+
+Going bundle to core and back, `roundtrip-bcb-+-cr`, `roundtrip-bcb-·-cr`,
+`roundtrip-bcb-neg-cr`, `roundtrip-bcb-0-cr`, and `roundtrip-bcb-1-cr` state the
+same agreement on the bundle's own equivalence.
 
 ```agda
-module _ {𝑪 : CommutativeRing α ρ} where
-  open CommutativeRing-Op 𝑪
-  open Setoid 𝔻[ proj₁ 𝑪 ]
-  open CommutativeRing-Op ⟪ ⟨ 𝑪 ⟩ᶜʳᵍ ⟫ᶜʳᵍ renaming ( _+_ to _+'_ ; _·_ to _·'_ ; -_ to -'_ ; 0R to 0R' ; 1R to 1R' )
+module _ {𝒞@(𝑪 , _) : CommutativeRing α ρ} where
+  open CommutativeRing-Op 𝒞
+  open Setoid 𝔻[ 𝑪 ]
+  open CommutativeRing-Op ⟪ ⟨ 𝒞 ⟩ᶜʳᵍ ⟫ᶜʳᵍ renaming  ( _+_ to _+'_ ; _·_ to _·'_ ; -_ to -'_
+                                                   ; 0R to 0R' ; 1R to 1R' )
 
-  roundtrip-cbc-+-cr : (a b : 𝕌[ proj₁ 𝑪 ]) → (a +' b) ≈ (a + b)
+  roundtrip-cbc-+-cr : (a b : 𝕌[ 𝑪 ]) → a +' b ≈ a + b
   roundtrip-cbc-+-cr a b = refl
 
-  roundtrip-cbc-·-cr : (a b : 𝕌[ proj₁ 𝑪 ]) → (a ·' b) ≈ (a · b)
+  roundtrip-cbc-·-cr : (a b : 𝕌[ 𝑪 ]) → a ·' b ≈ a · b
   roundtrip-cbc-·-cr a b = refl
 
-  roundtrip-cbc-neg-cr : (a : 𝕌[ proj₁ 𝑪 ]) → (-' a) ≈ (- a)
+  roundtrip-cbc-neg-cr : (a : 𝕌[ 𝑪 ]) → -' a ≈ - a
   roundtrip-cbc-neg-cr a = refl
 
   roundtrip-cbc-0-cr : 0R' ≈ 0R
@@ -163,16 +168,21 @@ module _ {𝑪 : CommutativeRing α ρ} where
   roundtrip-cbc-1-cr = refl
 
 module _ {R : stdlib-CommutativeRing α ρ} where
-  open stdlib-CommutativeRing R using ( _≈_ ; _+_ ; _*_ ; -_ ; 0# ; 1# ; refl ) renaming ( Carrier to A )
-  open stdlib-CommutativeRing ⟨ ⟪ R ⟫ᶜʳᵍ ⟩ᶜʳᵍ using () renaming ( _+_ to _+'_ ; _*_ to _*'_ ; -_ to -'_ ; 0# to 0#' ; 1# to 1#' )
+  open stdlib-CommutativeRing R  using ( _≈_ ; _+_ ; _*_ ; -_ ; 0# ; 1# ; refl )
+                                 renaming ( Carrier to A )
 
-  roundtrip-bcb-+-cr : (a b : A) → (a + b) ≈ (a +' b)
+  open stdlib-CommutativeRing ⟨ ⟪ R ⟫ᶜʳᵍ ⟩ᶜʳᵍ  using ()
+                                             renaming  ( _+_ to _+'_
+                                                       ; _*_ to _*'_ ; -_ to -'_
+                                                       ; 0# to 0#' ; 1# to 1#' )
+
+  roundtrip-bcb-+-cr : (a b : A) → a + b ≈ a +' b
   roundtrip-bcb-+-cr a b = refl
 
-  roundtrip-bcb-·-cr : (a b : A) → (a * b) ≈ (a *' b)
+  roundtrip-bcb-·-cr : (a b : A) → a * b ≈ a *' b
   roundtrip-bcb-·-cr a b = refl
 
-  roundtrip-bcb-neg-cr : (a : A) → (- a) ≈ (-' a)
+  roundtrip-bcb-neg-cr : (a : A) → - a ≈ -' a
   roundtrip-bcb-neg-cr a = refl
 
   roundtrip-bcb-0-cr : 0# ≈ 0#'

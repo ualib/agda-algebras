@@ -19,11 +19,11 @@ modules that give the classical structures their categorical face.
    is `monoid→semigroupF`; the module closes by re-deriving that functor's
    theory obligation from reduct-invariance of satisfaction, the general lemma
    of which the bespoke per-structure pivots are instances.
-+  [Classical.Categories.AdjoinUnit][] proves the inaugural free-expansion
-   adjunction: freely adjoining a unit to a semigroup (the free monoid on a
-   semigroup, with carrier `Maybe 𝕌[ 𝑺 ]`) is left adjoint to the
-   monoid-to-semigroup forgetful, with unit, counit, both naturality squares, the
-   triangle identities, and the explicit universal property.
++  [Classical.Categories.AdjoinUnit][] proves the free-expansion adjunction:
+   freely adjoining a unit to a semigroup (the free monoid on a semigroup, with
+   carrier `Maybe 𝕌[ 𝑺 ]`) is left adjoint to the monoid-to-semigroup forgetful, with
+   unit, counit, both naturality squares, the triangle identities, and the
+   explicit universal property.
 
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
