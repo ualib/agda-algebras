@@ -9,6 +9,11 @@ author: "the agda-algebras development team"
 
 This is the [Overture.Adjunction.Closure][] module of the [Agda Universal Algebra Library][].
 
+The order-theoretic vocabulary of closure: closure systems, families of subsets
+closed under arbitrary intersection, and closure operators, extensive, monotone,
+idempotent endofunctions of a poset.  Among the library's instances of this
+vocabulary are the subuniverses and the congruences of an algebra.
+
 <!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}

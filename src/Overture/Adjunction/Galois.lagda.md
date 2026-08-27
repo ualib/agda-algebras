@@ -9,6 +9,11 @@ author: "the agda-algebras development team"
 
 This is the [Overture.Adjunction.Galois][] module of the [Agda Universal Algebra Library][].
 
+The definition of a Galois connection between two posets, followed by
+`PosetOfSubsets`, the poset of all subsets of a set under inclusion (with
+mutual-inclusion `_≐_` as its equivalence), which supplies the classical setting
+for such connections.
+
 <!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}

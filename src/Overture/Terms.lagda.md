@@ -8,6 +8,14 @@ author: "the agda-algebras development team"
 
 ## Terms
 
+This is the [Overture.Terms][] module of the [Agda Universal Algebra Library][].
+
+A barrel over the term machinery, parameterized by a signature `𝑆` that it passes
+to [Overture.Terms.Basic][] for the `Term` type and its level shorthand `ov`.
+[Overture.Terms.Interpretation][] gives theory interpretations, sending operation
+symbols to derived terms, and [Overture.Terms.Translation][] translates terms
+along a signature morphism.
+
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 

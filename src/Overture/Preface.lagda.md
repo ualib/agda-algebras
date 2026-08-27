@@ -10,6 +10,9 @@ author: "the agda-algebras development team"
 
 This is the [Overture.Preface][] module of the [Agda Universal Algebra Library][].
 
+The front door of the library, and the one module whose only code is its own
+declaration: why a mathematician might formalize universal algebra, why in Agda,
+what the 3.0 reconstruction changed, and where to go next.
 
 <!--
 ```agda

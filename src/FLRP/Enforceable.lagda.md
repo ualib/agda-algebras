@@ -343,6 +343,10 @@ cfIE : {ℓP : Level} → GroupProperty ℓP → Lattice → Type (lsuc 0ℓ ⊔
 cfIE P 𝑳 = ∀ 𝒢 H H-sg → CoreFree 𝒢 H H-sg → IntervalIso 𝒢 H H-sg 𝑳 → P 𝒢
 ```
 
+The weakening is one-directional and costs nothing to witness: `IE→cfIE` turns an
+interval-enforceable property into a core-free interval-enforceable one by
+discarding the core-freeness hypothesis.
+
 ```agda
 -- Interval enforceable implies core-free interval enforceable.
 IE→cfIE : {ℓP : Level} {P : GroupProperty ℓP} {𝑳 : Lattice} → IE P 𝑳 → cfIE P 𝑳

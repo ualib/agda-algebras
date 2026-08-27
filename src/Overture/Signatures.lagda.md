@@ -10,6 +10,11 @@ author: "agda-algebras development team"
 
 This is the [Overture.Signatures][] module of the [Agda Universal Algebra Library][].
 
+The signature vocabulary of the library: the reserved universe levels `𝓞` (for
+operation-symbol types) and `𝓥` (for arity types), the theoretical background,
+and the `Signature` type itself, a type of operation symbols paired with its
+arity function.
+
 <!--
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
