@@ -93,7 +93,7 @@ No result in this phase is postulated.  Four hypotheses are threaded as ordinary
 
 +  **A finite presentation of the parachute**: a `FiniteLattice` isomorphic to `⊕ᵖ-Lattice`.  Needed *only* in the last step of the meta-theorem, because statement (B) is quantified over `Fin`-presented lattices.  Every concrete instance supplies it by computation; the general transport (enumerate a finite setoid lattice, rebuild its operation tables, and transport the eight equations) is routine and unformalized.  It is the cheapest of the four to discharge and the natural next task.
 
-+  **A minimal normal subgroup** (in `Structure.Minimal`): existence follows from finiteness by well-founded descent, which the library does not have yet.  Only Lemma 3.7's centralizer half depends on it; the propagation theorem, Theorem 3.6, Corollary 3.8, and the meta-theorem do not.
++  **A minimal normal subgroup** (in `Structure.Minimal`): existence follows from finiteness by well-founded descent.  This is now a theorem — `minimalNormalᵈ` of `FLRP.MinimalNormalDescent` (issue #510) — proved at Layer D by descent on a `FiniteAlgebra`-derived measure: every nontrivial normal subgroup with decidable membership contains a minimal one, given a complete list of the (Layer-D) normal subgroups.  It is still *threaded as a parameter* here, because `Structure.Minimal` takes an abstract group, and wiring the discharge into it requires equipping the group with that finiteness data.  Only Lemma 3.7's centralizer half depends on it; the propagation theorem, Theorem 3.6, Corollary 3.8, and the meta-theorem do not.
 
 ## 5.  Open items
 
