@@ -1,8 +1,18 @@
 # RP-4 design note: the wreath no-go and the dead-end question
 
-This note records the design of research phase RP-4 (issue #461, `[M6-13j]`): the formalization of the note's Lemma 3.3 (`lem:IE-must-have-wreaths` of arXiv:1205.1927, vendored at `docs/papers/flrp/ieprops/`), the infrastructure it consumed, the index-hypothesis finding made while formalizing its proof, and the state of the phase's research question.  The reading assumes `docs/notes/flrp-research-roadmap.md` § 4 and the RP-1 note `docs/notes/flrp-rp1-parachutes.md`.
+This note records the design of research phase RP-4 (Issue #461, `[M6-13j]`):
 
-A terminological warning before anything else: two unrelated numbers in this phase are both called `n`.  The issue's "`n = 2` conjecture" is the *family-size-two* case of the empty-intersection question — a property and its negation.  The index-hypothesis finding of § 4 concerns the *coset index* `n = |G : H|` inside Kurzweil's construction.  This note says "the pair question" for the former and "index" only for the latter.
++  the formalization of the note's Lemma 3.3 (`lem:IE-must-have-wreaths` of arXiv:1205.1927, vendored at `docs/papers/flrp/ieprops/`),
++  the infrastructure it consumed,
++  the index-hypothesis finding made while formalizing its proof,
++  the state of the phase's research question.
+
+The reading assumes `docs/notes/flrp-research-roadmap.md` § 4 and the RP-1 note `docs/notes/flrp-rp1-parachutes.md`.
+
+**Terminological warning** before anything else: two unrelated numbers in this phase are both called `n`:
+
++  The issue's "`n = 2` conjecture" is the *family-size-two* case of the empty-intersection question,a property and its negation.
++  The index-hypothesis finding of § 4 concerns the *coset index* `n = |G : H|` inside Kurzweil's construction.  This note says "the pair question" for the former and "index" only for the latter.
 
 ## 1.  What landed
 
