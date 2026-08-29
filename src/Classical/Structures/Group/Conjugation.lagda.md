@@ -177,7 +177,7 @@ subgroups to subgroups.
 
 ```agda
   -- The conjugate subset g B g⁻¹.
-  conjugate : 𝕌[ 𝑮 ] → Pred 𝕌[ 𝑮 ]  ℓ → Pred 𝕌[ 𝑮 ]  (α ⊔ ρ ⊔ ℓ)
+  conjugate : 𝕌[ 𝑮 ] → Pred 𝕌[ 𝑮 ] ℓ → Pred 𝕌[ 𝑮 ] (α ⊔ ρ ⊔ ℓ)
   conjugate g B x = ∃[ h ] (h ∈ B × x ≈ h ^ g)
 
   infixl 30 conjugate-syntax

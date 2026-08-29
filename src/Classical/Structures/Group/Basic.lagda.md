@@ -389,7 +389,7 @@ need `setoidEqsToLattice`{.AgdaFunction} of [Classical.Structures.Lattice.Basic]
 
 To address this need, `setoidOpsToBareGroup`{.AgdaFunction} assembles the
 `Sig-Group` algebra from a carrier setoid, the three operations, and their
-congruence proofs (which the propositional case got for free from `cong₂`{.AgdaFunction});
+congruence proofs (which the propositional case got for free from `cong₂`{.AgdaFunction}).
 
 `setoidEqsToGroup`{.AgdaFunction} adds the five group equations, now stated over
 the setoid equality `≈`.

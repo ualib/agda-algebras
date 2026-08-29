@@ -11,7 +11,7 @@ author: "the agda-algebras development team"
 This is the [Classical.Structures.Group.Wreath][] module of the [Agda Universal Algebra Library][].
 
 For a base group `S`, an index set `I`, and a group `G` acting on `I` on the right
-([Classical.Structures.Group.IndexAction][]), the **twisted wreath product**
+([Classical.Structures.Group.IndexAction][]), the **permutational wreath product**
 `S ≀ G` is the semidirect product `Sᴵ ⋊ G` consisting of pairs `(f , x)`, where
 `f` is a tuple in `Sᴵ` and `x` is an element of `G`.  Such pairs are multiplied by
 "twisting" the right factor's tuple with the action of the left factor's second
@@ -21,13 +21,13 @@ component,
 
 Coordinate `i` of the product is `s i ∙ t (x i)`.[^1]
 
-**Terminology**.  When refering to an element `(s , x)` of a wreath product,
+**Terminology**.  When referring to an element `(s , x)` of a wreath product,
 we will call the tuple `s` the "first component" or "base tuple"; we will call `x`
 the "second component" or "action element."
 
 Associativity of this multiplication is exactly the contravariant compatibility
 law of the right action, and the inverse twists by the action of the inverted
-second component component; no other property of the action is used, so the
+second component; no other property of the action is used, so the
 construction is parameterized by a bare `RightAction`{.AgdaRecord}, with no
 permutation-group or automorphism-group object in sight.
 
@@ -56,7 +56,7 @@ at the two indices `i₀` and `j = x i₀` with the tuple that is `a` at `j` and
 identity elsewhere yields `d ∙ a ⁻¹ ≈ a ∙ d` for every `a`, which makes
 conjugation by `d` an inversion, forces the base group to be abelian
 (`inv-conj→comm`{.AgdaFunction}), and precludes a nontrivial base group with a
-trivial-center.  One uniform argument covers every index set with two points; the
+trivial center.  One uniform argument covers every index set with two points; the
 theorem is *false* for a one-point index set, where `D Ḡ` is all of `S ≀ G`.
 See `docs/notes/flrp-rp4-wreath.md` § 4 for the full account.
 
@@ -111,12 +111,6 @@ private variable ι α ρ β σ : Level
 module WreathProduct (𝒮@(𝑺 , _) : Group α ρ) {I : Type ι} {𝒢@(𝑮 , _) : Group β σ}
   (A : RightAction I 𝒢)
   where
-
-  -- private
-  --   𝑺 = proj₁ 𝒮
-  --   𝑮 = proj₁ 𝒢
-  --   S = 𝕌[ 𝑺 ]
-  --   G = 𝕌[ 𝑮 ]
 
   open Setoid 𝔻[ 𝑺 ] using ()
     renaming ( _≈_ to _≈₁_ ; refl to refl₁ ; sym to sym₁ ; trans to trans₁
@@ -324,8 +318,7 @@ single-index probes as the block-indicator tuples of
     open GroupProperties ⟨ 𝒢 ⟩ᵍᵖ using ()
       renaming ( ε⁻¹≈ε to ε⁻¹≈ε₂ )
     open Conjugate 𝒮 using ( conj-syntax )
-      renaming ( conj to conj₁ ; conj-cong to conj₁-cong
-               ; conj-∙-hom to conj₁-∙-hom )
+      renaming ( conj-cong to conj₁-cong ; conj-∙-hom to conj₁-∙-hom )
     open SetoidReasoning 𝔻[ 𝑺 ]
 ```
 
@@ -544,7 +537,7 @@ wreath product, which is the exact shape into which `CoreFree`{.AgdaFunction} of
 #### The wreath operator
 
 The group-level form, for use at call sites: `𝒮 ≀ᵍ A` is the wreath product of the
-base group `𝒮` by the right action `A` (whose index set and group group stay implicit).
+base group `𝒮` by the right action `A` (whose index set and acting group stay implicit).
 
 ```agda
 infixl 8 _≀ᵍ_

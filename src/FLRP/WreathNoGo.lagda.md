@@ -32,15 +32,16 @@ representation, of the original lattice, and cf-IE forces `P (S ≀ Ū)`.
 
 +  **Imported: Entry 5** (`KurzweilWreathInterval`{.AgdaFunction}, defined
    here, registered as `KurzweilWreathIntervalAt`{.AgdaFunction}).
-   From a core-free representation of a lattice `𝑳` with two distinct elements,
-   Kurzweil's construction yields the enumerated coset action of `𝒢` on the
-   cosets of `H` (a `RightAction`{.AgdaRecord} on `Fin (2 + m)` with the
-   pointed `IsCosetAction`{.AgdaRecord} specification) and the interval
-   isomorphism `[D Ḡ , S ≀ G] ≅ 𝑳′`.  The isomorphism is Kurzweil's theorem
-   (the same 1985 article behind Entries 2 and 4); the enumeration of the
-   coset space is elementary finiteness bookkeeping the library cannot yet
-   perform.  Both parts are documented in the registry entry, with the
-   retirement path split accordingly.
+   From a core-free representation, over a *finite* group, of a lattice `𝑳`
+   with two distinct elements, Kurzweil's construction yields the enumerated
+   coset action of `𝒢` on the cosets of `H` (a `RightAction`{.AgdaRecord} on
+   `Fin (2 + m)` with the pointed `IsCosetAction`{.AgdaRecord} specification)
+   and the interval isomorphism `[D Ḡ , S ≀ G] ≅ 𝑳′`.  The isomorphism is
+   Kurzweil's theorem (the same 1985 article behind Entries 2 and 4); the
+   enumeration of the coset space, and the carrier finiteness of the wreath
+   the construction builds, are elementary finiteness bookkeeping the library
+   cannot yet perform.  All parts are documented in the registry entry, with
+   the retirement path split accordingly.
 +  **Proved: the technical heart**.  Core-freeness preservation
    (`Diag≀-coreFree`{.AgdaFunction} of [Classical.Structures.Group.Wreath][])
    and the kernel–core correspondence (`coreFree→faithful`{.AgdaFunction} of
@@ -69,6 +70,9 @@ two fragments the core-freeness argument consumes (a non-identity element and a
 trivial center, `NontrivialCenterless`{.AgdaRecord}); the library does not
 yet define simplicity.  Kurzweil's interval theorem needs full finite nonabelian
 simplicity, which stays a prose side condition of Entry 5, exactly as in Entry 4.
+Finiteness of the *represented* group, by contrast, is a formal antecedent of the
+entry (a `FiniteAlgebra`{.AgdaRecord} witness); only the finiteness of `𝒮` stays
+in prose alongside simplicity.
 
 <!--
 ```agda
@@ -109,7 +113,7 @@ open import FLRP.Enforceable    using  ( cfIE ; CoreFree ; GroupRepresentable
                                        ; HasThreeDistinct )
 open import FLRP.Problem        using  ( FiniteLattice ; toLattice )
 open import Overture            using  ( ∃-syntax )
-open import Setoid.Algebras     using  ( 𝕌[_] ; 𝔻[_] )
+open import Setoid.Algebras     using  ( 𝕌[_] ; 𝔻[_] ; FiniteAlgebra )
 
 open GroupRepresentable
 ```
@@ -152,11 +156,13 @@ record NontrivialCenterless (𝒮 : Group 0ℓ 0ℓ) : Type 0ℓ where
 
 #### Entry 5: Kurzweil's wreath interval
 
-**The data Kurzweil's construction attaches to a core-free representation**: the
-enumerated coset action (on an index set of at least two points; the record
-carries `2 + degree`), its pointed coset-action specification tying it to `H`, and
-the interval isomorphism `[D Ḡ , S ≀ G] ≅ 𝑳′` onto the dual of the represented
-lattice.
+**The data Kurzweil's construction attaches to a core-free representation of a
+finite group**: the enumerated coset action (on an index set of at least two
+points; the record carries `2 + degree`), its pointed coset-action specification
+tying it to `H`, the interval isomorphism `[D Ḡ , S ≀ G] ≅ 𝑳′` onto the dual of
+the represented lattice, and carrier finiteness of the wreath product the
+construction builds — the field that feeds the entry's own finiteness antecedent
+at the second application.
 
 ```agda
 record WreathIntervalData
@@ -165,27 +171,33 @@ record WreathIntervalData
   : Type (lsuc 0ℓ) where
 
   field
-    degree  : ℕ
-    action  : RightAction (Fin (2 + degree)) 𝒢
-    cosets  : IsCosetAction action H
+    degree    : ℕ
+    action    : RightAction (Fin (2 + degree)) 𝒢
+    cosets    : IsCosetAction action H
     interval  : IntervalIso  (𝒮 ≀ᵍ action)
                              (WreathProduct.Diag≀ 𝒮 action)
                              (WreathProduct.Diag≀-isSubgroup 𝒮 action)
                              (dualLattice 𝑳)
+    finite    : FiniteAlgebra (proj₁ (𝒮 ≀ᵍ action))
 ```
 
 **The statement type of Entry 5 of the assumptions registry** ([FLRP.Assumptions][]):
-every core-free representation of a lattice with two distinct elements extends to
-the full wreath-interval package.  The registry entry documents source, side
-conditions, and the split retirement path; the classical theorem asserts the
-instances where `𝒮` is a finite nonabelian simple group and the groups are finite,
-and consumers must instantiate it there.
+every core-free representation of a lattice with two distinct elements *over a
+finite group* extends to the full wreath-interval package.  The finiteness
+antecedent (a `FiniteAlgebra`{.AgdaRecord} witness for the represented group) is
+what keeps the statement exactly the cited finite theorem: without it the type
+would also quantify over infinite-index core-free representations, where no
+finite coset enumeration exists and the statement is false.  The registry entry
+documents source, side conditions, and the split retirement path; the classical
+theorem asserts the instances where `𝒮` is a finite nonabelian simple group, and
+consumers must instantiate it there.
 
 ```agda
 KurzweilWreathInterval : Group 0ℓ 0ℓ → Type (lsuc 0ℓ)
 KurzweilWreathInterval 𝒮 =
   ∀ (𝑳 : Lattice) (𝒢 : Group 0ℓ 0ℓ) (H : Pred 𝕌[ proj₁ 𝒢 ] 0ℓ)
     (H-sg : IsSubgroup 𝒢 H)
+  → FiniteAlgebra (proj₁ 𝒢)
   → CoreFree 𝒢 H H-sg → IntervalIso 𝒢 H H-sg 𝑳 → HasTwoDistinct 𝑳
   → WreathIntervalData 𝒮 𝑳 𝒢 H H-sg
 ```
@@ -236,7 +248,9 @@ into a core-free representation of `𝑳″` on `[D₁ Ū , 𝒮 ≀ Ū]` with
 `Ū = 𝒮 ≀ 𝒢`.  Dualization swaps the two lattice operations, so dualizing
 twice restores them definitionally, and the second interval isomorphism *is*
 an interval isomorphism with `𝑳` — no transport is needed — to which cf-IE
-applies.
+applies.  Carrier finiteness threads through on the entry's own output: the
+given representation's `FiniteAlgebra`{.AgdaRecord} witness feeds the first
+application, and the wreath finiteness the entry returns feeds the second.
 
 ```agda
 cfIE-must-have-wreaths :
@@ -245,16 +259,17 @@ cfIE-must-have-wreaths :
   → KurzweilWreathInterval 𝒮
   → cfIE P 𝑳
   → (r : GroupRepresentable 𝑳)
+  → FiniteAlgebra (proj₁ (r .grp))
   → CoreFree (r .grp) (r .sub) (r .isSubgroup)
   → HasTwoDistinct 𝑳
   → ∃[ 𝒰 ∈ Group 0ℓ 0ℓ ] ∃[ m ∈ ℕ ]
       Σ[ A ∈ RightAction (Fin (2 + m)) 𝒰 ] P (𝒮 ≀ᵍ A)
-cfIE-must-have-wreaths P 𝑳 𝒮 nc kwi cf-ie r cf two =
+cfIE-must-have-wreaths P 𝑳 𝒮 nc kwi cf-ie r fin cf two =
   𝒰 , K₂.degree , K₂.action , P-holds
   where
   -- First application: a core-free representation of 𝑳′ on the first wreath.
   k₁ : WreathIntervalData 𝒮 𝑳 (r .grp) (r .sub) (r .isSubgroup)
-  k₁ = kwi 𝑳 (r .grp) (r .sub) (r .isSubgroup) cf (r .interval-iso) two
+  k₁ = kwi 𝑳 (r .grp) (r .sub) (r .isSubgroup) fin cf (r .interval-iso) two
 
   module K₁ = WreathIntervalData k₁
 
@@ -272,7 +287,7 @@ cfIE-must-have-wreaths P 𝑳 𝒮 nc kwi cf-ie r cf two =
   k₂ = kwi (dualLattice 𝑳) 𝒰
         (WreathProduct.Diag≀ 𝒮 K₁.action)
         (WreathProduct.Diag≀-isSubgroup 𝒮 K₁.action)
-        cf₁ K₁.interval (hasTwoDistinct-dual 𝑳 two)
+        K₁.finite cf₁ K₁.interval (hasTwoDistinct-dual 𝑳 two)
 
   module K₂ = WreathIntervalData k₂
 
@@ -306,12 +321,13 @@ omits-wreaths→not-cfIE :
        → ¬ P (𝒮 ≀ᵍ A))
   → cfIE P 𝑳
   → (r : GroupRepresentable 𝑳)
+  → FiniteAlgebra (proj₁ (r .grp))
   → CoreFree (r .grp) (r .sub) (r .isSubgroup)
   → HasTwoDistinct 𝑳
   → ⊥
-omits-wreaths→not-cfIE P 𝑳 𝒮 nc kwi omits cf-ie r cf two = omits 𝒰 m A holds
+omits-wreaths→not-cfIE P 𝑳 𝒮 nc kwi omits cf-ie r fin cf two = omits 𝒰 m A holds
   where
-  found = cfIE-must-have-wreaths P 𝑳 𝒮 nc kwi cf-ie r cf two
+  found = cfIE-must-have-wreaths P 𝑳 𝒮 nc kwi cf-ie r fin cf two
 
   𝒰 = found .proj₁
   m = found .proj₂ .proj₁
@@ -355,19 +371,21 @@ contradictory-pair-wreaths :
   → KurzweilWreathInterval 𝒮
   → cfIE P 𝑳₁
   → (r₁ : GroupRepresentable 𝑳₁)
+  → FiniteAlgebra (proj₁ (r₁ .grp))
   → CoreFree (r₁ .grp) (r₁ .sub) (r₁ .isSubgroup)
   → HasTwoDistinct 𝑳₁
   → cfIE (λ 𝒢 → ¬ P 𝒢) 𝑳₂
   → (r₂ : GroupRepresentable 𝑳₂)
+  → FiniteAlgebra (proj₁ (r₂ .grp))
   → CoreFree (r₂ .grp) (r₂ .sub) (r₂ .isSubgroup)
   → HasTwoDistinct 𝑳₂
   →  (∃[ 𝒰 ∈ Group 0ℓ 0ℓ ] ∃[ m ∈ ℕ ]
         Σ[ A ∈ RightAction (Fin (2 + m)) 𝒰 ] P (𝒮 ≀ᵍ A))
   ×  (∃[ 𝒱 ∈ Group 0ℓ 0ℓ ] ∃[ l ∈ ℕ ]
         Σ[ B ∈ RightAction (Fin (2 + l)) 𝒱 ] ¬ P (𝒮 ≀ᵍ B))
-contradictory-pair-wreaths P 𝑳₁ 𝑳₂ 𝒮 nc kwi cf-ie₁ r₁ cf₁ two₁ cf-ie₂ r₂ cf₂ two₂ =
-    cfIE-must-have-wreaths P 𝑳₁ 𝒮 nc kwi cf-ie₁ r₁ cf₁ two₁
-  , cfIE-must-have-wreaths (λ 𝒢 → ¬ P 𝒢) 𝑳₂ 𝒮 nc kwi cf-ie₂ r₂ cf₂ two₂
+contradictory-pair-wreaths P 𝑳₁ 𝑳₂ 𝒮 nc kwi cf-ie₁ r₁ fin₁ cf₁ two₁ cf-ie₂ r₂ fin₂ cf₂ two₂ =
+    cfIE-must-have-wreaths P 𝑳₁ 𝒮 nc kwi cf-ie₁ r₁ fin₁ cf₁ two₁
+  , cfIE-must-have-wreaths (λ 𝒢 → ¬ P 𝒢) 𝑳₂ 𝒮 nc kwi cf-ie₂ r₂ fin₂ cf₂ two₂
 ```
 
 **The reduction that places the question in the program's chain**: the
