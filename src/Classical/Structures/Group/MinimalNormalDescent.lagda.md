@@ -63,15 +63,25 @@ group; the search ranges over its *elements*, which is what carrier finiteness g
 `MinimalNormalDescent`{.AgdaFunction} of [FLRP.Reductions][] — the hypothesis threaded
 through Entries 1–3 of the RP-2 enforcement catalog — asks for a minimal normal
 subgroup in the *unrestricted* sense: minimality against every normal subgroup whose
-nontriviality is the negative statement.  `minimal→DNE`{.AgdaFunction} shows that this
-is not merely harder to prove, but classical: an unrestricted-minimal normal subgroup
-of a finite group decides `¬ ¬ P → P` for every proposition `P`{.AgdaBound} at the
-working level.  The witness is the normal subgroup `M ∩ (1 ∪ P)`{.AgdaFunction}, an
-"oracle subgroup" in the style of the oracle congruence `θ[ P ]`{.AgdaFunction} that
-drives the WP-1 no-go of [FLRP.Problem][].
+nontriviality is the negative statement.  `minimal→DNE`{.AgdaFunction} shows that the
+*witnessed* reading of that demand is not merely harder to prove, but classical: an
+unrestricted-minimal normal subgroup of a finite group, taken together with a
+witnessed non-identity element, decides `¬ ¬ P → P` for every proposition
+`P`{.AgdaBound} at the working level.  The instrument is the normal subgroup
+`M ∩ (1 ∪ P)`{.AgdaFunction}, an "oracle subgroup" in the style of the oracle
+congruence `θ[ P ]`{.AgdaFunction} that drives the WP-1 no-go of [FLRP.Problem][].
+The witness hypothesis is doing real work in that statement — extracting an element
+from the negative `Nontrivial`{.AgdaFunction} is itself a classical step
+(`witnessing→DNE`{.AgdaFunction} below) — so what the no-go rules out is any proof
+of descent that returns its minimal subgroups in witnessed form, which is the form
+the construction here naturally produces and the form every catalog consumer uses.
+Whether the bare negative reading of the hypothesis is *independently* derivable is
+not settled by this no-go; no route to it is in sight, and it would not feed the
+witnessed consumers in any case.
 
-So the descent hypothesis cannot be discharged outright, and the Layer-D restriction
-above is forced.  What *is* available unconditionally is the witnessed form, which is
+So the witnessed route to the descent hypothesis cannot be discharged outright, and
+the Layer-D restriction above is forced for it.  What *is* available unconditionally
+is the witnessed form over decidably presented subgroups, which is
 strictly stronger than the Layer-D form and is what a consumer with decidably presented
 subgroups actually needs; `minimal-normal-descent`{.AgdaFunction} records the remaining
 gap as one named principle, `WitnessedNontriviality`{.AgdaFunction}, rather than
