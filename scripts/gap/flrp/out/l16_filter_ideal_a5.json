@@ -1,0 +1,162 @@
+{
+  "engine": {
+    "gap": "4.15.1",
+    "libraries": {
+      "primgrp": "4.0.1",
+      "smallgrp": "1.5.4",
+      "transgrp": "3.6.5"
+    }
+  },
+  "filter": {
+    "H": {
+      "generators": "[ (3,4,5) ]",
+      "index": 20,
+      "order": 3,
+      "structureDescription": "C3"
+    },
+    "interval": {
+      "covers": [
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          2
+        ],
+        [
+          0,
+          3
+        ],
+        [
+          1,
+          4
+        ],
+        [
+          2,
+          4
+        ],
+        [
+          3,
+          4
+        ]
+      ],
+      "leq": [
+        [
+          true,
+          true,
+          true,
+          true,
+          true
+        ],
+        [
+          false,
+          true,
+          false,
+          false,
+          true
+        ],
+        [
+          false,
+          false,
+          true,
+          false,
+          true
+        ],
+        [
+          false,
+          false,
+          false,
+          true,
+          true
+        ],
+        [
+          false,
+          false,
+          false,
+          false,
+          true
+        ]
+      ],
+      "nodes": [
+        {
+          "generators": "[ (3,4,5) ]",
+          "index": 0,
+          "order": 3,
+          "role": "bottom"
+        },
+        {
+          "generators": "[ (3,4,5), (1,2)(3,5) ]",
+          "index": 1,
+          "order": 6,
+          "role": "interior"
+        },
+        {
+          "generators": "[ (3,4,5), (2,3)(4,5) ]",
+          "index": 2,
+          "order": 12,
+          "role": "interior"
+        },
+        {
+          "generators": "[ (3,4,5), (1,5,3) ]",
+          "index": 3,
+          "order": 12,
+          "role": "interior"
+        },
+        {
+          "generators": "[ (1,2,3,4,5), (1,2,3) ]",
+          "index": 4,
+          "order": 60,
+          "role": "top"
+        }
+      ],
+      "size": 5
+    },
+    "middles": [
+      {
+        "generators": "[ (3,4,5), (1,2)(3,5) ]",
+        "order": 6,
+        "structureDescription": "S3"
+      },
+      {
+        "generators": "[ (3,4,5), (2,3)(4,5) ]",
+        "order": 12,
+        "structureDescription": "A4"
+      },
+      {
+        "generators": "[ (3,4,5), (1,5,3) ]",
+        "order": 12,
+        "structureDescription": "A4"
+      }
+    ],
+    "name": "[H, G] antichain M3"
+  },
+  "format": "flrp-gap-filter-ideal v1",
+  "group": {
+    "id": [
+      60,
+      5
+    ],
+    "order": 60,
+    "source": "SmallGroup",
+    "structureDescription": "A5"
+  },
+  "ideal": {
+    "K": {
+      "generators": "[ (1,2,3,4,5) ]",
+      "index": 12,
+      "order": 5,
+      "structureDescription": "C5"
+    },
+    "belowNoMiddle": true,
+    "joinsMiddlesToTop": true,
+    "meetsMiddlesTrivially": true,
+    "name": "[1, K]"
+  },
+  "search": {
+    "idealOrder": 5,
+    "maxOrder": 100,
+    "middles": 3
+  },
+  "target": "L16"
+}
