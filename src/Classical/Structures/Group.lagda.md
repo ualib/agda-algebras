@@ -52,6 +52,9 @@ list.
       maximal normal subgroups;
    +  [Classical.Structures.Group.MinimalNormal][]:
       minimal normal subgroups and monoliths;
+   +  [Classical.Structures.Group.MaximalSubgroup][]:
+      maximal subgroups, as the classification data the two-element-chain
+      catalog entry consumes;
    +  [Classical.Structures.Group.Centralizer][]: centralizers.
 
 +  **Cosets and group actions**.
@@ -90,6 +93,7 @@ open import Classical.Structures.Group.Congruences            public
 open import Classical.Structures.Group.NormalSubgroupLattice  public
 open import Classical.Structures.Group.NormalCore             public
 open import Classical.Structures.Group.MinimalNormal          public
+open import Classical.Structures.Group.MaximalSubgroup        public
 open import Classical.Structures.Group.Centralizer            public
 open import Classical.Structures.Group.Cosets                 public
 open import Classical.Structures.Group.GSet                   public
