@@ -10,45 +10,40 @@ author: "the agda-algebras development team"
 
 This is the [FLRP.KurzweilNetter.Translations][] module of the [Agda Universal Algebra Library][].
 
-The manuscript proof of Kurzweil–Netter duality
-(`docs/papers/fin-lat-rep/SmallLatticeReps.tex` § "Lattice duals") opens by
-assuming the representing algebra has *unary* operations, citing the
-unary-reduction theorem `Con 𝑨 = Con ⟨A , Pol₁ 𝑨⟩` — which is issue #501 and is
-not yet formalized.  This module implements the deliberate scoping decision of
-issue #502: rather than importing #501 as a hypothesis, the construction lifts
-only the **basic translations** of `𝑨`{.AgdaBound} — the unary maps obtained
-from one basic operation by fixing all argument positions but one — and the
-classical Mal'cev-style observation that these already determine the
-congruences:
+The manuscript proof of Kurzweil–Netter duality[^1] opens by assuming the
+representing algebra has *unary* operations, citing the unary-reduction theorem
+`Con 𝑨 = Con ⟨A , Pol₁ 𝑨⟩` which is not yet formalized in the library.  The
+construction in this module lifts only the **basic translations** of
+`𝑨`{.AgdaBound}, that is, the unary maps obtained from one basic operation by
+fixing all argument positions but one, and the classical Mal'cev-style observation
+that these already determine the congruences.
 
-+  every congruence partition is invariant under every basic translation
-   (`pvOf-invariant`{.AgdaFunction} — one appeal to compatibility); and
++  Every congruence partition is invariant under every basic translation
+   (`pvOf-invariant`{.AgdaFunction}, one appeal to compatibility); and, conversely,
 
-+  conversely, a partition invariant under all basic translations induces a
-   relation compatible with *every* operation of any arity
-   (`blockRel-compatible`{.AgdaFunction}) — the **translation criterion**,
++  a partition invariant under all basic translations induces a relation
+   compatible with every operation of every arity
+   (`blockRel-compatible`{.AgdaFunction}); this is the **translation criterion**,
    proved by walking the argument tuple one position at a time and using one
    translation instance per step.
 
-This is strictly less than #501 (no polynomial clone is constructed, no
-composition of translations is needed), and it is exactly the interface the
-expansion step consumes: the operations lifted to the coset algebra in
-[FLRP.KurzweilNetter.Expansion][] are unary maps of the index set, and a family
-of unary index maps is precisely what this module produces.
+This is exactly the interface the expansion step consumes: the operations lifted
+to the coset algebra in [FLRP.KurzweilNetter.Expansion][] are unary maps of the
+index set, and a family of unary index maps is precisely what this module
+produces.
 
-**Presentation of the translations.**  The carrier is presented by an
-irredundant enumeration `ienum : Fin m → 𝕌[ 𝑨 ]`
-([Setoid.Algebras.Finite.Irredundant][]), so a translation is presented as a
-map `Fin m → Fin m`: feed the moving index and the constants to the operation
-through `ienum`{.AgdaFunction}, and take the index of the result.  A
-translation datum `TrData`{.AgdaFunction} records an operation symbol (through
-the symbol enumeration of the `FiniteSignature`{.AgdaRecord}), a distinguished
-argument position, and the constant tuple *positionally encoded* as a single
-`Fin (m ^ k)`{.AgdaDatatype} via the standard library's
-`finToFun`{.AgdaFunction} — encoded rather than functional so that downstream
-the family can be *flatly indexed* by `Fin trCount`{.AgdaDatatype}
-(`trFamily`{.AgdaFunction} below), which is the shape the expanded algebra's
-finite signature needs.
+**Presentation of the translations**.  The carrier is presented by an
+irredundant enumeration `ienum[_] : Fin m → 𝕌[ 𝑨 ]`
+([Setoid.Algebras.Finite.Irredundant][]), so a translation is presented as a map
+`Fin m → Fin m`: feed the moving index and the constants to the operation through
+`ienum[_]`{.AgdaFunction}, and take the index of the result.  A translation datum
+`TrData`{.AgdaFunction} records an operation symbol (through the symbol
+enumeration of the `FiniteSignature`{.AgdaRecord}), a distinguished argument
+position, and the constant tuple *positionally encoded* as a single
+`Fin (m ^ k)`{.AgdaDatatype} via the standard library's `finToFun`{.AgdaFunction},
+encoded rather than functional so that downstream the family can be *flatly indexed*
+by `Fin trCount`{.AgdaDatatype} (`trFamily`{.AgdaFunction} below), which is the
+shape the expanded algebra's finite signature needs.
 
 <!--
 ```agda
@@ -59,46 +54,61 @@ module FLRP.KurzweilNetter.Translations where
 open import Agda.Primitive using () renaming ( Set to Type )
 
 -- Imports from the Agda Standard Library ---------------------------------------
-open import Data.Bool.Base      using ( if_then_else_ )
-open import Data.Empty          using ( ⊥-elim )
-open import Data.Fin.Base       using ( Fin ; toℕ ; fromℕ< ; finToFun ; funToFin )
-open import Data.Fin.Properties using ( toℕ<n ; toℕ-fromℕ< ; toℕ-injective
-                                      ; finToFun-funToFin )
-                                renaming ( _≟_ to _≟ᶠ_ )
-open import Data.List.Base      using ( List ; length ; lookup ; concatMap
-                                      ; cartesianProduct ; allFin )
-                                renaming ( map to lmap )
-open import Data.List.Membership.Propositional             using ( _∈_ )
-open import Data.List.Membership.Propositional.Properties  using ( ∈-allFin ; ∈-map⁺
-                                                                 ; ∈-cartesianProduct⁺
-                                                                 ; ∈-concat⁺′ )
-open import Data.List.Relation.Unary.Any             using ( index )
-open import Data.List.Relation.Unary.Any.Properties  using ( lookup-index )
-open import Data.Nat.Base        using ( ℕ ; zero ; suc ; _≤_ ; _<_ ; s≤s )
-                                 renaming ( _^_ to _^ᴺ_ )
-open import Data.Nat.Properties  using ( _<?_ ; ≤-refl ; ≤-trans ; n≤1+n
-                                       ; <-irrefl ; ≤∧≢⇒< )
-open import Data.Product         using ( Σ-syntax ; _×_ ; _,_ ; proj₁ ; proj₂ )
-open import Function             using ( Func ; Inverse )
-open import Level                using ( 0ℓ )
-open import Relation.Binary      using ( Setoid ; IsEquivalence )
-open import Relation.Binary.PropositionalEquality
-                                 using ( _≡_ ; refl ; sym ; trans ; cong ; subst ; subst₂ )
-open import Relation.Nullary     using ( ¬_ ; Dec ; yes ; no )
-open import Relation.Nullary.Decidable  using ( does ; dec-true ; dec-false )
+open import Data.Bool.Base                                 using  ( if_then_else_ )
+open import Data.Empty                                     using  ( ⊥-elim )
+open import Data.Fin.Base                                  using  ( Fin ; funToFin
+                                                                  ; fromℕ< ; toℕ
+                                                                  ; finToFun )
+open import Data.Fin.Properties                            using  ( toℕ<n ; toℕ-fromℕ<
+                                                                  ; toℕ-injective
+                                                                  ; finToFun-funToFin )
+                                                           renaming ( _≟_ to _≟ᶠ_ )
+open import Data.List.Base                                 using  ( List ; length
+                                                                  ; lookup ; concatMap
+                                                                  ; cartesianProduct
+                                                                  ; allFin )
+                                                           renaming ( map to lmap )
+open import Data.List.Membership.Propositional             using  ( _∈_ )
+open import Data.List.Membership.Propositional.Properties  using  ( ∈-allFin ; ∈-map⁺
+                                                                  ; ∈-cartesianProduct⁺
+                                                                  ; ∈-concat⁺′ )
+open import Data.List.Relation.Unary.Any                   using  ( index )
+open import Data.List.Relation.Unary.Any.Properties        using  ( lookup-index )
+open import Data.Nat.Base                                  using  ( ℕ ; zero ; suc
+                                                                  ; _≤_ ; _<_ ; s≤s )
+                                                           renaming ( _^_ to _^ᴺ_ )
+open import Data.Nat.Properties                            using  ( _<?_ ; ≤-refl
+                                                                  ; ≤-trans ; n≤1+n
+                                                                  ; <-irrefl ; ≤∧≢⇒< )
+open import Data.Product                                   using  ( Σ-syntax ; _×_
+                                                                  ; _,_ ; proj₁ ; proj₂ )
+open import Function                                       using  ( Func ; Inverse )
+open import Level                                          using  ( 0ℓ )
+open import Relation.Binary                                using  ( Setoid
+                                                                  ; IsEquivalence )
+open import Relation.Binary.PropositionalEquality          using  ( _≡_ ; refl ; sym
+                                                                  ; trans ; cong
+                                                                  ; subst ; subst₂ )
+open import Relation.Nullary                               using  ( ¬_ ; Dec ; yes ; no )
+open import Relation.Nullary.Decidable                     using  ( does ; dec-true
+                                                                  ; dec-false )
 
 -- Imports from the Agda Universal Algebra Library ------------------------------
-open import Classical.Structures.Lattice.Partitions  using ( SameBlock )
-open import FLRP.KurzweilNetter.Blocks                using ( module KNBlocks )
-open import FLRP.KurzweilNetter.Invariance            using ( Inv )
-open import Overture  using ( Signature ; OperationSymbolsOf ; ArityOf ; _|:_ )
-open import Setoid.Algebras.Basic                using ( Algebra ; 𝕌[_] ; 𝔻[_] ; _^_ )
-open import Setoid.Algebras.Finite.Irredundant   using ( IrredundantEnumeration )
-open import Setoid.Congruences.Basic             using ( _∣≈_ ; mkcon ; reflexive
-                                                       ; is-equivalence ; is-compatible )
-open import Setoid.Congruences.Certificates.Schema  using ( ParentVec )
-open import Setoid.Congruences.Finite.Basic      using ( DecCon ; ConRel )
-open import Setoid.Signatures.Finite             using ( FiniteSignature )
+open import Classical.Structures.Lattice.Partitions        using  ( SameBlock )
+open import FLRP.KurzweilNetter.Blocks                     using  ( module KNBlocks )
+open import FLRP.KurzweilNetter.Invariance                 using  ( Inv )
+open import Overture                                       using  ( Signature
+                                                                  ; OperationSymbolsOf
+                                                                  ; _|:_ ; ArityOf)
+open import Setoid.Algebras.Basic                          using  ( Algebra ; 𝕌[_]
+                                                                  ; 𝔻[_] ; _^_ )
+open import Setoid.Algebras.Finite.Irredundant             using  ( IrredundantEnumeration )
+open import Setoid.Congruences.Basic                       using  ( _∣≈_ ; mkcon ; reflexive
+                                                                  ; is-equivalence
+                                                                  ; is-compatible )
+open import Setoid.Congruences.Certificates.Schema         using  ( ParentVec )
+open import Setoid.Congruences.Finite.Basic                using  ( DecCon ; ConRel )
+open import Setoid.Signatures.Finite                       using  ( FiniteSignature )
 
 open Algebra using ( Interp )
 ```
@@ -106,28 +116,27 @@ open Algebra using ( Interp )
 
 #### The translation toolkit
 
-`KNTranslations`{.AgdaModule} fixes the finite finitary algebra — through its
-signature-finiteness witness — and an irredundant enumeration of its carrier,
+`KNTranslations`{.AgdaModule} fixes the finite finitary algebra, through its
+signature-finiteness witness, and an irredundant enumeration of its carrier,
 and opens the relation-level dictionary of [FLRP.KurzweilNetter.Blocks][].
 
 ```agda
-module KNTranslations {𝑆 : Signature 0ℓ 0ℓ} (𝑨 : Algebra {𝑆 = 𝑆} 0ℓ 0ℓ)
-                      (𝑺 : FiniteSignature 𝑆) (𝑬 : IrredundantEnumeration 𝑨) where
+module KNTranslations  {𝑆 : Signature 0ℓ 0ℓ} (𝑨 : Algebra {𝑆 = 𝑆} 0ℓ 0ℓ)
+                       (𝑺 : FiniteSignature 𝑆) (𝑬 : IrredundantEnumeration 𝑨) where
 
   open KNBlocks 𝑨 𝑬
-  open Setoid 𝔻[ 𝑨 ] using ( _≈_ )
-    renaming ( refl to ≈refl ; sym to ≈sym ; trans to ≈trans ; reflexive to ≈reflexive )
-  open IrredundantEnumeration 𝑬 using ( ienum ) renaming ( icard to m )
-  open FiniteSignature 𝑺
-    using ( opCard ; opEnum ; opEnum-sur ; arCard ; arIdx ; arEnum ; arEnum-arIdx
-          ; finitary )
+  open Setoid 𝔻[ 𝑨 ] using ( _≈_ ) renaming  ( refl to ≈refl ; sym to ≈sym
+                                              ; trans to ≈trans ; reflexive to ≈reflexive )
+
+  open IrredundantEnumeration 𝑬 using ( ienum[_] ) renaming ( icard to m )
+  open FiniteSignature 𝑺 using  ( opCard ; opEnum ; opEnum-sur ; arCard ; arIdx
+                                ; arEnum ; arEnum-arIdx ; finitary )
 
   private
     -- The other round trip of the arity bijection (the record exposes only
     -- arEnum-arIdx; this direction is read off the underlying Inverse).
-    arIdx-arEnum : (f : OperationSymbolsOf 𝑆) (q : Fin (arCard f))
-      → arIdx f (arEnum f q) ≡ q
-    arIdx-arEnum f = Inverse.strictlyInverseˡ (proj₂ (finitary f))
+    arIdx-arEnum : (f : OperationSymbolsOf 𝑆) (q : Fin (arCard f)) → arIdx f (arEnum f q) ≡ q
+    arIdx-arEnum f = Inverse.strictlyInverseˡ (finitary f .proj₂)
 
     -- Congruence of an operation application in its argument tuple.
     fcong : (f : OperationSymbolsOf 𝑆) {u v : ArityOf 𝑆 f → 𝕌[ 𝑨 ]}
@@ -137,11 +146,10 @@ module KNTranslations {𝑆 : Signature 0ℓ 0ℓ} (𝑨 : Algebra {𝑆 = 𝑆}
 
 #### Translation data and the presented index maps
 
-A translation datum is an operation symbol (as an index into the symbol
-enumeration), a distinguished argument position, and a positional encoding of
-the constants at the remaining positions.  A nullary operation contributes no
-data (its position type is empty), matching the mathematics: constants impose
-no congruence constraint.
+A translation datum is an operation symbol (as an index into the symbol enumeration),
+a distinguished argument position, and a positional encoding of the constants at
+the remaining positions.  A nullary operation contributes no data (its position
+type is empty), matching the mathematics: constants impose no congruence constraint.
 
 ```agda
   -- One basic-translation instance, as pure data.
@@ -157,7 +165,7 @@ no congruence constraint.
   -- The unary index map presented by a translation datum.
   trMapOf : TrData → Fin m → Fin m
   trMapOf (o , p , cc) i =
-    eIdx ((opEnum o ^ 𝑨) (λ a → ienum (mixIx p cc i (arIdx (opEnum o) a))))
+    eIdx ((opEnum o ^ 𝑨) λ a → ienum[ mixIx p cc i (arIdx (opEnum o) a) ])
 ```
 
 #### Soundness: congruence partitions are invariant
@@ -169,30 +177,28 @@ reflexivity, and compatibility of the congruence does the rest.
 ```agda
   -- The partition of a decidable congruence is invariant under every translation.
   pvOf-invariant : (d : DecCon 𝑨 0ℓ) (td : TrData) → Inv (trMapOf td) (pvOf d)
-  pvOf-invariant d (o , p , cc) {i} {j} sb = pvOf-complete d related
+  pvOf-invariant d@((_θ_ , θcon) , _) (o , p , cc) {i} {j} sb = pvOf-complete d related
     where
-    θ-refl≈  = reflexive (proj₂ (proj₁ d))
-    θ-sym    = IsEquivalence.sym (is-equivalence (proj₂ (proj₁ d)))
-    θ-trans  = IsEquivalence.trans (is-equivalence (proj₂ (proj₁ d)))
+    θ-refl≈  = reflexive θcon
+    θ-sym    = IsEquivalence.sym (is-equivalence θcon)
+    θ-trans  = IsEquivalence.trans (is-equivalence θcon)
 
     f = opEnum o
 
     -- the two argument tuples, and their pointwise relatedness
     argsAt : Fin m → ArityOf 𝑆 f → 𝕌[ 𝑨 ]
-    argsAt i' a = ienum (mixIx p cc i' (arIdx f a))
+    argsAt i' a = ienum[ mixIx p cc i' (arIdx f a) ]
 
     mixRel : (q : Fin (arCard f)) (dq : Dec (q ≡ p))
-      → ConRel d  (ienum (if does dq then i else finToFun cc q))
-                  (ienum (if does dq then j else finToFun cc q))
+      → ienum[ if does dq then i else finToFun cc q ]
+        θ ienum[ if does dq then j else finToFun cc q ]
     mixRel q (yes _)  = pvOf-sound d sb
     mixRel q (no _)   = θ-refl≈ ≈refl
 
-    relF : ConRel d ((f ^ 𝑨) (argsAt i)) ((f ^ 𝑨) (argsAt j))
-    relF = is-compatible (proj₂ (proj₁ d)) f
-             {argsAt i} {argsAt j} (λ a → mixRel (arIdx f a) (arIdx f a ≟ᶠ p))
+    relF : (f ^ 𝑨)(argsAt i) θ (f ^ 𝑨)(argsAt j)
+    relF = is-compatible θcon f λ a → mixRel (arIdx f a) (arIdx f a ≟ᶠ p)
 
-    related : ConRel d  (ienum (trMapOf (o , p , cc) i))
-                        (ienum (trMapOf (o , p , cc) j))
+    related : ienum[ trMapOf (o , p , cc) i ] θ ienum[ trMapOf (o , p , cc) j ]
     related = θ-trans (θ-refl≈ (eIdx-≈ ((f ^ 𝑨) (argsAt i))))
                 (θ-trans relF (θ-sym (θ-refl≈ (eIdx-≈ ((f ^ 𝑨) (argsAt j))))))
 ```
@@ -212,8 +218,8 @@ instance, with the constants of the instance encoding the current hybrid.
   blockRel-compatible : (pv : ParentVec m)
     → ((td : TrData) → Inv (trMapOf td) pv) → 𝑨 ∣≈ blockRel pv
   blockRel-compatible pv inv 𝑓 =
-    subst (λ g → (g ^ 𝑨) |: blockRel pv) (proj₂ (opEnum-sur 𝑓))
-          (compatAt (proj₁ (opEnum-sur 𝑓)))
+    subst  (λ g → (g ^ 𝑨) |: blockRel pv) (opEnum-sur 𝑓 .proj₂)
+           (compatAt (opEnum-sur 𝑓 .proj₁))
     where
     compatAt : (o : Fin opCard) → (opEnum o ^ 𝑨) |: blockRel pv
     compatAt o {u} {v} hyp = final
@@ -231,13 +237,13 @@ instance, with the constants of the instance encoding the current hybrid.
         (cong (λ b → if b then v a else u a) (dec-false (toℕ (arIdx f a) <? 0) λ ()))
 
       hybk≈v : ∀ a → hyb k a ≈ v a
-      hybk≈v a = ≈reflexive
-        (cong (λ b → if b then v a else u a)
-              (dec-true (toℕ (arIdx f a) <? k) (toℕ<n (arIdx f a))))
+      hybk≈v a =
+        ≈reflexive (cong  (λ b → if b then v a else u a)
+                          (dec-true (toℕ (arIdx f a) <? k) (toℕ<n (arIdx f a))))
 
       -- one step of the walk: position l moves from its u-value to its v-value
       step : (l : ℕ) (sl≤k : suc l ≤ k)
-        → blockRel pv ((f ^ 𝑨) (hyb l)) ((f ^ 𝑨) (hyb (suc l)))
+        → blockRel pv ((f ^ 𝑨)(hyb l)) ((f ^ 𝑨)(hyb (suc l)))
       step l sl≤k =
         subst₂ (SameBlock pv) tI≡ tJ≡ (inv (o , pl , cc) (hyp p))
         where
@@ -293,27 +299,27 @@ instance, with the constants of the instance encoding the current hybrid.
 
         -- the translation at the moving u-index computes hyb l ...
         keyU : (q : Fin k) (dq : Dec (q ≡ pl))
-          → ienum (if does dq then eIdx (u p) else finToFun cc q) ≈ hyb l (arEnum f q)
+          → ienum[ if does dq then eIdx (u p) else finToFun cc q ] ≈ hyb l (arEnum f q)
         keyU q (yes e) = ≈trans (eIdx-≈ (u p))
           (≈reflexive (sym (trans (cong (hyb l) (cong (arEnum f) e)) hybl-p)))
         keyU q (no _)  = ≈trans
-          (≈reflexive (cong ienum (finToFun-funToFin (λ q' → eIdx (hyb l (arEnum f q'))) q)))
+          (≈reflexive (cong ienum[_] (finToFun-funToFin (λ q' → eIdx (hyb l (arEnum f q'))) q)))
           (eIdx-≈ (hyb l (arEnum f q)))
 
         -- ... and at the moving v-index computes hyb (suc l)
         keyV : (q : Fin k) (dq : Dec (q ≡ pl))
-          → ienum (if does dq then eIdx (v p) else finToFun cc q) ≈ hyb (suc l) (arEnum f q)
+          → ienum[ if does dq then eIdx (v p) else finToFun cc q ] ≈ hyb (suc l) (arEnum f q)
         keyV q (yes e) = ≈trans (eIdx-≈ (v p))
           (≈reflexive (sym (trans (cong (hyb (suc l)) (cong (arEnum f) e)) hybsl-p)))
         keyV q (no ne) = ≈trans
-          (≈reflexive (cong ienum (finToFun-funToFin (λ q' → eIdx (hyb l (arEnum f q'))) q)))
+          (≈reflexive (cong ienum[_] (finToFun-funToFin (λ q' → eIdx (hyb l (arEnum f q'))) q)))
           (≈trans (eIdx-≈ (hyb l (arEnum f q))) (≈reflexive (hyb-stable q ne)))
 
-        argU : ∀ a → ienum (mixIx pl cc (eIdx (u p)) (arIdx f a)) ≈ hyb l a
+        argU : ∀ a → ienum[ mixIx pl cc (eIdx (u p)) (arIdx f a) ] ≈ hyb l a
         argU a = ≈trans (keyU (arIdx f a) (arIdx f a ≟ᶠ pl))
                         (≈reflexive (cong (hyb l) (arEnum-arIdx f a)))
 
-        argV : ∀ a → ienum (mixIx pl cc (eIdx (v p)) (arIdx f a)) ≈ hyb (suc l) a
+        argV : ∀ a → ienum[ mixIx pl cc (eIdx (v p)) (arIdx f a) ] ≈ hyb (suc l) a
         argV a = ≈trans (keyV (arIdx f a) (arIdx f a ≟ᶠ pl))
                         (≈reflexive (cong (hyb (suc l)) (arEnum-arIdx f a)))
 
@@ -348,13 +354,12 @@ criterion, and its decision procedure by label comparison.
 
 #### The flat family
 
-The expansion step ([FLRP.KurzweilNetter.Expansion][]) consumes the
-translations as a family indexed by a plain `Fin`{.AgdaDatatype} — the shape a
-finite signature's symbol type needs.  The family is obtained by listing all
-translation data (finitely many: symbols, positions, and constant codes are all
-enumerated) and reading the list back through positional lookup; completeness
-of the listing is what converts family-invariance back into invariance under
-every datum.
+The expansion step ([FLRP.KurzweilNetter.Expansion][]) consumes the translations
+as a family indexed by a plain `Fin`{.AgdaDatatype}, which is the shape a finite
+signature's symbol type needs.  The family is obtained by listing all translation
+data (finitely many: symbols, positions, and constant codes are all enumerated)
+and reading the list back through positional lookup; completeness of the listing
+is what converts family-invariance back into invariance under every datum.
 
 ```agda
   private
@@ -406,8 +411,8 @@ family-invariance suffices for the criterion.
     → ((τ : Fin trCount) → Inv (trFamily τ) pv)
     → (td : TrData) → Inv (trMapOf td) pv
   family-invariant-all pv h td =
-    subst (λ z → Inv (trMapOf z) pv) (proj₂ (trIdx-complete td))
-          (h (proj₁ (trIdx-complete td)))
+    subst (λ z → Inv (trMapOf z) pv) (trIdx-complete td .proj₂)
+          (h (trIdx-complete td .proj₁))
 
   -- The decidable congruence presented by a family-invariant partition.
   blockConᶠ : (pv : ParentVec m)
@@ -416,3 +421,5 @@ family-invariance suffices for the criterion.
 ```
 
 --------------------------------------
+
+[^1]: See `docs/papers/fin-lat-rep/SmallLatticeReps.tex` § "Lattice duals".

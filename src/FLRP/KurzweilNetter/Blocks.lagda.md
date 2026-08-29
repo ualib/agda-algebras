@@ -10,40 +10,39 @@ author: "the agda-algebras development team"
 
 This is the [FLRP.KurzweilNetter.Blocks][] module of the [Agda Universal Algebra Library][].
 
-The Kurzweil–Netter construction (issue #502) represents the dual of
-`Con 𝑨` on a power of a simple group *indexed by the carrier* of the finite
-algebra `𝑨`{.AgdaBound}.  The traffic between the two sides runs through the
-partition lattice `Eq(m)` of [Classical.Structures.Lattice.Partitions][]: a
-decidable congruence of `𝑨`{.AgdaBound} must become a partition of
-`Fin m`{.AgdaDatatype}, and a partition must become a decidable relation on the
-carrier.  This module provides exactly that dictionary, *at the relation level*
-— no operations of `𝑨`{.AgdaBound} appear, so everything here is about
-decidable equivalences; the interaction with the operations (which partitions
-arise from congruences) is the business of
+For a finite algebra `𝑨`{.AgdaBound}, the Kurzweil–Netter construction represents
+the dual of `Con 𝑨` on a power of a simple group *indexed by the carrier* of `𝑨`{.AgdaBound}.
+
+The traffic between the two sides runs through the partition lattice `Eq(m)` of
+[Classical.Structures.Lattice.Partitions][]: a decidable congruence of
+`𝑨`{.AgdaBound} must become a partition of `Fin m`{.AgdaDatatype}, and a partition
+must become a decidable relation on the carrier.  This module provides exactly
+that dictionary, at the relation level; no operations of `𝑨`{.AgdaBound} appear,
+so everything here is about decidable equivalences.  The interaction with the
+operations (which partitions arise from congruences) is handled in
 [FLRP.KurzweilNetter.Translations][].
 
 Throughout, the carrier is presented by an *irredundant* enumeration
-([Setoid.Algebras.Finite.Irredundant][]): `ienum : Fin m → 𝕌[ 𝑨 ]` hits every
+([Setoid.Algebras.Finite.Irredundant][]): `ienum[_] : Fin m → 𝕌[ 𝑨 ]` hits every
 `≈`-class exactly once.  Irredundancy is not a convenience but a correctness
-condition — with a redundant index the partitions of `Fin m` could separate two
+condition; with a redundant index the partitions of `Fin m` could separate two
 copies of one carrier element, and the correspondence below would fail to be a
 bijection.
 
-The two directions:
+**The two directions**.
 
-+  **`pvOf`** sends a decidable congruence `d` to the partition of the index
-   set by `d`-classes, presented as a `ParentVec`{.AgdaFunction}: index `i` is
-   labelled by the *least* index `d`-related to it, computed by the bounded
-   search `findLeast`{.AgdaFunction}.  Its kernel is exactly the restriction of
-   `d` to enumerated values (`pvOf-sound`{.AgdaFunction} /
-   `pvOf-complete`{.AgdaFunction}).
++  **`pvOf`** sends a decidable congruence `d` to the partition of the index set
+   by `d`-classes, presented as a `ParentVec`{.AgdaFunction}: index `i` is
+   labelled by the *least* index `d`-related to it, computed by the bounded search
+   `findLeast`{.AgdaFunction}; its kernel is exactly the restriction of `d` to
+   enumerated values (`pvOf-sound`{.AgdaFunction} / `pvOf-complete`{.AgdaFunction}).
 
 +  **`blockRel`** sends a partition `pv` to the relation identifying carrier
-   elements whose indices share a block.  It is a decidable equivalence
-   respecting `≈`{.AgdaFunction}, by irredundancy of the enumeration.
+   elements whose indices share a block; it is a decidable equivalence respecting
+   `≈`{.AgdaFunction}, by irredundancy of the enumeration.
 
-The module closes with the monotonicity of both maps and the two round trips,
-each stated against an arbitrary relation-equivalent presentation so that the
+The module closes with the monotonicity of both maps and the two round trips, each
+stated against an arbitrary relation-equivalent presentation so that the
 downstream isomorphisms can consume them without definitional coincidences.
 
 <!--
@@ -53,28 +52,33 @@ downstream isomorphisms can consume them without definitional coincidences.
 module FLRP.KurzweilNetter.Blocks where
 
 -- Imports from the Agda Standard Library ---------------------------------------
-open import Data.Empty          using ( ⊥-elim )
-open import Data.Fin.Base       using ( Fin ) renaming ( _≤_ to _≤ᶠ_ )
-open import Data.Fin.Properties using () renaming ( _≟_ to _≟ᶠ_ )
-open import Data.Product        using ( Σ-syntax ; _×_ ; _,_ ; proj₁ ; proj₂ )
-open import Data.Sum.Base       using ( _⊎_ ; inj₁ ; inj₂ )
-open import Data.Vec.Base       using ( tabulate )
-open import Level               using ( 0ℓ )
-open import Relation.Binary     using ( Setoid ; IsEquivalence )
-                                renaming ( Rel to BinaryRel )
-open import Relation.Binary.PropositionalEquality
-                                using ( _≡_ ; refl ; sym ; trans ; cong ; subst ; subst₂ )
-open import Relation.Nullary    using ( ¬_ ; Dec )
+open import Data.Empty                               using  ( ⊥-elim )
+open import Data.Fin.Base                            using  ( Fin )
+                                                     renaming ( _≤_ to _≤ᶠ_ )
+open import Data.Fin.Properties                      using  ()
+                                                     renaming ( _≟_ to _≟ᶠ_ )
+open import Data.Product                             using  ( Σ-syntax ; _×_ ; _,_
+                                                            ; proj₁ ; proj₂ )
+open import Data.Sum.Base                            using  ( _⊎_ ; inj₁ ; inj₂ )
+open import Data.Vec.Base                            using  ( tabulate )
+open import Function                                 using  ( _∘_ )
+open import Level                                    using  ( 0ℓ )
+open import Relation.Binary                          using  ( Setoid ; IsEquivalence )
+                                                     renaming ( Rel to BinaryRel )
+open import Relation.Binary.PropositionalEquality    using  ( _≡_ ; refl ; sym ; trans
+                                                            ; cong ; subst ; subst₂ )
+open import Relation.Nullary                         using  ( ¬_ ; Dec )
 
 -- Imports from the Agda Universal Algebra Library ------------------------------
-open import Classical.Structures.Lattice.Partitions
-  using ( SameBlock ; _⊑_ ; _≈ᵖ_ ; parent-tab ; findLeast ; least-unique )
-open import Overture                             using ( Signature )
-open import Setoid.Algebras.Basic                using ( Algebra ; 𝕌[_] ; 𝔻[_] )
-open import Setoid.Algebras.Finite.Irredundant   using ( IrredundantEnumeration )
-open import Setoid.Congruences.Basic             using ( reflexive ; is-equivalence )
-open import Setoid.Congruences.Certificates.Schema  using ( ParentVec ; parent )
-open import Setoid.Congruences.Finite.Basic      using ( DecCon ; ConRel )
+open import Classical.Structures.Lattice.Partitions  using  ( SameBlock ; _⊑_ ; _≈ᵖ_
+                                                            ; parent-tab ; findLeast
+                                                            ; least-unique )
+open import Overture                                 using  ( Signature )
+open import Setoid.Algebras.Basic                    using  ( Algebra ; 𝕌[_] ; 𝔻[_] )
+open import Setoid.Algebras.Finite.Irredundant       using  ( IrredundantEnumeration )
+open import Setoid.Congruences.Basic                 using  ( reflexive ; is-equivalence )
+open import Setoid.Congruences.Certificates.Schema   using  ( ParentVec ; parent )
+open import Setoid.Congruences.Finite.Basic          using  ( DecCon ; ConRel )
 ```
 -->
 
@@ -82,17 +86,18 @@ open import Setoid.Congruences.Finite.Basic      using ( DecCon ; ConRel )
 
 `KNBlocks`{.AgdaModule} fixes the algebra and an irredundant enumeration of its
 carrier.  Nothing here looks at the operations, but the ambient algebra is kept
-(rather than a bare setoid) because the input and output of the dictionary are
-`DecCon`{.AgdaFunction}s.
+(rather than a bare setoid) because the input and output of the dictionary inhabit
+`DecCon`{.AgdaFunction}.
 
 ```agda
-module KNBlocks {𝑆 : Signature 0ℓ 0ℓ} (𝑨 : Algebra {𝑆 = 𝑆} 0ℓ 0ℓ)
-                (𝑬 : IrredundantEnumeration 𝑨) where
+module KNBlocks
+  {𝑆 : Signature 0ℓ 0ℓ}
+  (𝑨 : Algebra {𝑆 = 𝑆} 0ℓ 0ℓ)
+  (𝑬 : IrredundantEnumeration 𝑨)
+  where
 
-  open Setoid 𝔻[ 𝑨 ] using ( _≈_ )
-    renaming ( refl to ≈refl ; sym to ≈sym ; trans to ≈trans )
-  open IrredundantEnumeration 𝑬 using ( ienum ; ienum-sur ; ienum-inj )
-    renaming ( icard to m )
+  open Setoid 𝔻[ 𝑨 ] using ( _≈_ ) renaming ( refl to ≈refl ; sym to ≈sym ; trans to ≈trans )
+  open IrredundantEnumeration 𝑬 using ( ienum[_] ; ienum-sur ; ienum-inj ) renaming ( icard to m )
 ```
 
 #### The index of a carrier element
@@ -104,86 +109,88 @@ of an enumerated value is its own position.
 ```agda
   -- The index of (the ≈-class of) a carrier element.
   eIdx : 𝕌[ 𝑨 ] → Fin m
-  eIdx x = proj₁ (ienum-sur x)
+  eIdx = proj₁ ∘ ienum-sur
 
   -- The enumerated value at the index of x is x, up to ≈.
-  eIdx-≈ : ∀ x → ienum (eIdx x) ≈ x
-  eIdx-≈ x = proj₂ (ienum-sur x)
+  eIdx-≈ : ∀ x → ienum[ eIdx x ] ≈ x
+  eIdx-≈ = proj₂ ∘ ienum-sur
 
   -- ≈-equal elements have equal indices (this is exactly irredundancy).
   eIdx-cong : ∀ {x y} → x ≈ y → eIdx x ≡ eIdx y
   eIdx-cong {x} {y} e = ienum-inj (≈trans (eIdx-≈ x) (≈trans e (≈sym (eIdx-≈ y))))
 
   -- The index of an enumerated value is its position.
-  eIdx-ienum : ∀ i → eIdx (ienum i) ≡ i
-  eIdx-ienum i = ienum-inj (eIdx-≈ (ienum i))
+  eIdx-ienum[_] : ∀ i → eIdx ienum[ i ] ≡ i
+  eIdx-ienum[_] = ienum-inj ∘ eIdx-≈ ∘ ienum[_]
 ```
 
 #### From a decidable congruence to a partition
 
-Fix a decidable congruence `d`.  Each index `i` is relabelled by the least
-index whose value is `d`-related to `ienum i`; the search cannot fail because
-`i` itself qualifies, by reflexivity of `d` over `≈`.
+Fix a decidable congruence `θ`.  Each index `i` is relabelled by the least index
+whose value is `θ`-related to `ienum[ i ]`; the search cannot fail because `i`
+itself qualifies, by reflexivity of `θ` over `_≈_`{.AgdaField}.
 
 ```agda
-  module _ (d : DecCon 𝑨 0ℓ) where
-
+  module _ (((_θ_ , θcon) , θdec) : DecCon 𝑨 0ℓ) where
     private
-      θ : BinaryRel 𝕌[ 𝑨 ] 0ℓ
-      θ = ConRel d
 
-      θ-refl≈ : ∀ {x y} → x ≈ y → θ x y
-      θ-refl≈ = reflexive (proj₂ (proj₁ d))
+      θ-refl≈ : ∀ {x y} → x ≈ y → x θ y
+      θ-refl≈ = reflexive θcon
 
-      θ-sym : ∀ {x y} → θ x y → θ y x
-      θ-sym = IsEquivalence.sym (is-equivalence (proj₂ (proj₁ d)))
+      θ-sym : ∀ {x y} → x θ y → y θ x
+      θ-sym = IsEquivalence.sym (is-equivalence θcon)
 
-      θ-trans : ∀ {x y z} → θ x y → θ y z → θ x z
-      θ-trans = IsEquivalence.trans (is-equivalence (proj₂ (proj₁ d)))
+      θ-trans : ∀ {x y z} → x θ y → y θ z → x θ z
+      θ-trans = IsEquivalence.trans (is-equivalence θcon)
 
-      -- The least index of the d-class of ienum i, with its two certificates.
-      found : (i : Fin m)
-        → Σ[ j ∈ Fin m ] (θ (ienum j) (ienum i) × ((k : Fin m) → θ (ienum k) (ienum i) → j ≤ᶠ k))
-      found i = extract (findLeast m (λ j → proj₂ d (ienum j) (ienum i)))
+      -- The least index of the θ-class of ienum[ i ], with its two certificates.
+      found : (i : Fin m) → Σ[ j ∈ Fin m ] (ienum[ j ] θ ienum[ i ]
+                                           × ∀ k → ienum[ k ] θ ienum[ i ] → j ≤ᶠ k)
+
+      found i = extract (findLeast m (λ j → θdec ienum[ j ] ienum[ i ]))
         where
-        extract :
-             (Σ[ j ∈ Fin m ] (θ (ienum j) (ienum i) × ((k : Fin m) → θ (ienum k) (ienum i) → j ≤ᶠ k)))
-           ⊎ ((j : Fin m) → ¬ θ (ienum j) (ienum i))
-          → Σ[ j ∈ Fin m ] (θ (ienum j) (ienum i) × ((k : Fin m) → θ (ienum k) (ienum i) → j ≤ᶠ k))
-        extract (inj₁ w)     = w
-        extract (inj₂ none)  = ⊥-elim (none i (θ-refl≈ ≈refl))
+        extract :  Σ[ j ∈ Fin m ] ( ienum[ j ] θ ienum[ i ]
+                                    × ∀ k → ienum[ k ] θ ienum[ i ] → j ≤ᶠ k )
+                   ⊎ (∀ j → ¬ ienum[ j ] θ ienum[ i ])
+
+          → Σ[ j ∈ Fin m ] ( ienum[ j ] θ ienum[ i ]
+                             × ∀ k → ienum[ k ] θ ienum[ i ] → j ≤ᶠ k)
+
+        extract (inj₁ w) = w
+        extract (inj₂ none) = ⊥-elim (none i (θ-refl≈ ≈refl))
 
       -- The class representative (least related index).
       rep : Fin m → Fin m
-      rep i = proj₁ (found i)
+      rep i = found i .proj₁
 
-      rep-rel : (i : Fin m) → θ (ienum (rep i)) (ienum i)
-      rep-rel i = proj₁ (proj₂ (found i))
+      rep-rel : (i : Fin m) → ienum[ rep i ] θ ienum[ i ]
+      rep-rel i = found i .proj₂ .proj₁
 
-      rep-least : (i k : Fin m) → θ (ienum k) (ienum i) → rep i ≤ᶠ k
-      rep-least i = proj₂ (proj₂ (found i))
+      rep-least : (i k : Fin m) → ienum[ k ] θ ienum[ i ] → rep i ≤ᶠ k
+      rep-least i = found i .proj₂ .proj₂
 
-    -- The partition of the index set by d-classes.
+    -- The partition of the index set by θ-classes.
     pvOf : ParentVec m
     pvOf = tabulate rep
 ```
 
-The kernel of `pvOf`{.AgdaFunction} is the restriction of `d` to enumerated
+The kernel of `pvOf`{.AgdaFunction} is the restriction of `θ` to enumerated
 values: same label means related through the shared representative, and related
 values search pointwise-equivalent predicates, so their least representatives
 coincide.
 
 ```agda
-    -- Same pvOf-block implies d-related values.
-    pvOf-sound : ∀ {i j} → SameBlock pvOf i j → θ (ienum i) (ienum j)
+    -- Same pvOf-block implies θ-related values.
+    pvOf-sound : ∀ {i j} → SameBlock pvOf i j → ienum[ i ] θ ienum[ j ]
     pvOf-sound {i} {j} sb =
-      θ-trans (θ-sym (rep-rel i)) (subst (λ k → θ (ienum k) (ienum j)) (sym rep≡) (rep-rel j))
+      θ-trans (θ-sym (rep-rel i)) ( subst  (λ k → ienum[ k ] θ ienum[ j ])
+                                           (sym rep≡) (rep-rel j) )
       where
       rep≡ : rep i ≡ rep j
       rep≡ = trans (sym (parent-tab rep i)) (trans sb (parent-tab rep j))
 
-    -- d-related values imply same pvOf-block.
-    pvOf-complete : ∀ {i j} → θ (ienum i) (ienum j) → SameBlock pvOf i j
+    -- θ-related values imply same pvOf-block.
+    pvOf-complete : ∀ {i j} → ienum[ i ] θ ienum[ j ] → SameBlock pvOf i j
     pvOf-complete {i} {j} rel = trans (parent-tab rep i) (trans rep≡ (sym (parent-tab rep j)))
       where
       rep≡ : rep i ≡ rep j
@@ -198,7 +205,7 @@ coincide.
 `blockRel pv` identifies carrier elements whose indices share a `pv`-block.
 Because `SameBlock`{.AgdaFunction} is a propositional equality of labels, the
 equivalence laws are those of `_≡_`{.AgdaDatatype}; reflexivity over
-`≈`{.AgdaFunction} and decidability come from irredundancy and the decidable
+`_≈_`{.AgdaField} and decidability come from irredundancy and the decidable
 equality of `Fin`{.AgdaDatatype}.
 
 ```agda
@@ -221,8 +228,8 @@ equality of `Fin`{.AgdaDatatype}.
 
 #### Monotonicity
 
-Both maps are monotone for containment: refinement of partitions is inclusion
-of kernels, so `blockRel`{.AgdaFunction} forwards it verbatim, and
+Both maps are monotone for containment: refinement of partitions is inclusion of
+kernels, so `blockRel`{.AgdaFunction} forwards it verbatim, and
 `pvOf`{.AgdaFunction} forwards a congruence containment through the two kernel
 characterizations.
 
@@ -243,8 +250,8 @@ characterizations.
 Each round trip is stated against an arbitrary relation-equivalent
 presentation.  On the partition side: if the relation of `d` is pointwise
 equivalent to `blockRel pv`, then `pvOf d` and `pv` have the same kernel — the
-step from index `i` to carrier element `ienum i` and back is repaired by
-`eIdx-ienum`{.AgdaFunction}.
+step from index `i` to carrier element `ienum[ i ]` and back is repaired by
+`eIdx-ienum[_]`{.AgdaFunction}.
 
 ```agda
   -- Round trip on partitions: pvOf inverts blockRel, up to kernel equality.
@@ -256,11 +263,12 @@ step from index `i` to carrier element `ienum i` and back is repaired by
     where
     to-pv : pvOf d ⊑ pv
     to-pv {i} {j} sb =
-      subst₂ (SameBlock pv) (eIdx-ienum i) (eIdx-ienum j) (fwd (pvOf-sound d sb))
+      subst₂ (SameBlock pv) eIdx-ienum[ i ] eIdx-ienum[ j ] (fwd (pvOf-sound d sb))
 
     from-pv : pv ⊑ pvOf d
     from-pv {i} {j} sb =
-      pvOf-complete d (bwd (subst₂ (SameBlock pv) (sym (eIdx-ienum i)) (sym (eIdx-ienum j)) sb))
+      pvOf-complete d (bwd (subst₂ (SameBlock pv)  (sym eIdx-ienum[ i ])
+                                                   (sym eIdx-ienum[ j ]) sb))
 ```
 
 On the congruence side: the relation induced by the partition of a decidable
@@ -268,24 +276,23 @@ congruence is the congruence itself, the step from `x` to `ienum (eIdx x)` and
 back repaired by reflexivity over `≈`{.AgdaFunction} and transitivity.
 
 ```agda
-  -- Round trip on relations: blockRel inverts pvOf, up to mutual containment.
-  blockRel-pvOf-out : (d : DecCon 𝑨 0ℓ) → ∀ {x y} → blockRel (pvOf d) x y → ConRel d x y
-  blockRel-pvOf-out d {x} {y} sb = θ-trans (θ-sym (θ-refl≈ (eIdx-≈ x))) (θ-trans rel (θ-refl≈ (eIdx-≈ y)))
-    where
-    θ-refl≈  = reflexive (proj₂ (proj₁ d))
-    θ-sym    = IsEquivalence.sym (is-equivalence (proj₂ (proj₁ d)))
-    θ-trans  = IsEquivalence.trans (is-equivalence (proj₂ (proj₁ d)))
+  module _ (d@((_θ_ , θcon) , _) : DecCon 𝑨 0ℓ) where
+    private
+      θ-refl≈  = reflexive θcon
+      θ-sym    = IsEquivalence.sym (is-equivalence θcon)
+      θ-trans  = IsEquivalence.trans (is-equivalence θcon)
 
-    rel : ConRel d (ienum (eIdx x)) (ienum (eIdx y))
-    rel = pvOf-sound d sb
+    -- Round trip on relations: blockRel inverts pvOf, up to mutual containment.
+    blockRel-pvOf-out : ∀ {x y} → blockRel (pvOf d) x y → ConRel d x y
+    blockRel-pvOf-out {x} {y} sb =
+      θ-trans (θ-sym (θ-refl≈ (eIdx-≈ x))) (θ-trans rel (θ-refl≈ (eIdx-≈ y)))
+      where
+      rel : ienum[ eIdx x ] θ ienum[ eIdx y ]
+      rel = pvOf-sound d sb
 
-  blockRel-pvOf-in : (d : DecCon 𝑨 0ℓ) → ∀ {x y} → ConRel d x y → blockRel (pvOf d) x y
-  blockRel-pvOf-in d {x} {y} rel =
-    pvOf-complete d (θ-trans (θ-refl≈ (eIdx-≈ x)) (θ-trans rel (θ-sym (θ-refl≈ (eIdx-≈ y)))))
-    where
-    θ-refl≈  = reflexive (proj₂ (proj₁ d))
-    θ-sym    = IsEquivalence.sym (is-equivalence (proj₂ (proj₁ d)))
-    θ-trans  = IsEquivalence.trans (is-equivalence (proj₂ (proj₁ d)))
+    blockRel-pvOf-in : ∀ {x y} → ConRel d x y → blockRel (pvOf d) x y
+    blockRel-pvOf-in {x} {y} rel =
+      pvOf-complete d (θ-trans (θ-refl≈ (eIdx-≈ x)) (θ-trans rel (θ-sym (θ-refl≈ (eIdx-≈ y)))))
 ```
 
 --------------------------------------

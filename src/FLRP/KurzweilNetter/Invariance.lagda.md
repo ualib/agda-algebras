@@ -13,14 +13,13 @@ This is the [FLRP.KurzweilNetter.Invariance][] module of the [Agda Universal Alg
 A partition `π` of `Fin n` is **invariant** under a map `t : Fin n → Fin n` when
 `t` carries blocks into blocks: indices in one block of `π` have their `t`-images
 in one block of `π`.  This is the pivotal notion of the Kurzweil–Netter expansion
-step (issue #502): on the algebra side, the congruences of a finite algebra `𝑨`
-indexed by `Fin n` correspond exactly to the partitions invariant under `𝑨`'s
-basic translations ([FLRP.KurzweilNetter.Translations][]); on the group side, the
+step: on the algebra side, the congruences of a finite algebra `𝑨` indexed by
+`Fin n` correspond exactly to the partitions invariant under `𝑨`'s basic
+translations ([FLRP.KurzweilNetter.Translations][]); on the group side, the
 congruences of the expanded coset algebra on `Sⁿ/D` correspond exactly to the
 partition subgroups `K_π` with `π` invariant under the lifted maps
-([FLRP.KurzweilNetter.Expansion][]).  The two sides meet in this definition,
-which is why it lives in its own small module, free of both the algebra and the
-group.
+([FLRP.KurzweilNetter.Expansion][]).  The two sides meet in this definition, which
+is why it lives in its own small module, free of both the algebra and the group.
 
 <!--
 ```agda
@@ -55,7 +54,7 @@ Inv t pv = ∀ {i j} → SameBlock pv i j → SameBlock pv (t i) (t j)
 ```
 
 Invariance is a property of the *kernel*, so it transports along partition
-equality (mutual refinement) — the lemma every round trip below needs when a
+equality (mutual refinement), the lemma every round trip below needs when a
 construction returns a merely `≈ᵖ`-equal presentation of a partition.
 
 ```agda

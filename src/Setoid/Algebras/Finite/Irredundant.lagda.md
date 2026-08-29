@@ -90,9 +90,9 @@ module _ {𝑆 : Signature 𝓞 𝓥} (𝑨 : Algebra {𝑆 = 𝑆} α ρ) where
   record IrredundantEnumeration : Type (α ⊔ ρ) where
     field
       icard      : ℕ
-      ienum      : Fin icard → 𝕌[ 𝑨 ]
-      ienum-sur  : ∀ x → ∃[ i ] ienum i ≈ x                 -- still hits everything
-      ienum-inj  : ∀ {i j} → ienum i ≈ ienum j → i ≡ j      -- but nothing twice
+      ienum[_]   : Fin icard → 𝕌[ 𝑨 ]
+      ienum-sur  : ∀ x → ∃[ i ] ienum[ i ] ≈ x                 -- still hits everything
+      ienum-inj  : ∀ {i j} → ienum[ i ] ≈ ienum[ j ] → i ≡ j      -- but nothing twice
 ```
 
 #### Two private list lemmas
@@ -170,7 +170,7 @@ trichotomy on the positions.
   irredundantEnumeration : IrredundantEnumeration 𝑨
   irredundantEnumeration = record
     { icard      = length dedup
-    ; ienum      = lookup dedup
+    ; ienum[_]   = lookup dedup
     ; ienum-sur  = sur
     ; ienum-inj  = λ {i} {j} → inj {i} {j}
     }
