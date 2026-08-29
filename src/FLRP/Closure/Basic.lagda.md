@@ -26,17 +26,22 @@ Layer D, re-exporting the two proved closure theorems and deriving the rest:
    at the two-element chain (whose Layer-D representation
    `chain₂-Representableᵈ`{.AgdaFunction} is the constructive centerpiece of
    [FLRP.Representable][]);
-+  **lattice duals**. `dual-Representableᵈ`{.AgdaFunction} below, *conditional*
-   on the Kurzweil–Netter entry of the assumptions registry
-   ([FLRP.Assumptions][], Entry 2): the theorem is classically proved but not yet
-   formalized, so it is threaded as an explicit hypothesis, keeping `--safe`
-   honest.  Once the planned formal reproof lands, the hypothesis discharges and
-   the corollary becomes a theorem.
++  **lattice duals**. `dual-Representableᵈ`{.AgdaFunction} below: the
+   Kurzweil–Netter duality theorem, *proved* in
+   [FLRP.KurzweilNetter.Duality][] (issue #502) and consumed here through the
+   simple-group package that parameterizes the proof — a finite nontrivial
+   group together with the Kurzweil-surjectivity family, Entry 4 of
+   [FLRP.Assumptions][].  Entry 2 of the registry (the duality theorem as an
+   *imported* hypothesis) is retired; what remains classical is exactly
+   Entry 4 and the choice of a concrete nonabelian simple instantiation.
 
-The payoff downstream: with Entry 2 in place, the two dual entries of the
-small-lattice census (`L18` and `L22`, duals of the certified `SLR19` and
-`SLR23`) become assumption-conditional corollaries; materializing those
-conditional certificates is issue #485's concern, not this module's.
+The payoff downstream: the two dual entries of the small-lattice census
+(`L18` and `L22`, duals of the certified `SLR19` and `SLR23`) now rest on
+Entry 4 and an instantiation rather than on the full duality theorem;
+materializing those conditional certificates is issue #485's concern, not
+this module's — and remains computationally out of reach in any case, since
+the construction represents an `n`-element algebra's dual on `|S|ⁿ⁻¹ ≥ 60ⁿ⁻¹`
+elements.
 
 <!--
 ```agda
@@ -46,18 +51,26 @@ module FLRP.Closure.Basic where
 
 -- Imports from the Agda Standard Library -----------------------------------
 open import Data.Fin.Patterns                      using  ( 0F ; 1F )
-open import Data.Product                           using  ( _,_ )
+open import Data.Nat.Base                          using  ( ℕ )
+open import Data.Product                           using  ( _,_ ; proj₁ )
+open import Level                                  using  ( 0ℓ )
+open import Relation.Binary                       using  ( Setoid )
 open import Relation.Binary.PropositionalEquality  using  ( refl )
+open import Relation.Nullary                       using  ( ¬_ )
 
 -- Imports from the Agda Universal Algebra Library ------------------------------
 open import Classical.Properties.Lattice              using  ( TopOf ; BottomOf )
 open import Classical.Small.Structures.Lattice        using  ( Lattice )
+open import Classical.Structures.Group.Basic          using  ( Group ; module Group-Op )
 open import Classical.Structures.Lattice.Dual         using  ( dualLattice )
 open import Classical.Structures.Lattice.OrdinalSum   using  ( ordinalSum )
-open import FLRP.Assumptions                          using  ( KurzweilNetterDuality )
+open import FLRP.Assumptions                          using  ( KurzweilSurjectivityAt )
+open import FLRP.KurzweilNetter.Duality               using  ( module KurzweilNetterProof )
 open import FLRP.Problem                              using  ( chain₂-lattice )
 open import FLRP.Representable                        using  ( Representableᵈ
                                                              ; chain₂-Representableᵈ )
+open import Setoid.Algebras.Basic                     using  ( 𝕌[_] ; 𝔻[_] )
+open import Setoid.Algebras.Finite                    using  ( FiniteAlgebra )
 
 open import FLRP.Closure.Product     public
 open import FLRP.Closure.OrdinalSum  public
@@ -101,18 +114,25 @@ adjoinTop-Representableᵈ t r =
   ordinalSum-Representableᵈ t chain₂-bot r chain₂-Representableᵈ
 ```
 
-#### Duality, conditionally
+#### Duality
 
-Closure under dualization, threaded through the registry's Entry 2.  The body
-is instantiation — deliberately so: the mathematical content lives in the
-*named, cited* hypothesis, and every consumer of this corollary displays its
-classical debt in its own type.
+Closure under dualization — the Kurzweil–Netter theorem, rewired from the
+retired Entry 2 to the proof of [FLRP.KurzweilNetter.Duality][].  The
+parameters are the simple-group package of the proof module: a finite group
+with a nontriviality witness and the Kurzweil-surjectivity family (Entry 4 of
+[FLRP.Assumptions][], classically true for `𝒮` finite nonabelian simple).
+Every consumer displays its remaining classical debt — Entry 4 at the chosen
+group — in its own type, exactly as the registry discipline demands.
 
 ```agda
--- The Kurzweil–Netter closure, conditional on the registered assumption.
-dual-Representableᵈ : KurzweilNetterDuality
+-- The Kurzweil–Netter closure, from the simple-group package of the proof.
+dual-Representableᵈ :
+    (𝒮 : Group 0ℓ 0ℓ) (𝑭ₛ : FiniteAlgebra (proj₁ 𝒮)) (s₀ : 𝕌[ proj₁ 𝒮 ])
+  → ¬ (Setoid._≈_ 𝔻[ proj₁ 𝒮 ] s₀ (Group-Op.ε 𝒮))
+  → ((n : ℕ) → KurzweilSurjectivityAt 𝒮 n)
   → (𝑳 : Lattice) → Representableᵈ 𝑳 → Representableᵈ (dualLattice 𝑳)
-dual-Representableᵈ knd 𝑳 = knd 𝑳
+dual-Representableᵈ 𝒮 𝑭ₛ s₀ s₀≉ε surj =
+  KurzweilNetterProof.kurzweilNetterDuality 𝒮 𝑭ₛ s₀ s₀≉ε surj
 ```
 
 --------------------------------------

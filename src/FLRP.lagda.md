@@ -57,13 +57,20 @@ Two standing warnings apply to everything under this namespace.
 +  [FLRP.Assumptions][]: the registry of classical theorems imported as
    explicit hypotheses (never postulates), keeping the tree honest under
    `--safe`; Entry 1 is the congruence-completeness bridge
-   `CongruenceCompleteness`, the single Layer-S→Layer-D assumption of ADR-008,
-   and Entry 2 is Kurzweil–Netter duality, consumed by the WP-5 closure
-   toolkit.
+   `CongruenceCompleteness`, the single Layer-S→Layer-D assumption of ADR-008;
+   Entry 2 (Kurzweil–Netter duality) is retired — proved in
+   [FLRP.KurzweilNetter][] — leaving Entry 4 (Kurzweil surjectivity) as the
+   construction's residual classical content.
 +  [FLRP.Closure][]: the WP-5 closure toolkit: product and ordinal-sum
    closure of `Representableᵈ` (issue #456), the adjoin-a-new-extremum
-   corollaries at `chain₂`, and the duality corollary `dual-Representableᵈ`
-   conditional on the registry's Entry 2.
+   corollaries at `chain₂`, and the duality theorem `dual-Representableᵈ`,
+   rewired from the retired Entry 2 to the Kurzweil–Netter proof.
++  [FLRP.KurzweilNetter][]: the formal Kurzweil–Netter duality proof (issue
+   #502): irredundant carrier enumerations, the basic-translation criterion
+   for congruences, the expansion of the coset algebra on `Sᵐ/D` by lifted
+   translations, and the assembled theorem `kurzweilNetterDuality`,
+   parameterized by exactly the properties of the simple group the argument
+   uses.
 +  [FLRP.LayerBridge][]: the cross-layer bridge: under the congruence-completeness
    assumption, the semantic and decidable congruence posets are order-isomorphic
    (`conDecIso`), whence `Representable 𝑳 ↔ Representableᵈ 𝑳`.
@@ -121,6 +128,7 @@ open import FLRP.Representable  public
 open import FLRP.Assumptions    public
 open import FLRP.Closure        public
 open import FLRP.KurzweilInterval public
+open import FLRP.KurzweilNetter public
 open import FLRP.LayerBridge    public
 open import FLRP.WreathNoGo     public
 open import FLRP.Certificates   public

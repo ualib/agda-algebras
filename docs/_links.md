@@ -32,7 +32,9 @@
 [Setoid.Algebras]: /Setoid/Algebras/
 [Setoid.Algebras.Basic]: /Setoid/Algebras/Basic/
 [Setoid.Algebras.Finite]: /Setoid/Algebras/Finite/
+[Setoid.Algebras.Finite.Irredundant]: /Setoid/Algebras/Finite/Irredundant/
 [Setoid.Algebras.Products]: /Setoid/Algebras/Products/
+[Setoid.Algebras.Products.Finite]: /Setoid/Algebras/Products/Finite/
 [Setoid.Algebras.Reduct]: /Setoid/Algebras/Reduct/
 [Setoid.Categories]: /Setoid/Categories/
 [Setoid.Categories.Adjunction]: /Setoid/Categories/Adjunction/
@@ -386,6 +388,12 @@
 [FLRP.Closure.Product]: /FLRP/Closure/Product/
 [FLRP.Enforceable]: /FLRP/Enforceable/
 [FLRP.KurzweilInterval]: /FLRP/KurzweilInterval/
+[FLRP.KurzweilNetter]: /FLRP/KurzweilNetter/
+[FLRP.KurzweilNetter.Blocks]: /FLRP/KurzweilNetter/Blocks/
+[FLRP.KurzweilNetter.Duality]: /FLRP/KurzweilNetter/Duality/
+[FLRP.KurzweilNetter.Expansion]: /FLRP/KurzweilNetter/Expansion/
+[FLRP.KurzweilNetter.Invariance]: /FLRP/KurzweilNetter/Invariance/
+[FLRP.KurzweilNetter.Translations]: /FLRP/KurzweilNetter/Translations/
 [FLRP.L7EqSix]: /FLRP/L7EqSix/
 [FLRP.LayerBridge]: /FLRP/LayerBridge/
 [FLRP.Parachute]: /FLRP/Parachute/
@@ -420,7 +428,9 @@
 [Setoid/Algebras.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Algebras.lagda.md
 [Setoid/Algebras/Basic.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Algebras/Basic.lagda.md
 [Setoid/Algebras/Finite.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Algebras/Finite.lagda.md
+[Setoid/Algebras/Finite/Irredundant.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Algebras/Finite/Irredundant.lagda.md
 [Setoid/Algebras/Products.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Algebras/Products.lagda.md
+[Setoid/Algebras/Products/Finite.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Algebras/Products/Finite.lagda.md
 [Setoid/Algebras/Reduct.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Algebras/Reduct.lagda.md
 [Setoid/Categories.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Categories.lagda.md
 [Setoid/Categories/Adjunction.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Categories/Adjunction.lagda.md
@@ -774,6 +784,12 @@
 [FLRP/Closure/Product.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/Closure/Product.lagda.md
 [FLRP/Enforceable.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/Enforceable.lagda.md
 [FLRP/KurzweilInterval.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/KurzweilInterval.lagda.md
+[FLRP/KurzweilNetter.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/KurzweilNetter.lagda.md
+[FLRP/KurzweilNetter/Blocks.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/KurzweilNetter/Blocks.lagda.md
+[FLRP/KurzweilNetter/Duality.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/KurzweilNetter/Duality.lagda.md
+[FLRP/KurzweilNetter/Expansion.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/KurzweilNetter/Expansion.lagda.md
+[FLRP/KurzweilNetter/Invariance.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/KurzweilNetter/Invariance.lagda.md
+[FLRP/KurzweilNetter/Translations.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/KurzweilNetter/Translations.lagda.md
 [FLRP/L7EqSix.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/L7EqSix.lagda.md
 [FLRP/LayerBridge.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/LayerBridge.lagda.md
 [FLRP/Parachute.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/Parachute.lagda.md
