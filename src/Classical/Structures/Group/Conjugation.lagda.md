@@ -81,10 +81,7 @@ itself (`conj-action-ε`{.AgdaFunction}, `conj-action-∙`{.AgdaFunction}) by
 `conj⁻¹-conj`{.AgdaFunction} the two inverse laws).
 
 ```agda
-module Conjugate {α ρ : Level} (𝒢 : Group α ρ) where
-  private
-    𝑮 = proj₁ 𝒢
-    G = 𝕌[ 𝑮 ]
+module Conjugate {α ρ : Level} (𝒢@(𝑮 , eqns) : Group α ρ) where
 
   open Setoid 𝔻[ 𝑮 ]  using ( _≈_ )
                       renaming ( refl to ≈refl ; sym to ≈sym ; trans to ≈trans )
@@ -95,12 +92,12 @@ module Conjugate {α ρ : Level} (𝒢 : Group α ρ) where
     using ( ε⁻¹≈ε ; ⁻¹-involutive ; ⁻¹-anti-homo-∙ ; \\-leftDividesʳ )
 
   -- Conjugation of the element x by the element g.
-  conj : G → G → G
+  conj : 𝕌[ 𝑮 ] → 𝕌[ 𝑮 ] → 𝕌[ 𝑮 ]
   conj g x = g ∙ x ∙ g ⁻¹
 
   infixl 30 conj-syntax
 
-  conj-syntax : G → G → G
+  conj-syntax : 𝕌[ 𝑮 ] → 𝕌[ 𝑮 ] → 𝕌[ 𝑮 ]
   conj-syntax = conj
 
   syntax conj-syntax g x = x ^ g
@@ -180,35 +177,35 @@ subgroups to subgroups.
 
 ```agda
   -- The conjugate subset g B g⁻¹.
-  conjugate : G → Pred G ℓ → Pred G (α ⊔ ρ ⊔ ℓ)
+  conjugate : 𝕌[ 𝑮 ] → Pred 𝕌[ 𝑮 ]  ℓ → Pred 𝕌[ 𝑮 ]  (α ⊔ ρ ⊔ ℓ)
   conjugate g B x = ∃[ h ] (h ∈ B × x ≈ h ^ g)
 
   infixl 30 conjugate-syntax
 
-  conjugate-syntax : G → Pred G ℓ → Pred G (α ⊔ ρ ⊔ ℓ)
+  conjugate-syntax : 𝕌[ 𝑮 ] → Pred 𝕌[ 𝑮 ] ℓ → Pred 𝕌[ 𝑮 ] (α ⊔ ρ ⊔ ℓ)
   conjugate-syntax = conjugate
 
   syntax conjugate-syntax g B = [ B ]^ g
 
   -- The conjugate respects the setoid equality, with no hypothesis on B.
-  conjugate-respects : ∀ g (B : Pred G ℓ) → [ B ]^ g Respects _≈_
+  conjugate-respects : ∀ g (B : Pred 𝕌[ 𝑮 ] ℓ) → [ B ]^ g Respects _≈_
   conjugate-respects g B x≈y (h , h∈B , x≈c) = h , h∈B , ≈trans (≈sym x≈y) x≈c
 
   -- Conjugation of an element lands in the conjugate of any subset containing it.
-  mem-conjugate : ∀ g {B : Pred G ℓ} {x} → x ∈ B → x ^ g ∈ [ B ]^ g
+  mem-conjugate : ∀ g {B : Pred 𝕌[ 𝑮 ] ℓ} {x} → x ∈ B → x ^ g ∈ [ B ]^ g
   mem-conjugate g x∈B = _ , x∈B , ≈refl
 
   -- Conjugation of subsets is monotone.
-  conjugate-mono : ∀ g {B : Pred G ℓ} {C : Pred G ℓ'} → B ⊆ C → [ B ]^ g ⊆ [ C ]^ g
+  conjugate-mono : ∀ g {B : Pred 𝕌[ 𝑮 ] ℓ} {C : Pred 𝕌[ 𝑮 ] ℓ'} → B ⊆ C → [ B ]^ g ⊆ [ C ]^ g
   conjugate-mono g B⊆C (h , h∈B , x≈c) = h , B⊆C h∈B , x≈c
 
   -- The conjugate of a subuniverse is a subuniverse.
-  conjugate-isSubuniverse : (g : G) (B : Pred G ℓ)
+  conjugate-isSubuniverse : (g : 𝕌[ 𝑮 ]) (B : Pred 𝕌[ 𝑮 ] ℓ)
     →  B ∈ Subuniverses 𝑮 → [ B ]^ g ∈ Subuniverses 𝑮
   conjugate-isSubuniverse g B B-sub ∙-Op a im =
     h₀ ∙ h₁ , sub-∙-closed 𝒢 B B-sub h₀∈B h₁∈B , eq
     where
-    h₀ h₁ : G
+    h₀ h₁ : 𝕌[ 𝑮 ]
     h₀ = im 0F .proj₁
     h₁ = im 1F .proj₁
 
@@ -235,7 +232,7 @@ subgroups to subgroups.
 
   conjugate-isSubuniverse g B B-sub ⁻¹-Op a im = h ⁻¹ , sub-⁻¹-closed 𝒢 B B-sub h∈B , eq
     where
-    h : G
+    h : 𝕌[ 𝑮 ]
     h = im 0F .proj₁
 
     h∈B : h ∈ B
@@ -258,20 +255,20 @@ lemmas make both directions available in the form each client needs.
 
 ```agda
   -- The normality predicate: closure under conjugation, pointwise.
-  IsNormal : Pred G ℓ → Type (α ⊔ ℓ)
+  IsNormal : Pred 𝕌[ 𝑮 ] ℓ → Type (α ⊔ ℓ)
   IsNormal B = ∀ g {x} → x ∈ B → x ^ g ∈ B
 
   -- For a respecting subset, normality bounds every conjugate above by B ...
-  normal-conjugate-⊆ : {B : Pred G ℓ}
+  normal-conjugate-⊆ : {B : Pred 𝕌[ 𝑮 ] ℓ}
     →  B Respects _≈_ → IsNormal B → ∀ g → [ B ]^ g ⊆ B
   normal-conjugate-⊆ resp nrmB g (h , h∈B , x≈c) = resp (≈sym x≈c) (nrmB g h∈B)
 
   -- ... and below by B (this direction needs no respect hypothesis) ...
-  normal-⊆-conjugate : {B : Pred G ℓ} → IsNormal B → ∀ g → B ⊆ [ B ]^ g
+  normal-⊆-conjugate : {B : Pred 𝕌[ 𝑮 ] ℓ} → IsNormal B → ∀ g → B ⊆ [ B ]^ g
   normal-⊆-conjugate nrmB g {x} x∈B = x ^ (g ⁻¹) , nrmB (g ⁻¹) x∈B , ≈sym (conj-conj⁻¹ g x)
 
   -- ... and conversely, a subset above all of its conjugates is normal.
-  conjugate-⊆-normal : {B : Pred G ℓ} → (∀ g → [ B ]^ g ⊆ B) → IsNormal B
+  conjugate-⊆-normal : {B : Pred 𝕌[ 𝑮 ] ℓ} → (∀ g → [ B ]^ g ⊆ B) → IsNormal B
   conjugate-⊆-normal cnj g x∈B = cnj g (mem-conjugate g x∈B)
 
   -- The trivial subgroup and the full subgroup are normal.

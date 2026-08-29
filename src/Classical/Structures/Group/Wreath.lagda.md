@@ -10,52 +10,53 @@ author: "the agda-algebras development team"
 
 This is the [Classical.Structures.Group.Wreath][] module of the [Agda Universal Algebra Library][].
 
-For a base group `S`, an index set `I`, and a group `G` acting on `I` on the
-right ([Classical.Structures.Group.IndexAction][]), the **permutational wreath
-product** `S ≀ G` is the semidirect product `Sᴵ ⋊ G`: pairs `(f , x)` of a base
-tuple and a top element, multiplied by twisting the right factor's tuple with
-the action of the left factor's top component,
+For a base group `S`, an index set `I`, and a group `G` acting on `I` on the right
+([Classical.Structures.Group.IndexAction][]), the **twisted wreath product**
+`S ≀ G` is the semidirect product `Sᴵ ⋊ G` consisting of pairs `(f , x)`, where
+`f` is a tuple in `Sᴵ` and `x` is an element of `G`.  Such pairs are multiplied by
+"twisting" the right factor's tuple with the action of the left factor's second
+component,
 
-$$(s, x)\,(t, y) \;=\; (s_1\, t_{x(1)}, \dots, s_n\, t_{x(n)},\; x y),$$
+    (s , x) (t , y) =  (s₁ tₓ₁ , … , sₙ tₓₙ , x y).
 
-which is the display in the proof of Lemma `lem:IE-must-have-wreaths` of the
-interval-enforceable-properties note[^1] — coordinate `i` of the product is
-`s i ∙ t (x(i))`.  Associativity of this multiplication is exactly the
-contravariant compatibility law of the right action, and the inverse twists by
-the action of the inverted top component; no other property of the action is
-used, so the construction is parameterized by a bare
-`RightAction`{.AgdaRecord}, with no permutation-group or automorphism-group
-object in sight.
+Coordinate `i` of the product is `s i ∙ t (x i)`.[^1]
 
-The module provides, over `Classical/` (this is reusable group theory, not
-FLRP-specific content):
+**Terminology**.  When refering to an element `(s , x)` of a wreath product,
+we will call the tuple `s` the "first component" or "base tuple"; we will call `x`
+the "second component" or "action element."
 
-+  the wreath product group `≀-Group`{.AgdaFunction} (top-level operator
+Associativity of this multiplication is exactly the contravariant compatibility
+law of the right action, and the inverse twists by the action of the inverted
+second component component; no other property of the action is used, so the
+construction is parameterized by a bare `RightAction`{.AgdaRecord}, with no
+permutation-group or automorphism-group object in sight.
+
+The module provides the following `Classical/` components:
+
++  the wreath product group `≀-Group`{.AgdaFunction} (group-level operator
    `_≀ᵍ_`{.AgdaFunction}), built by `setoidEqsToGroup`{.AgdaFunction} of
-   [Classical.Structures.Group.Basic][] with each group law proved
-   coordinatewise;
-+  the subgroup `D Ḡ` of wreath elements with *diagonal* base tuple
+   [Classical.Structures.Group.Basic][] with each group law proved coordinatewise;
++  the subgroup `D Ḡ` of wreath elements with *diagonal* first component
    (`Diag≀`{.AgdaFunction}), the bottom of the interval `[D Ḡ , S ≀ G]` that
-   Kurzweil's construction inhabits — its membership predicate is the diagonal
-   predicate of [Classical.Structures.Group.Diagonal][] on the base component;
-+  **the core-freeness preservation theorem**
-   (`Diag≀-coreFree`{.AgdaFunction}): if the action is faithful, the index set
-   has at least two points and decidable equality, and the base group is
-   nontrivial with trivial center, then `D Ḡ` is core-free in `S ≀ G`.  This
-   is the technical heart of the note's Lemma 3.3, the step its proof carries
-   out in full rather than citing.
+   Kurzweil's construction inhabits; its membership predicate is the diagonal
+   predicate of [Classical.Structures.Group.Diagonal][] on the first component;
++  **the core-freeness preservation theorem** (`Diag≀-coreFree`{.AgdaFunction}):
+   if the action is faithful, the index set has at least two points and decidable
+   equality, and the base group is nontrivial with trivial center, then `D Ḡ` is
+   core-free in `S ≀ G`.  This is the technical heart of the note's Lemma 3.3, the
+   step its proof carries out in full rather than citing.
 
-**On the hypotheses of the preservation theorem.**  The note's proof picks,
+**On the hypotheses of the preservation theorem**.  The note's proof picks,
 for a moved index `x(1) = j ≠ 1`, a third index `k ∉ {1 , j}`, justifying its
 existence by `n = |G : H| > 2` "since otherwise `H ⊴ G`, contradicting
-`Core_G(H) = 1`" — a justification that fails for `H = 1`: the pair
+`Core_G(H) = 1`"; this justification fails for `H = 1`: the pair
 `(H , G) = (1 , C₂)` is core-free with index `2`.  The formalization below
 closes the gap by *removing the third index altogether*: probing the constraint
-at the two indices `i₀` and `j = x(i₀)` with the tuple that is `a` at `j` and
+at the two indices `i₀` and `j = x i₀` with the tuple that is `a` at `j` and
 identity elsewhere yields `d ∙ a ⁻¹ ≈ a ∙ d` for every `a`, which makes
-conjugation by `d` an inversion, forces the base group abelian
-(`inv-conj→comm`{.AgdaFunction}), and contradicts a nontrivial trivial-center
-base.  One uniform argument covers every index set with two points; the
+conjugation by `d` an inversion, forces the base group to be abelian
+(`inv-conj→comm`{.AgdaFunction}), and precludes a nontrivial base group with a
+trivial-center.  One uniform argument covers every index set with two points; the
 theorem is *false* for a one-point index set, where `D Ḡ` is all of `S ≀ G`.
 See `docs/notes/flrp-rp4-wreath.md` § 4 for the full account.
 
@@ -103,20 +104,19 @@ private variable ι α ρ β σ : Level
 
 #### The construction
 
-`WreathProduct`{.AgdaModule} `𝒮` `A` packages the wreath product of the base
-group `𝒮`{.AgdaBound} by the right action `A`{.AgdaBound} of a top group on an
-index set.
+`WreathProduct`{.AgdaModule}` 𝒮 A` packages the wreath product of the base group
+`𝒮`{.AgdaBound} by the right action `A`{.AgdaBound} of a group on an index set.
 
 ```agda
-module WreathProduct (𝒮 : Group α ρ) {I : Type ι} {𝒢 : Group β σ}
+module WreathProduct (𝒮@(𝑺 , _) : Group α ρ) {I : Type ι} {𝒢@(𝑮 , _) : Group β σ}
   (A : RightAction I 𝒢)
   where
 
-  private
-    𝑺 = proj₁ 𝒮
-    𝑮 = proj₁ 𝒢
-    S = 𝕌[ 𝑺 ]
-    G = 𝕌[ 𝑮 ]
+  -- private
+  --   𝑺 = proj₁ 𝒮
+  --   𝑮 = proj₁ 𝒢
+  --   S = 𝕌[ 𝑺 ]
+  --   G = 𝕌[ 𝑮 ]
 
   open Setoid 𝔻[ 𝑺 ] using ()
     renaming ( _≈_ to _≈₁_ ; refl to refl₁ ; sym to sym₁ ; trans to trans₁
@@ -134,17 +134,17 @@ module WreathProduct (𝒮 : Group α ρ) {I : Type ι} {𝒢 : Group β σ}
   open RightAction A
 ```
 
-The carrier: pairs of a base tuple `I → S` and a top element, with pointwise
-base equality and componentwise pair equality — the isolated-equality locus
+**The carrier**: pairs of a base tuple `I → S` and a group element, with pointwise
+base equality and componentwise pair equality, the isolated-equality locus
 for the Cubical port, as in [Classical.Structures.Group.Product][].
 
 ```agda
   -- Base tuples, and the wreath carrier.
   Base : Type (ι ⊔ α)
-  Base = I → S
+  Base = I → 𝕌[ 𝑺 ]
 
   W : Type (ι ⊔ α ⊔ β)
-  W = Base × G
+  W = Base × 𝕌[ 𝑮 ]
 
   ≀-setoid : Setoid (ι ⊔ α ⊔ β) (ι ⊔ ρ ⊔ σ)
   ≀-setoid = record
@@ -161,50 +161,49 @@ for the Cubical port, as in [Classical.Structures.Group.Product][].
   open Setoid ≀-setoid using () renaming ( _≈_ to _≈ᵂ_ )
 ```
 
-The three operations.  Coordinate `i` of a product is `f i ∙ g (x(i))` — the
-left factor's tuple untwisted, the right factor's tuple read through the
-action of the left top component.  The inverse twists by the action of the
-inverted top component; the two-sided inverse laws below confirm the choice.
+**The three operations**.  Coordinate `i` of a product is `f i ∙ g (x i)`; the
+left factor's tuple `f` is untwisted; the right factor's tuple is twisted by
+permuting its indices by `x`, the left factors group element.  The inverse twists
+by the action of the inverted group element; the two-sided inverse laws below
+confirm that the choice works.
 
 ```agda
-  -- The wreath multiplication (the note's display, coordinatewise).
+  -- The wreath multiplication.
   ≀-mul : W → W → W
   ≀-mul (f , x) (g , y) = (λ i → f i ∙₁ g (act x i)) , x ∙₂ y
 
-  -- The identity: the constant-identity tuple over the top identity.
+  -- The identity: the constant-identity tuple over the group identity.
   ≀-one : W
   ≀-one = (λ _ → ε₁) , ε₂
 
-  -- The inverse: invert the tuple pointwise and untwist by the inverted top.
+  -- The inverse: invert the tuple pointwise and untwist by the inverted group element.
   ≀-inv : W → W
-  ≀-inv (f , x) = (λ i → (f (act (x ⁻¹₂) i)) ⁻¹₁) , x ⁻¹₂
+  ≀-inv (f , x) = (λ i → f (act (x ⁻¹₂) i) ⁻¹₁) , x ⁻¹₂
 ```
 
-Congruence of the operations.  The only nontrivial step is the index of the
-twisted tuple, which moves by `act-cong`{.AgdaField} along the top equality
+**Congruence of the operations**.  The only nontrivial step is the index of the
+twisted tuple, which moves by `act-cong`{.AgdaField} along the group equality
 and re-enters the base equality through `reflexive`.
 
 ```agda
   ≀-mul-cong : ∀ {p q u v} → p ≈ᵂ q → u ≈ᵂ v → ≀-mul p u ≈ᵂ ≀-mul q v
   ≀-mul-cong {p} {q} {u} {v} (bf , tf) (bg , tg) =
-      (λ i → ∙₁-cong (bf i)
-        (trans₁ (bg (act (proj₂ p) i))
-                (reflexive₁ (cong (proj₁ v) (act-cong tf i)))))
+    (λ i → ∙₁-cong (bf i) (trans₁  (bg (act (proj₂ p) i))
+                                   (reflexive₁ (cong (proj₁ v) (act-cong tf i)))))
     , ∙₂-cong tf tg
 
   ≀-inv-cong : ∀ {p q} → p ≈ᵂ q → ≀-inv p ≈ᵂ ≀-inv q
   ≀-inv-cong {p} {q} (bf , tf) =
-      (λ i → ⁻¹₁-cong
-        (trans₁ (bf (act (proj₂ p ⁻¹₂) i))
-                (reflexive₁ (cong (proj₁ q) (act-cong (⁻¹₂-cong tf) i)))))
+    (λ i → ⁻¹₁-cong (trans₁  (bf (act (proj₂ p ⁻¹₂) i))
+                             (reflexive₁ (cong (proj₁ q) (act-cong (⁻¹₂-cong tf) i)))))
     , ⁻¹₂-cong tf
 ```
 
 #### The group laws
 
-Each law is a named lemma proved coordinatewise: the base component reduces to
+Each law is a named lemma proved coordinatewise: the first component reduces to
 the corresponding law of `𝒮` after rewriting the tuple indices along the
-action laws, and the top component is the corresponding law of `𝒢`.
+action laws, and the second component is the corresponding law of `𝒢`.
 Associativity uses compatibility (`act-∙`{.AgdaField}), the left identity uses
 the identity law (`act-ε`{.AgdaField}), and the right inverse uses the derived
 round trip (`act-invˡ`{.AgdaFunction}); the right identity and left inverse
@@ -249,24 +248,25 @@ The wreath product group, assembled by the setoid-level builder.
 
 #### The subgroup `D Ḡ`
 
-The elements whose base tuple is *diagonal* — constant up to `≈` — form a
+The elements whose base tuple is *diagonal* (constant up to `≈`) form a
 subgroup: the twist permutes the coordinates of a constant tuple invisibly, so
-the product of two diagonal-based elements is diagonal-based.  The membership
-predicate is the canonical diagonal predicate of
-[Classical.Structures.Group.Diagonal][] applied to the base component, so the
+the product of two diagonal-based elements is diagonal-based.
+
+The membership predicate is the canonical diagonal predicate of
+[Classical.Structures.Group.Diagonal][] applied to the first component, so the
 library keeps a single notion of "diagonal".  This subgroup is the `D Ḡ` of
-Kurzweil's construction: the top component ranges over all of `G`, the base
+Kurzweil's construction: the second component ranges over all of `G`, the first
 over the diagonal copy of `S`.
 
 ```agda
   open DiagonalSubgroup I 𝒮 using ( Diag )
 
-  -- Membership: the base tuple is diagonal (the top component is unconstrained).
+  -- Membership: the first component is diagonal (the second component is unconstrained).
   Diag≀ : Pred W (ι ⊔ ρ)
   Diag≀ w = proj₁ w ∈ Diag
 
   -- (∙-c is applied through a wrapper binding both pairs explicitly: the
-  -- closure's type never mentions the right factor's top component, so an
+  -- closure's type never mentions the right factor's second component, so an
   -- implicit q would leave that component an unsolved metavariable.)
   Diag≀-isSubgroup : IsSubgroup ≀-Group Diag≀
   Diag≀-isSubgroup =
@@ -311,7 +311,7 @@ single-index probes as the block-indicator tuples of
   module CoreFreeness
     (_≟_         : (i j : I) → Dec (i ≡ j))
     (another     : ∀ i → Σ[ j ∈ I ] ¬ j ≡ i)
-    (s₀          : S) (s₀≉ε : ¬ s₀ ≈₁ ε₁)
+    (s₀          : 𝕌[ 𝑺 ]) (s₀≉ε : ¬ s₀ ≈₁ ε₁)
     (centerless  : ∀ d → (∀ t → t ∙₁ d ≈₁ d ∙₁ t) → d ≈₁ ε₁)
     (faithful    : Faithful)
     where
@@ -323,7 +323,7 @@ single-index probes as the block-indicator tuples of
       renaming ( ε⁻¹≈ε to ε⁻¹≈ε₁ ; ⁻¹-anti-homo-∙ to ⁻¹-anti-homo-∙₁ )
     open GroupProperties ⟨ 𝒢 ⟩ᵍᵖ using ()
       renaming ( ε⁻¹≈ε to ε⁻¹≈ε₂ )
-    open Conjugate 𝒮 using ()
+    open Conjugate 𝒮 using ( conj-syntax )
       renaming ( conj to conj₁ ; conj-cong to conj₁-cong
                ; conj-∙-hom to conj₁-∙-hom )
     open SetoidReasoning 𝔻[ 𝑺 ]
@@ -333,7 +333,7 @@ The probe tuples: value `a` at the index `j`, identity elsewhere.
 
 ```agda
     -- The tuple supported at j with value a.
-    probe : I → S → I → S
+    probe : I → 𝕌[ 𝑺 ] → I → 𝕌[ 𝑺 ]
     probe j a k = if does (k ≟ j) then a else ε₁
 
     -- The probe takes the value a at its support.
@@ -353,7 +353,7 @@ reads as the note's constancy constraint on the conjugated coordinates.
 
 ```agda
     -- Coordinate i of the conjugate of (f , x) by (t , ε).
-    conj-coord : ∀ (t f : Base) (x : G) (i : I)
+    conj-coord : ∀ (t f : Base) (x : 𝕌[ 𝑮 ]) (i : I)
       → proj₁ (conj (t , ε₂) (f , x)) i ≈₁ (t i ∙₁ f i) ∙₁ (t (act x i)) ⁻¹₁
     conj-coord t f x i =
       ∙₁-cong  (∙₁-cong refl₁ (reflexive₁ (cong f (act-ε i))))
@@ -365,26 +365,25 @@ reads as the note's constancy constraint on the conjugated coordinates.
                         (trans (act-cong ε⁻¹≈ε₂ (act x i)) (act-ε (act x i)))
 
     -- The core constraint: the conjugate's coordinates are pairwise equal.
-    constraint : ∀ {f x} → (f , x) ∈ proj₁ core → (t : Base) → ∀ i j
-      →  (t i ∙₁ f i) ∙₁ (t (act x i)) ⁻¹₁
-      ≈₁ (t j ∙₁ f j) ∙₁ (t (act x j)) ⁻¹₁
+    constraint : ∀ {f x} → (f , x) ∈ core .proj₁ → (t : Base) → ∀ i j
+      →  (t i ∙₁ f i) ∙₁ t (act x i) ⁻¹₁
+      ≈₁ (t j ∙₁ f j) ∙₁ t (act x j) ⁻¹₁
     constraint {f} {x} w∈core t i j =
       trans₁  (sym₁ (conj-coord t f x i))
               (trans₁ (core-mem-conj w∈core (t , ε₂) i j) (conj-coord t f x j))
 ```
 
-**The moved-index case.**  Suppose the top component `x` moves some index:
-`x(i₀) = j ≠ i₀`.  Probing the constraint at the pair `(i₀ , j)` with the
-tuple supported at `j` with value `a` gives, writing `d = f i₀`:
-`d ∙ a ⁻¹ ≈ a ∙ d` — the probe vanishes at `i₀` (which is off the support),
-and at the twisted index `x(j)`, which avoids the support because `x` is
-injective and already sends `i₀` to `j`.  Since `a` is arbitrary, conjugation
-by `d` is an inversion, which forces any two elements of the base group to
-commute (`inv-conj→comm`{.AgdaFunction} below).
+**The moved-index case**.  Suppose the group component `x` moves some index:
+`x i₀ = j ≠ i₀`.  Probing the constraint at the pair `(i₀ , j)` with the tuple
+supported at `j` with value `a` gives, writing `d = f i₀`: `d ∙ a ⁻¹ ≈ a ∙ d`; the
+probe vanishes at `i₀` (which is off the support), and at the twisted index `x j`,
+which avoids the support because `x` is injective and already sends `i₀` to `j`.
+Since `a` is arbitrary, conjugation by `d` is an inversion, which forces any two
+elements of the base group to commute (`inv-conj→comm`{.AgdaFunction} below).
 
 This is where the formalization diverges from the note's proof: no third
 index `k ∉ {i₀ , j}` is needed, so no lower bound on the index set beyond two
-points, and the note's gap at index two closes.  See the module header.
+points, and the note's gap at index two closes.
 
 ```agda
     -- A moved index turns the constraint into the inversion relation.
@@ -392,20 +391,14 @@ points, and the note's gap at index two closes.  See the module header.
       → ∀ {i₀} → ¬ act x i₀ ≡ i₀
       → ∀ a → (f i₀) ∙₁ a ⁻¹₁ ≈₁ a ∙₁ (f i₀)
     moved→inv-conj {f} {x} w∈core {i₀} moved a = begin
-      f i₀ ∙₁ a ⁻¹₁
-        ≈˘⟨ ∙₁-cong (idˡ₁ (f i₀)) (⁻¹₁-cong (reflexive₁ (probe-at j a))) ⟩
-      (ε₁ ∙₁ f i₀) ∙₁ (t j) ⁻¹₁
-        ≈˘⟨ ∙₁-cong (∙₁-cong (reflexive₁ (probe-off j a i₀≢j)) refl₁) refl₁ ⟩
-      (t i₀ ∙₁ f i₀) ∙₁ (t j) ⁻¹₁
-        ≈⟨ constraint w∈core t i₀ j ⟩
-      (t j ∙₁ f j) ∙₁ (t (act x j)) ⁻¹₁
-        ≈⟨ ∙₁-cong  (∙₁-cong (reflexive₁ (probe-at j a)) (df j i₀))
-                    (⁻¹₁-cong (reflexive₁ (probe-off j a xj≢j))) ⟩
-      (a ∙₁ f i₀) ∙₁ ε₁ ⁻¹₁
-        ≈⟨ ∙₁-cong refl₁ ε⁻¹≈ε₁ ⟩
-      (a ∙₁ f i₀) ∙₁ ε₁
-        ≈⟨ idʳ₁ (a ∙₁ f i₀) ⟩
-      a ∙₁ f i₀ ∎
+      f i₀ ∙₁ a ⁻¹₁                  ≈˘⟨ ∙₁-cong (idˡ₁ (f i₀)) (⁻¹₁-cong (reflexive₁ (probe-at j a))) ⟩
+      ε₁ ∙₁ f i₀ ∙₁ t j ⁻¹₁          ≈˘⟨ ∙₁-cong (∙₁-cong (reflexive₁ (probe-off j a i₀≢j)) refl₁) refl₁ ⟩
+      t i₀ ∙₁ f i₀ ∙₁ t j ⁻¹₁        ≈⟨ constraint w∈core t i₀ j ⟩
+      t j ∙₁ f j ∙₁ t (act x j) ⁻¹₁  ≈⟨ ∙₁-cong  (∙₁-cong (reflexive₁ (probe-at j a)) (df j i₀))
+                                                   (⁻¹₁-cong (reflexive₁ (probe-off j a xj≢j))) ⟩
+      a ∙₁ f i₀ ∙₁ ε₁ ⁻¹₁            ≈⟨ ∙₁-cong refl₁ ε⁻¹≈ε₁ ⟩
+      a ∙₁ f i₀ ∙₁ ε₁                ≈⟨ idʳ₁ (a ∙₁ f i₀) ⟩
+      a ∙₁ f i₀                      ∎
       where
       j : I
       j = act x i₀
@@ -427,39 +420,44 @@ points, and the note's gap at index two closes.  See the module header.
 ```
 
 The inversion relation collapses the base group: if conjugation by some `d`
-inverts every element, then `a ↦ d ∙ a ⁻¹ ∙ d ⁻¹` is the identity, and
-reading a product `p ∙ q` through it reverses the factors.
+inverts every element, then `a ↦ d ∙ a ⁻¹ ∙ d ⁻¹` is the identity, and reading a
+product `p ∙ q` through it reverses the factors.
 
 ```agda
     -- Conjugation by d inverting every element forces commutativity.
     inv-conj→comm : ∀ {d} → (∀ a → d ∙₁ a ⁻¹₁ ≈₁ a ∙₁ d) → ∀ p q → p ∙₁ q ≈₁ q ∙₁ p
     inv-conj→comm {d} inv p q = begin
-      p ∙₁ q                                 ≈⟨ ∙₁-cong (fix p) (fix q) ⟩
-      conj₁ d (p ⁻¹₁) ∙₁ conj₁ d (q ⁻¹₁)     ≈˘⟨ conj₁-∙-hom d (p ⁻¹₁) (q ⁻¹₁) ⟩
-      conj₁ d (p ⁻¹₁ ∙₁ q ⁻¹₁)               ≈˘⟨ conj₁-cong d (⁻¹-anti-homo-∙₁ q p) ⟩
-      conj₁ d ((q ∙₁ p) ⁻¹₁)                 ≈˘⟨ fix (q ∙₁ p) ⟩
-      q ∙₁ p                                 ∎
+      p ∙₁ q                    ≈⟨ ∙₁-cong (fix p) (fix q) ⟩
+      (p ⁻¹₁)^ d ∙₁ (q ⁻¹₁)^ d  ≈˘⟨ conj₁-∙-hom d (p ⁻¹₁) (q ⁻¹₁) ⟩
+      (p ⁻¹₁ ∙₁ q ⁻¹₁)^ d       ≈˘⟨ conj₁-cong d (⁻¹-anti-homo-∙₁ q p) ⟩
+      ((q ∙₁ p) ⁻¹₁)^ d         ≈˘⟨ fix (q ∙₁ p) ⟩
+      q ∙₁ p                    ∎
       where
       -- Conjugating the inverse by d restores the element.
-      fix : ∀ a → a ≈₁ conj₁ d (a ⁻¹₁)
+      fix : ∀ a → a ≈₁ (a ⁻¹₁)^ d
       fix a = sym₁ (begin
-        (d ∙₁ a ⁻¹₁) ∙₁ d ⁻¹₁    ≈⟨ ∙₁-cong (inv a) refl₁ ⟩
-        (a ∙₁ d) ∙₁ d ⁻¹₁        ≈⟨ assoc₁ a d (d ⁻¹₁) ⟩
-        a ∙₁ (d ∙₁ d ⁻¹₁)        ≈⟨ ∙₁-cong refl₁ (invʳ₁ d) ⟩
-        a ∙₁ ε₁                  ≈⟨ idʳ₁ a ⟩
-        a                        ∎)
+        (a ⁻¹₁)^ d         ≈⟨ ∙₁-cong (inv a) refl₁ ⟩
+        a ∙₁ d ∙₁ d ⁻¹₁    ≈⟨ assoc₁ a d (d ⁻¹₁) ⟩
+        a ∙₁ (d ∙₁ d ⁻¹₁)  ≈⟨ ∙₁-cong refl₁ (invʳ₁ d) ⟩
+        a ∙₁ ε₁            ≈⟨ idʳ₁ a ⟩
+        a                  ∎)
 ```
 
-**Assembling the theorem.**  Step 1: the top component of a core element
-fixes every index — the decision on `x(i) ≟ i` is passed to a named lemma,
-and the moved branch is killed by the inversion relation, commutativity, and
-the nontrivial centerless base.  Step 2: faithfulness collapses the top
-component to the identity.  Step 3: probing at a fixed index `i` (with a
-companion index supplied by the two-point hypothesis) shows the diagonal
-value is central, hence the identity.
+**Assembling the theorem**.
+
++  **Step 1**: the group component of a core element fixes every index; the
+   decision on `x i ≟ i` is passed to a named lemma, and the moved branch is
+   killed by the inversion relation, commutativity, and the nontrivial centerless
+   base.
+
++  **Step 2**: faithfulness collapses the group component to the identity.
+
++  **Step 3**: probing at a fixed index `i` (with a companion index supplied by
+   the two-point hypothesis) shows the diagonal value is central, hence the
+   identity.
 
 ```agda
-    -- Step 1: the top component of a core element fixes every index.
+    -- Step 1: the group component of a core element fixes every index.
     core-fixes : ∀ {f x} → (f , x) ∈ proj₁ core → ∀ i → act x i ≡ i
     core-fixes {f} {x} w∈core i = settle (act x i ≟ i)
       where
@@ -471,52 +469,47 @@ value is central, hence the identity.
         commutes : ∀ t → t ∙₁ s₀ ≈₁ s₀ ∙₁ t
         commutes t = inv-conj→comm (moved→inv-conj w∈core moved) t s₀
 
-    -- Step 2: the top component of a core element is the identity.
-    core-top : ∀ {f x} → (f , x) ∈ proj₁ core → x ≈₂ ε₂
-    core-top w∈core = faithful (core-fixes w∈core)
+    -- Step 2: the group component of a core element is the identity.
+    core-group : ∀ {f x} → (f , x) ∈ proj₁ core → x ≈₂ ε₂
+    core-group w∈core = faithful (core-fixes w∈core)
 ```
 
-For step 3, one more small commutation lemma: an element whose conjugate by
-`a` is itself commutes with `a`.
+For step 3, we need one more small commutation lemma: an element whose conjugate
+by `a` is itself commutes with `a`.
 
 ```agda
-    -- A fixed conjugate commutes: (a ∙ b) ∙ a ⁻¹ ≈ b gives a ∙ b ≈ b ∙ a.
-    conj-fix→comm : ∀ {a b} → (a ∙₁ b) ∙₁ a ⁻¹₁ ≈₁ b → a ∙₁ b ≈₁ b ∙₁ a
+    -- A fixed conjugate commutes: b ^ a ≈ b gives a ∙ b ≈ b ∙ a.
+    conj-fix→comm : ∀ {a b} → b ^ a ≈₁ b → a ∙₁ b ≈₁ b ∙₁ a
     conj-fix→comm {a} {b} h = begin
-      a ∙₁ b                      ≈˘⟨ idʳ₁ (a ∙₁ b) ⟩
-      (a ∙₁ b) ∙₁ ε₁              ≈˘⟨ ∙₁-cong refl₁ (invˡ₁ a) ⟩
-      (a ∙₁ b) ∙₁ (a ⁻¹₁ ∙₁ a)    ≈˘⟨ assoc₁ (a ∙₁ b) (a ⁻¹₁) a ⟩
-      ((a ∙₁ b) ∙₁ a ⁻¹₁) ∙₁ a    ≈⟨ ∙₁-cong h refl₁ ⟩
-      b ∙₁ a                      ∎
+      a ∙₁ b                  ≈˘⟨ idʳ₁ (a ∙₁ b) ⟩
+      a ∙₁ b ∙₁ ε₁            ≈˘⟨ ∙₁-cong refl₁ (invˡ₁ a) ⟩
+      a ∙₁ b ∙₁ (a ⁻¹₁ ∙₁ a)  ≈˘⟨ assoc₁ (a ∙₁ b) (a ⁻¹₁) a ⟩
+      b ^ a ∙₁ a              ≈⟨ ∙₁-cong h refl₁ ⟩
+      b ∙₁ a                  ∎
 
     -- Step 3: the base tuple of a core element is the identity tuple.
-    core-base : ∀ {f x} → (f , x) ∈ proj₁ core → ∀ i → f i ≈₁ ε₁
+    core-base : ∀ {f x} → (f , x) ∈ core .proj₁ → ∀ i → f i ≈₁ ε₁
     core-base {f} {x} w∈core i = centerless (f i) commutes
       where
       i' : I
-      i' = proj₁ (another i)
+      i' = another i .proj₁
 
       i'≢i : ¬ i' ≡ i
-      i'≢i = proj₂ (another i)
+      i'≢i = another i .proj₂
 
       df : ∀ p q → f p ≈₁ f q
       df = core-⊆ w∈core
 
       -- Probing at i with value a: the conjugate of f i by a is f i again.
-      fixed : ∀ a → (a ∙₁ f i) ∙₁ a ⁻¹₁ ≈₁ f i
+      fixed : ∀ a → f i ^ a ≈₁ f i
       fixed a = begin
-        (a ∙₁ f i) ∙₁ a ⁻¹₁
-          ≈˘⟨ ∙₁-cong  (∙₁-cong (reflexive₁ t-at-i) refl₁)
-                       (⁻¹₁-cong (reflexive₁ t-at-xi)) ⟩
-        (t i ∙₁ f i) ∙₁ (t (act x i)) ⁻¹₁
-          ≈⟨ constraint w∈core t i i' ⟩
-        (t i' ∙₁ f i') ∙₁ (t (act x i')) ⁻¹₁
-          ≈⟨ ∙₁-cong  (∙₁-cong (reflexive₁ t-at-i') (df i' i))
-                      (⁻¹₁-cong (reflexive₁ t-at-xi')) ⟩
-        (ε₁ ∙₁ f i) ∙₁ ε₁ ⁻¹₁
-          ≈⟨ ∙₁-cong (idˡ₁ (f i)) ε⁻¹≈ε₁ ⟩
-        f i ∙₁ ε₁
-          ≈⟨ idʳ₁ (f i) ⟩
+        f i ^ a                             ≈˘⟨ ∙₁-cong  (∙₁-cong (reflexive₁ t-at-i) refl₁)
+                                                         (⁻¹₁-cong (reflexive₁ t-at-xi)) ⟩
+        (t i ∙₁ f i) ∙₁ t (act x i) ⁻¹₁     ≈⟨ constraint w∈core t i i' ⟩
+        (t i' ∙₁ f i') ∙₁ t (act x i') ⁻¹₁  ≈⟨ ∙₁-cong  (∙₁-cong (reflexive₁ t-at-i') (df i' i))
+                                                                 (⁻¹₁-cong (reflexive₁ t-at-xi')) ⟩
+        f i ^ ε₁                            ≈⟨ ∙₁-cong (idˡ₁ (f i)) ε⁻¹≈ε₁ ⟩
+        f i ∙₁ ε₁                           ≈⟨ idʳ₁ (f i) ⟩
         f i ∎
         where
         t : Base
@@ -538,21 +531,20 @@ For step 3, one more small commutation lemma: an element whose conjugate by
       commutes a = conj-fix→comm (fixed a)
 ```
 
-The theorem: the core of `D Ḡ` is contained in the identity class of the
-wreath product — the exact shape `CoreFree`{.AgdaFunction} of
-[FLRP.Enforceable][] unfolds to, so FLRP consumers apply it directly.
+**The theorem**.  The core of `D Ḡ` is contained in the identity class of the
+wreath product, which is the exact shape into which `CoreFree`{.AgdaFunction} of
+[FLRP.Enforceable][] unfolds, so FLRP consumers apply it directly.
 
 ```agda
     -- D Ḡ is core-free in S ≀ G.
     Diag≀-coreFree : proj₁ core ⊆ proj₁ (trivialSubgroup ≀-Group)
-    Diag≀-coreFree w∈core = core-base w∈core , core-top w∈core
+    Diag≀-coreFree w∈core = core-base w∈core , core-group w∈core
 ```
 
 #### The wreath operator
 
-The top-level form, for use at call sites: `𝒮 ≀ᵍ A` is the wreath product of
-the base group `𝒮` by the right action `A` (whose index set and top group
-stay implicit).
+The group-level form, for use at call sites: `𝒮 ≀ᵍ A` is the wreath product of the
+base group `𝒮` by the right action `A` (whose index set and group group stay implicit).
 
 ```agda
 infixl 8 _≀ᵍ_

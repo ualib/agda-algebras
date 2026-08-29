@@ -51,7 +51,7 @@ open import Agda.Primitive using () renaming ( Set to Type )
 open import Data.Fin.Base                          using ( Fin )
 open import Data.Fin.Patterns                      using ( 0F ; 1F ; 2F )
 open import Data.Product                           using ( Σ-syntax ; _×_ ; _,_ ; proj₁ ; proj₂ )
-open import Function                               using ( Func )
+open import Function                               using ( Func ; id )
 open import Level                                  using ( Level ; _⊔_ ; suc )
 open import Relation.Binary                        using ( Setoid )
 open import Relation.Binary.PropositionalEquality  using ( _≡_ ; refl ; cong ; cong₂ ; setoid )
@@ -90,22 +90,22 @@ private variable α ρ : Level
 
 ```agda
 infix 4 _⊨ᵍᵖ_
-_⊨ᵍᵖ_ : (𝑨 : Algebra {𝑆 = Sig-Group} α ρ) (ℰ : Eq-Group → Term (Fin 3) × Term (Fin 3)) → Type (α ⊔ ρ)
+_⊨ᵍᵖ_ :  (𝑨 : Algebra {𝑆 = Sig-Group} α ρ)
+        (ℰ : Eq-Group → Term (Fin 3) × Term (Fin 3)) → Type (α ⊔ ρ)
 𝑨 ⊨ᵍᵖ ℰ = ∀ i → 𝑨 ⊧ proj₁ (ℰ i) ≈ proj₂ (ℰ i)
 ```
 
 #### The type of groups
 
-`Group α ρ`{.AgdaFunction} pairs an algebra over `Sig-Group`{.AgdaFunction} with a
-proof of `Th-Group`{.AgdaFunction}.  Like a monoid it needs its own signature rather
-than inheriting one, and for the same reason twice over: the identity is a nullary
+`Group`{.AgdaFunction}` α ρ` pairs an algebra over `Sig-Group`{.AgdaFunction} with a
+proof of `Th-Group`{.AgdaFunction}.  Its own signature since the identity is a nullary
 operation and the inverse is a unary one, and neither can be added to a weaker
 signature by equations alone.  The five equations of `Th-Group`{.AgdaFunction} are
 associativity, the two unit laws and the two inverse laws.
 
 ```agda
 Group : (α ρ : Level) → Type (suc α ⊔ suc ρ)
-Group α ρ = Σ[ 𝑨 ∈ Algebra {𝑆 = Sig-Group} α ρ ] 𝑨 ⊨ᵍᵖ Th-Group
+Group α ρ = Σ[ 𝑨 ∈ Algebra α ρ ] 𝑨 ⊨ᵍᵖ Th-Group
 ```
 
 #### The reduct to monoids
@@ -121,8 +121,8 @@ mo-incl ε-Opᵐᵒ = ε-Op
 
 mo-κ : (o : OperationSymbolsOf Sig-Monoid)
   → ArityOf Sig-Group (mo-incl o) → ArityOf Sig-Monoid o
-mo-κ ∙-Opᵐᵒ = λ z → z
-mo-κ ε-Opᵐᵒ = λ z → z
+mo-κ ∙-Opᵐᵒ = id
+mo-κ ε-Opᵐᵒ = id
 
 group→monoidAlg : Group α ρ → Algebra {𝑆 = Sig-Monoid} α ρ
 group→monoidAlg 𝑮 = reductBy mo-incl mo-κ (𝑮 .proj₁)
@@ -176,7 +176,7 @@ module _ ((𝑮 , equations) : Group α ρ) where
 
 #### The `Group-Op` module
 
-`Group-Op 𝑮`{.AgdaModule} is the named-accessor module for a fixed group, opened
+`Group-Op`{.AgdaModule}` 𝑮` is the named-accessor module for a fixed group, opened
 at a use site so that the laws read in ordinary notation.  It rebuilds the
 interface from `Sig-Group`{.AgdaFunction} directly rather than inheriting it,
 because the forgetful to monoids is a reduct along a signature morphism and so
@@ -184,18 +184,18 @@ carries nothing down.
 
 The three operations come first, curried out of their interpretations:
 `_∙_`{.AgdaFunction}, `ε`{.AgdaFunction} and `_⁻¹`{.AgdaFunction}.
-`equations`{.AgdaFunction} is the satisfaction witness projected out of the Σ.  Then
-come the two congruences, `∙-cong`{.AgdaFunction} and `⁻¹-cong`{.AgdaFunction}, and
-the three containment lemmas `interp-node-∙`{.AgdaFunction},
-`interp-node-ε`{.AgdaFunction} and `interp-node-⁻¹`{.AgdaFunction}, one per
-operation symbol, each crossing the gap between a law stated about interpreted terms
-and the same law in curried form.
+`equations`{.AgdaFunction} is the satisfaction witness projected out of the Σ.
+Then come the two congruences, `∙-cong`{.AgdaFunction} and
+`⁻¹-cong`{.AgdaFunction}, and the three containment lemmas
+`interp-node-∙`{.AgdaFunction}, `interp-node-ε`{.AgdaFunction} and
+`interp-node-⁻¹`{.AgdaFunction}, one per operation symbol, each crossing the gap
+between a law stated about interpreted terms and the same law in curried form.
 
 The five laws follow: `assoc-law`{.AgdaFunction}, `idˡ-law`{.AgdaFunction},
-`idʳ-law`{.AgdaFunction}, `invˡ-law`{.AgdaFunction} and
-`invʳ-law`{.AgdaFunction}.  Each is its `equations` step wrapped in the containment
-lemmas for the symbols it mentions, so the inverse laws are the longest of the five:
-they mention all three operations.
+`idʳ-law`{.AgdaFunction}, `invˡ-law`{.AgdaFunction} and `invʳ-law`{.AgdaFunction}.
+Each is its `equations` step wrapped in the containment lemmas for the symbols it
+mentions, so the inverse laws are the longest of the five: they mention all three
+operations.
 
 ```agda
 module Group-Op {α ρ : Level} ((𝑮 , equations) : Group α ρ) where
@@ -422,13 +422,13 @@ module _ (𝐷 : Setoid α ρ) where
     interp-congruence ⁻¹-Op  eq = i-cong (eq 0F)
 
   setoidEqsToGroup : (_·_ : D → D → D) (e : D) (i : D → D)
-    → (·-cong     : ∀ {x y u v} → x ≈ y → u ≈ v → (x · u) ≈ (y · v))
+    → (·-cong     : ∀ {x y u v} → x ≈ y → u ≈ v → x · u ≈ y · v)
     → (i-cong     : ∀ {x y} → x ≈ y → i x ≈ i y)
-    → (·-assoc-≈  : ∀ a b c → ((a · b) · c) ≈ (a · (b · c)))
-    → (·-idˡ-≈    : ∀ a → (e · a) ≈ a)
-    → (·-idʳ-≈    : ∀ a → (a · e) ≈ a)
-    → (·-invˡ-≈   : ∀ a → (i a · a) ≈ e)
-    → (·-invʳ-≈   : ∀ a → (a · i a) ≈ e)
+    → (·-assoc-≈  : ∀ a b c → (a · b) · c ≈ a · (b · c))
+    → (·-idˡ-≈    : ∀ a → e · a ≈ a)
+    → (·-idʳ-≈    : ∀ a → a · e ≈ a)
+    → (·-invˡ-≈   : ∀ a → i a · a ≈ e)
+    → (·-invʳ-≈   : ∀ a → a · i a ≈ e)
     → Group α ρ
   setoidEqsToGroup _·_ e i ·-cong i-cong ·-assoc-≈ ·-idˡ-≈ ·-idʳ-≈ ·-invˡ-≈ ·-invʳ-≈ =
     setoidOpsToBareGroup _·_ e i ·-cong i-cong , proof

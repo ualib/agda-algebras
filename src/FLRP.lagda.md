@@ -32,15 +32,15 @@ Two standing warnings apply to everything under this namespace.
 
 **Current submodules**.
 
-+  [FLRP.Problem][] — the representability predicate `Representable`, the
++  [FLRP.Problem][]: the representability predicate `Representable`, the
    formal statement of the problem, the first worked instance (the one-element
    chain), and the constructive no-go theorem for the two-element chain.
-+  [FLRP.Enforceable][] — group representability of a lattice, the
++  [FLRP.Enforceable][]: group representability of a lattice, the
    interval-enforceability classification (IE, cf-IE, min-IE), the fattening
    isomorphism `[H × K, G × K] ≅ [H, G]`, the no-contradictory-IE theorem
    (the research note's Lemma 3.2), and hypothesis-parameterized statements of
    Lemma 3.1 and the parachute meta-theorem.
-+  [FLRP.Bridge][] — the easy (constructive) direction of the Pálfy–Pudlák
++  [FLRP.Bridge][]: the easy (constructive) direction of the Pálfy–Pudlák
    correspondence, at both layers: the Layer-S order isomorphism
    `Con (𝒢 ↷ 𝒢/H) ≅ [H, 𝒢]` between the semantic congruence lattice of the
    transitive G-set of cosets and the respecting upper interval in the subgroup
@@ -49,38 +49,38 @@ Two standing warnings apply to everything under this namespace.
    assumption, together with the representability corollaries — in particular
    `GroupRepresentable→Representableᵈ`: every group-representable lattice is
    decidably representable (issue #454).
-+  [FLRP.Representable][] — the Layer-D reformulation of the problem:
++  [FLRP.Representable][]: the Layer-D reformulation of the problem:
    decidable representability `Representableᵈ`, the statement
    `FLRP-Statementᵈ`, and the constructive two-element-chain representation
    `chain₂-Representableᵈ` (the object the no-go theorem forbids at Layer S,
    attained here with no postulate).
-+  [FLRP.Assumptions][] — the registry of classical theorems imported as
++  [FLRP.Assumptions][]: the registry of classical theorems imported as
    explicit hypotheses (never postulates), keeping the tree honest under
    `--safe`; Entry 1 is the congruence-completeness bridge
    `CongruenceCompleteness`, the single Layer-S→Layer-D assumption of ADR-008,
    and Entry 2 is Kurzweil–Netter duality, consumed by the WP-5 closure
    toolkit.
-+  [FLRP.Closure][] — the WP-5 closure toolkit: product and ordinal-sum
++  [FLRP.Closure][]: the WP-5 closure toolkit: product and ordinal-sum
    closure of `Representableᵈ` (issue #456), the adjoin-a-new-extremum
    corollaries at `chain₂`, and the duality corollary `dual-Representableᵈ`
    conditional on the registry's Entry 2.
-+  [FLRP.LayerBridge][] — the cross-layer bridge: under the congruence-completeness
++  [FLRP.LayerBridge][]: the cross-layer bridge: under the congruence-completeness
    assumption, the semantic and decidable congruence posets are order-isomorphic
    (`conDecIso`), whence `Representable 𝑳 ↔ Representableᵈ 𝑳`.
-+  [FLRP.Certificates][] — machine-checked representation certificates: the
++  [FLRP.Certificates][]: machine-checked representation certificates: the
    assembly turning a checked whole-lattice certificate (Freese traces and
    pointer tables, verified search-free by the
    `Setoid.Congruences.Certificates` checkers) into a `Representableᵈ` witness
    for the target lattice, so external searches (GAP, UACalc, SAT) enter the
    corpus only through the checker.
-+  [FLRP.L7EqSix][] — the explicit Pudlák–Tůma witness for the distinguished
++  [FLRP.L7EqSix][]: the explicit Pudlák–Tůma witness for the distinguished
    open instance: seven partitions of a six-element set (the minimum possible)
    forming a sublattice of `Eq(6)` isomorphic to `L7`, with meets, join upper
    bounds, injectivity, and normal forms decided over the finite carrier and
    join least-ness proved against arbitrary equivalence relations via bounded
    alternating chains (issue #484; session note `docs/notes/flrp-l7-eq6.md`).
 
-+  [FLRP.WreathNoGo][] — the RP-4 **wreath no-go**: the note's Lemma 3.3 by
++  [FLRP.WreathNoGo][]: the RP-4 **wreath no-go**: the note's Lemma 3.3 by
    the double Kurzweil construction (a property cf-IE by a group-representable
    lattice has wreath products `S ≀ Ū` over every admissible base), with the
    core-freeness preservation proved in [Classical.Structures.Group.Wreath][]
@@ -90,7 +90,7 @@ Two standing warnings apply to everything under this namespace.
    question, reduced formally to statement (C).  Consumes Entry 5 of the
    assumptions registry; design note `docs/notes/flrp-rp4-wreath.md`.
 
-+  [FLRP.Reductions][] — the RP-2 **enforcement catalog**: the literature's
++  [FLRP.Reductions][]: the RP-2 **enforcement catalog**: the literature's
    "an interval of this shape forces a group of this kind" theorems, each recast
    as a precise (cf-/min-)IE statement, with the vacuity discipline tracked
    entry by entry.  Entries 1–3 (the note's classes `𝒢₂`, `𝒢₃`, `𝒢₄`) are
