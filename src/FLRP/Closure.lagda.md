@@ -26,6 +26,7 @@ between the summands), not as an exported theorem.
 module FLRP.Closure where
 
 open import FLRP.Closure.Basic public
+open import FLRP.Closure.FilterIdeal public
 open import FLRP.Closure.Product public
 open import FLRP.Closure.OrdinalSum public
 ```

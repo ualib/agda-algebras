@@ -137,13 +137,13 @@ The tables of [FLRP.Certificates.FilterIdeal.A5Data][], read as functions;
 the two quadratic action checks and the four linear laws are discharged by
 decision, and associativity comes through the faithful action.
 
-The six law witnesses are `abstract`{.AgdaKeyword}, and this is load-bearing
+The six law witnesses are `opaque`{.AgdaKeyword}, and this is load-bearing
 rather than stylistic.  Each is a `from-yes`{.AgdaFunction} of a sweep over
 the 60-element carrier (3600 cases for the two action checks), and each ends
 up inside the group bundle that every downstream type mentions.  Left
 transparent, the proof terms normalize whenever a goal about a *concrete*
 subgroup or congruence is checked, and the check exhausts a 6 GB heap;
-`abstract`{.AgdaKeyword} stops the unfolding at the name, which costs nothing
+`opaque`{.AgdaKeyword} stops the unfolding at the name, which costs nothing
 because no consumer needs a group law to *compute* — only to exist.
 
 ```agda
@@ -325,7 +325,7 @@ open FiniteLattice
 The subgroup order of the family reproduces the meet order of the tables —
 one decidable statement, both directions at once.
 
-Every decision below is `abstract`{.AgdaKeyword}, and the reason is the same
+Every decision below is `opaque`{.AgdaKeyword}, and the reason is the same
 one that governs this whole module.  Checking a `from-yes`{.AgdaFunction}
 *definition* costs only what it takes to see that the decision says
 `yes`{.AgdaInductiveConstructor}; **applying** the result forces the proof
@@ -333,7 +333,7 @@ term itself, and these proof terms reach the subgroup axioms and thence the
 group bundle, whose own law witnesses are decision sweeps over the
 60-element carrier.  Measured on this instance, a single such application
 exhausts a 32 GB heap.  Sealing each decision behind
-`abstract`{.AgdaKeyword} stops the unfolding at the name and costs nothing:
+`opaque`{.AgdaKeyword} stops the unfolding at the name and costs nothing:
 these are proofs of decidable facts, and no consumer needs one to *compute*
 — only to exist.
 
