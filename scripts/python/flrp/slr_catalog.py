@@ -123,9 +123,9 @@ AKA: Dict[int, str] = {
 # route recorded in the census note (docs/notes/flrp-slr-census.md).
 PARKED: Dict[int, str] = {
     10: "open — this library's `L7`, the subject of #484",
-    11: "group representation (108-element coset algebra in SmallGroup(216,153)); pending the WP-3 bridge #454 with data from #487",
+    11: "filter-ideal route (Snow's lemma, #530): pentagon filter with the order-3 minimal subgroup in SmallGroup(216,153), 216 points; lemma formalized, assembly pending",
     14: "group representation (upper interval in Sub(A6), 90 points); pending #454/#487",
-    16: "group representation (Sub(C2.A6), 180 points); pending #454/#487",
+    16: "filter-ideal route (Snow's lemma, #530): [C3, A5] ∪ [1, C5] in Sub(A5), 60 points (not 180 — erratum E2); configuration machine-verified, assembly pending",
     18: "dual of L19; assumption-conditional via Kurzweil–Netter duality (#456)",
     20: "group representation (filter-ideal in SmallGroup(216,153)); pending #454/#487",
     22: "dual of L23; assumption-conditional via Kurzweil–Netter duality (#456)",

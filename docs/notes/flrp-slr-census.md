@@ -27,12 +27,12 @@ Every artifact is a deterministic function of the manuscript source, via `script
 | `L8` | 6 | certified — `FLRP.Certificates.SmallLatticeReps.SLR08` |
 | `L9` | 7 | certified — `FLRP.Certificates.SmallLatticeReps.SLR09` |
 | `L10` | 7 | open — this library's `L7`, the subject of #484 |
-| `L11` | 7 | group representation (108-element coset algebra in SmallGroup(216,153)); pending the WP-3 bridge #454 with data from #487 |
+| `L11` | 7 | filter-ideal route (Snow's lemma, #530): pentagon filter with the order-3 minimal subgroup in SmallGroup(216,153), 216 points; lemma formalized, assembly pending |
 | `L12` | 7 | certified — `FLRP.Certificates.SmallLatticeReps.SLR12` |
 | `L13` | 7 | certified — `FLRP.Certificates.SmallLatticeReps.SLR13` |
 | `L14` | 7 | group representation (upper interval in Sub(A6), 90 points); pending #454/#487 |
 | `L15` | 7 | certified — `FLRP.Certificates.SmallLatticeReps.SLR15` |
-| `L16` | 7 | group representation (Sub(C2.A6), 180 points); pending #454/#487 |
+| `L16` | 7 | filter-ideal route (Snow's lemma, #530): [C3, A5] ∪ [1, C5] in Sub(A5), 60 points (not 180 — erratum E2); configuration machine-verified, assembly pending |
 | `L17` | 7 | certified — `FLRP.Certificates.SmallLatticeReps.SLR17` |
 | `L18` | 7 | dual of L19; conditional corollary of the Kurzweil–Netter theorem (#502) — rests on Entry 4 (Kurzweil surjectivity, #522) and a simple-group instantiation (#527) |
 | `L19` | 7 | certified — `FLRP.Certificates.SmallLatticeReps.SLR19` |
@@ -60,8 +60,8 @@ Tally: **27 certified** (21 in batch 1, 6 more once the batch-2 renderer landed)
 +  **`L10`** — this library's `L7`; the manuscript's lone open case, and the subject of the dedicated hunt #484 (minimal `Eq(6)` sublattice representation formalized in `FLRP.L7EqSix`; closure obstructions machine-checked through eight points; see `docs/notes/flrp-l7-eq6.md`).
 +  **`L11`, `L14`, `L16`, `L20`** — the manuscript's representations are group-theoretic (carriers 90–216).  The #487 GAP engine has now supplied the concrete group data (committed under `scripts/gap/flrp/out/`); certification remains the WP-3 bridge (#454) at big carrier, driven from #485.
    +  **`L14`** — reproduced: the core-free index-90 subgroup of `A6` whose upper interval is `≅ L14` (`l14_a6.search.json`, verdict positive), with its 90-point coset action bundled for the bridge.
-   +  **`L11`** — the manuscript's filter-ideal construction reproduced in `SmallGroup(216,153)` (`bin/filter_ideal_216.g`): the pentagon filter `[H, G] ≅ N5` together with the order-3 minimal subgroup `K` (index 72, below β but neither α nor γ), `l11_filter_ideal_216_153.json`.
-   +  **`L16`** — **not reproduced as printed**: the manuscript's "upper interval in `Sub(C2.A6)`, index 180" does not appear in `C2.A6 = 2.A6 = SL(2,9)`; recorded as candidate erratum E2 below.
+   +  **`L11`** — the manuscript's filter-ideal construction reproduced in `SmallGroup(216,153)` (`bin/filter_ideal_216.g`): the pentagon filter `[H, G] ≅ N5` together with the order-3 minimal subgroup `K` (index 72, below β but neither α nor γ), `l11_filter_ideal_216_153.json`.  Snow's lemma itself is now formalized (#530, `FLRP.Closure.FilterIdeal`), so this entry no longer waits on new mathematics — only on the assembly step described in `docs/notes/flrp-530-filter-ideal.md` § 4.
+   +  **`L16`** — **not reproduced as printed**, but *replaced*: the manuscript's "upper interval in `Sub(C2.A6)`, index 180" does not appear in `C2.A6 = 2.A6 = SL(2,9)` (candidate erratum E2 below), and the filter-ideal route of #530 supplies a smaller witness instead — `[C3, A5] ∪ [1, C5]` inside `Sub(A5)`, on **60** points, found by `bin/find_filter_ideal.g` as the only such configuration over all groups of order at most 100 (`l16_filter_ideal_a5.json`).  The configuration is machine-verified in `FLRP.Certificates.FilterIdeal.L16SubA5`; see `docs/notes/flrp-530-filter-ideal.md`.
    +  **`L20`** — filter-ideal in `SmallGroup(216,153)`; the 2016-06-10 draft states the method but prints no explicit construction, so only the group is pinned, with the pentagon/subgroup data of `L11` in hand for a fuller reproduction.
 +  **`L18`, `L22`** — duals of `L19` and `L23`, with no explicit small algebras in the manuscript.  Both duals' partners are now **certified** (`SLR19`, `SLR23`), and the Kurzweil–Netter duality theorem is now proved from the simple-group package (#502, `FLRP.KurzweilNetter`), so `L18` and `L22` are corollaries conditional on Entry 4 (Kurzweil surjectivity, retirement tracked by #522) and a concrete simple-group instantiation (#527) — no longer on the full duality theorem as an assumption (the former #456 route).  Explicit algebras may also be found by the #486 search tooling (their lattice stanzas `slr18_lattice.json`, `slr22_lattice.json` are committed as ready-made `eqsearch.py` targets).
 
@@ -95,7 +95,8 @@ Per the #485 discipline, a claim that fails the engine is first rechecked agains
 
 +  **The claim**.  § 6 lists `L16` (seven elements, covers `0 ≺ 1, 2`; `1 ≺ 3, 4, 5`; `2, 3, 4, 5 ≺ 6`) as an upper interval in `Sub(C2.A6)` with algebra of size 180 — that is, an index-180, hence order-4, subgroup `H` of `C2.A6` (order 720) with `[H, C2.A6] ≅ L16`.
 +  **The finding**.  Read as the double cover `C2.A6 = 2.A6 = SL(2,9)`, the claim fails: the #487 engine finds `SL(2,9)` has a single conjugacy class of order-4 (index-180) subgroups, whose upper interval has **38** elements, not seven.  The only size-7 upper interval of `SL(2,9)` (over subgroups of order ≥ 3) is `≅ L14`, at index 90 (`|H| = 8`).  Scanning the other order-720 relatives of `A6` — `S6`, `PGL(2,9)`, `M10` — turns up `L14` (index 90) and two further seven-element lattices (indices 40 and 144), but never `L16`.  Reproduce with `bin/find_interval.g` on `SL(2,9)` at `FLRP_INDEX := 180`.
-+  **Caveat and status**.  The lattice transcription (`slr16_lattice.json`) matches the printed diagram, and `C2.A6` is standard ATLAS notation for `2.A6`; either the group name or the index is off in the 2016-06-10 draft.  Recorded as a candidate erratum pending clarification of the intended group; `L16` has no verified group representation in hand, and `slr16_lattice.json` remains a search target.  Reported upstream alongside E1.
++  **Caveat and status**.  The lattice transcription (`slr16_lattice.json`) matches the printed diagram, and `C2.A6` is standard ATLAS notation for `2.A6`; either the group name or the index is off in the 2016-06-10 draft.  Recorded as a candidate erratum pending clarification of the intended group.  Reported upstream alongside E1.
++  **Superseded in effect (2026-08-17, #530)**.  `L16` no longer depends on the printed claim: it occurs as the filter-ideal union `[C3, A5] ∪ [1, C5]` inside `Sub(A5)`, on **60** points — a third of the printed 180 — and this is the only such configuration over all groups of order at most 100.  The subgroup order there is machine-verified against `slr16_lattice.json` in `FLRP.Certificates.FilterIdeal.L16SubA5`, so the transcription is confirmed even though the printed representation is not.
 
 ## 5. Costs observed
 
