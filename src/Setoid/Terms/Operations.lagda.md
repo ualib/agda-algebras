@@ -20,7 +20,7 @@ module Setoid.Terms.Operations where
 
 -- Imports from Agda and the Agda Standard Library ---------------------
 open import Agda.Primitive    using ()  renaming ( Set to Type )
-open import Data.Product      using ( _,_ ; proj₁ ; proj₂ )
+open import Data.Product      using ( _,_ )
 open import Function.Base     using ( _∘_ )
 open import Function.Bundles  using ()         renaming ( Func to _⟶_ )
 open import Level             using ( Level )

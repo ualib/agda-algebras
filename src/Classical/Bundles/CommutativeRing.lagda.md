@@ -24,7 +24,7 @@ module Classical.Bundles.CommutativeRing where
 -- Imports from the Agda Standard Library -----------------------------------------
 open import Algebra.Bundles     using () renaming ( CommutativeRing to stdlib-CommutativeRing )
 open import Data.Fin.Patterns   using ( 0F ; 1F ; 2F )
-open import Data.Product        using ( _,_ ; proj₁ )
+open import Data.Product        using ( _,_ )
 open import Function            using ( Func )
 open import Level               using ( Level )
 open import Relation.Binary     using ( Setoid )
@@ -36,7 +36,7 @@ open import Classical.Signatures.Ring             using ( Sig-Ring ; +-Op ; 0-Op
 open import Classical.Structures.CommutativeRing  using ( CommutativeRing ; module CommutativeRing-Op )
 open import Classical.Theories.CommutativeRing    using ( +-assoc ; +-idˡ ; +-idʳ ; +-invˡ ; +-invʳ ; +-comm
                                                         ; ·-assoc ; ·-idˡ ; ·-idʳ ; ·-comm ; distribˡ ; distribʳ )
-open import Setoid.Algebras.Basic  using ( Algebra ; 𝕌[_] ; 𝔻[_] )
+open import Setoid.Algebras.Basic                 using ( Algebra ; 𝕌[_] ; 𝔻[_] )
 open import Setoid.Signatures                     using ( ⟨_⟩ )
 
 private variable α ρ : Level
