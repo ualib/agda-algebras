@@ -457,8 +457,9 @@ smuggled in.  **Minimal-normal descent**: every nontrivial normal subgroup of a
 *finite* group contains a minimal one.  RP-1 threads it as a module parameter of
 `Structure.Minimal`{.AgdaModule}, and the catalog threads it as a property of the group
 being constrained — so the quantifier over normal subgroups in `𝒢₃` and `𝒢₄` is *not*
-silently dropped.  Every finite group satisfies it, so on the note's universe of
-discourse the entries below say exactly what the note says.
+silently dropped.  Classically every finite group satisfies it, so on the note's
+universe of discourse the entries below say exactly what the note says; what the
+formal discharge below additionally needs is recorded after the definition.
 
 ```agda
 -- Minimal-normal descent: a consequence of finiteness, threaded explicitly.
@@ -474,12 +475,18 @@ proves the descent for a finite group, by well-founded recursion on the order of
 subgroup, with normal closures of single elements as the descending chain; what remains
 is a *presentation* hypothesis, not a group-theoretic one.  Minimality quantifies over
 every normal subgroup, including those whose membership cannot be decided, and the
-no-go `minimal→DNE`{.AgdaFunction} of that module shows the unrestricted reading is
-equivalent to double-negation elimination.  So the property below is discharged for a
-finite group exactly when its normal subgroups are decidably presented — the group-side
-reading of `complete`{.AgdaField} of `FiniteCongruences`{.AgdaRecord}, which the
-two-layer note (`docs/notes/flrp-two-layer-congruences.md`) already identifies as the
-library's single Layer-S bridge.
+no-go `minimal→DNE`{.AgdaFunction} of that module shows the *witnessed* reading of
+unrestricted minimality yields double-negation elimination — so no constructive proof
+can return witnessed minimal subgroups against arbitrary predicates, and the
+construction's output must be restricted somewhere.  `finite-MinimalNormalDescent`
+below therefore discharges the property for a finite group *whenever* its normal
+subgroups are decidably presented — the group-side reading of `complete`{.AgdaField}
+of `FiniteCongruences`{.AgdaRecord}, which the two-layer note
+(`docs/notes/flrp-two-layer-congruences.md`) already identifies as the library's
+single Layer-S bridge.  Decidable presentation is the sufficient bridge this module
+establishes, and the no-go is why the witnessed route demands *some* such datum; the
+bare negative reading of the property carries no witness for the no-go to exploit,
+and its unconditional derivability is left open.
 
 ```agda
 -- Descent is a theorem for a finite group with decidably presented normal subgroups.

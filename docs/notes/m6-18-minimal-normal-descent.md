@@ -2,13 +2,13 @@
 
 # M6-18 design note: minimal normal subgroups of a finite group
 
-This note records [M6-18][] (#510), the proof that **every nontrivial normal subgroup of a finite group contains a minimal one**, and the exact classical residue that survives it.  Read it alongside the RP-1 note [`flrp-rp1-parachutes.md`][] (§ 4, fourth assumption), the RP-2 note [`flrp-rp2-catalog.md`][] (§ 4.2), and the two-layer note [`flrp-two-layer-congruences.md`][], whose Layer-S/Layer-D discipline this work instantiates on the group side.
+This note records M6-18 (issue #510), the proof that **every nontrivial normal subgroup of a finite group contains a minimal one**, and the exact classical residue that survives it.  Read it alongside the RP-1 note `docs/notes/flrp-rp1-parachutes.md` (§ 4, fourth assumption), the RP-2 note `docs/notes/flrp-rp2-catalog.md` (§ 4.2), and the two-layer note `docs/notes/flrp-two-layer-congruences.md`, whose Layer-S/Layer-D discipline this work instantiates on the group side.
 
 The headline is not just the theorem.  It is that the fact RP-1 and RP-2 assumed splits cleanly in two: a *group-theoretic* half, which is now a theorem with no hypotheses beyond carrier finiteness, and a *presentational* half, which is the library's already-identified Layer-S bridge and provably cannot be removed.
 
 ## 1.  What landed
 
-Four modules, all `--cubical-compatible --exact-split --safe`, no postulates.
+Six modules — three of them new — all `--cubical-compatible --exact-split --safe`, no postulates.
 
 | Statement | Name | Module |
 | --- | --- | --- |
@@ -86,11 +86,11 @@ finite-MinimalNormalDescent : (𝒢 : Group 0ℓ 0ℓ)(𝑭 : FiniteAlgebra (pro
   →  Descent.MinimalNormalDescent.DecidablyPresented 𝒢 𝑭 → MinimalNormalDescent 𝒢
 ```
 
-So issue #510's acceptance criterion — Entries 1–3 reading `cfIE 𝒢ᵢ ⊕ᵖ-Lattice` with *no* antecedent — is not attainable, and the no-go says why rather than leaving the failure as a gap.  What is attained is better than it looks: the antecedent is no longer an unproved statement of finite group theory, but the same layer-crossing datum every other finiteness theorem in the library crosses, and a concrete certificate supplies it by computation.
+So issue #510's acceptance criterion — Entries 1–3 reading `cfIE 𝒢ᵢ ⊕ᵖ-Lattice` with *no* antecedent — is not attained here, and on the witnessed route the no-go says why rather than leaving the failure as a gap: any discharge that returns witnessed minimal subgroups, which is what the descent construction produces and what the entries' proofs consume, would decide `¬ ¬ P → P`.  The no-go does not exclude a hypothetical proof of the bare negative form of the antecedent, but none is in sight and it would not feed the witnessed consumers; `DecidablyPresented` is the honest bridge on the route that exists.  What is attained is better than it looks: the antecedent is no longer an unproved statement of finite group theory, but the same layer-crossing datum every other finiteness theorem in the library crosses, and a concrete certificate supplies it by computation.
 
 ## 4.  What is still assumed
 
-+  **`DecidablyPresented`** in the catalog's discharge, as above.  Irreducible, by § 3.
++  **`DecidablyPresented`** in the catalog's discharge, as above.  Irreducible for the witnessed route, by § 3; the bare negative form of the antecedent is not known to be derivable either.
 
 +  **RP-1's `Structure.Minimal` still takes minimality as a module parameter.**  Its single use of that parameter is at `M ∩ K`, for `K` an interval element, so the parameter can be supplied from `IsMinimalNormalʷ` as soon as `M ∩ K` is decidably presented — that is, as soon as RP-1's interval data is threaded at Layer D (`Intervalᵈ` of `FLRP.Enforceable`) rather than at Layer S.  That refactor touches `FLRP.Parachute`, `FLRP.Parachute.Theorems`, and the `Rep` module of `FLRP.Reductions`, and is deliberately **not** done here; it is bookkeeping with a known shape, and it belongs with the Layer-D pass over the parachute modules rather than with the descent theorem.  Tracked as a follow-up to #510.
 
