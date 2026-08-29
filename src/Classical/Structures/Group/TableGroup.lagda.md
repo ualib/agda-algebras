@@ -44,7 +44,6 @@ checks yields a `DecSubgroup`{.AgdaFunction}.
 
 module Classical.Structures.Group.TableGroup where
 
-open import Agda.Primitive using () renaming ( Set to Type )
 
 -- Imports from the Agda Standard Library ---------------------------------------
 open import Data.Bool.Base        using ( Bool ; T )
@@ -62,7 +61,7 @@ open import Relation.Binary.PropositionalEquality  using ( _≡_ ; refl ; sym ; 
                                                          ; cong ; subst )
 open import Relation.Nullary                       using ( Dec )
 open import Relation.Nullary.Decidable.Core        using ( _→-dec_ )
-open import Relation.Unary                         using ( Pred ; _∈_ )
+open import Relation.Unary                         using ( Pred )
 
 -- Imports from the Agda Universal Algebra Library ------------------------------
 open import Classical.Structures.Group.Basic      using  ( Group ; eqsToGroup )

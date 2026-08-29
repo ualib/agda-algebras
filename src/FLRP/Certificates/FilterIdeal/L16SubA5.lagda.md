@@ -92,19 +92,15 @@ is cheap to *state* can be ruinous to *apply*.
 
 module FLRP.Certificates.FilterIdeal.L16SubA5 where
 
-open import Agda.Primitive using () renaming ( Set to Type )
 
 -- Imports from the Agda Standard Library ---------------------------------------
-open import Data.Bool.Base        using ( Bool ; T )
-open import Data.Bool.Properties  using ( T? )
 open import Data.Fin.Base         using ( Fin )
 open import Data.Fin.Patterns     using ( 0F ; 1F ; 2F ; 3F ; 4F ; 5F ; 6F )
 open import Data.Fin.Properties   renaming ( all? to allᶠ? ; _≟_ to _≟ᶠ_ ) using ()
-open import Data.Product          using ( _,_ ; _×_ ; Σ-syntax ; proj₁ ; proj₂ )
+open import Data.Product          using ( _×_ )
 open import Data.Vec.Base         using ( Vec ; lookup ; _∷_ ; [] )
 open import Level                 using ( 0ℓ )
-open import Relation.Nullary      using ( Dec )
-open import Relation.Binary.PropositionalEquality  using ( _≡_ ; refl )
+open import Relation.Binary.PropositionalEquality  using ( _≡_ )
 open import Relation.Nullary.Decidable.Core        using ( _×-dec_ ; _→-dec_ )
 open import Relation.Unary                         using ( _⊆_ )
 
@@ -219,9 +215,7 @@ congruences are exactly the coset partitions of decidable subgroups
 ([Classical.Structures.Group.RegularAction][]).
 
 ```agda
-open Regular A5 using  ( cosetAlgebra ; regular-FiniteAlgebra
-                       ; Kθ ; Kθ-subgroup ; Kθᵈ ; cosetCon ; cosetConᵈ
-                       ; cosetCon-Kθ ; Kθ-cosetCon ; cosetCon-mono ; cosetCon-reflect )
+open Regular A5 using  ( cosetAlgebra ; regular-FiniteAlgebra ; cosetConᵈ )
 
 private
   𝑭 = regular-FiniteAlgebra A5-FiniteAlgebra

@@ -41,7 +41,6 @@ of decidable congruences and consumes the same case analysis.
 module Classical.Structures.Lattice.FilterIdeal where
 
 -- Imports from the Agda Standard Library ---------------------------------------
-open import Agda.Primitive   using () renaming ( Set to Type )
 open import Data.Product     using ( proj₁ )
 open import Data.Sum.Base    using ( inj₁ ; inj₂ )
 open import Level            using ( Level )

@@ -80,7 +80,6 @@ open import Data.Fin.Patterns             using ( 0F )
 open import Data.Product                  using ( _×_ ; _,_ ; proj₁ ; proj₂ )
 open import Level                         using ( Level )
 open import Relation.Binary               using ( Setoid ; IsEquivalence )
-open import Relation.Nullary              using ( Dec )
 open import Relation.Unary                using ( Pred ; _∈_ ; _⊆_ )
 
 import Algebra.Properties.Group as GroupProperties
