@@ -300,6 +300,13 @@ finite signature from the expansion module, and the composite isomorphism.
 property witnesses of the deliverable list, and instantiates the glue at the
 canonical irredundant enumeration of each representation.
 
+One reading note, so the module cannot overstate itself: the definitions below
+inhabit `KurzweilNetterDuality`{.AgdaFunction} *inside* this parameterized
+module, so their closed types quantify over the package — the library holds no
+closed inhabitant of the statement, and Entry 4's family is a genuine
+hypothesis of the result.  Entry 2 of [FLRP.Assumptions][] is thereby *reduced
+to Entry 4*, not discharged; the registry entry records the same reading.
+
 ```agda
 module KurzweilNetterProof
   (𝒮     : Group 0ℓ 0ℓ)
@@ -320,7 +327,7 @@ module KurzweilNetterProof
     𝑬ᵢ : IrredundantEnumeration algᵈ
     𝑬ᵢ = irredundantEnumeration finiteᵈ
 
-  -- The Kurzweil–Netter duality theorem.
+  -- The Kurzweil–Netter duality theorem, conditional on the module's package.
   kurzweilNetterDuality : KurzweilNetterDuality
   kurzweilNetterDuality 𝑳 = kurzweilNetterDualityAt 𝑳
 ```

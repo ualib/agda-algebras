@@ -12,7 +12,7 @@ This is the [FLRP.KurzweilNetter][] module of the [Agda Universal Algebra Librar
 
 The formal proof of the **Kurzweil–Netter duality theorem** — the class of
 decidably representable lattices is closed under dualization — assembled from
-four submodules (issue #502; the argument of
+five submodules (issue #502; the argument of
 `docs/papers/fin-lat-rep/SmallLatticeReps.tex` § "Lattice duals", after
 Pálfy's 2009 lectures):
 

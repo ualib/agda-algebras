@@ -53,14 +53,14 @@ constructive data reconstitutes the full semantic
 `FiniteCongruences`{.AgdaRecord}, so the assumption is exactly the classical delta
 between the two layers, no more, no less.
 
-**Entry 2** (*retired*): Kurzweil–Netter duality.  The class of representable
-lattices is closed under dualization.[^3]  Registered here as
+**Entry 2** (*reduced to Entry 4*): Kurzweil–Netter duality.  The class of
+representable lattices is closed under dualization.[^3]  Registered here as
 `KurzweilNetterDuality`{.AgdaFunction} while a formal reproof was pending, the
-entry is **retired as an assumption**: issue #502's
-[FLRP.KurzweilNetter.Duality][] proves the statement outright from the
-properties of the base group the argument actually uses, the only remaining
-classical ingredient being Entry 4.  The statement types remain here as the
-theorem's canonical name.[^4]
+entry is **retired as an independent assumption**: issue #502's
+[FLRP.KurzweilNetter.Duality][] proves the statement from a package of
+properties of the base group the argument actually uses, so the closed result
+is *conditional*; the only remaining classical ingredient is Entry 4.  The
+statement types remain here as the theorem's canonical name.[^4]
 
 **Entry 3**: the Pálfy–Pudlák theorem.  Every finite lattice is a congruence
 lattice of a finite algebra *if and only if* every finite lattice is an interval in
@@ -215,7 +215,7 @@ completeness `completeᵈ`{.AgdaField} by transitivity.
       φ≑e = d≑e .proj₁ ∘ φ≑d .proj₁ , φ≑d .proj₂ ∘ d≑e .proj₂
 ```
 
-#### Entry 2: Kurzweil–Netter duality (retired)
+#### Entry 2: Kurzweil–Netter duality (reduced to Entry 4)
 
 **The theorem of Kurzweil and Netter**.  If a finite lattice is representable as
 the congruence lattice of a finite algebra, then so is its dual.
@@ -239,18 +239,21 @@ algebra with lifted operations.
    ([Classical.Structures.Lattice.Dual][]).  The ∀-form
    `KurzweilNetterDuality`{.AgdaFunction} is the full theorem.
 
-+  **Status: retired as an assumption** (issue #502).
++  **Status: reduced to Entry 4** (issue #502).
    `kurzweilNetterDuality`{.AgdaFunction} of [FLRP.KurzweilNetter.Duality][]
-   *proves* `KurzweilNetterDuality`{.AgdaFunction} outright, parameterized by
-   the properties of the base group the argument actually uses — a finite
-   carrier with decidable equality, a nontriviality witness, and Entry 4's
-   surjectivity family — and `dual-Representableᵈ`{.AgdaFunction} of
-   [FLRP.Closure][] is rewired to that theorem.  Nothing consumes this entry
-   as a hypothesis any more; the definitions below remain as the canonical
-   *statement* of the theorem (they are its conclusion's type).  The residual
-   classical content is exactly Entry 4 (retirement tracked by issue #522)
-   plus the instantiation of `𝒮` at a concrete finite nonabelian simple group
-   (tracked separately; `A₅` needs the simplicity predicates of issue #512).
+   proves `KurzweilNetterDuality`{.AgdaFunction} *from a package of witnesses*
+   for the base group (a finite carrier with decidable equality, a
+   nontriviality witness, and Entry 4's surjectivity family), and
+   `dual-Representableᵈ`{.AgdaFunction} of [FLRP.Closure][] is rewired to that
+   proof, taking the same package.  So the library holds no *closed* inhabitant
+   of `KurzweilNetterDuality`{.AgdaFunction} — the closed form of the proof
+   quantifies over the package — and the result stays conditional exactly on
+   Entry 4 plus the instantiation of `𝒮` at a concrete finite nonabelian
+   simple group.  What is retired is Entry 2's role as an *independent*
+   hypothesis: nothing consumes it any more, and the definitions below remain
+   as the canonical *statement* of the theorem (they are its conclusion's
+   type).  The residue is tracked by issue #522 (Entry 4) and issue #527
+   (the `A₅` instantiation, needing the simplicity predicates of issue #512).
 
 +  **Layer**.  The statement is at Layer D (`Representableᵈ`{.AgdaRecord}),
    the program's working notion per [ADR-008][]; the classical statement is the

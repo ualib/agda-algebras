@@ -58,9 +58,9 @@ Two standing warnings apply to everything under this namespace.
    explicit hypotheses (never postulates), keeping the tree honest under
    `--safe`; Entry 1 is the congruence-completeness bridge
    `CongruenceCompleteness`, the single Layer-S→Layer-D assumption of ADR-008;
-   Entry 2 (Kurzweil–Netter duality) is retired — proved in
-   [FLRP.KurzweilNetter][] — leaving Entry 4 (Kurzweil surjectivity) as the
-   construction's residual classical content.
+   Entry 2 (Kurzweil–Netter duality) is reduced to Entry 4 (Kurzweil
+   surjectivity) by the proof in [FLRP.KurzweilNetter][], and no longer enters
+   anywhere as an independent hypothesis.
 +  [FLRP.Closure][]: the WP-5 closure toolkit: product and ordinal-sum
    closure of `Representableᵈ` (issue #456), the adjoin-a-new-extremum
    corollaries at `chain₂`, and the duality theorem `dual-Representableᵈ`,

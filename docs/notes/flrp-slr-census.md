@@ -34,11 +34,11 @@ Every artifact is a deterministic function of the manuscript source, via `script
 | `L15` | 7 | certified — `FLRP.Certificates.SmallLatticeReps.SLR15` |
 | `L16` | 7 | group representation (Sub(C2.A6), 180 points); pending #454/#487 |
 | `L17` | 7 | certified — `FLRP.Certificates.SmallLatticeReps.SLR17` |
-| `L18` | 7 | dual of L19; assumption-conditional via Kurzweil–Netter duality (#456) |
+| `L18` | 7 | dual of L19; conditional corollary of the Kurzweil–Netter theorem (#502) — rests on Entry 4 (Kurzweil surjectivity, #522) and a simple-group instantiation (#527) |
 | `L19` | 7 | certified — `FLRP.Certificates.SmallLatticeReps.SLR19` |
 | `L20` | 7 | group representation (filter-ideal in SmallGroup(216,153)); pending #454/#487 |
 | `L21` | 7 | certified — `FLRP.Certificates.SmallLatticeReps.SLR21` |
-| `L22` | 7 | dual of L23; assumption-conditional via Kurzweil–Netter duality (#456) |
+| `L22` | 7 | dual of L23; conditional corollary of the Kurzweil–Netter theorem (#502) — rests on Entry 4 (Kurzweil surjectivity, #522) and a simple-group instantiation (#527) |
 | `L23` | 7 | certified — `FLRP.Certificates.SmallLatticeReps.SLR23` |
 | `L24` | 7 | certified — `FLRP.Certificates.SmallLatticeReps.SLR24` |
 | `L25` | 7 | certified — `FLRP.Certificates.SmallLatticeReps.SLR25` |
@@ -53,7 +53,7 @@ Every artifact is a deterministic function of the manuscript source, via `script
 | `L34` | 7 | certified — `FLRP.Certificates.SmallLatticeReps.SLR34` |
 | `L35` | 7 | certified — `FLRP.Certificates.SmallLatticeReps.SLR35` |
 
-Tally: **27 certified** (21 in batch 1, 6 more once the batch-2 renderer landed), **4 parked on the group route** (#454/#487), **2 assumption-conditional duals** (#456), **1 open** (#484), **1 candidate erratum**.
+Tally: **27 certified** (21 in batch 1, 6 more once the batch-2 renderer landed), **4 parked on the group route** (#454/#487), **2 conditional duals** (corollaries of the #502 theorem, resting on Entry 4), **1 open** (#484), **1 candidate erratum**.
 
 ## 3. The parked entries, in detail
 
@@ -63,7 +63,7 @@ Tally: **27 certified** (21 in batch 1, 6 more once the batch-2 renderer landed)
    +  **`L11`** — the manuscript's filter-ideal construction reproduced in `SmallGroup(216,153)` (`bin/filter_ideal_216.g`): the pentagon filter `[H, G] ≅ N5` together with the order-3 minimal subgroup `K` (index 72, below β but neither α nor γ), `l11_filter_ideal_216_153.json`.
    +  **`L16`** — **not reproduced as printed**: the manuscript's "upper interval in `Sub(C2.A6)`, index 180" does not appear in `C2.A6 = 2.A6 = SL(2,9)`; recorded as candidate erratum E2 below.
    +  **`L20`** — filter-ideal in `SmallGroup(216,153)`; the 2016-06-10 draft states the method but prints no explicit construction, so only the group is pinned, with the pentagon/subgroup data of `L11` in hand for a fuller reproduction.
-+  **`L18`, `L22`** — duals of `L19` and `L23`, with no explicit small algebras in the manuscript.  Both duals' partners are now **certified** (`SLR19`, `SLR23`), so once WP-5 (#456) registers Kurzweil–Netter duality as a named assumption, `L18` and `L22` become assumption-conditional corollaries; explicit algebras may also be found by the #486 search tooling (their lattice stanzas `slr18_lattice.json`, `slr22_lattice.json` are committed as ready-made `eqsearch.py` targets).
++  **`L18`, `L22`** — duals of `L19` and `L23`, with no explicit small algebras in the manuscript.  Both duals' partners are now **certified** (`SLR19`, `SLR23`), and the Kurzweil–Netter duality theorem is now proved from the simple-group package (#502, `FLRP.KurzweilNetter`), so `L18` and `L22` are corollaries conditional on Entry 4 (Kurzweil surjectivity, retirement tracked by #522) and a concrete simple-group instantiation (#527) — no longer on the full duality theorem as an assumption (the former #456 route).  Explicit algebras may also be found by the #486 search tooling (their lattice stanzas `slr18_lattice.json`, `slr22_lattice.json` are committed as ready-made `eqsearch.py` targets).
 
 ## 4. Erratum log
 
