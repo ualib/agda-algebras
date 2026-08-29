@@ -26,7 +26,7 @@ module Classical.Bundles.Ring where
 -- Imports from the Agda Standard Library -----------------------------------------
 open import Algebra.Bundles     using () renaming ( Ring to stdlib-Ring )
 open import Data.Fin.Patterns   using ( 0F ; 1F ; 2F )
-open import Data.Product        using ( _,_ ; proj₁ )
+open import Data.Product        using ( _,_ )
 open import Function            using ( Func )
 open import Level               using ( Level )
 open import Relation.Binary     using ( Setoid )

@@ -64,7 +64,6 @@ open import Agda.Primitive using () renaming ( Set to Type )
 -- imports from the Agda Standard Library ---------------------------------------------------
 open import Data.Product          using ( _,_ ; Σ-syntax ) renaming ( _×_ to _∧_ )
 open import Level                 using ( Level ; _⊔_ )
-open import Relation.Binary       using ( REL )
 open import Relation.Unary        using ( Pred ; _∈_ )
 
 -- Imports from the Agda Universal Algebra Library ------------------------------------------

@@ -45,7 +45,7 @@ module Classical.Structures.Group.NormalCore where
 open import Agda.Primitive using () renaming ( Set to Type )
 
 -- Imports from the Agda Standard Library ---------------------------------------
-open import Data.Product     using ( _,_ ; proj₁ ; proj₂ ; ∃-syntax ; _×_)
+open import Data.Product     using ( _,_ ; proj₁ ; proj₂ )
 open import Level            using ( Level ; _⊔_ ; Lift ; lift ; lower )
 open import Relation.Binary  using ( Setoid )
 open import Relation.Unary   using ( Pred ; _∈_ ; _⊆_ )

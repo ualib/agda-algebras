@@ -37,7 +37,7 @@ module Setoid.Algebras.Products where
 
 -- Imports from Agda and the Agda Standard Library --------------------------------
 open import Agda.Primitive    using () renaming ( Set to Type )
-open import Data.Product      using ( _,_ ; Σ-syntax ; proj₁ )
+open import Data.Product      using ( _,_ ; Σ-syntax )
 open import Function          using ( flip ; Func )
 open import Level             using( _⊔_ ; Level )
 open import Relation.Binary   using ( Setoid ;  IsEquivalence ; Decidable )

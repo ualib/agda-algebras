@@ -60,7 +60,7 @@ module Centralizer {α ρ : Level} (𝒢 : Group α ρ) where
   open SetoidReasoning 𝔻[ 𝑮 ]
   open Group-Op 𝒢     using  ( _∙_ ; ε ; _⁻¹ ; ∙-cong ; assoc-law
                              ; idˡ-law ; idʳ-law ; invˡ-law ; invʳ-law )
-  open Conjugate 𝒢         using  ( conj ; IsNormal ; conj-cong ; conj-∙-hom
+  open Conjugate 𝒢         using  ( IsNormal ; conj-cong ; conj-∙-hom
                                   ; conj-conj⁻¹ ; conj-syntax)
 
   -- The centralizer of N: the elements commuting with every member of N.
