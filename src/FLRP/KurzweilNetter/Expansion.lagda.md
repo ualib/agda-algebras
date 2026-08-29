@@ -130,7 +130,11 @@ module KNExpansion
   (surj  : KurzweilInterval.KurzweilSurjectivity 𝒮 m)
   where
 
-  open KurzweilInterval 𝒮 m  -- Sⁿ = Sᵐ, Diag, K, the interval, kurzweilIntervalIso
+  -- Sⁿ = Sᵐ, Diag, K, the interval, kurzweilIntervalIso; the power kit's
+  -- pointwise lemmas are renamed to match this module's ∙ₚ/εₚ/⁻¹ₚ convention.
+  open KurzweilInterval 𝒮 m
+    renaming ( ⊗-pointwise to ∙ₚ-pointwise ; e-pointwise to εₚ-pointwise
+             ; inv-pointwise to ⁻¹ₚ-pointwise )
 
   open Setoid 𝔻[ proj₁ 𝒮 ] using ()
     renaming ( _≈_ to _≈₁_ ; refl to refl₁ ; sym to sym₁ ; trans to trans₁
