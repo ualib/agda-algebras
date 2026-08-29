@@ -31,8 +31,10 @@ representation.
 
 module Setoid.Algebras where
 
-open import Setoid.Algebras.Basic     public
-open import Setoid.Algebras.Finite    public
-open import Setoid.Algebras.Products  public
-open import Setoid.Algebras.Reduct    public
+open import Setoid.Algebras.Basic                public
+open import Setoid.Algebras.Finite               public
+open import Setoid.Algebras.Finite.Irredundant   public
+open import Setoid.Algebras.Products             public
+open import Setoid.Algebras.Products.Finite      public
+open import Setoid.Algebras.Reduct               public
 ```
