@@ -53,6 +53,7 @@ open import Data.Unit.Base                using ( ⊤ ; tt )
 open import Level                         using ( Level ; _⊔_ ; suc ; Lift ; lift )
 open import Relation.Binary               using ( Setoid )
 open import Relation.Binary.Definitions   using ( _Respects_ )
+open import Relation.Nullary              using ( Dec )
 open import Relation.Unary                using ( Pred ; _∈_ )
 
 import Algebra.Properties.Group as GroupProperties
@@ -182,6 +183,18 @@ a proof that it is a subgroup.
 ```agda
   Subgroup : (ℓ : Level) → Type (α ⊔ ρ ⊔ suc ℓ)
   Subgroup ℓ = Σ[ B ∈ Pred A ℓ ] IsSubgroup B
+```
+
+A **decidable subgroup** bundles a subgroup with a decision procedure for its
+membership — the Layer-D presentation of a subgroup (ADR-008), mirroring how
+`DecCon`{.AgdaFunction} of [Setoid.Congruences.Finite.Basic][] bundles a
+congruence with its decider.  Decidability is genuine data here: it cannot be
+derived from carrier finiteness, since a predicate on a finite carrier need
+not be decidable.
+
+```agda
+  DecSubgroup : (ℓ : Level) → Type (α ⊔ ρ ⊔ suc ℓ)
+  DecSubgroup ℓ = Σ[ B ∈ Subgroup ℓ ] (∀ x → Dec (x ∈ proj₁ B))
 ```
 
 #### The trivial and full subgroups
