@@ -383,11 +383,18 @@ gap-smoke:
 	@echo "target: $@"
 	gap -A -q -b scripts/gap/flrp/bin/smoke.g
 
-# The RP-3 hunt runs (issue #460): the parachute realizability sweep and the
-# candidate-table witness checks.  Run inside `nix develop .#gap`; the sweep
-# takes a few minutes.  Confirm sweep candidates with gap_search.py per the
-# header of bin/hunt_parachutes.g.
+# The RP-3 hunt runs (issue #460): the parachute realizability sweep, the
+# candidate-table witness checks, and the gap_search.py confirmations that
+# regenerate the four committed rp3_*.search.json verdicts (the date is
+# pinned so a reproduction run is byte-identical).  Run inside
+# `nix develop .#gap` (that shell carries python3); the sweep takes a few
+# minutes.
+RP3_SWEEP_DATE := 2026-08-29
 gap-hunt:
 	@echo "target: $@"
 	gap -A -q -b scripts/gap/flrp/bin/hunt_parachutes.g
 	gap -A -q -b scripts/gap/flrp/bin/hunt_witnesses.g
+	python3 scripts/python/flrp/gap_search.py scripts/gap/flrp/out/rp3_parachutes_s6.raw.json --target scripts/gap/flrp/inputs/p33.json --out scripts/gap/flrp/out/rp3_p33.search.json --date $(RP3_SWEEP_DATE)
+	python3 scripts/python/flrp/gap_search.py scripts/gap/flrp/out/rp3_parachutes_s7.raw.json --target scripts/gap/flrp/inputs/p332.json --out scripts/gap/flrp/out/rp3_p332.search.json --date $(RP3_SWEEP_DATE)
+	python3 scripts/python/flrp/gap_search.py scripts/gap/flrp/out/rp3_parachutes_s7.raw.json --target scripts/gap/flrp/inputs/p34.json --out scripts/gap/flrp/out/rp3_p34.search.json --date $(RP3_SWEEP_DATE)
+	python3 scripts/python/flrp/gap_search.py scripts/gap/flrp/out/rp3_parachutes_s7.raw.json --target scripts/gap/flrp/inputs/p3m2.json --out scripts/gap/flrp/out/rp3_p3m2.search.json --date $(RP3_SWEEP_DATE)

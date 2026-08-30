@@ -1,5 +1,5 @@
 {
-  "date": "2026-08-29",
+  "date": "2026-08-30",
   "engine": {
     "gap": "4.15.1",
     "libraries": {
@@ -13,6 +13,7 @@
     {
       "CFMax_coreFreeMaximal": true,
       "G0_nonsolvable": false,
+      "G1_notAltOrSym": false,
       "G2_subdirectlyIrreducible": true,
       "G3_noAbelianNormal": false,
       "G4_trivialCentralizers": false,
@@ -24,6 +25,7 @@
     {
       "CFMax_coreFreeMaximal": true,
       "G0_nonsolvable": false,
+      "G1_notAltOrSym": false,
       "G2_subdirectlyIrreducible": true,
       "G3_noAbelianNormal": false,
       "G4_trivialCentralizers": false,
@@ -35,6 +37,7 @@
     {
       "CFMax_coreFreeMaximal": true,
       "G0_nonsolvable": true,
+      "G1_notAltOrSym": false,
       "G2_subdirectlyIrreducible": true,
       "G3_noAbelianNormal": true,
       "G4_trivialCentralizers": true,
@@ -46,6 +49,7 @@
     {
       "CFMax_coreFreeMaximal": true,
       "G0_nonsolvable": true,
+      "G1_notAltOrSym": true,
       "G2_subdirectlyIrreducible": true,
       "G3_noAbelianNormal": true,
       "G4_trivialCentralizers": true,
@@ -57,6 +61,7 @@
     {
       "CFMax_coreFreeMaximal": true,
       "G0_nonsolvable": true,
+      "G1_notAltOrSym": true,
       "G2_subdirectlyIrreducible": true,
       "G3_noAbelianNormal": true,
       "G4_trivialCentralizers": true,
@@ -68,6 +73,7 @@
     {
       "CFMax_coreFreeMaximal": true,
       "G0_nonsolvable": true,
+      "G1_notAltOrSym": true,
       "G2_subdirectlyIrreducible": true,
       "G3_noAbelianNormal": true,
       "G4_trivialCentralizers": true,
