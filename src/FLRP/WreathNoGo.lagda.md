@@ -110,7 +110,8 @@ open import Classical.Structures.Lattice.Dual       using  ( dualLattice )
 open import FLRP.Enforceable    using  ( cfIE ; CoreFree ; GroupRepresentable
                                        ; GroupProperty ; IntervalIso
                                        ; Statement-C ; TwoBigCanopies
-                                       ; HasThreeDistinct )
+                                       ; HasTwoDistinct ; HasThreeDistinct
+                                       ; threeDistinct→twoDistinct )
 open import FLRP.Problem        using  ( FiniteLattice ; toLattice )
 open import Overture            using  ( ∃-syntax )
 open import Setoid.Algebras     using  ( 𝕌[_] ; 𝔻[_] ; FiniteAlgebra )
@@ -121,15 +122,13 @@ open GroupRepresentable
 
 #### Two distinct elements, and their transport to the dual
 
-**The nontriviality side condition on the enforcing lattice**.  The dual lattice
+**The nontriviality side condition on the enforcing lattice** is
+`HasTwoDistinct`{.AgdaFunction} of [FLRP.Enforceable][], where it now lives
+beside its three-element sibling as a guard of statement (C).  The dual lattice
 of [Classical.Structures.Lattice.Dual][] lives on the *same* carrier setoid, so
 the witness transports unchanged.
 
 ```agda
-HasTwoDistinct : Lattice → Type 0ℓ
-HasTwoDistinct (L , _) = let open Setoid 𝔻[ L ] in
-  ∃[ x ∈ 𝕌[ L ] ] ∃[ y ∈ 𝕌[ L ] ] ¬ (x ≈ y)
-
 -- The dual shares carrier and equality, so the witness transports as-is.
 hasTwoDistinct-dual : (𝑳 : Lattice) → HasTwoDistinct 𝑳 → HasTwoDistinct (dualLattice 𝑳)
 hasTwoDistinct-dual 𝑳 w = w
@@ -418,6 +417,10 @@ statement-C→no-contradictory-pair stC P 𝑳₁ 𝑳₂ three₁ three₂ cf-i
   Ps 0F = P
   Ps 1F = λ 𝒢 → ¬ P 𝒢
 
+  two-all : ∀ i → HasTwoDistinct (toLattice (family i))
+  two-all 0F = threeDistinct→twoDistinct (toLattice 𝑳₁) three₁
+  two-all 1F = threeDistinct→twoDistinct (toLattice 𝑳₂) three₂
+
   two-big : TwoBigCanopies family
   two-big = 0F , 1F , (λ ()) , three₁ , three₂
 
@@ -425,7 +428,7 @@ statement-C→no-contradictory-pair stC P 𝑳₁ 𝑳₂ three₁ three₂ cf-i
   cfs 0F = cf-ie₁
   cfs 1F = cf-ie₂
 
-  joint = stC 0 family Ps two-big cfs
+  joint = stC 0 family Ps two-all two-big cfs
 
   Ps-hold : ∀ i → Ps i (joint .proj₁)
   Ps-hold = joint .proj₂ .proj₁

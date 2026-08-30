@@ -64,6 +64,16 @@ The honest form of the dead-end question, `PairQuestion`{.AgdaFunction} below,
 carries `HasTwoDistinct`{.AgdaFunction} on both lattices; everything RP-4 proved
 about the question applies to this form verbatim.
 
+**A repair to statement (C) itself.**  The same degenerate pair refutes the
+first formalization of statement (C), which quantified over arbitrary families
+of finite lattices: instantiated at the family (three-chain, three-chain,
+one-chain) it would produce a single group that is both trivial and nontrivial
+(`unguarded-statement-C-refuted`{.AgdaFunction} below).  The repaired
+`Statement-C`{.AgdaFunction} of [FLRP.Enforceable][] guards every canopy with
+`HasTwoDistinct`{.AgdaFunction}, matching the note's construction, and the
+defective form is kept there as `Statement-C-unguarded`{.AgdaFunction} in the
+`minIE`{.AgdaFunction} tradition of recording repairs.
+
 **Constructive status.**  As everywhere in the catalog, the theorems here are
 statements *about* representations and maximality data, whose witnesses are
 supplied classically; the one concrete witness constructed
@@ -84,15 +94,16 @@ open import Data.Empty          using  ( ⊥ )
 open import Data.Fin.Base       using  ( Fin )
 open import Data.Fin.Patterns   using  ( 0F ; 1F ; 2F )
 open import Data.Nat.Base       using  ( ℕ ; _+_ )
-open import Data.Product        using  ( Σ-syntax ; _×_ ; _,_ ; proj₁ ; proj₂ )
+open import Data.Product        using  ( Σ-syntax ; _,_ ; proj₁ ; proj₂ )
 open import Data.Sum.Base       using  ( _⊎_ ; inj₁ ; inj₂ )
 open import Data.Unit.Base      using  ( ⊤ ; tt )
+open import Data.Vec.Base       using  ( _∷_ ; [] )
 open import Level               using  ( Level ; 0ℓ ; _⊔_ ; Lift ; lift ; lower )
                                 renaming ( suc to lsuc )
 open import Relation.Binary     using  ( Setoid )
 open import Relation.Binary.PropositionalEquality  using  ( refl )
 open import Relation.Nullary    using  ( ¬_ )
-open import Relation.Unary      using  ( Pred ; _∈_ ; _⊆_ )
+open import Relation.Unary      using  ( Pred ; _∈_ )
 
 -- Imports from the Agda Universal Algebra Library ------------------------------
 open import Classical.Properties.Lattice       using  ( module Lattice-Order )
@@ -108,16 +119,22 @@ open import Classical.Structures.Group.IndexAction  using  ( RightAction )
 open import Classical.Structures.Group.Wreath  using  ( _≀ᵍ_ )
 open import FLRP.Enforceable   using  ( CoreFree ; GroupProperty
                                       ; GroupRepresentable ; IE ; IntervalIso
-                                      ; Statement-C ; TwoBigCanopies
-                                      ; HasThreeDistinct ; cfIE
+                                      ; Statement-C ; Statement-C-unguarded
+                                      ; TwoBigCanopies ; HasTwoDistinct
+                                      ; HasThreeDistinct
+                                      ; threeDistinct→twoDistinct ; cfIE
                                       ; module UpperInterval )
 open import FLRP.Problem       using  ( FiniteLattice ; toLattice
-                                      ; chain₁-lattice ; OrderIso )
+                                      ; chain₁ ; chain₁-lattice ; OrderIso )
 open import FLRP.Reductions    using  ( IsChain₂ ; module Chain₂Interval )
-open import FLRP.WreathNoGo    using  ( HasTwoDistinct ; NontrivialCenterless
+open import FLRP.WreathNoGo    using  ( NontrivialCenterless
                                       ; KurzweilWreathInterval
                                       ; cfIE-must-have-wreaths
                                       ; cfIE-no-contradictory-Statement )
+open import Overture.Cayley    using  ( Table ; ⟦_⟧ ; from-yes )
+open import Overture.Operations.Properties
+                               using  ( Associative? ; Commutative? ; Idempotent?
+                                      ; Absorbsˡ? ; Absorbsʳ? )
 open import Overture           using  ( ∃-syntax )
 open import Setoid.Algebras    using  ( 𝕌[_] ; 𝔻[_] ; FiniteAlgebra )
 
@@ -255,6 +272,86 @@ chain₁-coreFree : CoreFree 𝟙ᵍ 𝟙-sub 𝟙-sub-sg
 chain₁-coreFree _ = refl
 ```
 
+#### The unguarded statement (C) is refutable
+
+The degenerate enforcements above have a second, sharper consequence: the first
+formalization of statement (C), which quantified over arbitrary families of
+finite lattices, is outright false.  Instantiate it at the family (three-chain,
+three-chain, one-chain) with the properties (nontrivial, nontrivial, trivial):
+the two three-chains meet the two-big-canopies side condition, every member is
+core-free enforceable by the lemmas above, and the single group (C) produces
+would be simultaneously trivial and nontrivial.  The repaired
+`Statement-C`{.AgdaFunction} of [FLRP.Enforceable][] guards every canopy with
+`HasTwoDistinct`{.AgdaFunction}; the defective form is kept there as
+`Statement-C-unguarded`{.AgdaFunction}, and here is its refutation.
+
+The three-element chain, in the Cayley style of `chain₂`{.AgdaFunction} of
+[FLRP.Problem][]: meet is minimum, join is maximum.
+
+```agda
+∧₃-table ∨₃-table : Table 3
+∧₃-table = (0F ∷ 0F ∷ 0F ∷ []) ∷ (0F ∷ 1F ∷ 1F ∷ []) ∷ (0F ∷ 1F ∷ 2F ∷ []) ∷ []
+∨₃-table = (0F ∷ 1F ∷ 2F ∷ []) ∷ (1F ∷ 1F ∷ 2F ∷ []) ∷ (2F ∷ 2F ∷ 2F ∷ []) ∷ []
+
+_∧₃_ _∨₃_ : Fin 3 → Fin 3 → Fin 3
+_∧₃_ = ⟦ ∧₃-table ⟧
+_∨₃_ = ⟦ ∨₃-table ⟧
+
+open FiniteLattice
+
+chain₃ : FiniteLattice
+chain₃ .size     = 2
+chain₃ ._∧_      = _∧₃_
+chain₃ ._∨_      = _∨₃_
+chain₃ .∧-assoc  = from-yes (Associative? _∧₃_)
+chain₃ .∧-comm   = from-yes (Commutative? _∧₃_)
+chain₃ .∧-idem   = from-yes (Idempotent? _∧₃_)
+chain₃ .∨-assoc  = from-yes (Associative? _∨₃_)
+chain₃ .∨-comm   = from-yes (Commutative? _∨₃_)
+chain₃ .∨-idem   = from-yes (Idempotent? _∨₃_)
+chain₃ .absorbˡ  = from-yes (Absorbsˡ? _∧₃_ _∨₃_)
+chain₃ .absorbʳ  = from-yes (Absorbsʳ? _∧₃_ _∨₃_)
+```
+
+The refutation.  Nothing about it is hypothetical: every ingredient is one of
+the degenerate enforcements proved above, at the concrete chains.
+
+```agda
+unguarded-statement-C-refuted : {ℓP : Level} → ¬ Statement-C-unguarded ℓP
+unguarded-statement-C-refuted {ℓP} stC = (Ps-hold 0F) (Ps-hold 2F)
+  where
+  P : GroupProperty ℓP
+  P 𝒢 = Lift ℓP (IsTrivialᵍ 𝒢)
+
+  family : Fin 3 → FiniteLattice
+  family 0F = chain₃
+  family 1F = chain₃
+  family 2F = chain₁
+
+  Ps : Fin 3 → GroupProperty ℓP
+  Ps 0F = λ 𝒢 → ¬ P 𝒢
+  Ps 1F = λ 𝒢 → ¬ P 𝒢
+  Ps 2F = P
+
+  three : HasThreeDistinct (toLattice chain₃)
+  three = 0F , 1F , 2F , (λ ()) , (λ ()) , (λ ())
+
+  two-big : TwoBigCanopies family
+  two-big = 0F , 1F , (λ ()) , three , three
+
+  cfs : ∀ i → cfIE (Ps i) (toLattice (family i))
+  cfs 0F 𝒢 H H-sg c i l =
+    nontrivial-IE (toLattice chain₃) (0F , 1F , (λ ())) 𝒢 H H-sg i (lower l)
+  cfs 1F 𝒢 H H-sg c i l =
+    nontrivial-IE (toLattice chain₃) (0F , 1F , (λ ())) 𝒢 H H-sg i (lower l)
+  cfs 2F 𝒢 H H-sg c i = lift (trivial-cfIE-chain₁ 𝒢 H H-sg c i)
+
+  joint = stC 1 family Ps two-big cfs
+
+  Ps-hold : ∀ i → Ps i (joint .proj₁)
+  Ps-hold = joint .proj₂ .proj₁
+```
+
 #### The unrestricted pair question is refutable
 
 `cfIE-no-contradictory-Statement`{.AgdaFunction} of [FLRP.WreathNoGo][] asks that
@@ -305,6 +402,15 @@ PairQuestion ℓP =
 
 #### The two-element corner, closed
 
+A two-element chain has two distinct elements, which the guarded statement (C)
+and Lemma 3.3 both consume.
+
+```agda
+isChain₂→hasTwoDistinct : (𝑳 : Lattice) → IsChain₂ 𝑳 → HasTwoDistinct 𝑳
+isChain₂→hasTwoDistinct 𝑳 c₂ =
+  proj₁ (IsChain₂.bot c₂) , proj₁ (IsChain₂.top c₂) , IsChain₂.distinct c₂
+```
+
 First: a contradictory pair cannot live on two-element chains at all, with no
 appeal to statement (C).  The given core-free representation of the first chain
 supplies a group with a core-free maximal subgroup (Entry 9's backward
@@ -342,10 +448,11 @@ This strengthens `statement-C→no-contradictory-pair`{.AgdaFunction} of
 ```agda
 statement-C→no-pair-with-big : {ℓP : Level} → Statement-C ℓP
   → (P : GroupProperty ℓP) (𝑳₁ 𝑳₂ : FiniteLattice)
+  → HasTwoDistinct (toLattice 𝑳₁) → HasTwoDistinct (toLattice 𝑳₂)
   → HasThreeDistinct (toLattice 𝑳₁) ⊎ HasThreeDistinct (toLattice 𝑳₂)
   → cfIE P (toLattice 𝑳₁) → cfIE (λ 𝒢 → ¬ P 𝒢) (toLattice 𝑳₂)
   → ⊥
-statement-C→no-pair-with-big stC P 𝑳₁ 𝑳₂ (inj₁ three₁) cf-ie₁ cf-ie₂ =
+statement-C→no-pair-with-big stC P 𝑳₁ 𝑳₂ two₁ two₂ (inj₁ three₁) cf-ie₁ cf-ie₂ =
   (Ps-hold 2F) (Ps-hold 0F)
   where
   family : Fin 3 → FiniteLattice
@@ -358,6 +465,11 @@ statement-C→no-pair-with-big stC P 𝑳₁ 𝑳₂ (inj₁ three₁) cf-ie₁ 
   Ps 1F = P
   Ps 2F = λ 𝒢 → ¬ P 𝒢
 
+  two-all : ∀ i → HasTwoDistinct (toLattice (family i))
+  two-all 0F = two₁
+  two-all 1F = two₁
+  two-all 2F = two₂
+
   two-big : TwoBigCanopies family
   two-big = 0F , 1F , (λ ()) , three₁ , three₁
 
@@ -366,11 +478,11 @@ statement-C→no-pair-with-big stC P 𝑳₁ 𝑳₂ (inj₁ three₁) cf-ie₁ 
   cfs 1F = cf-ie₁
   cfs 2F = cf-ie₂
 
-  joint = stC 1 family Ps two-big cfs
+  joint = stC 1 family Ps two-all two-big cfs
 
   Ps-hold : ∀ i → Ps i (joint .proj₁)
   Ps-hold = joint .proj₂ .proj₁
-statement-C→no-pair-with-big stC P 𝑳₁ 𝑳₂ (inj₂ three₂) cf-ie₁ cf-ie₂ =
+statement-C→no-pair-with-big stC P 𝑳₁ 𝑳₂ two₁ two₂ (inj₂ three₂) cf-ie₁ cf-ie₂ =
   (Ps-hold 0F) (Ps-hold 2F)
   where
   family : Fin 3 → FiniteLattice
@@ -383,6 +495,11 @@ statement-C→no-pair-with-big stC P 𝑳₁ 𝑳₂ (inj₂ three₂) cf-ie₁ 
   Ps 1F = λ 𝒢 → ¬ P 𝒢
   Ps 2F = P
 
+  two-all : ∀ i → HasTwoDistinct (toLattice (family i))
+  two-all 0F = two₂
+  two-all 1F = two₂
+  two-all 2F = two₁
+
   two-big : TwoBigCanopies family
   two-big = 0F , 1F , (λ ()) , three₂ , three₂
 
@@ -391,7 +508,7 @@ statement-C→no-pair-with-big stC P 𝑳₁ 𝑳₂ (inj₂ three₂) cf-ie₁ 
   cfs 1F = cf-ie₂
   cfs 2F = cf-ie₁
 
-  joint = stC 1 family Ps two-big cfs
+  joint = stC 1 family Ps two-all two-big cfs
 
   Ps-hold : ∀ i → Ps i (joint .proj₁)
   Ps-hold = joint .proj₂ .proj₁
@@ -416,11 +533,20 @@ statement-C→pair-question-classified : {ℓP : Level} → Statement-C ℓP
 statement-C→pair-question-classified stC P 𝑳₁ 𝑳₂ (inj₁ c₁) (inj₁ c₂) r₁ cf₁ =
   pair-on-chains-impossible P (toLattice 𝑳₁) (toLattice 𝑳₂) c₁ c₂ r₁ cf₁
 statement-C→pair-question-classified stC P 𝑳₁ 𝑳₂ (inj₁ c₁) (inj₂ three₂) _ _ =
-  statement-C→no-pair-with-big stC P 𝑳₁ 𝑳₂ (inj₂ three₂)
+  statement-C→no-pair-with-big stC P 𝑳₁ 𝑳₂
+    (isChain₂→hasTwoDistinct (toLattice 𝑳₁) c₁)
+    (threeDistinct→twoDistinct (toLattice 𝑳₂) three₂)
+    (inj₂ three₂)
 statement-C→pair-question-classified stC P 𝑳₁ 𝑳₂ (inj₂ three₁) (inj₁ c₂) _ _ =
-  statement-C→no-pair-with-big stC P 𝑳₁ 𝑳₂ (inj₁ three₁)
-statement-C→pair-question-classified stC P 𝑳₁ 𝑳₂ (inj₂ three₁) (inj₂ _) _ _ =
-  statement-C→no-pair-with-big stC P 𝑳₁ 𝑳₂ (inj₁ three₁)
+  statement-C→no-pair-with-big stC P 𝑳₁ 𝑳₂
+    (threeDistinct→twoDistinct (toLattice 𝑳₁) three₁)
+    (isChain₂→hasTwoDistinct (toLattice 𝑳₂) c₂)
+    (inj₁ three₁)
+statement-C→pair-question-classified stC P 𝑳₁ 𝑳₂ (inj₂ three₁) (inj₂ three₂) _ _ =
+  statement-C→no-pair-with-big stC P 𝑳₁ 𝑳₂
+    (threeDistinct→twoDistinct (toLattice 𝑳₁) three₁)
+    (threeDistinct→twoDistinct (toLattice 𝑳₂) three₂)
+    (inj₁ three₁)
 ```
 
 #### Families on two-element chains intersect
@@ -461,10 +587,6 @@ consumes is packaged from any group with a core-free maximal subgroup through
 Entry 9's forward direction.
 
 ```agda
-isChain₂→hasTwoDistinct : (𝑳 : Lattice) → IsChain₂ 𝑳 → HasTwoDistinct 𝑳
-isChain₂→hasTwoDistinct 𝑳 c₂ =
-  proj₁ (IsChain₂.bot c₂) , proj₁ (IsChain₂.top c₂) , IsChain₂.distinct c₂
-
 chain₂-classes-wreath-rich : {ℓP : Level}
   (P : GroupProperty ℓP) (𝑳 : Lattice) (c₂ : IsChain₂ 𝑳) → cfIE P 𝑳
   → (𝒮 : Group 0ℓ 0ℓ) → NontrivialCenterless 𝒮 → KurzweilWreathInterval 𝒮

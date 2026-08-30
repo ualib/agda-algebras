@@ -647,14 +647,27 @@ GroupFLRP-Statement = (𝑳 : FiniteLattice) → GroupRepresentable (toLattice �
 ```
 
 Theorem `thm-wjd-1` of the note proves (B) equivalent to a statement (C) about
-finite families of cf-IE classes.  Its hypotheses need two side conditions made
-formal: a lattice *has more than two elements* (three pairwise `≈`-distinct
-elements exist), and *at least two members* of the family do.
+finite families of cf-IE classes.  Its hypotheses need three side conditions
+made formal: a lattice *is nontrivial* (two `≈`-distinct elements exist, so its
+canopy has a genuine atom below the shared top), a lattice *has more than two
+elements* (three pairwise `≈`-distinct elements exist), and *at least two
+members* of the family do.  The first condition applies to **every** member of
+a family: a one-element canopy degenerates the parachute construction, and
+dropping the guard makes statement (C) outright false (the refutation is
+`unguarded-statement-C-refuted`{.AgdaFunction} of [FLRP.Hunt][]).
 
 ```agda
+HasTwoDistinct : Lattice → Type 0ℓ
+HasTwoDistinct (L , _) = let open Setoid 𝔻[ L ] in
+  ∃[ x ∈ 𝕌[ L ] ] ∃[ y ∈ 𝕌[ L ] ] ¬ (x ≈ y)
+
 HasThreeDistinct : Lattice → Type 0ℓ
 HasThreeDistinct (L , _) = let open Setoid 𝔻[ L ] in
   ∃[ x ∈ 𝕌[ L ] ] ∃[ y ∈ 𝕌[ L ] ] ∃[ z ∈ 𝕌[ L ] ] ( ¬ (x ≈ y) × ¬ (x ≈ z) × ¬ (y ≈ z) )
+
+-- Three pairwise distinct elements give two.
+threeDistinct→twoDistinct : (𝑳 : Lattice) → HasThreeDistinct 𝑳 → HasTwoDistinct 𝑳
+threeDistinct→twoDistinct 𝑳 (x , y , _ , x≉y , _) = x , y , x≉y
 
 TwoBigCanopies : {m : ℕ} → (Fin m → FiniteLattice) → Type 0ℓ
 TwoBigCanopies {m} 𝑳s =
@@ -664,17 +677,42 @@ TwoBigCanopies {m} 𝑳s =
     × HasThreeDistinct (toLattice (𝑳s j)) )
 ```
 
-Statement (C): for every family of at least two finite lattices, two of them big,
-and properties `Pᵢ` core-free enforceable by them, a *single* group satisfies every
-`Pᵢ` and realizes every `𝑳ᵢ` as an upper interval over a core-free subgroup.  (The
-note's § 3 statement strengthens core-freeness to every proper subgroup between
-`Hᵢ` and `G`; that refinement needs the proper-subgroup language and is deferred to
-RP-1 with the proof.)
+Statement (C): for every family of at least two *nontrivial* finite lattices,
+two of them big, and properties `Pᵢ` core-free enforceable by them, a *single*
+group satisfies every `Pᵢ` and realizes every `𝑳ᵢ` as an upper interval over a
+core-free subgroup.  (The note's § 3 statement strengthens core-freeness to
+every proper subgroup between `Hᵢ` and `G`; that refinement needs the
+proper-subgroup language and is deferred to RP-1 with the proof.)
+
+The per-canopy guard is not decorative.  The first formalization of (C) omitted
+it, quantifying over arbitrary `FiniteLattice`{.AgdaRecord} families, and that
+form is **refutable**: the one-element chain core-free enforces "is trivial"
+while any three-element chain core-free enforces "is nontrivial", and the
+unguarded (C) applied to the family (three-chain, three-chain, one-chain) would
+produce a single group that is both.  The defective form is kept, in the
+`minIE`{.AgdaFunction} tradition, as the record of the repair; the refutation
+itself is `unguarded-statement-C-refuted`{.AgdaFunction} of [FLRP.Hunt][],
+which needed exactly the degenerate-enforcement lemmas RP-3 built for the pair
+question.
 
 ```agda
+-- The unguarded first formalization: refutable, kept as the record of the
+-- defect (see FLRP.Hunt).  Do not consume this in new results.
+Statement-C-unguarded : (ℓP : Level) → Type (lsuc 0ℓ ⊔ lsuc ℓP)
+Statement-C-unguarded ℓP =
+  ∀ (n : ℕ) (𝑳s : Fin (2 + n) → FiniteLattice) (Ps : Fin (2 + n) → GroupProperty ℓP)
+  → TwoBigCanopies 𝑳s
+  → (∀ i → cfIE (Ps i) (toLattice (𝑳s i)))
+  → ∃[ 𝒢 ∈ Group 0ℓ 0ℓ ]
+      ( (∀ i → Ps i 𝒢)
+      × ( ∀ i → ∃[ H ∈ Pred 𝕌[ proj₁ 𝒢 ] 0ℓ ] ∃[ H-sg ∈ IsSubgroup 𝒢 H ]
+                ( CoreFree 𝒢 H H-sg × IntervalIso 𝒢 H H-sg (toLattice (𝑳s i)) )))
+
+-- Statement (C), with every canopy nontrivial: the note's actual statement.
 Statement-C : (ℓP : Level) → Type (lsuc 0ℓ ⊔ lsuc ℓP)
 Statement-C ℓP =
   ∀ (n : ℕ) (𝑳s : Fin (2 + n) → FiniteLattice) (Ps : Fin (2 + n) → GroupProperty ℓP)
+  → (∀ i → HasTwoDistinct (toLattice (𝑳s i)))
   → TwoBigCanopies 𝑳s
   → (∀ i → cfIE (Ps i) (toLattice (𝑳s i)))
   → ∃[ 𝒢 ∈ Group 0ℓ 0ℓ ]
@@ -702,11 +740,15 @@ record ParachuteHypotheses : Type (lsuc 0ℓ) where
 
     -- Its defining property: a core-free group representation of the
     -- parachute yields, for each canopy, a representation of that canopy
-    -- over a core-free subgroup of the same group.
+    -- over a core-free subgroup of the same group.  The per-canopy guard is
+    -- required here for the same reason as in Statement-C: a one-element
+    -- canopy admits no core-free representation over a nontrivial group, so
+    -- the unguarded field is not satisfiable.
     canopy-intervals :
       (n : ℕ) (𝑳s : Fin (2 + n) → FiniteLattice)
       (r : GroupRepresentable (toLattice (parachute n 𝑳s)))
       → CoreFree (r .grp) (r .sub) (r .isSubgroup)
+      → (∀ i → HasTwoDistinct (toLattice (𝑳s i)))
       → TwoBigCanopies 𝑳s
       → ∀ i → ∃[ H ∈ Pred 𝕌[ proj₁ (r .grp) ] 0ℓ ] ∃[ H-sg ∈ IsSubgroup (r .grp) H ]
                 ( CoreFree (r .grp) H H-sg × IntervalIso (r .grp) H H-sg (toLattice (𝑳s i)) )
