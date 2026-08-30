@@ -232,6 +232,12 @@ def emitted_module(claim: Claim, cert: WholeLatticeCertificate,
         "  joinTrᵛ = ",
         [vec_block([trace_block(t) for t in row]) for row in cert.join_traces])
 
+    # `translate` is imported only when some trace justification uses it;
+    # an unconditional import trips the unused-imports gate on the (rare)
+    # certificate whose merges are all seed-justified.
+    uses_translate = any("translate" in line for line in list(prin_tr) + list(join_tr))
+    schema_seed_uses = "; seed ; translate )" if uses_translate else "; seed )"
+
     def lines(block: Block) -> str:
         return "\n".join(block)
 
@@ -297,7 +303,7 @@ open import Setoid.Algebras.Finite       using ( FiniteAlgebra )
 open import Setoid.Congruences.Certificates.Schema
                                          using ( ParentVec ; Trace ; LatticeCert
                                                ; mkLatticeCert ; mkMerge
-                                               ; seed ; translate )
+                                               {schema_seed_uses}
 open import Setoid.Congruences.Certificates.Congruence
                                          using ( module CertCheck )
 open import Setoid.Congruences.Certificates.Lattice

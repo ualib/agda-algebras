@@ -107,7 +107,7 @@ open import Setoid.Congruences.Basic                       using  ( _∣≈_ ; m
                                                                   ; is-equivalence
                                                                   ; is-compatible )
 open import Setoid.Congruences.Certificates.Schema         using  ( ParentVec )
-open import Setoid.Congruences.Finite.Basic                using  ( DecCon ; ConRel )
+open import Setoid.Congruences.Finite.Basic                using  ( DecCon )
 open import Setoid.Signatures.Finite                       using  ( FiniteSignature )
 
 open Algebra using ( Interp )
