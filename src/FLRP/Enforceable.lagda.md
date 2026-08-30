@@ -319,8 +319,8 @@ IE P 𝑳 = ∀ 𝒢 H H-sg → IntervalIso 𝒢 H H-sg 𝑳 → P 𝒢
 ```
 
 Core-freeness of a subgroup is expressed through the normal core:[^wp-2] the core of
-`H` — the greatest normal subgroup below `H`, constructed in
-[Classical.Structures.Group.NormalCore][] as the meet of all conjugates — is
+`H` (the greatest normal subgroup below `H`, constructed in
+[Classical.Structures.Group.NormalCore][] as the meet of all conjugates) is
 contained in the trivial subgroup (the `≈`-class of the identity).
 
 The converse containment always holds (the core is a subgroup, hence contains the
@@ -334,6 +334,15 @@ CoreFree 𝒢 H H-sg = proj₁ (Core.core 𝒢 H H-sg) ⊆ proj₁ (trivialSubgr
 ```
 
 where `𝒢` and `H` range over `Group 0ℓ 0ℓ` and `Pred 𝕌[ proj₁ 𝒢 ] 0ℓ`, respectively.
+
+```agda
+record CoreFreeRepresentable (𝑳 : Lattice) : Type (lsuc 0ℓ) where
+  field
+    rep  : GroupRepresentable 𝑳
+    cf   : CoreFree  (GroupRepresentable.grp rep)
+                     (GroupRepresentable.sub rep)
+                     (GroupRepresentable.isSubgroup rep)
+```
 
 `cfIE P 𝑳` weakens `IE` by demanding the conclusion only for representations over a
 core-free subgroup; consequently every IE property is cf-IE.
@@ -657,8 +666,8 @@ dropping the guard makes statement (C) outright false (the refutation is
 `unguarded-statement-C-refuted`{.AgdaFunction} of [FLRP.Hunt][]).
 
 ```agda
-HasTwoDistinct : Lattice → Type 0ℓ
-HasTwoDistinct (L , _) = let open Setoid 𝔻[ L ] in
+Nontrivial : Lattice → Type 0ℓ
+Nontrivial (L , _) = let open Setoid 𝔻[ L ] in
   ∃[ x ∈ 𝕌[ L ] ] ∃[ y ∈ 𝕌[ L ] ] ¬ (x ≈ y)
 
 HasThreeDistinct : Lattice → Type 0ℓ
@@ -666,7 +675,7 @@ HasThreeDistinct (L , _) = let open Setoid 𝔻[ L ] in
   ∃[ x ∈ 𝕌[ L ] ] ∃[ y ∈ 𝕌[ L ] ] ∃[ z ∈ 𝕌[ L ] ] ( ¬ (x ≈ y) × ¬ (x ≈ z) × ¬ (y ≈ z) )
 
 -- Three pairwise distinct elements give two.
-threeDistinct→twoDistinct : (𝑳 : Lattice) → HasThreeDistinct 𝑳 → HasTwoDistinct 𝑳
+threeDistinct→twoDistinct : (𝑳 : Lattice) → HasThreeDistinct 𝑳 → Nontrivial 𝑳
 threeDistinct→twoDistinct 𝑳 (x , y , _ , x≉y , _) = x , y , x≉y
 
 TwoBigCanopies : {m : ℕ} → (Fin m → FiniteLattice) → Type 0ℓ
@@ -712,7 +721,7 @@ Statement-C-unguarded ℓP =
 Statement-C : (ℓP : Level) → Type (lsuc 0ℓ ⊔ lsuc ℓP)
 Statement-C ℓP =
   ∀ (n : ℕ) (𝑳s : Fin (2 + n) → FiniteLattice) (Ps : Fin (2 + n) → GroupProperty ℓP)
-  → (∀ i → HasTwoDistinct (toLattice (𝑳s i)))
+  → (∀ i → Nontrivial (toLattice (𝑳s i)))
   → TwoBigCanopies 𝑳s
   → (∀ i → cfIE (Ps i) (toLattice (𝑳s i)))
   → ∃[ 𝒢 ∈ Group 0ℓ 0ℓ ]
@@ -748,7 +757,7 @@ record ParachuteHypotheses : Type (lsuc 0ℓ) where
       (n : ℕ) (𝑳s : Fin (2 + n) → FiniteLattice)
       (r : GroupRepresentable (toLattice (parachute n 𝑳s)))
       → CoreFree (r .grp) (r .sub) (r .isSubgroup)
-      → (∀ i → HasTwoDistinct (toLattice (𝑳s i)))
+      → (∀ i → Nontrivial (toLattice (𝑳s i)))
       → TwoBigCanopies 𝑳s
       → ∀ i → ∃[ H ∈ Pred 𝕌[ proj₁ (r .grp) ] 0ℓ ] ∃[ H-sg ∈ IsSubgroup (r .grp) H ]
                 ( CoreFree (r .grp) H H-sg × IntervalIso (r .grp) H H-sg (toLattice (𝑳s i)) )

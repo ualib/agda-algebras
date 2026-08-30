@@ -110,7 +110,7 @@ open import Classical.Structures.Lattice.Dual       using  ( dualLattice )
 open import FLRP.Enforceable    using  ( cfIE ; CoreFree ; GroupRepresentable
                                        ; GroupProperty ; IntervalIso
                                        ; Statement-C ; TwoBigCanopies
-                                       ; HasTwoDistinct ; HasThreeDistinct
+                                       ; Nontrivial ; HasThreeDistinct
                                        ; threeDistinct→twoDistinct )
 open import FLRP.Problem        using  ( FiniteLattice ; toLattice )
 open import Overture            using  ( ∃-syntax )
@@ -123,14 +123,14 @@ open GroupRepresentable
 #### Two distinct elements, and their transport to the dual
 
 **The nontriviality side condition on the enforcing lattice** is
-`HasTwoDistinct`{.AgdaFunction} of [FLRP.Enforceable][], where it now lives
+`Nontrivial`{.AgdaFunction} of [FLRP.Enforceable][], where it now lives
 beside its three-element sibling as a guard of statement (C).  The dual lattice
 of [Classical.Structures.Lattice.Dual][] lives on the *same* carrier setoid, so
 the witness transports unchanged.
 
 ```agda
 -- The dual shares carrier and equality, so the witness transports as-is.
-hasTwoDistinct-dual : (𝑳 : Lattice) → HasTwoDistinct 𝑳 → HasTwoDistinct (dualLattice 𝑳)
+hasTwoDistinct-dual : (𝑳 : Lattice) → Nontrivial 𝑳 → Nontrivial (dualLattice 𝑳)
 hasTwoDistinct-dual 𝑳 w = w
 ```
 
@@ -197,7 +197,7 @@ KurzweilWreathInterval 𝒮 =
   ∀ (𝑳 : Lattice) (𝒢 : Group 0ℓ 0ℓ) (H : Pred 𝕌[ proj₁ 𝒢 ] 0ℓ)
     (H-sg : IsSubgroup 𝒢 H)
   → FiniteAlgebra (proj₁ 𝒢)
-  → CoreFree 𝒢 H H-sg → IntervalIso 𝒢 H H-sg 𝑳 → HasTwoDistinct 𝑳
+  → CoreFree 𝒢 H H-sg → IntervalIso 𝒢 H H-sg 𝑳 → Nontrivial 𝑳
   → WreathIntervalData 𝒮 𝑳 𝒢 H H-sg
 ```
 
@@ -260,7 +260,7 @@ cfIE-must-have-wreaths :
   → (r : GroupRepresentable 𝑳)
   → FiniteAlgebra (proj₁ (r .grp))
   → CoreFree (r .grp) (r .sub) (r .isSubgroup)
-  → HasTwoDistinct 𝑳
+  → Nontrivial 𝑳
   → ∃[ 𝒰 ∈ Group 0ℓ 0ℓ ] ∃[ m ∈ ℕ ]
       Σ[ A ∈ RightAction (Fin (2 + m)) 𝒰 ] P (𝒮 ≀ᵍ A)
 cfIE-must-have-wreaths P 𝑳 𝒮 nc kwi cf-ie r fin cf two =
@@ -322,7 +322,7 @@ omits-wreaths→not-cfIE :
   → (r : GroupRepresentable 𝑳)
   → FiniteAlgebra (proj₁ (r .grp))
   → CoreFree (r .grp) (r .sub) (r .isSubgroup)
-  → HasTwoDistinct 𝑳
+  → Nontrivial 𝑳
   → ⊥
 omits-wreaths→not-cfIE P 𝑳 𝒮 nc kwi omits cf-ie r fin cf two = omits 𝒰 m A holds
   where
@@ -372,12 +372,12 @@ contradictory-pair-wreaths :
   → (r₁ : GroupRepresentable 𝑳₁)
   → FiniteAlgebra (proj₁ (r₁ .grp))
   → CoreFree (r₁ .grp) (r₁ .sub) (r₁ .isSubgroup)
-  → HasTwoDistinct 𝑳₁
+  → Nontrivial 𝑳₁
   → cfIE (λ 𝒢 → ¬ P 𝒢) 𝑳₂
   → (r₂ : GroupRepresentable 𝑳₂)
   → FiniteAlgebra (proj₁ (r₂ .grp))
   → CoreFree (r₂ .grp) (r₂ .sub) (r₂ .isSubgroup)
-  → HasTwoDistinct 𝑳₂
+  → Nontrivial 𝑳₂
   →  (∃[ 𝒰 ∈ Group 0ℓ 0ℓ ] ∃[ m ∈ ℕ ]
         Σ[ A ∈ RightAction (Fin (2 + m)) 𝒰 ] P (𝒮 ≀ᵍ A))
   ×  (∃[ 𝒱 ∈ Group 0ℓ 0ℓ ] ∃[ l ∈ ℕ ]
@@ -417,7 +417,7 @@ statement-C→no-contradictory-pair stC P 𝑳₁ 𝑳₂ three₁ three₂ cf-i
   Ps 0F = P
   Ps 1F = λ 𝒢 → ¬ P 𝒢
 
-  two-all : ∀ i → HasTwoDistinct (toLattice (family i))
+  two-all : ∀ i → Nontrivial (toLattice (family i))
   two-all 0F = threeDistinct→twoDistinct (toLattice 𝑳₁) three₁
   two-all 1F = threeDistinct→twoDistinct (toLattice 𝑳₂) three₂
 

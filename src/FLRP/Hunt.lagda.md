@@ -61,7 +61,7 @@ concrete core-free representation of the one-element chain, so the unrestricted
 statement is refuted outright from any core-free representation of any lattice
 with two distinct elements (`unrestricted-question-refuted`{.AgdaFunction}).
 The honest form of the dead-end question, `PairQuestion`{.AgdaFunction} below,
-carries `HasTwoDistinct`{.AgdaFunction} on both lattices; everything RP-4 proved
+carries `Nontrivial`{.AgdaFunction} on both lattices; everything RP-4 proved
 about the question applies to this form verbatim.
 
 **A repair to statement (C) itself.**  The same degenerate pair refutes the
@@ -70,7 +70,7 @@ of finite lattices: instantiated at the family (three-chain, three-chain,
 one-chain) it would produce a single group that is both trivial and nontrivial
 (`unguarded-statement-C-refuted`{.AgdaFunction} below).  The repaired
 `Statement-C`{.AgdaFunction} of [FLRP.Enforceable][] guards every canopy with
-`HasTwoDistinct`{.AgdaFunction}, matching the note's construction, and the
+`Nontrivial`{.AgdaFunction}, matching the note's construction, and the
 defective form is kept there as `Statement-C-unguarded`{.AgdaFunction} in the
 `minIE`{.AgdaFunction} tradition of recording repairs.
 
@@ -90,53 +90,54 @@ module FLRP.Hunt where
 open import Agda.Primitive using () renaming ( Set to Type )
 
 -- Imports from the Agda Standard Library ---------------------------------------
-open import Data.Empty          using  ( ⊥ )
-open import Data.Fin.Base       using  ( Fin )
-open import Data.Fin.Patterns   using  ( 0F ; 1F ; 2F )
-open import Data.Nat.Base       using  ( ℕ ; _+_ )
-open import Data.Product        using  ( Σ-syntax ; _,_ ; proj₁ ; proj₂ )
-open import Data.Sum.Base       using  ( _⊎_ ; inj₁ ; inj₂ )
-open import Data.Unit.Base      using  ( ⊤ ; tt )
-open import Data.Vec.Base       using  ( _∷_ ; [] )
-open import Level               using  ( Level ; 0ℓ ; _⊔_ ; Lift ; lift ; lower )
-                                renaming ( suc to lsuc )
-open import Relation.Binary     using  ( Setoid )
+open import Data.Empty                             using  ( ⊥ )
+open import Data.Fin.Base                          using  ( Fin )
+open import Data.Fin.Patterns                      using  ( 0F ; 1F ; 2F )
+open import Data.Nat.Base                          using  ( ℕ ; _+_ )
+open import Data.Product                           using  ( Σ-syntax ; _,_ ; _×_
+                                                          ; ∃-syntax ; proj₁ ; proj₂ )
+open import Data.Sum.Base                          using  ( _⊎_ ; inj₁ ; inj₂ )
+open import Data.Unit.Base                         using  ( ⊤ ; tt )
+open import Data.Vec.Base                          using  ( _∷_ ; [] )
+open import Function                               using  ( id )
+open import Level                                  using  ( Level ; 0ℓ ; _⊔_
+                                                          ; Lift ; lift ; lower )
+                                                   renaming ( suc to lsuc )
+open import Relation.Binary                        using  ( Setoid )
 open import Relation.Binary.PropositionalEquality  using  ( refl )
-open import Relation.Nullary    using  ( ¬_ )
-open import Relation.Unary      using  ( Pred ; _∈_ )
+open import Relation.Nullary                       using  ( ¬_ )
+open import Relation.Unary                         using  ( Pred ; _∈_ )
 
 -- Imports from the Agda Universal Algebra Library ------------------------------
-open import Classical.Properties.Lattice       using  ( module Lattice-Order )
-open import Classical.Small.Structures         using  ( Lattice )
-open import Classical.Small.Structures.Group   using  ( eqsToGroup )
-open import Classical.Structures.Group         using  ( Group ; IsSubgroup
-                                                      ; module Core
-                                                      ; module MaximalSubgroup
-                                                      ; trivialSubgroup
-                                                      ; fullSubgroup )
-open import Classical.Structures.Group.Basic   using  ( module Group-Op )
-open import Classical.Structures.Group.IndexAction  using  ( RightAction )
-open import Classical.Structures.Group.Wreath  using  ( _≀ᵍ_ )
-open import FLRP.Enforceable   using  ( CoreFree ; GroupProperty
-                                      ; GroupRepresentable ; IE ; IntervalIso
-                                      ; Statement-C ; Statement-C-unguarded
-                                      ; TwoBigCanopies ; HasTwoDistinct
-                                      ; HasThreeDistinct
-                                      ; threeDistinct→twoDistinct ; cfIE
-                                      ; module UpperInterval )
-open import FLRP.Problem       using  ( FiniteLattice ; toLattice
-                                      ; chain₁ ; chain₁-lattice ; OrderIso )
-open import FLRP.Reductions    using  ( IsChain₂ ; module Chain₂Interval )
-open import FLRP.WreathNoGo    using  ( NontrivialCenterless
-                                      ; KurzweilWreathInterval
-                                      ; cfIE-must-have-wreaths
-                                      ; cfIE-no-contradictory-Statement )
-open import Overture.Cayley    using  ( Table ; ⟦_⟧ ; from-yes )
-open import Overture.Operations.Properties
-                               using  ( Associative? ; Commutative? ; Idempotent?
-                                      ; Absorbsˡ? ; Absorbsʳ? )
-open import Overture           using  ( ∃-syntax )
-open import Setoid.Algebras    using  ( 𝕌[_] ; 𝔻[_] ; FiniteAlgebra )
+open import Classical.Properties.Lattice    using  ( module Lattice-Order )
+open import Classical.Small.Structures      using  ( Lattice ; eqsToGroup )
+open import Classical.Structures.Group      using  ( Group ; IsSubgroup ; module Core
+                                                   ; module MaximalSubgroup ; _≀ᵍ_
+                                                   ; trivialSubgroup ; fullSubgroup
+                                                   ; module Group-Op ; RightAction )
+open import FLRP.Enforceable                using  ( CoreFree ; GroupProperty
+                                                   ; GroupRepresentable
+                                                   ; CoreFreeRepresentable ; IE
+                                                   ; IntervalIso ; Nontrivial
+                                                   ; Statement-C ; HasThreeDistinct
+                                                   ; Statement-C-unguarded
+                                                   ; TwoBigCanopies ; cfIE
+                                                   ; threeDistinct→twoDistinct
+                                                   ; module UpperInterval )
+open import FLRP.Problem                    using  ( FiniteLattice ; chain₁-lattice
+                                                   ; toLattice ; chain₁ ; OrderIso )
+open import FLRP.Reductions                 using  ( module Chain₂Interval
+                                                   ; IsChain₂ )
+open import FLRP.WreathNoGo                 using  ( NontrivialCenterless
+                                                   ; KurzweilWreathInterval
+                                                   ; cfIE-must-have-wreaths
+                                                   ; cfIE-no-contradictory-Statement )
+open import Overture.Cayley                 using  ( Table ; ⟦_⟧ ; from-yes )
+open import Overture.Operations.Properties  using  ( Associative? ; Commutative?
+                                                   ; Absorbsˡ? ; Absorbsʳ?
+                                                   ; Idempotent? )
+open import Overture                        using  ( ∃-syntax )
+open import Setoid.Algebras                 using  ( 𝕌[_] ; 𝔻[_] ; FiniteAlgebra )
 
 open GroupRepresentable
 ```
@@ -156,7 +157,7 @@ IsTrivialᵍ 𝒢 = ∀ x → x ≈ ε
   open Group-Op 𝒢           using  ( ε )
 ```
 
-**The one-element chain core-free enforces triviality.**  A representation
+**A core-free one-element chain implies triviality**.  A representation
 `[H , G] ≅ 𝟙` collapses the interval, so `H` is all of `G`; then the normal core
 of `H` is also all of `G`, and core-freeness makes every element the identity.
 Note that plain IE fails here: without core-freeness, `[G , G]` realizes the
@@ -168,21 +169,23 @@ trivial-cfIE-chain₁ 𝒢 H H-sg cf iso x =
   cf (Core.conj-mem-core 𝒢 H H-sg (λ g → allH _))
   where
   open UpperInterval 𝒢 H H-sg  using  ( Interval≈ ; mk ; set ; above )
-  module I = OrderIso iso
+  -- module I = OrderIso iso
+  open OrderIso iso using ( to ; from∘to ; from-mono )
 
   H↑ᵉ G↑ᵉ : Interval≈
-  H↑ᵉ = mk H H-sg (λ h → h)
-  G↑ᵉ = mk (proj₁ (fullSubgroup 𝒢 0ℓ)) (proj₂ (fullSubgroup 𝒢 0ℓ)) (λ _ → lift tt)
+  H↑ᵉ = mk H H-sg id
+  G↑ᵉ = mk (fullSubgroup 𝒢 0ℓ .proj₁) (fullSubgroup 𝒢 0ℓ .proj₂) (λ _ → lift tt)
+  open Lattice-Order chain₁-lattice using (_≤_)
 
   -- Any two elements of the one-element chain are related.
-  ≤₁ : ∀ u v → Lattice-Order._≤_ chain₁-lattice u v
-  ≤₁ 0F 0F = refl
+  _≤₁_ : ∀ u v → u ≤ v
+  0F ≤₁ 0F = refl
 
   -- The full subgroup collapses onto H through the isomorphism.
   allH : ∀ y → y ∈ H
-  allH y = proj₁ (I.from∘to H↑ᵉ)
-    (I.from-mono {I.to G↑ᵉ} {I.to H↑ᵉ} (≤₁ (I.to G↑ᵉ) (I.to H↑ᵉ))
-      (proj₂ (I.from∘to G↑ᵉ) (lift tt)))
+  allH y = from∘to H↑ᵉ .proj₁  ( from-mono  (to G↑ᵉ ≤₁ to H↑ᵉ)
+                                            (from∘to G↑ᵉ .proj₂ (lift tt))
+                               )
 ```
 
 **Every lattice with two distinct elements enforces nontriviality**, and at the
@@ -191,33 +194,32 @@ contains the identity's class, which is everything), so the isomorphism would
 collapse the two distinct lattice elements.
 
 ```agda
-nontrivial-IE : (𝑳 : Lattice) → HasTwoDistinct 𝑳 → IE (λ 𝒢 → ¬ IsTrivialᵍ 𝒢) 𝑳
-nontrivial-IE 𝑳 (x , y , x≉y) 𝒢 H H-sg iso triv = x≉y x≈y
+nontrivial-IE : (ℒ : Lattice) → Nontrivial ℒ → IE (λ 𝒢 → ¬ IsTrivialᵍ 𝒢) ℒ
+nontrivial-IE ℒ@(𝑳 , _) (x , y , x≉y) 𝒢@(𝑮 , _) H H-sg iso triv = x≉y x≈y
   where
-  open Setoid 𝔻[ proj₁ 𝑳 ]  using  ()
-    renaming ( _≈_ to _≈ᴸ_ ; sym to ≈ᴸ-sym ; trans to ≈ᴸ-trans )
-  open Setoid 𝔻[ proj₁ 𝒢 ]  using  ()  renaming ( sym to ≈ᵍ-sym )
-  open Lattice-Order 𝑳      using  ( ≤-antisym )
-  open UpperInterval 𝒢 H H-sg
-    using  ( Interval≈ ; set ; element-isSubgroup ; _≈ᵢ_ )
-  open IsSubgroup
-  module I = OrderIso iso
+  open Setoid 𝔻[ 𝑳 ] using ( _≈_ ; sym ; trans)
+  open Setoid 𝔻[ 𝑮 ] using() renaming ( sym to ≈ᵍ-sym )
+  open Lattice-Order ℒ using ( ≤-antisym )
+  open UpperInterval 𝒢 H H-sg using ( Interval≈ ; set ; element-isSubgroup ; _≈ᵢ_ )
+  open IsSubgroup using ( respects ; ε-closed )
+  open OrderIso iso using ( from ; to∘from ; to-mono )
 
   -- Over a trivial group, every interval element contains every element.
   every : (B : Interval≈) → ∀ z → z ∈ set B
-  every B z = respects (element-isSubgroup B) (≈ᵍ-sym (triv z))
-                       (ε-closed (element-isSubgroup B))
+  every B z = respects  (element-isSubgroup B) (≈ᵍ-sym (triv z))
+                        (ε-closed (element-isSubgroup B))
 
   -- Hence any two interval elements are equal ...
   same : (A B : Interval≈) → A ≈ᵢ B
   same A B = (λ {z} _ → every B z) , (λ {z} _ → every A z)
 
   -- ... and the two distinct lattice elements collapse.
-  x≈y : x ≈ᴸ y
-  x≈y = ≈ᴸ-trans (≈ᴸ-sym (I.to∘from x))
-        (≈ᴸ-trans (≤-antisym  (I.to-mono (proj₁ (same (I.from x) (I.from y))))
-                              (I.to-mono (proj₂ (same (I.from x) (I.from y)))))
-                  (I.to∘from y))
+  x≈y : x ≈ y
+  x≈y = trans  ( sym (to∘from x) )
+               ( trans  (≤-antisym  (to-mono (same (from x) (from y) .proj₁))
+                                    (to-mono (same (from x) (from y) .proj₂)))
+                        (to∘from y)
+               )
 ```
 
 #### A concrete core-free representation of the one-element chain
@@ -230,11 +232,11 @@ The trivial group, on the unit carrier; every group law is `refl` by eta.
        (λ _ _ _ → refl) (λ _ → refl) (λ _ → refl) (λ _ → refl) (λ _ → refl)
 
 private
-  𝟙-sub : Pred 𝕌[ proj₁ 𝟙ᵍ ] 0ℓ
-  𝟙-sub = proj₁ (trivialSubgroup 𝟙ᵍ)
+  𝟙-sub : Pred 𝕌[ 𝟙ᵍ .proj₁ ] 0ℓ
+  𝟙-sub = trivialSubgroup 𝟙ᵍ .proj₁
 
   𝟙-sub-sg : IsSubgroup 𝟙ᵍ 𝟙-sub
-  𝟙-sub-sg = proj₂ (trivialSubgroup 𝟙ᵍ)
+  𝟙-sub-sg = trivialSubgroup 𝟙ᵍ .proj₂
 ```
 
 The interval `[1 , 𝟙]` is a one-element poset and the isomorphism is by constant
@@ -245,17 +247,16 @@ out concrete representations of the *two*-element chain.
 
 ```agda
 chain₁-coreFreeRep : GroupRepresentable chain₁-lattice
-chain₁-coreFreeRep = record
-  { grp           = 𝟙ᵍ
-  ; sub           = 𝟙-sub
-  ; isSubgroup    = 𝟙-sub-sg
-  ; interval-iso  = iso
-  }
+chain₁-coreFreeRep = record  { grp = 𝟙ᵍ
+                             ; sub = 𝟙-sub
+                             ; isSubgroup = 𝟙-sub-sg
+                             ; interval-iso = iso
+                             }
   where
   open UpperInterval 𝟙ᵍ 𝟙-sub 𝟙-sub-sg  using  ( Interval≈ ; mk ; above )
 
   H↑ᵉ : Interval≈
-  H↑ᵉ = mk 𝟙-sub 𝟙-sub-sg (λ h → h)
+  H↑ᵉ = mk 𝟙-sub 𝟙-sub-sg id
 
   iso : IntervalIso 𝟙ᵍ 𝟙-sub 𝟙-sub-sg chain₁-lattice
   iso = record
@@ -282,7 +283,7 @@ the two three-chains meet the two-big-canopies side condition, every member is
 core-free enforceable by the lemmas above, and the single group (C) produces
 would be simultaneously trivial and nontrivial.  The repaired
 `Statement-C`{.AgdaFunction} of [FLRP.Enforceable][] guards every canopy with
-`HasTwoDistinct`{.AgdaFunction}; the defective form is kept there as
+`Nontrivial`{.AgdaFunction}; the defective form is kept there as
 `Statement-C-unguarded`{.AgdaFunction}, and here is its refutation.
 
 The three-element chain, in the Cayley style of `chain₂`{.AgdaFunction} of
@@ -313,7 +314,7 @@ chain₃ .absorbˡ  = from-yes (Absorbsˡ? _∧₃_ _∨₃_)
 chain₃ .absorbʳ  = from-yes (Absorbsʳ? _∧₃_ _∨₃_)
 ```
 
-The refutation.  Nothing about it is hypothetical: every ingredient is one of
+**The refutation**.  Nothing about it is hypothetical: every ingredient is one of
 the degenerate enforcements proved above, at the concrete chains.
 
 ```agda
@@ -346,6 +347,14 @@ unguarded-statement-C-refuted {ℓP} stC = (Ps-hold 0F) (Ps-hold 2F)
     nontrivial-IE (toLattice chain₃) (0F , 1F , (λ ())) 𝒢 H H-sg i (lower l)
   cfs 2F 𝒢 H H-sg c i = lift (trivial-cfIE-chain₁ 𝒢 H H-sg c i)
 
+  joint : ∃[ 𝒢 ∈ Group 0ℓ 0ℓ ]
+    (∀ i → Ps i 𝒢)
+    ×  ( ∀ i → ∃[ H ] ∃[ H-sg ]  (  CoreFree 𝒢 H H-sg
+                                    × IntervalIso 𝒢 H H-sg (toLattice (family i))
+                                 )
+       )
+
+
   joint = stC 1 family Ps two-big cfs
 
   Ps-hold : ∀ i → Ps i (joint .proj₁)
@@ -358,21 +367,21 @@ unguarded-statement-C-refuted {ℓP} stC = (Ps-hold 0F) (Ps-hold 2F)
 no property and its negation both be cf-IE via lattices with core-free
 representations, with no size condition on the lattices.  The degenerate pair
 (`IsTrivialᵍ`{.AgdaFunction} via the one-element chain, its negation via any
-two-distinct lattice) refutes it, from any core-free representation of any
-lattice with two distinct elements; classically such a representation exists
-(`[1 , C₂]`), so the unrestricted statement is classically false and the
-two-distinct hypotheses of `PairQuestion`{.AgdaFunction} below are not optional
-bookkeeping but part of the question's content.
+two-distinct lattice) refutes it, from any core-free representation of any lattice
+with two distinct elements; classically such a representation exists (`[1 , C₂]`),
+so the unrestricted statement is classically false and the two-distinct hypotheses
+of `PairQuestion`{.AgdaFunction} below are not optional bookkeeping but part of
+the question's content.
 
 ```agda
 unrestricted-question-refuted : {ℓP : Level}
-  (𝑳 : Lattice) (r : GroupRepresentable 𝑳)
-  → CoreFree (r .grp) (r .sub) (r .isSubgroup)
-  → HasTwoDistinct 𝑳
-  → ¬ cfIE-no-contradictory-Statement ℓP
-unrestricted-question-refuted {ℓP} 𝑳 r cf two stmt =
-  stmt P chain₁-lattice 𝑳 chain₁-coreFreeRep chain₁-coreFree cfP r cf cf¬P
+  (𝑳 : Lattice) (r : CoreFreeRepresentable 𝑳)
+  → Nontrivial 𝑳 → ¬ cfIE-no-contradictory-Statement ℓP
+unrestricted-question-refuted {ℓP} 𝑳 r two stmt =
+  stmt P chain₁-lattice 𝑳 chain₁-coreFreeRep chain₁-coreFree cfP rep cf cf¬P
   where
+  open CoreFreeRepresentable r
+
   P : GroupProperty ℓP
   P 𝒢 = Lift ℓP (IsTrivialᵍ 𝒢)
 
@@ -386,17 +395,15 @@ unrestricted-question-refuted {ℓP} 𝑳 r cf two stmt =
 #### The pair question, repaired
 
 The honest statement of RP-4's dead-end question: both lattices carry core-free
-representations *and* two distinct elements.  As before this is a statement type
-only; no inhabitant is claimed in either direction.
+representations *and* both are nontrivial lattices.  As before this is a statement
+type only; no inhabitant is claimed in either direction.
 
 ```agda
 PairQuestion : (ℓP : Level) → Type (lsuc 0ℓ ⊔ lsuc ℓP)
 PairQuestion ℓP =
   ∀ (P : GroupProperty ℓP) (𝑳₁ 𝑳₂ : Lattice)
-  → (r₁ : GroupRepresentable 𝑳₁) → CoreFree (r₁ .grp) (r₁ .sub) (r₁ .isSubgroup)
-  → HasTwoDistinct 𝑳₁ → cfIE P 𝑳₁
-  → (r₂ : GroupRepresentable 𝑳₂) → CoreFree (r₂ .grp) (r₂ .sub) (r₂ .isSubgroup)
-  → HasTwoDistinct 𝑳₂ → cfIE (λ 𝒢 → ¬ P 𝒢) 𝑳₂
+  → (r₁ : CoreFreeRepresentable 𝑳₁) → Nontrivial 𝑳₁ → cfIE P 𝑳₁
+  → (r₂ : CoreFreeRepresentable 𝑳₂) → Nontrivial 𝑳₂ → cfIE (λ 𝒢 → ¬ P 𝒢) 𝑳₂
   → ⊥
 ```
 
@@ -406,7 +413,7 @@ A two-element chain has two distinct elements, which the guarded statement (C)
 and Lemma 3.3 both consume.
 
 ```agda
-isChain₂→hasTwoDistinct : (𝑳 : Lattice) → IsChain₂ 𝑳 → HasTwoDistinct 𝑳
+isChain₂→hasTwoDistinct : (𝑳 : Lattice) → IsChain₂ 𝑳 → Nontrivial 𝑳
 isChain₂→hasTwoDistinct 𝑳 c₂ =
   proj₁ (IsChain₂.bot c₂) , proj₁ (IsChain₂.top c₂) , IsChain₂.distinct c₂
 ```
@@ -421,22 +428,24 @@ direction), so the one group would satisfy the property and its negation.
 pair-on-chains-impossible : {ℓP : Level}
   (P : GroupProperty ℓP) (𝑳₁ 𝑳₂ : Lattice)
   → IsChain₂ 𝑳₁ → IsChain₂ 𝑳₂
-  → (r₁ : GroupRepresentable 𝑳₁) → CoreFree (r₁ .grp) (r₁ .sub) (r₁ .isSubgroup)
+  → (cfr₁ : CoreFreeRepresentable 𝑳₁)
   → cfIE P 𝑳₁ → cfIE (λ 𝒢 → ¬ P 𝒢) 𝑳₂
   → ⊥
-pair-on-chains-impossible P 𝑳₁ 𝑳₂ c₁ c₂ r₁ cf₁ enfP enf¬P = ¬P-holds P-holds
+pair-on-chains-impossible P 𝑳₁ 𝑳₂ c₁ c₂ cfr₁ enfP enf¬P = ¬P-holds P-holds
   where
-  P-holds : P (r₁ .grp)
-  P-holds = enfP (r₁ .grp) (r₁ .sub) (r₁ .isSubgroup) cf₁ (r₁ .interval-iso)
+  open CoreFreeRepresentable cfr₁
+  P-holds : P (rep .grp)
+  P-holds = enfP (rep .grp) (rep .sub) (rep .isSubgroup) cf (rep .interval-iso)
 
   H-max = Chain₂Interval.intervalIso→maximal 𝑳₁ c₁
-            (r₁ .grp) (r₁ .sub) (r₁ .isSubgroup) (r₁ .interval-iso)
+            (rep .grp) (rep .sub) (rep .isSubgroup) (rep .interval-iso)
 
-  ¬P-holds : ¬ P (r₁ .grp)
-  ¬P-holds = enf¬P (r₁ .grp) (r₁ .sub) (r₁ .isSubgroup) cf₁
+  ¬P-holds : ¬ P (rep .grp)
+  ¬P-holds = enf¬P (rep .grp) (rep .sub) (rep .isSubgroup) cf
     (Chain₂Interval.maximal→intervalIso 𝑳₂ c₂
-      (r₁ .grp) (r₁ .sub) (r₁ .isSubgroup) H-max)
+      (rep .grp) (rep .sub) (rep .isSubgroup) H-max)
 ```
+
 
 Second: statement (C) kills any pair in which at least one lattice has three
 distinct elements, with **no hypothesis at all on the other lattice**.  The
@@ -448,7 +457,7 @@ This strengthens `statement-C→no-contradictory-pair`{.AgdaFunction} of
 ```agda
 statement-C→no-pair-with-big : {ℓP : Level} → Statement-C ℓP
   → (P : GroupProperty ℓP) (𝑳₁ 𝑳₂ : FiniteLattice)
-  → HasTwoDistinct (toLattice 𝑳₁) → HasTwoDistinct (toLattice 𝑳₂)
+  → Nontrivial (toLattice 𝑳₁) → Nontrivial (toLattice 𝑳₂)
   → HasThreeDistinct (toLattice 𝑳₁) ⊎ HasThreeDistinct (toLattice 𝑳₂)
   → cfIE P (toLattice 𝑳₁) → cfIE (λ 𝒢 → ¬ P 𝒢) (toLattice 𝑳₂)
   → ⊥
@@ -465,7 +474,7 @@ statement-C→no-pair-with-big stC P 𝑳₁ 𝑳₂ two₁ two₂ (inj₁ three
   Ps 1F = P
   Ps 2F = λ 𝒢 → ¬ P 𝒢
 
-  two-all : ∀ i → HasTwoDistinct (toLattice (family i))
+  two-all : ∀ i → Nontrivial (toLattice (family i))
   two-all 0F = two₁
   two-all 1F = two₁
   two-all 2F = two₂
@@ -478,6 +487,12 @@ statement-C→no-pair-with-big stC P 𝑳₁ 𝑳₂ two₁ two₂ (inj₁ three
   cfs 1F = cf-ie₁
   cfs 2F = cf-ie₂
 
+  joint : ∃[ 𝒢 ∈ Group 0ℓ 0ℓ ]
+    (∀ i → Ps i 𝒢)
+    ×  ( ∀ i → ∃[ H ] ∃[ H-sg ]  (  CoreFree 𝒢 H H-sg
+                                    × IntervalIso 𝒢 H H-sg (toLattice (family i))
+                                 )
+       )
   joint = stC 1 family Ps two-all two-big cfs
 
   Ps-hold : ∀ i → Ps i (joint .proj₁)
@@ -495,7 +510,7 @@ statement-C→no-pair-with-big stC P 𝑳₁ 𝑳₂ two₁ two₂ (inj₂ three
   Ps 1F = λ 𝒢 → ¬ P 𝒢
   Ps 2F = P
 
-  two-all : ∀ i → HasTwoDistinct (toLattice (family i))
+  two-all : ∀ i → Nontrivial (toLattice (family i))
   two-all 0F = two₂
   two-all 1F = two₂
   two-all 2F = two₁
@@ -526,27 +541,26 @@ statement-C→pair-question-classified : {ℓP : Level} → Statement-C ℓP
   → (P : GroupProperty ℓP) (𝑳₁ 𝑳₂ : FiniteLattice)
   → IsChain₂ (toLattice 𝑳₁) ⊎ HasThreeDistinct (toLattice 𝑳₁)
   → IsChain₂ (toLattice 𝑳₂) ⊎ HasThreeDistinct (toLattice 𝑳₂)
-  → (r₁ : GroupRepresentable (toLattice 𝑳₁))
-  → CoreFree (r₁ .grp) (r₁ .sub) (r₁ .isSubgroup)
+  → (r₁ : CoreFreeRepresentable (toLattice 𝑳₁))
+  -- → CoreFree (r₁ .grp) (r₁ .sub) (r₁ .isSubgroup)
   → cfIE P (toLattice 𝑳₁) → cfIE (λ 𝒢 → ¬ P 𝒢) (toLattice 𝑳₂)
   → ⊥
-statement-C→pair-question-classified stC P 𝑳₁ 𝑳₂ (inj₁ c₁) (inj₁ c₂) r₁ cf₁ =
-  pair-on-chains-impossible P (toLattice 𝑳₁) (toLattice 𝑳₂) c₁ c₂ r₁ cf₁
-statement-C→pair-question-classified stC P 𝑳₁ 𝑳₂ (inj₁ c₁) (inj₂ three₂) _ _ =
+statement-C→pair-question-classified stC P 𝑳₁ 𝑳₂ (inj₁ c₁) (inj₁ c₂) cfr₁ =
+  pair-on-chains-impossible P (toLattice 𝑳₁) (toLattice 𝑳₂) c₁ c₂ cfr₁
+statement-C→pair-question-classified stC P 𝑳₁ 𝑳₂ (inj₁ c₁) (inj₂ three₂) _ h =
   statement-C→no-pair-with-big stC P 𝑳₁ 𝑳₂
     (isChain₂→hasTwoDistinct (toLattice 𝑳₁) c₁)
-    (threeDistinct→twoDistinct (toLattice 𝑳₂) three₂)
-    (inj₂ three₂)
-statement-C→pair-question-classified stC P 𝑳₁ 𝑳₂ (inj₂ three₁) (inj₁ c₂) _ _ =
+    (threeDistinct→twoDistinct (toLattice 𝑳₂) three₂) (inj₂ three₂) h
+statement-C→pair-question-classified stC P 𝑳₁ 𝑳₂ (inj₂ three₁) (inj₁ c₂) _ h =
   statement-C→no-pair-with-big stC P 𝑳₁ 𝑳₂
     (threeDistinct→twoDistinct (toLattice 𝑳₁) three₁)
     (isChain₂→hasTwoDistinct (toLattice 𝑳₂) c₂)
-    (inj₁ three₁)
-statement-C→pair-question-classified stC P 𝑳₁ 𝑳₂ (inj₂ three₁) (inj₂ three₂) _ _ =
+    (inj₁ three₁) h
+statement-C→pair-question-classified stC P 𝑳₁ 𝑳₂ (inj₂ three₁) (inj₂ three₂) _ h =
   statement-C→no-pair-with-big stC P 𝑳₁ 𝑳₂
     (threeDistinct→twoDistinct (toLattice 𝑳₁) three₁)
     (threeDistinct→twoDistinct (toLattice 𝑳₂) three₂)
-    (inj₁ three₁)
+    (inj₁ three₁) h
 ```
 
 #### Families on two-element chains intersect
@@ -566,16 +580,16 @@ module _ {n : ℕ} {ℓP : Level}
   where
 
   all-chain₂-family-intersects :
-    (i₀ : Fin n) (r : GroupRepresentable (𝑳s i₀))
-    → CoreFree (r .grp) (r .sub) (r .isSubgroup)
+    (i₀ : Fin n) (r : CoreFreeRepresentable (𝑳s i₀))
     → Σ[ 𝒢 ∈ Group 0ℓ 0ℓ ] (∀ i → Ps i 𝒢)
-  all-chain₂-family-intersects i₀ r cf =
-    r .grp , λ i →
-      cfs i (r .grp) (r .sub) (r .isSubgroup) cf
+  all-chain₂-family-intersects i₀ cfr =
+    rep .grp , λ i →
+      cfs i (rep .grp) (rep .sub) (rep .isSubgroup) cf
         (Chain₂Interval.maximal→intervalIso (𝑳s i) (chains i)
-          (r .grp) (r .sub) (r .isSubgroup)
+          (rep .grp) (rep .sub) (rep .isSubgroup)
           (Chain₂Interval.intervalIso→maximal (𝑳s i₀) (chains i₀)
-            (r .grp) (r .sub) (r .isSubgroup) (r .interval-iso)))
+            (rep .grp) (rep .sub) (rep .isSubgroup) (rep .interval-iso)))
+    where open CoreFreeRepresentable cfr
 ```
 
 #### Two-element-chain classes are wreath-rich

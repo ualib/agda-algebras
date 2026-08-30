@@ -1015,8 +1015,8 @@ The tautological class: the groups with a core-free maximal subgroup.
 
 ```agda
 HasCoreFreeMaximal : GroupProperty (lsuc 0ℓ)
-HasCoreFreeMaximal 𝒢 =
-  Σ[ H ∈ Pred 𝕌[ proj₁ 𝒢 ] 0ℓ ] Σ[ H-sg ∈ IsSubgroup 𝒢 H ]
+HasCoreFreeMaximal 𝒢@(𝑮 , _) =
+  Σ[ H ∈ Pred 𝕌[ 𝑮 ] 0ℓ ] Σ[ H-sg ∈ IsSubgroup 𝒢 H ]
     ( CoreFree 𝒢 H H-sg × MaximalSubgroup.IsMaximalSubgroup 𝒢 0ℓ H )
 ```
 
@@ -1029,14 +1029,14 @@ bottoms and the two tops.
 
 ```agda
 module Chain₂Interval
-  (𝑳 : Lattice) (c₂ : IsChain₂ 𝑳)
-  (𝒢 : Group 0ℓ 0ℓ) (H : Pred 𝕌[ proj₁ 𝒢 ] 0ℓ) (H-sg : IsSubgroup 𝒢 H)
+  (ℒ@(𝑳 , _) : Lattice) (c₂ : IsChain₂ ℒ)
+  (𝒢@(𝑮 , _) : Group 0ℓ 0ℓ) (H : Pred 𝕌[ 𝑮 ] 0ℓ) (H-sg : IsSubgroup 𝒢 H)
   where
 
   open IsChain₂ c₂
-  open Setoid 𝔻[ proj₁ 𝑳 ]  using  ()
-    renaming ( _≈_ to _≈ᴸ_ ; sym to ≈ᴸ-sym ; trans to ≈ᴸ-trans )
-  open Lattice-Order 𝑳  using  ( _≤_ ; ≤-antisym ; ≤-reflexive ; ≤-trans )
+  open Setoid 𝔻[ 𝑳 ]   using ()
+                        renaming ( _≈_ to _≈ᴸ_ ; sym to ≈ᴸ-sym ; trans to ≈ᴸ-trans )
+  open Lattice-Order ℒ  using ( _≤_ ; ≤-antisym ; ≤-reflexive ; ≤-trans )
                         renaming ( ≤-refl to ≤ᴸ-refl )
   open UpperInterval 𝒢 H H-sg
     using  ( Interval≈ ; mk ; set ; above ; element-isSubgroup ; _≈ᵢ_ ; _≤ᵢ_ )
@@ -1044,14 +1044,14 @@ module Chain₂Interval
   open IsMaximalSubgroup
 
   private
-    b t : 𝕌[ proj₁ 𝑳 ]
+    b t : 𝕌[ 𝑳 ]
     b = proj₁ bot
     t = proj₁ top
 
     -- The two endpoints of the interval, as interval elements.
     H↑ᵉ G↑ᵉ : Interval≈
     H↑ᵉ = mk H H-sg (λ h → h)
-    G↑ᵉ = mk (proj₁ (fullSubgroup 𝒢 0ℓ)) (proj₂ (fullSubgroup 𝒢 0ℓ)) (λ _ → lift tt)
+    G↑ᵉ = mk (fullSubgroup 𝒢 0ℓ .proj₁) (fullSubgroup 𝒢 0ℓ .proj₂) (λ _ → lift tt)
 ```
 
 **Maximality yields the isomorphism.**  Each proof obligation is dispatched by a
@@ -1073,19 +1073,19 @@ helper taking the relevant classification as an argument, in the library's
       -- (The subject is explicit throughout this block: the classification
       -- type mentions only the element's predicate, so an implicit subject
       -- would leave its proof components as unsolved metavariables.)
-      toAux : (K : Interval≈) → Class K → 𝕌[ proj₁ 𝑳 ]
+      toAux : (K : Interval≈) → Class K → 𝕌[ 𝑳 ]
       toAux _ (inj₁ _) = b
       toAux _ (inj₂ _) = t
 
-      to′ : Interval≈ → 𝕌[ proj₁ 𝑳 ]
+      to′ : Interval≈ → 𝕌[ 𝑳 ]
       to′ K = toAux K (class K)
 
       -- Where a placed lattice element comes from.
-      fromAux : (u : 𝕌[ proj₁ 𝑳 ]) → (u ≈ᴸ b) ⊎ (u ≈ᴸ t) → Interval≈
+      fromAux : (u : 𝕌[ 𝑳 ]) → (u ≈ᴸ b) ⊎ (u ≈ᴸ t) → Interval≈
       fromAux _ (inj₁ _) = H↑ᵉ
       fromAux _ (inj₂ _) = G↑ᵉ
 
-      from′ : 𝕌[ proj₁ 𝑳 ] → Interval≈
+      from′ : 𝕌[ 𝑳 ] → Interval≈
       from′ u = fromAux u (place u)
 
       -- Monotonicity, by cases on the two classifications; the crossed case
@@ -1100,7 +1100,7 @@ helper taking the relevant classification as an argument, in the library's
 
       -- Monotonicity of from, by cases on the two placements; the crossed case
       -- (top below bottom) contradicts distinctness.
-      from-mono′ : (u v : 𝕌[ proj₁ 𝑳 ])
+      from-mono′ : (u v : 𝕌[ 𝑳 ])
         (c : (u ≈ᴸ b) ⊎ (u ≈ᴸ t)) (c' : (v ≈ᴸ b) ⊎ (v ≈ᴸ t))
         → u ≤ v → fromAux u c ≤ᵢ fromAux v c'
       from-mono′ _ _ (inj₁ _)    (inj₁ _)     _   = λ z → z
@@ -1114,12 +1114,12 @@ helper taking the relevant classification as an argument, in the library's
       from-mono′ _ _ (inj₂ _)    (inj₂ _)     _   = λ z → z
 
       -- Round trip on the lattice: the endpoints classify to themselves.
-      to∘from-bot : (u : 𝕌[ proj₁ 𝑳 ]) → u ≈ᴸ b
+      to∘from-bot : (u : 𝕌[ 𝑳 ]) → u ≈ᴸ b
         → (d : Class H↑ᵉ) → toAux H↑ᵉ d ≈ᴸ u
       to∘from-bot u u≈b (inj₁ _)     = ≈ᴸ-sym u≈b
       to∘from-bot u u≈b (inj₂ allH)  = ⊥-elim (proper H-max allH)
 
-      to∘from-top : (u : 𝕌[ proj₁ 𝑳 ]) → u ≈ᴸ t
+      to∘from-top : (u : 𝕌[ 𝑳 ]) → u ≈ᴸ t
         → (d : Class G↑ᵉ) → toAux G↑ᵉ d ≈ᴸ u
       to∘from-top u u≈t (inj₁ full⊆H)  =
         ⊥-elim (proper H-max (λ x → full⊆H (lift tt)))
@@ -1147,7 +1147,7 @@ helper taking the relevant classification as an argument, in the library's
       ... | inj₂ allK  = from∘to-top K allK (place t)
 
     -- A core-free maximal subgroup carries the two-element chain.
-    maximal→intervalIso : IntervalIso 𝒢 H H-sg 𝑳
+    maximal→intervalIso : IntervalIso 𝒢 H H-sg ℒ
     maximal→intervalIso = record
       { to         = to′
       ; from       = from′
@@ -1164,7 +1164,7 @@ intermediate subgroup is classified by where it lands, and properness follows fr
 distinctness of the two chain elements.
 
 ```agda
-  module _ (iso : IntervalIso 𝒢 H H-sg 𝑳) where
+  module _ (iso : IntervalIso 𝒢 H H-sg ℒ) where
 
     private
       module I = OrderIso iso
