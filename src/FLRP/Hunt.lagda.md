@@ -122,7 +122,7 @@ open import FLRP.Enforceable                using  ( CoreFree ; GroupProperty
                                                    ; Statement-C ; HasThreeDistinct
                                                    ; Statement-C-unguarded
                                                    ; TwoBigCanopies ; cfIE
-                                                   ; threeDistinct→twoDistinct
+                                                   ; threeDistinct→nontrivial
                                                    ; module UpperInterval )
 open import FLRP.Problem                    using  ( FiniteLattice ; chain₁-lattice
                                                    ; toLattice ; chain₁ ; OrderIso )
@@ -169,7 +169,6 @@ trivial-cfIE-chain₁ 𝒢 H H-sg cf iso x =
   cf (Core.conj-mem-core 𝒢 H H-sg (λ g → allH _))
   where
   open UpperInterval 𝒢 H H-sg  using  ( Interval≈ ; mk ; set ; above )
-  -- module I = OrderIso iso
   open OrderIso iso using ( to ; from∘to ; from-mono )
 
   H↑ᵉ G↑ᵉ : Interval≈
@@ -246,12 +245,16 @@ properness is involved: contrast the WP-1 no-go of [FLRP.Problem][], which rules
 out concrete representations of the *two*-element chain.
 
 ```agda
-chain₁-coreFreeRep : GroupRepresentable chain₁-lattice
-chain₁-coreFreeRep = record  { grp = 𝟙ᵍ
-                             ; sub = 𝟙-sub
-                             ; isSubgroup = 𝟙-sub-sg
-                             ; interval-iso = iso
-                             }
+chain₁-coreFreeRep : CoreFreeRepresentable chain₁-lattice
+chain₁-coreFreeRep = record
+  { rep  = record  { grp = 𝟙ᵍ
+                   ; sub = 𝟙-sub
+                   ; isSubgroup = 𝟙-sub-sg
+                   ; interval-iso = iso
+                   }
+  -- The trivial subgroup of the trivial group is core-free.
+  ; cf   = λ _ → refl
+  }
   where
   open UpperInterval 𝟙ᵍ 𝟙-sub 𝟙-sub-sg  using  ( Interval≈ ; mk ; above )
 
@@ -267,10 +270,6 @@ chain₁-coreFreeRep = record  { grp = 𝟙ᵍ
     ; to∘from    = λ { 0F → refl }
     ; from∘to    = λ K → above K , (λ _ → refl)
     }
-
--- The trivial subgroup of the trivial group is core-free.
-chain₁-coreFree : CoreFree 𝟙ᵍ 𝟙-sub 𝟙-sub-sg
-chain₁-coreFree _ = refl
 ```
 
 #### The unguarded statement (C) is refutable
@@ -354,7 +353,6 @@ unguarded-statement-C-refuted {ℓP} stC = (Ps-hold 0F) (Ps-hold 2F)
                                  )
        )
 
-
   joint = stC 1 family Ps two-big cfs
 
   Ps-hold : ∀ i → Ps i (joint .proj₁)
@@ -378,10 +376,8 @@ unrestricted-question-refuted : {ℓP : Level}
   (𝑳 : Lattice) (r : CoreFreeRepresentable 𝑳)
   → Nontrivial 𝑳 → ¬ cfIE-no-contradictory-Statement ℓP
 unrestricted-question-refuted {ℓP} 𝑳 r two stmt =
-  stmt P chain₁-lattice 𝑳 chain₁-coreFreeRep chain₁-coreFree cfP rep cf cf¬P
+  stmt P chain₁-lattice 𝑳 chain₁-coreFreeRep cfP r cf¬P
   where
-  open CoreFreeRepresentable r
-
   P : GroupProperty ℓP
   P 𝒢 = Lift ℓP (IsTrivialᵍ 𝒢)
 
@@ -413,8 +409,8 @@ A two-element chain has two distinct elements, which the guarded statement (C)
 and Lemma 3.3 both consume.
 
 ```agda
-isChain₂→hasTwoDistinct : (𝑳 : Lattice) → IsChain₂ 𝑳 → Nontrivial 𝑳
-isChain₂→hasTwoDistinct 𝑳 c₂ =
+isChain₂→nontrivial : (𝑳 : Lattice) → IsChain₂ 𝑳 → Nontrivial 𝑳
+isChain₂→nontrivial 𝑳 c₂ =
   proj₁ (IsChain₂.bot c₂) , proj₁ (IsChain₂.top c₂) , IsChain₂.distinct c₂
 ```
 
@@ -445,7 +441,6 @@ pair-on-chains-impossible P 𝑳₁ 𝑳₂ c₁ c₂ cfr₁ enfP enf¬P = ¬P-h
     (Chain₂Interval.maximal→intervalIso 𝑳₂ c₂
       (rep .grp) (rep .sub) (rep .isSubgroup) H-max)
 ```
-
 
 Second: statement (C) kills any pair in which at least one lattice has three
 distinct elements, with **no hypothesis at all on the other lattice**.  The
@@ -542,24 +537,23 @@ statement-C→pair-question-classified : {ℓP : Level} → Statement-C ℓP
   → IsChain₂ (toLattice 𝑳₁) ⊎ HasThreeDistinct (toLattice 𝑳₁)
   → IsChain₂ (toLattice 𝑳₂) ⊎ HasThreeDistinct (toLattice 𝑳₂)
   → (r₁ : CoreFreeRepresentable (toLattice 𝑳₁))
-  -- → CoreFree (r₁ .grp) (r₁ .sub) (r₁ .isSubgroup)
   → cfIE P (toLattice 𝑳₁) → cfIE (λ 𝒢 → ¬ P 𝒢) (toLattice 𝑳₂)
   → ⊥
 statement-C→pair-question-classified stC P 𝑳₁ 𝑳₂ (inj₁ c₁) (inj₁ c₂) cfr₁ =
   pair-on-chains-impossible P (toLattice 𝑳₁) (toLattice 𝑳₂) c₁ c₂ cfr₁
 statement-C→pair-question-classified stC P 𝑳₁ 𝑳₂ (inj₁ c₁) (inj₂ three₂) _ h =
   statement-C→no-pair-with-big stC P 𝑳₁ 𝑳₂
-    (isChain₂→hasTwoDistinct (toLattice 𝑳₁) c₁)
-    (threeDistinct→twoDistinct (toLattice 𝑳₂) three₂) (inj₂ three₂) h
+    (isChain₂→nontrivial (toLattice 𝑳₁) c₁)
+    (threeDistinct→nontrivial (toLattice 𝑳₂) three₂) (inj₂ three₂) h
 statement-C→pair-question-classified stC P 𝑳₁ 𝑳₂ (inj₂ three₁) (inj₁ c₂) _ h =
   statement-C→no-pair-with-big stC P 𝑳₁ 𝑳₂
-    (threeDistinct→twoDistinct (toLattice 𝑳₁) three₁)
-    (isChain₂→hasTwoDistinct (toLattice 𝑳₂) c₂)
+    (threeDistinct→nontrivial (toLattice 𝑳₁) three₁)
+    (isChain₂→nontrivial (toLattice 𝑳₂) c₂)
     (inj₁ three₁) h
 statement-C→pair-question-classified stC P 𝑳₁ 𝑳₂ (inj₂ three₁) (inj₂ three₂) _ h =
   statement-C→no-pair-with-big stC P 𝑳₁ 𝑳₂
-    (threeDistinct→twoDistinct (toLattice 𝑳₁) three₁)
-    (threeDistinct→twoDistinct (toLattice 𝑳₂) three₂)
+    (threeDistinct→nontrivial (toLattice 𝑳₁) three₁)
+    (threeDistinct→nontrivial (toLattice 𝑳₂) three₂)
     (inj₁ three₁) h
 ```
 
@@ -610,15 +604,18 @@ chain₂-classes-wreath-rich : {ℓP : Level}
   → ∃[ 𝒰 ∈ Group 0ℓ 0ℓ ] ∃[ m ∈ ℕ ]
       Σ[ A ∈ RightAction (Fin (2 + m)) 𝒰 ] P (𝒮 ≀ᵍ A)
 chain₂-classes-wreath-rich P 𝑳 c₂ enf 𝒮 nc kwi 𝒢 H H-sg fin cf H-max =
-  cfIE-must-have-wreaths P 𝑳 𝒮 nc kwi enf rep fin cf
-    (isChain₂→hasTwoDistinct 𝑳 c₂)
+  cfIE-must-have-wreaths P 𝑳 𝒮 nc kwi enf cfr fin
+    (isChain₂→nontrivial 𝑳 c₂)
   where
-  rep : GroupRepresentable 𝑳
-  rep = record
-    { grp           = 𝒢
-    ; sub           = H
-    ; isSubgroup    = H-sg
-    ; interval-iso  = Chain₂Interval.maximal→intervalIso 𝑳 c₂ 𝒢 H H-sg H-max
+  cfr : CoreFreeRepresentable 𝑳
+  cfr = record
+    { rep = record
+        { grp           = 𝒢
+        ; sub           = H
+        ; isSubgroup    = H-sg
+        ; interval-iso  = Chain₂Interval.maximal→intervalIso 𝑳 c₂ 𝒢 H H-sg H-max
+        }
+    ; cf  = cf
     }
 ```
 

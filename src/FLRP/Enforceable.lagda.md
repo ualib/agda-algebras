@@ -335,7 +335,13 @@ CoreFree 𝒢 H H-sg = proj₁ (Core.core 𝒢 H H-sg) ⊆ proj₁ (trivialSubgr
 
 where `𝒢` and `H` range over `Group 0ℓ 0ℓ` and `Pred 𝕌[ proj₁ 𝒢 ] 0ℓ`, respectively.
 
+A **core-free representation** of `𝑳` bundles a group representation with
+core-freeness of its subgroup: it is the note's `𝒢₀(𝑳)`-membership made
+first-class, the hypothesis pair that every statement of the RP-3 hunt would
+otherwise thread separately.
+
 ```agda
+-- A representation of 𝑳 over a core-free subgroup: the note's 𝒢₀(𝑳), as a record.
 record CoreFreeRepresentable (𝑳 : Lattice) : Type (lsuc 0ℓ) where
   field
     rep  : GroupRepresentable 𝑳
@@ -674,9 +680,9 @@ HasThreeDistinct : Lattice → Type 0ℓ
 HasThreeDistinct (L , _) = let open Setoid 𝔻[ L ] in
   ∃[ x ∈ 𝕌[ L ] ] ∃[ y ∈ 𝕌[ L ] ] ∃[ z ∈ 𝕌[ L ] ] ( ¬ (x ≈ y) × ¬ (x ≈ z) × ¬ (y ≈ z) )
 
--- Three pairwise distinct elements give two.
-threeDistinct→twoDistinct : (𝑳 : Lattice) → HasThreeDistinct 𝑳 → Nontrivial 𝑳
-threeDistinct→twoDistinct 𝑳 (x , y , _ , x≉y , _) = x , y , x≉y
+-- Three pairwise distinct elements make the lattice nontrivial.
+threeDistinct→nontrivial : (𝑳 : Lattice) → HasThreeDistinct 𝑳 → Nontrivial 𝑳
+threeDistinct→nontrivial 𝑳 (x , y , _ , x≉y , _) = x , y , x≉y
 
 TwoBigCanopies : {m : ℕ} → (Fin m → FiniteLattice) → Type 0ℓ
 TwoBigCanopies {m} 𝑳s =
@@ -741,6 +747,7 @@ is stated as a schema conditional on it and on the core-free reduction.
 
 ```agda
 open GroupRepresentable
+open CoreFreeRepresentable
 
 record ParachuteHypotheses : Type (lsuc 0ℓ) where
   field
@@ -755,12 +762,12 @@ record ParachuteHypotheses : Type (lsuc 0ℓ) where
     -- the unguarded field is not satisfiable.
     canopy-intervals :
       (n : ℕ) (𝑳s : Fin (2 + n) → FiniteLattice)
-      (r : GroupRepresentable (toLattice (parachute n 𝑳s)))
-      → CoreFree (r .grp) (r .sub) (r .isSubgroup)
+      (r : CoreFreeRepresentable (toLattice (parachute n 𝑳s)))
       → (∀ i → Nontrivial (toLattice (𝑳s i)))
       → TwoBigCanopies 𝑳s
-      → ∀ i → ∃[ H ∈ Pred 𝕌[ proj₁ (r .grp) ] 0ℓ ] ∃[ H-sg ∈ IsSubgroup (r .grp) H ]
-                ( CoreFree (r .grp) H H-sg × IntervalIso (r .grp) H H-sg (toLattice (𝑳s i)) )
+      → ∀ i → ∃[ H ∈ Pred 𝕌[ proj₁ (r .rep .grp) ] 0ℓ ] ∃[ H-sg ∈ IsSubgroup (r .rep .grp) H ]
+                ( CoreFree (r .rep .grp) H H-sg
+                × IntervalIso (r .rep .grp) H H-sg (toLattice (𝑳s i)) )
 
 -- Theorem thm-wjd-1 of the note, as a statement.
 thm-wjd-1-Statement : (ℓP : Level) → Type (lsuc 0ℓ ⊔ lsuc ℓP)

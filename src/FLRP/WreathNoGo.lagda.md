@@ -62,7 +62,7 @@ representation, of the original lattice, and cf-IE forces `P (S ≀ Ū)`.
 one-point lattice constrains only the trivial group).  Two distinct elements of
 `𝑳` rule this out: classically `n = |G : H| ≥ 2`, which is why Entry 5 produces an
 action on `Fin (2 + m)`.  The hypothesis transports to the dual
-(`hasTwoDistinct-dual`{.AgdaFunction}), which is what keeps the second application
+(`nontrivial-dual`{.AgdaFunction}), which is what keeps the second application
 fed.
 
 **The nonabelian-simple side condition**.  The formal hypotheses on `𝒮` are the
@@ -107,11 +107,12 @@ open import Classical.Structures.Group.Subgroups    using  ( IsSubgroup )
 open import Classical.Structures.Group.Wreath       using  ( module WreathProduct
                                                            ; _≀ᵍ_ )
 open import Classical.Structures.Lattice.Dual       using  ( dualLattice )
-open import FLRP.Enforceable    using  ( cfIE ; CoreFree ; GroupRepresentable
+open import FLRP.Enforceable    using  ( cfIE ; CoreFree ; CoreFreeRepresentable
+                                       ; GroupRepresentable
                                        ; GroupProperty ; IntervalIso
                                        ; Statement-C ; TwoBigCanopies
                                        ; Nontrivial ; HasThreeDistinct
-                                       ; threeDistinct→twoDistinct )
+                                       ; threeDistinct→nontrivial )
 open import FLRP.Problem        using  ( FiniteLattice ; toLattice )
 open import Overture            using  ( ∃-syntax )
 open import Setoid.Algebras     using  ( 𝕌[_] ; 𝔻[_] ; FiniteAlgebra )
@@ -130,8 +131,8 @@ the witness transports unchanged.
 
 ```agda
 -- The dual shares carrier and equality, so the witness transports as-is.
-hasTwoDistinct-dual : (𝑳 : Lattice) → Nontrivial 𝑳 → Nontrivial (dualLattice 𝑳)
-hasTwoDistinct-dual 𝑳 w = w
+nontrivial-dual : (𝑳 : Lattice) → Nontrivial 𝑳 → Nontrivial (dualLattice 𝑳)
+nontrivial-dual 𝑳 w = w
 ```
 
 #### The nonabelian-simple fragments
@@ -257,18 +258,18 @@ cfIE-must-have-wreaths :
   → NontrivialCenterless 𝒮
   → KurzweilWreathInterval 𝒮
   → cfIE P 𝑳
-  → (r : GroupRepresentable 𝑳)
-  → FiniteAlgebra (proj₁ (r .grp))
-  → CoreFree (r .grp) (r .sub) (r .isSubgroup)
+  → (r : CoreFreeRepresentable 𝑳)
+  → FiniteAlgebra (proj₁ (CoreFreeRepresentable.rep r .grp))
   → Nontrivial 𝑳
   → ∃[ 𝒰 ∈ Group 0ℓ 0ℓ ] ∃[ m ∈ ℕ ]
       Σ[ A ∈ RightAction (Fin (2 + m)) 𝒰 ] P (𝒮 ≀ᵍ A)
-cfIE-must-have-wreaths P 𝑳 𝒮 nc kwi cf-ie r fin cf two =
+cfIE-must-have-wreaths P 𝑳 𝒮 nc kwi cf-ie r fin two =
   𝒰 , K₂.degree , K₂.action , P-holds
   where
+  open CoreFreeRepresentable r
   -- First application: a core-free representation of 𝑳′ on the first wreath.
-  k₁ : WreathIntervalData 𝒮 𝑳 (r .grp) (r .sub) (r .isSubgroup)
-  k₁ = kwi 𝑳 (r .grp) (r .sub) (r .isSubgroup) fin cf (r .interval-iso) two
+  k₁ : WreathIntervalData 𝒮 𝑳 (rep .grp) (rep .sub) (rep .isSubgroup)
+  k₁ = kwi 𝑳 (rep .grp) (rep .sub) (rep .isSubgroup) fin cf (rep .interval-iso) two
 
   module K₁ = WreathIntervalData k₁
 
@@ -286,7 +287,7 @@ cfIE-must-have-wreaths P 𝑳 𝒮 nc kwi cf-ie r fin cf two =
   k₂ = kwi (dualLattice 𝑳) 𝒰
         (WreathProduct.Diag≀ 𝒮 K₁.action)
         (WreathProduct.Diag≀-isSubgroup 𝒮 K₁.action)
-        K₁.finite cf₁ K₁.interval (hasTwoDistinct-dual 𝑳 two)
+        K₁.finite cf₁ K₁.interval (nontrivial-dual 𝑳 two)
 
   module K₂ = WreathIntervalData k₂
 
@@ -319,14 +320,13 @@ omits-wreaths→not-cfIE :
   → (∀ (𝒰 : Group 0ℓ 0ℓ) (m : ℕ) (A : RightAction (Fin (2 + m)) 𝒰)
        → ¬ P (𝒮 ≀ᵍ A))
   → cfIE P 𝑳
-  → (r : GroupRepresentable 𝑳)
-  → FiniteAlgebra (proj₁ (r .grp))
-  → CoreFree (r .grp) (r .sub) (r .isSubgroup)
+  → (r : CoreFreeRepresentable 𝑳)
+  → FiniteAlgebra (proj₁ (CoreFreeRepresentable.rep r .grp))
   → Nontrivial 𝑳
   → ⊥
-omits-wreaths→not-cfIE P 𝑳 𝒮 nc kwi omits cf-ie r fin cf two = omits 𝒰 m A holds
+omits-wreaths→not-cfIE P 𝑳 𝒮 nc kwi omits cf-ie r fin two = omits 𝒰 m A holds
   where
-  found = cfIE-must-have-wreaths P 𝑳 𝒮 nc kwi cf-ie r fin cf two
+  found = cfIE-must-have-wreaths P 𝑳 𝒮 nc kwi cf-ie r fin two
 
   𝒰 = found .proj₁
   m = found .proj₂ .proj₁
@@ -347,10 +347,8 @@ deliberately not asserted: no inhabitant is claimed in either direction.
 cfIE-no-contradictory-Statement : (ℓP : Level) → Type (lsuc 0ℓ ⊔ lsuc ℓP)
 cfIE-no-contradictory-Statement ℓP =
   ∀ (P : GroupProperty ℓP) (𝑳₁ 𝑳₂ : Lattice)
-  → (r₁ : GroupRepresentable 𝑳₁) → CoreFree (r₁ .grp) (r₁ .sub) (r₁ .isSubgroup)
-  → cfIE P 𝑳₁
-  → (r₂ : GroupRepresentable 𝑳₂) → CoreFree (r₂ .grp) (r₂ .sub) (r₂ .isSubgroup)
-  → cfIE (λ 𝒢 → ¬ P 𝒢) 𝑳₂
+  → CoreFreeRepresentable 𝑳₁ → cfIE P 𝑳₁
+  → CoreFreeRepresentable 𝑳₂ → cfIE (λ 𝒢 → ¬ P 𝒢) 𝑳₂
   → ⊥
 ```
 
@@ -369,22 +367,20 @@ contradictory-pair-wreaths :
   → NontrivialCenterless 𝒮
   → KurzweilWreathInterval 𝒮
   → cfIE P 𝑳₁
-  → (r₁ : GroupRepresentable 𝑳₁)
-  → FiniteAlgebra (proj₁ (r₁ .grp))
-  → CoreFree (r₁ .grp) (r₁ .sub) (r₁ .isSubgroup)
+  → (r₁ : CoreFreeRepresentable 𝑳₁)
+  → FiniteAlgebra (proj₁ (CoreFreeRepresentable.rep r₁ .grp))
   → Nontrivial 𝑳₁
   → cfIE (λ 𝒢 → ¬ P 𝒢) 𝑳₂
-  → (r₂ : GroupRepresentable 𝑳₂)
-  → FiniteAlgebra (proj₁ (r₂ .grp))
-  → CoreFree (r₂ .grp) (r₂ .sub) (r₂ .isSubgroup)
+  → (r₂ : CoreFreeRepresentable 𝑳₂)
+  → FiniteAlgebra (proj₁ (CoreFreeRepresentable.rep r₂ .grp))
   → Nontrivial 𝑳₂
   →  (∃[ 𝒰 ∈ Group 0ℓ 0ℓ ] ∃[ m ∈ ℕ ]
         Σ[ A ∈ RightAction (Fin (2 + m)) 𝒰 ] P (𝒮 ≀ᵍ A))
   ×  (∃[ 𝒱 ∈ Group 0ℓ 0ℓ ] ∃[ l ∈ ℕ ]
         Σ[ B ∈ RightAction (Fin (2 + l)) 𝒱 ] ¬ P (𝒮 ≀ᵍ B))
-contradictory-pair-wreaths P 𝑳₁ 𝑳₂ 𝒮 nc kwi cf-ie₁ r₁ fin₁ cf₁ two₁ cf-ie₂ r₂ fin₂ cf₂ two₂ =
-    cfIE-must-have-wreaths P 𝑳₁ 𝒮 nc kwi cf-ie₁ r₁ fin₁ cf₁ two₁
-  , cfIE-must-have-wreaths (λ 𝒢 → ¬ P 𝒢) 𝑳₂ 𝒮 nc kwi cf-ie₂ r₂ fin₂ cf₂ two₂
+contradictory-pair-wreaths P 𝑳₁ 𝑳₂ 𝒮 nc kwi cf-ie₁ r₁ fin₁ two₁ cf-ie₂ r₂ fin₂ two₂ =
+    cfIE-must-have-wreaths P 𝑳₁ 𝒮 nc kwi cf-ie₁ r₁ fin₁ two₁
+  , cfIE-must-have-wreaths (λ 𝒢 → ¬ P 𝒢) 𝑳₂ 𝒮 nc kwi cf-ie₂ r₂ fin₂ two₂
 ```
 
 **The reduction that places the question in the program's chain**: the
@@ -418,8 +414,8 @@ statement-C→no-contradictory-pair stC P 𝑳₁ 𝑳₂ three₁ three₂ cf-i
   Ps 1F = λ 𝒢 → ¬ P 𝒢
 
   two-all : ∀ i → Nontrivial (toLattice (family i))
-  two-all 0F = threeDistinct→twoDistinct (toLattice 𝑳₁) three₁
-  two-all 1F = threeDistinct→twoDistinct (toLattice 𝑳₂) three₂
+  two-all 0F = threeDistinct→nontrivial (toLattice 𝑳₁) three₁
+  two-all 1F = threeDistinct→nontrivial (toLattice 𝑳₂) three₂
 
   two-big : TwoBigCanopies family
   two-big = 0F , 1F , (λ ()) , three₁ , three₂
