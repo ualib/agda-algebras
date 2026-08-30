@@ -190,6 +190,7 @@
 [Classical.Structures.Group.Diagonal]: /Classical/Structures/Group/Diagonal/
 [Classical.Structures.Group.GSet]: /Classical/Structures/Group/GSet/
 [Classical.Structures.Group.IndexAction]: /Classical/Structures/Group/IndexAction/
+[Classical.Structures.Group.MaximalSubgroup]: /Classical/Structures/Group/MaximalSubgroup/
 [Classical.Structures.Group.MinimalNormal]: /Classical/Structures/Group/MinimalNormal/
 [Classical.Structures.Group.NormalCore]: /Classical/Structures/Group/NormalCore/
 [Classical.Structures.Group.NormalSubgroupLattice]: /Classical/Structures/Group/NormalSubgroupLattice/
@@ -387,6 +388,7 @@
 [FLRP.Closure.OrdinalSum]: /FLRP/Closure/OrdinalSum/
 [FLRP.Closure.Product]: /FLRP/Closure/Product/
 [FLRP.Enforceable]: /FLRP/Enforceable/
+[FLRP.Hunt]: /FLRP/Hunt/
 [FLRP.KurzweilInterval]: /FLRP/KurzweilInterval/
 [FLRP.KurzweilNetter]: /FLRP/KurzweilNetter/
 [FLRP.KurzweilNetter.Blocks]: /FLRP/KurzweilNetter/Blocks/
@@ -586,6 +588,7 @@
 [Classical/Structures/Group/Diagonal.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Group/Diagonal.lagda.md
 [Classical/Structures/Group/GSet.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Group/GSet.lagda.md
 [Classical/Structures/Group/IndexAction.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Group/IndexAction.lagda.md
+[Classical/Structures/Group/MaximalSubgroup.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Group/MaximalSubgroup.lagda.md
 [Classical/Structures/Group/MinimalNormal.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Group/MinimalNormal.lagda.md
 [Classical/Structures/Group/NormalCore.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Group/NormalCore.lagda.md
 [Classical/Structures/Group/NormalSubgroupLattice.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Group/NormalSubgroupLattice.lagda.md
@@ -783,6 +786,7 @@
 [FLRP/Closure/OrdinalSum.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/Closure/OrdinalSum.lagda.md
 [FLRP/Closure/Product.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/Closure/Product.lagda.md
 [FLRP/Enforceable.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/Enforceable.lagda.md
+[FLRP/Hunt.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/Hunt.lagda.md
 [FLRP/KurzweilInterval.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/KurzweilInterval.lagda.md
 [FLRP/KurzweilNetter.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/KurzweilNetter.lagda.md
 [FLRP/KurzweilNetter/Blocks.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/KurzweilNetter/Blocks.lagda.md

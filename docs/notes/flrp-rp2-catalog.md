@@ -6,7 +6,7 @@ The framework the catalog is written in is RP-1's (`docs/notes/flrp-rp1-parachut
 
 ## 1.  The entries
 
-Eight entries.  "Derived" means the enforcement is proved in the library from RP-1; "imported" means the theorem stays on paper and enters as a named, cited hypothesis (never a postulate).  The last column is the vacuity datum: whether the enforcing lattice is *known* to be group representable, which is what decides whether an entry says anything at all.
+Nine entries (the ninth added by RP-3).  "Derived" means the enforcement is proved in the library from RP-1; "imported" means the theorem stays on paper and enters as a named, cited hypothesis (never a postulate).  The last column is the vacuity datum: whether the enforcing lattice is *known* to be group representable, which is what decides whether an entry says anything at all.
 
 | # | Property | Enforcing lattice | Level | Source | Formal status | Lattice representable? |
 | --- | --- | --- | --- | --- | --- | --- |
@@ -18,8 +18,9 @@ Eight entries.  "Derived" means the enforcement is proved in the library from RP
 | 6 | `𝒢₂ ∧ 𝒢₃` | `Mₙ`, `n − 1` not a prime power (`M₇`) | min-IE | Köhler 1983 (`𝒢₂`); Pálfy–Pudlák 1980 (`𝒢₃`) | both imported, **conjunction derived** | yes at `n = 7`, as in Entry 4 |
 | 7 | `𝒢₄ ∧ 𝒢₃ ∧ 𝒢₂ ∧ 𝒢₀` | `L7` | cf-IE | DeMeo 2012a, Thm 6.3.1 (ii)–(v) | imported; the conditional consequence derived | **unknown — the open problem** |
 | 8 | `𝒢₁` is **not** enforced | `𝟚³` (rank-3 Boolean) | refutation | Lucchini–Moscatiello–Palcoux–Spiga 2019, Thm 1.1 (1)–(2) | realization imported, **refutation derived** | yes, *inside* the excluded class |
+| 9 | every 2-chain-enforced class contains the core-free-maximal class `HasCoreFreeMaximal`, which is itself 2-chain-enforced | any two-element chain (`IsChain₂`) | cf-IE, both directions | elementary (this repository); closes the RP-4 reduction's two-element corner | **derived** (`chain₂-enforces`, `chain₂-cfIE-coreFreeMaximal`), on the new `Classical.Structures.Group.MaximalSubgroup`; wreath-richness derived in `FLRP.Hunt` | yes classically (`[1 , C₂]`); constructively oracle-strength, see the module prose |
 
-Entries 1–3 discharge the note's three parachute classes as theorems rather than hypotheses, which is what the issue asked for; Entries 4 and 5 are the note's two IE classes; Entry 6 is the min-IE example the library was asked to record; Entries 7 and 8 are the two external entries whose statements could be pinned down exactly.
+Entries 1–3 discharge the note's three parachute classes as theorems rather than hypotheses, which is what the issue asked for; Entries 4 and 5 are the note's two IE classes; Entry 6 is the min-IE example the library was asked to record; Entries 7 and 8 are the two external entries whose statements could be pinned down exactly; Entry 9 was added by RP-3 (survey note `docs/notes/flrp-rp3-hunt.md`) to close the two-element corner of the RP-4 reduction.
 
 Beyond the entries, the module contributes the catalog's *vocabulary* — the operations that make it compose rather than merely list:
 
