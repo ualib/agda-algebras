@@ -41,7 +41,7 @@
 #      where a path segment happens to contain the substring `agda`.
 # =============================================================================
 
-.PHONY: default all check check-certificates check-all test clean site serve serve-full html agda-md site-full profile project-plan unused-imports unused-imports-test check-links check-links-test gen-links docstrings docstrings-test docstrings-list docstrings-unused docstrings-json flrp-test flrp-slr gap-smoke Everything.agda EverythingLegacy.agda EverythingCertificates.agda
+.PHONY: default all check check-certificates check-all test clean site serve serve-full html agda-md site-full profile project-plan unused-imports unused-imports-test check-links check-links-test gen-links gap-hunt docstrings docstrings-test docstrings-list docstrings-unused docstrings-json flrp-test flrp-slr gap-smoke Everything.agda EverythingLegacy.agda EverythingCertificates.agda
 
 # -- Configuration -----------------------------------------------------------
 SRCDIR    := src
@@ -362,6 +362,7 @@ flrp-test:
 	python3 scripts/python/flrp/test_slr_catalog.py
 	python3 scripts/python/flrp/test_eqfast.py
 	python3 scripts/python/flrp/test_gap_interval.py
+	python3 scripts/python/flrp/test_parachute_targets.py
 
 # Regenerate the SmallLatticeReps catalog artifacts (issue #485) from the
 # manuscript source: claim files under scripts/python/flrp/inputs/slr/, audit
@@ -381,3 +382,12 @@ flrp-slr:
 gap-smoke:
 	@echo "target: $@"
 	gap -A -q -b scripts/gap/flrp/bin/smoke.g
+
+# The RP-3 hunt runs (issue #460): the parachute realizability sweep and the
+# candidate-table witness checks.  Run inside `nix develop .#gap`; the sweep
+# takes a few minutes.  Confirm sweep candidates with gap_search.py per the
+# header of bin/hunt_parachutes.g.
+gap-hunt:
+	@echo "target: $@"
+	gap -A -q -b scripts/gap/flrp/bin/hunt_parachutes.g
+	gap -A -q -b scripts/gap/flrp/bin/hunt_witnesses.g

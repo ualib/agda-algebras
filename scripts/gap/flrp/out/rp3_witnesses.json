@@ -1,0 +1,81 @@
+{
+  "date": "2026-08-29",
+  "engine": {
+    "gap": "4.15.1",
+    "libraries": {
+      "primgrp": "4.0.1",
+      "smallgrp": "1.5.4",
+      "transgrp": "3.6.5"
+    }
+  },
+  "format": "flrp-gap-hunt-witness v1",
+  "groups": [
+    {
+      "CFMax_coreFreeMaximal": true,
+      "G0_nonsolvable": false,
+      "G2_subdirectlyIrreducible": true,
+      "G3_noAbelianNormal": false,
+      "G4_trivialCentralizers": false,
+      "minimalNormalCount": 1,
+      "name": "C2",
+      "order": 2,
+      "structureDescription": "C2"
+    },
+    {
+      "CFMax_coreFreeMaximal": true,
+      "G0_nonsolvable": false,
+      "G2_subdirectlyIrreducible": true,
+      "G3_noAbelianNormal": false,
+      "G4_trivialCentralizers": false,
+      "minimalNormalCount": 1,
+      "name": "S4",
+      "order": 24,
+      "structureDescription": "S4"
+    },
+    {
+      "CFMax_coreFreeMaximal": true,
+      "G0_nonsolvable": true,
+      "G2_subdirectlyIrreducible": true,
+      "G3_noAbelianNormal": true,
+      "G4_trivialCentralizers": true,
+      "minimalNormalCount": 1,
+      "name": "A5",
+      "order": 60,
+      "structureDescription": "A5"
+    },
+    {
+      "CFMax_coreFreeMaximal": true,
+      "G0_nonsolvable": true,
+      "G2_subdirectlyIrreducible": true,
+      "G3_noAbelianNormal": true,
+      "G4_trivialCentralizers": true,
+      "minimalNormalCount": 1,
+      "name": "PSL(3,2)",
+      "order": 168,
+      "structureDescription": "PSL(3,2)"
+    },
+    {
+      "CFMax_coreFreeMaximal": true,
+      "G0_nonsolvable": true,
+      "G2_subdirectlyIrreducible": true,
+      "G3_noAbelianNormal": true,
+      "G4_trivialCentralizers": true,
+      "minimalNormalCount": 1,
+      "name": "A5 wr C2",
+      "order": 7200,
+      "structureDescription": "(A5 x A5) : C2"
+    },
+    {
+      "CFMax_coreFreeMaximal": true,
+      "G0_nonsolvable": true,
+      "G2_subdirectlyIrreducible": true,
+      "G3_noAbelianNormal": true,
+      "G4_trivialCentralizers": true,
+      "minimalNormalCount": 1,
+      "name": "PSL(3,2) wr C2",
+      "order": 56448,
+      "structureDescription": "(PSL(3,2) x PSL(3,2)) : C2"
+    }
+  ],
+  "purpose": "RP-3 candidate-table witness data: class membership of the groups the survey note uses to kill candidate families (docs/notes/flrp-rp3-hunt.md)"
+}
