@@ -47,7 +47,7 @@ implication form by finite computation, which is not possible with the disjuncti
 form.
 
 The implication form has a recorded limit: conclusions that are themselves
-identity equations are encoded as doubly negations.  To show a central element `d`
+identity equations are encoded as double negations.  To show a central element `d`
 is the identity, one applies simplicity to the center at witness `d`; but the
 hypothesis `¬ d ≈ ε` is exactly what a proof of `d ≈ ε` is trying to refute, so
 the argument yields `¬ ¬ (d ≈ ε)` and stops.
@@ -88,7 +88,7 @@ module Classical.Structures.Group.Simple where
 open import Agda.Primitive using () renaming ( Set to Type )
 
 -- Imports from the Agda Standard Library ---------------------------------------
-open import Data.Product     using  ( Σ-syntax ; proj₁ ; proj₂ ; _,_ ; ∃-syntax ; _×_ )
+open import Data.Product     using  ( proj₁ ; proj₂ ; _,_ ; ∃-syntax ; _×_ )
 open import Data.Unit.Base   using  ( tt )
 open import Level            using  ( Level ; _⊔_ ; lift ) renaming ( suc to lsuc )
 open import Function         using  ( _∘_ )
@@ -107,7 +107,6 @@ open import Classical.Structures.Group.NormalCore       using  ( module Core )
 open import Classical.Structures.Group.SubgroupLattice  using  ( module GroupSublattice )
 open import Classical.Structures.Group.Subgroups        using  ( IsSubgroup
                                                                ; fullSubgroup )
-open import Overture                                    using  ( ∃-syntax )
 open import Setoid.Algebras.Basic                       using  ( 𝕌[_] ; 𝔻[_] )
 ```
 -->

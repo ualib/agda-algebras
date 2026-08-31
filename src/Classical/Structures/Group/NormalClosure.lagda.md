@@ -43,7 +43,7 @@ open import Agda.Primitive using () renaming ( Set to Type )
 -- Imports from the Agda Standard Library ---------------------------------------
 open import Data.Fin.Base    using  ( Fin )
 open import Data.Nat.Base    using  ( ℕ )
-open import Data.Product     using  ( proj₁ ; _,_ )
+open import Data.Product     using  ( _,_ )
 open import Level            using  ( Level )
 open import Relation.Unary   using  ( Pred ; _∈_ )
 

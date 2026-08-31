@@ -31,8 +31,8 @@ Three presentations were candidates, and we naturally chose the one that is easi
 integrated into our existing finite group theory framework and has good
 computational properties.[^2]
 
-We represent `A₅` using a carrier table and exploiting the fact that `A₅`
-acts faithfully on its five points, the action tables are data.
+We represent `A₅` by a Cayley table, exploiting the fact that `A₅` acts
+faithfully on its five points: the action tables are data.
 `assoc-from-action`{.AgdaFunction} of [Overture.Cayley][] derives associativity
 from two quadratic decisions: `ActionHom?`{.AgdaFunction} and
 `ActionFaithful?`{.AgdaFunction} of [Overture.Operations.Properties][].
