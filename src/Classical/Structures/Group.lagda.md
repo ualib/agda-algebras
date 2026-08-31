@@ -55,6 +55,8 @@ list.
    +  [Classical.Structures.Group.MaximalSubgroup][]:
       maximal subgroups, as the classification data the two-element-chain
       catalog entry consumes;
+   +  [Classical.Structures.Group.Simple][]:
+      simple groups, in implication form, and the nonabelian-simple interface;
    +  [Classical.Structures.Group.Centralizer][]: centralizers.
 
 +  **Cosets and group actions**.
@@ -101,6 +103,7 @@ open import Classical.Structures.Group.NormalSubgroupLattice  public
 open import Classical.Structures.Group.PartitionSubgroup      public
 open import Classical.Structures.Group.Power                  public
 open import Classical.Structures.Group.Product                public
+open import Classical.Structures.Group.Simple                 public
 open import Classical.Structures.Group.SubgroupLattice        public
 open import Classical.Structures.Group.Subgroups              public
 open import Classical.Structures.Group.Wreath                 public

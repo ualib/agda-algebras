@@ -197,6 +197,7 @@
 [Classical.Structures.Group.PartitionSubgroup]: /Classical/Structures/Group/PartitionSubgroup/
 [Classical.Structures.Group.Power]: /Classical/Structures/Group/Power/
 [Classical.Structures.Group.Product]: /Classical/Structures/Group/Product/
+[Classical.Structures.Group.Simple]: /Classical/Structures/Group/Simple/
 [Classical.Structures.Group.SubgroupLattice]: /Classical/Structures/Group/SubgroupLattice/
 [Classical.Structures.Group.Subgroups]: /Classical/Structures/Group/Subgroups/
 [Classical.Structures.Group.Wreath]: /Classical/Structures/Group/Wreath/
@@ -595,6 +596,7 @@
 [Classical/Structures/Group/PartitionSubgroup.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Group/PartitionSubgroup.lagda.md
 [Classical/Structures/Group/Power.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Group/Power.lagda.md
 [Classical/Structures/Group/Product.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Group/Product.lagda.md
+[Classical/Structures/Group/Simple.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Group/Simple.lagda.md
 [Classical/Structures/Group/SubgroupLattice.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Group/SubgroupLattice.lagda.md
 [Classical/Structures/Group/Subgroups.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Group/Subgroups.lagda.md
 [Classical/Structures/Group/Wreath.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Group/Wreath.lagda.md
