@@ -21,6 +21,7 @@ nothing to gain (and names to clash) from re-exporting them through a barrel.
 + `CyclicGroup3` is the cyclic group `ℤ/3ℤ`, built from a Cayley table.
 + `KleinFourGroup` is the Klein four-group `V₄`.
 + `SymmetricGroup3` is the symmetric group `S₃`, the smallest non-abelian group.
++ `AlternatingGroup5` is the alternating group `A₅`, the smallest nonabelian simple group, certified simple by finite computation (with its generated `Tables` companion).
 
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
@@ -28,6 +29,7 @@ nothing to gain (and names to clash) from re-exporting them through a barrel.
 module Examples.Classical.Groups where
 
 open import Examples.Classical.Groups.AbelianGroup
+open import Examples.Classical.Groups.AlternatingGroup5
 open import Examples.Classical.Groups.CyclicGroup
 open import Examples.Classical.Groups.CyclicGroup3
 open import Examples.Classical.Groups.KleinFourGroup

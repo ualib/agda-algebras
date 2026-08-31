@@ -115,9 +115,10 @@ These two checkers feed `assoc-from-action`{.AgdaFunction} of
 [Overture.Cayley][]: a binary operation on `Fin n` is associative as soon as
 some action on `Fin m` represents it by function composition
 (`ActionHom?`{.AgdaFunction}) and is faithful (`ActionFaithful?`{.AgdaFunction}).
-Both decisions are at worst quadratic in `n`, against the cubic count of
-`Associative?`{.AgdaFunction}, which is what makes large Cayley-table examples
-feasible.
+Both decisions cost `n² · m` point comparisons, against the `n³` count of
+`Associative?`{.AgdaFunction}, so they are quadratic in `n` when the point set
+stays small and fixed; a faithful action on few points is what makes large
+Cayley-table examples feasible.
 
 ```agda
 module _ {n m : ℕ} (_·_ : Fin n → Fin n → Fin n) (act : Fin n → Fin m → Fin m) where

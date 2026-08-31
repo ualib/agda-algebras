@@ -114,8 +114,11 @@ triples, at `Fin 60` it is 216000.  When the operation is faithfully
 represented by function composition on a set of points (for a permutation
 group presented by a table, its action on the points it permutes),
 associativity follows instead from the associativity of composition, which
-holds definitionally.  Two checks suffice, and both are at worst quadratic in
-the carrier: the representation is a homomorphism onto composition
+holds definitionally.  Two checks suffice, and each costs `n² · m` point
+comparisons for `n` carrier elements acting on `m` points, so the route wins
+exactly when the point set is small (quadratic in the carrier for fixed `m`;
+for an action on the carrier itself it degenerates to the cubic count): the
+representation sends products to composition
 (`ActionHom?`{.AgdaFunction} of [Overture.Operations.Properties][]), and it is
 faithful, meaning distinct elements act differently
 (`ActionFaithful?`{.AgdaFunction}).
