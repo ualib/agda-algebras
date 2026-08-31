@@ -330,7 +330,10 @@ parachute representation has no nontrivial abelian normal subgroup.[^4]
       The transport of `HasMonolithᵍ`{.AgdaFunction} across it to the algebra-side
       `HasMonolith`{.AgdaFunction} has not been carried out; until it is, the
       superscript keeps the two notions apart rather than pretending they are the
-      same definition.
+      same definition.  The simplicity instance of the same identification is
+      proved in that module: the group-theoretic notion is equivalent to the
+      congruence-level `IsSimple`{.AgdaFunction} of [Setoid.Congruences.Simple][],
+      constructively in both directions.
 
 [^4]: `docs/papers/flrp/ieprops/IEProps-1205.1927v4.tex`, the Remark after
       Lemma 3.7: "If `N` is abelian, then `N ≤ C_G(N)`, so (i) implies that every
