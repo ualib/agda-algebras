@@ -49,7 +49,7 @@ without: it lets us apply the library's `IsSubdirectlyIrreducible`{.AgdaFunction
 group, whose subdirect irreducibility the group theorist states as "there is a
 least nontrivial normal subgroup".  The final step of that identification,
 `HasMonolithᵍ → HasMonolith`, is deliberately *not* taken here; see **What this module
-does not do** below.
+does and does not transport** below.
 
 Four points about the formal statement deserve to be recorded up front, because in each
 case the informal slogan "congruences are normal subgroups" conceals a choice that the
@@ -102,14 +102,18 @@ for a normal subgroup they do, which we prove (`rel→coset`{.AgdaFunction},
 `coset→rel`{.AgdaFunction}) rather than assume, so that either presentation may be used
 downstream.
 
-**What this module does not do**.  Issue #508 also asks that
-`HasMonolithᵍ`{.AgdaFunction} of `Classical.Structures.Group.MinimalNormal` be
-transported to `HasMonolith`{.AgdaFunction}, that the `ᵍ` superscript be retired, and
-that `𝒢₂` of `FLRP.Reductions` be restated.  Those steps are held back until the pull
-request that introduces `MinimalNormal` lands; everything above is independent of them.
-The `Nonzero`{.AgdaFunction}/nontriviality equivalences proved here
-(`nonzero→nontrivial`{.AgdaFunction} and friends) are precisely the ingredient that
-transport will need beyond the isomorphism itself.
+**What this module does and does not transport**.  The first notion carried whole
+across the correspondence is simplicity: the final section below proves that the
+group-theoretic `IsSimple`{.AgdaFunction} of [Classical.Structures.Group.Simple][] is
+equivalent to the congruence-level `IsSimple`{.AgdaFunction} of
+[Setoid.Congruences.Simple][], constructively in both directions.  The retirement
+program built on the correspondence also asks that `HasMonolithᵍ`{.AgdaFunction} of
+`Classical.Structures.Group.MinimalNormal` be transported to
+`HasMonolith`{.AgdaFunction}, that the `ᵍ` superscript be retired, and that `𝒢₂` of
+`FLRP.Reductions` be restated.  Those steps remain open, with the simplicity
+equivalence as their template; the `Nonzero`{.AgdaFunction}/nontriviality equivalences
+proved here (`nonzero→nontrivial`{.AgdaFunction} and friends) are precisely the
+ingredient the monolith transport will need beyond the isomorphism itself.
 
 <!--
 ```agda
@@ -121,7 +125,8 @@ open import Agda.Primitive using () renaming ( Set to Type )
 
 -- Imports from the Agda Standard Library ---------------------------------------
 open import Data.Fin.Patterns             using  ( 0F ; 1F )
-open import Data.Product                  using  ( _,_ ; _×_ ; Σ-syntax ; proj₁ ; swap )
+open import Data.Product                  using  ( _,_ ; _×_ ; Σ-syntax ; proj₁ ; proj₂
+                                                 ; swap )
 open import Level                         using  ( Level ; _⊔_ ; suc )
 open import Relation.Binary               using  ( Setoid ; IsEquivalence
                                                  ; IsPartialOrder )
@@ -140,6 +145,9 @@ open import Classical.Signatures.Group              using  ( ∙-Op ; ε-Op ; �
 open import Classical.Structures.Group.Basic        using  ( Group ; module Group-Op )
 open import Classical.Structures.Group.Conjugation  using  ( module Conjugate )
 open import Classical.Structures.Group.Cosets       using  ( module Coset )
+open import Classical.Structures.Group.MinimalNormal
+                                                    using  ( module MinimalNormal )
+open import Classical.Structures.Group.Simple       using  ( module Simple )
 open import Classical.Structures.Group.Subgroups    using  ( IsSubgroup ; mkIsSubgroup
                                                            ; trivialSubgroup
                                                            ; interp-tuple-∙
@@ -153,6 +161,7 @@ open import Setoid.Congruences.Basic                using  ( Con ; IsCongruence 
 open import Setoid.Congruences.Lattice              using  ( _≑_ )
                                                     renaming ( _⊆_ to _⊑_ )
 open import Setoid.Congruences.Monolith             using  ( BelowDiagonal ; Nonzero )
+open import Setoid.Congruences.Simple               using  ( IsSimple )
 
 private variable α ρ ℓ : Level
 ```
@@ -770,4 +779,83 @@ nontrivial.
   con-nontrivial→nonzero : (θ : Con 𝑮 ℓ)
     →  Nontrivialᴺ (set (normalOf θ)) → Nonzero 𝑮 θ
   con-nontrivial→nonzero θ nt θ⊆Δ = nt (con-below-diagonal→below-trivial θ θ⊆Δ)
+```
+
+#### Simplicity across the correspondence
+
+The first notion to be transported whole is simplicity.  The group-theoretic
+`IsSimple`{.AgdaFunction} of [Classical.Structures.Group.Simple][] and the
+congruence-level `IsSimple`{.AgdaFunction} of [Setoid.Congruences.Simple][] are both
+implications with a witnessed hypothesis, and under the correspondence each
+hypothesis maps to the other: a congruence relating `a`{.AgdaBound} and
+`b`{.AgdaBound} apart puts the non-identity element `a ∙ b ⁻¹` in the identity
+class, and a non-identity member `x`{.AgdaBound} of a normal subgroup makes
+`NormalRel N`{.AgdaFunction} relate `x`{.AgdaBound} and `ε`{.AgdaFunction} apart.
+Both directions are fully constructive, with no stability antecedent: the
+double-negation fork recorded in the design note of
+[Classical.Structures.Group.Simple][] arises only in consumers that extract identity
+equations, and neither direction here extracts one.
+
+Two presentation points.  On levels: the group side at base level `ℓ₀`{.AgdaBound}
+quantifies over subgroup predicates at `L = α ⊔ ρ ⊔ ℓ₀`, so the congruence side is
+instantiated at exactly that level, per the level-uniformity note above.  On names:
+the two notions deliberately share the name `IsSimple`{.AgdaFunction}, since they
+live in different parameterized modules and qualified access disambiguates; here the
+group-side notion is accessed through its defining module `Simple`{.AgdaModule} and
+the congruence-level notion unqualified, and the theorem names spell the latter as
+"simple algebra".
+
+```agda
+  module _ (ℓ₀ : Level) where
+    open MinimalNormal 𝒢 (ρ ⊔ ℓ₀)  using  ( IsNormalSubgroup ; isSubgroup ; isNormal )
+
+    -- Group-side simplicity gives congruence-level simplicity: the identity class
+    -- of a congruence relating a distinct pair contains a non-identity element, so
+    -- it is the whole group, so the congruence relates every pair through ε.
+    simple→simpleAlgebra : Simple.IsSimple 𝒢 ℓ₀ → IsSimple 𝑮 (α ⊔ ρ ⊔ ℓ₀)
+    simple→simpleAlgebra sim θ@(_ , θcon) (a , b , aθb , a≉b) x y =
+      θ-trans (all∈N x) (θ-sym (all∈N y))
+      where
+      open ConNormal θ using ( θ-trans )
+
+      θ-sym : ∀ {u v} → proj₁ θ u v → proj₁ θ v u
+      θ-sym = IsEquivalence.sym (is-equivalence θcon)
+
+      𝑵 : NormalSubgroup (α ⊔ ρ ⊔ ℓ₀)
+      𝑵 = normalOf θ
+
+      -- The Σ-packaged normal subgroup, as the record the group side consumes.
+      nsg : IsNormalSubgroup (set 𝑵)
+      nsg = record { isSubgroup = set-isSubgroup 𝑵 ; isNormal = set-normal 𝑵 }
+
+      -- The round trip on congruences puts the right quotient of the related
+      -- pair in the identity class ...
+      ab⁻¹∈N : a ∙ b ⁻¹ ∈ set 𝑵
+      ab⁻¹∈N = proj₂ (congruenceOf∘normalOf θ) aθb
+
+      -- ... and the quotient is not the identity, by cancellation.
+      ab⁻¹≉ε : ¬ a ∙ b ⁻¹ ≈ ε
+      ab⁻¹≉ε e = a≉b (∙⁻¹≈ε→≈ e)
+
+      -- Group-side simplicity applied at the witness: the class is everything.
+      all∈N : ∀ z → z ∈ set 𝑵
+      all∈N = sim (set 𝑵) nsg (a ∙ b ⁻¹ , ab⁻¹∈N , ab⁻¹≉ε)
+
+    -- Congruence-level simplicity gives group-side simplicity: the congruence of
+    -- a normal subgroup with a non-identity member relates that member and ε
+    -- apart, so it relates every pair, and fullness of the subgroup follows
+    -- through the identity class.
+    simpleAlgebra→simple : IsSimple 𝑮 (α ⊔ ρ ⊔ ℓ₀) → Simple.IsSimple 𝒢 ℓ₀
+    simpleAlgebra→simple simp N nsg (x , x∈N , x≉ε) y =
+      proj₁ (normalOf∘congruenceOf 𝑵) (simp θ (x , ε , x∼ε , x≉ε) y ε)
+      where
+      𝑵 : NormalSubgroup (α ⊔ ρ ⊔ ℓ₀)
+      𝑵 = N , isSubgroup nsg , isNormal nsg
+
+      θ : Con 𝑮 (α ⊔ ρ ⊔ ℓ₀)
+      θ = congruenceOf 𝑵
+
+      -- The round trip on subgroups puts the witness in the identity class of θ_N.
+      x∼ε : proj₁ θ x ε
+      x∼ε = proj₂ (normalOf∘congruenceOf 𝑵) x∈N
 ```
