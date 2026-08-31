@@ -176,6 +176,11 @@ data never pays for the extraction.
   nontrivial⇒𝟙-nonzero (a , b , a≉b) 𝟙⊆Δ = a≉b (𝟙⊆Δ (lift tt))
 ```
 
+Assembling the pieces under the antecedent: nontriviality makes the total
+congruence nonzero, extraction turns any nonzero congruence into a witnessed one,
+and simplicity makes every witnessed congruence total, so the total congruence is
+the least nonzero congruence, which is exactly the monolith.
+
 ```agda
   -- With a witness-extraction principle for nonzero congruences, a nontrivial
   -- simple algebra is subdirectly irreducible, with the total congruence as

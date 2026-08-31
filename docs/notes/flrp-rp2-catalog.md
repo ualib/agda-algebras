@@ -81,6 +81,8 @@ The decision: state `𝒢₂` group-side, as `HasMonolithᵍ` of the new `Classi
 
 What the bridge needs, for whoever picks it up: from a normal subgroup `N`, the relation `x θ y ⟺ x y⁻¹ ∈ N` is a congruence of the group algebra; from a congruence `θ`, the class `{x : x θ ε}` is a normal subgroup; the two maps are mutually inverse and monotone, so they are an order isomorphism `Con 𝑮 ≅ Normal(𝑮)`; nontriviality corresponds to nonzeroness on the nose.  With it, `HasMonolithᵍ` transports to `HasMonolith` and `𝒢₂` becomes the library's `IsSubdirectlyIrreducible`.  It is ordinary work — no obstruction, no classical input — and it would retire the `ᵍ` superscript.
 
+**Update (2026-08-31)**.  The bridge landed as `Classical.Structures.Group.Congruences` (#508): the order isomorphism `Con 𝑮 ≅ Normal(𝑮)` at every relation level, with the nonzero/nontrivial equivalences.  The first notion transported whole across it is simplicity (#564): the congruence-level `IsSimple` of `Setoid.Congruences.Simple` is equivalent to the group-theoretic `IsSimple` of `Classical.Structures.Group.Simple`, constructively in both directions, and `A₅` is certified simple at the congruence level.  The monolith instance (`HasMonolithᵍ → HasMonolith`, restating `𝒢₂`, retiring the `ᵍ` superscript) remains open, with the simplicity equivalence as its template.
+
 ### 4.2  Minimal-normal descent is threaded, not dropped
 
 RP-1's Lemma 3.7 machinery takes a *minimal normal subgroup* as a module parameter, because its existence follows from finiteness by well-founded descent, which the library does not yet have.  Entries 1–3 must therefore be honest about it, and the tempting shortcut — stating the classes only for groups that come equipped with a minimal normal subgroup — would quietly weaken the quantifier over normal subgroups.
@@ -160,7 +162,7 @@ The failure mode of this phase is a plausible-sounding theorem statement that no
 
 ## 6.  Open items and follow-ups
 
-+  **The normal-subgroup/congruence bridge for groups** (§ 4.1).  Retires the `ᵍ` divergence and connects `𝒢₂` to the library's `IsSubdirectlyIrreducible`.  Ordinary work; worth its own issue.
++  **The normal-subgroup/congruence bridge for groups** (§ 4.1).  Landed in two installments: the order isomorphism itself (#508) and the simplicity transport with the certified `A₅` (#564); see the update in § 4.1.  The residue, `HasMonolithᵍ → HasMonolith` and the `𝒢₂` restatement, retires the `ᵍ` divergence and remains open.
 +  **Retire `minIE`** in favour of `MinimallyIE` (§ 4.7), in `FLRP.Enforceable`, after PR #506 merges.
 +  **Minimal-normal descent for finite groups** (§ 4.2): well-founded descent on order.  Discharges the antecedent of Entries 1–3 and RP-1's fourth assumption at once.
 +  **Certificates instead of hypotheses for the vacuity data of Entries 4–6**.  `M₆` is an interval in a group of order 100 (`V ⋊ F₅^*` for `V` a plane over `F₅`), which is small enough for the GAP search and certificate pipeline of WP-6 to produce and for the Agda checker to verify; that would turn `M₆-representable` from an import into a theorem, and with it the non-vacuity of Entry 5.  `M₇`'s witness lives in `A₃₁` and is far out of reach, so Entry 4 keeps `FeitM₇` as an import.
