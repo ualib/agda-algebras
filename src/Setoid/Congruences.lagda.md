@@ -28,6 +28,8 @@ following:
    permuting congruences and joins computed as chains;
 +  [Setoid.Congruences.Monolith][]: monolithic algebras, those with a unique
    minimal nonzero congruence;
++  [Setoid.Congruences.Simple][]: simple algebras, in the implication form that
+   concrete instances inhabit;
 +  [Setoid.Congruences.Finite][], [Setoid.Congruences.Presented][] and
    [Setoid.Congruences.Certificates][]: the decidable and finitely presented
    cases, and the machine-checked certificates built on them;
@@ -44,6 +46,7 @@ open import Setoid.Congruences.Permutability public
 open import Setoid.Congruences.Lattice public
 open import Setoid.Congruences.CompleteLattice public
 open import Setoid.Congruences.Monolith public
+open import Setoid.Congruences.Simple public
 open import Setoid.Congruences.Properties public
 open import Setoid.Congruences.ChainJoin                public
 open import Setoid.Congruences.Generation               public
