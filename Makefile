@@ -357,6 +357,7 @@ docstrings-test:
 # the nix dev shell ships numpy (flake.nix), so under `nix develop` they run.
 flrp-test:
 	@echo "target: $@"
+	python3 scripts/python/flrp/test_a5_simple_cert.py
 	python3 scripts/python/flrp/test_flrp.py
 	python3 scripts/python/flrp/test_eqsearch.py
 	python3 scripts/python/flrp/test_slr_catalog.py

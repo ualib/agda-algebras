@@ -56,6 +56,9 @@ open import Agda.Primitive                   using () renaming ( Set to Type )
 open import Data.Nat                         using ( ℕ )
 open import Data.Fin                         using ( Fin )
 open import Data.Vec.Base                    using ( Vec ; lookup )
+open import Level                            using ( Level )
+open import Relation.Binary.PropositionalEquality
+                                             using ( _≡_ ; cong ; sym ; trans )
 
 -- Re-exported so downstream examples can discharge laws with a single name.
 open import Relation.Nullary.Decidable.Core  using ( from-yes ) public
@@ -101,3 +104,37 @@ two-dimensional table, so the finite Cayley-table case keeps the plain curried
 function type.  The decidable-law checkers in [`Overture.Operations.Properties`][Overture.Operations.Properties]
 take the same bare `Fin n → Fin n → Fin n`, for the same reason: finiteness is what
 makes the laws decidable, independently of how an operation's arguments are packaged.
+
+#### Associativity through a faithful action
+
+For a small carrier, `Associative?`{.AgdaFunction} of
+[Overture.Operations.Properties][] decides associativity by enumerating all
+triples, and the count is cubic in the carrier size: at `Fin 6` it is 216
+triples, at `Fin 60` it is 216000.  When the operation is faithfully
+represented by function composition on a set of points (for a permutation
+group presented by a table, its action on the points it permutes),
+associativity follows instead from the associativity of composition, which
+holds definitionally.  Two checks suffice, and each costs `n² · m` point
+comparisons for `n` carrier elements acting on `m` points, so the route wins
+exactly when the point set is small (quadratic in the carrier for fixed `m`;
+for an action on the carrier itself it degenerates to the cubic count): the
+representation sends products to composition
+(`ActionHom?`{.AgdaFunction} of [Overture.Operations.Properties][]), and it is
+faithful, meaning distinct elements act differently
+(`ActionFaithful?`{.AgdaFunction}).
+
+```agda
+module _ {a p : Level} {A : Type a} {P : Type p}
+         (_·_ : A → A → A) (act : A → P → P) where
+
+  -- Associativity from a faithful action: if act represents the operation by
+  -- function composition and distinct elements act differently, then the
+  -- operation is associative.
+  assoc-from-action :
+       (∀ x y q → act (x · y) q ≡ act x (act y q))
+    →  (∀ x y → (∀ q → act x q ≡ act y q) → x ≡ y)
+    →  ∀ x y z → (x · y) · z ≡ x · (y · z)
+  assoc-from-action hom faithful x y z = faithful _ _ λ q →
+    trans  (trans (hom (x · y) z q) (hom x y (act z q)))
+           (sym (trans (hom x (y · z) q) (cong (act x) (hom y z q))))
+```

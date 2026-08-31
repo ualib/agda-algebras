@@ -192,11 +192,13 @@
 [Classical.Structures.Group.IndexAction]: /Classical/Structures/Group/IndexAction/
 [Classical.Structures.Group.MaximalSubgroup]: /Classical/Structures/Group/MaximalSubgroup/
 [Classical.Structures.Group.MinimalNormal]: /Classical/Structures/Group/MinimalNormal/
+[Classical.Structures.Group.NormalClosure]: /Classical/Structures/Group/NormalClosure/
 [Classical.Structures.Group.NormalCore]: /Classical/Structures/Group/NormalCore/
 [Classical.Structures.Group.NormalSubgroupLattice]: /Classical/Structures/Group/NormalSubgroupLattice/
 [Classical.Structures.Group.PartitionSubgroup]: /Classical/Structures/Group/PartitionSubgroup/
 [Classical.Structures.Group.Power]: /Classical/Structures/Group/Power/
 [Classical.Structures.Group.Product]: /Classical/Structures/Group/Product/
+[Classical.Structures.Group.Simple]: /Classical/Structures/Group/Simple/
 [Classical.Structures.Group.SubgroupLattice]: /Classical/Structures/Group/SubgroupLattice/
 [Classical.Structures.Group.Subgroups]: /Classical/Structures/Group/Subgroups/
 [Classical.Structures.Group.Wreath]: /Classical/Structures/Group/Wreath/
@@ -241,6 +243,8 @@
 [Examples.Classical.CommutativeSemigroup]: /Examples/Classical/CommutativeSemigroup/
 [Examples.Classical.Groups]: /Examples/Classical/Groups/
 [Examples.Classical.Groups.AbelianGroup]: /Examples/Classical/Groups/AbelianGroup/
+[Examples.Classical.Groups.AlternatingGroup5]: /Examples/Classical/Groups/AlternatingGroup5/
+[Examples.Classical.Groups.AlternatingGroup5.Tables]: /Examples/Classical/Groups/AlternatingGroup5/Tables/
 [Examples.Classical.Groups.CyclicGroup]: /Examples/Classical/Groups/CyclicGroup/
 [Examples.Classical.Groups.CyclicGroup3]: /Examples/Classical/Groups/CyclicGroup3/
 [Examples.Classical.Groups.KleinFourGroup]: /Examples/Classical/Groups/KleinFourGroup/
@@ -590,11 +594,13 @@
 [Classical/Structures/Group/IndexAction.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Group/IndexAction.lagda.md
 [Classical/Structures/Group/MaximalSubgroup.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Group/MaximalSubgroup.lagda.md
 [Classical/Structures/Group/MinimalNormal.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Group/MinimalNormal.lagda.md
+[Classical/Structures/Group/NormalClosure.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Group/NormalClosure.lagda.md
 [Classical/Structures/Group/NormalCore.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Group/NormalCore.lagda.md
 [Classical/Structures/Group/NormalSubgroupLattice.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Group/NormalSubgroupLattice.lagda.md
 [Classical/Structures/Group/PartitionSubgroup.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Group/PartitionSubgroup.lagda.md
 [Classical/Structures/Group/Power.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Group/Power.lagda.md
 [Classical/Structures/Group/Product.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Group/Product.lagda.md
+[Classical/Structures/Group/Simple.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Group/Simple.lagda.md
 [Classical/Structures/Group/SubgroupLattice.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Group/SubgroupLattice.lagda.md
 [Classical/Structures/Group/Subgroups.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Group/Subgroups.lagda.md
 [Classical/Structures/Group/Wreath.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Group/Wreath.lagda.md
@@ -639,6 +645,8 @@
 [Examples/Classical/CommutativeSemigroup.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Examples/Classical/CommutativeSemigroup.lagda.md
 [Examples/Classical/Groups.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Examples/Classical/Groups.lagda.md
 [Examples/Classical/Groups/AbelianGroup.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Examples/Classical/Groups/AbelianGroup.lagda.md
+[Examples/Classical/Groups/AlternatingGroup5.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Examples/Classical/Groups/AlternatingGroup5.lagda.md
+[Examples/Classical/Groups/AlternatingGroup5/Tables.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Examples/Classical/Groups/AlternatingGroup5/Tables.lagda.md
 [Examples/Classical/Groups/CyclicGroup.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Examples/Classical/Groups/CyclicGroup.lagda.md
 [Examples/Classical/Groups/CyclicGroup3.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Examples/Classical/Groups/CyclicGroup3.lagda.md
 [Examples/Classical/Groups/KleinFourGroup.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Examples/Classical/Groups/KleinFourGroup.lagda.md

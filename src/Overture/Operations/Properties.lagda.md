@@ -39,7 +39,7 @@ open import Data.Nat                                using ( ℕ )
 open import Data.Fin                                using ( Fin )
 open import Data.Fin.Properties                     using ( _≟_ ; all? )
 open import Relation.Binary.PropositionalEquality   using ( _≡_ )
-open import Relation.Nullary.Decidable.Core         using ( Dec )
+open import Relation.Nullary.Decidable.Core         using ( Dec ; _→-dec_ )
 ```
 -->
 
@@ -107,4 +107,30 @@ module _ {n : ℕ} (_·_ _∘_ : Fin n → Fin n → Fin n) where
   -- (b ∘ c) · a ≡ (b · a) ∘ (c · a)
   Distributesʳ? : Dec (∀ a b c → (b ∘ c) · a ≡ (b · a) ∘ (c · a))
   Distributesʳ? = all? (λ a → all? (λ b → all? (λ c → ((b ∘ c) · a) ≟ ((b · a) ∘ (c · a)))))
+```
+
+#### An operation represented by an action
+
+These two checkers feed `assoc-from-action`{.AgdaFunction} of
+[Overture.Cayley][]: a binary operation on `Fin n` is associative as soon as
+some action on `Fin m` represents it by function composition
+(`ActionHom?`{.AgdaFunction}) and is faithful (`ActionFaithful?`{.AgdaFunction}).
+Both decisions cost `n² · m` point comparisons, against the `n³` count of
+`Associative?`{.AgdaFunction}, so they are quadratic in `n` when the point set
+stays small and fixed; a faithful action on few points is what makes large
+Cayley-table examples feasible.
+
+```agda
+module _ {n m : ℕ} (_·_ : Fin n → Fin n → Fin n) (act : Fin n → Fin m → Fin m) where
+
+  -- act (a · b) is act a after act b, pointwise, for every a, b.
+  ActionHom? : Dec (∀ a b q → act (a · b) q ≡ act a (act b q))
+  ActionHom? = all? (λ a → all? (λ b → all? (λ q → (act (a · b) q) ≟ (act a (act b q)))))
+
+module _ {n m : ℕ} (act : Fin n → Fin m → Fin m) where
+
+  -- Elements that act the same are equal.
+  ActionFaithful? : Dec (∀ a b → (∀ q → act a q ≡ act b q) → a ≡ b)
+  ActionFaithful? =
+    all? (λ a → all? (λ b → (all? (λ q → (act a q) ≟ (act b q))) →-dec (a ≟ b)))
 ```
