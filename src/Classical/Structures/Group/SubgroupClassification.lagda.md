@@ -10,43 +10,40 @@ author: "the agda-algebras development team"
 
 This is the [Classical.Structures.Group.SubgroupClassification][] module of the [Agda Universal Algebra Library][].
 
-Over a finite group, this module answers questions of the form "which
-subgroups contain `H`?" (equivalently, "which subgroups lie in a given
-interval of `Sub(G)`?") **by certificate**, in the witness-not-decision style
-of the WP-6 checkers: the engine (GAP, or the Python generator of
-`scripts/python/flrp/`) supplies *words* — products of designated generators —
-and the checkers here re-verify every word by evaluating it, so nothing is
-believed on the engine's authority.
+This module answers questions of the form "which subgroups of a finite group
+contain `H`?" (equivalently, "which subgroups lie in a given interval of `Sub(G)`?")
+**by certificate**, in the witness-not-decision style of the WP-6 checkers: the
+engine (GAP, or the Python generator of `scripts/python/flrp/`) supplies *words*
+(products of designated generators) and the checkers here re-verify every word by
+evaluating it, so nothing is believed on the engine's authority.
 
-The problem being solved: an *arbitrary* decidable subgroup `K`{.AgdaBound} is
-given only by its membership decider, so "`K` is one of the listed subgroups"
-cannot be established by enumerating subgroups — the type of deciders is not
-searchable.  What *can* be done constructively is to walk `K`{.AgdaBound} up a
-finite family: if `K`{.AgdaBound} contains a listed member and is not
-contained in it, a concrete element `g ∈ K` off the member is found by finite
-search (`sub⊈-witness`{.AgdaFunction}), and a certificate for the pair
-(member, `g`) names a *larger* listed member together with words proving that
-the larger member's generators lie in `⟨member ∪ {g}⟩ ⊆ K`.  Certified steps
-strictly increase a rank, so the walk terminates, and `K`{.AgdaBound} is
-identified — up to mutual containment — with a listed member.  The two
-ingredients are as follows.
+The problem being solved: an arbitrary decidable subgroup `K`{.AgdaBound} is given
+only by its membership decider, so "`K` is one of the listed subgroups" cannot be
+established by enumerating subgroups; the type of deciders is not searchable.
 
-+  **Words**: evaluation of index words over the carrier enumeration, and the
-   one lemma that matters — a word whose letters lie in a subgroup evaluates
-   into the subgroup (`evalWord-closed`{.AgdaFunction}).
+What *can* be done constructively is to walk `K`{.AgdaBound} up a finite family:
+if `K`{.AgdaBound} contains a listed member and is not contained in it, a concrete
+element `g ∈ K` off the member is found by finite search
+(`sub⊈-witness`{.AgdaFunction}), and a certificate for the pair (member, `g`)
+names a *larger* listed member together with words proving that the larger
+member's generators lie in `⟨member ∪ {g}⟩ ⊆ K`.  Certified steps strictly
+increase a rank, so the walk terminates, and `K`{.AgdaBound} is identified (up to
+mutual containment) with a listed member.  The two ingredients are as follows.
 
-+  **Escalation**: the certificate schema (per-member generators and
-   expansion words, per-pair step words and a rank), the decidable
-   well-formedness predicate `EscalationOK`{.AgdaFunction} that a data module
-   discharges with `from-yes`{.AgdaFunction}, and the classifier
-   `classify`{.AgdaFunction}.
++  **Words**: evaluation of index words over the carrier enumeration, and the one
+   lemma that matters; a word whose letters lie in a subgroup evaluates into the
+   subgroup (`evalWord-closed`{.AgdaFunction}).
 
-The first consumer is the filter-ideal route to the census entries `L16`
-(interval `[C3 , A5]` in `Sub(A5)`, exactly three intermediate subgroups) and
-`L11` (issue #530): there the classifier turns "a congruence of the regular
-action whose `ε`-class contains `C3`" into one of five named subgroups.  The
-machinery is deliberately independent of that application — any finite group
-with emitted word certificates can use it.
++  **Escalation**: the certificate schema (per-member generators and expansion
+   words, per-pair step words and a rank), the decidable well-formedness predicate
+   `EscalationOK`{.AgdaFunction} that a data module discharges with
+   `from-yes`{.AgdaFunction}, and the classifier `classify`{.AgdaFunction}.
+
+The first consumer is the filter-ideal route to the census entries `L16` (interval
+`[C3 , A5]` in `Sub(A5)`, exactly three intermediate subgroups) and `L11`: there
+the classifier turns "a congruence of the regular action whose `ε`-class contains
+`C3`" into one of five named subgroups.  The machinery is deliberately independent
+of that application; any finite group with emitted word certificates can use it.
 
 <!--
 ```agda
@@ -57,76 +54,72 @@ module Classical.Structures.Group.SubgroupClassification where
 open import Agda.Primitive using () renaming ( Set to Type )
 
 -- Imports from the Agda Standard Library ---------------------------------------
-open import Data.Empty                    using ( ⊥-elim )
-open import Data.Fin.Base                 using ( Fin )
-open import Data.Fin.Properties           using ( ¬∀⟶∃¬ )
-                                          renaming ( all? to allᶠ? ; _≟_ to _≟ᶠ_ )
-open import Data.List.Base                using ( List ; [] ; _∷_ )
-open import Data.List.Membership.Propositional
-                                          using () renaming ( _∈_ to _∈ˡ_ )
-open import Data.List.Relation.Unary.All  using ( All ; [] ; _∷_ )
-                                          renaming ( all? to allˡ? ; lookup to All-lookup
-                                                   ; map to All-map )
-open import Data.List.Relation.Unary.Any  using ( here ; there )
-open import Data.List.Relation.Binary.Pointwise
-                                          using ( Pointwise ; [] ; _∷_ )
+open import Data.Empty                             using  ( ⊥-elim )
+open import Data.Fin.Base                          using  ( Fin )
+open import Data.Fin.Properties                    using  ( ¬∀⟶∃¬ )
+                                                   renaming ( all? to allᶠ? ; _≟_ to _≟ᶠ_ )
+open import Data.List.Base                         using  ( List ; [] ; _∷_ )
+open import Data.List.Membership.Propositional     using  () renaming ( _∈_ to _∈ˡ_ )
+open import Data.List.Relation.Unary.All           using  ( All ; [] ; _∷_ )
+                                                   renaming  ( all? to allˡ?
+                                                             ; lookup to All-lookup
+                                                             ; map to All-map )
+open import Data.List.Relation.Unary.Any           using  ( here ; there )
+open import Data.List.Relation.Binary.Pointwise    using  ( Pointwise ; [] ; _∷_ )
 import Data.List.Membership.DecPropositional as DecMembership
 import Data.List.Relation.Binary.Pointwise.Properties as PointwiseProps
-open import Data.Nat.Base                 using ( ℕ ; zero ; suc ; _+_ ; _<_ ; _≤_ )
-open import Data.Nat.Properties           using ( _<?_ ; ≤-trans ; m≤m+n ; +-suc
-                                                ; <⇒≱ ; +-monoʳ-≤ )
-open import Data.Product                  using ( _×_ ; _,_ ; Σ-syntax ; proj₁ ; proj₂ )
-open import Level                         using ( Level ; _⊔_ )
-open import Relation.Binary               using ( Setoid )
-open import Relation.Binary.PropositionalEquality  using ( refl ; sym ; subst )
-open import Relation.Nullary              using ( ¬_ ; Dec ; yes ; no )
-open import Relation.Nullary.Decidable.Core        using ( ¬? ; _×-dec_ ; _→-dec_ )
-open import Relation.Unary                using ( Pred ; _∈_ ; _⊆_ )
+open import Data.Nat.Base                          using  ( ℕ ; zero ; suc ; _+_ ; _<_ ; _≤_ )
+open import Data.Nat.Properties                    using  ( _<?_ ; ≤-trans ; m≤m+n ; +-suc
+                                                          ; <⇒≱ ; +-monoʳ-≤ )
+open import Data.Product                           using  ( _×_ ; _,_ ; Σ-syntax
+                                                          ; proj₁ ; proj₂ )
+open import Level                                  using  ( Level ; _⊔_ )
+open import Relation.Binary                        using  ( Setoid )
+open import Relation.Binary.PropositionalEquality  using  ( refl ; sym ; subst )
+open import Relation.Nullary                       using  ( ¬_ ; Dec ; yes ; no )
+open import Relation.Nullary.Decidable.Core        using  ( ¬? ; _×-dec_ ; _→-dec_ )
+open import Relation.Unary                         using  ( Pred ; _∈_ ; _⊆_ )
 
 -- Imports from the Agda Universal Algebra Library ------------------------------
-open import Classical.Structures.Group.Basic      using  ( Group ; module Group-Op )
-open import Classical.Structures.Group.Subgroups  using  ( IsSubgroup ; Subgroup
-                                                         ; DecSubgroup )
-open import Setoid.Algebras.Basic                 using  ( 𝕌[_] ; 𝔻[_] )
-open import Setoid.Algebras.Finite                using  ( FiniteAlgebra )
+open import Classical.Structures.Group.Basic       using  ( Group ; module Group-Op )
+open import Classical.Structures.Group.Subgroups   using  ( IsSubgroup ; Subgroup
+                                                          ; DecSubgroup )
+open import Setoid.Algebras.Basic                  using  ( 𝕌[_] ; 𝔻[_] )
+open import Setoid.Algebras.Finite                 using  ( FiniteAlgebra )
 ```
 -->
 
 #### The setting
 
-Everything is parameterized by a group and a finiteness witness for its
-carrier.  `set`{.AgdaFunction} and `memb?`{.AgdaFunction} are the two
-projections of a decidable subgroup that the development reads constantly.
+Everything is parameterized by a group and a finiteness witness for its carrier.
+`set`{.AgdaFunction} and `memb?`{.AgdaFunction} are the two projections of a
+decidable subgroup that the development reads constantly.
 
 ```agda
-module Classify {α ρ ℓ : Level} (𝒢 : Group α ρ) (𝑭 : FiniteAlgebra (proj₁ 𝒢)) where
-
-  private
-    𝑮 = proj₁ 𝒢
-    G = 𝕌[ 𝑮 ]
+module Classify {α ρ ℓ : Level} (𝒢@(𝑮 , _) : Group α ρ) (𝑭 : FiniteAlgebra (proj₁ 𝒢)) where
 
   open Setoid 𝔻[ 𝑮 ]    using ( _≈_ ) renaming ( sym to ≈sym )
   open Group-Op 𝒢       using ( _∙_ ; ε )
   open FiniteAlgebra 𝑭  renaming ( _≟_ to _≈?_ )
 
   -- The underlying predicate, subgroup structure, and membership decider.
-  set : DecSubgroup 𝒢 ℓ → Pred G ℓ
-  set K = proj₁ (proj₁ K)
+  set : DecSubgroup 𝒢 ℓ → Pred 𝕌[ 𝑮 ] ℓ
+  set K = K .proj₁ .proj₁
 
   isSub : (K : DecSubgroup 𝒢 ℓ) → IsSubgroup 𝒢 (set K)
-  isSub K = proj₂ (proj₁ K)
+  isSub K = K .proj₁ .proj₂
 
   memb? : (K : DecSubgroup 𝒢 ℓ) → ∀ x → Dec (x ∈ set K)
-  memb? K = proj₂ K
+  memb? K = K .proj₂
 ```
 
 #### Decidable containment, with witness extraction
 
-Containment of decidable subgroups reduces to finitely many decidable
-implications over the enumeration, lifted through surjectivity by the
-`respects`{.AgdaField} fields; a *failed* containment yields the **index** of
-a violating element — the index, not just the element, because certificate
-rows are keyed by enumeration indices.
+Containment of decidable subgroups reduces to finitely many decidable implications
+over the enumeration, lifted through surjectivity by the `respects`{.AgdaField}
+fields; a *failed* containment yields the **index** of a violating element; the
+index, not just the element, because certificate rows are keyed by enumeration
+indices.
 
 ```agda
   private
@@ -175,7 +168,7 @@ single consumption lemma is closure of subgroups under products.
   Word : Type
   Word = List (Fin card)
 
-  evalWord : Word → G
+  evalWord : Word → 𝕌[ 𝑮 ]
   evalWord []       = ε
   evalWord (l ∷ w)  = enum l ∙ evalWord w
 
