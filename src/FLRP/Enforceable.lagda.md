@@ -699,20 +699,27 @@ core-free subgroup.  (The note's § 3 statement strengthens core-freeness to
 every proper subgroup between `Hᵢ` and `G`; that refinement needs the
 proper-subgroup language and is deferred to RP-1 with the proof.)
 
-The per-canopy guard is not decorative.  The first formalization of (C) omitted
-it, quantifying over arbitrary `FiniteLattice`{.AgdaRecord} families, and that
-form is **refutable**: the one-element chain core-free enforces "is trivial"
-while any three-element chain core-free enforces "is nontrivial", and the
-unguarded (C) applied to the family (three-chain, three-chain, one-chain) would
-produce a single group that is both.  The defective form is kept, in the
+The per-canopy guard is not decorative, and the omission is the *note's*, not
+only the transcription's: the printed Theorem 3.6 asks merely that at least two
+members of the family have more than two elements, and the first formalization
+transcribed exactly that.  The unguarded form is **refutable**: the one-element
+chain core-free enforces "is trivial" while any three-element chain core-free
+enforces "is nontrivial", and the unguarded (C) applied to the family
+(three-chain, three-chain, one-chain) would produce a single group that is
+both.  The note's parachute construction requires a genuine atom per canopy, so
+the repair restores the hypothesis its proof always used; this is the second
+missing-nontriviality instance in the vendored note, after the Lemma 3.3
+hypothesis the RP-4 phase found, and it is recorded in the same erratum issue
+(see the RP-3 survey note).  The defective form is kept, in the
 `minIE`{.AgdaFunction} tradition, as the record of the repair; the refutation
 itself is `unguarded-statement-C-refuted`{.AgdaFunction} of [FLRP.Hunt][],
 which needed exactly the degenerate-enforcement lemmas RP-3 built for the pair
 question.
 
 ```agda
--- The unguarded first formalization: refutable, kept as the record of the
--- defect (see FLRP.Hunt).  Do not consume this in new results.
+-- Statement (C) as the note prints it (no per-canopy nontriviality):
+-- refutable, kept as the record of the source-level omission (see
+-- FLRP.Hunt).  Do not consume this in new results.
 Statement-C-unguarded : (ℓP : Level) → Type (lsuc 0ℓ ⊔ lsuc ℓP)
 Statement-C-unguarded ℓP =
   ∀ (n : ℕ) (𝑳s : Fin (2 + n) → FiniteLattice) (Ps : Fin (2 + n) → GroupProperty ℓP)
@@ -723,7 +730,8 @@ Statement-C-unguarded ℓP =
       × ( ∀ i → ∃[ H ∈ Pred 𝕌[ proj₁ 𝒢 ] 0ℓ ] ∃[ H-sg ∈ IsSubgroup 𝒢 H ]
                 ( CoreFree 𝒢 H H-sg × IntervalIso 𝒢 H H-sg (toLattice (𝑳s i)) )))
 
--- Statement (C), with every canopy nontrivial: the note's actual statement.
+-- Statement (C), repaired: every canopy nontrivial, the hypothesis the
+-- note's parachute construction requires but its printed statement omits.
 Statement-C : (ℓP : Level) → Type (lsuc 0ℓ ⊔ lsuc ℓP)
 Statement-C ℓP =
   ∀ (n : ℕ) (𝑳s : Fin (2 + n) → FiniteLattice) (Ps : Fin (2 + n) → GroupProperty ℓP)

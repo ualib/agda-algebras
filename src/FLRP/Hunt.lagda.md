@@ -63,14 +63,17 @@ The honest form of the dead-end question, `PairQuestion`{.AgdaFunction} below,
 carries `Nontrivial`{.AgdaFunction} on both lattices; everything RP-4 proved
 about the question applies to this form verbatim.
 
-**A repair to statement (C) itself.**  The same degenerate pair refutes the
-first formalization of statement (C), which quantified over arbitrary families
-of finite lattices: instantiated at the family (three-chain, three-chain,
-one-chain) it would produce a single group that is both trivial and nontrivial
-(`unguarded-statement-C-refuted`{.AgdaFunction} below).  The repaired
-`Statement-C`{.AgdaFunction} of [FLRP.Enforceable][] guards every canopy with
-`Nontrivial`{.AgdaFunction}, matching the note's construction, and the
-defective form is kept there as `Statement-C-unguarded`{.AgdaFunction} in the
+**A repair to statement (C) itself.**  The same degenerate pair refutes
+statement (C) as the note prints it, whose hypotheses ask only that two
+members of the family have more than two elements, and which the first
+formalization transcribed faithfully: instantiated at the family (three-chain,
+three-chain, one-chain) it would produce a single group that is both trivial
+and nontrivial (`unguarded-statement-C-refuted`{.AgdaFunction} below).  The
+repaired `Statement-C`{.AgdaFunction} of [FLRP.Enforceable][] guards every
+canopy with `Nontrivial`{.AgdaFunction}, the hypothesis the note's parachute
+construction requires but its printed statement omits (erratum material,
+recorded with the RP-4 Lemma 3.3 item; see the survey note), and the defective
+form is kept there as `Statement-C-unguarded`{.AgdaFunction} in the
 `minIE`{.AgdaFunction} tradition of recording repairs.
 
 **Constructive status.**  As everywhere in the catalog, the theorems here are
@@ -273,15 +276,18 @@ chain₁-coreFreeRep = record
 
 #### The unguarded statement (C) is refutable
 
-The degenerate enforcements above have a second, sharper consequence: the first
-formalization of statement (C), which quantified over arbitrary families of
-finite lattices, is outright false.  Instantiate it at the family (three-chain,
-three-chain, one-chain) with the properties (nontrivial, nontrivial, trivial):
-the two three-chains meet the two-big-canopies side condition, every member is
+The degenerate enforcements above have a second, sharper consequence:
+statement (C) as the note prints it, quantifying over arbitrary families of
+finite lattices with only two required to exceed two elements, is outright
+false, and the first formalization transcribed the printed statement
+faithfully.  Instantiate it at the family (three-chain, three-chain,
+one-chain) with the properties (nontrivial, nontrivial, trivial): the two
+three-chains meet the two-big-canopies side condition, every member is
 core-free enforceable by the lemmas above, and the single group (C) produces
 would be simultaneously trivial and nontrivial.  The repaired
 `Statement-C`{.AgdaFunction} of [FLRP.Enforceable][] guards every canopy with
-`Nontrivial`{.AgdaFunction}; the defective form is kept there as
+`Nontrivial`{.AgdaFunction}, the hypothesis the note's own parachute
+construction requires; the defective form is kept there as
 `Statement-C-unguarded`{.AgdaFunction}, and here is its refutation.
 
 The three-element chain, in the Cayley style of `chain₂`{.AgdaFunction} of
@@ -528,9 +534,11 @@ statement-C→no-pair-with-big stC P 𝑳₁ 𝑳₂ two₁ two₂ (inj₂ three
 The corner assembled: once each enforcing lattice is classified as a two-element
 chain or as three-element-rich, statement (C) leaves no room for a contradictory
 pair whatsoever.  Classically the classification is trivial for a finite
-lattice, so this says: modulo statement (C), the repaired pair question has a
-positive answer on classified finite lattices, and the two-element mismatch of
-the RP-4 reduction is closed.
+*nontrivial* lattice; the one-element lattice is neither alternative, and it is
+exactly the degenerate case the repaired pair question's
+`Nontrivial`{.AgdaFunction} hypotheses exclude.  So this says: modulo
+statement (C), the repaired pair question has a positive answer on classified
+finite lattices, and the two-element mismatch of the RP-4 reduction is closed.
 
 ```agda
 statement-C→pair-question-classified : {ℓP : Level} → Statement-C ℓP
