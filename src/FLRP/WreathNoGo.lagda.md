@@ -83,7 +83,11 @@ application fed.
 
 The formal hypotheses on `𝒮` are the two fragments the core-freeness argument
 consumes (a non-identity element and a trivial center,
-`NontrivialCenterless`{.AgdaRecord}); the library does not yet define simplicity.
+`NontrivialCenterless`{.AgdaRecord}).  The library's simplicity notion
+([Classical.Structures.Group.Simple][]) discharges the record at any nonabelian
+simple group with decidable equality
+(`nonabelianSimple→nontrivialCenterless`{.AgdaFunction} below), so consumers can
+instantiate `𝒮` through the notion instead of threading the fragments by hand.
 
 Kurzweil's interval theorem needs full finite nonabelian simplicity, which stays a
 prose side condition of Entry 5, exactly as in Entry 4.  Finiteness of the
@@ -119,7 +123,8 @@ open import Classical.Small.Structures    using  ( Lattice )
 open import Classical.Structures.Group    using  ( Group ; module Group-Op
                                                  ; RightAction ; IsCosetAction
                                                  ; module ActionKernel ; _≀ᵍ_
-                                                 ; IsSubgroup ; module WreathProduct )
+                                                 ; IsSubgroup ; module WreathProduct
+                                                 ; module Simple )
 open import Classical.Structures.Lattice  using  ( dualLattice )
 open import FLRP.Enforceable              using  ( cfIE ; CoreFree
                                                  ; CoreFreeRepresentable
@@ -166,6 +171,32 @@ record NontrivialCenterless (𝒮 : Group 0ℓ 0ℓ) : Type 0ℓ where
     elt         : 𝕌[ 𝒮 .proj₁ ]
     elt≉ε       : ¬ elt ≈ ε
     centerless  : ∀ d → (∀ t → t ∙ d ≈ d ∙ t) → d ≈ ε
+```
+
+The record is exactly what the library's nonabelian-simple interface of
+[Classical.Structures.Group.Simple][] proves: the interface's non-commuting pair
+supplies the non-identity element, and its center-triviality theorem supplies
+`centerless`{.AgdaField}, positively, given stability of identity equations
+(which decidable equality supplies, so every concrete finite instance qualifies).
+Consumers holding a certified nonabelian simple group therefore discharge the
+record here once, instead of exhibiting the two fragments per instance.
+
+```agda
+-- Nonabelian simple, with stable identity equations, implies nontrivial
+-- and centerless.  The stability antecedent is the constructive caveat
+-- recorded in the Simple module's design note.
+nonabelianSimple→nontrivialCenterless : (𝒮 : Group 0ℓ 0ℓ)
+  → Simple.Stable-≈ε 𝒮 0ℓ
+  → Simple.IsNonabelianSimple 𝒮 0ℓ
+  → NontrivialCenterless 𝒮
+nonabelianSimple→nontrivialCenterless 𝒮 st nas = record
+  { elt         = S.elt nas
+  ; elt≉ε       = S.elt≉ε nas
+  ; centerless  = λ d central → S.center-trivial st nas d (λ x _ → ≈sym (central x))
+  }
+  where
+  module S = Simple 𝒮 0ℓ
+  open Setoid 𝔻[ 𝒮 .proj₁ ] using () renaming ( sym to ≈sym )
 ```
 
 #### Entry 5: Kurzweil's wreath interval
