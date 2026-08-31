@@ -10,64 +10,46 @@ author: "the agda-algebras development team"
 
 This is the [Examples.Classical.Groups.AlternatingGroup5][] module of the [Agda Universal Algebra Library][].
 
-The alternating group `A₅` on five points is the smallest nonabelian simple
-group.  This module constructs it concretely, on the carrier `Fin 60` with
-propositional equality, and certifies its simplicity by finite computation:
-the result is an inhabitant of `IsSimple`{.AgdaFunction} of
-[Classical.Structures.Group.Simple][], the nonabelian-simple bundle
-`IsNonabelianSimple`{.AgdaRecord}, and the discharged
-`NontrivialCenterless`{.AgdaRecord} of [FLRP.WreathNoGo][], which is what
-makes `A₅` an admissible base group for the Kurzweil entries of
-[FLRP.Assumptions][].
+The alternating group `A₅` on five points is the smallest nonabelian simple group.
+This module constructs it concretely, on the carrier `Fin 60` with propositional
+equality, and certifies its simplicity by finite computation: the result is an
+inhabitant of `IsSimple`{.AgdaFunction} of [Classical.Structures.Group.Simple][],
+the nonabelian-simple bundle `IsNonabelianSimple`{.AgdaRecord}, and the discharged
+`NontrivialCenterless`{.AgdaRecord} of [FLRP.WreathNoGo][].[^1]
 
 The raw data lives in the generated companion
-[Examples.Classical.Groups.AlternatingGroup5.Tables][]: the 60 by 60 Cayley
-table on the lexicographic even-permutation encoding (index 0 is the
-identity), the inverse vector, the action of each element on the five points,
-and the simplicity certificate.  Nothing rests on the generator's authority:
-every claim in the data is replayed here by decision procedures over the
-finite carrier, exactly as in the certificate discipline of
-[FLRP.Certificates][].
+[Examples.Classical.Groups.AlternatingGroup5.Tables][]: the 60 by 60 Cayley table
+on the lexicographic even-permutation encoding (index 0 is the identity), the
+inverse vector, the action of each element on the five points, and the simplicity
+certificate.  Nothing rests on the generator's authority: every claim in the data
+is replayed here by decision procedures over the finite carrier, exactly as in the
+certificate discipline of [FLRP.Certificates][].
 
 #### Presentation choice, with measurements
 
-Two presentations were candidates, and the cost decided between them.
+Three presentations were candidates, and we naturally chose the one that is easily
+integrated into our existing finite group theory framework and has good
+computational properties.[^2]
 
-+  **A Cayley table with all laws decided**, as in
-   [Examples.Classical.Groups.SymmetricGroup3][].  At `Fin 60` the
-   associativity decision ranges over `60³ = 216000` triples of table
-   lookups; measured on this module's table, `from-yes (Associative? _·_)`
-   type-checks in 72 seconds at a peak of 13.8 GB of memory, which is
-   hostile to both contributors and CI.
-+  **A permutation presentation** over `setoidEqsToGroup`{.AgdaFunction},
-   with near-definitional laws.  Rejected for a different reason: the carrier
-   would be a setoid of functions, so the certificate replay below would have
-   to transport memberships along pointwise equality through
-   `respects`{.AgdaField} at every step, and the group would not plug into
-   the `Fin`-indexed finite machinery as it stands.
-
-The module takes a third route that keeps the table carrier and avoids the
-cubic decision: `A₅` acts faithfully on its five points, the action tables
-are data, and `assoc-from-action`{.AgdaFunction} of [Overture.Cayley][]
-derives associativity from two quadratic decisions
-(`ActionHom?`{.AgdaFunction} and `ActionFaithful?`{.AgdaFunction} of
-[Overture.Operations.Properties][]).  Measured, the whole module type-checks
-in under ten seconds at under a gigabyte, so it stays inside the plain
-`make check` tier.
+We represent `A₅` using a carrier table and exploiting the fact that `A₅`
+acts faithfully on its five points, the action tables are data.
+`assoc-from-action`{.AgdaFunction} of [Overture.Cayley][] derives associativity
+from two quadratic decisions: `ActionHom?`{.AgdaFunction} and
+`ActionFaithful?`{.AgdaFunction} of [Overture.Operations.Properties][].
+The whole module type-checks in under ten seconds at under a gigabyte.
 
 #### The simplicity certificate
 
-Simplicity in implication form says: every normal subgroup `N` containing a
-non-identity element `x` is everything.  The certificate witnesses this in
-two stages, in the closure-term language of
-[Classical.Structures.Group.NormalClosure][], and the two stages are decided
-by `from-yes`{.AgdaFunction} below.
+The definition of "simple group" in implication form says that a group is simple
+provided every normal subgroup containing a non-identity element is the whole
+group.  The certificate witnesses this in two stages decided by
+`from-yes`{.AgdaFunction} below.
 
 1.  For each of the 59 non-identity elements `x`, the two generators
-    `s = (0 1 2 3 4)` and `t = (0 1 2)` are expressed as products of
-    conjugates of `x` and of its inverse (`a5-seed-words-s`{.AgdaFunction},
-    `a5-seed-words-t`{.AgdaFunction}); soundness of the term language puts
-    both generators in `N`.
+    `s = (0 1 2 3 4)` and `t = (0 1 2)` are expressed as products of conjugates of
+    `x` and of its inverse (`a5-seed-words-s`{.AgdaFunction},
+    `a5-seed-words-t`{.AgdaFunction}); soundness of the term language puts both
+    generators in `N`.
 2.  Every element is expressed as a word in `s` and `t`
     (`a5-gen-words`{.AgdaFunction}), so `N` contains everything.
 
@@ -89,22 +71,19 @@ open import Relation.Nullary.Negation.Core         using ( contradiction )
 open import Relation.Unary                         using ( _∈_ )
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
-open import Overture.Cayley                   using  ( ⟦_⟧ ; from-yes
-                                                     ; assoc-from-action )
-open import Overture.Operations.Properties    using  ( ActionHom? ; ActionFaithful?
-                                                     ; LeftIdentity? ; RightIdentity?
-                                                     ; LeftInverse? ; RightInverse? )
+open import Overture.Cayley            using  ( ⟦_⟧ ; from-yes ; assoc-from-action )
+open import Overture.Operations.Properties
+                                       using  ( ActionHom? ; ActionFaithful?
+                                              ; LeftIdentity? ; RightIdentity?
+                                              ; LeftInverse? ; RightInverse? )
 open import Classical.Small.Structures.Group  using  ( Group ; eqsToGroup )
 open import Examples.Classical.Groups.AlternatingGroup5.Tables
-                                              using  ( a5-mul-table ; a5-inv-vec
-                                                     ; a5-act-table
-                                                     ; a5-gen-s ; a5-gen-t
-                                                     ; a5-gen-words
-                                                     ; a5-seed-words-s
-                                                     ; a5-seed-words-t )
-open import FLRP.WreathNoGo                   using  ( NontrivialCenterless
-                                                     ; nonabelianSimple→nontrivialCenterless )
-open import Setoid.Algebras.Finite            using  ( FiniteAlgebra )
+                                       using  ( a5-mul-table ; a5-inv-vec ; a5-gen-s
+                                              ; a5-act-table ; a5-gen-t ; a5-gen-words
+                                              ; a5-seed-words-s ; a5-seed-words-t )
+open import FLRP.WreathNoGo            using  ( NontrivialCenterless
+                                              ; nonabelianSimple→nontrivialCenterless )
+open import Setoid.Algebras.Finite     using  ( FiniteAlgebra )
 import Classical.Structures.Group as Polymorphic
 ```
 -->
@@ -117,6 +96,7 @@ The tables denote the operation, the inverse, and the point action.
 -- The multiplication read off the Cayley table.
 _·_ : Fin 60 → Fin 60 → Fin 60
 _·_ = ⟦ a5-mul-table ⟧
+infixl 7 _·_
 
 -- The inverse map.
 a5-inv : Fin 60 → Fin 60
@@ -132,10 +112,9 @@ remaining four laws are linear decisions over the carrier.
 
 ```agda
 -- Associativity, through the faithful point action.
-·-assoc : ∀ a b c → (a · b) · c ≡ a · (b · c)
-·-assoc = assoc-from-action _·_ a5-act
-            (from-yes (ActionHom? _·_ a5-act))
-            (from-yes (ActionFaithful? a5-act))
+·-assoc : ∀ a b c → a · b · c ≡ a · (b · c)
+·-assoc = assoc-from-action _·_ a5-act  (from-yes (ActionHom? _·_ a5-act))
+                                        (from-yes (ActionFaithful? a5-act))
 
 -- The group: the identity is the identity permutation, at index 0.
 a5-group : Group
@@ -151,14 +130,18 @@ The simplicity vocabulary, the normal-subgroup projections, and the
 closure-term evaluator, all instantiated at `A₅`.
 
 ```agda
-module S   = Polymorphic.Simple         a5-group 0ℓ
-module MN  = Polymorphic.MinimalNormal  a5-group 0ℓ
-module NW  = Polymorphic.NormalClosure  a5-group
+open Polymorphic.Simple         a5-group 0ℓ  using  ( IsSimple ; NoncommutingPair
+                                                    ; IsNonabelianSimple
+                                                    ; ≈-dec→Stable-≈ε ; center
+                                                    ; Stable-≈ε ; center-trivial )
+open Polymorphic.MinimalNormal  a5-group 0ℓ  using  (isSubgroup ; isNormal)
+open Polymorphic.NormalClosure  a5-group     using  ( closure-sound )
+                                             renaming ( ⟦_⟧ to ⟦_⟧◃ )
 ```
 
 #### Replaying the certificate
 
-The three decided checks: the shared word table hits every element, and at
+**The three decided checks**: the shared word table hits every element, and at
 each non-identity element the two seed words evaluate to the generators.
 
 ```agda
@@ -168,44 +151,46 @@ genσ 0F = a5-gen-s
 genσ 1F = a5-gen-t
 
 -- Decided: the word table expresses every element in the generators.
-gen-words-ok : ∀ y → NW.⟦ lookup a5-gen-words y ⟧ genσ ≡ y
-gen-words-ok = from-yes (all? (λ y → NW.⟦ lookup a5-gen-words y ⟧ genσ ≟ y))
+gen-words-ok : ∀ y → ⟦ lookup a5-gen-words y ⟧◃ genσ ≡ y
+gen-words-ok = from-yes (all? (λ y → ⟦ lookup a5-gen-words y ⟧◃ genσ ≟ y))
 
 -- Decided: at the i-th non-identity element, the s-word evaluates to s ...
-seed-words-s-ok : ∀ i → NW.⟦ lookup a5-seed-words-s i ⟧ (λ _ → suc i) ≡ a5-gen-s
+seed-words-s-ok : ∀ i → ⟦ lookup a5-seed-words-s i ⟧◃ (λ _ → suc i) ≡ a5-gen-s
 seed-words-s-ok =
-  from-yes (all? (λ i → NW.⟦ lookup a5-seed-words-s i ⟧ (λ _ → suc i) ≟ a5-gen-s))
+  from-yes (all? (λ i → ⟦ lookup a5-seed-words-s i ⟧◃ (λ _ → suc i) ≟ a5-gen-s))
 
 -- ... and the t-word to t.
-seed-words-t-ok : ∀ i → NW.⟦ lookup a5-seed-words-t i ⟧ (λ _ → suc i) ≡ a5-gen-t
+seed-words-t-ok : ∀ i → ⟦ lookup a5-seed-words-t i ⟧◃ (λ _ → suc i) ≡ a5-gen-t
 seed-words-t-ok =
-  from-yes (all? (λ i → NW.⟦ lookup a5-seed-words-t i ⟧ (λ _ → suc i) ≟ a5-gen-t))
+  from-yes (all? (λ i → ⟦ lookup a5-seed-words-t i ⟧◃ (λ _ → suc i) ≟ a5-gen-t))
 ```
 
-Simplicity, by replay.  A non-identity element of `Fin 60` is `suc i` for a
+**Simplicity, by replay**.  A non-identity element of `Fin 60` is `suc i` for a
 unique `i : Fin 59`, so the two certificate stages compose: soundness of the
-closure terms puts the generators in `N`, then every element.
+closure terms puts the generators, and then every element, in `N`.
 
 ```agda
 -- A₅ is simple: every normal subgroup containing a non-identity element
--- is everything.
-a5-isSimple : S.IsSimple
-a5-isSimple N N-nsg 0F       x∈N x≉ε y = contradiction refl x≉ε
-a5-isSimple N N-nsg (suc i)  x∈N x≉ε y =
-  subst (_∈ N) (gen-words-ok y)
-        (NW.closure-sound sg nrm σ∈ (lookup a5-gen-words y))
+-- is the whole group.
+a5-isSimple : IsSimple
+a5-isSimple N N-nsg (0F , x∈N , x≉ε) y = contradiction refl x≉ε
+a5-isSimple N N-nsg ((suc i) , x∈N , x≉ε) y =
+  subst (_∈ N) (gen-words-ok y) (closure-sound sg nrm σ∈ (lookup a5-gen-words y))
   where
-  sg   = MN.isSubgroup N-nsg
-  nrm  = MN.isNormal N-nsg
+  sg : Polymorphic.IsSubgroup a5-group N
+  sg = isSubgroup N-nsg
+
+  nrm : Polymorphic.Conjugate.IsNormal a5-group N
+  nrm  = isNormal N-nsg
 
   -- Stage 1: the generators lie in N, by the seed words at x = suc i.
   s∈N : a5-gen-s ∈ N
-  s∈N = subst (_∈ N) (seed-words-s-ok i)
-              (NW.closure-sound sg nrm (λ _ → x∈N) (lookup a5-seed-words-s i))
+  s∈N = subst  (_∈ N) (seed-words-s-ok i)
+               (closure-sound sg nrm (λ _ → x∈N) (lookup a5-seed-words-s i))
 
   t∈N : a5-gen-t ∈ N
-  t∈N = subst (_∈ N) (seed-words-t-ok i)
-              (NW.closure-sound sg nrm (λ _ → x∈N) (lookup a5-seed-words-t i))
+  t∈N = subst  (_∈ N) (seed-words-t-ok i)
+               (closure-sound sg nrm (λ _ → x∈N) (lookup a5-seed-words-t i))
 
   -- Stage 2 seeds: the word-table assignment lands in N.
   σ∈ : ∀ j → genσ j ∈ N
@@ -215,34 +200,33 @@ a5-isSimple N N-nsg (suc i)  x∈N x≉ε y =
 
 #### The nonabelian-simple bundle and its consequences
 
-The generators do not commute, which makes the pair the nonabelianness
-witness; the bundle then yields the positive triviality of the center, since
-`Fin 60` has decidable equality.
+The generators do not commute, which provides a pair to use as the nonabelianness
+witness; the bundle then yields the positive triviality of the center, since `Fin 60`
+has decidable equality.
 
 ```agda
 -- s and t do not commute: s · t and t · s are distinct table entries.
-a5-noncommuting : S.NoncommutingPair
+a5-noncommuting : NoncommutingPair
 a5-noncommuting = a5-gen-s , a5-gen-t , λ ()
 
 -- A₅ is nonabelian simple.
-a5-isNonabelianSimple : S.IsNonabelianSimple
-a5-isNonabelianSimple = record
-  { simple        = a5-isSimple
-  ; noncommuting  = a5-noncommuting }
+a5-isNonabelianSimple : IsNonabelianSimple
+a5-isNonabelianSimple = record  { simple        = a5-isSimple
+                                ; noncommuting  = a5-noncommuting }
 
 -- Identity equations are stable: the carrier equality is decidable.
-a5-Stable-≈ε : S.Stable-≈ε
-a5-Stable-≈ε = S.≈-dec→Stable-≈ε _≟_
+a5-Stable-≈ε : Stable-≈ε
+a5-Stable-≈ε = ≈-dec→Stable-≈ε _≟_
 
 -- The center of A₅ is trivial, positively.
-a5-center-trivial : ∀ d → d ∈ S.center → d ≡ 0F
-a5-center-trivial = S.center-trivial a5-Stable-≈ε a5-isNonabelianSimple
+a5-center-trivial : ∀ d → d ∈ center → d ≡ 0F
+a5-center-trivial = center-trivial a5-Stable-≈ε a5-isNonabelianSimple
 ```
 
-The FLRP-facing consequence: `A₅` discharges the `NontrivialCenterless`
-record of [FLRP.WreathNoGo][], so it is an admissible base group for the
-Kurzweil entries of [FLRP.Assumptions][] with the nonabelian-simple side
-condition witnessed rather than assumed.
+**An important consequence**: `A₅` discharges the `NontrivialCenterless`
+record of [FLRP.WreathNoGo][], so it is an admissible base group for the Kurzweil
+entries of [FLRP.Assumptions][] with the nonabelian-simple side condition
+witnessed rather than assumed.
 
 ```agda
 -- A₅ is nontrivial and centerless, as FLRP.WreathNoGo consumes it.
@@ -285,3 +269,23 @@ open Polymorphic.Group-Op a5-group using ( _∙_ ; ε ; _⁻¹ )
 ⁻¹-is-inv : ∀ (a : Fin 60) → a ⁻¹ ≡ a5-inv a
 ⁻¹-is-inv a = refl
 ```
+
+---
+
+[^1]: This is what makes `A₅` an admissible base group for the Kurzweil entries of
+      [FLRP.Assumptions][].
+
+[^2]: The two candidate formalizations that were rejected:
+      +  **A Cayley table with all laws decided**, as in
+         [Examples.Classical.Groups.SymmetricGroup3][].  At `Fin 60` the associativity
+         decision ranges over `60³ = 216000` triples of table lookups; measured on this
+         module's table, `from-yes (Associative? _·_)` type-checks in 72 seconds at a
+         peak of 13.8 GB of memory, which makes it undesirable from a usability
+         perspective and would be a burden on the CI workflow.
+
+      +  **A permutation presentation** over `setoidEqsToGroup`{.AgdaFunction}, with
+         near-definitional laws.  Rejected for a different reason: the carrier would be
+         a setoid of functions, so the certificate replay below would have to transport
+         memberships along pointwise equality through `respects`{.AgdaField} at every
+         step, and the group would not plug into the `Fin`-indexed finite machinery as
+         it stands.

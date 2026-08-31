@@ -10,9 +10,9 @@ author: "the agda-algebras development team"
 
 This is the [Classical.Structures.Group.NormalClosure][] module of the [Agda Universal Algebra Library][].
 
-The **normal closure** of a set of elements is the least normal subgroup
-containing them.  This module does not construct that subgroup; it provides the
-*witness language* for membership claims about it: a term datatype
+The **normal closure** of a set of elements of a group is the least normal
+subgroup containing them.  This module does not construct that subgroup; it
+provides the *witness language* for membership claims about it: a term datatype
 `ClosureTerm`{.AgdaDatatype} whose inhabitants denote elements built from given
 seeds by the identity, inverses, products, and conjugates, together with the
 soundness theorem `closure-sound`{.AgdaFunction}: whenever a normal subgroup
@@ -21,8 +21,8 @@ contains the seeds, it contains the value of every term.
 The point of the language is finite certification.  A simplicity certificate in
 the sense of [Classical.Structures.Group.Simple][] must show, for a given seed,
 that the seed's normal closure is everything; a certificate does that by
-exhibiting, for each target element, a closure term that evaluates to it, and
-the evaluations are decidable equalities over a finite carrier.  Soundness then
+exhibiting, for each target element, a closure term that evaluates to it, and the
+evaluations are decidable equalities over a finite carrier.  Soundness then
 replays the certificate against an *arbitrary* normal subgroup containing the
 seed, with no completeness theorem needed: only the two directions actually
 consumed are stated.
@@ -43,15 +43,15 @@ open import Agda.Primitive using () renaming ( Set to Type )
 -- Imports from the Agda Standard Library ---------------------------------------
 open import Data.Fin.Base    using  ( Fin )
 open import Data.Nat.Base    using  ( ℕ )
-open import Data.Product     using  ( proj₁ )
+open import Data.Product     using  ( proj₁ ; _,_ )
 open import Level            using  ( Level )
 open import Relation.Unary   using  ( Pred ; _∈_ )
 
 -- Imports from the Agda Universal Algebra Library ------------------------------
-open import Classical.Structures.Group.Basic        using  ( Group ; module Group-Op )
-open import Classical.Structures.Group.Conjugation  using  ( module Conjugate )
-open import Classical.Structures.Group.Subgroups    using  ( IsSubgroup )
-open import Setoid.Algebras.Basic                   using  ( 𝕌[_] )
+open import Classical.Structures.Group.Basic        using ( Group ; module Group-Op )
+open import Classical.Structures.Group.Conjugation  using ( module Conjugate )
+open import Classical.Structures.Group.Subgroups    using ( IsSubgroup )
+open import Setoid.Algebras.Basic                   using ( 𝕌[_] )
 ```
 -->
 
@@ -75,35 +75,32 @@ data ClosureTerm {a : Level} (A : Type a) (k : ℕ) : Type a where
 
 Evaluation interprets a term in a group, at an assignment of the seeds; the
 conjugation case is exactly `conj`{.AgdaFunction} of
-[Classical.Structures.Group.Conjugation][], so that soundness can consume a
-normality proof with no conversion.
+[Classical.Structures.Group.Conjugation][] (syntax: `_^ g`), so that soundness
+can consume a normality proof with no conversion.
 
 ```agda
-module NormalClosure {α ρ : Level} (𝒢 : Group α ρ) where
-  private
-    G = 𝕌[ proj₁ 𝒢 ]
-
+module NormalClosure {α ρ : Level} (𝒢@(𝑮 , _) : Group α ρ) where
   open Group-Op 𝒢   using  ( _∙_ ; ε ; _⁻¹ )
-  open Conjugate 𝒢  using  ( conj ; IsNormal )
+  open Conjugate 𝒢  using  ( conj-syntax ; IsNormal )
 
   -- Evaluate a closure term at an assignment of the seeds.
-  ⟦_⟧ : {k : ℕ} → ClosureTerm G k → (Fin k → G) → G
+  ⟦_⟧ : {k : ℕ} → ClosureTerm 𝕌[ 𝑮 ] k → (Fin k → 𝕌[ 𝑮 ]) → 𝕌[ 𝑮 ]
   ⟦ one ⟧      σ = ε
   ⟦ seed i ⟧   σ = σ i
-  ⟦ inv e ⟧    σ = (⟦ e ⟧ σ) ⁻¹
+  ⟦ inv e ⟧    σ = ⟦ e ⟧ σ ⁻¹
   ⟦ mul e f ⟧  σ = ⟦ e ⟧ σ ∙ ⟦ f ⟧ σ
-  ⟦ cnj g e ⟧  σ = conj g (⟦ e ⟧ σ)
+  ⟦ cnj g e ⟧  σ = ⟦ e ⟧ σ ^ g
 ```
 
-Soundness: a normal subgroup containing every seed contains the value of every
-term.  The proof is structural, one closure property per constructor.
+**Soundness**.  A normal subgroup containing every seed contains the value of
+every term.  The proof is structural, one closure property per constructor.
 
 ```agda
   -- A normal subgroup containing the seeds contains every term's value.
-  closure-sound : {ℓ : Level} {N : Pred G ℓ}
+  closure-sound : {ℓ : Level} {N : Pred 𝕌[ 𝑮 ] ℓ}
     →  IsSubgroup 𝒢 N → IsNormal N
-    →  {k : ℕ} {σ : Fin k → G} → (∀ i → σ i ∈ N)
-    →  (e : ClosureTerm G k) → ⟦ e ⟧ σ ∈ N
+    →  {k : ℕ} {σ : Fin k → 𝕌[ 𝑮 ]} → (∀ i → σ i ∈ N)
+    →  (e : ClosureTerm 𝕌[ 𝑮 ] k) → ⟦ e ⟧ σ ∈ N
   closure-sound sg nrm σ∈ one        = IsSubgroup.ε-closed sg
   closure-sound sg nrm σ∈ (seed i)   = σ∈ i
   closure-sound sg nrm σ∈ (inv e)    = IsSubgroup.⁻¹-closed sg (closure-sound sg nrm σ∈ e)
