@@ -108,6 +108,19 @@ Two standing warnings apply to everything under this namespace.
    `not-representable→IE`, and repairs `minIE` as `MinimallyIE`; the survey note
    is `docs/notes/flrp-rp2-catalog.md`.
 
++  [FLRP.Hunt][]: the RP-3 **constraint dossier** for the hunt for an
+   empty-intersection family: the degenerate enforcements of the one- and
+   two-element chains (triviality and nontriviality), a concrete core-free
+   representation of the one-element chain, the machine-checked refutation of
+   statement (C) as the note prints it (`unguarded-statement-C-refuted`, the
+   erratum-grade finding behind the per-canopy guard of the repaired
+   `Statement-C`), the refutation of the unrestricted pair statement and its
+   repaired form `PairQuestion`, the closure of the two-element corner of the
+   RP-4 reduction (outright on chains, by padding under statement (C)
+   otherwise), the theorem that families of two-element chains have inhabited
+   intersection, and the wreath-richness of two-element-chain classes; the
+   survey note is `docs/notes/flrp-rp3-hunt.md`.
+
 **Planned submodules** (per § 6 of the roadmap).
 
 +  `FLRP.Intervals` (intervals in subgroup lattices and core-free normalization).
@@ -131,6 +144,7 @@ open import FLRP.KurzweilInterval public
 open import FLRP.KurzweilNetter public
 open import FLRP.LayerBridge    public
 open import FLRP.WreathNoGo     public
+open import FLRP.Hunt           public
 open import FLRP.Certificates   public
 open import FLRP.L7EqSix        public
 ```

@@ -52,6 +52,9 @@ list.
       maximal normal subgroups;
    +  [Classical.Structures.Group.MinimalNormal][]:
       minimal normal subgroups and monoliths;
+   +  [Classical.Structures.Group.MaximalSubgroup][]:
+      maximal subgroups, as the classification data the two-element-chain
+      catalog entry consumes;
    +  [Classical.Structures.Group.Centralizer][]: centralizers.
 
 +  **Cosets and group actions**.
@@ -79,22 +82,26 @@ list.
 module Classical.Structures.Group where
 
 open import Classical.Structures.Group.Basic                  public
+
 open import Classical.Structures.Group.AbelianGroup           public
-open import Classical.Structures.Group.Subgroups              public
-open import Classical.Structures.Group.SubgroupLattice        public
-open import Classical.Structures.Group.PartitionSubgroup      public
-open import Classical.Structures.Group.Complements            public
-open import Classical.Structures.Group.Dedekind               public
-open import Classical.Structures.Group.Conjugation            public
-open import Classical.Structures.Group.Congruences            public
-open import Classical.Structures.Group.NormalSubgroupLattice  public
-open import Classical.Structures.Group.NormalCore             public
-open import Classical.Structures.Group.MinimalNormal          public
 open import Classical.Structures.Group.Centralizer            public
-open import Classical.Structures.Group.Cosets                 public
-open import Classical.Structures.Group.GSet                   public
-open import Classical.Structures.Group.Product                public
-open import Classical.Structures.Group.Power                  public
-open import Classical.Structures.Group.Diagonal               public
+open import Classical.Structures.Group.Complements            public
 open import Classical.Structures.Group.Complexes              public
+open import Classical.Structures.Group.Congruences            public
+open import Classical.Structures.Group.Conjugation            public
+open import Classical.Structures.Group.Cosets                 public
+open import Classical.Structures.Group.Dedekind               public
+open import Classical.Structures.Group.Diagonal               public
+open import Classical.Structures.Group.GSet                   public
+open import Classical.Structures.Group.IndexAction            public
+open import Classical.Structures.Group.MaximalSubgroup        public
+open import Classical.Structures.Group.MinimalNormal          public
+open import Classical.Structures.Group.NormalCore             public
+open import Classical.Structures.Group.NormalSubgroupLattice  public
+open import Classical.Structures.Group.PartitionSubgroup      public
+open import Classical.Structures.Group.Power                  public
+open import Classical.Structures.Group.Product                public
+open import Classical.Structures.Group.SubgroupLattice        public
+open import Classical.Structures.Group.Subgroups              public
+open import Classical.Structures.Group.Wreath                 public
 ```

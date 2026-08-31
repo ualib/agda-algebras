@@ -29,6 +29,8 @@ The module contents, keyed to the note, are as follows:
 
 +  `GroupRepresentable`{.AgdaRecord} — the lattice occurs as an upper interval `[H , G]`
    in the subgroup lattice of a group, with all witnesses carried explicitly;
+   `CoreFreeRepresentable`{.AgdaRecord} bundles that witness with core-freeness
+   of its subgroup (the note's `𝒢₀`-membership as a record);
 +  `IE`{.AgdaFunction}, `cfIE`{.AgdaFunction}, `minIE`{.AgdaFunction} — § 2
    definitions in the note, with core-freeness expressed through the normal core;[^wp-2]
 +  the **fattening isomorphism** `[H × K , G × K] ≅ [H , G]` (`Fatten`{.AgdaModule}),
@@ -38,7 +40,9 @@ The module contents, keyed to the note, are as follows:
    with the note's fattening remark as the companion `IE-fattens`{.AgdaFunction};
 +  **Lemma 3.1** (`lemma-wjd-2`) and the parachute meta-theorem (`thm-wjd-1`) as
    *statements only*, their proofs deferred to RP-1 behind named hypothesis records
-   in the `FLRP.Assumptions` style.
+   in the `FLRP.Assumptions` style; statement (C) carries a per-canopy
+   nontriviality guard the note's printed statement omits, with the printed form
+   kept as `Statement-C-unguarded`{.AgdaFunction} and refuted in [FLRP.Hunt][].
 
 Two disciplines from the roadmap govern the definitions.
 
@@ -319,8 +323,8 @@ IE P 𝑳 = ∀ 𝒢 H H-sg → IntervalIso 𝒢 H H-sg 𝑳 → P 𝒢
 ```
 
 Core-freeness of a subgroup is expressed through the normal core:[^wp-2] the core of
-`H` — the greatest normal subgroup below `H`, constructed in
-[Classical.Structures.Group.NormalCore][] as the meet of all conjugates — is
+`H` (the greatest normal subgroup below `H`, constructed in
+[Classical.Structures.Group.NormalCore][] as the meet of all conjugates) is
 contained in the trivial subgroup (the `≈`-class of the identity).
 
 The converse containment always holds (the core is a subgroup, hence contains the
@@ -334,6 +338,21 @@ CoreFree 𝒢 H H-sg = proj₁ (Core.core 𝒢 H H-sg) ⊆ proj₁ (trivialSubgr
 ```
 
 where `𝒢` and `H` range over `Group 0ℓ 0ℓ` and `Pred 𝕌[ proj₁ 𝒢 ] 0ℓ`, respectively.
+
+A **core-free representation** of `𝑳` bundles a group representation with
+core-freeness of its subgroup: it is the note's `𝒢₀(𝑳)`-membership made
+first-class, the hypothesis pair that every statement of the RP-3 hunt would
+otherwise thread separately.
+
+```agda
+-- A representation of 𝑳 over a core-free subgroup: the note's 𝒢₀(𝑳), as a record.
+record CoreFreeRepresentable (𝑳 : Lattice) : Type (lsuc 0ℓ) where
+  field
+    rep  : GroupRepresentable 𝑳
+    cf   : CoreFree  (GroupRepresentable.grp rep)
+                     (GroupRepresentable.sub rep)
+                     (GroupRepresentable.isSubgroup rep)
+```
 
 `cfIE P 𝑳` weakens `IE` by demanding the conclusion only for representations over a
 core-free subgroup; consequently every IE property is cf-IE.
@@ -647,14 +666,27 @@ GroupFLRP-Statement = (𝑳 : FiniteLattice) → GroupRepresentable (toLattice �
 ```
 
 Theorem `thm-wjd-1` of the note proves (B) equivalent to a statement (C) about
-finite families of cf-IE classes.  Its hypotheses need two side conditions made
-formal: a lattice *has more than two elements* (three pairwise `≈`-distinct
-elements exist), and *at least two members* of the family do.
+finite families of cf-IE classes.  Its hypotheses need three side conditions
+made formal: a lattice *is nontrivial* (two `≈`-distinct elements exist, so its
+canopy has a genuine atom below the shared top), a lattice *has more than two
+elements* (three pairwise `≈`-distinct elements exist), and *at least two
+members* of the family do.  The first condition applies to **every** member of
+a family: a one-element canopy degenerates the parachute construction, and
+dropping the guard makes statement (C) outright false (the refutation is
+`unguarded-statement-C-refuted`{.AgdaFunction} of [FLRP.Hunt][]).
 
 ```agda
+Nontrivial : Lattice → Type 0ℓ
+Nontrivial (L , _) = let open Setoid 𝔻[ L ] in
+  ∃[ x ∈ 𝕌[ L ] ] ∃[ y ∈ 𝕌[ L ] ] ¬ (x ≈ y)
+
 HasThreeDistinct : Lattice → Type 0ℓ
 HasThreeDistinct (L , _) = let open Setoid 𝔻[ L ] in
   ∃[ x ∈ 𝕌[ L ] ] ∃[ y ∈ 𝕌[ L ] ] ∃[ z ∈ 𝕌[ L ] ] ( ¬ (x ≈ y) × ¬ (x ≈ z) × ¬ (y ≈ z) )
+
+-- Three pairwise distinct elements make the lattice nontrivial.
+threeDistinct→nontrivial : (𝑳 : Lattice) → HasThreeDistinct 𝑳 → Nontrivial 𝑳
+threeDistinct→nontrivial 𝑳 (x , y , _ , x≉y , _) = x , y , x≉y
 
 TwoBigCanopies : {m : ℕ} → (Fin m → FiniteLattice) → Type 0ℓ
 TwoBigCanopies {m} 𝑳s =
@@ -664,17 +696,50 @@ TwoBigCanopies {m} 𝑳s =
     × HasThreeDistinct (toLattice (𝑳s j)) )
 ```
 
-Statement (C): for every family of at least two finite lattices, two of them big,
-and properties `Pᵢ` core-free enforceable by them, a *single* group satisfies every
-`Pᵢ` and realizes every `𝑳ᵢ` as an upper interval over a core-free subgroup.  (The
-note's § 3 statement strengthens core-freeness to every proper subgroup between
-`Hᵢ` and `G`; that refinement needs the proper-subgroup language and is deferred to
-RP-1 with the proof.)
+Statement (C): for every family of at least two *nontrivial* finite lattices,
+two of them big, and properties `Pᵢ` core-free enforceable by them, a *single*
+group satisfies every `Pᵢ` and realizes every `𝑳ᵢ` as an upper interval over a
+core-free subgroup.  (The note's § 3 statement strengthens core-freeness to
+every proper subgroup between `Hᵢ` and `G`; that refinement needs the
+proper-subgroup language and is deferred to RP-1 with the proof.)
+
+The per-canopy guard is not decorative, and the omission is the *note's*, not
+only the transcription's: the printed Theorem 3.6 asks merely that at least two
+members of the family have more than two elements, and the first formalization
+transcribed exactly that.  The unguarded form is **refutable**: the one-element
+chain core-free enforces "is trivial" while any three-element chain core-free
+enforces "is nontrivial", and the unguarded (C) applied to the family
+(three-chain, three-chain, one-chain) would produce a single group that is
+both.  The note's parachute construction requires a genuine atom per canopy, so
+the repair restores the hypothesis its proof always used; this is the second
+missing-nontriviality instance in the vendored note, after the Lemma 3.3
+hypothesis the RP-4 phase found, and it is recorded in the same erratum issue
+(see the RP-3 survey note).  The defective form is kept, in the
+`minIE`{.AgdaFunction} tradition, as the record of the repair; the refutation
+itself is `unguarded-statement-C-refuted`{.AgdaFunction} of [FLRP.Hunt][],
+which needed exactly the degenerate-enforcement lemmas RP-3 built for the pair
+question.
 
 ```agda
+-- Statement (C) as the note prints it (no per-canopy nontriviality):
+-- refutable, kept as the record of the source-level omission (see
+-- FLRP.Hunt).  Do not consume this in new results.
+Statement-C-unguarded : (ℓP : Level) → Type (lsuc 0ℓ ⊔ lsuc ℓP)
+Statement-C-unguarded ℓP =
+  ∀ (n : ℕ) (𝑳s : Fin (2 + n) → FiniteLattice) (Ps : Fin (2 + n) → GroupProperty ℓP)
+  → TwoBigCanopies 𝑳s
+  → (∀ i → cfIE (Ps i) (toLattice (𝑳s i)))
+  → ∃[ 𝒢 ∈ Group 0ℓ 0ℓ ]
+      ( (∀ i → Ps i 𝒢)
+      × ( ∀ i → ∃[ H ∈ Pred 𝕌[ proj₁ 𝒢 ] 0ℓ ] ∃[ H-sg ∈ IsSubgroup 𝒢 H ]
+                ( CoreFree 𝒢 H H-sg × IntervalIso 𝒢 H H-sg (toLattice (𝑳s i)) )))
+
+-- Statement (C), repaired: every canopy nontrivial, the hypothesis the
+-- note's parachute construction requires but its printed statement omits.
 Statement-C : (ℓP : Level) → Type (lsuc 0ℓ ⊔ lsuc ℓP)
 Statement-C ℓP =
   ∀ (n : ℕ) (𝑳s : Fin (2 + n) → FiniteLattice) (Ps : Fin (2 + n) → GroupProperty ℓP)
+  → (∀ i → Nontrivial (toLattice (𝑳s i)))
   → TwoBigCanopies 𝑳s
   → (∀ i → cfIE (Ps i) (toLattice (𝑳s i)))
   → ∃[ 𝒢 ∈ Group 0ℓ 0ℓ ]
@@ -694,6 +759,7 @@ is stated as a schema conditional on it and on the core-free reduction.
 
 ```agda
 open GroupRepresentable
+open CoreFreeRepresentable
 
 record ParachuteHypotheses : Type (lsuc 0ℓ) where
   field
@@ -702,14 +768,18 @@ record ParachuteHypotheses : Type (lsuc 0ℓ) where
 
     -- Its defining property: a core-free group representation of the
     -- parachute yields, for each canopy, a representation of that canopy
-    -- over a core-free subgroup of the same group.
+    -- over a core-free subgroup of the same group.  The per-canopy guard is
+    -- required here for the same reason as in Statement-C: a one-element
+    -- canopy admits no core-free representation over a nontrivial group, so
+    -- the unguarded field is not satisfiable.
     canopy-intervals :
       (n : ℕ) (𝑳s : Fin (2 + n) → FiniteLattice)
-      (r : GroupRepresentable (toLattice (parachute n 𝑳s)))
-      → CoreFree (r .grp) (r .sub) (r .isSubgroup)
+      (r : CoreFreeRepresentable (toLattice (parachute n 𝑳s)))
+      → (∀ i → Nontrivial (toLattice (𝑳s i)))
       → TwoBigCanopies 𝑳s
-      → ∀ i → ∃[ H ∈ Pred 𝕌[ proj₁ (r .grp) ] 0ℓ ] ∃[ H-sg ∈ IsSubgroup (r .grp) H ]
-                ( CoreFree (r .grp) H H-sg × IntervalIso (r .grp) H H-sg (toLattice (𝑳s i)) )
+      → ∀ i → ∃[ H ∈ Pred 𝕌[ proj₁ (r .rep .grp) ] 0ℓ ] ∃[ H-sg ∈ IsSubgroup (r .rep .grp) H ]
+                ( CoreFree (r .rep .grp) H H-sg
+                × IntervalIso (r .rep .grp) H H-sg (toLattice (𝑳s i)) )
 
 -- Theorem thm-wjd-1 of the note, as a statement.
 thm-wjd-1-Statement : (ℓP : Level) → Type (lsuc 0ℓ ⊔ lsuc ℓP)

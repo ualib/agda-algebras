@@ -1,0 +1,104 @@
+<!-- File: docs/notes/flrp-rp3-hunt.md -->
+
+# RP-3 survey note: the hunt for an empty intersection
+
+Research phase RP-3 (GitHub [issue #460](https://github.com/ualib/agda-algebras/issues/460)) hunts, per Theorem 3.6 of the vendored note (arXiv:1205.1927, `docs/papers/flrp/ieprops/`), for finitely many cf-IE classes whose intersection is empty; by the strategy meta-theorem of RP-1 that would give the FLRP a negative answer.  The phase is open-ended, reviewed quarterly against the kill criterion of roadmap § 4.
+
+**This note is its running record**:
+
++  the constraint dossier a candidate family must satisfy,
++  the candidate table with every kill and bound recorded,
++  the falsification-sweep runs,
++  the review scaffold.
+
+The formal companion is [`src/FLRP/Hunt.lagda.md`](../../src/FLRP/Hunt.lagda.md); the framework is RP-1's (`docs/notes/flrp-rp1-parachutes.md`), the catalog RP-2's (`docs/notes/flrp-rp2-catalog.md`), and the wreath constraint RP-4's (`docs/notes/flrp-rp4-wreath.md`).
+
+## 1.  The constraint dossier
+
+A candidate family `𝒢₁ , … , 𝒢ₙ` of cf-IE classes with empty intersection must satisfy all of the following; each entry names its formal artifact or its classical source.
+
++  **Every member is wreath-rich** (Lemma 3.3, `cfIE-must-have-wreaths` of `FLRP.WreathNoGo`, modulo Entry 5 of the assumptions registry).
+
+   Over every admissible finite nonabelian simple `S`, each member class contains a wreath product `S ≀ Ū` built by Kurzweil's double construction from that member's own core-free representation.  Consequently a class that provably omits such wreaths cannot be a member at all (`omits-wreaths→not-cfIE`); this is the instrument that kills every negation-shaped candidate in § 2.
+
++  **Parachute realizations are structurally forced** (Lemma 3.7, Entries 1 through 3 of `FLRP.Reductions`).
+
+   Any group realizing the family's parachute core-freely is subdirectly irreducible with nonabelian monolith and trivial centralizers, so the family's joint tension must live in invariants finer than wreath content: the isomorphism type of the monolith, its complementation, and the permutation action on it.
+
++  **At least one enforcing lattice must exceed the two-element chain** (`all-chain₂-family-intersects` of `FLRP.Hunt`, on catalog Entry 9).
+
+   Classes enforced by two-element chains all contain every group with a core-free maximal subgroup, so a family living entirely on two-element chains has inhabited intersection as soon as any one member's chain carries a core-free representation.  The hunt therefore lives where statement (C) applies, which is what Theorem 3.6 needs anyway.
+
++  **Both degenerate chains are spoken for** (`trivial-cfIE-chain₁`, `nontrivial-IE` of `FLRP.Hunt`).
+
+   The one-element chain core-free enforces exactly "is trivial", and every lattice with two distinct elements plainly enforces "is nontrivial"; a candidate family must steer clear of this degenerate pair, which is excluded by the two-distinct discipline and is precisely what refutes the unguarded statements of § 3.
+
++  **A property and its negation cannot serve**, modulo statement (C) (`statement-C→pair-question-classified` of `FLRP.Hunt`).
+
+   With each enforcing lattice classified as a two-element chain or as three-element-rich, statement (C) leaves no contradictory pair at all: the both-chains case is impossible outright (`pair-on-chains-impossible`, no appeal to (C)), and one big lattice suffices for the padding instantiation of (C) (`statement-C→no-pair-with-big`).  This closes the two-element corner that the RP-4 reduction left open (RP-4 note § 5 (iii) and § 6).
+
+## 2.  The candidate table
+
+The classes available to a candidate family today are the catalog's: `𝒢₀` (nonsolvable), `𝒢₁` (neither alternating nor symmetric), `𝒢₂` (subdirectly irreducible), `𝒢₃` (no nontrivial abelian normal subgroup), `𝒢₄` (trivial centralizers), and Entry 9's `HasCoreFreeMaximal` (written `CFMax` below), plus their negations.  The verdicts:
+
+| #   | candidate family                                     | status     | kill instrument               |
+| --- | ---------------------------------------------------- | ---------- | ----------------------------- |
+| F1  | any subfamily of `{𝒢₀ , 𝒢₁ , 𝒢₂ , 𝒢₃ , 𝒢₄ , CFMax}` | **killed** | common witness: every Kurzweil wreath lies in all six classes at once (instances `A₅ ≀ C₂`, `PSL(3,2) ≀ C₂` machine-verified in `rp3_witnesses.json`); `A₅`, being itself alternating, witnesses the subfamilies avoiding `𝒢₁` |
+| F2  | any family containing `Solvable`                     | **killed** | `Solvable` omits the wreaths (each contains `S`), so it is not cf-IE by a representable lattice (`omits-wreaths→not-cfIE`) |
+| F3  | any family containing `AltOrSym`                     | **killed** | a wreath `S ≀ Ū` has the *non-simple* proper nontrivial normal subgroup `Sⁿ` (`n ≥ 2`); for `d ≥ 5` the alternating `A_d` has no proper nontrivial normal subgroup and the symmetric `S_d` has only the simple `A_d`, so the wreath is neither, and below degree 5 both are solvable while the wreath is not |
+| F4  | any family containing `¬ 𝒢₂`                         | **killed**   | the Kurzweil wreaths are subdirectly irreducible: transitivity of `Ū` makes the socle `Sⁿ` a minimal normal subgroup, and its trivial centralizer makes it the monolith |
+| F5  | any family containing `¬ 𝒢₃`                         | **killed**   | every nontrivial normal subgroup of a Kurzweil wreath contains the socle, hence is nonabelian |
+| F6  | any family containing `¬ 𝒢₄`                         | **killed**   | centralizers are antitone and `C(Sⁿ) = 1` in a Kurzweil wreath |
+| F7  | any family containing `¬ CFMax`                      | **killed**   | the Kurzweil wreaths act primitively in the product action (Dixon and Mortimer, *Permutation Groups*, Lemma 2.7A), so each has a core-free maximal subgroup |
+| F8  | the degenerate pair `{IsTrivial , ¬ IsTrivial}`      | **excluded** | enforced only via the one-element chain, which the two-distinct discipline excludes; retained as the engine of the § 3 refutations |
+| F9  | any family enforced entirely by two-element chains   | **killed (formal)** | `all-chain₂-family-intersects` |
+| F10 | pairs separated by the finer invariants of Lemma 3.7 (the monolith and the action on it), stated so that *both* polarities contain the arising wreaths | **open, blocked** | no enforcement theorem produces any such class; the identified source is Aschbacher's `D∆`/signalizer program (roadmap avenue B), whose primary texts the RP-2 survey records as not yet in hand; see the pinned-invariant caution below |
+
+Kills F2 through F7 are classical statements instantiated computationally, not formal theorems: the omission corollary is formal, and the wreath membership facts (`S ≀ Ū` nonsolvable, not alternating or symmetric, subdirectly irreducible, socle-forced, primitive in product action) are classical, with the memberships of the concrete instances `A₅ ≀ C₂` and `PSL(3,2) ≀ C₂` in `𝒢₀`, `𝒢₁`, `𝒢₂`, `𝒢₃`, `𝒢₄`, and `CFMax` machine-verified by GAP in `scripts/gap/flrp/out/rp3_witnesses.json` (the `𝒢₁` verdict is decided by an order-and-isomorphism test against the one candidate degree of each kind; `CFMax` is decided directly, so the product-action *mechanism* stays classical prose while the membership itself is checked).  The witness file also records the separations the table's reading needs: `C₂` lies in `CFMax` but in none of `𝒢₀`, `𝒢₃`, `𝒢₄`, and `S₄` lies in `𝒢₂ ∩ CFMax` but in none of `𝒢₀`, `𝒢₃`, `𝒢₄`; so neither `CFMax` nor `𝒢₂` is contained in any of those three classes, and the F1 witnesses are not an artifact of the classes collapsing into one another.  (Pairwise distinctness of all six classes is neither claimed nor needed.)
+
+The upshot of the table: **every family expressible in today's catalog vocabulary is dead**, either by a common witness or because a member is not enforceable at all, and the surviving direction is F10, classes refined by the structure Lemma 3.7 forces (the monolith and the action on it), for which the catalog has no enforcement entries yet.  This sharpens the RP-4 conclusion "any refutation must separate the two classes by invariants finer than wreath content" into a concrete acquisition target: enforcement theorems at the level of the monolith and its action, with the Aschbacher engagement as the only identified source.
+
+A caution the dossier itself teaches, recorded here because this note's first draft got it wrong: not every Lemma 3.7 invariant can separate a pair.  On every wreath the double Kurzweil construction produces, the monolith is a *proper power* of the base (the coset space has at least two points), it is *complemented* (the wreath splits over its base), and the group above it is a first-stage wreath, hence *nonsolvable*; so monolith simplicity, monolith non-complementation, and solvability above the socle are constant across the arising family, and a class asserting the pinned polarity omits the wreaths and dies exactly as F2 through F7 do.  (The first draft's F10 examples, monolith simple versus a proper power and monolith complemented versus not, were of this pre-killed kind: each has one dead polarity.)  A viable F10 pair must use invariants that genuinely vary across the arising wreaths and correlate with the enforcing lattice: the exponent of the monolith, the structure and action of the group above it, or joint conditions tying several canopies of one parachute together.  Stating any such class formally also needs a simplicity notion for the monolith's factors, which the library does not yet have; that prerequisite is filed as [issue #562](https://github.com/ualib/agda-algebras/issues/562).
+
+## 3.  Two formalization findings
+
+Both were found while assembling the dossier, both are the vacuity discipline biting, and both are now machine-checked.
+
++  **The unguarded statement (C) was refutable**.  WP-4's `Statement-C` quantified over arbitrary families of finite lattices, with no nontriviality condition on the members.  Instantiated at the family (three-chain, three-chain, one-chain) with the properties (nontrivial, nontrivial, trivial), whose enforcements are exactly the degenerate lemmas of § 1, it produces a single group that is both trivial and nontrivial.  The refutation is `unguarded-statement-C-refuted` of `FLRP.Hunt`; the repair guards every canopy with `Nontrivial` (the lattice-nontriviality predicate, moved from `FLRP.WreathNoGo` into `FLRP.Enforceable` and renamed from its original `HasTwoDistinct`), matching the note's construction, and the defective form is kept as `Statement-C-unguarded` in the `minIE` tradition of recording repairs.  `ParachuteHypotheses.canopy-intervals` gains the same guard, without which the field demands a core-free representation of a one-element canopy over a nontrivial group and is never satisfiable.  The omission is the note's, not only the transcription's: Theorem 3.6 as printed (`IEProps-1205.1927v4.tex`, statement (C)) asks only that at least two members of the family have more than two elements, so the refutation applies to the source statement as well; since the note phrases the family as a *set*, the impeccable classical counterexample takes two distinct big chains, (three-chain, four-chain, one-chain).  The parachute construction in the note's proof requires a genuine atom per canopy, so the repair restores the hypothesis the proof always used.  This is the second missing-nontriviality instance in the note, after the Lemma 3.3 hypothesis RP-4 found, and it is recorded as a second item on the erratum issue [#525](https://github.com/ualib/agda-algebras/issues/525).
++  **The unrestricted pair statement is refutable, classically**.  RP-4's `cfIE-no-contradictory-Statement` carries no size condition on its two lattices, so the degenerate pair refutes it from any core-free representation of any two-distinct lattice (`unrestricted-question-refuted`; classically `[1 , C₂]` is such a representation, so the unrestricted statement is classically false).  The honest form of the dead-end question is `PairQuestion` of `FLRP.Hunt`, which takes a `CoreFreeRepresentable` witness (the representation-plus-core-freeness bundle of `FLRP.Enforceable`) and `Nontrivial` on both sides.  Unlike the previous finding this one needs a classical witness, because a concrete core-free representation of a two-element chain is oracle-strength data (the interval-side face of the WP-1 no-go; see the `IsMaximalSubgroup` prose in `Classical.Structures.Group.MaximalSubgroup`).
+
+## 4.  Catalog Entry 9, and the corner it closes
+
+The RP-4 note's § 6 asked for a catalog entry recording that cf-IE via a two-element chain forces the property on every group with a core-free maximal subgroup, and that such classes are wreath-rich.  Both halves landed:
+
++  `FLRP.Reductions` Entry 9: `IsChain₂` (a lattice with chosen bottom and top, distinct, every element placed at one of them), the correspondence `Chain₂Interval` between maximality data and two-element-chain interval isomorphisms, proved in both directions, and the entry theorems `chain₂-enforces` and `chain₂-cfIE-coreFreeMaximal` (the core-free-maximal class is the *least* class a two-element chain core-free enforces).  The maximality notion is the new `Classical.Structures.Group.MaximalSubgroup`, whose classification field is honest about being oracle-strength.
++  `FLRP.Hunt`: the wreath-richness half (`chain₂-classes-wreath-rich`, Lemma 3.3 instantiated at the chain) and the corner closure of § 1's last bullet.
+
+## 5.  The falsification sweep
+
+**Targets**.  The four smallest parachutes with two big canopies, `P(3,3)` (six elements), `P(3,3,2)`, `P(3,4)`, and `P(3,2×2)` (seven), generated as lattice stanzas by `scripts/python/flrp/parachute_targets.py` (golden-tested in `make flrp-test`).  A core-free group representation of such a parachute is a positive instance of statement (C) for the corresponding family, so realizability data on these shapes is the cheapest empirical read on how hard (C) is; a hit would also kill "this parachute is not representable" as a shortcut to a negative FLRP answer.
+
+**Method** (`scripts/gap/flrp/bin/hunt_parachutes.g`, run via `make gap-hunt` inside `nix develop .#gap`).  The pentagon sweep's two bounding facts transfer verbatim because every parachute with a big canopy contains `N₅`: the bottom of any such interval is the intersection of two maximal subgroups (two coatoms from different canopies meet at the bottom), so maximal-pair intersections enumerate all candidate bottoms; and p-groups are skipped outright, their candidate intervals being modular.  Only core-free bottoms are kept (else pass to the smaller quotient), and cheap GAP-side gates (six or seven elements, two or three atoms, an interior cover) keep the confirmation lists small; `gap_search.py` decides each isomorphism type authoritatively against the committed stanzas.
+
+**Run of 2026-08-29** (GAP 4.15.1, smallgrp 1.5.4; 279 s): orders 2 through 300, `idCap 3000` (order 256, with 56092 groups, skipped and recorded), 5580 non-p-groups scanned, 2833 p-groups skipped.  Fifteen six-element and zero seven-element candidates passed the gates; **all four verdicts negative** (`rp3_p33`, `rp3_p332`, `rp3_p34`, `rp3_p3m2` under `scripts/gap/flrp/out/`, each with the full interval-size histogram).
+
+**Reading the result**.  **No group of order at most 300 carries any of the four targets as a core-free upper interval**.   The one skipped order costs nothing: every group of order 256 is a 2-group, and the p-group exclusion is proved sound for these targets (the candidate bottoms contain the Frattini subgroup, forcing a modular interval, while every target contains `N₅`), so the `idCap` skip of order 256 is subsumed by the modularity argument.  This is a recorded lower bound, never a non-representability claim.  `make gap-hunt` reproduces the run end to end, confirmations included, with the date pinned so the committed verdicts re-derive byte for byte.  For contrast, one big canopy is much cheaper: `N₅ = P(2,3)` first occurs core-freely at order 216 (the pentagon minimality sweep of the WP-6 campaign).  So the empirical difficulty of statement (C) jumps between one big canopy and two, which is consistent with the two-big-canopies side condition being exactly where the note's Lemma 3.7 forcing begins.  Follow-up slices worth running at the next review: orders 300 to 512 (the 2-power orders are covered by the modularity argument; 384 needs the `idCap` raised or a smarter slice), and the primitive-groups library at small degrees, where a first `P(3,3)` realization is most plausible.
+
+## 6.  Quarterly-review scaffold
+
+The phase's kill criterion (roadmap § 4, issue #460): two consecutive quarterly reviews with no viable candidate family.  Each review appends an entry here and mirrors its verdict to the tracking issue #451.
+
+Template: date; catalog delta (new enforcement entries since last review, with sources); candidate-table delta (new families, changed verdicts); sweep delta (new slices, changed bounds); verdict (viable candidate family exists: yes/no, with the family or the blocking gap named); consecutive no-verdicts count.
+
++  **Review 2026-08-29** (phase opening, this note).  Catalog delta: Entry 9 (two-element chains) added; Entries 1 through 8 unchanged.  Candidate table: F1 through F9 killed or excluded as above; F10 open and blocked on socle-level enforcement theorems (Aschbacher engagement, avenue B).  Sweep: first run, orders 2 through 300, all four targets negative.  Verdict: **no viable candidate family**; the blocking gap is the absence of any enforcement theorem separating groups by monolith structure.  Consecutive no-verdicts: 1.
+
+## 7.  Follow-ups
+
++  **Socle-level enforcement entries** (the F10 gap, filed as [issue #560](https://github.com/ualib/agda-algebras/issues/560)): obtain the Aschbacher `D∆`/signalizer primary texts and work the specialization to parachutes, per RP-2's § 5 and § 6; any resulting entry immediately reopens the candidate table.  Its formal prerequisite, a simplicity notion with a certified `A₅` (needed even to state monolith-refined classes), is [issue #562](https://github.com/ualib/agda-algebras/issues/562).
++  **Extend the sweep**: orders 300 to 512 and the primitive-groups library at degrees up to 50, per § 5.
++  **The mixed-corner intersection fact**: a class cf-IE via a two-element chain and a class cf-IE via a big lattice always intersect (the big class's Kurzweil wreath is primitive in product action, hence lies in the chain class too).  Formally this needs a product-action-primitivity entry in the assumptions registry; it is not needed for the pair question (the padding theorem covers the mixed corner), so it was deliberately not added this session, but an empty-intersection *family* argument may want it.
++  **Retire the note-side gap list**: the RP-4 note's § 6 two-element-corner item is closed by this phase and annotated there.
+
+## 8.  Reading order
+
+`FLRP.Hunt` (the dossier and both refutations), then Entry 9 of `FLRP.Reductions` with `Classical.Structures.Group.MaximalSubgroup`, then the sweep artifacts under `scripts/gap/flrp/out/rp3_*`.  The classical background is § 3 of the vendored note; the program context is roadmap § 4 and the RP-2/RP-4 survey notes.

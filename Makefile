@@ -41,7 +41,7 @@
 #      where a path segment happens to contain the substring `agda`.
 # =============================================================================
 
-.PHONY: default all check check-certificates check-all test clean site serve serve-full html agda-md site-full profile project-plan unused-imports unused-imports-test check-links check-links-test gen-links docstrings docstrings-test docstrings-list docstrings-unused docstrings-json flrp-test flrp-slr gap-smoke Everything.agda EverythingLegacy.agda EverythingCertificates.agda
+.PHONY: default all check check-certificates check-all test clean site serve serve-full html agda-md site-full profile project-plan unused-imports unused-imports-test check-links check-links-test gen-links gap-hunt docstrings docstrings-test docstrings-list docstrings-unused docstrings-json flrp-test flrp-slr gap-smoke Everything.agda EverythingLegacy.agda EverythingCertificates.agda
 
 # -- Configuration -----------------------------------------------------------
 SRCDIR    := src
@@ -362,6 +362,7 @@ flrp-test:
 	python3 scripts/python/flrp/test_slr_catalog.py
 	python3 scripts/python/flrp/test_eqfast.py
 	python3 scripts/python/flrp/test_gap_interval.py
+	python3 scripts/python/flrp/test_parachute_targets.py
 
 # Regenerate the SmallLatticeReps catalog artifacts (issue #485) from the
 # manuscript source: claim files under scripts/python/flrp/inputs/slr/, audit
@@ -381,3 +382,19 @@ flrp-slr:
 gap-smoke:
 	@echo "target: $@"
 	gap -A -q -b scripts/gap/flrp/bin/smoke.g
+
+# The RP-3 hunt runs (issue #460): the parachute realizability sweep, the
+# candidate-table witness checks, and the gap_search.py confirmations that
+# regenerate the four committed rp3_*.search.json verdicts (the date is
+# pinned so a reproduction run is byte-identical).  Run inside
+# `nix develop .#gap` (that shell carries python3); the sweep takes a few
+# minutes.
+RP3_SWEEP_DATE := 2026-08-29
+gap-hunt:
+	@echo "target: $@"
+	gap -A -q -b scripts/gap/flrp/bin/hunt_parachutes.g
+	gap -A -q -b scripts/gap/flrp/bin/hunt_witnesses.g
+	python3 scripts/python/flrp/gap_search.py scripts/gap/flrp/out/rp3_parachutes_s6.raw.json --target scripts/gap/flrp/inputs/p33.json --out scripts/gap/flrp/out/rp3_p33.search.json --date $(RP3_SWEEP_DATE)
+	python3 scripts/python/flrp/gap_search.py scripts/gap/flrp/out/rp3_parachutes_s7.raw.json --target scripts/gap/flrp/inputs/p332.json --out scripts/gap/flrp/out/rp3_p332.search.json --date $(RP3_SWEEP_DATE)
+	python3 scripts/python/flrp/gap_search.py scripts/gap/flrp/out/rp3_parachutes_s7.raw.json --target scripts/gap/flrp/inputs/p34.json --out scripts/gap/flrp/out/rp3_p34.search.json --date $(RP3_SWEEP_DATE)
+	python3 scripts/python/flrp/gap_search.py scripts/gap/flrp/out/rp3_parachutes_s7.raw.json --target scripts/gap/flrp/inputs/p3m2.json --out scripts/gap/flrp/out/rp3_p3m2.search.json --date $(RP3_SWEEP_DATE)

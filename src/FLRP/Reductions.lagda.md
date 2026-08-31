@@ -65,6 +65,9 @@ they assume; when the predicates land, the schemas instantiate unchanged.
    `L7`; DeMeo's thesis, Theorem 6.3.1.
 +  **Entry 8** — a *negative* entry: rank-three Boolean lattices do not enforce
    `𝒢₁`; Lucchini–Moscatiello–Palcoux–Spiga.
++  **Entry 9**: the two-element chain enforces exactly on the class of groups with
+   a core-free maximal subgroup; elementary, both directions derived, closing the
+   two-element corner of the RP-4 reduction.
 
 <!--
 ```agda
@@ -77,25 +80,29 @@ open import Agda.Primitive using () renaming ( Set to Type )
 -- Imports from the Agda Standard Library ---------------------------------------
 open import Data.Empty                             using  ( ⊥-elim )
 open import Data.Fin.Base                          using  ( Fin )
-open import Data.Fin.Patterns                      using  ( 1F )
+open import Data.Fin.Patterns                      using  ( 0F ; 1F )
 open import Data.Fin.Properties                    using  ( _≟_ )
 open import Data.Nat.Base renaming ( _≤_ to _≤ⁿ_ ) using  ( ℕ ; zero ; suc ; _+_ )
 open import Data.Nat.Properties                    using  ( ≤-refl )
 open import Data.Product                           using  ( _×_ ; _,_ ; Σ-syntax
                                                           ; proj₁ ; proj₂ )
+open import Data.Sum.Base                          using  ( _⊎_ ; inj₁ ; inj₂ )
+open import Data.Unit.Base                         using  ( tt )
 open import Level                                  using  ( Level ; 0ℓ ; _⊔_ ; lift )
                                                    renaming ( suc to lsuc )
 open import Relation.Binary                        using  ( Setoid )
-open import Relation.Binary.PropositionalEquality  using  ( _≡_ )
+open import Relation.Binary.PropositionalEquality  using  ( _≡_ ; refl )
 open import Relation.Nullary                       using  ( ¬_ ; Dec )
-open import Relation.Unary                         using  ( Pred ; _⊆_ )
+open import Relation.Unary                         using  ( Pred ; _∈_ ; _⊆_ )
 
 -- Imports from the Agda Universal Algebra Library ------------------------------
-open import Classical.Properties.Lattice            using  ( TopOf ; BottomOf )
+open import Classical.Properties.Lattice            using  ( TopOf ; BottomOf
+                                                           ; module Lattice-Order )
 open import Classical.Small.Structures              using  ( Lattice )
 open import Classical.Structures.Group              using  ( Group ; IsSubgroup
                                                            ; module Centralizer
                                                            ; module Conjugate
+                                                           ; module MaximalSubgroup
                                                            ; module MinimalNormal
                                                            ; fullSubgroup )
 open import Classical.Structures.Lattice.Parachute   using  ( module LatticeParachute )
@@ -106,10 +113,11 @@ open import FLRP.Enforceable    using  ( ComplementHClosed ; CoreFree
                                        ; CoreFreeReduction ; GroupProperty
                                        ; GroupRepresentable ; IE ; IE→cfIE
                                        ; IntervalIso ; PropertyStable ; cfIE
-                                       ; cfIE→IE-Statement ; minIE )
+                                       ; cfIE→IE-Statement ; minIE
+                                       ; module UpperInterval )
 open import FLRP.Parachute      using  ( module GroupParachute )
 open import FLRP.Parachute.Theorems  using  ( module ParachuteTheorems )
-open import FLRP.Problem        using  ( chain₂-lattice )
+open import FLRP.Problem        using  ( chain₂-lattice ; OrderIso )
 open import Setoid.Algebras     using  ( 𝕌[_] ; 𝔻[_] ; FiniteAlgebra )
 open import Setoid.Homomorphisms  using  ( _IsHomImageOf_ )
 ```
@@ -942,6 +950,302 @@ module Entry-Boolean {ℓA : Level} (AltOrSym : GroupProperty ℓA) where
     →  (∀ 𝒢 → AltOrSym 𝒢 → ¬ P 𝒢) → ¬ IE P 𝟚³
   boolean-¬IE P (𝒢 , H , H-sg , alt , iso) fails =
     witness→¬IE P 𝟚³ 𝒢 H H-sg iso (fails 𝒢 alt)
+```
+
+#### Entry 9: the two-element chain enforces exactly on the core-free-maximal class
+
+**Property**.  Schematic, in both directions.  Forward: *every* property that is
+cf-IE via a two-element chain holds of every group with a core-free maximal
+subgroup.  Backward: the tautological class `HasCoreFreeMaximal`{.AgdaFunction} is
+itself cf-IE via every two-element chain, so it is the *least* class such a chain
+core-free enforces.
+
+**Enforcing lattice**.  Any lattice with exactly two elements
+(`IsChain₂`{.AgdaRecord} below); `chain₂-lattice`{.AgdaFunction} is the concrete
+instance.
+
+**Source**.  Elementary, and **derived** in full; nothing is imported.  The entry
+exists because the RP-4 reduction of the pair question to statement (C) carries a
+three-element side condition on each canopy, so a contradictory pair living on
+two-element chains would evade it; this entry is the classical piece that closes
+that corner (the design note `docs/notes/flrp-rp4-wreath.md` § 5 records the gap,
+and `FLRP.Hunt`{.AgdaModule} assembles the closure).  Classically the content is
+folklore: `[H , G]` is a two-element chain over a core-free `H` precisely when `H`
+is a core-free maximal subgroup, i.e. when `G` acts faithfully and primitively on
+the cosets of `H`.
+
+**Level**.  cf-IE.  The classes so enforced are also wreath-rich, by Lemma 3.3
+instantiated at the chain; that corollary lives in [FLRP.Hunt][] beside the corner
+it closes, keeping this module independent of the wreath machinery.
+
+**Constructive status**.  Both directions are proved, but the maximality datum they
+exchange (`IsMaximalSubgroup`{.AgdaRecord} of
+[Classical.Structures.Group.MaximalSubgroup][]) is oracle-strength, for the reason
+recorded in that module: classifying an arbitrary intermediate subgroup decides an
+arbitrary proposition.  This is the interval-side face of the WP-1 no-go theorem of
+[FLRP.Problem][], and it is why neither direction produces concrete
+`𝒢₀`{.AgdaFunction}-memberships in safe Agda: like every entry, this one is a
+statement *about* representations, with the witnesses supplied classically.
+
+A lattice **is a two-element chain** when it has a chosen bottom and top, the two
+are distinct, and every element is one or the other.  The last field is the
+decision the interval construction consumes; for a concrete lattice on a finite
+carrier it is a pattern match.
+
+```agda
+record IsChain₂ (𝑳 : Lattice) : Type 0ℓ where
+  field
+    bot       : BottomOf 𝑳
+    top       : TopOf 𝑳
+    distinct  : ¬ (Setoid._≈_ 𝔻[ proj₁ 𝑳 ] (proj₁ bot) (proj₁ top))
+    place     : ∀ x →  Setoid._≈_ 𝔻[ proj₁ 𝑳 ] x (proj₁ bot)
+                    ⊎  Setoid._≈_ 𝔻[ proj₁ 𝑳 ] x (proj₁ top)
+
+-- The concrete two-element chain is one.
+chain₂-IsChain₂ : IsChain₂ chain₂-lattice
+chain₂-IsChain₂ = record
+  { bot       = chain₂-bot
+  ; top       = chain₂-top
+  ; distinct  = λ ()
+  ; place     = λ { 0F → inj₁ refl ; 1F → inj₂ refl }
+  }
+```
+
+The tautological class: the groups with a core-free maximal subgroup.
+
+```agda
+HasCoreFreeMaximal : GroupProperty (lsuc 0ℓ)
+HasCoreFreeMaximal 𝒢@(𝑮 , _) =
+  Σ[ H ∈ Pred 𝕌[ 𝑮 ] 0ℓ ] Σ[ H-sg ∈ IsSubgroup 𝒢 H ]
+    ( CoreFree 𝒢 H H-sg × MaximalSubgroup.IsMaximalSubgroup 𝒢 0ℓ H )
+```
+
+The correspondence itself: over a fixed subgroup, maximality data and an interval
+isomorphism with a two-element chain are interconvertible.  The forward direction
+sends an interval element to the bottom or the top according to its
+classification; the backward direction classifies an intermediate subgroup by
+where the isomorphism sends it, using that an order isomorphism matches up the two
+bottoms and the two tops.
+
+```agda
+module Chain₂Interval
+  (ℒ@(𝑳 , _) : Lattice) (c₂ : IsChain₂ ℒ)
+  (𝒢@(𝑮 , _) : Group 0ℓ 0ℓ) (H : Pred 𝕌[ 𝑮 ] 0ℓ) (H-sg : IsSubgroup 𝒢 H)
+  where
+
+  open IsChain₂ c₂
+  open Setoid 𝔻[ 𝑳 ]   using ()
+                        renaming ( _≈_ to _≈ᴸ_ ; sym to ≈ᴸ-sym ; trans to ≈ᴸ-trans )
+  open Lattice-Order ℒ  using ( _≤_ ; ≤-antisym ; ≤-reflexive ; ≤-trans )
+                        renaming ( ≤-refl to ≤ᴸ-refl )
+  open UpperInterval 𝒢 H H-sg
+    using  ( Interval≈ ; mk ; set ; above ; element-isSubgroup ; _≈ᵢ_ ; _≤ᵢ_ )
+  open MaximalSubgroup 𝒢 0ℓ  using  ( IsMaximalSubgroup )
+  open IsMaximalSubgroup
+
+  private
+    b t : 𝕌[ 𝑳 ]
+    b = proj₁ bot
+    t = proj₁ top
+
+    -- The two endpoints of the interval, as interval elements.
+    H↑ᵉ G↑ᵉ : Interval≈
+    H↑ᵉ = mk H H-sg (λ h → h)
+    G↑ᵉ = mk (fullSubgroup 𝒢 0ℓ .proj₁) (fullSubgroup 𝒢 0ℓ .proj₂) (λ _ → lift tt)
+```
+
+**Maximality yields the isomorphism.**  Each proof obligation is dispatched by a
+helper taking the relevant classification as an argument, in the library's
+`with`-discipline.
+
+```agda
+  module _ (H-max : IsMaximalSubgroup H) where
+
+    private
+      -- The classification of an interval element.
+      Class : Interval≈ → Type 0ℓ
+      Class K = (set K ⊆ H) ⊎ (∀ x → x ∈ set K)
+
+      class : (K : Interval≈) → Class K
+      class K = classify H-max (set K) (element-isSubgroup K) (above K)
+
+      -- Where a classified element goes: bottom if it is H, top if it is G.
+      -- (The subject is explicit throughout this block: the classification
+      -- type mentions only the element's predicate, so an implicit subject
+      -- would leave its proof components as unsolved metavariables.)
+      toAux : (K : Interval≈) → Class K → 𝕌[ 𝑳 ]
+      toAux _ (inj₁ _) = b
+      toAux _ (inj₂ _) = t
+
+      to′ : Interval≈ → 𝕌[ 𝑳 ]
+      to′ K = toAux K (class K)
+
+      -- Where a placed lattice element comes from.
+      fromAux : (u : 𝕌[ 𝑳 ]) → (u ≈ᴸ b) ⊎ (u ≈ᴸ t) → Interval≈
+      fromAux _ (inj₁ _) = H↑ᵉ
+      fromAux _ (inj₂ _) = G↑ᵉ
+
+      from′ : 𝕌[ 𝑳 ] → Interval≈
+      from′ u = fromAux u (place u)
+
+      -- Monotonicity, by cases on the two classifications; the crossed case
+      -- (everything below a subgroup of H) contradicts properness.
+      to-mono′ : (K K' : Interval≈) (d : Class K) (d' : Class K')
+        → K ≤ᵢ K' → toAux K d ≤ toAux K' d'
+      to-mono′ _ _ (inj₁ _)    (inj₁ _)     _   = ≤ᴸ-refl
+      to-mono′ _ _ (inj₁ _)    (inj₂ _)     _   = proj₂ bot t
+      to-mono′ _ _ (inj₂ all)  (inj₁ K'⊆H)  le  =
+        ⊥-elim (proper H-max (λ x → K'⊆H (le (all x))))
+      to-mono′ _ _ (inj₂ _)    (inj₂ _)     _   = ≤ᴸ-refl
+
+      -- Monotonicity of from, by cases on the two placements; the crossed case
+      -- (top below bottom) contradicts distinctness.
+      from-mono′ : (u v : 𝕌[ 𝑳 ])
+        (c : (u ≈ᴸ b) ⊎ (u ≈ᴸ t)) (c' : (v ≈ᴸ b) ⊎ (v ≈ᴸ t))
+        → u ≤ v → fromAux u c ≤ᵢ fromAux v c'
+      from-mono′ _ _ (inj₁ _)    (inj₁ _)     _   = λ z → z
+      from-mono′ _ _ (inj₁ _)    (inj₂ _)     _   = λ _ → lift tt
+      from-mono′ u v (inj₂ u≈t)  (inj₁ v≈b)   le  =
+        ⊥-elim (distinct (≤-antisym (proj₂ bot t) t≤b))
+        where
+        t≤b : t ≤ b
+        t≤b = ≤-trans  (≤-reflexive (≈ᴸ-sym u≈t))
+                       (≤-trans le (≤-reflexive v≈b))
+      from-mono′ _ _ (inj₂ _)    (inj₂ _)     _   = λ z → z
+
+      -- Round trip on the lattice: the endpoints classify to themselves.
+      to∘from-bot : (u : 𝕌[ 𝑳 ]) → u ≈ᴸ b
+        → (d : Class H↑ᵉ) → toAux H↑ᵉ d ≈ᴸ u
+      to∘from-bot u u≈b (inj₁ _)     = ≈ᴸ-sym u≈b
+      to∘from-bot u u≈b (inj₂ allH)  = ⊥-elim (proper H-max allH)
+
+      to∘from-top : (u : 𝕌[ 𝑳 ]) → u ≈ᴸ t
+        → (d : Class G↑ᵉ) → toAux G↑ᵉ d ≈ᴸ u
+      to∘from-top u u≈t (inj₁ full⊆H)  =
+        ⊥-elim (proper H-max (λ x → full⊆H (lift tt)))
+      to∘from-top u u≈t (inj₂ _)       = ≈ᴸ-sym u≈t
+
+      to∘from′ : ∀ u → to′ (from′ u) ≈ᴸ u
+      to∘from′ u with place u
+      ... | inj₁ u≈b = to∘from-bot u u≈b (class H↑ᵉ)
+      ... | inj₂ u≈t = to∘from-top u u≈t (class G↑ᵉ)
+
+      -- Round trip on the interval: a classified element is its endpoint.
+      from∘to-bot : (K : Interval≈) → set K ⊆ H
+        → (c : (b ≈ᴸ b) ⊎ (b ≈ᴸ t)) → fromAux b c ≈ᵢ K
+      from∘to-bot K K⊆H (inj₁ _)    = above K , K⊆H
+      from∘to-bot K K⊆H (inj₂ b≈t)  = ⊥-elim (distinct b≈t)
+
+      from∘to-top : (K : Interval≈) → (∀ x → x ∈ set K)
+        → (c : (t ≈ᴸ b) ⊎ (t ≈ᴸ t)) → fromAux t c ≈ᵢ K
+      from∘to-top K allK (inj₁ t≈b)  = ⊥-elim (distinct (≈ᴸ-sym t≈b))
+      from∘to-top K allK (inj₂ _)    = (λ {x} _ → allK x) , (λ _ → lift tt)
+
+      from∘to′ : ∀ K → from′ (to′ K) ≈ᵢ K
+      from∘to′ K with class K
+      ... | inj₁ K⊆H   = from∘to-bot K K⊆H (place b)
+      ... | inj₂ allK  = from∘to-top K allK (place t)
+
+    -- A core-free maximal subgroup carries the two-element chain.
+    maximal→intervalIso : IntervalIso 𝒢 H H-sg ℒ
+    maximal→intervalIso = record
+      { to         = to′
+      ; from       = from′
+      ; to-mono    = λ {K} {K'} le → to-mono′ K K' (class K) (class K') le
+      ; from-mono  = λ {u} {v} le → from-mono′ u v (place u) (place v) le
+      ; to∘from    = to∘from′
+      ; from∘to    = from∘to′
+      }
+```
+
+**The isomorphism yields maximality.**  An order isomorphism matches the interval's
+endpoints with the chain's (`to-H↑`{.AgdaFunction}, `to-G↑`{.AgdaFunction}), so an
+intermediate subgroup is classified by where it lands, and properness follows from
+distinctness of the two chain elements.
+
+```agda
+  module _ (iso : IntervalIso 𝒢 H H-sg ℒ) where
+
+    private
+      module I = OrderIso iso
+
+      -- The isomorphism respects interval equality, by antisymmetry.
+      to-cong : {K K' : Interval≈} → K ≈ᵢ K' → I.to K ≈ᴸ I.to K'
+      to-cong (le , ge) = ≤-antisym (I.to-mono le) (I.to-mono ge)
+
+      -- The interval's bottom lands on the chain's bottom ...
+      to-H↑ : I.to H↑ᵉ ≈ᴸ b
+      to-H↑ = ≤-antisym (below b) (proj₂ bot (I.to H↑ᵉ))
+        where
+        below : ∀ u → I.to H↑ᵉ ≤ u
+        below u = ≤-trans  (I.to-mono {H↑ᵉ} {I.from u} (above (I.from u)))
+                           (≤-reflexive (I.to∘from u))
+
+      -- ... and the interval's top on the chain's top.
+      to-G↑ : I.to G↑ᵉ ≈ᴸ t
+      to-G↑ = ≤-antisym (proj₂ top (I.to G↑ᵉ)) (over t)
+        where
+        over : ∀ u → u ≤ I.to G↑ᵉ
+        over u = ≤-trans  (≤-reflexive (≈ᴸ-sym (I.to∘from u)))
+                          (I.to-mono {I.from u} {G↑ᵉ} (λ _ → lift tt))
+
+    -- A subgroup carrying the two-element chain is maximal.
+    intervalIso→maximal : IsMaximalSubgroup H
+    intervalIso→maximal = record
+      { isSubgroup  = H-sg
+      ; proper      = prop
+      ; classify    = decide
+      }
+      where
+      prop : ¬ (∀ x → x ∈ H)
+      prop allH = distinct
+        (≈ᴸ-trans  (≈ᴸ-sym to-H↑)
+        (≈ᴸ-trans  (to-cong ((λ _ → lift tt) , (λ {x} _ → allH x)))
+                   to-G↑))
+
+      decide : (K : Pred 𝕌[ proj₁ 𝒢 ] 0ℓ) (K-sg : IsSubgroup 𝒢 K) → H ⊆ K
+        → (K ⊆ H) ⊎ (∀ x → x ∈ K)
+      decide K K-sg H⊆K = go (place (I.to k))
+        where
+        k : Interval≈
+        k = mk K K-sg H⊆K
+
+        go : (I.to k ≈ᴸ b) ⊎ (I.to k ≈ᴸ t) → (K ⊆ H) ⊎ (∀ x → x ∈ K)
+        go (inj₁ e) = inj₁ λ x∈K →
+          proj₁ (I.from∘to H↑ᵉ)
+            (I.from-mono {I.to k} {I.to H↑ᵉ}
+              (≤-reflexive (≈ᴸ-trans e (≈ᴸ-sym to-H↑)))
+              (proj₂ (I.from∘to k) x∈K))
+        go (inj₂ e) = inj₂ λ x →
+          proj₁ (I.from∘to k)
+            (I.from-mono {I.to G↑ᵉ} {I.to k}
+              (≤-reflexive (≈ᴸ-trans to-G↑ (≈ᴸ-sym e)))
+              (proj₂ (I.from∘to G↑ᵉ) (lift tt)))
+```
+
+The entry, in both directions.  Forward, the headline of the RP-4 design note's
+open item: a property that is cf-IE via a two-element chain holds of every group
+with a core-free maximal subgroup.
+
+```agda
+chain₂-enforces : {ℓP : Level} (P : GroupProperty ℓP) (𝑳 : Lattice) → IsChain₂ 𝑳
+  → cfIE P 𝑳
+  → ∀ 𝒢 (H : Pred 𝕌[ proj₁ 𝒢 ] 0ℓ) (H-sg : IsSubgroup 𝒢 H)
+  → CoreFree 𝒢 H H-sg → MaximalSubgroup.IsMaximalSubgroup 𝒢 0ℓ H
+  → P 𝒢
+chain₂-enforces P 𝑳 c₂ enf 𝒢 H H-sg cf H-max =
+  enf 𝒢 H H-sg cf (Chain₂Interval.maximal→intervalIso 𝑳 c₂ 𝒢 H H-sg H-max)
+```
+
+Backward, the tautology made formal: the core-free-maximal class is itself cf-IE
+via every two-element chain, so it is exactly the least class such a chain
+enforces.
+
+```agda
+chain₂-cfIE-coreFreeMaximal : (𝑳 : Lattice) → IsChain₂ 𝑳
+  → cfIE HasCoreFreeMaximal 𝑳
+chain₂-cfIE-coreFreeMaximal 𝑳 c₂ 𝒢 H H-sg cf iso =
+  H , H-sg , cf , Chain₂Interval.intervalIso→maximal 𝑳 c₂ 𝒢 H H-sg iso
 ```
 
 ---
