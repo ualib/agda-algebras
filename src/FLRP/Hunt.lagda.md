@@ -41,12 +41,11 @@ with empty intersection must satisfy all of the following.
    intersection as soon as one enforcing chain has a core-free representation.
    A candidate family therefore needs canopies with at least three elements,
    which is exactly the regime where statement (C) applies.
-+  **The family cannot be a property and its negation on classified lattices,
-   modulo statement (C)**
-   (`statement-C→pair-question-classified`{.AgdaFunction} below): with each
-   enforcing lattice classified as a two-element chain or as three-element-rich,
-   statement (C) leaves no contradictory pair at all.  This closes the
-   two-element corner that the RP-4 reduction
++  **The family cannot be a property and its negation on classified lattices**
+   modulo statement (C) (`statement-C→pair-question-classified`{.AgdaFunction}
+   below): with each enforcing lattice classified as a two-element chain or as
+   three-element-rich, statement (C) leaves no contradictory pair at all.  This
+   closes the two-element corner that the RP-4 reduction
    (`statement-C→no-contradictory-pair`{.AgdaFunction} of [FLRP.WreathNoGo][])
    left open, using catalog Entry 9.
 
@@ -346,13 +345,11 @@ unguarded-statement-C-refuted {ℓP} stC = (Ps-hold 0F) (Ps-hold 2F)
     nontrivial-IE (toLattice chain₃) (0F , 1F , (λ ())) 𝒢 H H-sg i (lower l)
   cfs 2F 𝒢 H H-sg c i = lift (trivial-cfIE-chain₁ 𝒢 H H-sg c i)
 
-  joint : ∃[ 𝒢 ∈ Group 0ℓ 0ℓ ]
-    (∀ i → Ps i 𝒢)
-    ×  ( ∀ i → ∃[ H ] ∃[ H-sg ]  (  CoreFree 𝒢 H H-sg
-                                    × IntervalIso 𝒢 H H-sg (toLattice (family i))
-                                 )
-       )
-
+  joint :
+    ∃[ 𝒢 ]
+      (∀ i → Ps i 𝒢)
+      × ( ∀ i → ∃[ H ] ∃[ H-sg ]  (  CoreFree 𝒢 H H-sg
+                                     × IntervalIso 𝒢 H H-sg (toLattice (family i)) ) )
   joint = stC 1 family Ps two-big cfs
 
   Ps-hold : ∀ i → Ps i (joint .proj₁)
@@ -482,12 +479,11 @@ statement-C→no-pair-with-big stC P 𝑳₁ 𝑳₂ two₁ two₂ (inj₁ three
   cfs 1F = cf-ie₁
   cfs 2F = cf-ie₂
 
-  joint : ∃[ 𝒢 ∈ Group 0ℓ 0ℓ ]
-    (∀ i → Ps i 𝒢)
-    ×  ( ∀ i → ∃[ H ] ∃[ H-sg ]  (  CoreFree 𝒢 H H-sg
-                                    × IntervalIso 𝒢 H H-sg (toLattice (family i))
-                                 )
-       )
+  joint :
+    ∃[ 𝒢 ]
+      (∀ i → Ps i 𝒢)
+      × ( ∀ i → ∃[ H ] ∃[ H-sg ]  (  CoreFree 𝒢 H H-sg
+                                     × IntervalIso 𝒢 H H-sg (toLattice (family i)) ) )
   joint = stC 1 family Ps two-all two-big cfs
 
   Ps-hold : ∀ i → Ps i (joint .proj₁)
@@ -518,6 +514,11 @@ statement-C→no-pair-with-big stC P 𝑳₁ 𝑳₂ two₁ two₂ (inj₂ three
   cfs 1F = cf-ie₂
   cfs 2F = cf-ie₁
 
+  joint :
+    ∃[ 𝒢 ]
+      (∀ i → Ps i 𝒢)
+      × ( ∀ i → ∃[ H ] ∃[ H-sg ]  (  CoreFree 𝒢 H H-sg
+                                     × IntervalIso 𝒢 H H-sg (toLattice (family i)) ) )
   joint = stC 1 family Ps two-all two-big cfs
 
   Ps-hold : ∀ i → Ps i (joint .proj₁)
