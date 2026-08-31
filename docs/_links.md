@@ -67,6 +67,7 @@
 [Setoid.Congruences.Presented.Basic]: /Setoid/Congruences/Presented/Basic/
 [Setoid.Congruences.Presented.Decidable]: /Setoid/Congruences/Presented/Decidable/
 [Setoid.Congruences.Properties]: /Setoid/Congruences/Properties/
+[Setoid.Congruences.Simple]: /Setoid/Congruences/Simple/
 [Setoid.Functions]: /Setoid/Functions/
 [Setoid.Functions.Basic]: /Setoid/Functions/Basic/
 [Setoid.Functions.Bijective]: /Setoid/Functions/Bijective/
@@ -469,6 +470,7 @@
 [Setoid/Congruences/Presented/Basic.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Congruences/Presented/Basic.lagda.md
 [Setoid/Congruences/Presented/Decidable.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Congruences/Presented/Decidable.lagda.md
 [Setoid/Congruences/Properties.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Congruences/Properties.lagda.md
+[Setoid/Congruences/Simple.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Congruences/Simple.lagda.md
 [Setoid/Functions.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Functions.lagda.md
 [Setoid/Functions/Basic.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Functions/Basic.lagda.md
 [Setoid/Functions/Bijective.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Functions/Bijective.lagda.md
