@@ -48,6 +48,9 @@ list.
       normal subgroups and congruences;
    +  [Classical.Structures.Group.NormalSubgroupLattice][]:
       congruence lattices of groups;
+   +  [Classical.Structures.Group.NormalClosure][]:
+      witness terms for normal-closure membership, the replay language of
+      simplicity certificates;
    +  [Classical.Structures.Group.NormalCore][]:
       maximal normal subgroups;
    +  [Classical.Structures.Group.MinimalNormal][]:
@@ -98,6 +101,7 @@ open import Classical.Structures.Group.GSet                   public
 open import Classical.Structures.Group.IndexAction            public
 open import Classical.Structures.Group.MaximalSubgroup        public
 open import Classical.Structures.Group.MinimalNormal          public
+open import Classical.Structures.Group.NormalClosure          public
 open import Classical.Structures.Group.NormalCore             public
 open import Classical.Structures.Group.NormalSubgroupLattice  public
 open import Classical.Structures.Group.PartitionSubgroup      public
