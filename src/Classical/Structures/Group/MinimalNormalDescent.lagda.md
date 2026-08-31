@@ -174,6 +174,10 @@ projection and pairing.
 
 #### Layer D: normal subgroups that can be counted
 
+A `Normalᵈ`{.AgdaFunction} is a normal subgroup bundled with a decision procedure
+for its membership, with `setᵈ`{.AgdaFunction}, `isNormalᵈ`{.AgdaFunction}, and
+`_∈ᵈ?_`{.AgdaFunction} as its three projections.
+
 ```agda
   -- A normal subgroup together with a decision procedure for its membership.
   Normalᵈ : Type (α ⊔ ρ ⊔ lsuc L)
@@ -218,6 +222,11 @@ exactly when it contains that representative.
 
 #### The order of a decidably presented subgroup
 
+The measure the descent recurses on: the order `∥ 𝑵 ∥`{.AgdaFunction} of a
+decidably presented subgroup is the number of enumerated carrier elements its
+decision procedure admits.  (Repetitions in the enumeration inflate the count
+uniformly, so the comparisons below are unaffected.)
+
 ```agda
   -- The order of 𝑵: the number of enumerated carrier elements it contains.
   ∥_∥ : Normalᵈ → ℕ
@@ -260,6 +269,11 @@ per the library's house style.
 ```
 
 #### Nontriviality is witnessed, at Layer D
+
+On a finite group the negative `Nontrivial`{.AgdaFunction} hypothesis upgrades to a
+`Witnessed`{.AgdaFunction} one for a decidably presented subgroup, by searching the
+enumeration for a non-identity member: `witness`{.AgdaFunction} is the passage the
+no-go below shows cannot exist for arbitrary predicates.
 
 ```agda
   -- On a finite group a decidably presented nontrivial normal subgroup has a witness.
@@ -375,6 +389,13 @@ search — and stops — or moves to a normal closure of strictly smaller order.
 ```
 
 #### The theorem
+
+Kicking off the recursion with `<`-well-foundedness gives the theorem,
+`minimal-normal-descentʷ`{.AgdaFunction}; the two Layer-D corollaries then follow by
+the finite search, with `minimal-normal-descentᵈ`{.AgdaFunction} taking its
+nontriviality hypothesis in negative form and `minimalʷ→minimalᵈ`{.AgdaFunction}
+reading witnessed minimality against a decidably presented competitor whose
+nontriviality is negative.
 
 ```agda
   -- Minimal-normal descent: every witnessed-nontrivial, decidably presented normal
