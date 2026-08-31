@@ -29,6 +29,8 @@ The module contents, keyed to the note, are as follows:
 
 +  `GroupRepresentable`{.AgdaRecord} — the lattice occurs as an upper interval `[H , G]`
    in the subgroup lattice of a group, with all witnesses carried explicitly;
+   `CoreFreeRepresentable`{.AgdaRecord} bundles that witness with core-freeness
+   of its subgroup (the note's `𝒢₀`-membership as a record);
 +  `IE`{.AgdaFunction}, `cfIE`{.AgdaFunction}, `minIE`{.AgdaFunction} — § 2
    definitions in the note, with core-freeness expressed through the normal core;[^wp-2]
 +  the **fattening isomorphism** `[H × K , G × K] ≅ [H , G]` (`Fatten`{.AgdaModule}),
@@ -38,7 +40,9 @@ The module contents, keyed to the note, are as follows:
    with the note's fattening remark as the companion `IE-fattens`{.AgdaFunction};
 +  **Lemma 3.1** (`lemma-wjd-2`) and the parachute meta-theorem (`thm-wjd-1`) as
    *statements only*, their proofs deferred to RP-1 behind named hypothesis records
-   in the `FLRP.Assumptions` style.
+   in the `FLRP.Assumptions` style; statement (C) carries a per-canopy
+   nontriviality guard the note's printed statement omits, with the printed form
+   kept as `Statement-C-unguarded`{.AgdaFunction} and refuted in [FLRP.Hunt][].
 
 Two disciplines from the roadmap govern the definitions.
 

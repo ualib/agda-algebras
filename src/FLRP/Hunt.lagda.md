@@ -138,7 +138,6 @@ open import Overture.Cayley                 using  ( Table ; ⟦_⟧ ; from-yes 
 open import Overture.Operations.Properties  using  ( Associative? ; Commutative?
                                                    ; Absorbsˡ? ; Absorbsʳ?
                                                    ; Idempotent? )
-open import Overture                        using  ( ∃-syntax )
 open import Setoid.Algebras                 using  ( 𝕌[_] ; 𝔻[_] ; FiniteAlgebra )
 
 open GroupRepresentable
@@ -446,7 +445,8 @@ pair-on-chains-impossible P 𝑳₁ 𝑳₂ c₁ c₂ cfr₁ enfP enf¬P = ¬P-h
 ```
 
 Second: statement (C) kills any pair in which at least one lattice has three
-distinct elements, with **no hypothesis at all on the other lattice**.  The
+distinct elements, with only nontriviality asked of the other lattice (the
+guard statement (C) itself carries).  The
 trick is padding: instantiate (C) at the three-member family that repeats the
 big lattice, so the two-big-canopies side condition is met by the two copies.
 This strengthens `statement-C→no-contradictory-pair`{.AgdaFunction} of
@@ -610,8 +610,7 @@ chain₂-classes-wreath-rich : {ℓP : Level}
   → (𝒢 : Group 0ℓ 0ℓ) (H : Pred 𝕌[ proj₁ 𝒢 ] 0ℓ) (H-sg : IsSubgroup 𝒢 H)
   → FiniteAlgebra (proj₁ 𝒢) → CoreFree 𝒢 H H-sg
   → MaximalSubgroup.IsMaximalSubgroup 𝒢 0ℓ H
-  → ∃[ 𝒰 ∈ Group 0ℓ 0ℓ ] ∃[ m ∈ ℕ ]
-      Σ[ A ∈ RightAction (Fin (2 + m)) 𝒰 ] P (𝒮 ≀ᵍ A)
+  → ∃[ 𝒰 ] ∃[ m ] Σ[ A ∈ RightAction (Fin (2 + m)) 𝒰 ] P (𝒮 ≀ᵍ A)
 chain₂-classes-wreath-rich P 𝑳 c₂ enf 𝒮 nc kwi 𝒢 H H-sg fin cf H-max =
   cfIE-must-have-wreaths P 𝑳 𝒮 nc kwi enf cfr fin
     (isChain₂→nontrivial 𝑳 c₂)
