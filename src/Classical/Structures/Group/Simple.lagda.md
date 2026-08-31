@@ -88,7 +88,7 @@ module Classical.Structures.Group.Simple where
 open import Agda.Primitive using () renaming ( Set to Type )
 
 -- Imports from the Agda Standard Library ---------------------------------------
-open import Data.Product     using  ( proj₁ ; proj₂ ; _,_ ; ∃-syntax ; _×_ )
+open import Data.Product     using  ( proj₁ ; proj₂ ; _,_ ; ∃-syntax )
 open import Data.Unit.Base   using  ( tt )
 open import Level            using  ( Level ; _⊔_ ; lift ) renaming ( suc to lsuc )
 open import Function         using  ( _∘_ )
@@ -122,18 +122,21 @@ module Simple {α ρ : Level} (𝒢@(𝑮 , _) : Group α ρ) (ℓ₀ : Level) w
   open Centralizer 𝒢               using  ( C[_] ; C-isSubgroup ; C-isNormal )
   open GroupSublattice 𝒢 (ρ ⊔ ℓ₀)  using  ( L )
   open MinimalNormal 𝒢 (ρ ⊔ ℓ₀)    using  ( IsNormalSubgroup ; isSubgroup
-                                          ; isNormal ; Triv )
+                                          ; isNormal ; Triv ; Witnessed )
 ```
 
 **Simple group** (definition):  A group is **simple** provided the only normal
 subgroup containing a non-identity element is the whole group.  The trivial group
-satisfies the definition vacuously.
+satisfies the definition vacuously.  The hypothesis is
+`Witnessed`{.AgdaFunction} of [Classical.Structures.Group.MinimalNormal][], the
+witnessed reading of nontriviality: the non-identity member enters as positive
+Σ-data, which is what every consumer below produces.
 
 ```agda
   -- Simple group, implication form: a normal subgroup containing a
-  -- non-identity element is the whole group.
+  -- non-identity element (a witnessed-nontrivial one) is the whole group.
   IsSimple : Type (α ⊔ ρ ⊔ lsuc L)
-  IsSimple = ∀ N → IsNormalSubgroup N → ∃[ x ] x ∈ N × ¬ x ≈ ε → ∀ y → y ∈ N
+  IsSimple = ∀ N → IsNormalSubgroup N → Witnessed N → ∀ y → y ∈ N
 ```
 
 #### The nonabelian-simple bundle
