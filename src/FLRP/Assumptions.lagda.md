@@ -344,10 +344,16 @@ remaining classical delta.
    `𝒮 : Group 0ℓ 0ℓ`, and for arbitrary `𝒮` it is *false* (for `S = ℤ₃` and
    `n = 3` the tuples with `x₀ x₂ = x₁²` form a non-partition subgroup above the
    diagonal).  The classical theorem asserts the instances where `𝒮` is finite
-   nonabelian simple, and consumers must instantiate it there; the side
-   condition stays in prose because the library does not yet define simplicity
-   predicates (issue #512 owns them), and making it formal is part of this
-   entry's retirement.
+   nonabelian simple, and consumers must instantiate it there.  The selecting
+   notion is now formal: [Classical.Structures.Group.Simple][] defines
+   `IsSimple`{.AgdaFunction} and the nonabelian-simple bundle, and
+   [Examples.Classical.Groups.AlternatingGroup5][] certifies `A₅` as a
+   nonabelian simple group by finite computation, with a
+   `FiniteAlgebra`{.AgdaRecord} witness beside it, so the canonical admissible
+   `𝒮` carries machine-checked witnesses of the whole side condition.  The
+   entry's *statement* remains a classical import, and making the side
+   condition a formal antecedent of a proved theorem is this entry's
+   retirement.
 
 +  **Status and retirement path**.  A classically proven theorem imported
    pending formalization.  The missing mathematics is the normal-subgroup
@@ -418,8 +424,12 @@ special case, without reproof).
 +  **Side conditions**.  The statement type is defined for an arbitrary
    `𝒮 : Group 0ℓ 0ℓ`, and the classical theorem asserts the instances where `𝒮` is
    *finite nonabelian simple*; consumers must instantiate it there.  Nonabelian
-   simplicity stays in prose exactly as in Entry 4, and the finiteness of `𝒮`
-   stays in prose with it.  Finiteness of the *represented* group, by contrast,
+   simplicity is a prose side condition exactly as in Entry 4, with the same
+   formal selecting notion ([Classical.Structures.Group.Simple][]) and the same
+   certified admissible instance: the `A₅` of
+   [Examples.Classical.Groups.AlternatingGroup5][], whose
+   `FiniteAlgebra`{.AgdaRecord} witness also discharges the finiteness of `𝒮`
+   at that instance.  Finiteness of the *represented* group, by contrast,
    is a formal antecedent (`FiniteAlgebra`{.AgdaRecord}), not a prose side
    condition: without it the statement would also quantify over infinite-index
    core-free representations (for instance the trivial subgroup of an infinite
