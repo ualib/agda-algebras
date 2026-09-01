@@ -54,13 +54,17 @@ Three design points, each forced by a constraint worth recording.
    (`K-closed→Inv`{.AgdaFunction}).  This is one of the few places the base
    group's properties enter the proof at all.
 
-+  **Kurzweil surjectivity enters as the registered hypothesis**.
++  **Kurzweil surjectivity enters in its decidable form**.
 
    The passage from an arbitrary congruence to a partition routes through Entry 4
-   of [FLRP.Assumptions][] (`KurzweilSurjectivity`{.AgdaFunction}, the classical
-   half of Kurzweil's lemma, true for `𝒮` finite nonabelian simple); this module
-   takes it as a module parameter, exactly as `kurzweilIntervalIso`{.AgdaFunction}
-   does.
+   of [FLRP.Assumptions][] in the working form
+   `KurzweilSurjectivityᵈ`{.AgdaFunction} (the classical half of Kurzweil's
+   lemma, true for `𝒮` finite nonabelian simple), taken as a module parameter.
+   Every interval element this construction manipulates is the base-coset class
+   of a *decidable* congruence, delivered with its decider by the Layer-D bridge
+   map `toᵈ`{.AgdaFunction}, so the semantic form is never needed; that matters,
+   because the semantic form is unprovable outright (the no-go of
+   [FLRP.KurzweilInterval][]).
 
 <!--
 ```agda
@@ -97,9 +101,7 @@ open import Classical.Structures.Group.Basic         using  ( Group ; module Gro
 open import Classical.Structures.Group.Cosets        using  ( module Coset )
 open import Classical.Structures.Group.GSet          using  ( module CosetAction )
 open import Classical.Structures.Interpret           using  ( interp-cong )
-open import Classical.Structures.Lattice.Dual        using  ( module LatticeDual )
-open import Classical.Structures.Lattice.Partitions  using  ( SameBlock ; _⊑_ ; _≈ᵖ_
-                                                            ; EqLattice ; ≤→⊑ )
+open import Classical.Structures.Lattice.Partitions  using  ( SameBlock ; _⊑_ ; _≈ᵖ_ )
 open import FLRP.Bridge                              using  ( module Bridge )
 open import FLRP.KurzweilInterval                    using  ( module KurzweilInterval )
 open import FLRP.KurzweilNetter.Invariance           using  ( Inv )
@@ -123,7 +125,7 @@ open import Setoid.Signatures.Finite                 using  ( FiniteSignature )
 
 `KNExpansion`{.AgdaModule} fixes the base group with its finiteness and
 nontriviality witnesses, the exponent `m`, the abstract family `tr` of index maps,
-and the Kurzweil surjectivity hypothesis at `m`.
+and the decidable Kurzweil surjectivity hypothesis at `m`.
 
 ```agda
 module KNExpansion
@@ -134,7 +136,7 @@ module KNExpansion
   (s₀≉ε       : ¬ s₀ ≈ ε)
   (m T        : ℕ)
   (tr         : Fin T → Fin m → Fin m)
-  (surj       : KurzweilInterval.KurzweilSurjectivity 𝒮 m)
+  (surj       : KurzweilInterval.KurzweilSurjectivityᵈ 𝒮 m)
   where
 
   -- Sⁿ = Sᵐ, Diag, K, the interval, kurzweilIntervalIso; the power kit's
@@ -362,28 +364,35 @@ the relation level.
 #### From congruences to invariant partitions and back
 
 The forward passage composes the WP-3 bridge with the surjectivity hypothesis.
-The congruence's base-coset class is an interval element, the hypothesis hands
-over a partition, and closure of the class under the lifts (one compatibility
-instance at `ε`) makes that partition invariant through the indicator argument.
+The congruence's base-coset class, carried with the congruence's own decision
+procedure through the bridge's Layer-D map, is a decidable interval element;
+the hypothesis hands over a partition, and closure of the class under the lifts
+(one compatibility instance at `ε`) makes that partition invariant through the
+indicator argument.
 
 ```agda
   private
     module B = Bridge 𝑺ⁿ Diag Diag-isSubgroup
 
-  -- The interval element of an expanded congruence: its base-coset class.
+  -- The decidable interval element of an expanded congruence: its base-coset
+  -- class, with the congruence's own decision procedure.
+  intervalOfᵈ : DecCon expandedAlgebra 0ℓ → Intervalᵈ
+  intervalOfᵈ θE = B.toᵈ (forget θE)
+
+  -- The underlying interval element (the base-coset class alone).
   intervalOf : DecCon expandedAlgebra 0ℓ → Interval≈
-  intervalOf θE = B.to (forget θE .proj₁)
+  intervalOf θE = intervalOfᵈ θE .proj₁
 
   -- The partition the surjectivity hypothesis attaches to it.
   partOf : DecCon expandedAlgebra 0ℓ → ParentVec m
-  partOf θE = surj (intervalOf θE) .proj₁
+  partOf θE = surj (intervalOfᵈ θE) .proj₁
 
   private
     partOf-in : (θE : DecCon expandedAlgebra 0ℓ) → set (intervalOf θE) ⊆ K (partOf θE)
-    partOf-in θE = surj (intervalOf θE) .proj₂ .proj₁
+    partOf-in θE = surj (intervalOfᵈ θE) .proj₂ .proj₁
 
     partOf-out : (θE : DecCon expandedAlgebra 0ℓ) → K (partOf θE) ⊆ set (intervalOf θE)
-    partOf-out θE = surj (intervalOf θE)  .proj₂ .proj₂
+    partOf-out θE = surj (intervalOfᵈ θE)  .proj₂ .proj₂
 
     -- the base-coset class is closed under the lifts
     classClosed : (θE : DecCon expandedAlgebra 0ℓ) (τ : Fin T)
@@ -461,22 +470,28 @@ The two maps of the isomorphism.
 ```
 
 **Monotonicity**.  Forward: a containment of congruences passes through the bridge
-to an inclusion of interval elements, through the interval isomorphism of
-[FLRP.KurzweilInterval][] to the dual lattice order, and unflips to reversed
-refinement.  Backward: reversed refinement is an inclusion of partition
-subgroups (`K-antitone`{.AgdaFunction}), which the bridge's inverse forwards.
+to an inclusion of base-coset classes, which the order-reflection argument of
+[Classical.Structures.Group.PartitionSubgroup][] flips to reversed refinement of
+the attached partitions (this is the mono-flip step of
+`kurzweilIntervalIso`{.AgdaFunction}, taken directly at the decidable elements
+this module manipulates).  Backward: reversed refinement is an inclusion of
+partition subgroups (`K-antitone`{.AgdaFunction}), which the bridge's inverse
+forwards.
 
 ```agda
   private
-    KI = kurzweilIntervalIso s₀ s₀≉ε surj
+    -- Inclusion of base-coset classes reflects to reversed refinement of the
+    -- attached partitions.
+    partOf-flip : {θE φE : DecCon expandedAlgebra 0ℓ}
+      → intervalOf θE ≤ᵢ intervalOf φE → partOf φE ⊑ partOf θE
+    partOf-flip {θE} {φE} le =
+      K-reflects s₀ s₀≉ε {pu = partOf φE} {pw = partOf θE}
+        λ k → partOf-in φE (le (partOf-out θE k))
 
   toInvPart-mono : (θE φE : DecCon expandedAlgebra 0ℓ)
     → (∀ {x y} → ConRel θE x y → ConRel φE x y) → toInvPart θE ≥ᵛ toInvPart φE
   toInvPart-mono θE φE sub =
-    ≤→⊑ {pu = partOf φE} {pw = partOf θE}
-      (LatticeDual.≤ᵈ-flip (EqLattice m) {x = partOf θE} {y = partOf φE}
-        (OrderIso.to-mono KI {intervalOf θE} {intervalOf φE}
-          (B.to-mono {forget θE .proj₁} {forget φE .proj₁} sub)))
+    partOf-flip {θE} {φE} (B.to-mono {forget θE .proj₁} {forget φE .proj₁} sub)
 
   fromInvPart-mono : (P Q : InvPart) → P ≥ᵛ Q
     → ∀ {x y} → ConRel (fromInvPart P) x y → ConRel (fromInvPart Q) x y

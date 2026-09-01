@@ -58,7 +58,7 @@ open import Classical.Small.Structures.Lattice        using  ( Lattice )
 open import Classical.Structures.Group.Basic          using  ( Group ; module Group-Op )
 open import Classical.Structures.Lattice.Dual         using  ( dualLattice )
 open import Classical.Structures.Lattice.OrdinalSum   using  ( ordinalSum )
-open import FLRP.Assumptions                          using  ( KurzweilSurjectivityAt )
+open import FLRP.Assumptions                          using  ( KurzweilSurjectivityᵈAt )
 open import FLRP.KurzweilNetter.Duality               using  ( module KurzweilNetterProof )
 open import FLRP.Problem                              using  ( chain₂-lattice )
 open import FLRP.Representable                        using  ( Representableᵈ
@@ -111,8 +111,8 @@ adjoinTop-Representableᵈ t r =
 Here we prove closure under dualization (the Kurzweil–Netter theorem) using
 [FLRP.KurzweilNetter.Duality][].  The parameters are the simple-group package of
 the proof module: a finite group with a nontriviality witness and the
-Kurzweil-surjectivity family (Entry 4 of [FLRP.Assumptions][], classically true
-for `𝒮` finite nonabelian simple).
+Kurzweil-surjectivity family in its decidable working form (Entry 4 of
+[FLRP.Assumptions][], classically true for `𝒮` finite nonabelian simple).
 
 Every consumer displays its remaining classical debt (Entry 4 at the chosen group)
 in its own type, exactly as the registry discipline demands.
@@ -123,7 +123,7 @@ module _ ((𝑺 , eqns) : Group 0ℓ 0ℓ) where
   open Group-Op (𝑺 , eqns) using (ε)
   -- The Kurzweil–Netter closure, from the simple-group package of the proof.
   dual-Representableᵈ : (𝑭ₛ : FiniteAlgebra 𝑺) (s₀ : 𝕌[ 𝑺 ])
-    → ¬ s₀ ≈ ε → (∀ n → KurzweilSurjectivityAt (𝑺 , eqns) n)
+    → ¬ s₀ ≈ ε → (∀ n → KurzweilSurjectivityᵈAt (𝑺 , eqns) n)
     → (𝑳 : Lattice) → Representableᵈ 𝑳 → Representableᵈ (dualLattice 𝑳)
   dual-Representableᵈ 𝑭ₛ s₀ s₀≉ε surj =
     KurzweilNetterProof.kurzweilNetterDuality (𝑺 , eqns) 𝑭ₛ s₀ s₀≉ε surj

@@ -76,7 +76,9 @@ partition subgroup `K_π`; this is the surjectivity half of Kurzweil's lemma,
 `[D , Sⁿ] ≅ Eq(n)′`, whose dual-embedding half is proved outright in
 [Classical.Structures.Group.PartitionSubgroup][].  It is registered as
 `KurzweilSurjectivityAt`{.AgdaFunction}, in the witness-producing form defined by
-[FLRP.KurzweilInterval][].
+[FLRP.KurzweilInterval][], with the decidable working form
+`KurzweilSurjectivityᵈAt`{.AgdaFunction} beside it; the Layer-S form is excluded
+middle (that module's no-go theorem), so consumers take the working form.
 
 **Entry 5**: Kurzweil's wreath interval.  For a core-free representation
 `[H , G] ≅ 𝑳` of a lattice with two distinct elements (`G` finite) and a finite
@@ -252,8 +254,10 @@ algebra with lifted operations.
    simple group.  What is retired is Entry 2's role as an *independent*
    hypothesis: nothing consumes it any more, and the definitions below remain
    as the canonical *statement* of the theorem (they are its conclusion's
-   type).  The residue is tracked by issue #522 (Entry 4) and issue #527
-   (the `A₅` instantiation, needing the simplicity predicates of issue #512).
+   type).  The residue is tracked by issue #522 (Entry 4, scoped to the decidable
+   form by issue #566) and issue #527 (the `A₅` instantiation; the simplicity
+   predicates it once awaited landed with
+   [Classical.Structures.Group.Simple][]).
 
 +  **Layer**.  The statement is at Layer D (`Representableᵈ`{.AgdaRecord}),
    the program's working notion per [ADR-008][]; the classical statement is the
@@ -340,6 +344,19 @@ remaining classical delta.
    defined in [FLRP.KurzweilInterval][], which is precisely what the inverse map
    of `kurzweilIntervalIso`{.AgdaFunction} consumes.
 
++  **Strength**.  The Layer-S form is not a constructively open statement
+   awaiting proof: `kurzweilSurjectivity→EM`{.AgdaFunction} of
+   [FLRP.KurzweilInterval][] shows that at exponent `2`, over any base group
+   with an apartness witness, it implies full excluded middle for level-zero
+   types, by feeding the produced partition an oracle subgroup.  It therefore
+   caps the `WLEM₀`{.AgdaFunction} no-go family of [FLRP.Problem][] from
+   above, and no proof of it can land in the safe fragment.  The *working*
+   form is `KurzweilSurjectivityᵈAt`{.AgdaFunction}, the same Σ-form over the
+   decidable interval elements `Intervalᵈ`{.AgdaFunction} of
+   [FLRP.Enforceable][]; every consumer takes it, and the Layer-S statement
+   remains registered as the classical statement of record, exactly as
+   Entry 2's types remain as its statement.
+
 +  **Side condition**.  The statement type is defined for an arbitrary
    `𝒮 : Group 0ℓ 0ℓ`, and for arbitrary `𝒮` it is *false* (for `S = ℤ₃` and
    `n = 3` the tuples with `x₀ x₂ = x₁²` form a non-partition subgroup above the
@@ -356,26 +373,40 @@ remaining classical delta.
    retirement.
 
 +  **Status and retirement path**.  A classically proven theorem imported
-   pending formalization.  The missing mathematics is the normal-subgroup
-   structure theory of powers of a nonabelian simple group (normal subgroups of
-   `Sⁿ` are partial products; subdirect subgroups containing the diagonal
-   collapse blockwise), a follow-up flagged in issue #521.  On completion this
-   entry retires, `kurzweilIntervalIso`{.AgdaFunction} holds outright at simple
-   instantiations, and the Kurzweil–Netter route of issue #502 loses one of its
-   two imported steps toward retiring Entry 2.
+   pending formalization, with the provable target now precisely scoped: the
+   decidable form.  The missing mathematics is the normal-subgroup structure
+   theory of powers of a nonabelian simple group (normal subgroups of `Sⁿ` are
+   partial products; subdirect subgroups containing the diagonal collapse
+   blockwise), applied over interval elements whose membership is decided,
+   where the partition is computable as the kernel meet of the member tuples;
+   the selecting predicates and the certified instance the proof needs are in
+   place ([Classical.Structures.Group.Simple][],
+   [Examples.Classical.Groups.AlternatingGroup5][]).  On completion
+   `KurzweilSurjectivityᵈAt`{.AgdaFunction} holds outright at simple
+   instantiations, this entry retires, and the Kurzweil–Netter route of issue
+   #502 becomes a closed theorem there; the Layer-S form stays behind as the
+   classical statement, priced exactly by the no-go.
 
-+  **Layer**.  Layer S, on the respecting interval `Interval≈`{.AgdaFunction}.
-   Over a decidable interval element (`Intervalᵈ`{.AgdaFunction}) with a finite
-   base group the partition is computable as the kernel meet of the member
-   tuples, so a formal proof is expected to produce the Layer-D reading
-   directly, mirroring Entry 2's layer note.
++  **Layer**.  Layer S for the statement of record; Layer D
+   (`Intervalᵈ`{.AgdaFunction}) for the working form, per the sibling
+   discipline of [ADR-008][].  The Kurzweil–Netter route consumes only the
+   working form: every interval element it manipulates is the base-coset class
+   of a decidable congruence, delivered with its decider by the Layer-D bridge
+   of [FLRP.Bridge][].
 
 ```agda
--- Entry 4, per-instance form: every subgroup in [D , Sⁿ] is a partition
--- subgroup, with the partition produced as data.  Classically true for 𝒮 a
--- finite nonabelian simple group; consumers instantiate it there.
+-- Entry 4, statement of record (Layer S): every subgroup in [D , Sⁿ] is a
+-- partition subgroup, with the partition produced as data.  Classically true
+-- for 𝒮 a finite nonabelian simple group; unprovable outright (the no-go of
+-- FLRP.KurzweilInterval), and consumed by nothing.
 KurzweilSurjectivityAt : Group 0ℓ 0ℓ → ℕ → Type (lsuc 0ℓ)
 KurzweilSurjectivityAt 𝒮 n = KurzweilInterval.KurzweilSurjectivity 𝒮 n
+
+-- Entry 4, working form (Layer D): the same Σ-form, over interval elements
+-- carrying a membership decider.  This is the form consumers take, and the
+-- form whose proof at a finite nonabelian simple 𝒮 retires the entry.
+KurzweilSurjectivityᵈAt : Group 0ℓ 0ℓ → ℕ → Type (lsuc 0ℓ)
+KurzweilSurjectivityᵈAt 𝒮 n = KurzweilInterval.KurzweilSurjectivityᵈ 𝒮 n
 ```
 
 #### Entry 5: Kurzweil's wreath interval

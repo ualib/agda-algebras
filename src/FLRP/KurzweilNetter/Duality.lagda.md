@@ -27,8 +27,9 @@ lectures).  Given a representation `𝑳 ≅ DecCon 𝑨`, proceed as follows:
 2. expand the coset algebra of the diagonal `D ≤ Sᵐ` by the lifted translations;
    its decidable congruence poset is the *reversed* poset of invariant partitions
    ([FLRP.KurzweilNetter.Expansion][], composing the WP-3 bridge
-   `DecCon (Sᵐ ↷ Sᵐ/D) ≅ [D , Sᵐ]` of [FLRP.Bridge][] with Kurzweil's interval
-   isomorphism `[D , Sᵐ] ≅ Eq(m)′` of [FLRP.KurzweilInterval][]);
+   `DecCon (Sᵐ ↷ Sᵐ/D) ≅ [D , Sᵐ]` of [FLRP.Bridge][] with the
+   decidable-instance passage of Kurzweil's interval isomorphism
+   `[D , Sᵐ] ≅ Eq(m)′` of [FLRP.KurzweilInterval][]);
 
 3. compose the two, and the original representation, into
    `DecCon 𝑬 ≅ dualLattice 𝑳`, the record `dual-representation`{.AgdaFunction} below.
@@ -48,10 +49,13 @@ argument actually uses:
    order reflection and injectivity of `π ↦ K_π`, and for extracting
    invariance from closure in the expansion step (the indicator tuples);
 
-+  **Kurzweil surjectivity at every exponent**
-   (`KurzweilSurjectivityAt`{.AgdaFunction}` 𝒮 n`, Entry 4 of
-   [FLRP.Assumptions][]): every subgroup in `[D , Sⁿ]` is a partition
-   subgroup.
++  **Kurzweil surjectivity at every exponent, in the decidable form**
+   (`KurzweilSurjectivityᵈAt`{.AgdaFunction}` 𝒮 n`, the working form of
+   Entry 4 of [FLRP.Assumptions][]): every *decidable* subgroup in
+   `[D , Sⁿ]` is a partition subgroup.  The semantic form is deliberately
+   not consumed: it is unprovable outright (the no-go of
+   [FLRP.KurzweilInterval][]), while the decidable form is exactly what the
+   construction's base-coset classes deliver.
 
 *Nonabelianness and simplicity of `S` enter only through the third item*;
 they are what makes Entry 4 true classically.  Thus no simplicity predicate is
@@ -101,7 +105,7 @@ open import Classical.Structures.Lattice.Dual   using  ( dualLattice
                                                        ; module LatticeDual )
 open import FLRP.Assumptions                    using  ( KurzweilNetterDualityAt
                                                        ; KurzweilNetterDuality
-                                                       ; KurzweilSurjectivityAt )
+                                                       ; KurzweilSurjectivityᵈAt )
 open import FLRP.KurzweilNetter.Blocks          using  ( module KNBlocks )
 open import FLRP.KurzweilNetter.Expansion       using  ( module KNExpansion )
 open import FLRP.KurzweilNetter.Translations    using  ( module KNTranslations )
@@ -144,7 +148,7 @@ module KNGlue
   (𝑭ₛ         : FiniteAlgebra 𝑺)
   (s₀         : 𝕌[ 𝑺 ])
   (s₀≉ε       : ¬ s₀ ≈ ε)
-  (surjm      : KurzweilSurjectivityAt 𝒮 (IrredundantEnumeration.icard 𝑬ᵢ))
+  (surjm      : KurzweilSurjectivityᵈAt 𝒮 (IrredundantEnumeration.icard 𝑬ᵢ))
   (𝓛@(𝑳 , _)  : Lattice)
   (iso        : ConIsoᵈ 𝑨 𝓛)
   where
@@ -302,7 +306,7 @@ canonical irredundant enumeration of each representation.
 One reading note, so the module cannot overstate itself: the definitions below
 inhabit `KurzweilNetterDuality`{.AgdaFunction} *inside* this parameterized
 module; the library holds no closed inhabitant of the statement, and Entry 4's
-family is a genuine hypothesis of the result.  Entry 2 of [FLRP.Assumptions][] is
+decidable family is a genuine hypothesis of the result.  Entry 2 of [FLRP.Assumptions][] is
 thereby *reduced to Entry 4*, not discharged; the registry entry records the same
 reading.
 
@@ -312,7 +316,7 @@ module KurzweilNetterProof
   (𝑭ₛ         : FiniteAlgebra 𝑺)
   (s₀         : 𝕌[ 𝑺 ])
   (s₀≉ε       : ¬ (Setoid._≈_ 𝔻[ 𝑺 ] s₀ (Group-Op.ε 𝒮)))
-  (surj       : (n : ℕ) → KurzweilSurjectivityAt 𝒮 n)
+  (surj       : (n : ℕ) → KurzweilSurjectivityᵈAt 𝒮 n)
   where
 
   -- Kurzweil–Netter duality at a lattice.
