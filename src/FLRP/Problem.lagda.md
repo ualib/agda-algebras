@@ -400,6 +400,25 @@ WLEM₀ : Type (lsuc 0ℓ)
 WLEM₀ = ∀ P → ¬ P ⊎ ¬ ¬ P
 ```
 
+The *strong* formula, full excluded middle for level-zero types, is recorded
+beside it.  No result of this module reaches it; it is the conclusion of the
+surjectivity no-go of [FLRP.KurzweilInterval][], and the generic weakening
+`EM₀→WLEM₀`{.AgdaFunction} places that conclusion above every
+`WLEM₀`{.AgdaFunction}-strength obstruction in this family.
+
+```agda
+EM₀ : Type (lsuc 0ℓ)
+EM₀ = ∀ P → P ⊎ ¬ P
+
+-- Full excluded middle weakens to weak excluded middle.
+EM₀→WLEM₀ : EM₀ → WLEM₀
+EM₀→WLEM₀ em P = weaken (em P)
+  where
+  weaken : P ⊎ ¬ P → ¬ P ⊎ ¬ ¬ P
+  weaken (inj₁ p)   = inj₂ (λ ¬p → ¬p p)
+  weaken (inj₂ ¬p)  = inj₁ ¬p
+```
+
 The proof needs three small facts, each with a one-line justification.
 
 +  `to-cong`{.AgdaFunction}: `≑`-equal congruences have equal images, because both
