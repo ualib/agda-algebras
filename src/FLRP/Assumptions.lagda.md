@@ -81,7 +81,7 @@ partition subgroup `K_π`; this is the surjectivity half of Kurzweil's lemma,
 [FLRP.KurzweilInterval][], with the decidable working form
 `KurzweilSurjectivityᵈAt`{.AgdaFunction} beside it; the Layer-S form is excluded
 middle (that module's no-go theorem), so consumers take the working form.  The
-entry is **retired**: [FLRP.KurzweilSurjectivity][] proves the working form for
+entry is **retired**: [FLRP.KurzweilInterval.Surjectivity][] proves the working form for
 every finite witnessed-nonabelian-simple base group.
 
 **Entry 5**: Kurzweil's wreath interval.  For a core-free representation
@@ -252,7 +252,7 @@ algebra with lifted operations.
    nontriviality witness, and Entry 4's surjectivity family), and
    `dual-Representableᵈ`{.AgdaFunction} of [FLRP.Closure][] is rewired to that
    proof, taking the same package.  The package is now fully dischargeable:
-   [FLRP.KurzweilSurjectivity][] proves the surjectivity family from a
+   [FLRP.KurzweilInterval.Surjectivity][] proves the surjectivity family from a
    `FiniteAlgebra`{.AgdaRecord} witness and the nonabelian-simplicity bundle
    (`kurzweilNetterDuality-ofSimple`{.AgdaFunction}), and
    [FLRP.KurzweilNetter.A5][] instantiates the bundle at the certified `A₅`,
@@ -377,7 +377,7 @@ remaining classical delta.
    retirement.
 
 +  **Status: retired** (issue #522).  `kurzweilSurjectivityᵈ`{.AgdaFunction}
-   of [FLRP.KurzweilSurjectivity][] proves the working form for every finite
+   of [FLRP.KurzweilInterval.Surjectivity][] proves the working form for every finite
    witnessed-nonabelian-simple base group, via the blockwise collapse of
    [Classical.Structures.Group.PowerCollapse][]: the partition is the joint
    kernel of the members, computed by enumerating the power, and the killed
@@ -406,7 +406,7 @@ KurzweilSurjectivityAt 𝒮 n = KurzweilInterval.KurzweilSurjectivity 𝒮 n
 
 -- Entry 4, working form (Layer D): the same Σ-form, over interval elements
 -- carrying a membership decider.  This is the form consumers take, proved at
--- every finite witnessed-nonabelian-simple 𝒮 by FLRP.KurzweilSurjectivity.
+-- every finite witnessed-nonabelian-simple 𝒮 by FLRP.KurzweilInterval.Surjectivity.
 KurzweilSurjectivityᵈAt : Group 0ℓ 0ℓ → ℕ → Type (lsuc 0ℓ)
 KurzweilSurjectivityᵈAt 𝒮 n = KurzweilInterval.KurzweilSurjectivityᵈ 𝒮 n
 ```

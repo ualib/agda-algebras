@@ -396,6 +396,7 @@
 [FLRP.Enforceable]: /FLRP/Enforceable/
 [FLRP.Hunt]: /FLRP/Hunt/
 [FLRP.KurzweilInterval]: /FLRP/KurzweilInterval/
+[FLRP.KurzweilInterval.Surjectivity]: /FLRP/KurzweilInterval/Surjectivity/
 [FLRP.KurzweilNetter]: /FLRP/KurzweilNetter/
 [FLRP.KurzweilNetter.A5]: /FLRP/KurzweilNetter/A5/
 [FLRP.KurzweilNetter.Blocks]: /FLRP/KurzweilNetter/Blocks/
@@ -403,7 +404,6 @@
 [FLRP.KurzweilNetter.Expansion]: /FLRP/KurzweilNetter/Expansion/
 [FLRP.KurzweilNetter.Invariance]: /FLRP/KurzweilNetter/Invariance/
 [FLRP.KurzweilNetter.Translations]: /FLRP/KurzweilNetter/Translations/
-[FLRP.KurzweilSurjectivity]: /FLRP/KurzweilSurjectivity/
 [FLRP.L7EqSix]: /FLRP/L7EqSix/
 [FLRP.LayerBridge]: /FLRP/LayerBridge/
 [FLRP.Parachute]: /FLRP/Parachute/
@@ -802,6 +802,7 @@
 [FLRP/Enforceable.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/Enforceable.lagda.md
 [FLRP/Hunt.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/Hunt.lagda.md
 [FLRP/KurzweilInterval.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/KurzweilInterval.lagda.md
+[FLRP/KurzweilInterval/Surjectivity.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/KurzweilInterval/Surjectivity.lagda.md
 [FLRP/KurzweilNetter.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/KurzweilNetter.lagda.md
 [FLRP/KurzweilNetter/A5.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/KurzweilNetter/A5.lagda.md
 [FLRP/KurzweilNetter/Blocks.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/KurzweilNetter/Blocks.lagda.md
@@ -809,7 +810,6 @@
 [FLRP/KurzweilNetter/Expansion.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/KurzweilNetter/Expansion.lagda.md
 [FLRP/KurzweilNetter/Invariance.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/KurzweilNetter/Invariance.lagda.md
 [FLRP/KurzweilNetter/Translations.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/KurzweilNetter/Translations.lagda.md
-[FLRP/KurzweilSurjectivity.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/KurzweilSurjectivity.lagda.md
 [FLRP/L7EqSix.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/L7EqSix.lagda.md
 [FLRP/LayerBridge.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/LayerBridge.lagda.md
 [FLRP/Parachute.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/Parachute.lagda.md
@@ -834,6 +834,7 @@
 [ADR-010]: /adr/010-documentation-coverage-policy/
 
 <!-- ===== External links ===== -->
+[FLRP.KurzweilSurjectivity]: /FLRP/KurzweilSurjectivity/
 [Classical.Structures.DistributiveLattice]: /Classical/Structures/Lattice/DistributiveLattice/
 [A Machine-checked proof of Birkhoff's Variety Theorem in Martin-Löf Type Theory]: https://arxiv.org/abs/2101.10166
 [absolute value]: https://en.wikipedia.org/wiki/Absolute_value

@@ -60,7 +60,7 @@ argument actually uses:
 *Nonabelianness and simplicity of `S` enter only through the third item*;
 they are what makes the surjectivity family true.  Thus no simplicity predicate
 is needed anywhere in this module.  Both follow-ons have landed with no change
-here: [FLRP.KurzweilSurjectivity][] proves the family from the
+here: [FLRP.KurzweilInterval.Surjectivity][] proves the family from the
 nonabelian-simplicity bundle and closes the theorem over the package
 (`kurzweilNetterDuality-ofSimple`{.AgdaFunction}), and
 [FLRP.KurzweilNetter.A5][] instantiates the package at the certified `A₅`
@@ -108,6 +108,8 @@ open import Classical.Structures.Lattice.Dual   using  ( dualLattice
 open import FLRP.Assumptions                    using  ( KurzweilNetterDualityAt
                                                        ; KurzweilNetterDuality
                                                        ; KurzweilSurjectivityᵈAt )
+open import Classical.Structures.Group.Simple   using  ( module Simple )
+open import FLRP.KurzweilInterval.Surjectivity  using  ( kurzweilSurjectivityᵈ )
 open import FLRP.KurzweilNetter.Blocks          using  ( module KNBlocks )
 open import FLRP.KurzweilNetter.Expansion       using  ( module KNExpansion )
 open import FLRP.KurzweilNetter.Translations    using  ( module KNTranslations )
@@ -308,7 +310,7 @@ canonical irredundant enumeration of each representation.
 One reading note, on what is proved where: the definitions below inhabit
 `KurzweilNetterDuality`{.AgdaFunction} *inside* this parameterized module, so
 this module's own result is conditional on its package.  The closed inhabitants
-live downstream ([FLRP.KurzweilSurjectivity][] discharges the surjectivity
+live downstream ([FLRP.KurzweilInterval.Surjectivity][] discharges the surjectivity
 family; [FLRP.KurzweilNetter.A5][] closes the theorem at `A₅`), and the
 registry's Entry 2 records the same reading.
 
@@ -335,6 +337,25 @@ module KurzweilNetterProof
   -- The Kurzweil–Netter duality theorem, conditional on the module's package.
   kurzweilNetterDuality : KurzweilNetterDuality
   kurzweilNetterDuality 𝑳 = kurzweilNetterDualityAt 𝑳
+```
+
+#### The theorem, closed over the simple-group package
+
+The four witnesses of the parameterized proof were the deliverable list of the argument; [FLRP.KurzweilInterval.Surjectivity][] proves the fourth from the first three, so the theorem closes over the package alone: a finite carrier and the nonabelian-simplicity bundle, with the nontriviality witness derived from the bundle's non-commuting pair.  Nothing else is assumed; [FLRP.KurzweilNetter.A5][] instantiates the package at the certified `A₅`.
+
+```agda
+module _ (𝒮@(𝑺 , _)  : Group 0ℓ 0ℓ)
+         (𝑭ₛ          : FiniteAlgebra 𝑺)
+         (nas         : Simple.IsNonabelianSimple 𝒮 0ℓ)
+  where
+
+  open Simple 𝒮 0ℓ using ( elt ; elt≉ε )
+
+  -- Kurzweil–Netter duality, from a finite nonabelian simple base group alone.
+  kurzweilNetterDuality-ofSimple : KurzweilNetterDuality
+  kurzweilNetterDuality-ofSimple =
+    KurzweilNetterProof.kurzweilNetterDuality 𝒮 𝑭ₛ (elt nas) (elt≉ε nas)
+      (kurzweilSurjectivityᵈ 𝒮 𝑭ₛ nas)
 ```
 
 --------------------------------------

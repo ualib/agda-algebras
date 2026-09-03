@@ -45,7 +45,7 @@ characters, and the formal treatment mirrors the split honestly:[^1]
    module shows the Layer-S form implies full excluded middle at level zero,
    so only the decidable form is provable, and it *is* proved: for a finite
    witnessed-nonabelian-simple base, the blockwise collapse that
-   [FLRP.KurzweilSurjectivity][] reads through this module's vocabulary
+   [FLRP.KurzweilInterval.Surjectivity][] reads through this module's vocabulary
    retires the entry and closes `kurzweilIntervalIso`{.AgdaFunction}'s
    decidable sibling unconditionally.
 
@@ -161,7 +161,7 @@ sibling quantifies instead over the decidable interval elements
 `Intervalᵈ`{.AgdaFunction} of [FLRP.Enforceable][]: the same Σ-form, taken over
 elements that carry a membership decider.  This is the form the Kurzweil–Netter
 route consumes, because every interval element it manipulates is the base-coset
-class of a *decidable* congruence, and it is the form [FLRP.KurzweilSurjectivity][]
+class of a *decidable* congruence, and it is the form [FLRP.KurzweilInterval.Surjectivity][]
 proves for a finite witnessed-nonabelian-simple base group, retiring Entry 4;
 the closing theorem of this module shows the Layer-S form above is not provable
 at all.
@@ -371,7 +371,7 @@ module ConsumerChecks (𝒮 : Group 0ℓ 0ℓ) (n : ℕ) where
   open KurzweilInterval 𝒮 n
   open CosetAction 𝑺ⁿ Diag Diag-isSubgroup using ( cosetAlgebra )
 
-  -- The Kurzweil-etter proof inhabits this by composing the WP-3 bridge with
+  -- The Kurzweil–Netter proof inhabits this by composing the WP-3 bridge with
   -- kurzweilIntervalIso.
   DualityConIso : Type (lsuc 0ℓ)
   DualityConIso = ConIso cosetAlgebra (dualLattice (EqLattice n))

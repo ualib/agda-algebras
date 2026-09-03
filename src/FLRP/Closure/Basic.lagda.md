@@ -112,7 +112,7 @@ Here we prove closure under dualization (the Kurzweil–Netter theorem) using
 [FLRP.KurzweilNetter.Duality][].  The parameters are the simple-group package of
 the proof module: a finite group with a nontriviality witness and the
 Kurzweil-surjectivity family in its decidable working form (Entry 4 of
-[FLRP.Assumptions][], now a theorem: [FLRP.KurzweilSurjectivity][] proves the
+[FLRP.Assumptions][], now a theorem: [FLRP.KurzweilInterval.Surjectivity][] proves the
 family for any finite witnessed-nonabelian-simple base, and
 [FLRP.KurzweilNetter.A5][] closes the composite at the certified `A₅`).
 
