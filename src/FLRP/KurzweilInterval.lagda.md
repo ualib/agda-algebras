@@ -71,7 +71,7 @@ open import Agda.Primitive using () renaming ( Set to Type )
 -- Imports from the Agda Standard Library ---------------------------------------
 open import Data.Empty        using ( ⊥-elim )
 open import Data.Fin.Patterns using ( 0F ; 1F )
-open import Data.Fin.Properties using ( _≟_ )
+open import Data.Fin.Properties using ( _≟_ ; all? )
 open import Data.Nat.Base     using ( ℕ )
 open import Data.Product      using ( Σ-syntax ; _×_ ; _,_ ; proj₁ ; proj₂ )
 open import Data.Sum.Base     using ( _⊎_ ; inj₁ ; inj₂ )
@@ -80,6 +80,7 @@ open import Relation.Binary   using ( Setoid )
 open import Relation.Binary.Definitions using ( _Respects_ )
 open import Relation.Binary.PropositionalEquality as ≡ using ()
 open import Relation.Nullary  using ( ¬_ ; Dec ; yes ; no )
+open import Relation.Nullary.Decidable using ( map′ ; _→-dec_ )
 open import Relation.Unary    using ( Pred ; _∈_ ; _⊆_ )
 
 -- Imports from the Agda Universal Algebra Library ------------------------------
@@ -100,6 +101,7 @@ open import FLRP.Enforceable                             using  ( module UpperIn
 open import FLRP.Problem                                 using  ( ConIso ; EM₀ ; WLEM₀
                                                                 ; EM₀→WLEM₀ )
 open import Setoid.Algebras                              using  ( 𝕌[_] ; 𝔻[_] ; Algebra)
+open import Setoid.Algebras.Finite                       using  ( FiniteAlgebra )
 open import Setoid.Congruences.Certificates.Schema       using  ( ParentVec ; parent )
 ```
 -->
@@ -127,6 +129,19 @@ module KurzweilInterval (𝒮@(𝑺 , _) : Group 0ℓ 0ℓ) (n : ℕ) where
   -- A partition subgroup, as an element of the interval [D , Sⁿ].
   toInterval : ParentVec n → Interval≈
   toInterval pv = mk (K pv) (K-isSubgroup pv) (Diag⊆K pv)
+```
+
+Over a finite base group, membership in a partition subgroup is a finite conjunction of decidable base equalities, so each partition subgroup is a *decidable* interval element; the expansion stage of the Kurzweil–Netter route and the decidable interval isomorphism both consume this decider.
+
+```agda
+  -- Membership in a partition subgroup is decidable over a finite base.
+  module _ (𝑭ₛ : FiniteAlgebra 𝑺) where
+
+    K-dec : (pv : ParentVec n) → ∀ x → Dec (x ∈ K pv)
+    K-dec pv x =
+      map′ (λ f {i} {j} → f i j) (λ g i j → g)
+        (all? (λ i → all? (λ j →
+          (parent pv i ≟ parent pv j) →-dec FiniteAlgebra._≟_ 𝑭ₛ (x i) (x j))))
 ```
 
 **Entry 4 of the assumptions registry** ([FLRP.Assumptions][]): every interval
