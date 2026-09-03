@@ -37,6 +37,10 @@ list.
       subgroups and their lattice;
    +  [Classical.Structures.Group.PartitionSubgroup][]:
       partition subgroups of a finite power;
+   +  [Classical.Structures.Group.PowerCollapse][]:
+      the blockwise collapse: every decidable subgroup between the diagonal
+      and a finite power of a nonabelian simple group is a partition
+      subgroup;
    +  [Classical.Structures.Group.Complements][]:
       permuting complements in an interval of a subgroup lattice;
    +  [Classical.Structures.Group.Dedekind][]: Dedekind's rule.
@@ -60,7 +64,10 @@ list.
       catalog entry consumes;
    +  [Classical.Structures.Group.Simple][]:
       simple groups, in implication form, and the nonabelian-simple interface;
-   +  [Classical.Structures.Group.Centralizer][]: centralizers.
+   +  [Classical.Structures.Group.Centralizer][]: centralizers;
+   +  [Classical.Structures.Group.Commutator][]:
+      commutators, their absorption laws, and the equivalence with the
+      commuting relation.
 
 +  **Cosets and group actions**.
 
@@ -90,6 +97,7 @@ open import Classical.Structures.Group.Basic                  public
 
 open import Classical.Structures.Group.AbelianGroup           public
 open import Classical.Structures.Group.Centralizer            public
+open import Classical.Structures.Group.Commutator             public
 open import Classical.Structures.Group.Complements            public
 open import Classical.Structures.Group.Complexes              public
 open import Classical.Structures.Group.Congruences            public
@@ -106,6 +114,7 @@ open import Classical.Structures.Group.NormalCore             public
 open import Classical.Structures.Group.NormalSubgroupLattice  public
 open import Classical.Structures.Group.PartitionSubgroup      public
 open import Classical.Structures.Group.Power                  public
+open import Classical.Structures.Group.PowerCollapse          public
 open import Classical.Structures.Group.Product                public
 open import Classical.Structures.Group.Simple                 public
 open import Classical.Structures.Group.SubgroupLattice        public

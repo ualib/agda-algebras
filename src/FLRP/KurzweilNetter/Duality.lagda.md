@@ -58,11 +58,13 @@ argument actually uses:
    construction's base-coset classes deliver.
 
 *Nonabelianness and simplicity of `S` enter only through the third item*;
-they are what makes Entry 4 true classically.  Thus no simplicity predicate is
-needed anywhere in the formal development.  Retiring Entry 4 and instantiating `𝒮`
-at a concrete finite nonabelian simple group such as `A₅` are tracked separately
-as follow-on work; on either completion this module's statements strengthen with
-no change to consumers.
+they are what makes the surjectivity family true.  Thus no simplicity predicate
+is needed anywhere in this module.  Both follow-ons have landed with no change
+here: [FLRP.KurzweilSurjectivity][] proves the family from the
+nonabelian-simplicity bundle and closes the theorem over the package
+(`kurzweilNetterDuality-ofSimple`{.AgdaFunction}), and
+[FLRP.KurzweilNetter.A5][] instantiates the package at the certified `A₅`
+(`kurzweilNetterDuality-A₅`{.AgdaFunction}, a closed inhabitant).
 
 #### What the proof does not assume
 
@@ -303,12 +305,12 @@ and finite signature from the expansion module, and the composite isomorphism.
 property witnesses of the deliverable list, and instantiates the glue at the
 canonical irredundant enumeration of each representation.
 
-One reading note, so the module cannot overstate itself: the definitions below
-inhabit `KurzweilNetterDuality`{.AgdaFunction} *inside* this parameterized
-module; the library holds no closed inhabitant of the statement, and Entry 4's
-decidable family is a genuine hypothesis of the result.  Entry 2 of [FLRP.Assumptions][] is
-thereby *reduced to Entry 4*, not discharged; the registry entry records the same
-reading.
+One reading note, on what is proved where: the definitions below inhabit
+`KurzweilNetterDuality`{.AgdaFunction} *inside* this parameterized module, so
+this module's own result is conditional on its package.  The closed inhabitants
+live downstream — [FLRP.KurzweilSurjectivity][] discharges the surjectivity
+family, and [FLRP.KurzweilNetter.A5][] closes the theorem at `A₅` — and the
+registry's Entry 2 records the same reading.
 
 ```agda
 module KurzweilNetterProof

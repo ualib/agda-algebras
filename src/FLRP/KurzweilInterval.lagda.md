@@ -32,23 +32,22 @@ characters, and the formal treatment mirrors the split honestly:[^1]
    prove, it is finite combinatorics, and it needs only a *nontrivial* base
    group ([Classical.Structures.Group.PartitionSubgroup][]).
 
-+  **Surjectivity is a registered hypothesis**.  That every respecting subgroup
-   between `D` and `Sⁿ` is a partition subgroup is the half where `S` must be a
-   finite nonabelian simple group; the sources cite it to Kurzweil's article
-   without reproof, and its formalization needs the normal-subgroup structure
-   theory of powers of a simple group (subdirect products, block inductions) that
-   the library does not yet have.  Per the `--safe` discipline it enters as the
-   explicit hypothesis `KurzweilSurjectivity`{.AgdaFunction}, registered as
-   **Entry 4** of [FLRP.Assumptions][]; it is stated in the Σ-form that
-   *hands the consumer the partition witness*, which is exactly what the
-   isomorphism's inverse map needs.  The Σ-form now comes in two layers: over
++  **Surjectivity is stated here, and proved at the decidable layer**.  That
+   every respecting subgroup between `D` and `Sⁿ` is a partition subgroup is
+   the half where `S` must be a finite nonabelian simple group; the sources
+   cite it to Kurzweil's article without reproof.  This module states it in
+   the Σ-form that *hands the consumer the partition witness*, which is
+   exactly what the isomorphism's inverse map needs, in two layers: over
    semantic interval elements (`KurzweilSurjectivity`{.AgdaFunction}, the
-   classical statement of record) and over decidable ones
-   (`KurzweilSurjectivityᵈ`{.AgdaFunction}, the working form the
-   Kurzweil–Netter route consumes).  The split is forced, not stylistic: the
-   closing theorem of this module shows the Layer-S form implies full excluded
-   middle at level zero, so the retirement of Entry 4, proving surjectivity
-   for a nonabelian simple base, can only ever land on the decidable form.
+   classical statement of record, **Entry 4** of [FLRP.Assumptions][]) and
+   over decidable ones (`KurzweilSurjectivityᵈ`{.AgdaFunction}, the working
+   form).  The split is forced, not stylistic: the closing theorem of this
+   module shows the Layer-S form implies full excluded middle at level zero,
+   so only the decidable form is provable — and it *is* proved, for a finite
+   witnessed-nonabelian-simple base, by the blockwise collapse that
+   [FLRP.KurzweilSurjectivity][] reads through this module's vocabulary,
+   retiring the entry and closing `kurzweilIntervalIso`{.AgdaFunction}'s
+   decidable sibling unconditionally.
 
 Given the hypothesis, `kurzweilIntervalIso`{.AgdaFunction} is a theorem:
 `[D , Sⁿ] ≅ (Eq n)′` in the `IntervalIso` presentation, with the dual order
@@ -162,9 +161,10 @@ sibling quantifies instead over the decidable interval elements
 `Intervalᵈ`{.AgdaFunction} of [FLRP.Enforceable][]: the same Σ-form, taken over
 elements that carry a membership decider.  This is the form the Kurzweil–Netter
 route consumes, because every interval element it manipulates is the base-coset
-class of a *decidable* congruence, and it is the form whose proof for a finite
-nonabelian simple base group retires Entry 4; the closing theorem of this
-module shows the Layer-S form above is not provable at all.
+class of a *decidable* congruence, and it is the form [FLRP.KurzweilSurjectivity][]
+proves for a finite witnessed-nonabelian-simple base group, retiring Entry 4;
+the closing theorem of this module shows the Layer-S form above is not provable
+at all.
 
 ```agda
   -- Kurzweil surjectivity, Layer-D form: the partition witness over interval

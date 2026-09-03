@@ -49,7 +49,7 @@ open import Data.List.Membership.Propositional    using () renaming ( _∈_ to _
 open import Data.List.Membership.Propositional.Properties
                                 using ( ∈-allFin ; ∈-filter⁺ ; ∈-filter⁻ )
 open import Data.Nat.Base       using ( ℕ ; zero ; suc ; _+_ ; _<_ ; s≤s )
-open import Data.Nat.Properties using ( <-cmp ; <-irrefl ; <-asym ; ≤⇒≯ ; ≤-reflexive
+open import Data.Nat.Properties using ( <-cmp ; <-irrefl ; ≤⇒≯ ; ≤-reflexive
                                       ; m<n⇒m<1+n ; +-suc ; +-identityʳ ; _<?_ )
                                 renaming ( _≟_ to _≟ℕ_ )
 open import Data.Product        using ( Σ-syntax ; ∃ ; _×_ ; _,_ ; proj₁ ; proj₂ )
@@ -118,8 +118,7 @@ module PowerCollapse
   open GroupProperties ⟨ 𝒮 ⟩ᵍᵖ     using  ( ε⁻¹≈ε )
   open GroupCongruences 𝒮          using  ( ∙⁻¹≈ε→≈ )
   open Commutator 𝒮                using  ( Commutes ; Commutes-congʳ ; comm
-                                          ; comm-cong ; comm-εˡ ; comm-εʳ
-                                          ; comm≈ε→commutes )
+                                          ; comm-εˡ ; comm-εʳ ; comm≈ε→commutes )
   open Commutator ⨅ᵍ-Group         using () renaming ( comm to commᴾ )
   open Simple 𝒮 0ℓ                 using  ( IsNonabelianSimple ; center
                                           ; center-trivial ; ≈-dec→Stable-≈ε

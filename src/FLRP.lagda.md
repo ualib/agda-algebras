@@ -58,9 +58,10 @@ Two standing warnings apply to everything under this namespace.
    explicit hypotheses (never postulates), keeping the tree honest under
    `--safe`; Entry 1 is the congruence-completeness bridge
    `CongruenceCompleteness`, the single Layer-S→Layer-D assumption of ADR-008;
-   Entry 2 (Kurzweil–Netter duality) is reduced to Entry 4 (Kurzweil
-   surjectivity) by the proof in [FLRP.KurzweilNetter][], and no longer enters
-   anywhere as an independent hypothesis.
+   Entry 2 (Kurzweil–Netter duality) is reduced by the proof in
+   [FLRP.KurzweilNetter][] to Entry 4 (Kurzweil surjectivity), which
+   [FLRP.KurzweilSurjectivity][] proves in its decidable working form, so both
+   entries are retired and neither enters anywhere as a hypothesis.
 +  [FLRP.Closure][]: the WP-5 closure toolkit: product and ordinal-sum
    closure of `Representableᵈ` (issue #456), the adjoin-a-new-extremum
    corollaries at `chain₂`, and the duality theorem `dual-Representableᵈ`,
@@ -70,7 +71,13 @@ Two standing warnings apply to everything under this namespace.
    for congruences, the expansion of the coset algebra on `Sᵐ/D` by lifted
    translations, and the assembled theorem `kurzweilNetterDuality`,
    parameterized by exactly the properties of the simple group the argument
-   uses.
+   uses — closed at the certified `A₅` by `kurzweilNetterDuality-A₅`.
++  [FLRP.KurzweilSurjectivity][]: Kurzweil surjectivity, proved: the
+   blockwise collapse read through the interval vocabulary, retiring Entry 4
+   in its decidable working form, closing Kurzweil's lemma
+   `[D , Sⁿ]ᵈ ≅ Eq(n)′` unconditionally, and discharging the surjectivity
+   hypothesis of the Kurzweil–Netter route for every finite
+   witnessed-nonabelian-simple base group.
 +  [FLRP.LayerBridge][]: the cross-layer bridge: under the congruence-completeness
    assumption, the semantic and decidable congruence posets are order-isomorphic
    (`conDecIso`), whence `Representable 𝑳 ↔ Representableᵈ 𝑳`.
@@ -141,6 +148,7 @@ open import FLRP.Representable  public
 open import FLRP.Assumptions    public
 open import FLRP.Closure        public
 open import FLRP.KurzweilInterval public
+open import FLRP.KurzweilSurjectivity public
 open import FLRP.KurzweilNetter public
 open import FLRP.LayerBridge    public
 open import FLRP.WreathNoGo     public

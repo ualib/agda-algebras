@@ -53,14 +53,16 @@ constructive data reconstitutes the full semantic
 `FiniteCongruences`{.AgdaRecord}, so the assumption is exactly the classical delta
 between the two layers, no more, no less.
 
-**Entry 2** (*reduced to Entry 4*): Kurzweil–Netter duality.  The class of
+**Entry 2** (*closed*): Kurzweil–Netter duality.  The class of
 representable lattices is closed under dualization.[^3]  Registered here as
 `KurzweilNetterDuality`{.AgdaFunction} while a formal reproof was pending, the
-entry is **retired as an independent assumption**: issue #502's
-[FLRP.KurzweilNetter.Duality][] proves the statement from a package of
-properties of the base group the argument actually uses, so the closed result
-is *conditional*; the only remaining classical ingredient is Entry 4.  The
-statement types remain here as the theorem's canonical name.[^4]
+entry is **retired**: issue #502's [FLRP.KurzweilNetter.Duality][] proves the
+statement from a package of properties of the base group the argument actually
+uses, the retirement of Entry 4 discharged the last classical ingredient of
+that package, and [FLRP.KurzweilNetter.A5][] instantiates it at the certified
+`A₅`, so the library holds a *closed* inhabitant,
+`kurzweilNetterDuality-A₅`{.AgdaFunction}.  The statement types remain here as
+the theorem's canonical name.[^4]
 
 **Entry 3**: the Pálfy–Pudlák theorem.  Every finite lattice is a congruence
 lattice of a finite algebra *if and only if* every finite lattice is an interval in
@@ -78,7 +80,9 @@ partition subgroup `K_π`; this is the surjectivity half of Kurzweil's lemma,
 `KurzweilSurjectivityAt`{.AgdaFunction}, in the witness-producing form defined by
 [FLRP.KurzweilInterval][], with the decidable working form
 `KurzweilSurjectivityᵈAt`{.AgdaFunction} beside it; the Layer-S form is excluded
-middle (that module's no-go theorem), so consumers take the working form.
+middle (that module's no-go theorem), so consumers take the working form.  The
+entry is **retired**: [FLRP.KurzweilSurjectivity][] proves the working form for
+every finite witnessed-nonabelian-simple base group.
 
 **Entry 5**: Kurzweil's wreath interval.  For a core-free representation
 `[H , G] ≅ 𝑳` of a lattice with two distinct elements (`G` finite) and a finite
@@ -241,23 +245,22 @@ algebra with lifted operations.
    ([Classical.Structures.Lattice.Dual][]).  The ∀-form
    `KurzweilNetterDuality`{.AgdaFunction} is the full theorem.
 
-+  **Status: reduced to Entry 4** (issue #502).
++  **Status: closed** (issues #502, #522, #527).
    `kurzweilNetterDuality`{.AgdaFunction} of [FLRP.KurzweilNetter.Duality][]
    proves `KurzweilNetterDuality`{.AgdaFunction} *from a package of witnesses*
    for the base group (a finite carrier with decidable equality, a
    nontriviality witness, and Entry 4's surjectivity family), and
    `dual-Representableᵈ`{.AgdaFunction} of [FLRP.Closure][] is rewired to that
-   proof, taking the same package.  So the library holds no *closed* inhabitant
-   of `KurzweilNetterDuality`{.AgdaFunction} — the closed form of the proof
-   quantifies over the package — and the result stays conditional exactly on
-   Entry 4 plus the instantiation of `𝒮` at a concrete finite nonabelian
-   simple group.  What is retired is Entry 2's role as an *independent*
-   hypothesis: nothing consumes it any more, and the definitions below remain
-   as the canonical *statement* of the theorem (they are its conclusion's
-   type).  The residue is tracked by issue #522 (Entry 4, scoped to the decidable
-   form by issue #566) and issue #527 (the `A₅` instantiation; the simplicity
-   predicates it once awaited landed with
-   [Classical.Structures.Group.Simple][]).
+   proof, taking the same package.  The package is now fully dischargeable:
+   [FLRP.KurzweilSurjectivity][] proves the surjectivity family from a
+   `FiniteAlgebra`{.AgdaRecord} witness and the nonabelian-simplicity bundle
+   (`kurzweilNetterDuality-ofSimple`{.AgdaFunction}), and
+   [FLRP.KurzweilNetter.A5][] instantiates the bundle at the certified `A₅`,
+   producing the closed `kurzweilNetterDuality-A₅`{.AgdaFunction}.  The
+   parameterized module remains the canonical proof, so any other certified
+   nonabelian simple base closes the theorem the same way, and the definitions
+   below remain as the canonical *statement* of the theorem (they are its
+   conclusion's type).
 
 +  **Layer**.  The statement is at Layer D (`Representableᵈ`{.AgdaRecord}),
    the program's working notion per [ADR-008][]; the classical statement is the
@@ -355,7 +358,8 @@ remaining classical delta.
    decidable interval elements `Intervalᵈ`{.AgdaFunction} of
    [FLRP.Enforceable][]; every consumer takes it, and the Layer-S statement
    remains registered as the classical statement of record, exactly as
-   Entry 2's types remain as its statement.
+   Entry 2's types remain as its statement; the working form is proved, per
+   the status note next.
 
 +  **Side condition**.  The statement type is defined for an arbitrary
    `𝒮 : Group 0ℓ 0ℓ`, and for arbitrary `𝒮` it is *false* (for `S = ℤ₃` and
@@ -372,20 +376,18 @@ remaining classical delta.
    condition a formal antecedent of a proved theorem is this entry's
    retirement.
 
-+  **Status and retirement path**.  A classically proven theorem imported
-   pending formalization, with the provable target now precisely scoped: the
-   decidable form.  The missing mathematics is the normal-subgroup structure
-   theory of powers of a nonabelian simple group (normal subgroups of `Sⁿ` are
-   partial products; subdirect subgroups containing the diagonal collapse
-   blockwise), applied over interval elements whose membership is decided,
-   where the partition is computable as the kernel meet of the member tuples;
-   the selecting predicates and the certified instance the proof needs are in
-   place ([Classical.Structures.Group.Simple][],
-   [Examples.Classical.Groups.AlternatingGroup5][]).  On completion
-   `KurzweilSurjectivityᵈAt`{.AgdaFunction} holds outright at simple
-   instantiations, this entry retires, and the Kurzweil–Netter route of issue
-   #502 becomes a closed theorem there; the Layer-S form stays behind as the
-   classical statement, priced exactly by the no-go.
++  **Status: retired** (issue #522).  `kurzweilSurjectivityᵈ`{.AgdaFunction}
+   of [FLRP.KurzweilSurjectivity][] proves the working form for every finite
+   witnessed-nonabelian-simple base group, via the blockwise collapse of
+   [Classical.Structures.Group.PowerCollapse][]: the partition is the joint
+   kernel of the members, computed by enumerating the power, and the killed
+   projections of the subgroup receive every simplicity application, so the
+   whole argument stays at the base-group level.  The former side condition is
+   now the formal antecedent (`IsNonabelianSimple`{.AgdaRecord} of
+   [Classical.Structures.Group.Simple][]), `kurzweilIntervalIsoᵈ`{.AgdaFunction}
+   holds outright, and the Kurzweil–Netter route of issue #502 is a closed
+   theorem at the certified `A₅` (issue #527).  The Layer-S form stays behind
+   as the classical statement, priced exactly by the no-go.
 
 +  **Layer**.  Layer S for the statement of record; Layer D
    (`Intervalᵈ`{.AgdaFunction}) for the working form, per the sibling
@@ -403,8 +405,8 @@ KurzweilSurjectivityAt : Group 0ℓ 0ℓ → ℕ → Type (lsuc 0ℓ)
 KurzweilSurjectivityAt 𝒮 n = KurzweilInterval.KurzweilSurjectivity 𝒮 n
 
 -- Entry 4, working form (Layer D): the same Σ-form, over interval elements
--- carrying a membership decider.  This is the form consumers take, and the
--- form whose proof at a finite nonabelian simple 𝒮 retires the entry.
+-- carrying a membership decider.  This is the form consumers take, proved at
+-- every finite witnessed-nonabelian-simple 𝒮 by FLRP.KurzweilSurjectivity.
 KurzweilSurjectivityᵈAt : Group 0ℓ 0ℓ → ℕ → Type (lsuc 0ℓ)
 KurzweilSurjectivityᵈAt 𝒮 n = KurzweilInterval.KurzweilSurjectivityᵈ 𝒮 n
 ```
@@ -455,7 +457,8 @@ special case, without reproof).
 +  **Side conditions**.  The statement type is defined for an arbitrary
    `𝒮 : Group 0ℓ 0ℓ`, and the classical theorem asserts the instances where `𝒮` is
    *finite nonabelian simple*; consumers must instantiate it there.  Nonabelian
-   simplicity is a prose side condition exactly as in Entry 4, with the same
+   simplicity is a prose side condition, as it was in Entry 4 before that
+   entry's retirement made it a formal antecedent, with the same
    formal selecting notion ([Classical.Structures.Group.Simple][]) and the same
    certified admissible instance: the `A₅` of
    [Examples.Classical.Groups.AlternatingGroup5][], whose
@@ -486,8 +489,9 @@ special case, without reproof).
        since `H` is closed under inverses.  The same finiteness machinery
        discharges the wreath-finiteness field;
 
-   2.  The interval-isomorphism half retires on the structure theory that also
-       retires Entry 4, extended from the power `Sⁿ` to the wreath `Sⁿ ⋊ G`.
+   2.  The interval-isomorphism half retires on the structure theory that
+       retired Entry 4 ([Classical.Structures.Group.PowerCollapse][]), extended
+       from the power `Sⁿ` to the wreath `Sⁿ ⋊ G`.
        Retiring the entry upgrades Lemma 3.3
        (`cfIE-must-have-wreaths`{.AgdaFunction}) and its corollaries with no
        change to consumers.
