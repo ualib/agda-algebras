@@ -13,7 +13,7 @@ This is the [FLRP.KurzweilNetter.Expansion][] module of the [Agda Universal Alge
 This is the heart of the Kurzweil–Netter construction.  The transitive `Sᵐ`-set on
 `Sᵐ / D` has (decidable) congruence lattice isomorphic to the interval `[D , Sᵐ]`
 ([FLRP.Bridge][]), which is dually isomorphic to the partition lattice `Eq(m)`
-([FLRP.KurzweilInterval][]).
+([FLRP.KurzweilNetter.Interval][]).
 
 **Expanding** the coset algebra by the lifted maps `x ↦ x ∘ t`, one per member `t`
 of a given family of index maps, cuts the congruences down to the partitions
@@ -64,7 +64,7 @@ Three design points, each forced by a constraint worth recording.
    of a *decidable* congruence, delivered with its decider by the Layer-D bridge
    map `toᵈ`{.AgdaFunction}, so the semantic form is never needed; that matters,
    because the semantic form is unprovable outright (the no-go of
-   [FLRP.KurzweilInterval][]).
+   [FLRP.KurzweilNetter.Interval][]).
 
 <!--
 ```agda
@@ -102,7 +102,7 @@ open import Classical.Structures.Group.GSet          using  ( module CosetAction
 open import Classical.Structures.Interpret           using  ( interp-cong )
 open import Classical.Structures.Lattice.Partitions  using  ( SameBlock ; _⊑_ ; _≈ᵖ_ )
 open import FLRP.Bridge                              using  ( module Bridge )
-open import FLRP.KurzweilInterval                    using  ( module KurzweilInterval )
+open import FLRP.KurzweilNetter.Interval                    using  ( module KurzweilInterval )
 open import FLRP.KurzweilNetter.Invariance           using  ( Inv )
 open import FLRP.Representable                       using  ( _⊆ᵈ_ ; _≑ᵈ_ )
 open import Order.Iso                                using  ( OrderIso )
@@ -162,7 +162,7 @@ module KNExpansion
 
 Membership in the diagonal is a finite conjunction of decidable base-group
 equalities, so it is decidable; the partition subgroups have their decider
-`K-dec`{.AgdaFunction} upstream in [FLRP.KurzweilInterval][], shared with the
+`K-dec`{.AgdaFunction} upstream in [FLRP.KurzweilNetter.Interval][], shared with the
 decidable interval isomorphism.
 
 ```agda

@@ -1,14 +1,14 @@
 ---
 layout: default
-file: "src/FLRP/KurzweilInterval.lagda.md"
-title: "FLRP.KurzweilInterval module (The Agda Universal Algebra Library)"
+file: "src/FLRP/KurzweilNetter/Interval.lagda.md"
+title: "FLRP.KurzweilNetter.Interval module (The Agda Universal Algebra Library)"
 date: "2026-07-27"
 author: "the agda-algebras development team"
 ---
 
 ### Kurzweil's interval `[D , Sⁿ] ≅ Eq(n)′`
 
-This is the [FLRP.KurzweilInterval][] module of the [Agda Universal Algebra Library][].
+This is the [FLRP.KurzweilNetter.Interval][] module of the [Agda Universal Algebra Library][].
 
 This module packages the group infrastructure of
 
@@ -45,7 +45,7 @@ characters, and the formal treatment mirrors the split honestly:[^1]
    module shows the Layer-S form implies full excluded middle at level zero,
    so only the decidable form is provable, and it *is* proved: for a finite
    witnessed-nonabelian-simple base, the blockwise collapse that
-   [FLRP.KurzweilInterval.Surjectivity][] reads through this module's vocabulary
+   [FLRP.KurzweilNetter.Surjectivity][] reads through this module's vocabulary
    retires the entry and closes `kurzweilIntervalIso`{.AgdaFunction}'s
    decidable sibling unconditionally.
 
@@ -63,7 +63,7 @@ Kurzweil–Netter duality proof will call.
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
-module FLRP.KurzweilInterval where
+module FLRP.KurzweilNetter.Interval where
 
 open import Agda.Primitive using () renaming ( Set to Type )
 
@@ -161,7 +161,7 @@ sibling quantifies instead over the decidable interval elements
 `Intervalᵈ`{.AgdaFunction} of [FLRP.Enforceable][]: the same Σ-form, taken over
 elements that carry a membership decider.  This is the form the Kurzweil–Netter
 route consumes, because every interval element it manipulates is the base-coset
-class of a *decidable* congruence, and it is the form [FLRP.KurzweilInterval.Surjectivity][]
+class of a *decidable* congruence, and it is the form [FLRP.KurzweilNetter.Surjectivity][]
 proves for a finite witnessed-nonabelian-simple base group, retiring Entry 4;
 the closing theorem of this module shows the Layer-S form above is not provable
 at all.

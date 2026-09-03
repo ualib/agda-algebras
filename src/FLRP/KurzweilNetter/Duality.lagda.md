@@ -29,7 +29,7 @@ lectures).  Given a representation `𝑳 ≅ DecCon 𝑨`, proceed as follows:
    ([FLRP.KurzweilNetter.Expansion][], composing the WP-3 bridge
    `DecCon (Sᵐ ↷ Sᵐ/D) ≅ [D , Sᵐ]` of [FLRP.Bridge][] with the
    decidable-instance passage of Kurzweil's interval isomorphism
-   `[D , Sᵐ] ≅ Eq(m)′` of [FLRP.KurzweilInterval][]);
+   `[D , Sᵐ] ≅ Eq(m)′` of [FLRP.KurzweilNetter.Interval][]);
 
 3. compose the two, and the original representation, into
    `DecCon 𝑬 ≅ dualLattice 𝑳`, the record `dual-representation`{.AgdaFunction} below.
@@ -54,13 +54,13 @@ argument actually uses:
    Entry 4 of [FLRP.Assumptions][]): every *decidable* subgroup in
    `[D , Sⁿ]` is a partition subgroup.  The semantic form is deliberately
    not consumed: it is unprovable outright (the no-go of
-   [FLRP.KurzweilInterval][]), while the decidable form is exactly what the
+   [FLRP.KurzweilNetter.Interval][]), while the decidable form is exactly what the
    construction's base-coset classes deliver.
 
 *Nonabelianness and simplicity of `S` enter only through the third item*;
 they are what makes the surjectivity family true.  Thus no simplicity predicate
 is needed anywhere in this module.  Both follow-ons have landed with no change
-here: [FLRP.KurzweilInterval.Surjectivity][] proves the family from the
+here: [FLRP.KurzweilNetter.Surjectivity][] proves the family from the
 nonabelian-simplicity bundle and closes the theorem over the package
 (`kurzweilNetterDuality-ofSimple`{.AgdaFunction}), and
 [FLRP.KurzweilNetter.A5][] instantiates the package at the certified `A₅`
@@ -109,7 +109,7 @@ open import FLRP.Assumptions                    using  ( KurzweilNetterDualityAt
                                                        ; KurzweilNetterDuality
                                                        ; KurzweilSurjectivityᵈAt )
 open import Classical.Structures.Group.Simple   using  ( module Simple )
-open import FLRP.KurzweilInterval.Surjectivity  using  ( kurzweilSurjectivityᵈ )
+open import FLRP.KurzweilNetter.Surjectivity  using  ( kurzweilSurjectivityᵈ )
 open import FLRP.KurzweilNetter.Blocks          using  ( module KNBlocks )
 open import FLRP.KurzweilNetter.Expansion       using  ( module KNExpansion )
 open import FLRP.KurzweilNetter.Translations    using  ( module KNTranslations )
@@ -310,7 +310,7 @@ canonical irredundant enumeration of each representation.
 One reading note, on what is proved where: the definitions below inhabit
 `KurzweilNetterDuality`{.AgdaFunction} *inside* this parameterized module, so
 this module's own result is conditional on its package.  The closed inhabitants
-live downstream ([FLRP.KurzweilInterval.Surjectivity][] discharges the surjectivity
+live downstream ([FLRP.KurzweilNetter.Surjectivity][] discharges the surjectivity
 family; [FLRP.KurzweilNetter.A5][] closes the theorem at `A₅`), and the
 registry's Entry 2 records the same reading.
 
@@ -341,7 +341,7 @@ module KurzweilNetterProof
 
 #### The theorem, closed over the simple-group package
 
-The four witnesses of the parameterized proof were the deliverable list of the argument; [FLRP.KurzweilInterval.Surjectivity][] proves the fourth from the first three, so the theorem closes over the package alone: a finite carrier and the nonabelian-simplicity bundle, with the nontriviality witness derived from the bundle's non-commuting pair.  Nothing else is assumed; [FLRP.KurzweilNetter.A5][] instantiates the package at the certified `A₅`.
+The four witnesses of the parameterized proof were the deliverable list of the argument; [FLRP.KurzweilNetter.Surjectivity][] proves the fourth from the first three, so the theorem closes over the package alone: a finite carrier and the nonabelian-simplicity bundle, with the nontriviality witness derived from the bundle's non-commuting pair.  Nothing else is assumed; [FLRP.KurzweilNetter.A5][] instantiates the package at the certified `A₅`.
 
 ```agda
 module _ (𝒮@(𝑺 , _)  : Group 0ℓ 0ℓ)

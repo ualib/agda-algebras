@@ -78,10 +78,10 @@ partition subgroup `K_π`; this is the surjectivity half of Kurzweil's lemma,
 `[D , Sⁿ] ≅ Eq(n)′`, whose dual-embedding half is proved outright in
 [Classical.Structures.Group.PartitionSubgroup][].  It is registered as
 `KurzweilSurjectivityAt`{.AgdaFunction}, in the witness-producing form defined by
-[FLRP.KurzweilInterval][], with the decidable working form
+[FLRP.KurzweilNetter.Interval][], with the decidable working form
 `KurzweilSurjectivityᵈAt`{.AgdaFunction} beside it; the Layer-S form is excluded
 middle (that module's no-go theorem), so consumers take the working form.  The
-entry is **retired**: [FLRP.KurzweilInterval.Surjectivity][] proves the working form for
+entry is **retired**: [FLRP.KurzweilNetter.Surjectivity][] proves the working form for
 every finite witnessed-nonabelian-simple base group.
 
 **Entry 5**: Kurzweil's wreath interval.  For a core-free representation
@@ -115,7 +115,7 @@ open import Classical.Small.Structures.Lattice    using  ( Lattice )
 open import Classical.Structures.Group.Basic      using  ( Group )
 open import Classical.Structures.Lattice.Dual     using  ( dualLattice )
 open import FLRP.Enforceable                      using  ( GroupFLRP-Statement )
-open import FLRP.KurzweilInterval                 using  ( module KurzweilInterval )
+open import FLRP.KurzweilNetter.Interval                 using  ( module KurzweilInterval )
 open import FLRP.WreathNoGo                       using  ( KurzweilWreathInterval )
 open import FLRP.Problem                          using  ( FLRP-Statement )
 open import FLRP.Representable                    using  ( Representableᵈ )
@@ -252,7 +252,7 @@ algebra with lifted operations.
    nontriviality witness, and Entry 4's surjectivity family), and
    `dual-Representableᵈ`{.AgdaFunction} of [FLRP.Closure][] is rewired to that
    proof, taking the same package.  The package is now fully dischargeable:
-   [FLRP.KurzweilInterval.Surjectivity][] proves the surjectivity family from a
+   [FLRP.KurzweilNetter.Surjectivity][] proves the surjectivity family from a
    `FiniteAlgebra`{.AgdaRecord} witness and the nonabelian-simplicity bundle
    (`kurzweilNetterDuality-ofSimple`{.AgdaFunction}), and
    [FLRP.KurzweilNetter.A5][] instantiates the bundle at the certified `A₅`,
@@ -344,12 +344,12 @@ remaining classical delta.
    element of the respecting upper interval `[D , Sⁿ]` (an
    `Interval≈`{.AgdaFunction} of the `UpperInterval`{.AgdaModule} at the
    diagonal) is extensionally `K_π` for a *produced* partition `π` — the Σ-form
-   defined in [FLRP.KurzweilInterval][], which is precisely what the inverse map
+   defined in [FLRP.KurzweilNetter.Interval][], which is precisely what the inverse map
    of `kurzweilIntervalIso`{.AgdaFunction} consumes.
 
 +  **Strength**.  The Layer-S form is not a constructively open statement
    awaiting proof: `kurzweilSurjectivity→EM`{.AgdaFunction} of
-   [FLRP.KurzweilInterval][] shows that at exponent `2`, over any base group
+   [FLRP.KurzweilNetter.Interval][] shows that at exponent `2`, over any base group
    with an apartness witness, it implies full excluded middle for level-zero
    types, by feeding the produced partition an oracle subgroup.  It therefore
    caps the `WLEM₀`{.AgdaFunction} no-go family of [FLRP.Problem][] from
@@ -377,7 +377,7 @@ remaining classical delta.
    retirement.
 
 +  **Status: retired** (issue #522).  `kurzweilSurjectivityᵈ`{.AgdaFunction}
-   of [FLRP.KurzweilInterval.Surjectivity][] proves the working form for every finite
+   of [FLRP.KurzweilNetter.Surjectivity][] proves the working form for every finite
    witnessed-nonabelian-simple base group, via the blockwise collapse of
    [Classical.Structures.Group.PowerCollapse][]: the partition is the joint
    kernel of the members, computed by enumerating the power, and the killed
@@ -400,13 +400,13 @@ remaining classical delta.
 -- Entry 4, statement of record (Layer S): every subgroup in [D , Sⁿ] is a
 -- partition subgroup, with the partition produced as data.  Classically true
 -- for 𝒮 a finite nonabelian simple group; unprovable outright (the no-go of
--- FLRP.KurzweilInterval), and consumed by nothing.
+-- FLRP.KurzweilNetter.Interval), and consumed by nothing.
 KurzweilSurjectivityAt : Group 0ℓ 0ℓ → ℕ → Type (lsuc 0ℓ)
 KurzweilSurjectivityAt 𝒮 n = KurzweilInterval.KurzweilSurjectivity 𝒮 n
 
 -- Entry 4, working form (Layer D): the same Σ-form, over interval elements
 -- carrying a membership decider.  This is the form consumers take, proved at
--- every finite witnessed-nonabelian-simple 𝒮 by FLRP.KurzweilInterval.Surjectivity.
+-- every finite witnessed-nonabelian-simple 𝒮 by FLRP.KurzweilNetter.Surjectivity.
 KurzweilSurjectivityᵈAt : Group 0ℓ 0ℓ → ℕ → Type (lsuc 0ℓ)
 KurzweilSurjectivityᵈAt 𝒮 n = KurzweilInterval.KurzweilSurjectivityᵈ 𝒮 n
 ```
