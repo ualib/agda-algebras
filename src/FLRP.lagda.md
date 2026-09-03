@@ -71,7 +71,7 @@ Two standing warnings apply to everything under this namespace.
    for congruences, the expansion of the coset algebra on `Sᵐ/D` by lifted
    translations, and the assembled theorem `kurzweilNetterDuality`,
    parameterized by exactly the properties of the simple group the argument
-   uses — closed at the certified `A₅` by `kurzweilNetterDuality-A₅`.
+   uses; it is closed at the certified `A₅` by `kurzweilNetterDuality-A₅`.
 +  [FLRP.KurzweilSurjectivity][]: Kurzweil surjectivity, proved: the
    blockwise collapse read through the interval vocabulary, retiring Entry 4
    in its decidable working form, closing Kurzweil's lemma

@@ -308,8 +308,8 @@ canonical irredundant enumeration of each representation.
 One reading note, on what is proved where: the definitions below inhabit
 `KurzweilNetterDuality`{.AgdaFunction} *inside* this parameterized module, so
 this module's own result is conditional on its package.  The closed inhabitants
-live downstream — [FLRP.KurzweilSurjectivity][] discharges the surjectivity
-family, and [FLRP.KurzweilNetter.A5][] closes the theorem at `A₅` — and the
+live downstream ([FLRP.KurzweilSurjectivity][] discharges the surjectivity
+family; [FLRP.KurzweilNetter.A5][] closes the theorem at `A₅`), and the
 registry's Entry 2 records the same reading.
 
 ```agda

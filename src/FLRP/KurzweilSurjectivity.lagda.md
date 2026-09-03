@@ -12,8 +12,8 @@ This is the [FLRP.KurzweilSurjectivity][] module of the [Agda Universal Algebra 
 
 This module discharges the working form of **Entry 4** of [FLRP.Assumptions][]: for a finite nonabelian simple base group, every decidable interval element of `[D , Sⁿ]` is a partition subgroup, with the partition produced as data.  The mathematics is the blockwise collapse of [Classical.Structures.Group.PowerCollapse][]; here the collapse is read through the interval vocabulary and packaged in the three forms the FLRP program consumes:
 
-+  `kurzweilSurjectivityᵈ`{.AgdaFunction}: the surjectivity family itself, `KurzweilSurjectivityᵈAt 𝒮 n` for every exponent — the hypothesis of the Kurzweil–Netter route, now a theorem;
-+  `kurzweilIntervalIsoᵈ`{.AgdaFunction}: **Kurzweil's lemma**, unconditionally — the decidable interval `[D , Sⁿ]` is isomorphic to the dual of the partition lattice `Eq(n)`;
++  `kurzweilSurjectivityᵈ`{.AgdaFunction}: the surjectivity family itself, `KurzweilSurjectivityᵈAt 𝒮 n` for every exponent, the hypothesis of the Kurzweil–Netter route, now a theorem;
++  `kurzweilIntervalIsoᵈ`{.AgdaFunction}: **Kurzweil's lemma**, unconditionally: the decidable interval `[D , Sⁿ]` is isomorphic to the dual of the partition lattice `Eq(n)`;
 +  `kurzweilNetterDuality-ofSimple`{.AgdaFunction}: the **Kurzweil–Netter duality theorem** with the surjectivity hypothesis discharged, leaving only the base-group package: any finite witnessed-nonabelian-simple group closes the theorem.
 
 The hypotheses of all three are a `FiniteAlgebra`{.AgdaRecord} witness and the `IsNonabelianSimple`{.AgdaRecord} bundle of [Classical.Structures.Group.Simple][]; the nontriviality witness the interval isomorphism needs is derived from the bundle's non-commuting pair.  The Layer-S form of Entry 4 stays behind in the registry as the classical statement of record: it is excluded middle (the no-go of [FLRP.KurzweilInterval][]), so this decidable form is not one honest layer of two but the *only* provable layer, exactly as the registry's strength note records.

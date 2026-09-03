@@ -43,10 +43,10 @@ characters, and the formal treatment mirrors the split honestly:[^1]
    over decidable ones (`KurzweilSurjectivityᵈ`{.AgdaFunction}, the working
    form).  The split is forced, not stylistic: the closing theorem of this
    module shows the Layer-S form implies full excluded middle at level zero,
-   so only the decidable form is provable — and it *is* proved, for a finite
-   witnessed-nonabelian-simple base, by the blockwise collapse that
-   [FLRP.KurzweilSurjectivity][] reads through this module's vocabulary,
-   retiring the entry and closing `kurzweilIntervalIso`{.AgdaFunction}'s
+   so only the decidable form is provable, and it *is* proved: for a finite
+   witnessed-nonabelian-simple base, the blockwise collapse that
+   [FLRP.KurzweilSurjectivity][] reads through this module's vocabulary
+   retires the entry and closes `kurzweilIntervalIso`{.AgdaFunction}'s
    decidable sibling unconditionally.
 
 Given the hypothesis, `kurzweilIntervalIso`{.AgdaFunction} is a theorem:
