@@ -1,21 +1,21 @@
 ---
 layout: default
-file: "src/FLRP/KurzweilInterval/Surjectivity.lagda.md"
-title: "FLRP.KurzweilInterval.Surjectivity module (The Agda Universal Algebra Library)"
+file: "src/FLRP/KurzweilNetter/Surjectivity.lagda.md"
+title: "FLRP.KurzweilNetter.Surjectivity module (The Agda Universal Algebra Library)"
 date: "2026-09-02"
 author: "the agda-algebras development team"
 ---
 
 ### Kurzweil surjectivity, proved: the retirement of Entry 4
 
-This is the [FLRP.KurzweilInterval.Surjectivity][] module of the [Agda Universal Algebra Library][].
+This is the [FLRP.KurzweilNetter.Surjectivity][] module of the [Agda Universal Algebra Library][].
 
-This module discharges the working form of **Entry 4** of [FLRP.Assumptions][]: for a finite nonabelian simple base group, every decidable interval element of `[D , Sⁿ]` is a partition subgroup, with the partition produced as data.  [FLRP.KurzweilInterval][] states Kurzweil's lemma; this companion proves its surjectivity half, by reading the blockwise collapse of [Classical.Structures.Group.PowerCollapse][] through the interval vocabulary, and packages it in the two forms native to the lemma:
+This module discharges the working form of **Entry 4** of [FLRP.Assumptions][]: for a finite nonabelian simple base group, every decidable interval element of `[D , Sⁿ]` is a partition subgroup, with the partition produced as data.  [FLRP.KurzweilNetter.Interval][] states Kurzweil's lemma; this companion proves its surjectivity half, by reading the blockwise collapse of [Classical.Structures.Group.PowerCollapse][] through the interval vocabulary, and packages it in the two forms native to the lemma:
 
 +  `kurzweilSurjectivityᵈ`{.AgdaFunction}: the surjectivity family itself, `KurzweilSurjectivityᵈAt 𝒮 n` for every exponent, the hypothesis of the Kurzweil–Netter route, now a theorem;
 +  `kurzweilIntervalIsoᵈ`{.AgdaFunction}: **Kurzweil's lemma**, unconditionally: the decidable interval `[D , Sⁿ]` is isomorphic to the dual of the partition lattice `Eq(n)`.
 
-The hypotheses of both are a `FiniteAlgebra`{.AgdaRecord} witness and the `IsNonabelianSimple`{.AgdaRecord} bundle of [Classical.Structures.Group.Simple][]; the nontriviality witness the interval isomorphism needs is derived from the bundle's non-commuting pair.  The Layer-S form of Entry 4 stays behind in the registry as the classical statement of record: it is excluded middle (the no-go of [FLRP.KurzweilInterval][]), so this decidable form is not one honest layer of two but the *only* provable layer, exactly as the registry's strength note records.
+The hypotheses of both are a `FiniteAlgebra`{.AgdaRecord} witness and the `IsNonabelianSimple`{.AgdaRecord} bundle of [Classical.Structures.Group.Simple][]; the nontriviality witness the interval isomorphism needs is derived from the bundle's non-commuting pair.  The Layer-S form of Entry 4 stays behind in the registry as the classical statement of record: it is excluded middle (the no-go of [FLRP.KurzweilNetter.Interval][]), so this decidable form is not one honest layer of two but the *only* provable layer, exactly as the registry's strength note records.
 
 What is deliberately *not* here is any consequence for the Kurzweil–Netter duality theorem: that theorem lives in the [FLRP.KurzweilNetter][] namespace, and its closure over the base-group package (`kurzweilNetterDuality-ofSimple`{.AgdaFunction}) sits at the bottom of [FLRP.KurzweilNetter.Duality][], consuming this module's family.
 
@@ -23,7 +23,7 @@ What is deliberately *not* here is any consequence for the Kurzweil–Netter dua
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
-module FLRP.KurzweilInterval.Surjectivity where
+module FLRP.KurzweilNetter.Surjectivity where
 
 -- Imports from the Agda Standard Library ---------------------------------------
 open import Data.Nat.Base    using ( ℕ )
@@ -41,7 +41,7 @@ open import Classical.Structures.Lattice.Dual        using  ( dualLattice
                                                             ; module LatticeDual )
 open import Classical.Structures.Lattice.Partitions  using  ( EqLattice ; _⊑_ ; ⊑→≤ ; ≤→⊑ )
 open import FLRP.Assumptions                         using  ( KurzweilSurjectivityᵈAt )
-open import FLRP.KurzweilInterval                    using  ( module KurzweilInterval )
+open import FLRP.KurzweilNetter.Interval                    using  ( module KurzweilInterval )
 open import Order.Iso                                using  ( OrderIso )
 open import Setoid.Algebras.Basic                    using  ( 𝕌[_] ; 𝔻[_] )
 open import Setoid.Algebras.Finite                   using  ( FiniteAlgebra )
@@ -74,7 +74,7 @@ module _ (𝒮@(𝑺 , _)  : Group 0ℓ 0ℓ)
 
 #### Kurzweil's lemma, unconditionally
 
-With surjectivity a theorem, the conditional interval isomorphism of [FLRP.KurzweilInterval][] closes over the decidable carrier: `[D , Sⁿ]` with decidable membership is dually isomorphic to the partition lattice.  The maps and round trips are those of the conditional isomorphism; the deciders ride along, produced by `K-dec`{.AgdaFunction} on the way in and forgotten on the way out.
+With surjectivity a theorem, the conditional interval isomorphism of [FLRP.KurzweilNetter.Interval][] closes over the decidable carrier: `[D , Sⁿ]` with decidable membership is dually isomorphic to the partition lattice.  The maps and round trips are those of the conditional isomorphism; the deciders ride along, produced by `K-dec`{.AgdaFunction} on the way in and forgotten on the way out.
 
 ```agda
   module _ (n : ℕ) where

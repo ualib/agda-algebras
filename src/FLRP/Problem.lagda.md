@@ -402,7 +402,7 @@ WLEM₀ = ∀ P → ¬ P ⊎ ¬ ¬ P
 
 The *strong* formula, full excluded middle for level-zero types, is recorded
 beside it.  No result of this module reaches it; it is the conclusion of the
-surjectivity no-go of [FLRP.KurzweilInterval][], and the generic weakening
+surjectivity no-go of [FLRP.KurzweilNetter.Interval][], and the generic weakening
 `EM₀→WLEM₀`{.AgdaFunction} places that conclusion above every
 `WLEM₀`{.AgdaFunction}-strength obstruction in this family.
 

@@ -221,4 +221,4 @@ Reflection upgrades mutual inclusion of partition subgroups to equality of parti
 
 [^2]: `K` is also *onto* the interval if `G` is a nonabelian simple group; this is
       **Kurzweil's lemma**, registered as an explicit hypothesis where the FLRP
-      program consumes it ([FLRP.KurzweilInterval][]).
+      program consumes it ([FLRP.KurzweilNetter.Interval][]).
