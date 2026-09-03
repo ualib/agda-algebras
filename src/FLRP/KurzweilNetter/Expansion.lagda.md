@@ -13,7 +13,7 @@ This is the [FLRP.KurzweilNetter.Expansion][] module of the [Agda Universal Alge
 This is the heart of the Kurzweil–Netter construction.  The transitive `Sᵐ`-set on
 `Sᵐ / D` has (decidable) congruence lattice isomorphic to the interval `[D , Sᵐ]`
 ([FLRP.Bridge][]), which is dually isomorphic to the partition lattice `Eq(m)`
-([FLRP.KurzweilInterval][]).
+([FLRP.KurzweilNetter.Interval][]).
 
 **Expanding** the coset algebra by the lifted maps `x ↦ x ∘ t`, one per member `t`
 of a given family of index maps, cuts the congruences down to the partitions
@@ -64,7 +64,7 @@ Three design points, each forced by a constraint worth recording.
    of a *decidable* congruence, delivered with its decider by the Layer-D bridge
    map `toᵈ`{.AgdaFunction}, so the semantic form is never needed; that matters,
    because the semantic form is unprovable outright (the no-go of
-   [FLRP.KurzweilInterval][]).
+   [FLRP.KurzweilNetter.Interval][]).
 
 <!--
 ```agda
@@ -89,8 +89,7 @@ open import Level                                  using  ( 0ℓ )
 open import Relation.Binary                        using  ( Setoid ; IsEquivalence )
 open import Relation.Binary.PropositionalEquality as ≡ using  ( _≡_ ; cong )
 open import Relation.Nullary                       using  ( ¬_ ; Dec ; yes ; no )
-open import Relation.Nullary.Decidable             using  ( does ; dec-true ; dec-false
-                                                          ; map′ ; _→-dec_ )
+open import Relation.Nullary.Decidable             using  ( does ; dec-true ; dec-false )
 open import Relation.Unary                         using  ( _∈_ ; _⊆_ )
 
 -- Imports from the Agda Universal Algebra Library ------------------------------
@@ -103,7 +102,7 @@ open import Classical.Structures.Group.GSet          using  ( module CosetAction
 open import Classical.Structures.Interpret           using  ( interp-cong )
 open import Classical.Structures.Lattice.Partitions  using  ( SameBlock ; _⊑_ ; _≈ᵖ_ )
 open import FLRP.Bridge                              using  ( module Bridge )
-open import FLRP.KurzweilInterval                    using  ( module KurzweilInterval )
+open import FLRP.KurzweilNetter.Interval                    using  ( module KurzweilInterval )
 open import FLRP.KurzweilNetter.Invariance           using  ( Inv )
 open import FLRP.Representable                       using  ( _⊆ᵈ_ ; _≑ᵈ_ )
 open import Order.Iso                                using  ( OrderIso )
@@ -159,23 +158,17 @@ module KNExpansion
     G = 𝕌[ Sⁿ ]
 ```
 
-#### Decidability of the diagonal and of the partition subgroups
+#### Decidability of the diagonal
 
-Membership in the diagonal and in a partition subgroup is a finite conjunction
-of decidable base-group equalities, so both are decidable (the Layer-D
-presentation data of the interval elements the construction manipulates).
+Membership in the diagonal is a finite conjunction of decidable base-group
+equalities, so it is decidable; the partition subgroups have their decider
+`K-dec`{.AgdaFunction} upstream in [FLRP.KurzweilNetter.Interval][], shared with the
+decidable interval isomorphism.
 
 ```agda
   -- The diagonal has decidable membership.
   Diag-dec : ∀ x → Dec (x ∈ Diag)
   Diag-dec x = all? (λ i → all? (λ j → 𝑭ₛ ._≟_ (x i) (x j)))
-    where open FiniteAlgebra
-
-  -- Each partition subgroup has decidable membership.
-  K-dec : (pv : ParentVec m) → ∀ x → Dec (x ∈ K pv)
-  K-dec pv x =
-    map′ (λ f {i} {j} → f i j) (λ g i j → g)
-      (all? (λ i → all? (λ j → (parent pv i ≟ᶠ parent pv j) →-dec 𝑭ₛ ._≟_ (x i) (x j))))
     where open FiniteAlgebra
 ```
 
@@ -427,8 +420,8 @@ lift-compatibility supplied by the easy half of the invariance transfer.
   private
     -- the coset relation of an invariant partition is closed under the lifts
     θK-comp : (pv : ParentVec m) → ((τ : Fin T) → Inv (tr τ) pv) → (τ : Fin T)
-      → ∀ {x y} → ConRel (B.fromᵈ (toInterval pv , K-dec pv)) x y
-      → ConRel (B.fromᵈ (toInterval pv , K-dec pv)) (x ∘ tr τ) (y ∘ tr τ)
+      → ∀ {x y} → ConRel (B.fromᵈ (toInterval pv , K-dec 𝑭ₛ pv)) x y
+      → ConRel (B.fromᵈ (toInterval pv , K-dec 𝑭ₛ pv)) (x ∘ tr τ) (y ∘ tr τ)
     θK-comp pv invτ τ {x} {y} mem =
       K-respects pv (λ i → sym (quot-comp x y (tr τ) i))
         (Inv→K-closed (tr τ) pv (invτ τ) mem)
@@ -466,7 +459,7 @@ The two maps of the isomorphism.
 
   -- ... and an invariant partition yields a congruence of the expanded algebra.
   fromInvPart : InvPart → DecCon expandedAlgebra 0ℓ
-  fromInvPart (pv , invτ) = extend (B.fromᵈ (toInterval pv , K-dec pv)) (θK-comp pv invτ)
+  fromInvPart (pv , invτ) = extend (B.fromᵈ (toInterval pv , K-dec 𝑭ₛ pv)) (θK-comp pv invτ)
 ```
 
 **Monotonicity**.  Forward: a containment of congruences passes through the bridge

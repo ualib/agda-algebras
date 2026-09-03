@@ -112,10 +112,13 @@ Here we prove closure under dualization (the Kurzweil–Netter theorem) using
 [FLRP.KurzweilNetter.Duality][].  The parameters are the simple-group package of
 the proof module: a finite group with a nontriviality witness and the
 Kurzweil-surjectivity family in its decidable working form (Entry 4 of
-[FLRP.Assumptions][], classically true for `𝒮` finite nonabelian simple).
+[FLRP.Assumptions][], now a theorem: [FLRP.KurzweilNetter.Surjectivity][] proves the
+family for any finite witnessed-nonabelian-simple base, and
+[FLRP.KurzweilNetter.A5][] closes the composite at the certified `A₅`).
 
-Every consumer displays its remaining classical debt (Entry 4 at the chosen group)
-in its own type, exactly as the registry discipline demands.
+The parameterized form is kept so that census consumers can thread any base
+group's package explicitly; a consumer wanting no package at all takes the
+closed `kurzweilNetterDuality-A₅`{.AgdaFunction} instead.
 
 ```agda
 module _ ((𝑺 , eqns) : Group 0ℓ 0ℓ) where
