@@ -11,9 +11,9 @@ author: "the agda-algebras development team"
 This is the [Classical.Structures.Group.RegularAction][] module of the [Agda Universal Algebra Library][].
 
 Instantiating the coset G-set of [Classical.Structures.Group.GSet][] at the
-**trivial subgroup** gives the (left-)regular action `G ↷ G`, packaged as a
-unary algebra whose operations are the left translations `x ↦ g ∙ x`.  This
-module records the classical correspondence for that instance.
+trivial subgroup gives the (left-)regular action `G ↷ G`, packaged as a unary
+algebra whose operations are the left translations `x ↦ g ∙ x`.  This module
+records the classical correspondence for that instance.
 
 +  **congruence ⟶ subgroup** (`Kθ`{.AgdaFunction}): the `θ`-class of the identity
    is a subgroup, decided (at Layer D) by `θ`'s own decision procedure at the pair
@@ -116,10 +116,8 @@ identifies exactly the `≈`-equal elements (via one group computation), and the
 
 ```agda
 module Regular {α ρ : Level} (𝒢@(𝑮 , _) : Group α ρ) where
-  open Setoid 𝔻[ 𝑮 ]            using ( _≈_ )
-                                renaming ( refl to ≈refl ; sym to ≈sym ; trans to ≈trans )
-  open Group-Op 𝒢               using  ( _∙_ ; ε ; _⁻¹ ; ∙-cong ; idˡ-law
-                                       ; idʳ-law ; invˡ-law )
+  open Setoid 𝔻[ 𝑮 ] using ( _≈_ ) renaming ( refl to ≈refl ; sym to ≈sym ; trans to ≈trans )
+  open Group-Op 𝒢 using  ( _∙_ ; ε ; _⁻¹ ; ∙-cong ; idˡ-law ; idʳ-law ; invˡ-law )
   open GroupProperties ⟨ 𝒢 ⟩ᵍᵖ  using  ( ε⁻¹≈ε ; \\-leftDividesˡ )
 
   -- The trivial subgroup (the ≈-class of ε) and its coset machinery.
@@ -129,8 +127,8 @@ module Regular {α ρ : Level} (𝒢@(𝑮 , _) : Group α ρ) where
   H₁-sg : IsSubgroup 𝒢 H₁
   H₁-sg = trivialSubgroup 𝒢 .proj₂
 
-  open Coset 𝒢 H₁ H₁-sg               using ( _∼_ ; ≈⇒∼ ; ∼-dec )
-  open CosetAction 𝒢 H₁ H₁-sg public  using ( cosetAlgebra ; cosetAlgebra-FiniteAlgebra )
+  open Coset 𝒢 H₁ H₁-sg using ( _∼_ ; ≈⇒∼ ; ∼-dec )
+  open CosetAction 𝒢 H₁ H₁-sg public using ( cosetAlgebra ; cosetAlgebra-FiniteAlgebra )
 
   -- Membership in the trivial subgroup is decided by one equality test, so a
   -- finite group makes the regular action a finite algebra.
@@ -206,7 +204,7 @@ as in the general bridge, unchanged by the specialization.
     -- At Layer D: a decidable congruence decides membership in its own
     -- ε-class, by running its decision procedure at (ε , g).
     Kθᵈ : DecCon cosetAlgebra ℓ → DecSubgroup 𝒢 ℓ
-    Kθᵈ d = Kθ-subgroup (proj₁ d) , λ g → proj₂ d ε g
+    Kθᵈ (θ , θdec) = Kθ-subgroup θ , λ g → θdec ε g
 ```
 
 #### Subgroup to congruence: the coset partition
@@ -222,23 +220,25 @@ that no call site re-instantiates them.
 ```agda
     -- The left-coset relation of K: x and y agree modulo K.
     cosetRel : Subgroup 𝒢 ℓ → 𝕌[ 𝑮 ] → 𝕌[ 𝑮 ] → Type ℓ
-    cosetRel K x y = x ⁻¹ ∙ y ∈ proj₁ K
+    cosetRel 𝑲 x y = x ⁻¹ ∙ y ∈ 𝑲 .proj₁
 
     opaque
-      cosetIsCongruence : (K : Subgroup 𝒢 ℓ) → IsCongruence cosetAlgebra (cosetRel K)
-      cosetIsCongruence K = mkcon reflx equivx compatx
+      cosetIsCongruence : (𝑲 : Subgroup 𝒢 ℓ) → IsCongruence cosetAlgebra (cosetRel 𝑲)
+      cosetIsCongruence 𝑲 = mkcon reflx equivx compatx
         where
-        K-sg : IsSubgroup 𝒢 (proj₁ K)
-        K-sg = proj₂ K
+        K : Pred 𝕌[ 𝑮 ] ℓ
+        K = 𝑲 .proj₁
+        K-sg : IsSubgroup 𝒢 K
+        K-sg = 𝑲 .proj₂
 
-        reflx : {a b : 𝕌[ 𝑮 ]} → a ∼ b → cosetRel K a b
+        reflx : {a b : 𝕌[ 𝑮 ]} → a ∼ b → cosetRel 𝑲 a b
         reflx a∼b = IsSubgroup.respects K-sg (≈sym a∼b) (IsSubgroup.ε-closed K-sg)
 
-        equivx : IsEquivalence (cosetRel K)
-        equivx = Coset.∼-isEquivalence 𝒢 (proj₁ K) K-sg
+        equivx : IsEquivalence (cosetRel 𝑲)
+        equivx = Coset.∼-isEquivalence 𝒢 K K-sg
 
-        compatx : cosetAlgebra ∣≈ cosetRel K
-        compatx g h = Coset.∼-congˡ 𝒢 (proj₁ K) K-sg g (h 0F)
+        compatx : cosetAlgebra ∣≈ cosetRel 𝑲
+        compatx g h = Coset.∼-congˡ 𝒢 K K-sg g (h 0F)
 
     cosetCon : Subgroup 𝒢 ℓ → Con cosetAlgebra ℓ
     cosetCon K = cosetRel K , cosetIsCongruence K
@@ -246,7 +246,7 @@ that no call site re-instantiates them.
     -- At Layer D: the coset partition of a decidable subgroup is decided by
     -- one group multiplication and one membership test.
     cosetConᵈ : DecSubgroup 𝒢 ℓ → DecCon cosetAlgebra ℓ
-    cosetConᵈ K = cosetCon (proj₁ K) , λ x y → proj₂ K (x ⁻¹ ∙ y)
+    cosetConᵈ 𝑲 = cosetCon (𝑲 .proj₁) , λ x y → 𝑲 .proj₂ (x ⁻¹ ∙ y)
 ```
 
 #### Mutual inverseness and monotonicity
@@ -275,13 +275,13 @@ correspondence is an order isomorphism between `Con (G ↷ G)` and `Sub(G)`.
       -- Round trip on subgroups: the ε-class of the coset partition is K.
       Kθ-cosetCon :  (K : Subgroup 𝒢 ℓ)
         → (Kθ (cosetCon K) ⊆ proj₁ K) × (proj₁ K ⊆ Kθ (cosetCon K))
-      Kθ-cosetCon K = fwd , bwd
+      Kθ-cosetCon 𝑲@(K , K-sg) = fwd , bwd
         where
-        fwd : Kθ (cosetCon K) ⊆ proj₁ K
-        fwd {g} p = IsSubgroup.respects (proj₂ K) (ε⁻¹∙ g) p
+        fwd : Kθ (cosetCon 𝑲) ⊆ K
+        fwd {g} p = IsSubgroup.respects K-sg (ε⁻¹∙ g) p
 
-        bwd : proj₁ K ⊆ Kθ (cosetCon K)
-        bwd {g} p = IsSubgroup.respects (proj₂ K) (≈sym (ε⁻¹∙ g)) p
+        bwd : K ⊆ Kθ (cosetCon 𝑲)
+        bwd {g} p = IsSubgroup.respects K-sg (≈sym (ε⁻¹∙ g)) p
 
       -- Subgroup containment forwards to coset-partition containment ...
       cosetCon-mono :  (K L : Subgroup 𝒢 ℓ) → proj₁ K ⊆ proj₁ L
@@ -290,7 +290,7 @@ correspondence is an order isomorphism between `Con (G ↷ G)` and `Sub(G)`.
 
       -- ... and reflects back, through the ε-class.
       cosetCon-reflect :  (K L : Subgroup 𝒢 ℓ) → cosetCon K ⊑ cosetCon L
-        → proj₁ K ⊆ proj₁ L
+        →  K .proj₁ ⊆ L .proj₁
       cosetCon-reflect (_ , Ksub) (_ , Lsub) sub {x} x∈K =
         IsSubgroup.respects Lsub (ε⁻¹∙ x)
           (sub (IsSubgroup.respects Ksub (≈sym (ε⁻¹∙ x)) x∈K))
