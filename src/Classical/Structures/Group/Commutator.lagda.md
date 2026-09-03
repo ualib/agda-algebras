@@ -53,8 +53,7 @@ module Commutator {α ρ : Level} (𝒢 : Group α ρ) where
     𝑮 = proj₁ 𝒢
     G = 𝕌[ 𝑮 ]
 
-  open Setoid 𝔻[ 𝑮 ]            using  ( _≈_ )
-                                renaming  ( refl to ≈refl ; sym to ≈sym ; trans to ≈trans )
+  open Setoid 𝔻[ 𝑮 ]            using  ( _≈_ ) renaming  ( refl to ≈refl )
   open SetoidReasoning 𝔻[ 𝑮 ]
   open Group-Op 𝒢               using  ( _∙_ ; ε ; _⁻¹ ; ∙-cong ; ⁻¹-cong ; assoc-law
                                         ; idˡ-law ; idʳ-law ; invˡ-law ; invʳ-law )

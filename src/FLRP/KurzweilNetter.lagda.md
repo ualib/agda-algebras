@@ -27,7 +27,10 @@ the taking of lattice duals.  It is assembled from the following submodules:
 +  [FLRP.KurzweilNetter.Duality][]: the composite theorem
    `kurzweilNetterDuality`{.AgdaFunction}, retiring Entry 2 of
    [FLRP.Assumptions][] to a proof from Entry 4 and the properties of a finite
-   nontrivial group.
+   nontrivial group;
++  [FLRP.KurzweilNetter.A5][]: the instantiation at the certified `A₅`:
+   `kurzweilNetterDuality-A₅`{.AgdaFunction}, a closed inhabitant of the
+   theorem, together with the per-exponent surjectivity family.
 
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
@@ -39,6 +42,7 @@ open import FLRP.KurzweilNetter.Blocks        public
 open import FLRP.KurzweilNetter.Translations  public
 open import FLRP.KurzweilNetter.Expansion     public
 open import FLRP.KurzweilNetter.Duality       public
+open import FLRP.KurzweilNetter.A5            public
 ```
 
 --------------------------------------
