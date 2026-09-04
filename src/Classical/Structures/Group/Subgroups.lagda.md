@@ -13,29 +13,34 @@ This is the [Classical.Structures.Group.Subgroups][] module of the [Agda Univers
 For a group `𝑮`{.AgdaBound} presented as a Σ-typed structure over
 [`Sig-Group`][Classical.Signatures.Group] (per [Classical.Structures.Group][]), a
 **subgroup** is a subset of the carrier that is closed under the three basic
-operations — that is, a *subuniverse* of the underlying algebra in the sense of
-[Setoid.Subalgebras.Subuniverses][].  This module generalizes the concrete treatment
-of the Klein four-group in [Examples.Setoid.SubgroupLattice][] to an arbitrary group.
+operations; that is, a *subuniverse* of the underlying algebra in the sense of
+[Setoid.Subalgebras.Subuniverses][].
 
-Because the carrier of a setoid algebra comes with a setoid equality `_≈_`{.AgdaFunction},
-a subset that is to play the role of a subgroup in *theorems* (conjugation, cosets,
-Dedekind's rule) must also be compatible with that equality.  We therefore package a
-subgroup predicate as a record `IsSubgroup`{.AgdaRecord} with two fields:
+This module generalizes the concrete treatment of the Klein four-group in
+[Examples.Setoid.SubgroupLattice][] to an arbitrary group.
 
-+  `respects`{.AgdaField} — the predicate respects the setoid equality (`B Respects _≈_`);
-+  `isSubuniverse`{.AgdaField} — the predicate is closed under the interpreted operations.
+Because the carrier of a setoid algebra comes with a setoid equality
+`_≈_`{.AgdaFunction}, a subset that is to play the role of a subgroup in
+theorems (conjugation, cosets, Dedekind's rule) must also be compatible with
+that equality.  We therefore package a subgroup predicate as a record
+`IsSubgroup`{.AgdaRecord} with two fields:
 
-The first field is invisible in the classical (`_≡_`-setoid) case — where it holds by
-`subst`{.AgdaFunction} — and is exactly what setoid-based group theory needs; the second
-field alone already suffices to place the subgroup in the subuniverse lattice of
-[Setoid.Subalgebras.CompleteLattice][] (see [Classical.Structures.Group.SubgroupLattice][]).
++  `respects`{.AgdaField}: the predicate respects the setoid equality (`B Respects _≈_`);
++  `isSubuniverse`{.AgdaField}: the predicate is closed under the interpreted operations.
+
+The first field is invisible in the classical (`_≡_`-setoid) case, where it holds by
+`subst`{.AgdaFunction}, and is exactly what setoid-based group theory needs.
+
+The second field alone already suffices to place the subgroup in the subuniverse
+lattice of [Setoid.Subalgebras.CompleteLattice][] (see
+[Classical.Structures.Group.SubgroupLattice][]).
 
 The module also provides the *curried closure toolkit*: a subuniverse of a group
 algebra is closed under the curried `_∙_`{.AgdaFunction}, contains `ε`{.AgdaFunction},
 and is closed under `_⁻¹`{.AgdaFunction}; and conversely those three closure properties
 (together with `respects`{.AgdaField}) make a predicate a subgroup
-(`mkIsSubgroup`{.AgdaFunction}).  The trivial subgroup `{ x ∣ x ≈ ε }` and the full
-subgroup close the module.
+(`mkIsSubgroup`{.AgdaFunction}).  The trivial subgroup `{ x ∣ x ≈ ε }` and the
+full subgroup close the module.
 
 <!--
 ```agda
@@ -88,20 +93,20 @@ module _ (𝑮 : Group α ρ) where
 
   open Setoid 𝔻[ 𝑨 ]  using ( _≈_ )
                       renaming ( refl to ≈refl ; sym to ≈sym ; trans to ≈trans )
-  open Group-Op 𝑮     using ( _∙_ ; ε ; _⁻¹ ; ∙-cong ; ⁻¹-cong ; idˡ-law )
+  open Group-Op 𝑮 using ( _∙_ ; ε ; _⁻¹ ; ∙-cong ; ⁻¹-cong ; idˡ-law )
   open GroupProperties ⟨ 𝑮 ⟩ᵍᵖ using ( ε⁻¹≈ε )
 
   -- The binary operation on an arbitrary 2-tuple is the curried ∙ of its components.
   interp-tuple-∙ : (a : Fin 2 → A) → (∙-Op ^ 𝑨) a ≈ a 0F ∙ a 1F
-  interp-tuple-∙ a = interp-cong 𝑨 ∙-Op (λ { 0F → ≈refl ; 1F → ≈refl })
+  interp-tuple-∙ a = interp-cong 𝑨 ∙-Op λ { 0F → ≈refl ; 1F → ≈refl }
 
   -- The nullary operation on an arbitrary 0-tuple is the identity element ε.
   interp-tuple-ε : (a : Fin 0 → A) → (ε-Op ^ 𝑨) a ≈ ε
-  interp-tuple-ε a = interp-cong 𝑨 ε-Op (λ ())
+  interp-tuple-ε a = interp-cong 𝑨 ε-Op λ ()
 
   -- The unary operation on an arbitrary 1-tuple is the curried ⁻¹ of its component.
   interp-tuple-⁻¹ : (a : Fin 1 → A) → (⁻¹-Op ^ 𝑨) a ≈ a 0F ⁻¹
-  interp-tuple-⁻¹ a = interp-cong 𝑨 ⁻¹-Op (λ { 0F → ≈refl })
+  interp-tuple-⁻¹ a = interp-cong 𝑨 ⁻¹-Op λ { 0F → ≈refl }
 ```
 
 #### The curried closure toolkit
@@ -199,7 +204,7 @@ not be decidable.
 
 #### The trivial and full subgroups
 
-The trivial subgroup is the ≈-class of the identity, `{ x ∣ x ≈ ε }` — over a setoid
+The trivial subgroup is the ≈-class of the identity, `{ x ∣ x ≈ ε }`; over a setoid
 carrier the *class*, not the syntactic singleton, is the right notion.  The full
 subgroup is the whole carrier.
 

@@ -11,21 +11,23 @@ author: "the agda-algebras development team"
 This is the [Classical.Structures.Group.TableGroup][] module of the [Agda Universal Algebra Library][].
 
 The worked Cayley-table groups of [Examples.Classical.Groups][] discharge
-associativity by brute decision — a cubic sweep, `n³` equality tests.  At
-`n = 6` (the symmetric group `S₃`) that is 216 tests and instantaneous; at
-`n = 60` (the alternating group `A₅` needed by the filter-ideal census
-entries, issue #530) it is 216 000 tests, each through three table lookups,
-and the sweep dominates type-checking.  This module removes the cubic sweep:
-when the group is presented **with a faithful permutation action** — each
-element `i` as the vector `elt i` of images of a permutation of `Fin d` — the
-associativity of the multiplication table follows from two *quadratic* checks:
+associativity by brute decision, a cubic sweep involving `n³` equality tests.
+At `n = 6` (the symmetric group `S₃`) that is 216 tests and instantaneous; at
+`n = 60` (the alternating group `A₅` needed by the filter-ideal census entries[^1])
+it is 216,000 tests, each through three table lookups, and the sweep dominates
+type-checking.
+
+This module removes the cubic sweep: when the group is presented *with a faithful
+permutation action*, presenting each element `i` as the vector `elt i` of images
+of a permutation of `Fin d`, then the associativity of the multiplication table
+follows from two *quadratic* checks:
 
 +  `elt`{.AgdaBound} is injective (the action is faithful), and
 +  `elt`{.AgdaBound} sends table products to compositions
-   (`elt (mul i j) ≡ compose (elt i) (elt j)`).
+   (`elt (mul i j) ≡ (elt i) ⨁ (elt j)`).
 
 Composition of functions is associative for free
-(`compose-assoc`{.AgdaFunction}, three `tabulate`/`lookup` steps), so the
+(`⨁-assoc`{.AgdaFunction}, three `tabulate`/`lookup` steps), so the
 table inherits associativity through injectivity.  Both hypotheses are
 decidable (`elt-inj?`{.AgdaFunction}, `mul-hom?`{.AgdaFunction}), so a
 concrete instance discharges them with `from-yes`{.AgdaFunction} — `n²`
@@ -78,12 +80,12 @@ A permutation of `Fin d` is presented as its vector of images; composition is
 three applications of the `tabulate`/`lookup` round trip.
 
 ```agda
-compose : {d : ℕ} → Vec (Fin d) d → Vec (Fin d) d → Vec (Fin d) d
-compose u v = tabulate (λ p → lookup u (lookup v p))
+_⨁_ : {d : ℕ} → Vec (Fin d) d → Vec (Fin d) d → Vec (Fin d) d
+u ⨁ v = tabulate (λ p → lookup u (lookup v p))
 
-compose-assoc :  {d : ℕ} (u v w : Vec (Fin d) d)
-  →              compose (compose u v) w ≡ compose u (compose v w)
-compose-assoc u v w = trans
+⨁-assoc :  {d : ℕ} (u v w : Vec (Fin d) d)
+  →              (u ⨁ v) ⨁ w ≡ u ⨁ (v ⨁ w)
+⨁-assoc u v w = trans
   (tabulate-cong (λ p → lookup∘tabulate (λ q → lookup u (lookup v q)) (lookup w p)))
   (sym (tabulate-cong (λ p → cong (lookup u) (lookup∘tabulate (λ q → lookup v (lookup w q)) p))))
 ```
@@ -107,8 +109,8 @@ module TableGroupBuilder
   elt-inj? = allᶠ? (λ i → allᶠ? (λ j → ≡-dec _≟ᶠ_ (elt i) (elt j) →-dec (i ≟ᶠ j)))
 
   -- The table computes composition, as a decidable statement.
-  mul-hom? : Dec (∀ i j → elt (mul i j) ≡ compose (elt i) (elt j))
-  mul-hom? = allᶠ? (λ i → allᶠ? (λ j → ≡-dec _≟ᶠ_ (elt (mul i j)) (compose (elt i) (elt j))))
+  mul-hom? : Dec (∀ i j → elt (mul i j) ≡ elt i ⨁ elt j)
+  mul-hom? = allᶠ? (λ i → allᶠ? (λ j → ≡-dec _≟ᶠ_ (elt (mul i j)) (elt i ⨁ elt j)))
 ```
 
 Given the two action hypotheses and the four linear laws, the group is
@@ -117,7 +119,7 @@ assembled; associativity never runs the cubic sweep.
 ```agda
   module Build
     (inj   : ∀ i j → elt i ≡ elt j → i ≡ j)
-    (hom   : ∀ i j → elt (mul i j) ≡ compose (elt i) (elt j))
+    (hom   : ∀ i j → elt (mul i j) ≡ elt i ⨁ elt j)
     (idˡ   : ∀ a → mul e a ≡ a)
     (idʳ   : ∀ a → mul a e ≡ a)
     (invˡ  : ∀ a → mul (inv a) a ≡ e)
@@ -127,9 +129,9 @@ assembled; associativity never runs the cubic sweep.
     -- Associativity of the table, through the faithful action.
     mul-assoc : ∀ i j k → mul (mul i j) k ≡ mul i (mul j k)
     mul-assoc i j k = inj _ _ (trans (hom (mul i j) k) (trans
-      (cong (λ z → compose z (elt k)) (hom i j)) (trans
-      (compose-assoc (elt i) (elt j) (elt k)) (trans
-      (cong (compose (elt i)) (sym (hom j k)))
+      (cong (λ z → z ⨁ elt k) (hom i j)) (trans
+      (⨁-assoc (elt i) (elt j) (elt k)) (trans
+      (cong (elt i ⨁_) (sym (hom j k)))
       (sym (hom i (mul j k)))))))
 
     -- The group on carrier Fin n.
@@ -200,3 +202,5 @@ membership test is one vector lookup.
 ```
 
 --------------------------------------
+
+[^1]: See Issue #530.

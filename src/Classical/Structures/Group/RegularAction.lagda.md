@@ -127,14 +127,15 @@ module Regular {α ρ : Level} (𝒢@(𝑮 , _) : Group α ρ) where
   H₁-sg : IsSubgroup 𝒢 H₁
   H₁-sg = trivialSubgroup 𝒢 .proj₂
 
-  open Coset 𝒢 H₁ H₁-sg using ( _∼_ ; ≈⇒∼ ; ∼-dec )
+  open Coset 𝒢 H₁ H₁-sg using ( _∼_ ; ≈⇒∼ ; ∼-dec ; ∼-refl )
   open CosetAction 𝒢 H₁ H₁-sg public using ( cosetAlgebra ; cosetAlgebra-FiniteAlgebra )
 
   -- Membership in the trivial subgroup is decided by one equality test, so a
   -- finite group makes the regular action a finite algebra.
   regular-FiniteAlgebra : FiniteAlgebra 𝑮 → FiniteAlgebra cosetAlgebra
   regular-FiniteAlgebra fin =
-    cosetAlgebra-FiniteAlgebra fin (∼-dec (λ x → FiniteAlgebra._≟_ fin x ε))
+    cosetAlgebra-FiniteAlgebra fin (∼-dec (_≟ ε))
+    where open FiniteAlgebra fin
 ```
 
 #### Elementary facts about a congruence of the regular action
@@ -179,7 +180,8 @@ as in the general bridge, unchanged by the specialization.
 
     private
       Kθ-ε : (θ : Con cosetAlgebra ℓ) → ε ∈ Kθ θ
-      Kθ-ε (_ , θcon) = IsEquivalence.refl (is-equivalence θcon)
+      Kθ-ε θ = θ-refl θ ∼-refl
+      --  IsEquivalence.refl (is-equivalence θcon)
 
       Kθ-∙ : (θ : Con cosetAlgebra ℓ) {x y : 𝕌[ 𝑮 ]} → x ∈ Kθ θ → y ∈ Kθ θ → x ∙ y ∈ Kθ θ
       Kθ-∙ θ {x} {y} εx εy =
@@ -204,7 +206,7 @@ as in the general bridge, unchanged by the specialization.
     -- At Layer D: a decidable congruence decides membership in its own
     -- ε-class, by running its decision procedure at (ε , g).
     Kθᵈ : DecCon cosetAlgebra ℓ → DecSubgroup 𝒢 ℓ
-    Kθᵈ (θ , θdec) = Kθ-subgroup θ , λ g → θdec ε g
+    Kθᵈ (θ , θdec) = Kθ-subgroup θ , θdec ε
 ```
 
 #### Subgroup to congruence: the coset partition
@@ -224,21 +226,21 @@ that no call site re-instantiates them.
 
     opaque
       cosetIsCongruence : (𝑲 : Subgroup 𝒢 ℓ) → IsCongruence cosetAlgebra (cosetRel 𝑲)
-      cosetIsCongruence 𝑲 = mkcon reflx equivx compatx
+      cosetIsCongruence 𝑲 = mkcon reflx ∼-isEquivalence compatx
         where
         K : Pred 𝕌[ 𝑮 ] ℓ
         K = 𝑲 .proj₁
         K-sg : IsSubgroup 𝒢 K
         K-sg = 𝑲 .proj₂
 
-        reflx : {a b : 𝕌[ 𝑮 ]} → a ∼ b → cosetRel 𝑲 a b
-        reflx a∼b = IsSubgroup.respects K-sg (≈sym a∼b) (IsSubgroup.ε-closed K-sg)
+        open Coset 𝒢 K K-sg using (∼-isEquivalence ; ∼-congˡ)
+        open IsSubgroup K-sg using (respects ; ε-closed)
 
-        equivx : IsEquivalence (cosetRel 𝑲)
-        equivx = Coset.∼-isEquivalence 𝒢 K K-sg
+        reflx : {a b : 𝕌[ 𝑮 ]} → a ∼ b → cosetRel 𝑲 a b
+        reflx a∼b = respects (≈sym a∼b) ε-closed
 
         compatx : cosetAlgebra ∣≈ cosetRel 𝑲
-        compatx g h = Coset.∼-congˡ 𝒢 K K-sg g (h 0F)
+        compatx g h = ∼-congˡ g (h 0F)
 
     cosetCon : Subgroup 𝒢 ℓ → Con cosetAlgebra ℓ
     cosetCon K = cosetRel K , cosetIsCongruence K
@@ -251,7 +253,7 @@ that no call site re-instantiates them.
 
 #### Mutual inverseness and monotonicity
 
-Every congruence of the regular action *is* the coset partition of its `ε`-class
+Every congruence of the regular action is the coset partition of its `ε`-class
 (`cosetCon-Kθ`{.AgdaFunction}); this is the ambient-closedness fact the
 filter-ideal applications consume.  Every subgroup is recovered from its coset
 partition (`Kθ-cosetCon`{.AgdaFunction}).  Containment transfers both ways, so the
@@ -273,23 +275,18 @@ correspondence is an order isomorphism between `Con (G ↷ G)` and `Sub(G)`.
           θ-trans θ (θ-refl θ (≈⇒∼ (≈sym (invˡ-law x)))) (θ-transl θ (x ⁻¹) p)
 
       -- Round trip on subgroups: the ε-class of the coset partition is K.
-      Kθ-cosetCon :  (K : Subgroup 𝒢 ℓ)
-        → (Kθ (cosetCon K) ⊆ proj₁ K) × (proj₁ K ⊆ Kθ (cosetCon K))
-      Kθ-cosetCon 𝑲@(K , K-sg) = fwd , bwd
-        where
-        fwd : Kθ (cosetCon 𝑲) ⊆ K
-        fwd {g} p = IsSubgroup.respects K-sg (ε⁻¹∙ g) p
+      Kθ-cosetCon : (K : Subgroup 𝒢 ℓ)
+        → (Kθ (cosetCon K) ⊆ K .proj₁) × (K .proj₁ ⊆ Kθ (cosetCon K))
+      Kθ-cosetCon 𝑲 = (λ {g} → respects (ε⁻¹∙ g)) , λ {g} → respects (≈sym (ε⁻¹∙ g))
+        where open IsSubgroup (𝑲 .proj₂) using (respects)
 
-        bwd : K ⊆ Kθ (cosetCon 𝑲)
-        bwd {g} p = IsSubgroup.respects K-sg (≈sym (ε⁻¹∙ g)) p
 
       -- Subgroup containment forwards to coset-partition containment ...
-      cosetCon-mono :  (K L : Subgroup 𝒢 ℓ) → proj₁ K ⊆ proj₁ L
-        → cosetCon K ⊑ cosetCon L
+      cosetCon-mono : (K L : Subgroup 𝒢 ℓ) → proj₁ K ⊆ proj₁ L → cosetCon K ⊑ cosetCon L
       cosetCon-mono K L K⊆L p = K⊆L p
 
       -- ... and reflects back, through the ε-class.
-      cosetCon-reflect :  (K L : Subgroup 𝒢 ℓ) → cosetCon K ⊑ cosetCon L
+      cosetCon-reflect : (K L : Subgroup 𝒢 ℓ) → cosetCon K ⊑ cosetCon L
         →  K .proj₁ ⊆ L .proj₁
       cosetCon-reflect (_ , Ksub) (_ , Lsub) sub {x} x∈K =
         IsSubgroup.respects Lsub (ε⁻¹∙ x)

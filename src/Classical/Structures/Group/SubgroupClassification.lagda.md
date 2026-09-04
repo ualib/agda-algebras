@@ -11,24 +11,27 @@ author: "the agda-algebras development team"
 This is the [Classical.Structures.Group.SubgroupClassification][] module of the [Agda Universal Algebra Library][].
 
 This module answers questions of the form "which subgroups of a finite group
-contain `H`?" (equivalently, "which subgroups lie in a given interval of `Sub(G)`?")
-**by certificate**, in the witness-not-decision style of the WP-6 checkers: the
-engine (GAP, or the Python generator of `scripts/python/flrp/`) supplies *words*
-(products of designated generators) and the checkers here re-verify every word by
-evaluating it, so nothing is believed on the engine's authority.
+contain `H`?" or "which subgroups lie in a given interval of `Sub(G)`?".
 
-The problem being solved: an arbitrary decidable subgroup `K`{.AgdaBound} is given
-only by its membership decider, so "`K` is one of the listed subgroups" cannot be
-established by enumerating subgroups; the type of deciders is not searchable.
+An answer to such a question consists of a **certificate** which is derived
+*verbally*, as follows: the engine (GAP, or the Python generator of
+`scripts/python/flrp/`) supplies *words* (products of designated generators) and
+the checkers here re-verify every word by evaluating it, so nothing is believed on
+the engine's authority.
 
-What *can* be done constructively is to walk `K`{.AgdaBound} up a finite family:
-if `K`{.AgdaBound} contains a listed member and is not contained in it, a concrete
-element `g ∈ K` off the member is found by finite search
-(`sub⊈-witness`{.AgdaFunction}), and a certificate for the pair (member, `g`)
-names a *larger* listed member together with words proving that the larger
-member's generators lie in `⟨member ∪ {g}⟩ ⊆ K`.  Certified steps strictly
-increase a rank, so the walk terminates, and `K`{.AgdaBound} is identified (up to
-mutual containment) with a listed member.  The two ingredients are as follows.
+The problem being solved: an arbitrary decidable subgroup `K` is given only by its
+membership decider, so "`K` is one of the listed subgroups" cannot be established
+by enumerating subgroups; the type of deciders is not searchable.
+
+What *can* be done constructively is to walk `K` up a finite family: if
+`K` properly contains a listed member `K'`, a concrete element `g ∈ K ∖ K'` is
+found by finite search (`sub⊈-witness`{.AgdaFunction}), and a certificate for the
+pair (`K'`, `g`) names a *larger* listed member together with words proving that
+the larger member's generators lie in `⟨K' ∪ {g}⟩ ⊆ K`.
+
+Certified steps strictly increase a rank, so the walk terminates, and `K` is
+identified (up to mutual containment) with a listed member. The two ingredients
+are as follows.
 
 +  **Words**: evaluation of index words over the carrier enumeration, and the one
    lemma that matters; a word whose letters lie in a subgroup evaluates into the
@@ -40,10 +43,10 @@ mutual containment) with a listed member.  The two ingredients are as follows.
    `from-yes`{.AgdaFunction}, and the classifier `classify`{.AgdaFunction}.
 
 The first consumer is the filter-ideal route to the census entries `L16` (interval
-`[C3 , A5]` in `Sub(A5)`, exactly three intermediate subgroups) and `L11`: there
-the classifier turns "a congruence of the regular action whose `ε`-class contains
-`C3`" into one of five named subgroups.  The machinery is deliberately independent
-of that application; any finite group with emitted word certificates can use it.
+`[C3 , A5]` in `Sub(A5)`, exactly three intermediate subgroups) and `L11`: there the
+classifier turns "a congruence of the regular action whose `ε`-class contains `C3`"
+into one of five named subgroups.  The machinery is deliberately independent of
+that application; any finite group with emitted word certificates can use it.
 
 <!--
 ```agda
@@ -185,34 +188,31 @@ single consumption lemma is closure of subgroups under products.
 For a family `sub : Fin m → DecSubgroup` the certificate data comprise, per
 member `k`:
 
-+  `gens k` — indices of a generating set, each lying in `sub k`;
-+  `expWords k i` — for each carrier index `i` with `enum i ∈ sub k`, a word
++  `gens k`: indices of a generating set, each lying in `sub k`;
++  `expWords k i`: for each carrier index `i` with `enum i ∈ sub k`, a word
    over the letters `gens k` evaluating to `enum i` (the member's *expansion*:
    every element as a product of the generators);
-+  `rank k` — a rank below `m`, strictly increased by every step;
++  `rank k`: a rank below `m`, strictly increased by every step;
 
 and, per pair `(k , j)` with `enum j` inside the ambient member
-`top`{.AgdaBound} but off `sub k`:
+`top` but off `sub k`:
 
 +  `stepNext k j` — the larger member reached by adjoining `enum j`;
 +  `stepWords k j` — one word per generator of the target, over the letters
    `j ∷ gens k`, evaluating to that generator.
 
-The ambient `top`{.AgdaBound} confines the walk: step certificates are owed
-only for adjoined elements inside it, and in exchange the classifier applies
-only to subgroups `K ⊆ top`.  This is what makes *interval* families
-certifiable — for the ideal `[1 , C5]` of the `L16` instance, say, the family
-`{1 , C5}` owes step rows only for the four nontrivial elements of `C5`,
-not for the whole ambient group (adjoining an element of order 2 to the
-trivial subgroup reaches no family member, and never occurs for
-`K ⊆ C5`).  For an unconstrained walk take `top`{.AgdaBound} to be the full
-subgroup.
+The ambient `top` confines the walk: step certificates are owed only for adjoined
+elements inside it, and in exchange the classifier applies only to subgroups `K ⊆ top`.
+This is what makes interval families certifiable; for the ideal `[1 , C5]` of the
+`L16` instance, say, the family `{1 , C5}` owes step rows only for the four
+nontrivial elements of `C5`, not for the whole ambient group (adjoining an element
+of order 2 to the trivial subgroup reaches no family member, and never occurs for
+`K ⊆ C5`).  For an unconstrained walk take `top` to be the full subgroup.
 
 `EscalationOK`{.AgdaFunction} is the conjunction of the well-formedness
-conditions; every conjunct is decidable
-(`escalationOK?`{.AgdaFunction}), so a concrete data module discharges it
-with `from-yes`{.AgdaFunction} — evaluating the decision *is* the
-re-verification of every emitted word.
+conditions; every conjunct is decidable (`escalationOK?`{.AgdaFunction}), so a
+concrete data module discharges it with `from-yes`{.AgdaFunction}; evaluating the
+decision *is* the re-verification of every emitted word.
 
 ```agda
   private
@@ -278,12 +278,11 @@ re-verification of every emitted word.
 
 #### The classifier
 
-Given a certified table, an arbitrary decidable subgroup `K`{.AgdaBound}
-containing a listed member is walked up the family.  At each stage either
-`K ⊆ sub c` is decided positively — closing the identification — or a
-violating index escalates to a strictly higher-ranked member whose elements
-all lie in `K`{.AgdaBound}.  The fuel is the family size; the rank bound
-makes fuel exhaustion absurd.
+Given a certified table, an arbitrary decidable subgroup `K` containing a listed
+member is walked up the family.  At each stage either `K ⊆ sub c` is decided
+positively, closing the identification, or a violating index escalates to a
+strictly higher-ranked member whose elements all lie in `K`.  The fuel is the
+family size; the rank bound makes fuel exhaustion absurd.
 
 ```agda
     module _ (OK : EscalationOK) where
@@ -294,17 +293,25 @@ makes fuel exhaustion absurd.
         bound  = proj₂ (proj₂ OK)
 
         -- Extract, from a Pointwise certificate, the word for one generator.
-        pw-find :  {r : Level} {R : Fin card → Word → Type r} {xs : List (Fin card)} {ys : List Word}
-          →        Pointwise R xs ys → {l : Fin card} → l ∈ˡ xs → Σ[ w ∈ Word ] R l w
-        pw-find (r ∷ rs) (here refl)  = _ , r
-        pw-find (r ∷ rs) (there p)    = pw-find rs p
+        pw-find :
+          {r : Level}
+          {R : Fin card → Word → Type r}
+          {xs : List (Fin card)}
+          {ys : List Word}
+          → Pointwise R xs ys
+          → {l : Fin card} → l ∈ˡ xs
+          → Σ[ w ∈ Word ] R l w
+
+        pw-find (r ∷ rs) (here refl) = _ , r
+        pw-find (r ∷ rs) (there p) = pw-find rs p
 
       -- One escalation step: adjoining a violating element carries the
       -- containment invariant to the next member.
       step-⊆ :  (K : DecSubgroup 𝒢 ℓ) (c : Fin m) (j : Fin card)
-        →       set (sub c) ⊆ set K
-        →       enum j ∈ set top → enum j ∈ set K → ¬ (enum j ∈ set (sub c))
-        →       set (sub (stepNext c j)) ⊆ set K
+        → set (sub c) ⊆ set K
+        → enum j ∈ set top → enum j ∈ set K → ¬ (enum j ∈ set (sub c))
+        → set (sub (stepNext c j)) ⊆ set K
+
       step-⊆ K c j c⊆K j∈top j∈K j∉c {x} x∈next = x∈K
         where
         K-resp = IsSubgroup.respects (isSub K)
@@ -339,10 +346,11 @@ makes fuel exhaustion absurd.
       -- The classification loop, on fuel, with the rank invariant.
       private
         classify-loop :  (K : DecSubgroup 𝒢 ℓ) (fuel : ℕ) (c : Fin m)
-          →              set K ⊆ set top
-          →              m ≤ fuel + rank c
-          →              set (sub c) ⊆ set K
-          →              Σ[ k ∈ Fin m ] ((set (sub k) ⊆ set K) × (set K ⊆ set (sub k)))
+          → set K ⊆ set top
+          → m ≤ fuel + rank c
+          → set (sub c) ⊆ set K
+          → Σ[ k ∈ Fin m ] ((set (sub k) ⊆ set K) × (set K ⊆ set (sub k)))
+
         classify-loop K zero c K⊆top inv c⊆K = ⊥-elim (<⇒≱ (bound c) inv)
         classify-loop K (suc f) c K⊆top inv c⊆K with sub⊆-dec K (sub c)
         ... | yes K⊆c = c , c⊆K , K⊆c
@@ -359,9 +367,9 @@ makes fuel exhaustion absurd.
       -- containing a listed member is, up to mutual containment, a listed
       -- member.
       classify :  (K : DecSubgroup 𝒢 ℓ) (c : Fin m)
-        →         set K ⊆ set top
-        →         set (sub c) ⊆ set K
-        →         Σ[ k ∈ Fin m ] ((set (sub k) ⊆ set K) × (set K ⊆ set (sub k)))
+        → set K ⊆ set top
+        → set (sub c) ⊆ set K
+        → Σ[ k ∈ Fin m ] ((set (sub k) ⊆ set K) × (set K ⊆ set (sub k)))
       classify K c K⊆top c⊆K = classify-loop K m c K⊆top (m≤m+n m (rank c)) c⊆K
 ```
 
