@@ -6,7 +6,7 @@ Description: Emit the A5 certificate data module for the Snow filter-ideal
 
   The new witness represents L16 as the union of the filter [C3, A5] and the
   ideal [1, C5] inside Sub(A5).
-  Classical.Structures.Group.SubgroupClassification) consumes, and re-verifies
+  Classical.Structures.Group.SubgroupClassification consumes, and re-verifies
   by decision, the concrete data this script computes:
 
   + the alternating group A5 as 60 permutation image-vectors on 5 points,
