@@ -16,9 +16,9 @@ Do not edit it by hand; rerun the emitter instead.**
 Pure data, no proofs: the alternating group `A5` as 60 permutation
 image-vectors on 5 points with its multiplication and inverse tables, the
 characteristic vectors of the seven subgroups `1 , C3 , C5 , S3 , A4 , A4' ,
-A5` that carry the census lattice `L16` as a filter-ideal union (issue #530),
-and the escalation certificates — generators, ranks, step targets, step
-words, expansion words — for the two interval families `[C3 , A5]` (five
+A5` that carry the census lattice `L16` as a filter-ideal union, and the
+escalation certificates (generators, ranks, step targets, step words,
+expansion words) for the two interval families `[C3 , A5]` (five
 members) and `[1 , C5]` (two members), in the schema of
 [Classical.Structures.Group.SubgroupClassification][].  Element `0` is the
 identity; elements are the even permutations of `{0..4}` in lexicographic

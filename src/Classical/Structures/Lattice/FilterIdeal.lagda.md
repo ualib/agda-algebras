@@ -29,8 +29,8 @@ so does the join, since `a ≤ x ≤ x ∨ y`; and the remaining homogeneous cas
 the filter's meet-closure and the ideal's join-closure.
 
 This is the order-theoretic half of Snow's filter-ideal lemma (Snow, *Algebra
-Universalis* 43 (2000)); the congruence-theoretic half — a sublattice of a
-representable lattice with universe `a ↑ ∪ b ↓` is itself representable — is
+Universalis* 43 (2000)); the congruence-theoretic half, saying that a sublattice
+of a representable lattice with universe `a ↑ ∪ b ↓` is itself representable, is
 [FLRP.Closure.FilterIdeal][], which proves the corresponding closure at the level
 of decidable congruences and consumes the same case analysis.
 

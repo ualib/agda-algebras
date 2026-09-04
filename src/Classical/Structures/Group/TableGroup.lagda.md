@@ -30,13 +30,13 @@ Composition of functions is associative for free
 (`⨁-assoc`{.AgdaFunction}, three `tabulate`/`lookup` steps), so the
 table inherits associativity through injectivity.  Both hypotheses are
 decidable (`elt-inj?`{.AgdaFunction}, `mul-hom?`{.AgdaFunction}), so a
-concrete instance discharges them with `from-yes`{.AgdaFunction} — `n²`
+concrete instance discharges them with `from-yes`{.AgdaFunction}: `n²`
 vector comparisons instead of `n³` products.
 
 The `Build`{.AgdaModule} submodule assembles the `Group`{.AgdaFunction} (via
 `eqsToGroup`{.AgdaFunction}; the remaining unit and inverse laws are linear
 sweeps the instance also discharges by decision), its carrier-finiteness
-witness, and — because every concrete consumer immediately needs them —
+witness, and (because every concrete consumer immediately needs them)
 **boolean subgroups**: a characteristic vector plus three decidable closure
 checks yields a `DecSubgroup`{.AgdaFunction}.
 
@@ -176,7 +176,7 @@ membership test is one vector lookup.
       -- The subgroup *structure* is kept opaque, and this is load-bearing.
       -- It mentions the group bundle, whose law proofs are decision sweeps
       -- over the whole carrier; left transparent, every goal about a
-      -- concrete subgroup — a containment of coset congruences, say —
+      -- concrete subgroup (a containment of coset congruences, say)
       -- normalizes that tower, and the check diverges (measured on the A5
       -- instance: one containment exhausts a 32 GB heap).  Nothing needs a
       -- subgroup axiom to *compute*: the membership predicate and its
@@ -203,4 +203,4 @@ membership test is one vector lookup.
 
 --------------------------------------
 
-[^1]: See Issue #530.
+[^1]: See the filter-ideal design note, `docs/notes/flrp-530-filter-ideal.md`.

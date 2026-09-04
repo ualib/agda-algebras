@@ -32,15 +32,15 @@ would make a decidable check compute to `no`{.AgdaInductiveConstructor} and
 break compilation.  Specifically it establishes, by computation during
 type-checking:
 
-+  the concrete `A5` — carrier `Fin 60`, tables from
-   [FLRP.Certificates.FilterIdeal.A5Data][] — is a group, with associativity
++  the concrete `A5` (carrier `Fin 60`, tables from
+   [FLRP.Certificates.FilterIdeal.A5Data][]) is a group, with associativity
    obtained through the faithful permutation action
    ([Classical.Structures.Group.TableGroup][]) rather than the 216 000-case
    cubic sweep;
 +  the seven characteristic vectors really do cut out subgroups
    `1 , C3 , C5 , S3 , A4 , A4' , A5`;
-+  the emitted **escalation certificates** for both interval families —
-   `[C3 , A5]` (five members) and `[1 , C5]` (two members) — are
++  the emitted **escalation certificates** for both interval families,
+   `[C3 , A5]` (five members) and `[1 , C5]` (two members), are
    well-formed, so an arbitrary decidable subgroup in either interval is
    provably one of the listed members
    ([Classical.Structures.Group.SubgroupClassification][]);
@@ -52,29 +52,29 @@ type-checking:
 Together with Snow's filter-ideal lemma ([FLRP.Closure.FilterIdeal][]) and
 the ambient-closedness fact `Sub(A5) = Con (A5 ↷ A5)`
 ([Classical.Structures.Group.RegularAction][], the WP-3 bridge at `H = 1`,
-which is why no unary-reduction theorem — issue #501 — is consumed), these
-are the ingredients of an unconditional `Representableᵈ`{.AgdaRecord}
-witness for `L16`: one needing neither a postulate nor the Kurzweil–Netter
-duality assumption (Entry 2 of [FLRP.Assumptions][]) that the route of issue
-#529 would have required.
+which is why no unary-reduction theorem is consumed), these are the
+ingredients of an unconditional `Representableᵈ`{.AgdaRecord} witness for
+`L16`: one needing neither a postulate nor the Kurzweil–Netter duality
+assumption (Entry 2 of [FLRP.Assumptions][]) that the duality route would
+have required.
 
 #### What is not here yet, and why
 
-The final gluing step — feeding this family to
+The final gluing step, feeding this family to
 `FilterIdealClosure.Assembly`{.AgdaModule} to obtain the
-`Representableᵈ`{.AgdaRecord} value — is **not** in this module.  It is
+`Representableᵈ`{.AgdaRecord} value, is **not** in this module.  It is
 blocked on an Agda elaboration blowup, not on missing mathematics, and the
 diagnosis is worth recording because it shapes any retry (see
 `docs/notes/flrp-530-filter-ideal.md` § 4 for the full measurements).
 
-The assembly needs lemmas about the coset congruences of *named* subgroups —
-`cosetCon-reflect (proj₁ (S k)) (proj₁ (S l))`, say.  Elaborating even one
+The assembly needs lemmas about the coset congruences of *named* subgroups,
+`cosetCon-reflect (proj₁ (S k)) (proj₁ (S l))` for instance.  Elaborating one
 such application at this carrier size exhausts a 32 GB heap, while the same
 lemma applied to abstract subgroups, and every decision in this module, costs
 seconds.  The cost is not in any decision procedure: `ord-table`{.AgdaFunction}
 below settles all 49 subgroup containments in about three seconds.  Sealing
 the group laws, the subgroup axioms, the congruence proofs, and the round
-trips behind `opaque`{.AgdaKeyword} (which is why they are sealed — see
+trips behind `opaque`{.AgdaKeyword} (which is why they are sealed; see
 [Classical.Structures.Group.RegularAction][]) removed several layers of the
 blowup but not the last one.
 
@@ -140,7 +140,7 @@ up inside the group bundle that every downstream type mentions.  Left
 transparent, the proof terms normalize whenever a goal about a *concrete*
 subgroup or congruence is checked, and the check exhausts a 6 GB heap;
 `opaque`{.AgdaKeyword} stops the unfolding at the name, which costs nothing
-because no consumer needs a group law to *compute* — only to exist.
+because no consumer needs a group law to *compute*, only to exist.
 
 ```agda
 private
@@ -316,7 +316,7 @@ open FiniteLattice
 
 #### Order agreement
 
-The subgroup order of the family reproduces the meet order of the tables —
+The subgroup order of the family reproduces the meet order of the tables:
 one decidable statement, both directions at once.
 
 Every decision below is `opaque`{.AgdaKeyword}, and the reason is the same
@@ -328,8 +328,8 @@ group bundle, whose own law witnesses are decision sweeps over the
 60-element carrier.  Measured on this instance, a single such application
 exhausts a 32 GB heap.  Sealing each decision behind
 `opaque`{.AgdaKeyword} stops the unfolding at the name and costs nothing:
-these are proofs of decidable facts, and no consumer needs one to *compute*
-— only to exist.
+these are proofs of decidable facts, and no consumer needs one to *compute*,
+only to exist.
 
 ```agda
 private
@@ -346,7 +346,7 @@ private
 The two directions of `ord-table`{.AgdaFunction} are the substantive
 group-theoretic content of the `L16` witness: they say that the seven
 subgroups, ordered by inclusion in `Sub(A5)`, *are* the lattice whose Cayley
-tables the census records — the filter `[C3 , A5] ≅ M3` sitting above the
+tables the census records: the filter `[C3 , A5] ≅ M3` sitting above the
 ideal `[1 , C5]`.  What remains for the `Representableᵈ`{.AgdaRecord} value
 is the mechanical assembly described above.
 

@@ -7,7 +7,7 @@ Description:
   Guards the generated module of issue #530: the committed
   ``src/FLRP/Certificates/FilterIdeal/A5Data.lagda.md`` must re-derive byte
   for byte from ``filter_ideal_certs.build_all()``, so the emitter and its
-  committed output cannot drift apart silently — the same golden discipline
+  committed output cannot drift apart silently, the same golden discipline
   as ``test_slr_catalog``'s committed-artifact sweep.  The internal
   consistency checks (interval facts, L16 tables, escalation certificates)
   run as part of ``build_all`` itself, so a passing golden test also

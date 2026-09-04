@@ -48,7 +48,7 @@ proof survive verbatim:
    `(a , b)` and `(u , v)` constructively, and compatibility with the
    congruence's *own* `h` operation at `(u , v)` is the contradiction.
 
-The classification `Snow`{.AgdaFunction}, asserting that every decidable
+The classification `snow`{.AgdaFunction}, asserting that every decidable
 congruence of `𝑩` lies in `α↑ ∪ β↓`, follows by deciding the two containments
 (`⊆ᵈ-dec`{.AgdaFunction}).
 
@@ -395,8 +395,8 @@ to the violation step.
 
 ```agda
   -- Every decidable congruence of the extension lies in the filter or the ideal.
-  Snow : (d : DecCon 𝑩 0ℓ) → InFilterIdeal (restrictᵈ d)
-  Snow d with ⊆ᵈ-dec 𝑭 α (restrictᵈ d)
+  snow : (d : DecCon 𝑩 0ℓ) → InFilterIdeal (restrictᵈ d)
+  snow d with ⊆ᵈ-dec 𝑭 α (restrictᵈ d)
   ... | yes filter  = inj₁ filter
   ... | no ¬filter with ⊆ᵈ-dec 𝑭 (restrictᵈ d) β
   ...   | yes ideal  = inj₂ ideal
@@ -423,7 +423,7 @@ sublattice `L₀`:
 
 Nothing here forces any of the decision procedures to run during
 type-checking; the heavy decisions (`⊆ᵈ-dec`{.AgdaFunction} inside
-`Snow`{.AgdaFunction}) stay unevaluated because every proof below is by
+`snow`{.AgdaFunction}) stay unevaluated because every proof below is by
 containment reasoning and antisymmetry, never by normalization.
 
 ```agda
@@ -447,7 +447,7 @@ The two maps: classify the restriction; lift the listed member.
 
 ```agda
     to₀ : DecCon 𝑩 0ℓ → L
-    to₀ d = classify (restrictᵈ d) (Snow d) .proj₁
+    to₀ d = classify (restrictᵈ d) (snow d) .proj₁
 
     from₀ : L → DecCon 𝑩 0ℓ
     from₀ k = liftᵈ (γ k) (γ-mem k)
@@ -460,8 +460,8 @@ round trips, by the classification equalities and antisymmetry.
     to₀-mono : {d e : DecCon 𝑩 0ℓ} → d ⊆ᵈ e → to₀ d ∧ to₀ e ≡ to₀ d
     to₀-mono {d} {e} d⊆e =
       γ-mono (to₀ d) (to₀ e)
-        λ p → proj₁ (proj₂ (classify (restrictᵈ e) (Snow e)))
-                (d⊆e (proj₂ (proj₂ (classify (restrictᵈ d) (Snow d))) p))
+        λ p → proj₁ (proj₂ (classify (restrictᵈ e) (snow e)))
+                (d⊆e (proj₂ (proj₂ (classify (restrictᵈ d) (snow d))) p))
 
     from₀-mono : {k l : L} →  k ∧ l ≡ k → from₀ k ⊆ᵈ from₀ l
     from₀-mono {k} {l} = γ-reflect k l
@@ -469,14 +469,14 @@ round trips, by the classification equalities and antisymmetry.
     to₀∘from₀ : (k : L) → to₀ (from₀ k) ≡ k
     to₀∘from₀ k = ≤-antisym
       (γ-mono  (to₀ (from₀ k)) k
-               (classify (restrictᵈ (from₀ k)) (Snow (from₀ k)) .proj₂ .proj₂))
+               (classify (restrictᵈ (from₀ k)) (snow (from₀ k)) .proj₂ .proj₂))
       (γ-mono  k (to₀ (from₀ k))
-               (classify (restrictᵈ (from₀ k)) (Snow (from₀ k)) .proj₂ .proj₁ ))
+               (classify (restrictᵈ (from₀ k)) (snow (from₀ k)) .proj₂ .proj₁ ))
 
     from₀∘to₀ : (d : DecCon 𝑩 0ℓ) → from₀ (to₀ d) ≑ᵈ d
     from₀∘to₀ d =
-        classify (restrictᵈ d) (Snow d) .proj₂ .proj₂
-      , classify (restrictᵈ d) (Snow d) .proj₂ .proj₁
+        classify (restrictᵈ d) (snow d) .proj₂ .proj₂
+      , classify (restrictᵈ d) (snow d) .proj₂ .proj₁
 ```
 
 The order isomorphism, and the representability witness once the extended

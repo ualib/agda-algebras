@@ -191,7 +191,7 @@ a proof that it is a subgroup.
 ```
 
 A **decidable subgroup** bundles a subgroup with a decision procedure for its
-membership — the Layer-D presentation of a subgroup (ADR-008), mirroring how
+membership; this is the Layer-D presentation of a subgroup (ADR-008), mirroring how
 `DecCon`{.AgdaFunction} of [Setoid.Congruences.Finite.Basic][] bundles a
 congruence with its decider.  Decidability is genuine data here: it cannot be
 derived from carrier finiteness, since a predicate on a finite carrier need

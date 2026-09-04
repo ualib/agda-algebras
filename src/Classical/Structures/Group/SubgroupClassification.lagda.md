@@ -197,8 +197,8 @@ member `k`:
 and, per pair `(k , j)` with `enum j` inside the ambient member
 `top` but off `sub k`:
 
-+  `stepNext k j` — the larger member reached by adjoining `enum j`;
-+  `stepWords k j` — one word per generator of the target, over the letters
++  `stepNext k j`, the larger member reached by adjoining `enum j`;
++  `stepWords k j`, one word per generator of the target, over the letters
    `j ∷ gens k`, evaluating to that generator.
 
 The ambient `top` confines the walk: step certificates are owed only for adjoined

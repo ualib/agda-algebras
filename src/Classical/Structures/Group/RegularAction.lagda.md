@@ -222,24 +222,19 @@ that no call site re-instantiates them.
 ```agda
     -- The left-coset relation of K: x and y agree modulo K.
     cosetRel : Subgroup 𝒢 ℓ → 𝕌[ 𝑮 ] → 𝕌[ 𝑮 ] → Type ℓ
-    cosetRel 𝑲 x y = x ⁻¹ ∙ y ∈ 𝑲 .proj₁
+    cosetRel (K , _) x y = x ⁻¹ ∙ y ∈ K
 
     opaque
       cosetIsCongruence : (𝑲 : Subgroup 𝒢 ℓ) → IsCongruence cosetAlgebra (cosetRel 𝑲)
-      cosetIsCongruence 𝑲 = mkcon reflx ∼-isEquivalence compatx
+      cosetIsCongruence (K , K-sg) = mkcon reflx ∼-isEquivalence compatx
         where
-        K : Pred 𝕌[ 𝑮 ] ℓ
-        K = 𝑲 .proj₁
-        K-sg : IsSubgroup 𝒢 K
-        K-sg = 𝑲 .proj₂
-
         open Coset 𝒢 K K-sg using (∼-isEquivalence ; ∼-congˡ)
         open IsSubgroup K-sg using (respects ; ε-closed)
 
-        reflx : {a b : 𝕌[ 𝑮 ]} → a ∼ b → cosetRel 𝑲 a b
+        reflx : {a b : 𝕌[ 𝑮 ]} → a ∼ b → cosetRel (K , K-sg) a b
         reflx a∼b = respects (≈sym a∼b) ε-closed
 
-        compatx : cosetAlgebra ∣≈ cosetRel 𝑲
+        compatx : cosetAlgebra ∣≈ cosetRel (K , K-sg)
         compatx g h = ∼-congˡ g (h 0F)
 
     cosetCon : Subgroup 𝒢 ℓ → Con cosetAlgebra ℓ
@@ -248,7 +243,7 @@ that no call site re-instantiates them.
     -- At Layer D: the coset partition of a decidable subgroup is decided by
     -- one group multiplication and one membership test.
     cosetConᵈ : DecSubgroup 𝒢 ℓ → DecCon cosetAlgebra ℓ
-    cosetConᵈ 𝑲 = cosetCon (𝑲 .proj₁) , λ x y → 𝑲 .proj₂ (x ⁻¹ ∙ y)
+    cosetConᵈ (𝑲 , 𝑲-dec) = cosetCon 𝑲 , λ x y → 𝑲-dec (x ⁻¹ ∙ y)
 ```
 
 #### Mutual inverseness and monotonicity
@@ -277,8 +272,8 @@ correspondence is an order isomorphism between `Con (G ↷ G)` and `Sub(G)`.
       -- Round trip on subgroups: the ε-class of the coset partition is K.
       Kθ-cosetCon : (K : Subgroup 𝒢 ℓ)
         → (Kθ (cosetCon K) ⊆ K .proj₁) × (K .proj₁ ⊆ Kθ (cosetCon K))
-      Kθ-cosetCon 𝑲 = (λ {g} → respects (ε⁻¹∙ g)) , λ {g} → respects (≈sym (ε⁻¹∙ g))
-        where open IsSubgroup (𝑲 .proj₂) using (respects)
+      Kθ-cosetCon (_ , K-sg) = (λ {g} → respects (ε⁻¹∙ g)) , λ {g} → respects (≈sym (ε⁻¹∙ g))
+        where open IsSubgroup K-sg using (respects)
 
 
       -- Subgroup containment forwards to coset-partition containment ...
