@@ -4,8 +4,8 @@ File: scripts/python/flrp/filter_ideal_certs.py
 Description: Emit the A5 certificate data module for the Snow filter-ideal
   route to census entry L16 (issue #530).
 
-  The manuscript represents L16 as the union of the filter [C3, A5] and the
-  ideal [1, C5] inside Sub(A5).  The Agda side (FLRP.Closure.FilterIdeal +
+  The new witness represents L16 as the union of the filter [C3, A5] and the
+  ideal [1, C5] inside Sub(A5).
   Classical.Structures.Group.SubgroupClassification) consumes, and re-verifies
   by decision, the concrete data this script computes:
 
