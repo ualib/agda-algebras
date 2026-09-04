@@ -112,7 +112,7 @@ open import Classical.Structures.Group.SubgroupClassification
 open import Classical.Structures.Group.Subgroups
                                           using  ( DecSubgroup )
 open import Classical.Structures.Group.TableGroup
-                                          using  ( compose ; module TableGroupBuilder )
+                                          using  ( _⨁_ ; module TableGroupBuilder )
 open import FLRP.Certificates.FilterIdeal.A5Data
      using  ( permVecs ; mulVecs ; invVec
             ; chi1 ; chiC3 ; chiC5 ; chiS3 ; chiA4 ; chiA4' ; chiA5
@@ -160,7 +160,7 @@ private
     A5-inj : ∀ i j → elt i ≡ elt j → i ≡ j
     A5-inj = from-yes elt-inj?
 
-    A5-hom : ∀ i j → elt (mul i j) ≡ compose (elt i) (elt j)
+    A5-hom : ∀ i j → elt (mul i j) ≡ elt i ⨁ elt j
     A5-hom = from-yes mul-hom?
 
     A5-idˡ : ∀ a → mul 0F a ≡ a

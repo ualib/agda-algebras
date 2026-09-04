@@ -121,8 +121,9 @@ missing mathematics.  Measurements, all on the `A5` instance under
 | one congruence containment `γ k ⊆ᵈ γ l` at concrete `k , l`                            | **> 32 GB heap** |
 
 So no decision procedure is at fault; the cost is in elaborating an application of
-a coset-congruence lemma at this carrier size.  Four things were tried, and the
-negative results are the useful part.
+a coset-congruence lemma at this carrier size.  Four things were tried.  Three
+narrowed the problem and one was refuted outright, and both kinds of result are
+worth recording, since each rules out a line of attack.
 
 1.  **`abstract` is not a fix inside the defining module**.
     Its definitions remain transparent there, so sealing the group-law witnesses
@@ -145,11 +146,28 @@ negative results are the useful part.
     relation out directly and consuming the `Coset` lemmas once, generically,
     inside an opaque block is strictly better and is what the module now does.
 
-4.  **Pattern-matching a Σ argument blocks reduction where laziness was wanted**.
-    `cosetConᵈ (K , K?) = …` forces its argument open; reading the components with
-    `proj₁`/`proj₂` instead lets `cosetConᵈ K` reduce while `K` stays stuck, which
-    is the difference between a goal that normalizes a concrete subgroup and one
-    that does not.
+4.  **Pattern-matching a Σ argument does *not* block reduction; this hypothesis
+    was refuted.**
+    The guess was that `cosetConᵈ (K , K?) = …` forces its argument open, so that
+    reading the components through `proj₁`/`proj₂` would let `cosetConᵈ K` reduce
+    while `K` stayed stuck.  That is false: `Σ` is a record with eta, so Agda
+    eta-expands a neutral argument and the clause matches anyway.  The probe is
+    two lines,
+
+    ```agda
+    f : {A B : Set} → A × B → A          g : {A B : Set} → A × B → A
+    f (a , _) = a                        g p = p .proj₁
+
+    same : {A B : Set} (t : A × B) → f t ≡ g t
+    same t = refl                        -- accepted
+    ```
+
+    and it type-checks, which settles it: the two forms are definitionally equal
+    on a neutral argument.  Consistently with that, rewriting `cosetConᵈ` and
+    `cosetRel` to use projections did not move the measurement at all.  The
+    projection style is kept in `RegularAction` because it reads better and
+    documents the intent, not because it buys reduction.  Anyone retrying should
+    not spend time here.
 
 A retry should probably not push harder on opacity.  The more promising direction
 is to keep the ambient algebra away from the group bundle altogether.  Build the
