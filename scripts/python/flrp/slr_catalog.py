@@ -122,13 +122,13 @@ AKA: Dict[int, str] = {
 # Entries the manuscript ships without an explicit small algebra, with the
 # route recorded in the census note (docs/notes/flrp-slr-census.md).
 PARKED: Dict[int, str] = {
-    10: "open — this library's `L7`, the subject of #484",
+    10: "open: this library's `L7`, the subject of #484",
     11: "filter-ideal route (Snow's lemma, #530): pentagon filter with the order-3 minimal subgroup in SmallGroup(216,153), 216 points; lemma formalized, assembly pending",
     14: "group representation (upper interval in Sub(A6), 90 points); pending #454/#487",
-    16: "filter-ideal route (Snow's lemma, #530): [C3, A5] ∪ [1, C5] in Sub(A5), 60 points (not 180 — erratum E2); configuration machine-verified, assembly pending",
-    18: "dual of L19; assumption-conditional via Kurzweil–Netter duality (#456)",
+    16: "filter-ideal route (Snow's lemma, #530): [C3, A5] ∪ [1, C5] in Sub(A5), 60 points (not 180; erratum E2); configuration machine-verified, assembly pending",
+    18: "dual of L19; conditional corollary of the Kurzweil–Netter theorem (#502); rests on Entry 4 (Kurzweil surjectivity, #522) and a simple-group instantiation (#527)",
     20: "group representation (filter-ideal in SmallGroup(216,153)); pending #454/#487",
-    22: "dual of L23; assumption-conditional via Kurzweil–Netter duality (#456)",
+    22: "dual of L23; conditional corollary of the Kurzweil–Netter theorem (#502); rests on Entry 4 (Kurzweil surjectivity, #522) and a simple-group instantiation (#527)",
 }
 
 # Candidate manuscript errata: printed claims the engine refutes.  Per the
@@ -137,8 +137,8 @@ PARKED: Dict[int, str] = {
 # but gets no claim file or certificate, and the census note's erratum log
 # carries the diagnosis (reproducible with --diagnose).
 ERRATA: Dict[int, str] = {
-    28: "Con(B28) as printed has 8 congruences — a 7-chain plus one doubly "
-        "irreducible element — not the 7 elements of L28",
+    28: "Con(B28) as printed has 8 congruences (a 7-chain plus one doubly "
+        "irreducible element), not the 7 elements of L28",
 }
 
 
@@ -546,12 +546,12 @@ def covers_text(diagram: HasseDiagram) -> str:
 
 def status(entry: CatalogEntry) -> str:
     if entry.number in ERRATA:
-        return (f"candidate manuscript erratum — {ERRATA[entry.number]} "
+        return (f"candidate manuscript erratum: {ERRATA[entry.number]} "
                 "(erratum log below); no verified representation in hand")
     if entry.algebra is None:
         return PARKED[entry.number]
     if module_path(entry).exists():
-        return f"certified — `{MODULE_PREFIX}.SLR{entry.number:02d}`"
+        return f"certified: `{MODULE_PREFIX}.SLR{entry.number:02d}`"
     if not renderable(entry):
         return ("engine-audited (audit JSON committed); certificate module "
                 "pending the renderer extension (#485 batch 2)")

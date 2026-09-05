@@ -8,7 +8,7 @@
 ##
 ##      [H, G]  ∪  [1, K]        inside Sub(G)
 ##
-##  is a union of a filter and an ideal — hence representable, by
+##  is a union of a filter and an ideal, hence representable, by
 ##  lemma:union-filter-ideal of the SmallLatticeReps manuscript, on |G|
 ##  points.  This generalizes the ad-hoc probe that produced
 ##  bin/filter_ideal_216.g's L11 configuration.
@@ -50,7 +50,7 @@ if not IsBound(FLRP_FI_CONFIG) then
 fi;
 
 #############################################################################
-##  The interval test: [H, G] must be Mn — exactly `middles` intermediate
+##  The interval test: [H, G] must be Mn: exactly `middles` intermediate
 ##  subgroups, pairwise incomparable.  IntermediateSubgroups indexes 0 = H
 ##  and top = G, so an interior-to-interior inclusion would be a comparable
 ##  pair among the middles.

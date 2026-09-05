@@ -92,7 +92,7 @@ of the printed entry; this is candidate erratum E2 of
 independently (permutations, not GAP), asserts the group axioms, the three-middles
 fact, maximality of the middles, and agreement of the subgroup order with the meet
 and join tables of `inputs/slr/slr16_lattice.json`, and emits
-`FLRP.Certificates.FilterIdeal.A5Data` — the tables, the seven characteristic
+`FLRP.Certificates.FilterIdeal.A5Data`: the tables, the seven characteristic
 vectors, and escalation word certificates for both interval families.
 
 `FLRP.Certificates.FilterIdeal.L16SubA5` then

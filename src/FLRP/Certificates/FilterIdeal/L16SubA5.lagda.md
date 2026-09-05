@@ -52,10 +52,10 @@ type-checking:
 Together with Snow's filter-ideal lemma ([FLRP.Closure.FilterIdeal][]) and
 the ambient-closedness fact `Sub(A5) = Con (A5 ↷ A5)`
 ([Classical.Structures.Group.RegularAction][], the WP-3 bridge at `H = 1`,
-which is why no unary-reduction theorem is consumed), these are the
+which is why no unary-reduction theorem[^1] is consumed), these are the
 ingredients of an unconditional `Representableᵈ`{.AgdaRecord} witness for
 `L16`: one needing neither a postulate nor the Kurzweil–Netter duality
-assumption (Entry 2 of [FLRP.Assumptions][]) that the duality route would
+assumption (Entry 2 of [FLRP.Assumptions][]) that the duality route[^2] would
 have required.
 
 #### What is not here yet, and why
@@ -351,3 +351,7 @@ ideal `[1 , C5]`.  What remains for the `Representableᵈ`{.AgdaRecord} value
 is the mechanical assembly described above.
 
 --------------------------------------
+
+[^1]: The unary-reduction theorem is Issue #501.
+
+[^2]: The duality route for this entry is Issue #529.

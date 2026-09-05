@@ -203,4 +203,4 @@ membership test is one vector lookup.
 
 --------------------------------------
 
-[^1]: See the filter-ideal design note, `docs/notes/flrp-530-filter-ideal.md`.
+[^1]: See Issue #530, and the filter-ideal design note `docs/notes/flrp-530-filter-ideal.md`.
