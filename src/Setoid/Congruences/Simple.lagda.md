@@ -10,10 +10,14 @@ author: "the agda-algebras development team"
 
 This is the [Setoid.Congruences.Simple][] module of the [Agda Universal Algebra Library][].
 
-An algebra is **simple** when its congruence lattice has exactly two members: the
-diagonal, which relates only the setoid-equal pairs, and the total congruence, which
-relates everything.  This module states the notion at the congruence level, in the
-implication form that concrete instances can inhabit, and develops the following:
+Classically, a *nontrivial* algebra is **simple** when its congruence lattice has
+exactly two members: the diagonal, which relates only the setoid-equal pairs, and
+the total congruence, which relates everything.  This module states the notion at
+the congruence level in the implication form that concrete instances can inhabit,
+which keeps nontriviality out of the definition: the trivial algebra, whose diagonal
+and total congruences coincide, is simple vacuously
+(`trivial⇒simple`{.AgdaFunction}; see the design note below).  The module develops
+the following:
 
 +  `RelatesApart`{.AgdaFunction}: the positive data of a congruence relating a pair
    of provably distinct elements;
@@ -39,9 +43,10 @@ congruence.  Stated over arbitrary congruences, that disjunction is oracle-stren
 data, for exactly the reason recorded in [Classical.Structures.Group.Simple][] and
 [Classical.Structures.Group.MaximalSubgroup][]: relatedness under a congruence can
 encode an arbitrary proposition, so the classifier would decide it up to double
-negation, and no concrete algebra could inhabit the disjunctive form in `--safe`
-Agda.  The definition here is therefore the implication: a congruence that relates
-some pair of provably distinct elements relates every pair.
+negation, and no concrete algebra with two provably distinct elements could inhabit
+the disjunctive form in `--safe` Agda.  The definition here is therefore the
+implication: a congruence that relates some pair of provably distinct elements
+relates every pair.
 
 Two further choices mirror the group module.
 
@@ -165,10 +170,12 @@ positive `RelatesApart`{.AgdaFunction} data, and extracting the witness from the
 negation is a double-negation elimination.  The statement below therefore isolates
 that step as an antecedent, a witness-extraction principle for nonzero congruences,
 exactly as `Stable-≈ε`{.AgdaFunction} isolates the classical step in
-[Classical.Structures.Group.Simple][].  The antecedent is discharged wherever the
-congruences concerned are pointwise decidable over a searchable carrier; the halves
-that are constructive outright are stated separately, so a consumer holding positive
-data never pays for the extraction.
+[Classical.Structures.Group.Simple][].  The antecedent can be discharged by a finite
+search wherever the congruences concerned are pointwise decidable over an enumerated
+carrier, in the manner of `witness`{.AgdaFunction} of
+[Classical.Structures.Group.MinimalNormalDescent][], though no such instance is built
+here; the halves that are constructive outright are stated separately, so a consumer
+holding positive data never pays for the extraction.
 
 ```agda
   -- In a nontrivial algebra the total congruence is nonzero.
