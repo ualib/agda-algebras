@@ -288,7 +288,7 @@ the parachute's own, transported.
 #### The canopies are represented
 
 `[Kᵢ , G] ≅ Lᵢ`.  The maps are the parachute's own canopy retraction `π i` and its
-section `↑ i` ([Classical.Structures.Lattice.Parachute][]), conjugated by the
+section `↑` ([Classical.Structures.Lattice.Parachute][]), conjugated by the
 interval isomorphism.  The only bookkeeping is that a member of `[Kᵢ , G]` is also
 a member of `[H , G]` (`widen`{.AgdaFunction}), since `H ⊆ Kᵢ`.
 
