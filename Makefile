@@ -361,6 +361,7 @@ flrp-test:
 	python3 scripts/python/flrp/test_flrp.py
 	python3 scripts/python/flrp/test_eqsearch.py
 	python3 scripts/python/flrp/test_slr_catalog.py
+	python3 scripts/python/flrp/test_filter_ideal_certs.py
 	python3 scripts/python/flrp/test_eqfast.py
 	python3 scripts/python/flrp/test_gap_interval.py
 	python3 scripts/python/flrp/test_parachute_targets.py

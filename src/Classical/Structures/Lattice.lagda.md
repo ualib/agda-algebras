@@ -48,6 +48,7 @@ module Classical.Structures.Lattice where
 open import Classical.Structures.Lattice.Basic                public
 open import Classical.Structures.Lattice.DistributiveLattice  public
 open import Classical.Structures.Lattice.Dual                 public
+open import Classical.Structures.Lattice.FilterIdeal          public
 open import Classical.Structures.Lattice.OrdinalSum           public
 open import Classical.Structures.Lattice.Parachute            public
 open import Classical.Structures.Lattice.Partitions           public
