@@ -105,11 +105,11 @@ distinguished big canopies, and a property core-free enforceable by each canopy.
 ```agda
 module ParachuteTheorems {ℓP : Level} {m : ℕ}
   (𝑳s      : Fin (2 + m) → Lattice)
-  (𝒕       : ∀ i → TopOf (𝑳s i))
-  (top?    : ∀ i (x : 𝕌[ proj₁ (𝑳s i) ])
-           → Dec (Setoid._≈_ 𝔻[ proj₁ (𝑳s i) ] x (proj₁ (𝒕 i))))
-  (𝒃       : ∀ i → BottomOf (𝑳s i))
-  (nondeg  : ∀ i → ¬ (Setoid._≈_ 𝔻[ proj₁ (𝑳s i) ] (proj₁ (𝒃 i)) (proj₁ (𝒕 i))))
+  (𝒕       : ∀ {i} → TopOf (𝑳s i))
+  (top?    : ∀ {i} (x : 𝕌[ 𝑳s i .proj₁ ])
+           → Dec (Setoid._≈_ 𝔻[ 𝑳s i .proj₁ ] x (𝒕 .proj₁)))
+  (𝒃       : ∀ {i} → BottomOf (𝑳s i))
+  (nondeg  : ∀ i → ¬ (Setoid._≈_ 𝔻[ 𝑳s i .proj₁ ] (𝒃 .proj₁) (𝒕 .proj₁)))
   where
 
   open ParachuteRep 𝑳s 𝒕 top? 𝒃 nondeg public
@@ -164,8 +164,7 @@ core-free and carries its canopy, so the group has every enforced property.
 
       -- Each atom subgroup is core-free: it is a proper member of the interval,
       -- and core-freeness propagates from H to every proper member.
-      K-CoreFree : (i : Fin (2 + m))
-                 → CoreFree 𝒢 (set (K i)) (element-isSubgroup (K i))
+      K-CoreFree : (i : Fin (2 + m)) → CoreFree 𝒢 (set (K i)) (element-isSubgroup (K i))
       K-CoreFree i =
         proper-CoreFree config H-cf p≢q (bigCanopy p big-p) (bigCanopy q big-q)
                         (K i) (K-proper i (proj₁ (companion i)) (proj₂ (companion i)))

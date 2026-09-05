@@ -393,8 +393,8 @@ private
 
   -- The parachute of `suc m` two-element chains.
   module Mᵃ (m : ℕ) = LatticeParachute  {m = m} (λ (_ : Fin (suc m)) → chain₂-lattice)
-                                      (λ _ → chain₂-top) (λ _ → chain₂-top?)
-                                      (λ _ → chain₂-bot) (λ _ → chain₂-nondeg)
+                                      (chain₂-top) (chain₂-top?)
+                                      (chain₂-bot) (λ _ → chain₂-nondeg)
 
 -- Mₙ: the (n + 2)-element lattice with n atoms.  (M₀ is the two-element chain.)
 M[_] : ℕ → Lattice
@@ -501,11 +501,11 @@ settle the FLRP negatively (`strategy-meta-theorem`{.AgdaFunction} of
 ```agda
 module Parachutes {m : ℕ}
   (𝑳s      : Fin (2 + m) → Lattice)
-  (𝒕       : ∀ i → TopOf (𝑳s i))
-  (top?    : ∀ i (x : 𝕌[ proj₁ (𝑳s i) ])
-           → Dec (Setoid._≈_ 𝔻[ proj₁ (𝑳s i) ] x (proj₁ (𝒕 i))))
-  (𝒃       : ∀ i → BottomOf (𝑳s i))
-  (nondeg  : ∀ i → ¬ (Setoid._≈_ 𝔻[ proj₁ (𝑳s i) ] (proj₁ (𝒃 i)) (proj₁ (𝒕 i))))
+  (𝒕       : ∀ {i} → TopOf (𝑳s i))
+  (top?    : ∀ {i} (x : 𝕌[ 𝑳s i .proj₁ ])
+           → Dec (Setoid._≈_ 𝔻[ 𝑳s i .proj₁ ] x (𝒕 .proj₁)))
+  (𝒃       : ∀ {i} → BottomOf (𝑳s i))
+  (nondeg  : ∀ i → ¬ (Setoid._≈_ 𝔻[ 𝑳s i .proj₁ ] (𝒃 .proj₁) (𝒕 .proj₁ )))
   where
 
   open ParachuteTheorems {0ℓ} 𝑳s 𝒕 top? 𝒃 nondeg
