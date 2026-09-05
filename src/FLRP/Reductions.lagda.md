@@ -105,7 +105,7 @@ open import Classical.Structures.Group              using  ( Group ; IsSubgroup
                                                            ; module MaximalSubgroup
                                                            ; module MinimalNormal
                                                            ; fullSubgroup )
-open import Classical.Structures.Lattice.Parachute   using  ( module LatticeParachute )
+open import Classical.Structures.Lattice.Parachute   using  ( Parachute ; parachuteLattice )
 open import Classical.Structures.Lattice.Product     using  ( _×ˡ_ )
 open import Examples.Classical.Lattices.L7           using  ( L7-lattice )
 open import FLRP.Closure.Basic  using  ( chain₂-top ; chain₂-bot )
@@ -392,14 +392,19 @@ private
   chain₂-nondeg ()
 
   -- The parachute of `suc m` two-element chains.
-  module Mᵃ (m : ℕ) = LatticeParachute  {m = m} (λ (_ : Fin (suc m)) → chain₂-lattice)
-                                      (λ _ → chain₂-top) (λ _ → chain₂-top?)
-                                      (λ _ → chain₂-bot) (λ _ → chain₂-nondeg)
+  Mᵃ : (m : ℕ) → Parachute 0ℓ 0ℓ m
+  Mᵃ m = record
+    { 𝓛       = λ _ → chain₂-lattice
+    ; 𝒕       = chain₂-top
+    ; top?    = chain₂-top?
+    ; 𝒃       = chain₂-bot
+    ; nondeg  = λ _ → chain₂-nondeg
+    }
 
 -- Mₙ: the (n + 2)-element lattice with n atoms.  (M₀ is the two-element chain.)
 M[_] : ℕ → Lattice
 M[ zero ]   = chain₂-lattice
-M[ suc m ]  = Mᵃ.⊕ᵖ-Lattice m
+M[ suc m ]  = parachuteLattice (Mᵃ m)
 ```
 
 #### The note's classes `𝒢₂`, `𝒢₃`, `𝒢₄`
@@ -499,16 +504,9 @@ settle the FLRP negatively (`strategy-meta-theorem`{.AgdaFunction} of
 [FLRP.Parachute.Theorems][]).  The catalog therefore never assumes it.
 
 ```agda
-module Parachutes {m : ℕ}
-  (𝑳s      : Fin (2 + m) → Lattice)
-  (𝒕       : ∀ i → TopOf (𝑳s i))
-  (top?    : ∀ i (x : 𝕌[ proj₁ (𝑳s i) ])
-           → Dec (Setoid._≈_ 𝔻[ proj₁ (𝑳s i) ] x (proj₁ (𝒕 i))))
-  (𝒃       : ∀ i → BottomOf (𝑳s i))
-  (nondeg  : ∀ i → ¬ (Setoid._≈_ 𝔻[ proj₁ (𝑳s i) ] (proj₁ (𝒃 i)) (proj₁ (𝒕 i))))
-  where
+module Parachutes {m : ℕ} (𝒫 : Parachute 0ℓ 0ℓ (suc m)) where
 
-  open ParachuteTheorems {0ℓ} 𝑳s 𝒕 top? 𝒃 nondeg
+  open ParachuteTheorems {0ℓ} 𝒫
 
   -- The two big canopies, as Lemma 3.7 requires.
   module Enforcement
@@ -668,10 +666,10 @@ enter as the theorems proved above and not as assumptions.
 ```agda
     module Compose {ℓP : Level}
       (Ps       : Fin (2 + m) → GroupProperty ℓP)
-      (Ps-cfIE  : ∀ i → cfIE (Ps i) (𝑳s i))
+      (Ps-cfIE  : ∀ i → cfIE (Ps i) (𝓛 i))
       where
 
-      private module PT = ParachuteTheorems {ℓP} 𝑳s 𝒕 top? 𝒃 nondeg
+      private module PT = ParachuteTheorems {ℓP} 𝒫
 
       open PT.Enforced p q p≢q big-p big-q Ps Ps-cfIE public
         using  ( conjunction-cfIE
