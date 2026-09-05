@@ -16,6 +16,7 @@
 [Overture.Adjunction.Residuation]: /Overture/Adjunction/Residuation/
 [Overture.Basic]: /Overture/Basic/
 [Overture.Cayley]: /Overture/Cayley/
+[Overture.Counting]: /Overture/Counting/
 [Overture.Functions]: /Overture/Functions/
 [Overture.Operations]: /Overture/Operations/
 [Overture.Operations.Properties]: /Overture/Operations/Properties/
@@ -192,6 +193,7 @@
 [Classical.Structures.Group.IndexAction]: /Classical/Structures/Group/IndexAction/
 [Classical.Structures.Group.MaximalSubgroup]: /Classical/Structures/Group/MaximalSubgroup/
 [Classical.Structures.Group.MinimalNormal]: /Classical/Structures/Group/MinimalNormal/
+[Classical.Structures.Group.MinimalNormalDescent]: /Classical/Structures/Group/MinimalNormalDescent/
 [Classical.Structures.Group.NormalClosure]: /Classical/Structures/Group/NormalClosure/
 [Classical.Structures.Group.NormalCore]: /Classical/Structures/Group/NormalCore/
 [Classical.Structures.Group.NormalSubgroupLattice]: /Classical/Structures/Group/NormalSubgroupLattice/
@@ -425,6 +427,7 @@
 [Overture/Adjunction/Residuation.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Overture/Adjunction/Residuation.lagda.md
 [Overture/Basic.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Overture/Basic.lagda.md
 [Overture/Cayley.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Overture/Cayley.lagda.md
+[Overture/Counting.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Overture/Counting.lagda.md
 [Overture/Functions.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Overture/Functions.lagda.md
 [Overture/Operations.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Overture/Operations.lagda.md
 [Overture/Operations/Properties.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Overture/Operations/Properties.lagda.md
@@ -601,6 +604,7 @@
 [Classical/Structures/Group/IndexAction.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Group/IndexAction.lagda.md
 [Classical/Structures/Group/MaximalSubgroup.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Group/MaximalSubgroup.lagda.md
 [Classical/Structures/Group/MinimalNormal.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Group/MinimalNormal.lagda.md
+[Classical/Structures/Group/MinimalNormalDescent.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Group/MinimalNormalDescent.lagda.md
 [Classical/Structures/Group/NormalClosure.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Group/NormalClosure.lagda.md
 [Classical/Structures/Group/NormalCore.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Group/NormalCore.lagda.md
 [Classical/Structures/Group/NormalSubgroupLattice.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Group/NormalSubgroupLattice.lagda.md

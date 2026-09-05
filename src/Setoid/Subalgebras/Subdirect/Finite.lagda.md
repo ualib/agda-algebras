@@ -63,14 +63,12 @@ open import Agda.Primitive                 using  () renaming ( Set to Type )
 open import Data.Empty                     using  ( ⊥-elim )
 open import Data.Fin.Base                  using  ( Fin )
 open import Data.Fin.Properties            using  ( all? ; ¬∀⟶∃¬ )
-open import Data.List.Base                 using  ( List ; [] ; _∷_ ; filter ; length
+open import Data.List.Base                 using  ( List ; filter ; length
                                                   ; allFin ; cartesianProduct )
 open import Data.List.Extrema.Nat          using  ( argmax ; f[xs]≤f[argmax] ; argmax-sel )
 open import Data.List.Relation.Unary.All   using  ( lookup )
-open import Data.List.Relation.Unary.Any   using  ( here ; there )
-open import Data.Nat.Base                  using  ( ℕ ; _≤_ ; _<_ ; z≤n ; s≤s )
-open import Data.Nat.Properties            using  ( m≤n⇒m≤1+n ; n<1+n ; <-trans
-                                                  ; ≤-<-trans ; n≮n )
+open import Data.Nat.Base                  using  ( ℕ ; _≤_ ; _<_ )
+open import Data.Nat.Properties            using  ( ≤-<-trans ; n≮n )
 open import Data.Product                   using  ( _×_ ; _,_ ; proj₁ ; proj₂ ; ∃-syntax )
 open import Data.Sum.Base                  using  ( [_,_]′ )
 open import Function                       using  ( _∘_ )
@@ -86,7 +84,9 @@ open import Data.List.Membership.Propositional.Properties
   using ( ∈-filter⁺ ; ∈-filter⁻ ; ∈-cartesianProduct⁺ ; ∈-allFin )
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
-open import Overture                       using  ( 𝓞 ; 𝓥 ; Signature ; 𝑆 ; ∃-syntax )
+open import Overture                       using  ( 𝓞 ; 𝓥 ; Signature ; 𝑆 ; ∃-syntax
+                                                  ; filter-length-mono
+                                                  ; filter-length-strict )
 open import Setoid.Algebras.Basic          using  ( Algebra ; 𝕌[_] ; 𝔻[_] )
 open import Setoid.Algebras.Finite         using  ( FiniteAlgebra ; 𝟏
                                                   ; 𝟏-FiniteAlgebra )
@@ -107,43 +107,19 @@ private variable α ρ : Level
 ```
 -->
 
-#### Two generic list lemmas
+#### A splitting lemma
 
-The maximal-congruence search is driven by counting, so we first record two
-elementary, signature-agnostic facts about the length of a filtered list under two
-decidable predicates `P ⊆ Q`: the count is monotone, and it is *strictly* smaller
-whenever some listed element satisfies `Q` but not `P`.
+The maximal-congruence search is driven by counting: the count is monotone under
+containment of the filtering predicates and *strictly* smaller when some listed element
+escapes the smaller one.  Both facts are `filter-length-mono`{.AgdaFunction} and
+`filter-length-strict`{.AgdaFunction} of [Overture.Counting][], which is where they
+live because they mention neither signatures nor setoids.  One further elementary fact
+is local to this module.
 
 ```agda
 private variable ℓ₁ ℓ₂ ℓ₃ : Level
 
 private
-  module _ {X : Type ℓ₁}{P : X → Type ℓ₂}{Q : X → Type ℓ₃}
-           (P? : (x : X) → Dec (P x))(Q? : (x : X) → Dec (Q x))
-           (sub : ∀ {x} → P x → Q x) where
-
-    -- If P entails Q then no more elements pass the P-filter than the Q-filter.
-    filter-length-mono : (xs : List X) → length (filter P? xs) ≤ length (filter Q? xs)
-    filter-length-mono [] = z≤n
-    filter-length-mono (x ∷ xs) with P? x | Q? x
-    ... | yes _  | yes _  = s≤s (filter-length-mono xs)
-    ... | yes px | no ¬qx = ⊥-elim (¬qx (sub px))
-    ... | no _   | yes _  = m≤n⇒m≤1+n (filter-length-mono xs)
-    ... | no _   | no _   = filter-length-mono xs
-
-    -- If moreover some w ∈ xs has Q w and ¬ P w, the P-filter is strictly shorter.
-    filter-length-strict : (xs : List X){w : X} → w ∈ xs → Q w → ¬ P w
-                         → length (filter P? xs) < length (filter Q? xs)
-    filter-length-strict (x ∷ xs) (here refl) qw ¬pw with P? x | Q? x
-    ... | yes pw | _      = ⊥-elim (¬pw pw)
-    ... | no _   | yes _  = s≤s (filter-length-mono xs)
-    ... | no _   | no ¬qw = ⊥-elim (¬qw qw)
-    filter-length-strict (x ∷ xs) (there w∈xs) qw ¬pw with P? x | Q? x
-    ... | yes _  | yes _  = s≤s (filter-length-strict xs w∈xs qw ¬pw)
-    ... | yes px | no ¬qx = ⊥-elim (¬qx (sub px))
-    ... | no _   | yes _  = <-trans (filter-length-strict xs w∈xs qw ¬pw) (n<1+n _)
-    ... | no _   | no _   = filter-length-strict xs w∈xs qw ¬pw
-
   -- From a decidable P and a refutation of (P → Q), recover P and ¬ Q.
   ¬→-split : {P : Type ℓ₁}{Q : Type ℓ₂} → Dec P → ¬ (P → Q) → P × ¬ Q
   ¬→-split (yes p) ¬pq = p , λ q → ¬pq (λ _ → q)
