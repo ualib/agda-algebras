@@ -30,8 +30,8 @@ have to be settled first, and they are the two design decisions of the module.
 +  **Which nontriviality?**  `Nontrivial N`{.AgdaFunction} of
    [Classical.Structures.Group.MinimalNormal][] is the negative statement
    `¬ N ⊆ 1`, which carries no witness, and without a witness there is nothing to
-   descend from.  The theorem is therefore proved with `NontrivialWitness`{.AgdaFunction}
-   providing a witness of nontriviality on both sides, and the two are reconciled
+   descend from.  The theorem is therefore proved with the witnessed reading
+   `HasNontrivialWitness`{.AgdaFunction} on both sides, and the two are reconciled
    where they can be: on a *decidably presented* subgroup of a finite group the
    witness is recovered by a finite search (`witness`{.AgdaFunction}).  The
    unrestricted passage is not available, and that is a theorem, not an omission.
@@ -230,8 +230,12 @@ exactly when it contains that representative.
 
 The measure the descent recurses on: the order `∥ 𝑵 ∥`{.AgdaFunction} of a
 decidably presented subgroup is the number of enumerated carrier elements its
-decision procedure admits.  (Repetitions in the enumeration inflate the count
-uniformly, so the comparisons below are unaffected.)
+decision procedure admits.  (The enumeration is merely surjective, so an element
+may be listed several times and the count need not equal the order of the
+subgroup.  Nothing below depends on that: the comparisons are between counts over
+the *same* list, and the counting lemmas ask only that a containment admit no
+more listed elements, and that a missed listed element make it admit strictly
+fewer.)
 
 ```agda
   -- The order of 𝑵: the number of enumerated carrier elements it contains.
@@ -535,8 +539,9 @@ behind the first; there is exactly one, and this is it.
 
 #### The unrestricted descent, modulo the one principle
 
-Granted `WitnessedNontriviality`{.AgdaFunction} (and by the no-go above nothing
-weaker will do) the descent lands in the form [FLRP.Reductions][] threads.
+Granted `WitnessedNontriviality`{.AgdaFunction}, the principle the no-go above
+prices as double-negation elimination, the descent lands in the form
+[FLRP.Reductions][] threads.
 
 ```agda
   -- Minimal-normal descent in the unrestricted form, modulo the witnessing principle.
@@ -610,8 +615,8 @@ And with it the descent is the property the catalog threads, verbatim.
 
 --------------------------------------
 
-[^1]: exactly as `Intervalᵈ`{.AgdaFunction} of [FLRP.Enforceable][] bundles an
-      interval element with one; this is [ADR-008][]'s  discipline, stated rather
+[^1]: Exactly as `Intervalᵈ`{.AgdaFunction} of [FLRP.Enforceable][] bundles an
+      interval element with one; this is [ADR-008][]'s discipline, stated rather
       than smuggled in.
 
 [^2]: This is just like the oracle congruence `θ[ P ]`{.AgdaFunction} that drives

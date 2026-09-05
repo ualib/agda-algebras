@@ -614,8 +614,8 @@ centralizer, so a nontrivial one would be trivial.
 
 **Entry 1**.  Lemma 3.7 (ii).  Descent applied to the whole group supplies a minimal
 normal subgroup `M`; RP-1's `normals-meet`{.AgdaFunction} says no nontrivial normal
-subgroup meets `M` trivially; and `minimal-meets→least`{.AgdaFunction} turns that
-pairwise statement into the monolith property.
+subgroup meets `M` trivially; and `minimal-meets→below`{.AgdaFunction}, applied to
+each such subgroup, turns that pairwise statement into the monolith property.
 
 The group is nontrivial, as descent's hypothesis requires: were every element the
 identity, the `p`-th atom subgroup would collapse into `H`, which the parachute
@@ -658,7 +658,6 @@ forbids.
         -- ... so `M` is below every one of them.
         M-least : (N : Pred 𝕌[ 𝑮 ] 0ℓ) → IsNormalSubgroup N → Nontrivial N → M ⊆ N
         M-least N N-nsg N-nt = minimal-meets→below M N M-min N-nsg N-nt (meets N N-nsg N-nt)
-                        -- or: minimal-meets→least M M-min meets
 ```
 
 The three entries, as cf-IE statements.  Each is core-free interval enforceability of

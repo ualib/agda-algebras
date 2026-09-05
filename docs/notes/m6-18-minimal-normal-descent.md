@@ -4,18 +4,18 @@
 
 This note records M6-18 (issue #510), the proof that **every nontrivial normal subgroup of a finite group contains a minimal one**, and the exact classical residue that survives it.  Read it alongside the RP-1 note `docs/notes/flrp-rp1-parachutes.md` (§ 4, fourth assumption), the RP-2 note `docs/notes/flrp-rp2-catalog.md` (§ 4.2), and the two-layer note `docs/notes/flrp-two-layer-congruences.md`, whose Layer-S/Layer-D discipline this work instantiates on the group side.
 
-The headline is not just the theorem.  It is that the fact RP-1 and RP-2 assumed splits cleanly in two: a *group-theoretic* half, which is now a theorem with no hypotheses beyond carrier finiteness, and a *presentational* half, which is the library's already-identified Layer-S bridge and provably cannot be removed.
+The headline is not just the theorem.  It is that the fact RP-1 and RP-2 assumed splits cleanly in two: a *group-theoretic* half, which is now a theorem with no hypotheses beyond carrier finiteness, and a *presentational* half, which is the library's already-identified Layer-S bridge; on the witnessed route, the one the construction produces and the catalog consumes, the no-go of § 3 shows that half cannot be removed.
 
 ## 1.  What landed
 
-Six modules — three of them new — all `--cubical-compatible --exact-split --safe`, no postulates.
+Six modules, two of them new, all `--cubical-compatible --exact-split --safe`, no postulates.
 
 | Statement | Name | Module |
 | --- | --- | --- |
 | the group signature is finite finitary | `Sig-Group-FiniteSignature` | `Classical.Signatures.Finite` |
 | counting by filtering, monotone and strict | `filter-length-mono` / `filter-length-strict` | `Overture.Counting` (new) |
-| the normal closure of an element | `⟪_⟫`, `⟪⟫-dec`, `⟪⟫-mem`, `⟪⟫-least` | `Classical.Structures.Group.NormalClosure` (new) |
-| witnessed nontriviality and minimality | `Witnessed`, `IsMinimalNormalʷ` | `Classical.Structures.Group.MinimalNormal` |
+| the normal closure of an element | `⟪_⟫`, `⟪⟫-dec`, `⟪⟫-mem`, `⟪⟫-least` | `Classical.Structures.Group.NormalClosure` (extended by the inner module `NormalClosureᵈ`) |
+| witnessed nontriviality and minimality | `HasNontrivialWitness`, `IsMinimalNormalʷ` | `Classical.Structures.Group.MinimalNormal` |
 | **the theorem** | `minimal-normal-descentʷ` | `Classical.Structures.Group.MinimalNormalDescent` (new) |
 | descent at Layer D | `minimal-normal-descentᵈ`, `minimalʷ→minimalᵈ` | *ibid.* |
 | the no-go | `minimal→DNE`, `minimalᵈ→DNE`, `witnessing→DNE` | *ibid.* |
@@ -36,7 +36,7 @@ What removes the need is § 2.3 below: the search ranges over the group's *eleme
 
 `Nontrivial N` of `Classical.Structures.Group.MinimalNormal` is the negative statement `¬ (N ⊆ 1)`, chosen there deliberately because none of the parachute arguments needs a witness.  A descent, however, has nothing to descend *from* without one: the whole construction starts by naming an element of the subgroup that is not the identity.
 
-So the module names the positive reading, `Witnessed N = Σ[ y ] (y ∈ N × ¬ (y ≈ ε))`, proves the theorem in that form, and reconciles the two exactly where they can be reconciled — on a *decidably presented* subgroup of a finite group, where `witness` recovers a witness by a finite search over the enumeration.  The unrestricted passage is the no-go of § 3.
+So the module names the positive reading, `HasNontrivialWitness N = ∃[ y ] (y ∈ N × ¬ y ≈ ε)`, proves the theorem in that form, and reconciles the two exactly where they can be reconciled — on a *decidably presented* subgroup of a finite group, where `witness` recovers a witness by a finite search over the enumeration.  The unrestricted passage is the no-go of § 3.
 
 The two forms are not a strong statement and a weak one.  `minimal-normal-descentʷ` delivers `IsMinimalNormalʷ M`, whose minimality clause quantifies over **every** normal subgroup, with no decidability assumed of it; only the *nontriviality hypothesis* on the competitor is in witnessed form.  The Layer-D reading `minimalʷ→minimalᵈ`, which takes the negative hypothesis but demands a decision procedure for the competitor, is a corollary of it, not the other way round.
 
@@ -104,4 +104,4 @@ So issue #510's acceptance criterion — Entries 1–3 reading `cfIE 𝒢ᵢ ⊕
 
 ## 6.  Reading order
 
-`Overture.Counting` (two lemmas, no library dependencies), then `Classical.Structures.Group.NormalClosure` (short, and the only place the #508 bridge is used), then the two new sections of `Classical.Structures.Group.MinimalNormal` (`Witnessed`, `IsMinimalNormalʷ`, and the one principle separating it from `IsMinimalNormal`), then `Classical.Structures.Group.MinimalNormalDescent` front to back — the measure, the descent, then the no-go, which is where the design decisions of §§ 2.2 and 3 are justified rather than merely stated.
+`Overture.Counting` (two lemmas, no library dependencies), then `Classical.Structures.Group.NormalClosure` (short, and the only place the #508 bridge is used), then the two new sections of `Classical.Structures.Group.MinimalNormal` (`HasNontrivialWitness`, `IsMinimalNormalʷ`, and the one principle separating it from `IsMinimalNormal`), then `Classical.Structures.Group.MinimalNormalDescent` front to back — the measure, the descent, then the no-go, which is where the design decisions of §§ 2.2 and 3 are justified rather than merely stated.

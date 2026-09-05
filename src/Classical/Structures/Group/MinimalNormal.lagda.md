@@ -26,9 +26,10 @@ enforcement catalog of [FLRP.Reductions][] needs:
    `IsMonolithᵍ`{.AgdaRecord}, `HasMonolithᵍ`{.AgdaFunction};
 +  `∩-isNormalSubgroup`{.AgdaFunction}: an intersection of normal subgroups is a
    normal subgroup;
-+  `minimal-meets→least`{.AgdaFunction}: a minimal normal subgroup that intersects
-   nontrivially with every nontrivial normal subgroup is contained in all of
-   them, hence is the monolith;[^2]
++  `minimal-meets→below`{.AgdaFunction} and `minimal-meets→least`{.AgdaFunction}: a
+   minimal normal subgroup is contained in every nontrivial normal subgroup that it
+   intersects nontrivially, hence is the monolith when it intersects all of them
+   nontrivially;[^2]
 +  `abelian→⊆-centralizer`{.AgdaFunction}: an abelian subgroup lies inside its own
    centralizer, so a normal subgroup with trivial centralizer is nonabelian;
 +  `HasNontrivialWitness`{.AgdaFunction} and `IsMinimalNormalʷ`{.AgdaRecord}: the *witnessed*
@@ -96,7 +97,10 @@ module MinimalNormal {α ρ : Level} (𝒢@(𝑮 , _) : Group α ρ) (ℓ₀ : L
 The trivial subgroup is the `≈`-class of the identity, as elsewhere in the
 library; a subgroup is **nontrivial** when it is not contained in it.
 (Nontriviality is stated negatively on purpose: constructively, "not every element
-is the identity" carries no witness, and none of the arguments below need one.)
+is the identity" carries no witness, and none of the arguments of this section and
+the next need one.  The witnessed reading, which the descent of
+[Classical.Structures.Group.MinimalNormalDescent][] does need, is named separately
+further below.)
 
 ```agda
   -- The trivial subgroup, as a predicate.
@@ -155,9 +159,8 @@ the only nontrivial normal subgroup it contains is itself.
   open IsMinimalNormal public
 ```
 
-**The key step**.
-Suppose `M` is a minimal normal subgroup that meets every nontrivial
-normal subgroup nontrivially.  Then `M` is *below* every nontrivial normal subgroup
+**The key step**.  Suppose `M` is a minimal normal subgroup and `N` is a
+nontrivial normal subgroup that `M` does not meet trivially.  Then `M` is *below*
 `N`: the intersection `M ∩ N` is a normal subgroup inside `M`, and it is nontrivial
 precisely because `M` and `N` do not meet trivially, so minimality gives
 `M ⊆ M ∩ N ⊆ N`.
@@ -166,16 +169,8 @@ Note that no witness is extracted anywhere: `Nontrivial (M ∩ N)` and
 `¬ MeetTrivially M N` are the same statement, so the argument is constructive.
 
 ```agda
-  minimal-meets→least : (M : Pred G L) → IsMinimalNormal M
-    → (  ∀ N → IsNormalSubgroup N → Nontrivial N → ¬ MeetTrivially M N)
-    →    ∀ N → IsNormalSubgroup N → Nontrivial N → M ⊆ N
-  minimal-meets→least M M-min meets N N-nsg N-nontriv z =
-    proj₂ (M-min .minimal  (M ∩ N)
-                           (∩-isNormalSubgroup (M-min .normalSubgroup) N-nsg)
-                           proj₁ (meets N N-nsg N-nontriv) z)
-```
-
-```agda
+  -- A minimal normal subgroup lies below every nontrivial normal subgroup that
+  -- it does not meet trivially.
   minimal-meets→below : (M N : Pred G L) → IsMinimalNormal M
     → IsNormalSubgroup N → Nontrivial N → ¬ MeetTrivially M N → M ⊆ N
   minimal-meets→below M N M-min N-nsg N-nontriv MN = proj₂ ∘ M⊆MN
@@ -185,14 +180,28 @@ Note that no witness is extracted anywhere: `Nontrivial (M ∩ N)` and
       (∩-isNormalSubgroup (M-min .normalSubgroup) N-nsg) proj₁ MN
 ```
 
+Quantifying over `N` gives the form the monolith record below asks for: a minimal
+normal subgroup that meets every nontrivial normal subgroup nontrivially is below
+every one of them.
+
+```agda
+  -- A minimal normal subgroup that meets every nontrivial normal subgroup
+  -- nontrivially is below every one of them.
+  minimal-meets→least : (M : Pred G L) → IsMinimalNormal M
+    → (  ∀ N → IsNormalSubgroup N → Nontrivial N → ¬ MeetTrivially M N)
+    →    ∀ N → IsNormalSubgroup N → Nontrivial N → M ⊆ N
+  minimal-meets→least M M-min meets N N-nsg N-nontriv =
+    minimal-meets→below M N M-min N-nsg N-nontriv (meets N N-nsg N-nontriv)
+```
+
 #### Witnessed nontriviality, and minimality against witnessed subgroups
 
 `Nontrivial`{.AgdaFunction} is stated negatively, and that is the right choice for
 the arguments above; but a proof that a minimal normal subgroup exists cannot
 consume it.
 
-Over a finite group one recovers a witness for exactly one normal subgroup whose
-membership is decidable: `witness`{.AgdaFunction} of
+Over a finite group a witness can be recovered for a normal subgroup whose
+membership is decidable, and only for such a subgroup: `witness`{.AgdaFunction} of
 [Classical.Structures.Group.MinimalNormalDescent][] does the finite search, and
 the no-go theorem of that module shows the unrestricted passage from
 `Nontrivial`{.AgdaFunction} to `HasNontrivialWitness`{.AgdaFunction} is equivalent to
@@ -247,8 +256,7 @@ classical content in a single place rather than spread over the consumers.
 #### Monoliths and subdirect irreducibility
 
 A **monolith** is a minimal normal subgroup contained in every nontrivial normal
-subgroup.  A group has a monolith when there is exactly one nontrivial normal
-subgroup, which holds when, and only when, the group is subdirectly irreducible.[^1]
+subgroup.  A group has a monolith exactly when it is subdirectly irreducible.[^1]
 `HasMonolithᵍ`{.AgdaFunction} is therefore the group-side statement of subdirect
 irreducibility, and `minimal-meets→least`{.AgdaFunction} is how the parachute
 theorems of [FLRP.Parachute][] reach this characterization.
@@ -309,17 +317,20 @@ parachute representation has no nontrivial abelian normal subgroup.[^4]
       unique minimal normal subgroup."  The universal-algebra-side notion is
       `IsSubdirectlyIrreducible`{.AgdaFunction} of [Setoid.Congruences.Monolith][],
       stated for the congruence lattice of an algebra; the two are identified by the
-      correspondence between normal subgroups of `G` and congruences of `G`, which is
-      not yet formalized (see `docs/notes/flrp-rp2-catalog.md` § 4).
+      correspondence between normal subgroups of `G` and congruences of `G` of
+      [Classical.Structures.Group.Congruences][] (see footnote 3).
 
 [^2]: This is the step that turns the pairwise form of subdirect irreducibility
       (the constructive form the parachute theorems of [FLRP.Parachute][] prove)
       into the least-element form the algebra-side `IsMonolith`{.AgdaRecord} of
       [Setoid.Congruences.Monolith][] uses.
 
-[^3]: The formalization of normal-subgroup ↔ congruence correspondence is added to
-      the library in [PR #565](https://github.com/ualib/agda-algebras/pull/565),
-      closing [Issue #564](https://github.com/ualib/agda-algebras/issues/564).
+[^3]: The correspondence between the normal subgroups and the congruences of a
+      group is formalized in [Classical.Structures.Group.Congruences][] (M6-22).
+      The transport of `HasMonolithᵍ`{.AgdaFunction} across it to the algebra-side
+      `HasMonolith`{.AgdaFunction} has not been carried out; until it is, the
+      superscript keeps the two notions apart rather than pretending they are the
+      same definition.
 
 [^4]: `docs/papers/flrp/ieprops/IEProps-1205.1927v4.tex`, the Remark after
       Lemma 3.7: "If `N` is abelian, then `N ≤ C_G(N)`, so (i) implies that every

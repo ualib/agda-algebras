@@ -20,7 +20,8 @@ The Overture is the foundation layer: the vocabulary every later tree (`Setoid/`
    Galois connections, residuation.
 +  [Overture.Cayley][] represents finite binary operations by Cayley tables, with
    decision procedures that discharge their laws.
-+  [Overture.Counting][]
++  [Overture.Counting][] proves the two counting-by-filtering lemmas, monotone and
+   strict, that the library's well-founded descents on finite structures run on.
 +  [Overture.Functions][] collects the raw-function infrastructure (images,
    computed inverses, surjectivity) that the `Setoid/` tree builds on.
 +  [Overture.Operations][] represents an operation of arity `I` as a function
