@@ -84,7 +84,7 @@ open import Data.Fin.Patterns                      using  ( 0F ; 1F )
 open import Data.Fin.Properties                    using  ( _≟_ )
 open import Data.Nat.Base renaming ( _≤_ to _≤ⁿ_ ) using  ( ℕ ; zero ; suc ; _+_ )
 open import Data.Nat.Properties                    using  ( ≤-refl )
-open import Data.Product                           using  ( _×_ ; _,_ ; Σ-syntax
+open import Data.Product                           using  ( _×_ ; _,_ ; Σ-syntax ; ∃-syntax
                                                           ; proj₁ ; proj₂ )
 open import Data.Sum.Base                          using  ( _⊎_ ; inj₁ ; inj₂ )
 open import Data.Unit.Base                         using  ( tt )
@@ -556,7 +556,7 @@ parameters that module carries.
 
 ```agda
     module Rep
-      (𝒢     : Group 0ℓ 0ℓ)
+      (𝒢@(𝑮 , _)  : Group 0ℓ 0ℓ)
       (H     : Pred 𝕌[ proj₁ 𝒢 ] 0ℓ)
       (H-sg  : IsSubgroup 𝒢 H)
       (H-cf  : CoreFree 𝒢 H H-sg)
@@ -576,8 +576,8 @@ parameters that module carries.
       -- The minimality datum of RP-1's `Minimal` module, from a minimal normal
       -- subgroup in the sense of [Classical.Structures.Group.MinimalNormal][].
       private
-        minimality : {M : Pred 𝕌[ proj₁ 𝒢 ] 0ℓ} → IsMinimalNormal M
-          → {N : Pred 𝕌[ proj₁ 𝒢 ] 0ℓ} → IsSubgroup 𝒢 N → Conjugate.IsNormal 𝒢 N
+        minimality : {M : Pred 𝕌[ 𝑮 ] 0ℓ} → IsMinimalNormal M
+          → {N : Pred 𝕌[ 𝑮 ] 0ℓ} → IsSubgroup 𝒢 N → Conjugate.IsNormal 𝒢 N
           → N ⊆ M → Nontrivial N → M ⊆ N
         minimality M-min N-sg N-nrm =
           M-min .minimal _ (record { isSubgroup = N-sg ; isNormal = N-nrm })
@@ -625,27 +625,30 @@ forbids.
       monolith : MinimalNormalDescent 𝒢 → 𝒢₂ 𝒢
       monolith descent = M , record { isMinimalNormal = M-min ; least = M-least }
         where
-        open Setoid 𝔻[ proj₁ 𝒢 ]  using  ()  renaming ( sym to ≈symᵍ )
+        open Setoid 𝔻[ 𝑮 ]  using  ()  renaming ( sym to ≈symᵍ )
 
-        Full : Pred 𝕌[ proj₁ 𝒢 ] 0ℓ
-        Full = proj₁ (fullSubgroup 𝒢 0ℓ)
+        Full : Pred 𝕌[ 𝑮 ] 0ℓ
+        Full = fullSubgroup 𝒢 0ℓ .proj₁
 
         Full-nsg : IsNormalSubgroup Full
-        Full-nsg = record  { isSubgroup  = proj₂ (fullSubgroup 𝒢 0ℓ)
+        Full-nsg = record  { isSubgroup  = fullSubgroup 𝒢 0ℓ .proj₂
                            ; isNormal    = fullSubgroupIsnormal 0ℓ }
 
+        open IsSubgroup H-sg
         Full-nontriv : Nontrivial Full
-        Full-nontriv triv = K-⊄H p
-          (λ _ → IsSubgroup.respects H-sg (≈symᵍ (triv (lift _)))
-                                          (IsSubgroup.ε-closed H-sg))
+        Full-nontriv triv = K-⊄H p λ _ → respects (≈symᵍ (triv (lift _))) ε-closed
 
+        descended  : ∃[ M ] (IsMinimalNormal M × M ⊆ Full)
         descended  = descent Full Full-nsg Full-nontriv
-        M          = proj₁ descended
-        M-min      = proj₁ (proj₂ descended)
+
+        M : Pred 𝕌[ 𝑮 ] 0ℓ
+        M = descended .proj₁
+
+        M-min : IsMinimalNormal M
+        M-min = descended .proj₂ .proj₁
 
         -- No nontrivial normal subgroup meets `M` trivially (RP-1) ...
-        meets : (N : Pred 𝕌[ proj₁ 𝒢 ] 0ℓ) → IsNormalSubgroup N → Nontrivial N
-              → ¬ MeetTrivially M N
+        meets : ∀ N → IsNormalSubgroup N → Nontrivial N → ¬ MeetTrivially M N
         meets N N-nsg N-nontriv mt = N-nontriv
           (S.Minimal.normals-meet M
              (M-min .normalSubgroup .isSubgroup) (M-min .normalSubgroup .isNormal)
@@ -653,8 +656,9 @@ forbids.
              N (N-nsg .isSubgroup) (N-nsg .isNormal) (λ w∈M w∈N → mt (w∈M , w∈N)))
 
         -- ... so `M` is below every one of them.
-        M-least : (N : Pred 𝕌[ proj₁ 𝒢 ] 0ℓ) → IsNormalSubgroup N → Nontrivial N → M ⊆ N
-        M-least = minimal-meets→least M M-min meets
+        M-least : (N : Pred 𝕌[ 𝑮 ] 0ℓ) → IsNormalSubgroup N → Nontrivial N → M ⊆ N
+        M-least N N-nsg N-nt = minimal-meets→below M N M-min N-nsg N-nt (meets N N-nsg N-nt)
+                        -- or: minimal-meets→least M M-min meets
 ```
 
 The three entries, as cf-IE statements.  Each is core-free interval enforceability of
@@ -664,15 +668,15 @@ of "cf-IE via a parachute" in a library without well-founded descent on group or
 ```agda
     -- Entry 1: 𝒢₂ is cf-IE via the parachute (modulo descent).
     entry-𝒢₂ : cfIE (λ 𝒢 → MinimalNormalDescent 𝒢 → 𝒢₂ 𝒢) ⊕ᵖ-Lattice
-    entry-𝒢₂ 𝒢 H H-sg H-cf iso = Rep.monolith 𝒢 H H-sg H-cf iso
+    entry-𝒢₂ = Rep.monolith
 
     -- Entry 2: 𝒢₃ is cf-IE via the parachute (modulo descent).
     entry-𝒢₃ : cfIE (λ 𝒢 → MinimalNormalDescent 𝒢 → 𝒢₃ 𝒢) ⊕ᵖ-Lattice
-    entry-𝒢₃ 𝒢 H H-sg H-cf iso = Rep.nonabelian 𝒢 H H-sg H-cf iso
+    entry-𝒢₃ = Rep.nonabelian
 
     -- Entry 3: 𝒢₄ is cf-IE via the parachute (modulo descent).
     entry-𝒢₄ : cfIE (λ 𝒢 → MinimalNormalDescent 𝒢 → 𝒢₄ 𝒢) ⊕ᵖ-Lattice
-    entry-𝒢₄ 𝒢 H H-sg H-cf iso = Rep.centralizers 𝒢 H H-sg H-cf iso
+    entry-𝒢₄ = Rep.centralizers
 ```
 
 #### Composition: the catalog composes, its witnesses do not

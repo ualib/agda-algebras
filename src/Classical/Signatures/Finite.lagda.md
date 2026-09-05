@@ -13,18 +13,17 @@ This is the [Classical.Signatures.Finite][] module of the [Agda Universal Algebr
 The record `FiniteSignature`{.AgdaRecord} of [Setoid.Signatures.Finite][] packages
 what it means for a signature to be *finite finitary*: a finite surjective
 enumeration of its operation symbols, plus the `Finitary`{.AgdaFunction} witness
-that every arity is finite.  This module supplies the following canonical sanity-check
-instances:[^1]
+that every arity is finite.  This module supplies the following canonical
+sanity-check instances:[^1]
 
 +  `Sig-Lattice`{.AgdaFunction} ([Classical.Signatures.Lattice][]): two binary
-   operation symbols; both halves of the witness are finite case splits.
+   operation symbols; both halves of the witness are finite case splits;
 +  `Sig-Group`{.AgdaFunction} ([Classical.Signatures.Group][]): three operation
-   symbols, of arities two, zero, and one — the first signature here with a symbol
-   of every arity below three.
+   symbols, of arities two, zero, and one;
 +  `Sig-Unary A`{.AgdaFunction} ([Classical.Signatures.Unary][]): one unary symbol
    per element of `A`; the witness is exactly an enumeration of `A`.
 
-#### A caveat on enumerations up to `≈` versus up to `≡`
+#### A caveat on enumerations up to `≈`
 
 The symbol type of a signature is a bare type, so `opEnum-sur`{.AgdaField} demands
 surjectivity up to propositional equality `_≡_`.  The carrier enumeration of a
@@ -38,9 +37,9 @@ Consequently `Sig-Unary-FiniteSignature`{.AgdaFunction} below asks for an honest
 `FiniteAlgebra`{.AgdaRecord} witness.  In the intended applications this costs
 nothing; in points of fact,
 
-+  for a concrete finite group the raw carrier is typically `Fin n` or a finite data
-   type, where `≈` *is* `≡`;
-+  the raw carrier of a quotient `G/H` is that of `G` itself, so the same bare
++  for a concrete finite group the raw carrier is typically `Fin n` or a finite
+   data type, where `≈` *is* `≡`;
++  the raw carrier of a quotient `G / H` is that of `G` itself, so the same bare
    enumeration serves all coset algebras of `G` with no choice of coset
    representatives.
 
@@ -71,19 +70,19 @@ open FiniteSignature
 ```
 -->
 
-#### The lattice signature is finite finitary
+#### The lattice signature is finite and finitary
 
 Both lattice operation symbols are binary, so the `Finitary`{.AgdaFunction}
 witness names the identity bijection once per symbol, and the symbol enumeration
 lists the two symbols.
 
 ```agda
--- Each lattice operation symbol has finite arity (namely 2).
+-- The lattice signature is finitary: each operation symbol has finite arity.
 Sig-Lattice-Finitary : Finitary Sig-Lattice
 Sig-Lattice-Finitary ∧-Op = 2 , ↔-id _
 Sig-Lattice-Finitary ∨-Op = 2 , ↔-id _
 
--- The lattice signature is finite finitary.
+-- The lattice signature is finite: there are two operation symbols.
 Sig-Lattice-FiniteSignature : FiniteSignature Sig-Lattice
 Sig-Lattice-FiniteSignature .opCard              = 2
 Sig-Lattice-FiniteSignature .opEnum zero         = ∧-Op
@@ -93,23 +92,23 @@ Sig-Lattice-FiniteSignature .opEnum-sur ∨-Op     = suc zero , refl
 Sig-Lattice-FiniteSignature .finitary            = Sig-Lattice-Finitary
 ```
 
-#### The group signature is finite finitary
+#### The group signature is finite and finitary
 
 The three group operation symbols have arities `Fin 2`, `Fin 0`, and `Fin 1`, each
-already of the shape `Finitary`{.AgdaFunction} asks for, so the arity half is again
-the identity bijection once per symbol.  This is the witness that lets the decidable
-generated congruence of [Setoid.Congruences.Presented.Decidable][] — and hence the
-normal closure of [Classical.Structures.Group.NormalClosure][] — be formed over a
+already of the shape `Finitary`{.AgdaFunction} demands, so the arity half is again
+the identity bijection in each case.  From this witness we can derive the
+decidable generated congruence of [Setoid.Congruences.Presented.Decidable][], and
+hence the normal closure of [Classical.Structures.Group.NormalClosure][], over a
 finite group.
 
 ```agda
--- Each group operation symbol has finite arity (2, 0, and 1 respectively).
+-- The group signature is finitary: each operation symbol has finite arity.
 Sig-Group-Finitary : Finitary Sig-Group
 Sig-Group-Finitary ∙-Op   = 2 , ↔-id _
 Sig-Group-Finitary ε-Op   = 0 , ↔-id _
 Sig-Group-Finitary ⁻¹-Op  = 1 , ↔-id _
 
--- The group signature is finite finitary.
+-- The group signature is finite: there are three operation symbols.
 Sig-Group-FiniteSignature : FiniteSignature Sig-Group
 Sig-Group-FiniteSignature .opCard                    = 3
 Sig-Group-FiniteSignature .opEnum zero               = ∙-Op
@@ -123,15 +122,15 @@ Sig-Group-FiniteSignature .finitary                  = Sig-Group-Finitary
 
 #### The unary signature over an enumerated symbol type
 
-Given a surjective (up to `_≡_`; see the caveat above) enumeration of the bare
-type `A`, the unary signature over `A` is finite finitary: the symbol enumeration
-is the given one, and every arity is `Fin 1` definitionally.
+Given a surjective (up to `_≡_`) enumeration of the bare type `A`, the unary
+signature over `A` is finite and finitary: the symbol enumeration is the given one,
+and every arity is `Fin 1` definitionally.
 
 ```agda
 module _ {ℓ : Level}{A : Type ℓ}
          (n : ℕ)(e : Fin n → A)(e-sur : (a : A) → ∃[ i ] e i ≡ a) where
 
-  -- The unary signature over an enumerated symbol type is finite finitary.
+  -- The unary signature over an enumerated symbol type is finite.
   Sig-Unary-FiniteSignature : FiniteSignature (Sig-Unary A)
   Sig-Unary-FiniteSignature .opCard      = n
   Sig-Unary-FiniteSignature .opEnum      = e

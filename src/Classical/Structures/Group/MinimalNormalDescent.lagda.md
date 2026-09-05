@@ -11,8 +11,8 @@ author: "the agda-algebras development team"
 This is the [Classical.Structures.Group.MinimalNormalDescent][] module of the [Agda Universal Algebra Library][].
 
 Every nontrivial normal subgroup of a finite group contains a **minimal** one.  This
-module proves it, by well-founded descent on the order of a subgroup, and locates
-exactly the classical content of the textbook statement.
+module proves it, by well-founded descent on the order of a subgroup, and distills
+the precise classical content from the textbook statement.
 
 The textbook argument is a one-liner: among the nontrivial normal subgroups contained
 in `N`{.AgdaBound} choose one of least order.  Mechanized constructively, two things
@@ -21,71 +21,77 @@ have to be settled first, and they are the two design decisions of the module.
 +  **What is the order of a subgroup?**  A `FiniteAlgebra`{.AgdaRecord} witness
    ([Setoid.Algebras.Finite][]) for the underlying algebra gives decidable setoid
    equality and a surjective enumeration `enum : Fin card → G`, so the order of a
-   subgroup is the number of enumerated elements it contains — provided membership can
-   be *tested*.  A semantic-only subgroup has no computable order, so the measure lives
-   on the Layer-D presentation `Normalᵈ`{.AgdaFunction}: a normal subgroup bundled with
-   a membership decision procedure, exactly as `Intervalᵈ`{.AgdaFunction} of
-   [FLRP.Enforceable][] bundles an interval element with one.  This is [ADR-008][]'s
-   discipline, stated rather than smuggled in.
+   subgroup is the number of enumerated elements it contains, provided membership
+   can be tested.  The semantics of subgroups does not yield a computable notion
+   of order, so the measure lives in the Layer-D presentation
+   `Normalᵈ`{.AgdaFunction}: a normal subgroup bundled with a membership decision
+   procedure.[^1]
 
 +  **Which nontriviality?**  `Nontrivial N`{.AgdaFunction} of
-   [Classical.Structures.Group.MinimalNormal][] is the negative statement `¬ (N ⊆ 1)`,
-   which carries no witness — and a descent has nothing to descend from without one.
-   The theorem is therefore proved with `Witnessed`{.AgdaFunction} nontriviality on
-   both sides, and the two are reconciled where they can be: on a *decidably presented*
-   subgroup of a finite group the witness is recovered by a finite search
-   (`witness`{.AgdaFunction}).  The unrestricted passage is not available, and that is
-   a theorem, not an omission — see the no-go below.
+   [Classical.Structures.Group.MinimalNormal][] is the negative statement
+   `¬ N ⊆ 1`, which carries no witness, and without a witness there is nothing to
+   descend from.  The theorem is therefore proved with `NontrivialWitness`{.AgdaFunction}
+   providing a witness of nontriviality on both sides, and the two are reconciled
+   where they can be: on a *decidably presented* subgroup of a finite group the
+   witness is recovered by a finite search (`witness`{.AgdaFunction}).  The
+   unrestricted passage is not available, and that is a theorem, not an omission.
+   (See the no-go below.)
 
 #### What is proved
 
-`minimal-normal-descentʷ`{.AgdaFunction} is the theorem: a decidably presented normal
-subgroup with a witness contains a decidably presented `IsMinimalNormalʷ`{.AgdaRecord}
-one.  Note what is *not* restricted: the minimality clause it delivers quantifies over
-**every** normal subgroup, with no decidability assumed of it, and only the
-nontriviality hypothesis is in witnessed form.  The Layer-D corollaries follow by the
-finite search: `minimal-normal-descentᵈ`{.AgdaFunction} takes the negative
+The `minimal-normal-descentʷ`{.AgdaFunction} theorem proves that a decidably
+presented normal subgroup with a witness contains a decidably presented
+`IsMinimalNormalʷ`{.AgdaRecord} one.
+
+Note what is *not* restricted: the minimality clause of the theorem quantifies
+over **every** normal subgroup, with no decidability assumed of it, and only the
+nontriviality hypothesis is in witnessed form.  The Layer-D corollaries follow by
+the finite search: `minimal-normal-descentᵈ`{.AgdaFunction} takes the negative
 nontriviality hypothesis, and `minimalʷ→minimalᵈ`{.AgdaFunction} discharges the
 negative one in the minimality clause for a decidably presented competitor.
 
-The engine is [Classical.Structures.Group.NormalClosure][].  Descent needs a *smaller*
-candidate, and the normal closure `⟪ y ⟫`{.AgdaFunction} of an element supplies it: at
-each stage the argument asks whether some enumerated non-identity member of the current
-subgroup generates a strictly smaller normal subgroup.  If one does, recurse into it;
-if none does, the current subgroup is minimal, because a competitor's *witness*
-generates a normal closure trapped between them, and the failed search says that
-closure is not smaller — so it is all of the current subgroup, which is therefore
-inside the competitor.  Nothing here needs to enumerate the normal subgroups of the
-group; the search ranges over its *elements*, which is what carrier finiteness gives.
+The engine is [Classical.Structures.Group.NormalClosure][].  Descent needs a
+smaller candidate, and the normal closure `⟪ y ⟫` of an element supplies it: at
+each stage the argument asks whether some enumerated non-identity member of the
+current subgroup generates a strictly smaller normal subgroup.  If one does,
+recurse into it; if none does, the current subgroup is minimal, because a
+competitor's witness generates a normal closure trapped between them, and the
+failed search says that closure is not smaller, so it is all of the current
+subgroup, which is therefore inside the competitor.  Nothing here needs to
+enumerate the normal subgroups of the group; the search ranges over its elements,
+which is what carrier finiteness gives.
 
 #### The no-go, and what it means for the FLRP program
 
-`MinimalNormalDescent`{.AgdaFunction} of [FLRP.Reductions][] — the hypothesis threaded
-through Entries 1–3 of the RP-2 enforcement catalog — asks for a minimal normal
-subgroup in the *unrestricted* sense: minimality against every normal subgroup whose
-nontriviality is the negative statement.  `minimal→DNE`{.AgdaFunction} shows that the
-*witnessed* reading of that demand is not merely harder to prove, but classical: an
-unrestricted-minimal normal subgroup of a finite group, taken together with a
-witnessed non-identity element, decides `¬ ¬ P → P` for every proposition
+`MinimalNormalDescent`{.AgdaFunction} of [FLRP.Reductions][] (the hypothesis
+appearing in Entries 1–3 of the RP-2 enforcement catalog) asks for a minimal
+normal subgroup in the unrestricted sense: minimality against every normal
+subgroup whose nontriviality is the negative statement.
+`minimal→DNE`{.AgdaFunction} shows that the witnessed reading of that demand is
+not merely harder to prove, but classical.
+
+Indeed, an unrestricted minimal normal subgroup of a finite group, taken together
+with a witnessed non-identity element, decides `¬ ¬ P → P` for every proposition
 `P`{.AgdaBound} at the working level.  The instrument is the normal subgroup
-`M ∩ (1 ∪ P)`{.AgdaFunction}, an "oracle subgroup" in the style of the oracle
-congruence `θ[ P ]`{.AgdaFunction} that drives the WP-1 no-go of [FLRP.Problem][].
-The witness hypothesis is doing real work in that statement — extracting an element
+`M ∩ (1 ∪ P)`, an "oracle subgroup."[^2]
+The witness hypothesis is doing real work in that statement; extracting an element
 from the negative `Nontrivial`{.AgdaFunction} is itself a classical step
-(`witnessing→DNE`{.AgdaFunction} below) — so what the no-go rules out is any proof
-of descent that returns its minimal subgroups in witnessed form, which is the form
-the construction here naturally produces and the form every catalog consumer uses.
-Whether the bare negative reading of the hypothesis is *independently* derivable is
-not settled by this no-go; no route to it is in sight, and it would not feed the
-witnessed consumers in any case.
+(`witnessing→DNE`{.AgdaFunction} below).
+
+Thus, what the no-go rules out is any proof of descent that returns its minimal
+subgroups in witnessed form, which is the form the construction here naturally
+produces and the form every catalog consumer uses.  Whether the bare negative
+reading of the hypothesis is *independently* derivable is not settled by this
+no-go; no route to it is in sight, and it would not feed the witnessed consumers
+in any case.
 
 So the witnessed route to the descent hypothesis cannot be discharged outright, and
 the Layer-D restriction above is forced for it.  What *is* available unconditionally
-is the witnessed form over decidably presented subgroups, which is
-strictly stronger than the Layer-D form and is what a consumer with decidably presented
-subgroups actually needs; `minimal-normal-descent`{.AgdaFunction} records the remaining
-gap as one named principle, `WitnessedNontriviality`{.AgdaFunction}, rather than
-leaving it distributed over the catalog entries.
+is the witnessed form over decidably presented subgroups, which is strictly
+stronger than the Layer-D form and is what a consumer with decidably presented
+subgroups actually needs; `minimal-normal-descent`{.AgdaFunction} records the
+remaining gap as one named principle, `WitnessedNontriviality`{.AgdaFunction},
+rather than leaving it distributed over the catalog entries.
 
 <!--
 ```agda
@@ -117,18 +123,18 @@ open import Data.List.Membership.Propositional.Properties  using  ( ∈-allFin )
 import Algebra.Properties.Group as GroupProperties
 
 -- Imports from the Agda Universal Algebra Library ------------------------------
-open import Overture                                     using  ( filter-length-mono
-                                                                ; filter-length-strict )
-open import Classical.Bundles.Group                      using  ( ⟨_⟩ᵍᵖ )
-open import Classical.Structures.Group.Basic             using  ( Group ; module Group-Op )
-open import Classical.Structures.Group.Congruences        using  ( module GroupCongruences )
-open import Classical.Structures.Group.Conjugation        using  ( module Conjugate )
-open import Classical.Structures.Group.MinimalNormal      using  ( module MinimalNormal )
-open import Classical.Structures.Group.NormalClosure      using  ( module NormalClosureᵈ )
-open import Classical.Structures.Group.Subgroups          using  ( IsSubgroup
-                                                                 ; mkIsSubgroup )
-open import Setoid.Algebras.Basic                        using  ( 𝕌[_] ; 𝔻[_] )
-open import Setoid.Algebras.Finite                       using  ( FiniteAlgebra )
+open import Overture                                  using  ( filter-length-mono
+                                                             ; filter-length-strict )
+open import Classical.Bundles.Group                   using  ( ⟨_⟩ᵍᵖ )
+open import Classical.Structures.Group.Basic          using  ( Group ; module Group-Op )
+open import Classical.Structures.Group.Congruences    using  ( module GroupCongruences )
+open import Classical.Structures.Group.Conjugation    using  ( module Conjugate )
+open import Classical.Structures.Group.MinimalNormal  using  ( module MinimalNormal )
+open import Classical.Structures.Group.NormalClosure  using  ( module NormalClosureᵈ )
+open import Classical.Structures.Group.Subgroups      using  ( IsSubgroup
+                                                             ; mkIsSubgroup )
+open import Setoid.Algebras.Basic                     using  ( 𝕌[_] ; 𝔻[_] )
+open import Setoid.Algebras.Finite                    using  ( FiniteAlgebra )
 ```
 -->
 
@@ -136,17 +142,18 @@ open import Setoid.Algebras.Finite                       using  ( FiniteAlgebra 
 
 A **finite group** is a group together with carrier-finiteness data for its underlying
 algebra.  Nothing else is assumed: no enumeration of the subgroups, and no finiteness
-datum about the congruence lattice.
+constraint on the congruence lattice.
 
 ```agda
-module MinimalNormalDescent {α ρ : Level} (𝒢 : Group α ρ) (𝑭 : FiniteAlgebra (proj₁ 𝒢)) where
+module MinimalNormalDescent {α ρ : Level} (𝒢@(𝑮 , _) : Group α ρ) (𝑭 : FiniteAlgebra (proj₁ 𝒢)) where
   private
-    𝑮 = proj₁ 𝒢
+    G : Type α
     G = 𝕌[ 𝑮 ]
 
   open FiniteAlgebra 𝑭  using  ( _≟_ ; card ; enum ; enum-sur )
-  open Setoid 𝔻[ 𝑮 ]  using  ( _≈_ )
-                      renaming ( refl to ≈refl ; sym to ≈sym ; trans to ≈trans )
+  open Setoid 𝔻[ 𝑮 ]    using ( _≈_ )
+                        renaming  ( refl to ≈refl ; sym to ≈sym ; trans to ≈trans )
+
   open Group-Op 𝒢               using  ( _∙_ ; ε ; _⁻¹ ; ∙-cong ; ⁻¹-cong ; idˡ-law )
   open GroupProperties ⟨ 𝒢 ⟩ᵍᵖ  using  ( ε⁻¹≈ε )
   open Conjugate 𝒢              using  ( IsNormal ; conj-cong ; conj-ε )
@@ -156,11 +163,10 @@ module MinimalNormalDescent {α ρ : Level} (𝒢 : Group α ρ) (𝑭 : FiniteA
   open MinimalNormal 𝒢 ρ        public
 ```
 
-Passing between the two bundlings of a normal subgroup — the record
-`IsNormalSubgroup`{.AgdaRecord} of [Classical.Structures.Group.MinimalNormal][], and
+Passing between the two bundlings of a normal subgroup (the record
+`IsNormalSubgroup`{.AgdaRecord} of [Classical.Structures.Group.MinimalNormal][] and
 the Σ-type `NormalSubgroup`{.AgdaFunction} of
-[Classical.Structures.Group.Congruences][] that the normal closure speaks — is
-projection and pairing.
+[Classical.Structures.Group.Congruences][]) is projection and pairing.
 
 ```agda
   private
@@ -197,7 +203,7 @@ for its membership, with `setᵈ`{.AgdaFunction}, `isNormalᵈ`{.AgdaFunction}, 
 ```
 
 Two consequences of the enumeration, used throughout: every element has an enumerated
-representative, and a subgroup — respecting the setoid equality — contains an element
+representative, and a subgroup respecting the setoid equality contains an element
 exactly when it contains that representative.
 
 ```agda
@@ -271,19 +277,19 @@ per the library's house style.
 #### Nontriviality is witnessed, at Layer D
 
 On a finite group the negative `Nontrivial`{.AgdaFunction} hypothesis upgrades to a
-`Witnessed`{.AgdaFunction} one for a decidably presented subgroup, by searching the
+`HasNontrivialWitness`{.AgdaFunction} one for a decidably presented subgroup, by searching the
 enumeration for a non-identity member: `witness`{.AgdaFunction} is the passage the
 no-go below shows cannot exist for arbitrary predicates.
 
 ```agda
   -- On a finite group a decidably presented nontrivial normal subgroup has a witness.
-  witness : (𝑵 : Normalᵈ) → Nontrivial (setᵈ 𝑵) → Witnessed (setᵈ 𝑵)
+  witness : (𝑵 : Normalᵈ) → Nontrivial (setᵈ 𝑵) → HasNontrivialWitness (setᵈ 𝑵)
   witness 𝑵 nontriv = found (any? (λ i → (enum i ∈ᵈ? 𝑵) ×-dec ¬? (enum i ≟ ε)))
     where
     -- Found: the enumerated element is the witness.  Not found: every member of 𝑵
     -- is ≈ ε, since its representative is, so 𝑵 was trivial after all.
     found : Dec (Σ[ i ∈ Fin card ] (enum i ∈ setᵈ 𝑵 × ¬ (enum i ≈ ε)))
-          → Witnessed (setᵈ 𝑵)
+          → HasNontrivialWitness (setᵈ 𝑵)
     found (yes (i , mem , ne))  = enum i , mem , ne
     found (no ¬any)             = ⊥-elim (nontriv triv)
       where
@@ -296,7 +302,7 @@ no-go below shows cannot exist for arbitrary predicates.
 
 #### The descent
 
-The normal closure of an element, as a Layer-D normal subgroup — the candidate the
+The normal closure of an element, as a Layer-D normal subgroup, is the candidate the
 descent steps into.
 
 ```agda
@@ -326,12 +332,12 @@ finite search over the carrier enumeration.
 When the search fails, the current subgroup is minimal.  A competitor `N`{.AgdaBound}
 inside it has a witness `y`{.AgdaBound}; the normal closure of `y`{.AgdaBound} lies
 inside `N`{.AgdaBound}, hence inside `𝑴`{.AgdaBound}, and the failed search says it is
-not of strictly smaller order — so it is all of `𝑴`{.AgdaBound}, and `𝑴 ⊆ N`.
+not of strictly smaller order, so it is all of `𝑴`{.AgdaBound}, and `𝑴 ⊆ N`.
 
 ```agda
   -- The minimality of a subgroup no enumerated element of which descends.
   private
-    exhausted→minimalʷ : (𝑴 : Normalᵈ) → Witnessed (setᵈ 𝑴)
+    exhausted→minimalʷ : (𝑴 : Normalᵈ) → HasNontrivialWitness (setᵈ 𝑴)
       →  ((i : Fin card) → ¬ Step 𝑴 i) → IsMinimalNormalʷ (setᵈ 𝑴)
     exhausted→minimalʷ 𝑴 wit ¬step = record
       { normalSubgroupʷ  = isNormalᵈ 𝑴
@@ -339,7 +345,7 @@ not of strictly smaller order — so it is all of `𝑴`{.AgdaBound}, and `𝑴 
       ; minimalʷ         = below
       }
       where
-      below : (N : Pred G L) → IsNormalSubgroup N → N ⊆ setᵈ 𝑴 → Witnessed N
+      below : (N : Pred G L) → IsNormalSubgroup N → N ⊆ setᵈ 𝑴 → HasNontrivialWitness N
         →  setᵈ 𝑴 ⊆ N
       below N N-nsg N⊆M (y , y∈N , y≉ε) = λ z → clo⊆N (M⊆clo z)
         where
@@ -365,11 +371,11 @@ not of strictly smaller order — so it is all of `𝑴`{.AgdaBound}, and `𝑴 
 ```
 
 The recursion itself, on the accessibility of the order.  Each step either exhausts the
-search — and stops — or moves to a normal closure of strictly smaller order.
+search and stops, or moves to a normal closure of strictly smaller order.
 
 ```agda
   private
-    descend : (𝑴 : Normalᵈ) → Acc _<_ ∥ 𝑴 ∥ → Witnessed (setᵈ 𝑴)
+    descend : (𝑴 : Normalᵈ) → Acc _<_ ∥ 𝑴 ∥ → HasNontrivialWitness (setᵈ 𝑴)
       →  Σ[ 𝑵 ∈ Normalᵈ ] (IsMinimalNormalʷ (setᵈ 𝑵) × setᵈ 𝑵 ⊆ setᵈ 𝑴)
     descend 𝑴 (acc rs) wit = step (any? (Step? 𝑴))
       where
@@ -400,7 +406,7 @@ nontriviality is negative.
 ```agda
   -- Minimal-normal descent: every witnessed-nontrivial, decidably presented normal
   -- subgroup of a finite group contains a minimal normal subgroup.
-  minimal-normal-descentʷ : (𝑴 : Normalᵈ) → Witnessed (setᵈ 𝑴)
+  minimal-normal-descentʷ : (𝑴 : Normalᵈ) → HasNontrivialWitness (setᵈ 𝑴)
     →  Σ[ 𝑵 ∈ Normalᵈ ] (IsMinimalNormalʷ (setᵈ 𝑵) × setᵈ 𝑵 ⊆ setᵈ 𝑴)
   minimal-normal-descentʷ 𝑴 = descend 𝑴 (<-wellFounded ∥ 𝑴 ∥)
 
@@ -459,13 +465,13 @@ either by the trivial branch or, once `P`{.AgdaBound} holds, by the constant one
 Now the no-go.  Let `M`{.AgdaBound} be minimal in the unrestricted sense, with a
 witness `x₀`{.AgdaBound}.  The normal subgroup `M ∩ Trivᴾ`{.AgdaFunction} is inside
 `M`{.AgdaBound}, and it is nontrivial in the negative sense as soon as
-`P`{.AgdaBound} is not refutable — so minimality puts `M`{.AgdaBound} inside it, and
+`P`{.AgdaBound} is not refutable; so minimality puts `M`{.AgdaBound} inside it, and
 reading the second component at `x₀`{.AgdaBound} returns `P`{.AgdaBound}, since
 `x₀`{.AgdaBound} is not the identity.
 
 ```agda
   -- Unrestricted minimality decides ¬ ¬ P → P for every proposition at the level L.
-  minimal→DNE : {M : Pred G L} → IsMinimalNormal M → Witnessed M
+  minimal→DNE : {M : Pred G L} → IsMinimalNormal M → HasNontrivialWitness M
     →  (P : Type L) → ¬ ¬ P → P
   minimal→DNE {M} M-min (x₀ , x₀∈M , x₀≉ε) P ¬¬p = read (proj₂ (M⊆N x₀∈M))
     where
@@ -496,7 +502,7 @@ The same argument, with no minimality anywhere, prices the one principle that se
 `IsMinimalNormalʷ`{.AgdaRecord} from `IsMinimalNormal`{.AgdaRecord}: witnessing
 nontriviality for arbitrary normal subgroups is itself double-negation elimination.  So
 `minimal-normal-descent`{.AgdaFunction} below is not hiding a second classical step
-behind the first — there is exactly one, and this is it.
+behind the first; there is exactly one, and this is it.
 
 ```agda
   -- Witnessing nontriviality unrestrictedly is double-negation elimination.
@@ -514,13 +520,13 @@ behind the first — there is exactly one, and this is it.
 
     -- The oracle subgroup's own witness is not the identity, so its oracle
     -- component cannot be the trivial branch, and P is read off directly.
-    read : Witnessed (M ∩ Trivᴾ) → P
+    read : HasNontrivialWitness (M ∩ Trivᴾ) → P
     read (_ , (_ , inj₁ y≈ε)  , y≉ε)  = ⊥-elim (y≉ε y≈ε)
     read (_ , (_ , inj₂ p)    , _)    = p
 
     -- The oracle subgroup is nontrivial unless P is refutable, so the witnessing
     -- principle applies to it.
-    from-witness : Witnessed M → P
+    from-witness : HasNontrivialWitness M → P
     from-witness (x₀ , x₀∈M , x₀≉ε) = read (wit (M ∩ Trivᴾ) N-nsg N-nontriv)
       where
       N-nontriv : Nontrivial (M ∩ Trivᴾ)
@@ -529,8 +535,8 @@ behind the first — there is exactly one, and this is it.
 
 #### The unrestricted descent, modulo the one principle
 
-Granted `WitnessedNontriviality`{.AgdaFunction} — and by the no-go above nothing
-weaker will do — the descent lands in the form [FLRP.Reductions][] threads.
+Granted `WitnessedNontriviality`{.AgdaFunction} (and by the no-go above nothing
+weaker will do) the descent lands in the form [FLRP.Reductions][] threads.
 
 ```agda
   -- Minimal-normal descent in the unrestricted form, modulo the witnessing principle.
@@ -549,8 +555,8 @@ That still asks its input to be decidably presented, so it is not yet the proper
 `MinimalNormalDescent`{.AgdaFunction} of [FLRP.Reductions][], which quantifies over
 *semantic* normal subgroups.  The gap is one hypothesis, and it is not a new one: it is
 the group-side reading of `complete`{.AgdaField} of
-`FiniteCongruences`{.AgdaRecord} ([Setoid.Congruences.Finite.Basic][]) — every normal
-subgroup is `⊆`-equal to a decidably presented one — which the two-layer note already
+`FiniteCongruences`{.AgdaRecord} ([Setoid.Congruences.Finite.Basic][]) (every normal
+subgroup is `⊆`-equal to a decidably presented one) which the two-layer note already
 identifies as the library's single Layer-S bridge, of strength between weak excluded
 middle and excluded middle.
 
@@ -576,7 +582,7 @@ nontrivial, hence witnessed by the finite search, and the witness travels back.
     nontrivᵈ : Nontrivial (setᵈ (proj₁ presentation))
     nontrivᵈ ⊆Triv = nontriv (λ z → ⊆Triv (proj₂ (proj₂ presentation) z))
 
-    w : Witnessed (setᵈ (proj₁ presentation))
+    w : HasNontrivialWitness (setᵈ (proj₁ presentation))
     w = witness (proj₁ presentation) nontrivᵈ
 ```
 
@@ -603,3 +609,10 @@ And with it the descent is the property the catalog threads, verbatim.
 ```
 
 --------------------------------------
+
+[^1]: exactly as `Intervalᵈ`{.AgdaFunction} of [FLRP.Enforceable][] bundles an
+      interval element with one; this is [ADR-008][]'s  discipline, stated rather
+      than smuggled in.
+
+[^2]: This is just like the oracle congruence `θ[ P ]`{.AgdaFunction} that drives
+      the WP-1 no-go of [FLRP.Problem][].
