@@ -49,12 +49,16 @@ list.
    +  [Classical.Structures.Group.NormalSubgroupLattice][]:
       congruence lattices of groups;
    +  [Classical.Structures.Group.NormalClosure][]:
-      witness terms for normal-closure membership, the replay language of
-      simplicity certificates;
+      normal closures, twice: witness terms for membership (the replay language
+      of simplicity certificates), and the decidable construction over a finite
+      group;
    +  [Classical.Structures.Group.NormalCore][]:
       maximal normal subgroups;
    +  [Classical.Structures.Group.MinimalNormal][]:
       minimal normal subgroups and monoliths;
+   +  [Classical.Structures.Group.MinimalNormalDescent][]:
+      every nontrivial normal subgroup of a finite group contains a minimal
+      one, with the classical content isolated in one named principle;
    +  [Classical.Structures.Group.MaximalSubgroup][]:
       maximal subgroups, as the classification data the two-element-chain
       catalog entry consumes;
@@ -101,6 +105,7 @@ open import Classical.Structures.Group.GSet                    public
 open import Classical.Structures.Group.IndexAction             public
 open import Classical.Structures.Group.MaximalSubgroup         public
 open import Classical.Structures.Group.MinimalNormal           public
+open import Classical.Structures.Group.MinimalNormalDescent    public
 open import Classical.Structures.Group.NormalClosure           public
 open import Classical.Structures.Group.NormalCore              public
 open import Classical.Structures.Group.NormalSubgroupLattice   public

@@ -142,11 +142,12 @@ Chain⊆Gen 𝑩 θ φ (cons r c)  = transitive (base r) (Chain⊆Gen 𝑩 θ φ
 
 #### Finitary signatures
 
-A signature is **finitary** when every operation symbol has a finite arity — a finite
-bijection `ArityOf 𝑆 f ↔ Fin k`.  This is the standing assumption of ordinary (finitary)
-universal algebra, and for the signatures of the library it is *immediate*: each arity is a
-concrete `Fin k`, so the witness is the identity bijection `↔-id` at every symbol —
-`λ _ → _ , ↔-id`.
+A signature is **finitary** when every operation symbol has a finite arity; that is,
+there exists a finite bijection `ArityOf 𝑆 f ↔ Fin k` for some natural number `k`.
+This is the standing assumption of "ordinary" (finitary) universal algebra, and
+it holds of the example signatures defined in this library: each arity is a concrete
+`Fin k`, for some `k : ℕ`, so the witness is the identity bijection `↔-id` at
+every symbol.
 
 ```agda
 Finitary : (𝑆 : Signature 𝓞 𝓥) → Type (𝓞 ⊔ 𝓥)
