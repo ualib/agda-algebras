@@ -71,18 +71,18 @@ open import Agda.Primitive using () renaming ( Set to Type )
 open import Data.Fin.Base    using  ( Fin )
 open import Data.Fin.Patterns using ( 0F ; 1F )
 open import Data.Fin.Properties using ( _≟_ )
-open import Data.Nat.Base    using  ( ℕ ; _+_ )
+open import Data.Nat.Base    using  ( ℕ ; suc ; _+_ )
 open import Data.Product     using  ( _,_ ; _×_ ; Σ-syntax ; proj₁ ; proj₂ )
 open import Level            using  ( Level ; 0ℓ )
 open import Relation.Binary  using  ( Setoid )
 open import Relation.Binary.PropositionalEquality  using  ( _≡_ ; sym ; trans )
-open import Relation.Nullary using  ( ¬_ ; Dec ; yes ; no )
+open import Relation.Nullary using  ( ¬_ ; yes ; no )
 open import Relation.Unary   using  ( Pred ; _∈_ )
 
 -- Imports from the Agda Universal Algebra Library ------------------------------
-open import Classical.Properties.Lattice  using  ( TopOf ; BottomOf )
 open import Classical.Small.Structures    using  ( Lattice )
 open import Classical.Structures.Group    using  ( Group ; IsSubgroup )
+open import Classical.Structures.Lattice.Parachute  using  ( Parachute )
 open import FLRP.Assumptions              using  ( PalfyPudlak )
 open import FLRP.Enforceable  using  ( module UpperInterval ; CoreFree ; cfIE
                                      ; CoreFreeReduction ; GroupProperty
@@ -99,20 +99,13 @@ open import Setoid.Algebras   using  ( 𝕌[_] ; 𝔻[_] )
 
 #### The setting
 
-A family of `2 + m` canopies with the data the parachute construction needs, two
-distinguished big canopies, and a property core-free enforceable by each canopy.
+A parachute of `2 + m` canopies, two distinguished big canopies, and a property
+core-free enforceable by each canopy.
 
 ```agda
-module ParachuteTheorems {ℓP : Level} {m : ℕ}
-  (𝑳s      : Fin (2 + m) → Lattice)
-  (𝒕       : ∀ {i} → TopOf (𝑳s i))
-  (top?    : ∀ {i} (x : 𝕌[ 𝑳s i .proj₁ ])
-           → Dec (Setoid._≈_ 𝔻[ 𝑳s i .proj₁ ] x (𝒕 .proj₁)))
-  (𝒃       : ∀ {i} → BottomOf (𝑳s i))
-  (nondeg  : ∀ i → ¬ (Setoid._≈_ 𝔻[ 𝑳s i .proj₁ ] (𝒃 .proj₁) (𝒕 .proj₁)))
-  where
+module ParachuteTheorems {ℓP : Level} {m : ℕ} (𝒫 : Parachute 0ℓ 0ℓ (suc m)) where
 
-  open ParachuteRep 𝑳s 𝒕 top? 𝒃 nondeg public
+  open ParachuteRep 𝒫 public
 ```
 
 Every index has a companion, since there are at least two canopies; this is what
@@ -142,7 +135,7 @@ Fix the two big canopies and the enforced properties.
     (big-p    : BigCanopyᴸ p)
     (big-q    : BigCanopyᴸ q)
     (Ps       : Fin (2 + m) → GroupProperty ℓP)
-    (Ps-cfIE  : ∀ i → cfIE (Ps i) (𝑳s i))
+    (Ps-cfIE  : ∀ i → cfIE (Ps i) (𝓛 i))
     where
 ```
 
@@ -186,7 +179,7 @@ core-free and carries its canopy, so the group has every enforced property.
       -- The witnesses, in the packaged form statement (C) asks for.
       canopy-witnesses : (i : Fin (2 + m))
         → ∃[ J ∈ Pred 𝕌[ proj₁ 𝒢 ] 0ℓ ] ∃[ J-sg ∈ IsSubgroup 𝒢 J ]
-            ( CoreFree 𝒢 J J-sg × IntervalIso 𝒢 J J-sg (𝑳s i) )
+            ( CoreFree 𝒢 J J-sg × IntervalIso 𝒢 J J-sg (𝓛 i) )
       canopy-witnesses i =
         set (K i) , element-isSubgroup (K i) , K-CoreFree i , canopyIso i
 ```
@@ -211,7 +204,7 @@ enforced classes, with every canopy realized over a core-free subgroup.
       →  Σ[ 𝒢 ∈ Group 0ℓ 0ℓ ]
            (  (∀ i → Ps i 𝒢)
            ×  (∀ i → ∃[ J ∈ Pred 𝕌[ proj₁ 𝒢 ] 0ℓ ] ∃[ J-sg ∈ IsSubgroup 𝒢 J ]
-                     ( CoreFree 𝒢 J J-sg × IntervalIso 𝒢 J J-sg (𝑳s i) )) )
+                     ( CoreFree 𝒢 J J-sg × IntervalIso 𝒢 J J-sg (𝓛 i) )) )
     parachute-representable rep cfr =
       𝒬 , Core-Free.enforced 𝒬 J J-sg J-cf iso𝒬
         , Core-Free.canopy-witnesses 𝒬 J J-sg J-cf iso𝒬

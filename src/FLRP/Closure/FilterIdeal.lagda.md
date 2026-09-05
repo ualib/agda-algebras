@@ -108,7 +108,7 @@ open import Overture.Operations              using  ( Op )
 open import Setoid.Algebras.Basic            using  ( Algebra ; 𝔻[_] ; 𝕌[_]
                                                     ; mkAlgebra ; _^_ )
 open import Setoid.Algebras.Finite           using  ( FiniteAlgebra )
-open import Setoid.Congruences.Basic         using  ( Con ; mkcon ; _∣≈_ ; reflexive
+open import Setoid.Congruences.Basic         using  ( mkcon ; _∣≈_ ; reflexive
                                                     ; is-equivalence ; is-compatible
                                                     ; 𝟘[_] )
 open import Setoid.Congruences.Finite.Basic  using  ( DecCon ; ConRel )

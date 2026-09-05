@@ -54,7 +54,8 @@ open import Classical.Properties.Lattice            using  ( module Lattice-Orde
                                                            ; TopOf ; BottomOf )
 open import Classical.Small.Structures              using  ( Lattice )
 open import Classical.Structures.Group              using  ( Group ; IsSubgroup )
-open import Classical.Structures.Lattice.Parachute  using  ( module LatticeParachute )
+open import Classical.Structures.Lattice.Parachute  using  ( Parachute
+                                                            ; module LatticeParachute )
 open import FLRP.Enforceable                        using  ( module UpperInterval
                                                            ; IntervalIso )
 open import FLRP.Parachute                          using  ( module GroupParachute )
@@ -173,26 +174,18 @@ compose-IntervalIsoʳ 𝒢 H H-sg 𝓜@(𝑴 , _) 𝓛@(𝑳 , _) I J = record
 
 #### The configuration of a parachute representation
 
-Fix a family of canopies with their extrema and the decision procedure the
-parachute construction needs, and a group representation of the resulting
-parachute lattice.
+Fix a parachute, a family of canopies with the data the construction needs, and
+a group representation of its lattice.
 
 ```agda
-open Setoid
-module ParachuteRep {m : ℕ}
-  (𝑳s : Fin (suc m) → Lattice)
-  (𝒕 : ∀ {i} → TopOf (𝑳s i))
-  (top? : ∀ {i} (x : 𝕌[ 𝑳s i .proj₁ ]) → Dec (𝔻[ 𝑳s i .proj₁ ] ._≈_ x (𝒕 .proj₁)))
-  (𝒃 : ∀ {i} → BottomOf (𝑳s i))
-  (nondeg : ∀ i → ¬ 𝔻[ 𝑳s i .proj₁ ] ._≈_ (𝒃 .proj₁) (𝒕 .proj₁))
-  where
+module ParachuteRep {m : ℕ} (𝒫 : Parachute 0ℓ 0ℓ m) where
 
-  open LatticeParachute 𝑳s 𝒕 top? 𝒃 nondeg public renaming (_≈_ to _≈p_)
+  open LatticeParachute 𝒫 public
 
   -- "|Lᵢ| > 2": the i-th canopy has an element strictly between its two ends.
   record BigCanopyᴸ (i : Fin (suc m)) : Type 0ℓ where
     field
-      elt          : 𝕌[ 𝑳s i .proj₁ ]
+      elt          : U i
       elt-not-bot  : ¬ elt ≤ bot
       elt-not-top  : NonTop elt
 
@@ -316,11 +309,11 @@ a member of `[H , G]` (`widen`{.AgdaFunction}), since `H ⊆ Kᵢ`.
       widen M = mk (setᴷ M) (element-isSubgroupᴷ M) (aboveᴷ M ∘ above (K i))
 
       -- The i-th canopy coordinate of a member of [Kᵢ , G] ...
-      toᶜ : Interval≈ᴷ → 𝕌[ 𝑳s i .proj₁ ]
+      toᶜ : Interval≈ᴷ → U i
       toᶜ M = π i (to (widen M))
 
       -- ... and the member of [Kᵢ , G] a canopy element names.
-      fromᶜ : 𝕌[ 𝑳s i .proj₁ ] → Interval≈ᴷ
+      fromᶜ : U i → Interval≈ᴷ
       fromᶜ x = mkᴷ  (set (from (↑ x)))
                        (element-isSubgroup (from (↑ x)))
                        (from-mono′ (atom i) (↑ x) (≤ᵖ-sound (atom-≤-↑ x)))
@@ -328,17 +321,17 @@ a member of `[H , G]` (`widen`{.AgdaFunction}), since `H ⊆ Kᵢ`.
       toᶜ-mono : (M N : Interval≈ᴷ) → M ≤ᵢᴷ N → toᶜ M ≤ toᶜ N
       toᶜ-mono M N le = π-mono i (≤ᵖ-complete (to-mono′ (widen M) (widen N) le))
 
-      fromᶜ-mono : (x y : 𝕌[ 𝑳s i .proj₁ ]) → x ≤ y → fromᶜ x ≤ᵢᴷ fromᶜ y
+      fromᶜ-mono : (x y : U i) → x ≤ y → fromᶜ x ≤ᵢᴷ fromᶜ y
       fromᶜ-mono x y e = from-mono′ (↑ x) (↑ y) (≤ᵖ-sound (↑-mono e))
 
-      -- Round trip through the canopy: π i undoes ↑ i.
-      toᶜ∘fromᶜ : (x : 𝕌[ 𝑳s i .proj₁ ]) → toᶜ (fromᶜ x) ≈p x
+      -- Round trip through the canopy: π i undoes ↑.
+      toᶜ∘fromᶜ : (x : U i) → toᶜ (fromᶜ x) ≈ x
       toᶜ∘fromᶜ x = ≈trans (π-cong i step) (π∘↑ x)
         where
         step : to (widen (fromᶜ x)) ≈ᵖ ↑ x
         step = ≈ᵖ-trans (to-≈ (widen (fromᶜ x))(from (↑ x)) (id , id)) (to∘from (↑ x))
 
-      -- Round trip through the interval: ↑ i undoes π i above the i-th atom.
+      -- Round trip through the interval: ↑ undoes π i above the i-th atom.
       fromᶜ∘toᶜ : (M : Interval≈ᴷ) → fromᶜ (toᶜ M) ≈ᵢᴷ M
       fromᶜ∘toᶜ M = round
         where
@@ -354,7 +347,7 @@ a member of `[H , G]` (`widen`{.AgdaFunction}), since `H ⊆ Kᵢ`.
                           (from∘to (widen M))
 
       -- The canopy isomorphism [Kᵢ , G] ≅ Lᵢ.
-      canopy-iso : IntervalIso 𝒢 (set (K i)) Kᵢ-sg (𝑳s i)
+      canopy-iso : IntervalIso 𝒢 (set (K i)) Kᵢ-sg (𝓛 i)
       canopy-iso = record
         { to         = toᶜ
         ; from       = fromᶜ
@@ -365,7 +358,7 @@ a member of `[H , G]` (`widen`{.AgdaFunction}), since `H ⊆ Kᵢ`.
         }
 
     canopyIso : (i : Fin (suc m))
-      → IntervalIso 𝒢 (set (K i)) (element-isSubgroup (K i)) (𝑳s i)
+      → IntervalIso 𝒢 (set (K i)) (element-isSubgroup (K i)) (𝓛 i)
     canopyIso i = Canopy.canopy-iso i
 ```
 
@@ -387,11 +380,11 @@ is precisely the `BigCanopy`{.AgdaRecord} datum of [FLRP.Parachute][].
       open BigCanopyᴸ big
 
       -- The canopy coordinate of the member named by `elt` is `elt` again ...
-      coordinate : π i (to (from (↑ elt))) ≈p elt
+      coordinate : π i (to (from (↑ elt))) ≈ elt
       coordinate = ≈trans (π-cong i (to∘from (↑ elt))) (π∘↑ elt)
 
       -- ... and the canopy coordinate of the atom is the canopy's bottom.
-      atom-coordinate : π i (to (K i)) ≈p bot
+      atom-coordinate : π i (to (K i)) ≈ bot
       atom-coordinate = ≈trans (π-cong i (≈ᵖ-sym (K-image i))) π-atom
 
       -- Were the middle element below the atom, its canopy coordinate would be

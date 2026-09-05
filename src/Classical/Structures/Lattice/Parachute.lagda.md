@@ -102,6 +102,7 @@ open import Data.Product                           using ( _,_ ; _×_ ; Σ-synta
                                                          ; proj₁ ; proj₂ ; swap )
 open import Data.Sum.Base                          using ( _⊎_ ; inj₁ ; inj₂ )
 open import Level                                  using ( Level ; _⊔_ )
+                                                   renaming ( suc to lsuc )
 open import Relation.Binary                        using ( Setoid ; IsEquivalence
                                                          ; IsPartialOrder )
 open import Relation.Binary.PropositionalEquality  using ( _≡_ ; refl ; ≡-≟-identity )
@@ -122,35 +123,49 @@ private variable α ρ : Level
 ```
 -->
 
-#### The construction
+#### The data of a parachute
 
-`LatticeParachute 𝓛 𝒕 top? 𝒃 nondeg` fixes the canopies `𝓛`, their chosen tops `𝒕`
-(all identified in the parachute), the decision procedure `top?` for being the top
-of one's canopy, their chosen bottoms `𝒃` (the atoms of the parachute), and the
-assumption `nondeg` that no canopy is a single point (without which its "atom"
-would be its top).
+A `Parachute α ρ m`{.AgdaRecord} is the data the construction consumes: `suc m`
+canopies `𝓛`, their chosen tops `𝒕` (all identified in the parachute), the decision
+procedure `top?` for being the top of one's canopy, their chosen bottoms `𝒃` (the
+atoms of the parachute), and the assumption `nondeg` that no canopy is a single
+point (without which its "atom" would be its top).  The canopy index is implicit
+in `𝒕`, `top?`, and `𝒃`, where the element determines it, and explicit in `nondeg`,
+where nothing else does.
 
 There is at least one canopy: a parachute over the empty family has no atoms below
 its bottom, and the covering property below would fail.
 
 ```agda
--- open Setoid using (_≈_)
+record Parachute (α ρ : Level) (m : ℕ) : Type (lsuc (α ⊔ ρ)) where
+  field
+    𝓛       : Fin (suc m) → Lattice α ρ
+    𝒕       : ∀ {i} → TopOf (𝓛 i)
+    top?    : ∀ {i} (x : 𝕌[ 𝓛 i .proj₁ ]) → Dec (Setoid._≈_ 𝔻[ 𝓛 i .proj₁ ] x (𝒕 .proj₁))
+    𝒃       : ∀ {i} → BottomOf (𝓛 i)
+    nondeg  : ∀ i → ¬ Setoid._≈_ 𝔻[ 𝓛 i .proj₁ ] (𝒃 .proj₁) (𝒕 .proj₁)
+```
 
-module LatticeParachute {m : ℕ}
-  (𝓛       : Fin (suc m) → Lattice α ρ)
-  (𝒕       : ∀ {i} → TopOf (𝓛 i))
-  (top?    : ∀ {i} (x : 𝕌[ 𝓛 i .proj₁ ]) → Dec (Setoid._≈_ 𝔻[ 𝓛 i .proj₁ ] x (𝒕 .proj₁)))
-  (𝒃       : ∀ {i} → BottomOf (𝓛 i))
-  (nondeg  : ∀ i → ¬ Setoid._≈_ 𝔻[ 𝓛 i .proj₁ ] (𝒃 .proj₁) (𝒕 .proj₁))
-  where
+#### The construction
+
+`LatticeParachute 𝒫` builds the parachute lattice of `𝒫`.  Its body refers to the
+five fields by name and re-exports them, so that a consumer that opens the module
+sees the canopies `𝓛 i` alongside what is built from them.
+
+```agda
+module LatticeParachute {m : ℕ} (𝒫 : Parachute α ρ m) where
+
+  open Parachute 𝒫 public
 
   -- The canopy index.
   Ix : Type
   Ix = Fin (suc m)
 ```
 
-Per-canopy notation.  The canopy index is explicit throughout: the carriers `U i`
-are the images of a function of `i`, so Agda could not infer it.
+Per-canopy notation.  The carriers `U i` are the images of a function of `i`, so
+inside the anonymous module below the canopy index is an implicit parameter that
+Agda reads off the elements: for `x y : U i`, `x ≈ y` and `x ≤ y` are that
+canopy's equality and order, with no index written.
 
 ```agda
   -- The carrier of the i-th canopy.
@@ -327,7 +342,7 @@ these lemmas rather than repeating the split.
 **Decision 1**.  Is this canopy element the top?
 
 A canopy element `x` *represents* the parachute's top when it is the top of its
-canopy, and represents itself otherwise; `↑`{.AgdaFunction}` i x` is that element
+canopy, and represents itself otherwise; `↑`{.AgdaFunction}` x` is that element
 of `P`{.AgdaFunction}.
 
 ```agda
@@ -350,13 +365,13 @@ two values.
 
     module _ {i : Ix} where
 
-      -- Below `↑ i z`: a proper canopy element sits below it whenever it sits below z.
+      -- Below `↑ z`: a proper canopy element sits below it whenever it sits below z.
       ↑'-above : {x z : U i} (p : NonTop x) (d : Dec (z ≈ top))
         → x ≤ z → can x p ≤ᵖ ↑' z d
       ↑'-above p (yes _)  _    = ⊤-great
       ↑'-above p (no _)   x≤z  = c≤c x≤z
 
-      -- Above `↑ i z`: it sits below a proper canopy element whenever z does — and
+      -- Above `↑ z`: it sits below a proper canopy element whenever z does, and
       -- then z was not the top, since nothing but the top lies above the top.
       ↑'-below : {z c : U i} (r : NonTop c) (d : Dec (z ≈ top))
         → z ≤ c → ↑' z d ≤ᵖ can c r
@@ -364,7 +379,7 @@ two values.
         ⊥-elim (r (≤antisym (≤top c) (≤trans (≤reflexive (≈sym z≈⊤)) z≤c)))
       ↑'-below _ (no _)  z≤c = c≤c z≤c
 
-      -- `↑ i` is monotone: if x is the canopy top then so is anything above it.
+      -- `↑` is monotone: if x is the canopy top then so is anything above it.
       ↑'-mono : {x y : U i} (d : Dec (x ≈ top)) (e : Dec (y ≈ top))
         → x ≤ y → ↑' x d ≤ᵖ ↑' y e
       ↑'-mono (yes _) (yes _) _ = ⊤-great
@@ -373,7 +388,7 @@ two values.
       ↑'-mono (no _) (yes _) _ = ⊤-great
       ↑'-mono (no _) (no _) x≤y = c≤c x≤y
 
-      -- `↑ i` sends the canopy top to the parachute top ...
+      -- `↑` sends the canopy top to the parachute top ...
       ↑'-top : (d : Dec (top {i} ≈ top {i})) → ↑' top d ≈ᵖ ⊤ᵖ
       ↑'-top (yes _) = ≈ᵖ-refl
       ↑'-top (no p) = ⊥-elim (p ≈refl)
@@ -384,7 +399,7 @@ two values.
       ↑'-can x p (no _) = c≤c ≤refl , c≤c ≤refl
 ```
 
-The four consequences at the actual decision `top? i x`.
+The four consequences at the actual decision `top? x`.
 
 ```agda
   module _ {i : Ix} where
@@ -699,15 +714,14 @@ representation of `Lᵢ` off a representation of the parachute.
     πᶜ-diag {i} x rewrite ≟-diag i = ≈refl
 
     -- ... and it is monotone (hence respects the parachute equality).
-    πᶜ-mono : (i j : Ix) {x y : U j} (d : Dec (i ≡ j))
-            → x ≤ y → πᶜ x d ≤ πᶜ y d
-    πᶜ-mono i .i (yes refl)  e  = e
-    πᶜ-mono i j  (no _)      _  = ≤refl
+    πᶜ-mono : {i j : Ix} {x y : U j} (d : Dec (i ≡ j)) → x ≤ y → πᶜ x d ≤ πᶜ y d
+    πᶜ-mono (yes refl) e = e
+    πᶜ-mono (no _) _ = ≤refl
 
   π-mono : (i : Ix) {z w : P} → z ≤ᵖ w → π i z ≤ π i w
   π-mono i ⊥-least        = ≤bot _
   π-mono i ⊤-great        = ≤top _
-  π-mono i (c≤c {j} e)    = πᶜ-mono i j (i ≟ j) e
+  π-mono i (c≤c {j} e)    = πᶜ-mono (i ≟ j) e
 
   π-cong : (i : Ix) {z w : P} → z ≈ᵖ w → π i z ≈ π i w
   π-cong i (z≤w , w≤z) = ≤antisym (π-mono i z≤w) (π-mono i w≤z)
@@ -729,6 +743,18 @@ representation of `Lᵢ` off a representation of the parachute.
   ↑∘π : (i : Ix) (z : P) → atom i ≤ᵖ z → ↑ (π i z) ≈ᵖ z
   ↑∘π i ⊤ᵖ _ = ↑-top
   ↑∘π i (can {.i} x p) (c≤c _) = ≈ᵖ-trans (↑-cong (πᶜ-diag x)) (↑-can x p)
+```
+
+#### The lattice a parachute presents
+
+The parachute lattice as a function of its data.  A consumer that wants the
+lattice and not the module's vocabulary (a family of lattices indexed by `ℕ`, say)
+names it this way.
+
+```agda
+-- The parachute lattice 𝒫(L₁ , … , Lₙ) presented by a parachute.
+parachuteLattice : {m : ℕ} → Parachute α ρ m → Lattice (α ⊔ ρ) (α ⊔ ρ)
+parachuteLattice 𝒫 = LatticeParachute.⊕ᵖ-Lattice 𝒫
 ```
 
 ---
