@@ -43,9 +43,12 @@ Two presentation notes.
 +  **`ᵍ` marks the group-side form**.  `IsMonolithᵍ`{.AgdaRecord} is the
    normal-subgroup reading of the congruence-lattice notion
    `IsMonolith`{.AgdaRecord}; the two agree through the correspondence between normal
-   subgroups and congruences of a group, which the library does not yet formalize.
-   The superscript keeps the two apart rather than pretending they are the same
-   definition.
+   subgroups and congruences of a group, formalized as the order isomorphism of
+   [Classical.Structures.Group.Congruences][].  The simplicity instance of that
+   identification is proved there: the group-theoretic notion is equivalent to the
+   congruence-level `IsSimple`{.AgdaFunction} of [Setoid.Congruences.Simple][].  The
+   monolith instance is not yet, so the superscript keeps the two apart until it
+   lands rather than pretending they are the same definition.
 
 <!--
 ```agda
