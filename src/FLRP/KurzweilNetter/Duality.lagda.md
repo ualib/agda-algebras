@@ -27,8 +27,9 @@ lectures).  Given a representation `𝑳 ≅ DecCon 𝑨`, proceed as follows:
 2. expand the coset algebra of the diagonal `D ≤ Sᵐ` by the lifted translations;
    its decidable congruence poset is the *reversed* poset of invariant partitions
    ([FLRP.KurzweilNetter.Expansion][], composing the WP-3 bridge
-   `DecCon (Sᵐ ↷ Sᵐ/D) ≅ [D , Sᵐ]` of [FLRP.Bridge][] with Kurzweil's interval
-   isomorphism `[D , Sᵐ] ≅ Eq(m)′` of [FLRP.KurzweilInterval][]);
+   `DecCon (Sᵐ ↷ Sᵐ/D) ≅ [D , Sᵐ]` of [FLRP.Bridge][] with the
+   decidable-instance passage of Kurzweil's interval isomorphism
+   `[D , Sᵐ] ≅ Eq(m)′` of [FLRP.KurzweilInterval][]);
 
 3. compose the two, and the original representation, into
    `DecCon 𝑬 ≅ dualLattice 𝑳`, the record `dual-representation`{.AgdaFunction} below.
@@ -48,10 +49,13 @@ argument actually uses:
    order reflection and injectivity of `π ↦ K_π`, and for extracting
    invariance from closure in the expansion step (the indicator tuples);
 
-+  **Kurzweil surjectivity at every exponent**
-   (`KurzweilSurjectivityAt`{.AgdaFunction}` 𝒮 n`, Entry 4 of
-   [FLRP.Assumptions][]): every subgroup in `[D , Sⁿ]` is a partition
-   subgroup.
++  **Kurzweil surjectivity at every exponent, in the decidable form**
+   (`KurzweilSurjectivityᵈAt`{.AgdaFunction}` 𝒮 n`, the working form of
+   Entry 4 of [FLRP.Assumptions][]): every *decidable* subgroup in
+   `[D , Sⁿ]` is a partition subgroup.  The semantic form is deliberately
+   not consumed: it is unprovable outright (the no-go of
+   [FLRP.KurzweilInterval][]), while the decidable form is exactly what the
+   construction's base-coset classes deliver.
 
 *Nonabelianness and simplicity of `S` enter only through the third item*;
 they are what makes Entry 4 true classically.  Thus no simplicity predicate is
@@ -101,7 +105,7 @@ open import Classical.Structures.Lattice.Dual   using  ( dualLattice
                                                        ; module LatticeDual )
 open import FLRP.Assumptions                    using  ( KurzweilNetterDualityAt
                                                        ; KurzweilNetterDuality
-                                                       ; KurzweilSurjectivityAt )
+                                                       ; KurzweilSurjectivityᵈAt )
 open import FLRP.KurzweilNetter.Blocks          using  ( module KNBlocks )
 open import FLRP.KurzweilNetter.Expansion       using  ( module KNExpansion )
 open import FLRP.KurzweilNetter.Translations    using  ( module KNTranslations )
@@ -144,7 +148,7 @@ module KNGlue
   (𝑭ₛ         : FiniteAlgebra 𝑺)
   (s₀         : 𝕌[ 𝑺 ])
   (s₀≉ε       : ¬ s₀ ≈ ε)
-  (surjm      : KurzweilSurjectivityAt 𝒮 (IrredundantEnumeration.icard 𝑬ᵢ))
+  (surjm      : KurzweilSurjectivityᵈAt 𝒮 (IrredundantEnumeration.icard 𝑬ᵢ))
   (𝓛@(𝑳 , _)  : Lattice)
   (iso        : ConIsoᵈ 𝑨 𝓛)
   where
@@ -156,17 +160,18 @@ the expansion module builds the representing algebra `𝑬` on `Sᵐ/D`.
 
 ```agda
   private
-    module KB = KNBlocks 𝑨 𝑬ᵢ
-    module KT = KNTranslations 𝑨 𝑆fin 𝑬ᵢ
-    module KE = KNExpansion 𝒮 𝑭ₛ s₀ s₀≉ε  (IrredundantEnumeration.icard 𝑬ᵢ)
-                                          KT.trCount KT.trFamily surjm
-
-    module I₀ = OrderIso iso
-    module KEIso = OrderIso KE.expansionIso
-
-    open ConIsoᵈ-Consequences {𝑆 = 𝑆} {𝑨 = 𝑨} {𝑳 = 𝓛} iso using ( to-cong≑ )
+    open KNBlocks 𝑨 𝑬ᵢ using  ( pvOf ; blockRel-mono ; pvOf-mono ; blockRel-pvOf-out
+                              ; blockRel-pvOf-in ; pvOf-blockRel )
+    open KNTranslations 𝑨 𝑆fin 𝑬ᵢ using  ( trCount ; trFamily ; blockConᶠ
+                                         ; pvOf-invariant-family)
+    open ConIsoᵈ-Consequences {𝑆 = 𝑆} {𝑨} {𝓛} iso using ( to-cong≑ )
 
     open Setoid 𝔻[ 𝑳 ] using () renaming ( trans to ≈ᴸ-trans )
+    open KNExpansion 𝒮 𝑭ₛ s₀ s₀≉ε  (IrredundantEnumeration.icard 𝑬ᵢ)
+      trCount trFamily surjm using ( InvPart ; _≈ᵛ_ ; _≥ᵛ_ ; expandedAlgebra
+                                         ; expansionIso ; Sig-Exp
+                                         ; expandedAlgebra-FiniteAlgebra
+                                         ; Sig-Exp-FiniteSignature )
 ```
 
 **The middle stage of the composite**.  The family-invariant partitions are the
@@ -176,12 +181,12 @@ congruence the other.
 
 ```agda
     -- an invariant partition presents a congruence of the represented algebra ...
-    midTo : KE.InvPart → DecCon 𝑨 0ℓ
-    midTo (pv , h) = KT.blockConᶠ pv h
+    midTo : InvPart → DecCon 𝑨 0ℓ
+    midTo (pv , h) = blockConᶠ pv h
 
     -- ... and a congruence has an invariant partition.
-    midFrom : DecCon 𝑨 0ℓ → KE.InvPart
-    midFrom d = KB.pvOf d , KT.pvOf-invariant-family d
+    midFrom : DecCon 𝑨 0ℓ → InvPart
+    midFrom d = pvOf d , pvOf-invariant-family d
 ```
 
 **The middle stage as an order isomorphism in its own right**.  The round trips
@@ -197,14 +202,14 @@ verbatim.
     _⊇ᵈ_ : DecCon 𝑨 0ℓ → DecCon 𝑨 0ℓ → Type _
     d ⊇ᵈ e = e ⊆ᵈ d
 
-    midIso : OrderIso KE._≈ᵛ_ KE._≥ᵛ_ (_≑ᵈ_ {𝑨 = 𝑨} {ℓ = 0ℓ}) _⊇ᵈ_
+    midIso : OrderIso _≈ᵛ_ _≥ᵛ_ (_≑ᵈ_ {𝑨 = 𝑨} {ℓ = 0ℓ}) _⊇ᵈ_
     midIso = record
       { to         = midTo
       ; from       = midFrom
-      ; to-mono    = λ {(P , _)} {(Q , _)} ge → KB.blockRel-mono {pu = Q} {pw = P} ge
-      ; from-mono  = λ {d} {e} sup → KB.pvOf-mono e d sup
-      ; to∘from    = λ d → KB.blockRel-pvOf-out d , KB.blockRel-pvOf-in d
-      ; from∘to    = λ P → KB.pvOf-blockRel (midTo P) (proj₁ P) id id
+      ; to-mono    = λ {(P , _)} {(Q , _)} ge → blockRel-mono {pu = Q} {pw = P} ge
+      ; from-mono  = λ {d} {e} sup → pvOf-mono e d sup
+      ; to∘from    = λ d → blockRel-pvOf-out d , blockRel-pvOf-in d
+      ; from∘to    = λ P → pvOf-blockRel (midTo P) (proj₁ P) id id
       }
 ```
 
@@ -213,17 +218,19 @@ representation, with the monotonicity directions flipped through the two flip
 lemmas of [Classical.Structures.Lattice.Dual][].
 
 ```agda
-    I₀-dual : OrderIso  (_≑ᵈ_ {𝑨 = 𝑨} {ℓ = 0ℓ}) _⊇ᵈ_
-                        (Setoid._≈_ 𝔻[ proj₁ (dualLattice 𝓛) ])
-                        (Lattice-Order._≤_ (dualLattice 𝓛))
+    I₀-dual : OrderIso _≑ᵈ_ _⊇ᵈ_  (Setoid._≈_ 𝔻[ dualLattice 𝓛 .proj₁ ])
+                                  (Lattice-Order._≤_ (dualLattice 𝓛))
     I₀-dual = record
-      { to = I₀.to
-      ; from = I₀.from
-      ; to-mono = λ sup → LatticeDual.≤ᵈ-unflip 𝓛 (I₀.to-mono sup)
-      ; from-mono = λ le → I₀.from-mono (LatticeDual.≤ᵈ-flip 𝓛 le)
-      ; to∘from = I₀.to∘from
-      ; from∘to = I₀.from∘to
+      { to         = to
+      ; from       = from
+      ; to-mono    = ≤ᵈ-unflip ∘ to-mono
+      ; from-mono  = from-mono ∘ ≤ᵈ-flip
+      ; to∘from    = to∘from
+      ; from∘to    = from∘to
       }
+      where
+      open OrderIso iso
+      open LatticeDual 𝓛 using (≤ᵈ-unflip ; ≤ᵈ-flip)
 ```
 
 **The junction data for composing the three stages**: transitivity of the mutual
@@ -231,28 +238,27 @@ containments, and the congruence of each map with respect to the middle
 equivalence it crosses; every one of them is monotonicity applied twice.
 
 ```agda
-    ≑ᴱ-trans : {a b c : DecCon KE.expandedAlgebra 0ℓ} → a ≑ᵈ b → b ≑ᵈ c → a ≑ᵈ c
+    ≑ᴱ-trans : {a b c : DecCon expandedAlgebra 0ℓ} → a ≑ᵈ b → b ≑ᵈ c → a ≑ᵈ c
     ≑ᴱ-trans (p₁ , p₂) (q₁ , q₂) = q₁ ∘ p₁ , p₂ ∘ q₂
 
     ≑ᴬ-trans : {a b c : DecCon 𝑨 0ℓ} → a ≑ᵈ b → b ≑ᵈ c → a ≑ᵈ c
     ≑ᴬ-trans (p₁ , p₂) (q₁ , q₂) = q₁ ∘ p₁ , p₂ ∘ q₂
 
-    midTo-cong : {P Q : KE.InvPart} → P KE.≈ᵛ Q → midTo P ≑ᵈ midTo Q
+    midTo-cong : {P Q : InvPart} → P ≈ᵛ Q → midTo P ≑ᵈ midTo Q
     midTo-cong {(P , _)} {(Q , _)} (uw , wu) =
-        KB.blockRel-mono {pu = P} {pw = Q} uw
-      , KB.blockRel-mono {pu = Q} {pw = P} wu
+      blockRel-mono {pu = P} {pw = Q} uw , blockRel-mono {pu = Q} {pw = P} wu
 
-    midFrom-cong : {d e : DecCon 𝑨 0ℓ} → d ≑ᵈ e → midFrom d KE.≈ᵛ midFrom e
-    midFrom-cong {d} {e} (p , q) = KB.pvOf-mono d e p , KB.pvOf-mono e d q
+    midFrom-cong : {d e : DecCon 𝑨 0ℓ} → d ≑ᵈ e → midFrom d ≈ᵛ midFrom e
+    midFrom-cong {d} {e} (p , q) = pvOf-mono d e p , pvOf-mono e d q
 
-    KEfrom-cong : {P Q : KE.InvPart} → P KE.≈ᵛ Q → KEIso.from P ≑ᵈ KEIso.from Q
-    KEfrom-cong {P} {Q} (uw , wu) =
-      KEIso.from-mono {P} {Q} wu , KEIso.from-mono {Q} {P} uw
+    open OrderIso expansionIso using ( from ; from-mono)
+
+    KEfrom-cong : {P Q : InvPart} → P ≈ᵛ Q → from P ≑ᵈ from Q
+    KEfrom-cong {P} {Q} (uw , wu) = from-mono {P} {Q} wu , from-mono {Q} {P} uw
 
     stage₁-from-cong : {d e : DecCon 𝑨 0ℓ}
-      → d ≑ᵈ e → KEIso.from (midFrom d) ≑ᵈ KEIso.from (midFrom e)
-    stage₁-from-cong {d} {e} de =
-      KEfrom-cong {midFrom d} {midFrom e} (midFrom-cong {d} {e} de)
+      → d ≑ᵈ e → from (midFrom d) ≑ᵈ from (midFrom e)
+    stage₁-from-cong {d} {e} de = KEfrom-cong {midFrom d} {midFrom e} (midFrom-cong de)
 ```
 
 **The composite isomorphism `DecCon 𝑬 ≅ dualLattice 𝑳`**: by two applications of
@@ -261,21 +267,16 @@ inside the expansion isomorphism; the middle stages run against the reversed
 orders, and the boundary lands in the dual lattice's meet order.
 
 ```agda
-    stage₁ : OrderIso  (_≑ᵈ_ {𝑨 = KE.expandedAlgebra} {ℓ = 0ℓ})
-                       (_⊆ᵈ_ {𝑨 = KE.expandedAlgebra} {ℓ = 0ℓ})
-                       (_≑ᵈ_ {𝑨 = 𝑨} {ℓ = 0ℓ}) _⊇ᵈ_
-    stage₁ = OrderIso-trans KE.expansionIso midIso
+    stage₁ : OrderIso _≑ᵈ_ _⊆ᵈ_ _≑ᵈ_ _⊇ᵈ_
+    stage₁ = OrderIso-trans expansionIso midIso
       (λ {P} {Q} → midTo-cong {P} {Q})
       (λ {P} {Q} → KEfrom-cong {P} {Q})
       (λ {a} {b} {c} → ≑ᴱ-trans {a} {b} {c})
       (λ {a} {b} {c} → ≑ᴬ-trans {a} {b} {c})
 
-    dualConIso : ConIsoᵈ {𝑆 = KE.Sig-Exp} KE.expandedAlgebra (dualLattice 𝓛)
-    dualConIso = OrderIso-trans stage₁ I₀-dual
-      (λ {d} {e} → to-cong≑ {d} {e})
-      (λ {d} {e} → stage₁-from-cong {d} {e})
-      (λ {a} {b} {c} → ≑ᴱ-trans {a} {b} {c})
-      (λ {x} {y} {z} → ≈ᴸ-trans {x} {y} {z})
+    dualConIso : ConIsoᵈ expandedAlgebra (dualLattice 𝓛)
+    dualConIso = OrderIso-trans stage₁ I₀-dual to-cong≑ stage₁-from-cong
+      (λ {a} {b} {c} → ≑ᴱ-trans {a} {b} {c}) ≈ᴸ-trans
 ```
 
 **The representation of the dual**: the expanded coset algebra, its finiteness
@@ -285,10 +286,10 @@ and finite signature from the expansion module, and the composite isomorphism.
   -- The dual of a decidably representable lattice is decidably representable.
   dual-representation : Representableᵈ (dualLattice 𝓛)
   dual-representation = record
-    { sigᵈ      = KE.Sig-Exp
-    ; algᵈ      = KE.expandedAlgebra
-    ; finiteᵈ   = KE.expandedAlgebra-FiniteAlgebra
-    ; finsigᵈ   = KE.Sig-Exp-FiniteSignature
+    { sigᵈ      = Sig-Exp
+    ; algᵈ      = expandedAlgebra
+    ; finiteᵈ   = expandedAlgebra-FiniteAlgebra
+    ; finsigᵈ   = Sig-Exp-FiniteSignature
     ; con-isoᵈ  = dualConIso
     }
 ```
@@ -302,7 +303,7 @@ canonical irredundant enumeration of each representation.
 One reading note, so the module cannot overstate itself: the definitions below
 inhabit `KurzweilNetterDuality`{.AgdaFunction} *inside* this parameterized
 module; the library holds no closed inhabitant of the statement, and Entry 4's
-family is a genuine hypothesis of the result.  Entry 2 of [FLRP.Assumptions][] is
+decidable family is a genuine hypothesis of the result.  Entry 2 of [FLRP.Assumptions][] is
 thereby *reduced to Entry 4*, not discharged; the registry entry records the same
 reading.
 
@@ -312,19 +313,19 @@ module KurzweilNetterProof
   (𝑭ₛ         : FiniteAlgebra 𝑺)
   (s₀         : 𝕌[ 𝑺 ])
   (s₀≉ε       : ¬ (Setoid._≈_ 𝔻[ 𝑺 ] s₀ (Group-Op.ε 𝒮)))
-  (surj       : (n : ℕ) → KurzweilSurjectivityAt 𝒮 n)
+  (surj       : (n : ℕ) → KurzweilSurjectivityᵈAt 𝒮 n)
   where
 
   -- Kurzweil–Netter duality at a lattice.
   kurzweilNetterDualityAt : (𝑳 : Lattice) → KurzweilNetterDualityAt 𝑳
-  kurzweilNetterDualityAt 𝑳 r =
-    KNGlue.dual-representation {𝑆 = sigᵈ} {𝑨 = algᵈ} finsigᵈ 𝑬ᵢ
-      𝒮 𝑭ₛ s₀ s₀≉ε (surj (IrredundantEnumeration.icard 𝑬ᵢ)) 𝑳 con-isoᵈ
+  kurzweilNetterDualityAt 𝑳 r = dual-representation
     where
     open Representableᵈ r  -- sigᵈ, algᵈ, finiteᵈ, finsigᵈ, con-isoᵈ
 
     𝑬ᵢ : IrredundantEnumeration algᵈ
     𝑬ᵢ = irredundantEnumeration finiteᵈ
+    open IrredundantEnumeration 𝑬ᵢ
+    open KNGlue finsigᵈ 𝑬ᵢ 𝒮 𝑭ₛ s₀ s₀≉ε (surj icard) 𝑳 con-isoᵈ
 
   -- The Kurzweil–Netter duality theorem, conditional on the module's package.
   kurzweilNetterDuality : KurzweilNetterDuality
