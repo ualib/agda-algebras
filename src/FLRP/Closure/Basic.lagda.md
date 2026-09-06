@@ -11,32 +11,21 @@ author: "the agda-algebras development team"
 This is the [FLRP.Closure.Basic][] module of the [Agda Universal Algebra Library][].
 
 The class of representable lattices is closed under a catalogue of operations.[^1]
-This module is work package WP-5's umbrella over that catalogue at Layer D,
-re-exporting the two proved closure theorems and deriving the rest:
 
-+  **finite direct products**: `product-Representableᵈ`{.AgdaFunction}
-   ([FLRP.Closure.Product][], after Tůma);
-+  **ordinal sums**: `ordinalSum-Representableᵈ`{.AgdaFunction}
-   ([FLRP.Closure.OrdinalSum][], after McKenzie and Snow); the *unglued* sum is
-   the derived composite with `chain₂` glued in the middle;
-+  **adjoining a new bottom or top**: `adjoinBottom-Representableᵈ`{.AgdaFunction}
-   / `adjoinTop-Representableᵈ`{.AgdaFunction}, *corollaries* of ordinal-sum
-   closure, obtained by instantiating one summand at the two-element chain (whose
-   Layer-D representation `chain₂-Representableᵈ`{.AgdaFunction} is the
-   constructive centerpiece of [FLRP.Representable][]);
-+  **lattice duals**: `dual-Representableᵈ`{.AgdaFunction}, the Kurzweil–Netter
++  **Finite direct products** (`product-Representableᵈ`{.AgdaFunction}
+   in [FLRP.Closure.Product][]) after Tůma.
++  **Ordinal sums** (`ordinalSum-Representableᵈ`{.AgdaFunction}
+   in [FLRP.Closure.OrdinalSum][]) after McKenzie and Snow; the *unglued* sum is
+   the derived composite with `chain₂` glued in the middle.
++  **Adjoining a new bottom or top** (`adjoinBottom-Representableᵈ`{.AgdaFunction}
+   / `adjoinTop-Representableᵈ`{.AgdaFunction}) including *corollaries* of
+   ordinal-sum closure, obtained by instantiating one summand at the two-element
+   chain (whose Layer-D representation `chain₂-Representableᵈ`{.AgdaFunction} is the
+   constructive centerpiece of [FLRP.Representable][]).
++  **Lattice duals** (`dual-Representableᵈ`{.AgdaFunction}): the Kurzweil–Netter
    duality theorem, proved in [FLRP.KurzweilNetter.Duality][] and consumed here
    through the simple-group package that parameterizes the proof with a finite
-   nontrivial group together with the Kurzweil-surjectivity family, Entry 4 of
-   [FLRP.Assumptions][]; Entry 2 of the registry (the duality theorem as an
-   *imported* hypothesis) is retired; what remains classical is exactly Entry 4
-   and the choice of a concrete nonabelian simple instantiation.
-
-The payoff downstream: the two dual entries of the small-lattice census
-(`L18` and `L22`, duals of the certified `SLR19` and `SLR23`) now rest on Entry 4
-and an instantiation rather than on the full duality theorem; materializing those
-conditional certificates remains computationally out of reach, since the
-construction represents an `n`-element algebra's dual on `|S|ⁿ⁻¹ ≥ 60ⁿ⁻¹` elements.
+   nontrivial group together with the Kurzweil-surjectivity family.[^2]
 
 <!--
 ```agda
@@ -88,9 +77,9 @@ Adjoining a fresh extremum to a lattice is the special case of the glued ordinal
 sum in which one summand is the two-element chain: gluing `chain₂`'s top onto
 `𝑳`'s bottom leaves exactly one new element below everything (`adjoinBottom`), and
 mirrored for `adjoinTop`.  Each is a one-application corollary of
-`ordinalSum-Representableᵈ`{.AgdaFunction} at `chain₂-Representableᵈ`{.AgdaFunction},
-confirming that the ordinal-sum statement carries no hidden nontriviality
-assumptions on its summands.
+`ordinalSum-Representableᵈ`{.AgdaFunction} at
+`chain₂-Representableᵈ`{.AgdaFunction}, confirming that the ordinal-sum statement
+carries no hidden nontriviality assumptions on its summands.
 
 ```agda
 -- Adjoin a new bottom: chain₂ glued below 𝑳, at 𝑳's chosen bottom.
@@ -132,4 +121,22 @@ module _ ((𝑺 , eqns) : Group 0ℓ 0ℓ) where
 --------------------------------------
 
 
-[^1]: See the roadmap's § 3; `docs/papers/fin-lat-rep/SmallLatticeReps.tex`, § Closure properties.
+[^1]: See the roadmap's § 3; `docs/papers/fin-lat-rep/SmallLatticeReps.tex`, §
+      Closure properties.  This module is work package WP-5's umbrella over that
+      catalogue at Layer D, re-exporting the two proved closure theorems and
+      deriving the rest.
+
+[^2]: Entry 2 of the assumptions registry ([FLRP.Assumptions][]) provided the
+      duality theorem as an imported hypothesis, but is now retired; what remains
+      classical is exactly Entry 4 and the choice of a concrete nonabelian simple
+      instantiation; this will soon be replaced by a fully constructive proof of
+      the Kurzweil–Netter theorem in [FLRP.KurzweilNetter.Duality][].
+
+      **The payoff downstream**.  The two dual entries of the small-lattice census
+      (`L18` and `L22`, duals of the certified `SLR19` and `SLR23`) rests only on
+      Entry 4 and an instantiation rather than on the full duality theorem;
+      materializing those conditional certificates seemed computationally out of
+      reach, since the construction would require an `n`-element algebra's dual
+      on `|S|ⁿ⁻¹ ≥ 60ⁿ⁻¹` elements.  However, there is work in progress that
+      should offer a way around this; see PR
+      [#569](https://github.com/ualib/agda-algebras/pull/569).
