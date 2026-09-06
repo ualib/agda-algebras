@@ -64,7 +64,7 @@ Two further choices mirror the group module.
    the group side.
 
 The implication form does not recover the disjunctive classification (a congruence
-is either the identity relation or relates all pairs); deciding which disjunct
+is either the diagonal or relates all pairs); deciding which disjunct
 holds would decide, for an arbitrary congruence, whether it relates a distinct
 pair.  The fact that the disjunctive readings (both here and on the group side)
 are unreachable from the form that concrete instances inhabit is strong evidence
@@ -93,8 +93,7 @@ open import Data.Product      using ( _×_ ; _,_ ; ∃-syntax ; proj₁ )
 open import Data.Unit.Base    using ( tt )
 open import Level             using ( Level ; _⊔_ ; lift )
 open import Function          using ( _∘_ )
-open import Relation.Binary   using ( Setoid ; IsEquivalence )
-                              renaming ( Rel to BinaryRel )
+open import Relation.Binary   using ( Setoid ) renaming ( Rel to BinaryRel )
 open import Relation.Nullary  using ( ¬_ )
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
@@ -152,7 +151,7 @@ decision to keep nontriviality out of the definition.
 
 The disjunctive slogan survives in the form concrete instances can use: a congruence
 of a simple algebra that relates a distinct pair is the total congruence
-`𝟙[ 𝑨 ]` of [Setoid.Congruences.Basic][], up to the mutual
+`𝟙[ 𝑨 ]`{.AgdaFunction} of [Setoid.Congruences.Basic][], up to the mutual
 containment `≑`{.AgdaFunction} that serves as equality of congruences.
 
 ```agda
@@ -200,15 +199,15 @@ the least nonzero congruence, which is exactly the monolith.
   simple⇒si : Nontrivial 𝑨 → IsSimple ρ
     →  ((θ : Con 𝑨 ρ) → Nonzero 𝑨 θ → RelatesDistinctPoints θ)
     →  IsSubdirectlyIrreducible 𝑨
-  simple⇒si A-nt A-simp θ-rdp = A-nt , 𝟙[ 𝑨 ] , 1-isMonolith
+  simple⇒si A-nt A-simp θ-rdp = A-nt , 𝟙[ 𝑨 ] , 𝟙-isMonolith
     where
-    1-isMonolith : IsMonolith 𝑨 𝟙[ 𝑨 ]
-    1-isMonolith =
+    𝟙-isMonolith : IsMonolith 𝑨 𝟙[ 𝑨 ]
+    𝟙-isMonolith =
       record  { mono-nonzero = nontrivial⇒𝟙-nonzero A-nt
               ; mono-least = λ θ nz {x}{y} _ → A-simp θ (θ-rdp θ nz) x y }
 ```
 
 ---
 
-[^1]: The trivial algebra, whose diagonal and total congruences coincide, is simple vacuously
-      (`trivial⇒simple`{.AgdaFunction}; see the "Design note: the implication form" section).
+[^1]: The trivial algebra, whose diagonal and total congruences coincide, is simple
+      vacuously (`trivial⇒simple`{.AgdaFunction}; see the design note below).
