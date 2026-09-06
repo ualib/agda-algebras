@@ -17,8 +17,9 @@ as an implication, and keeps nontriviality out of the definition.[^1]
 
 The module develops the following:
 
-+  `RelatesDistinctPoints`{.AgdaFunction}: the positive data of a congruence
-   relating a pair of provably distinct elements;
++  `RelatesDistinctPoints`{.AgdaFunction}: the positive data of a binary relation
+   (in use, the relation of a congruence) relating a pair of provably distinct
+   elements;
 +  `IsSimple`{.AgdaFunction}, the implication definition of "simple algebra": a
    congruence relating a distinct pair relates every pair;
 +  `trivial⇒simple`{.AgdaFunction}: the trivial algebra is simple vacuously;
@@ -36,7 +37,7 @@ through the normal-subgroup ↔ congruence correspondence is proved in
 
 #### Design note: the implication form
 
-The textbook definition of **simple algebra** classifies every congruence as
+The textbook definition of a simple algebra classifies every congruence as
 either the diagonal or the total congruence.  Stated over arbitrary congruences,
 that disjunction is oracle-strength data, for exactly the reason recorded in
 [Classical.Structures.Group.Simple][] and
@@ -44,9 +45,8 @@ that disjunction is oracle-strength data, for exactly the reason recorded in
 encode an arbitrary proposition, which the classifier would decide up to double
 negation, and no concrete algebra with two provably distinct elements could
 inhabit the disjunctive form in `--safe` Agda.  The definition here is therefore
-an implication.  Precisely, an algebra is **simple** provided the following
-holds: if a congruence relates a pair of provably distinct elements, then it
-relates every pair.
+an implication: if a congruence relates a pair of provably distinct elements,
+then it relates every pair.
 
 Two further choices mirror the group module.
 
@@ -92,7 +92,6 @@ open import Data.Empty        using ( ⊥-elim )
 open import Data.Product      using ( _×_ ; _,_ ; ∃-syntax ; proj₁ )
 open import Data.Unit.Base    using ( tt )
 open import Level             using ( Level ; _⊔_ ; lift )
-open import Function          using ( _∘_ )
 open import Relation.Binary   using ( Setoid ) renaming ( Rel to BinaryRel )
 open import Relation.Nullary  using ( ¬_ )
 
@@ -113,17 +112,17 @@ private variable α ρ ℓ : Level
 
 Fix an algebra `𝑨`.  The hypothesis a consumer supplies is a related pair together
 with a proof that the setoid equality distinguishes the two elements of the pair.
+It is stated for an arbitrary binary relation on the carrier, since only the
+relation of a congruence is ever inspected; everything below applies it to that
+relation.
 
 ```agda
 module _ (𝑨 : Algebra {𝑆 = 𝑆} α ρ) where
   open Setoid 𝔻[ 𝑨 ]  using ( _≈_ )
 
-  RelDistinctPoints : BinaryRel 𝕌[ 𝑨 ] ℓ → Type (α ⊔ ρ ⊔ ℓ)
-  RelDistinctPoints _θ_ = ∃[ a ] ∃[ b ] a θ b × ¬ a ≈ b
-
   -- The positive data: θ relates a pair of provably distinct elements.
-  RelatesDistinctPoints : Con 𝑨 ℓ → Type (α ⊔ ρ ⊔ ℓ)
-  RelatesDistinctPoints = RelDistinctPoints ∘ proj₁
+  RelatesDistinctPoints : BinaryRel 𝕌[ 𝑨 ] ℓ → Type (α ⊔ ρ ⊔ ℓ)
+  RelatesDistinctPoints _θ_ = ∃[ a ] ∃[ b ] a θ b × ¬ a ≈ b
 ```
 
 An algebra is **simple** provided every congruence relating a pair of distinct
@@ -134,7 +133,7 @@ vacuously.)
   -- Simple algebra, implication form: a congruence relating a pair of
   -- provably distinct elements relates every pair.
   IsSimple : (ℓ : Level) → Type (α ⊔ ρ ⊔ ov {𝑆 = 𝑆} ℓ)
-  IsSimple ℓ = ((_θ_ , _) : Con 𝑨 ℓ) → RelDistinctPoints _θ_ → ∀ x y → x θ y
+  IsSimple ℓ = ((_θ_ , _) : Con 𝑨 ℓ) → RelatesDistinctPoints _θ_ → ∀ x y → x θ y
 ```
 
 In the trivial algebra no congruence relates a distinct pair, so the hypothesis is
@@ -157,7 +156,7 @@ containment `≑`{.AgdaFunction} that serves as equality of congruences.
 ```agda
   -- A congruence of a simple algebra relating a distinct pair is the total
   -- congruence.
-  simple⇒total : IsSimple ℓ → (θ : Con 𝑨 ℓ) → RelatesDistinctPoints θ → θ ≑ 𝟙[ 𝑨 ]
+  simple⇒total : IsSimple ℓ → (θ : Con 𝑨 ℓ) → RelatesDistinctPoints (proj₁ θ) → θ ≑ 𝟙[ 𝑨 ]
   simple⇒total simp θ wit = (λ _ → lift tt) , λ {x} {y} _ → simp θ wit x y
 ```
 
@@ -197,7 +196,7 @@ the least nonzero congruence, which is exactly the monolith.
   -- simple algebra is subdirectly irreducible, with the total congruence as
   -- its monolith.
   simple⇒si : Nontrivial 𝑨 → IsSimple ρ
-    →  ((θ : Con 𝑨 ρ) → Nonzero 𝑨 θ → RelatesDistinctPoints θ)
+    →  ((θ : Con 𝑨 ρ) → Nonzero 𝑨 θ → RelatesDistinctPoints (proj₁ θ))
     →  IsSubdirectlyIrreducible 𝑨
   simple⇒si A-nt A-simp θ-rdp = A-nt , 𝟙[ 𝑨 ] , 𝟙-isMonolith
     where
