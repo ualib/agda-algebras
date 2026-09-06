@@ -149,7 +149,9 @@ elements that carry a membership decider.  This is the form the Kurzweil–Nette
 route consumes, because every interval element it manipulates is the base-coset
 class of a *decidable* congruence, and it is the form whose proof for a finite
 nonabelian simple base group retires Entry 4; the closing theorem of this
-module shows the Layer-S form above is not provable at all.
+module shows that the Layer-S form above, at exponent `2` over a base group
+with an apartness witness, implies excluded middle, so no proof of it for such
+a group can land in the safe fragment.
 
 ```agda
   -- Kurzweil surjectivity, Layer-D form: the partition witness over interval
@@ -229,7 +231,7 @@ group representable, witnessed on `[D , Sⁿ]`.
       }
 ```
 
-#### The Layer-S form is excluded middle
+#### The Layer-S form implies excluded middle
 
 The Σ-form of `KurzweilSurjectivity`{.AgdaFunction} produces the partition as
 concrete data from an *arbitrary* respecting interval element, and interval

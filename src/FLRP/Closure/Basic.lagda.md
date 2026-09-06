@@ -133,7 +133,7 @@ module _ ((𝑺 , eqns) : Group 0ℓ 0ℓ) where
       the Kurzweil–Netter theorem in [FLRP.KurzweilNetter.Duality][].
 
       **The payoff downstream**.  The two dual entries of the small-lattice census
-      (`L18` and `L22`, duals of the certified `SLR19` and `SLR23`) rests only on
+      (`L18` and `L22`, duals of the certified `SLR19` and `SLR23`) rest only on
       Entry 4 and an instantiation rather than on the full duality theorem;
       materializing those conditional certificates seemed computationally out of
       reach, since the construction would require an `n`-element algebra's dual

@@ -77,8 +77,9 @@ partition subgroup `K_π`; this is the surjectivity half of Kurzweil's lemma,
 [Classical.Structures.Group.PartitionSubgroup][].  It is registered as
 `KurzweilSurjectivityAt`{.AgdaFunction}, in the witness-producing form defined by
 [FLRP.KurzweilInterval][], with the decidable working form
-`KurzweilSurjectivityᵈAt`{.AgdaFunction} beside it; the Layer-S form is excluded
-middle (that module's no-go theorem), so consumers take the working form.
+`KurzweilSurjectivityᵈAt`{.AgdaFunction} beside it; the Layer-S form implies
+excluded middle, at exponent `2` over a base group with an apartness witness
+(that module's no-go theorem), so consumers take the working form.
 
 **Entry 5**: Kurzweil's wreath interval.  For a core-free representation
 `[H , G] ≅ 𝑳` of a lattice with two distinct elements (`G` finite) and a finite
@@ -385,7 +386,10 @@ remaining classical delta.
    `KurzweilSurjectivityᵈAt`{.AgdaFunction} holds outright at simple
    instantiations, this entry retires, and the Kurzweil–Netter route of issue
    #502 becomes a closed theorem there; the Layer-S form stays behind as the
-   classical statement, priced exactly by the no-go.
+   classical statement, bounded below by the no-go, which shows it implies
+   excluded middle.  The converse, deciding the finitely many membership
+   questions with excluded middle and applying the decidable theorem, is not
+   formalized.
 
 +  **Layer**.  Layer S for the statement of record; Layer D
    (`Intervalᵈ`{.AgdaFunction}) for the working form, per the sibling
