@@ -854,9 +854,6 @@
 [ADR-010]: /adr/010-documentation-coverage-policy/
 
 <!-- ===== External links ===== -->
-[FLRP.KurzweilInterval]: /FLRP/KurzweilInterval/
-[FLRP.KurzweilInterval.Surjectivity]: /FLRP/KurzweilInterval/Surjectivity/
-[FLRP.KurzweilSurjectivity]: /FLRP/KurzweilSurjectivity/
 [Classical.Structures.DistributiveLattice]: /Classical/Structures/Lattice/DistributiveLattice/
 [A Machine-checked proof of Birkhoff's Variety Theorem in Martin-Löf Type Theory]: https://arxiv.org/abs/2101.10166
 [absolute value]: https://en.wikipedia.org/wiki/Absolute_value

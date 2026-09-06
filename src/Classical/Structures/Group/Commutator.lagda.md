@@ -37,7 +37,7 @@ module Classical.Structures.Group.Commutator where
 open import Agda.Primitive using () renaming ( Set to Type )
 
 -- Imports from the Agda Standard Library ---------------------------------------
-open import Data.Product     using  ( proj₁ ; _,_ )
+open import Data.Product     using  ( _,_ )
 open import Level            using  ( Level )
 open import Relation.Binary  using  ( Setoid )
 open import Relation.Nullary using  ( ¬_ )

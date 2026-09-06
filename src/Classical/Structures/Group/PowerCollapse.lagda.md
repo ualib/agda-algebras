@@ -95,7 +95,7 @@ open import Data.Nat.Properties                    using  ( <-cmp ; <-irrefl ; �
                                                           ; ≤-reflexive ; m<n⇒m<1+n
                                                           ; +-suc ; +-identityʳ ; _<?_ )
                                                    renaming ( _≟_ to _≟ℕ_ )
-open import Data.Product                           using  ( Σ-syntax ; ∃ ; _×_ ; ∃-syntax
+open import Data.Product                           using  ( Σ-syntax ; ∃ ; _×_
                                                           ; _,_ ; proj₁ ; proj₂ )
 open import Data.Vec.Base                          using  ( tabulate )
 open import Data.Vec.Properties                    using  ( lookup∘tabulate )
@@ -125,7 +125,7 @@ open import Classical.Structures.Group.PartitionSubgroup  using ( module Partiti
 open import Classical.Structures.Group.Simple             using ( module Simple )
 open import Classical.Structures.Group.Subgroups          using ( IsSubgroup ; mkIsSubgroup )
 open import Classical.Structures.Lattice.Partitions       using ( SameBlock )
-open import Overture                                      using ( ∃-syntax ; Π-syntax )
+open import Overture                                      using ( ∃-syntax )
 open import Setoid.Algebras.Basic                         using ( 𝕌[_] ; 𝔻[_] )
 open import Setoid.Algebras.Finite                        using ( FiniteAlgebra )
 open import Setoid.Algebras.Products.Finite               using ( power-FiniteAlgebra )
@@ -388,7 +388,7 @@ decision procedure.
 
     -- The projection: values at i of members vanishing on T.
     KP : Pred 𝕌[ 𝑺 ] 0ℓ
-    KP s = Σ[ ν ∈ Fin Nᴾ ](enumᴾ ν ∈ U × (∀ t → t ∈ T → enumᴾ ν t ≈ ε) × enumᴾ ν i ≈ s)
+    KP s = Σ[ ν ∈ Fin Nᴾ ] (enumᴾ ν ∈ U × (∀ t → t ∈ T → enumᴾ ν t ≈ ε) × enumᴾ ν i ≈ s)
 ```
 
 **The constructor**.  Any member vanishing on `T` puts its value at `i` into the
@@ -443,7 +443,7 @@ conjugates the value.
     open Conjugate 𝒮 using (conj-syntax)
     -- The projection is normalized by conjugation.
     -- (recall conjugation syntax: s ^ g = g ∙ s ∙ g ⁻¹)
-    KP-normal : ∀ g {s} → KP s → KP  (s ^ g)
+    KP-normal : ∀ g {s} → KP s → KP (s ^ g)
     KP-normal g {s} (ν , mem , kills , val) =
       KP-intro w (U-∙ (U-∙ (κ∈U g) mem) (U-inv (κ∈U g)))
         (λ t t∈T → ≈trans  (w-pt t)
@@ -454,7 +454,7 @@ conjugates the value.
       w : 𝕌[ Π𝑮 ]
       w = κ g ⊗ enumᴾ ν ⊗ invᴾ (κ g)
 
-      w-pt : ∀ t → w t ≈ (enumᴾ ν t)^ g
+      w-pt : ∀ t → w t ≈ (enumᴾ ν t) ^ g
       w-pt t = ≈trans  (⊗-pointwise (κ g ⊗ enumᴾ ν) (invᴾ (κ g)) t)
                        (∙-cong (⊗-pointwise (κ g) (enumᴾ ν) t) (inv-pointwise (κ g) t))
 
@@ -492,7 +492,7 @@ at `i`.
         (≈trans (h (surᴾ u .proj₁) (U-resp (≈ᴾ-sym (surᴾ u .proj₂)) u∈U))
           (surᴾ u .proj₂ j))
     open Setoid 𝔻[ 𝑺 ]  using () renaming (_≈_ to _≈ˢ_)
-    found : ∃[ w ] ¬ (enumᴾ w ∈ U → enumᴾ w i ≈ˢ enumᴾ w j)
+    found : ∃[ w ∈ Fin Nᴾ ] ¬ (enumᴾ w ∈ U → enumᴾ w i ≈ˢ enumᴾ w j)
     found = ¬∀⟶∃¬ Nᴾ (λ ν → enumᴾ ν ∈ U → enumᴾ ν i ≈ enumᴾ ν j)
               (λ ν → U-dec (enumᴾ ν) →-dec (enumᴾ ν i ≟ enumᴾ ν j)) ¬all
 
