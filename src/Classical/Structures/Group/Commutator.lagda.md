@@ -10,13 +10,23 @@ author: "the agda-algebras development team"
 
 This is the [Classical.Structures.Group.Commutator][] module of the [Agda Universal Algebra Library][].
 
-For elements `x` and `y` of a group, the **commutator** `comm x y = x ∙ y ∙ x ⁻¹ ∙ y ⁻¹` measures the failure of `x` and `y` to commute: it is the identity exactly when `x ∙ y ≈ y ∙ x`.  This module defines the commutator and the commuting relation, and proves the small algebra the normal-subgroup structure theory of powers consumes:
+For elements `x` and `y` of a group, the **commutator** `[ x ⸴ y ] = x ∙ y ∙ x ⁻¹ ∙ y ⁻¹`
+is a measure of the failure of `x` and `y` to commute: it is the identity exactly
+when `x ∙ y ≈ y ∙ x`.
 
-+  `Commutes`{.AgdaFunction} and `comm`{.AgdaFunction}, with their congruence lemmas;
+This module defines the commutator and the commuting relation, and encodes the
+small algebra the normal-subgroup structure theory of powers consumes; these are
+the following:
+
++  `Commutes`{.AgdaFunction} and `[_⸴_]`{.AgdaFunction}, with their congruence lemmas;
 +  the two absorption laws: a commutator with the identity in either slot is the identity;
-+  the equivalence between `comm x y ≈ ε` and `Commutes x y`, in both directions.
++  the equivalence between `[ x ⸴ y ] ≈ ε` and `Commutes x y`, in both directions.
 
-The absorption laws are the engine of the support-shrinking argument for subgroups of a power above the diagonal: a commutator of two tuples vanishes at every coordinate where *either* tuple vanishes, so iterated commutators cut a member's support down to a prescribed block while the equivalence keeps a designated coordinate away from the identity.
+The absorption laws are the engine of the support-shrinking argument for subgroups
+of a power above the diagonal: a commutator of two tuples vanishes at every
+coordinate where *either* tuple vanishes, so iterated commutators cut a member's
+support down to a prescribed block while the equivalence keeps a designated
+coordinate away from the identity.
 
 <!--
 ```agda
@@ -84,15 +94,15 @@ The relation is a congruence in each slot separately; the right-slot form is the
 
 ```agda
   -- The commutator of two elements.
-  comm : G → G → G
-  comm x y = x ∙ y ∙ x ⁻¹ ∙ y ⁻¹
+  [_⸴_] : G → G → G
+  [ x ⸴ y ] = x ∙ y ∙ x ⁻¹ ∙ y ⁻¹
 ```
 
 The commutator is a congruence in both slots at once, by the congruences of the two group operations.
 
 ```agda
   -- The commutator respects ≈ in both slots.
-  comm-cong : ∀ {x x' y y'} → x ≈ x' → y ≈ y' → comm x y ≈ comm x' y'
+  comm-cong : ∀ {x x' y y'} → x ≈ x' → y ≈ y' → [ x ⸴ y ] ≈ [ x' ⸴ y' ]
   comm-cong ex ey = ∙-cong (∙-cong (∙-cong ex ey) (⁻¹-cong ex)) (⁻¹-cong ey)
 ```
 
@@ -102,7 +112,7 @@ A commutator with the identity in the left slot collapses: the two `x`-factors b
 
 ```agda
   -- A commutator with the identity on the left is the identity.
-  comm-εˡ : ∀ {x} y → x ≈ ε → comm x y ≈ ε
+  comm-εˡ : ∀ {x} y → x ≈ ε → [ x ⸴ y ] ≈ ε
   comm-εˡ {x} y x≈ε = begin
     x ∙ y ∙ x ⁻¹ ∙ y ⁻¹  ≈⟨ ∙-cong (∙-cong (∙-cong x≈ε ≈refl) (⁻¹-cong x≈ε)) ≈refl ⟩
     ε ∙ y ∙ ε ⁻¹ ∙ y ⁻¹  ≈⟨ ∙-cong (∙-cong (idˡ-law y) ε⁻¹≈ε) ≈refl ⟩
@@ -115,7 +125,7 @@ Symmetrically for the right slot, where what remains is `x ∙ x ⁻¹`.
 
 ```agda
   -- A commutator with the identity on the right is the identity.
-  comm-εʳ : ∀ x {y} → y ≈ ε → comm x y ≈ ε
+  comm-εʳ : ∀ x {y} → y ≈ ε → [ x ⸴ y ] ≈ ε
   comm-εʳ x {y} y≈ε = begin
     x ∙ y ∙ x ⁻¹ ∙ y ⁻¹  ≈⟨ ∙-cong (∙-cong (∙-cong ≈refl y≈ε) ≈refl) (⁻¹-cong y≈ε) ⟩
     x ∙ ε ∙ x ⁻¹ ∙ ε ⁻¹  ≈⟨ ∙-cong (∙-cong (idʳ-law x) ≈refl) ε⁻¹≈ε ⟩
@@ -130,7 +140,7 @@ Multiplying the commutator by `y ∙ x` on the right telescopes back to `x ∙ y
 
 ```agda
   -- A trivial commutator means the elements commute.
-  comm≈ε→commutes : ∀ x y → comm x y ≈ ε → Commutes x y
+  comm≈ε→commutes : ∀ x y → [ x ⸴ y ] ≈ ε → Commutes x y
   comm≈ε→commutes x y h = begin
     x ∙ y                              ≈˘⟨ idʳ-law (x ∙ y) ⟩
     x ∙ y ∙ ε                          ≈˘⟨ ∙-cong ≈refl (invˡ-law x) ⟩
@@ -138,8 +148,8 @@ Multiplying the commutator by `y ∙ x` on the right telescopes back to `x ∙ y
     x ∙ y ∙ x ⁻¹ ∙ x                   ≈˘⟨ ∙-cong (idʳ-law (x ∙ y ∙ x ⁻¹)) ≈refl ⟩
     x ∙ y ∙ x ⁻¹ ∙ ε ∙ x               ≈˘⟨ ∙-cong (∙-cong ≈refl (invˡ-law y)) ≈refl ⟩
     x ∙ y ∙ x ⁻¹ ∙ (y ⁻¹ ∙ y) ∙ x      ≈˘⟨ ∙-cong (assoc-law (x ∙ y ∙ x ⁻¹) (y ⁻¹) y) ≈refl ⟩
-    x ∙ y ∙ x ⁻¹ ∙ y ⁻¹ ∙ y ∙ x        ≈⟨ assoc-law (comm x y) y x ⟩
-    comm x y ∙ (y ∙ x)                 ≈⟨ ∙-cong h ≈refl ⟩
+    x ∙ y ∙ x ⁻¹ ∙ y ⁻¹ ∙ y ∙ x        ≈⟨ assoc-law [ x ⸴ y ] y x ⟩
+    [ x ⸴ y ] ∙ (y ∙ x)                ≈⟨ ∙-cong h ≈refl ⟩
     ε ∙ (y ∙ x)                        ≈⟨ idˡ-law (y ∙ x) ⟩
     y ∙ x                              ∎
 ```
@@ -148,7 +158,7 @@ The contrapositive is the form the support-shrinking iteration consumes: a non-c
 
 ```agda
   -- Non-commuting elements have a nontrivial commutator.
-  ¬commutes→comm≉ε : ∀ x y → ¬ Commutes x y → ¬ comm x y ≈ ε
+  ¬commutes→comm≉ε : ∀ x y → ¬ Commutes x y → ¬ [ x ⸴ y ] ≈ ε
   ¬commutes→comm≉ε x y nc h = nc (comm≈ε→commutes x y h)
 ```
 
@@ -156,7 +166,7 @@ The forward direction closes the equivalence; it is the same telescope read back
 
 ```agda
   -- Commuting elements have a trivial commutator.
-  commutes→comm≈ε : ∀ x y → Commutes x y → comm x y ≈ ε
+  commutes→comm≈ε : ∀ x y → Commutes x y → [ x ⸴ y ] ≈ ε
   commutes→comm≈ε x y c = begin
     x ∙ y ∙ x ⁻¹ ∙ y ⁻¹        ≈⟨ ∙-cong (∙-cong c ≈refl) ≈refl ⟩
     y ∙ x ∙ x ⁻¹ ∙ y ⁻¹        ≈⟨ ∙-cong (assoc-law y x (x ⁻¹)) ≈refl ⟩

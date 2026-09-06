@@ -69,7 +69,7 @@ open import Classical.Structures.Interpret         using  ( interp-cong )
 open import Classical.Structures.Lattice.Partitions
   using  ( SameBlock ; _⊑_ ; _≈ᵖ_ ; ⊤ᵉ ; ⊤ᵉ-related ; ⊥ᵉ ; parent-tab )
 open import Setoid.Congruences.Certificates.Schema using  ( ParentVec ; parent )
-open import Setoid.Algebras.Basic                  using  ( 𝕌[_] ; 𝔻[_] )
+open import Setoid.Algebras.Basic                  using  ( 𝕌[_] ; 𝔻[_] ; Algebra )
 
 private variable α ρ : Level
 ```
@@ -81,14 +81,13 @@ private variable α ρ : Level
 power, together with the diagonal of [Classical.Structures.Group.Diagonal][].
 
 ```agda
-module PartitionSubgroups (n : ℕ) (𝒢 : Group α ρ) where
+module PartitionSubgroups (n : ℕ) (𝒢@(𝑮 , _) : Group α ρ) where
 
   open GroupPower (Fin n) 𝒢 public
   open DiagonalSubgroup (Fin n) 𝒢 public
 
-  private
-    𝑮 = 𝒢 .proj₁
-    Π𝑮 = ⨅ᵍ-Group .proj₁
+  Π𝑮 : Algebra α ρ
+  Π𝑮 = ⨅ᵍ-Group .proj₁
 
   open Setoid 𝔻[ 𝑮 ] using (reflexive ; _≈_) renaming (sym to ≈sym ; trans to ≈trans)
   open Setoid 𝔻[ Π𝑮 ] using () renaming ( _≈_ to _≈ᴵ_ )
