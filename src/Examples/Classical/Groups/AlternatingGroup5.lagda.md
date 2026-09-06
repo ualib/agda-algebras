@@ -14,8 +14,10 @@ The alternating group `A₅` on five points is the smallest nonabelian simple gr
 This module constructs it concretely, on the carrier `Fin 60` with propositional
 equality, and certifies its simplicity by finite computation: the result is an
 inhabitant of `IsSimple`{.AgdaFunction} of [Classical.Structures.Group.Simple][],
-the nonabelian-simple bundle `IsNonabelianSimple`{.AgdaRecord}, and the discharged
-`NontrivialCenterless`{.AgdaRecord} of [FLRP.WreathNoGo][].[^1]
+the nonabelian-simple bundle `IsNonabelianSimple`{.AgdaRecord}, the discharged
+`NontrivialCenterless`{.AgdaRecord} of [FLRP.WreathNoGo][],[^1] and, through the
+correspondence of [Classical.Structures.Group.Congruences][], the congruence-level
+`IsSimple`{.AgdaFunction} of [Setoid.Congruences.Simple][].
 
 The raw data lives in the generated companion
 [Examples.Classical.Groups.AlternatingGroup5.Tables][]: the 60 by 60 Cayley table
@@ -85,6 +87,7 @@ open import FLRP.WreathNoGo            using  ( NontrivialCenterless
                                               ; nonabelianSimple→nontrivialCenterless )
 open import Setoid.Algebras.Finite     using  ( FiniteAlgebra )
 import Classical.Structures.Group as Polymorphic
+import Setoid.Congruences.Simple as SimpleAlgebra
 ```
 -->
 
@@ -233,6 +236,25 @@ witnessed rather than assumed.
 a5-nontrivialCenterless : NontrivialCenterless a5-group
 a5-nontrivialCenterless =
   nonabelianSimple→nontrivialCenterless a5-group a5-Stable-≈ε a5-isNonabelianSimple
+```
+
+#### The congruence-level notion
+
+Through the normal-subgroup/congruence correspondence of
+[Classical.Structures.Group.Congruences][], the certificate transports to the
+congruence-level simplicity of [Setoid.Congruences.Simple][]: every congruence of
+the underlying algebra that relates two distinct elements relates every pair.  This
+makes `A₅` the library's first concrete finite algebra certified simple at the
+congruence level.  The group-side and algebra-side notions share a name, so the
+algebra-side module is imported qualified here.
+
+```agda
+open Polymorphic.GroupCongruences a5-group  using  ( simple→simpleAlgebra )
+
+-- A₅ is a simple algebra: the congruence-level notion, through the
+-- normal-subgroup/congruence correspondence.
+a5-isSimpleAlgebra : SimpleAlgebra.IsSimple (proj₁ a5-group) 0ℓ
+a5-isSimpleAlgebra = simple→simpleAlgebra 0ℓ a5-isSimple
 ```
 
 #### Finiteness

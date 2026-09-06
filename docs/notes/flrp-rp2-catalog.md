@@ -1,24 +1,32 @@
 # RP-2 survey note: the enforcement catalog
 
-Research phase RP-2 (GitHub [issue #459](https://github.com/ualib/agda-algebras/issues/459)) builds the machine-readable catalog of "an interval of this shape forces a group of this kind" theorems, each recast as a precise (cf-/min-)interval-enforceability statement.  The formal artifact is [`src/FLRP/Reductions.lagda.md`](../../src/FLRP/Reductions.lagda.md), supported by the new reusable module [`src/Classical/Structures/Group/MinimalNormal.lagda.md`](../../src/Classical/Structures/Group/MinimalNormal.lagda.md); this note is its companion — the entry table, the verification status of every literature claim, the formalization decisions, and the entries considered and rejected.
+Research phase RP-2 (GitHub [Issue #459](https://github.com/ualib/agda-algebras/issues/459)) builds the machine-readable catalog of "an interval of this shape forces a group of this kind" theorems, each recast as a precise (cf-/min-)interval-enforceability statement.
+
+The formal artifact is [`src/FLRP/Reductions.lagda.md`](../../src/FLRP/Reductions.lagda.md), supported by the new reusable module [`src/Classical/Structures/Group/MinimalNormal.lagda.md`](../../src/Classical/Structures/Group/MinimalNormal.lagda.md); this note is its companion, consisting of the entry table, the verification status of every literature claim, the formalization decisions, and the entries considered and rejected.
 
 The framework the catalog is written in is RP-1's (`docs/notes/flrp-rp1-parachutes.md`, `FLRP.Enforceable`, `FLRP.Parachute*`); the program that consumes it is RP-3's hunt for cf-IE classes with empty intersection (roadmap § 4).
 
 ## 1.  The entries
 
-Nine entries (the ninth added by RP-3).  "Derived" means the enforcement is proved in the library from RP-1; "imported" means the theorem stays on paper and enters as a named, cited hypothesis (never a postulate).  The last column is the vacuity datum: whether the enforcing lattice is *known* to be group representable, which is what decides whether an entry says anything at all.
+Nine entries (the ninth added by RP-3).
 
-| # | Property | Enforcing lattice | Level | Source | Formal status | Lattice representable? |
-| --- | --- | --- | --- | --- | --- | --- |
-| 1 | `𝒢₂` — subdirectly irreducible | any parachute `𝒫(L₁ , … , Lₙ)`, `n ≥ 2`, two big canopies | cf-IE | note Lemma 3.7 (ii) | **derived** (`entry-𝒢₂`), modulo minimal-normal descent | unknown — *is* statement (C) |
-| 2 | `𝒢₃` — no nontrivial abelian normal subgroup | ditto | cf-IE | note Lemma 3.7, Remark | **derived** (`entry-𝒢₃`), ditto | unknown |
-| 3 | `𝒢₄` — `C_G(N) = 1` for all `1 ≠ N ⊴ G` | ditto | cf-IE | note Lemma 3.7 (i) | **derived** (`entry-𝒢₄`), ditto | unknown |
-| 4 | `𝒢₀` — nonsolvable | `M₇` | IE | Pálfy–Pudlák 1980; Pálfy 1995; Feit 1983 | exclusion imported, **upgrade derived** (`nonsolvable-IE`) | **yes** — Feit's `[H , A₃₁]`, imported as `FeitM₇` |
-| 5 | `𝒢₁` — neither alternating nor symmetric | `M₆` | IE | Basile 2001 (Thm D, Prop. 5.2.1); Pálfy 1988 | exclusion imported, **upgrade derived** (`nongiant-IE`) | yes — plane over `F₅`, imported as `M₆-representable` |
-| 6 | `𝒢₂ ∧ 𝒢₃` | `Mₙ`, `n − 1` not a prime power (`M₇`) | min-IE | Köhler 1983 (`𝒢₂`); Pálfy–Pudlák 1980 (`𝒢₃`) | both imported, **conjunction derived** | yes at `n = 7`, as in Entry 4 |
-| 7 | `𝒢₄ ∧ 𝒢₃ ∧ 𝒢₂ ∧ 𝒢₀` | `L7` | cf-IE | DeMeo 2012a, Thm 6.3.1 (ii)–(v) | imported; the conditional consequence derived | **unknown — the open problem** |
-| 8 | `𝒢₁` is **not** enforced | `𝟚³` (rank-3 Boolean) | refutation | Lucchini–Moscatiello–Palcoux–Spiga 2019, Thm 1.1 (1)–(2) | realization imported, **refutation derived** | yes, *inside* the excluded class |
-| 9 | every 2-chain-enforced class contains the core-free-maximal class `HasCoreFreeMaximal`, which is itself 2-chain-enforced | any two-element chain (`IsChain₂`) | cf-IE, both directions | elementary (this repository); closes the RP-4 reduction's two-element corner | **derived** (`chain₂-enforces`, `chain₂-cfIE-coreFreeMaximal`), on the new `Classical.Structures.Group.MaximalSubgroup`; wreath-richness derived in `FLRP.Hunt` | yes classically (`[1 , C₂]`); constructively oracle-strength, see the module prose |
+**Legend**:
+
++  **derived** means the enforcement is proved in the library from RP-1;
++  **imported** means the theorem stays on paper and enters as a named, cited hypothesis;
++  The "Lattice representable?" column indicates whether the enforcing lattice is *known* to be group representable, which is what decides whether an entry currently tells us something concrete.
+
+| #   | Property                                    | Enforcing lattice   | Level | Source | Formal status | Lattice representable? |
+| --- | ------------------------------------------- | ------------------- | ----- | --- | --- | --- |
+| 1   | `𝒢₂`: subdirectly irreducible               | any `𝒫(L₁ , … , Lₙ)`, `n ≥ 2` big canopies | cf-IE | note Lemma 3.7 (ii) | **derived** (`entry-𝒢₂`), modulo minimal-normal descent | unknown — *is* statement (C) |
+| 2   | `𝒢₃`: no nontrivial abelian normal subgroup | ditto               | cf-IE | note Lemma 3.7, Remark | **derived** (`entry-𝒢₃`), ditto | unknown |
+| 3   | `𝒢₄`: `C_G(N) = 1` for all `1 ≠ N ⊴ G`      | ditto               | cf-IE | note Lemma 3.7 (i) | **derived** (`entry-𝒢₄`), ditto | unknown |
+| 4   | `𝒢₀`: nonsolvable                           | `M₇`                | IE    | Pálfy–Pudlák 1980; Pálfy 1995; Feit 1983 | exclusion imported, **upgrade derived** (`nonsolvable-IE`) | **yes** — Feit's `[H , A₃₁]`, imported as `FeitM₇` |
+| 5   | `𝒢₁` neither alternating nor symmetric      | `M₆` | IE | Basile 2001 (Thm D, Prop. 5.2.1); Pálfy 1988 | exclusion imported, **upgrade derived** (`nongiant-IE`) | yes — plane over `F₅`, imported as `M₆-representable` |
+| 6   | `𝒢₂ ∧ 𝒢₃`                                   | `Mₙ`, `n − 1` not a prime power (`M₇`) | min-IE | Köhler 1983 (`𝒢₂`); Pálfy–Pudlák 1980 (`𝒢₃`) | both imported, **conjunction derived** | yes at `n = 7`, as in Entry 4 |
+| 7   | `𝒢₄ ∧ 𝒢₃ ∧ 𝒢₂ ∧ 𝒢₀`                         | `L7`                 | cf-IE | DeMeo 2012a, Thm 6.3.1 (ii)–(v) | imported; the conditional consequence derived | **unknown — the open problem** |
+| 8   | `𝒢₁` is **not** enforced                    | `𝟚³` (rank-3 Boolean) | refutation | Lucchini–Moscatiello–Palcoux–Spiga 2019, Thm 1.1 (1)–(2) | realization imported, **refutation derived** | yes, *inside* the excluded class |
+| 9   | every 2-chain-enforced class contains the core-free-maximal class `HasCoreFreeMaximal`, which is itself 2-chain-enforced | any two-element chain (`IsChain₂`) | cf-IE, both directions | elementary (this repository); closes the RP-4 reduction's two-element corner | **derived** (`chain₂-enforces`, `chain₂-cfIE-coreFreeMaximal`), on the new `Classical.Structures.Group.MaximalSubgroup`; wreath-richness derived in `FLRP.Hunt` | yes classically (`[1 , C₂]`); constructively oracle-strength, see the module prose |
 
 Entries 1–3 discharge the note's three parachute classes as theorems rather than hypotheses, which is what the issue asked for; Entries 4 and 5 are the note's two IE classes; Entry 6 is the min-IE example the library was asked to record; Entries 7 and 8 are the two external entries whose statements could be pinned down exactly; Entry 9 was added by RP-3 (survey note `docs/notes/flrp-rp3-hunt.md`) to close the two-element corner of the RP-4 reduction.
 
@@ -69,17 +77,19 @@ Two things follow.  `M₆` does not occur below degree 5, so Entry 5's hypothesi
 
 ## 4.  Formalization decisions
 
-### 4.1  Subdirect irreducibility is stated group-side, and the bridge is a follow-up
+### 4.1  Subdirect irreducibility is stated group-side; the bridge was a follow-up, since landed
 
-The library has no correspondence between normal subgroups of a group and congruences of it, so `Setoid.Congruences.Monolith.IsSubdirectlyIrreducible` — which is about `Con 𝑨` — cannot be applied to a group without building that bridge.  RP-1 proves subdirect irreducibility in its constructive *pairwise* form (`Minimal.normals-meet`: no nontrivial normal subgroup meets the minimal normal subgroup trivially).
+At the time of the decision the library had no correspondence between the normal subgroups of a group and its congruences, so `Setoid.Congruences.Monolith.IsSubdirectlyIrreducible`, which is about `Con 𝑨`, could not be applied to a group without building that bridge.  The bridge has since landed; the update at the end of this section records what it delivered and what remains.  The rest of this section is the decision as it was taken.  RP-1 proves subdirect irreducibility in its constructive *pairwise* form (`Minimal.normals-meet`: no nontrivial normal subgroup meets the minimal normal subgroup trivially).
 
 The decision: state `𝒢₂` group-side, as `HasMonolithᵍ` of the new `Classical.Structures.Group.MinimalNormal`, and record the divergence.  Three reasons.
 
 +  It is the note's own definition: "Recall, for groups *subdirectly irreducible* is equivalent to having a unique minimal normal subgroup."  So the group-side form is not an approximation of the entry, it *is* the entry.
-+  RP-2's job is to state literature facts precisely, not to build infrastructure; the bridge is reusable mathematics that belongs in `Classical/Structures/Group/` beside `FLRP.Bridge`'s Pálfy–Pudlák correspondence, with its own issue.
-+  The group-side statement was strengthened to the shape the algebra-side notion has, so the bridge will be a *transport* and not a reproof: `minimal-meets→least` upgrades RP-1's pairwise form to the least-element form of `IsMonolith.mono-least`, constructively (`M ∩ N` is a normal subgroup inside `M`, and it is nontrivial exactly because `M` and `N` do not meet trivially, so minimality gives `M ⊆ M ∩ N ⊆ N`).
++  RP-2's job is to state literature facts precisely, not to build infrastructure; the bridge was reusable mathematics belonging in `Classical/Structures/Group/` beside `FLRP.Bridge`'s Pálfy–Pudlák correspondence, with its own issue.
++  The group-side statement was strengthened to the shape the algebra-side notion has, so the bridge would be a *transport* and not a reproof: `minimal-meets→least` upgrades RP-1's pairwise form to the least-element form of `IsMonolith.mono-least`, constructively (`M ∩ N` is a normal subgroup inside `M`, and it is nontrivial exactly because `M` and `N` do not meet trivially, so minimality gives `M ⊆ M ∩ N ⊆ N`).
 
-What the bridge needs, for whoever picks it up: from a normal subgroup `N`, the relation `x θ y ⟺ x y⁻¹ ∈ N` is a congruence of the group algebra; from a congruence `θ`, the class `{x : x θ ε}` is a normal subgroup; the two maps are mutually inverse and monotone, so they are an order isomorphism `Con 𝑮 ≅ Normal(𝑮)`; nontriviality corresponds to nonzeroness on the nose.  With it, `HasMonolithᵍ` transports to `HasMonolith` and `𝒢₂` becomes the library's `IsSubdirectlyIrreducible`.  It is ordinary work — no obstruction, no classical input — and it would retire the `ᵍ` superscript.
+What the bridge needed, as recorded before it was built: from a normal subgroup `N`, the relation `x θ y ⟺ x y⁻¹ ∈ N` is a congruence of the group algebra; from a congruence `θ`, the class `{x : x θ ε}` is a normal subgroup; the two maps are mutually inverse and monotone, so they are an order isomorphism `Con 𝑮 ≅ Normal(𝑮)`; nontriviality corresponds to nonzeroness on the nose.  With it, `HasMonolithᵍ` transports to `HasMonolith` and `𝒢₂` becomes the library's `IsSubdirectlyIrreducible`.  It was ordinary work — no obstruction, no classical input — and, once the monolith instance is transported, it retires the `ᵍ` superscript.
+
+**Update (2026-08-31)**.  The bridge landed as `Classical.Structures.Group.Congruences` (#508): the order isomorphism `Con 𝑮 ≅ Normal(𝑮)` at every relation level, with the nonzero/nontrivial equivalences.  The first notion transported whole across it is simplicity (#564): the congruence-level `IsSimple` of `Setoid.Congruences.Simple` is equivalent to the group-theoretic `IsSimple` of `Classical.Structures.Group.Simple`, constructively in both directions, and `A₅` is certified simple at the congruence level.  The monolith instance (`HasMonolithᵍ → HasMonolith`, restating `𝒢₂`, retiring the `ᵍ` superscript) remains open, with the simplicity equivalence as its template.
 
 ### 4.2  Minimal-normal descent is threaded, not dropped
 
@@ -162,9 +172,9 @@ The failure mode of this phase is a plausible-sounding theorem statement that no
 
 ## 6.  Open items and follow-ups
 
-+  **The normal-subgroup/congruence bridge for groups** (§ 4.1).  Retires the `ᵍ` divergence and connects `𝒢₂` to the library's `IsSubdirectlyIrreducible`.  Ordinary work; worth its own issue.
-+  **Retire `minIE`** in favour of `MinimallyIE` (§ 4.7), in `FLRP.Enforceable`, after PR #506 merges.
-+  **Minimal-normal descent for finite groups** (§ 4.2): well-founded descent on order.  Discharges the antecedent of Entries 1–3 and RP-1's fourth assumption at once.
++  **The normal-subgroup/congruence bridge for groups** (§ 4.1).  Landed in two installments: the order isomorphism itself (#508) and the simplicity transport with the certified `A₅` (#564); see the update in § 4.1.  The residue, `HasMonolithᵍ → HasMonolith` and the `𝒢₂` restatement, retires the `ᵍ` divergence and remains open.
++  **Retire `minIE`** in favour of `MinimallyIE` (§ 4.7), in `FLRP.Enforceable`; tracked as #509.
++  **Minimal-normal descent for finite groups** (§ 4.2).  Landed (#510): `Classical.Structures.Group.MinimalNormalDescent` proves the theorem by well-founded descent on order, and `finite-MinimalNormalDescent` of `FLRP.Reductions` discharges the antecedent of Entries 1–3 for a finite group whose normal subgroups are decidably presented.  The residue is that presentational hypothesis, `DecidablyPresented`, which the update in § 4.2 explains cannot be removed on the witnessed route; RP-1's fourth assumption is discharged by the same theorem once its interval data is threaded at Layer D, which remains open.
 +  **Certificates instead of hypotheses for the vacuity data of Entries 4–6**.  `M₆` is an interval in a group of order 100 (`V ⋊ F₅^*` for `V` a plane over `F₅`), which is small enough for the GAP search and certificate pipeline of WP-6 to produce and for the Agda checker to verify; that would turn `M₆-representable` from an import into a theorem, and with it the non-vacuity of Entry 5.  `M₇`'s witness lives in `A₃₁` and is far out of reach, so Entry 4 keeps `FeitM₇` as an import.
 +  **Solvability and `Aₙ`/`Sₙ`** as library definitions (§ 4.8), which turn the schemas into statements.  Solvability additionally closes RP-1's open item on the second half of Lemma 3.7 (ii).
 +  **The degree-`≤ 4` gap** in Entry 5 (§ 3), either by composing with Entry 4 under a further named hypothesis or by computation.
