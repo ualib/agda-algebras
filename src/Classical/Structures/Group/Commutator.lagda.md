@@ -37,7 +37,7 @@ module Classical.Structures.Group.Commutator where
 open import Agda.Primitive using () renaming ( Set to Type )
 
 -- Imports from the Agda Standard Library ---------------------------------------
-open import Data.Product     using  ( proj₁ )
+open import Data.Product     using  ( proj₁ ; _,_ )
 open import Level            using  ( Level )
 open import Relation.Binary  using  ( Setoid )
 open import Relation.Nullary using  ( ¬_ )
@@ -57,12 +57,7 @@ open import Setoid.Algebras.Basic             using  ( 𝕌[_] ; 𝔻[_] )
 `Commutator`{.AgdaModule}` 𝒢` packages the two notions and their algebra for a fixed group.
 
 ```agda
-module Commutator {α ρ : Level} (𝒢 : Group α ρ) where
-
-  private
-    𝑮 = proj₁ 𝒢
-    G = 𝕌[ 𝑮 ]
-
+module Commutator {α ρ : Level} (𝒢@(𝑮 , _) : Group α ρ) where
   open Setoid 𝔻[ 𝑮 ]            using  ( _≈_ ) renaming  ( refl to ≈refl )
   open SetoidReasoning 𝔻[ 𝑮 ]
   open Group-Op 𝒢               using  ( _∙_ ; ε ; _⁻¹ ; ∙-cong ; ⁻¹-cong ; assoc-law
@@ -74,7 +69,7 @@ module Commutator {α ρ : Level} (𝒢 : Group α ρ) where
 
 ```agda
   -- The commuting relation.
-  Commutes : G → G → Type ρ
+  Commutes : 𝕌[ 𝑮 ] → 𝕌[ 𝑮 ] → Type ρ
   Commutes x y = x ∙ y ≈ y ∙ x
 ```
 
@@ -94,7 +89,7 @@ The relation is a congruence in each slot separately; the right-slot form is the
 
 ```agda
   -- The commutator of two elements.
-  [_⸴_] : G → G → G
+  [_⸴_] : 𝕌[ 𝑮 ] → 𝕌[ 𝑮 ] → 𝕌[ 𝑮 ]
   [ x ⸴ y ] = x ∙ y ∙ x ⁻¹ ∙ y ⁻¹
 ```
 

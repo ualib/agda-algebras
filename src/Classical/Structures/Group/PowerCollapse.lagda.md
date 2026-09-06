@@ -95,7 +95,7 @@ open import Data.Nat.Properties                    using  ( <-cmp ; <-irrefl ; �
                                                           ; ≤-reflexive ; m<n⇒m<1+n
                                                           ; +-suc ; +-identityʳ ; _<?_ )
                                                    renaming ( _≟_ to _≟ℕ_ )
-open import Data.Product                           using  ( Σ-syntax ; ∃ ; _×_
+open import Data.Product                           using  ( Σ-syntax ; ∃ ; _×_ ; ∃-syntax
                                                           ; _,_ ; proj₁ ; proj₂ )
 open import Data.Vec.Base                          using  ( tabulate )
 open import Data.Vec.Properties                    using  ( lookup∘tabulate )
@@ -119,12 +119,13 @@ open import Classical.Bundles.Group                       using ( ⟨_⟩ᵍᵖ 
 open import Classical.Structures.Group.Basic              using ( Group ; module Group-Op )
 open import Classical.Structures.Group.Commutator         using ( module Commutator )
 open import Classical.Structures.Group.Congruences        using ( module GroupCongruences )
+open import Classical.Structures.Group.Conjugation        using ( module Conjugate )
 open import Classical.Structures.Group.MinimalNormal      using ( module MinimalNormal )
 open import Classical.Structures.Group.PartitionSubgroup  using ( module PartitionSubgroups )
 open import Classical.Structures.Group.Simple             using ( module Simple )
 open import Classical.Structures.Group.Subgroups          using ( IsSubgroup ; mkIsSubgroup )
 open import Classical.Structures.Lattice.Partitions       using ( SameBlock )
-open import Overture                                      using (∃-syntax)
+open import Overture                                      using ( ∃-syntax ; Π-syntax )
 open import Setoid.Algebras.Basic                         using ( 𝕌[_] ; 𝔻[_] )
 open import Setoid.Algebras.Finite                        using ( FiniteAlgebra )
 open import Setoid.Algebras.Products.Finite               using ( power-FiniteAlgebra )
@@ -180,20 +181,13 @@ module PowerCollapse
 base group, and the power enumeration drives the searches over members of `U`.
 
 ```agda
+  open FiniteAlgebra 𝑭ₛ
+
+  Πfin : FiniteAlgebra Π𝑮
+  Πfin = power-FiniteAlgebra {n = n} 𝑭ₛ
+  open FiniteAlgebra Πfin renaming (card to Nᴾ ; enum to enumᴾ ; enum-sur to surᴾ) using ()
+
   private
-    _≟ₛ_ = FiniteAlgebra._≟_ 𝑭ₛ
-
-    Nₛ     = FiniteAlgebra.card 𝑭ₛ
-    enumₛ  = FiniteAlgebra.enum 𝑭ₛ
-    surₛ   = FiniteAlgebra.enum-sur 𝑭ₛ
-
-    Πfin : FiniteAlgebra Π𝑮
-    Πfin = power-FiniteAlgebra {n = n} 𝑭ₛ
-
-    Nᴾ     = FiniteAlgebra.card Πfin
-    enumᴾ  = FiniteAlgebra.enum Πfin
-    surᴾ   = FiniteAlgebra.enum-sur Πfin
-
     s₀ : 𝕌[ 𝑺 ]
     s₀ = elt nas
 
@@ -205,13 +199,14 @@ base group, and the power enumeration drives the searches over members of `U`.
 the power identity is a member.
 
 ```agda
-  -- Every diagonal tuple κ g is a member of U.
-  κ∈U : ∀ g → κ g ∈ U
-  κ∈U g = D⊆U (κ-diag g)
+  private
+    -- Every diagonal tuple κ g is a member of U.
+    κ∈U : ∀ g → κ g ∈ U
+    κ∈U g = D⊆U (κ-diag g)
 
-  -- The identity tuple is a member of U.
-  εᴾ∈U : εᴾ ∈ U
-  εᴾ∈U = U-resp (λ t → ≈sym (e-pointwise t)) (κ∈U ε)
+    -- The identity tuple is a member of U.
+    εᴾ∈U : εᴾ ∈ U
+    εᴾ∈U = U-resp (λ t → ≈sym (e-pointwise t)) (κ∈U ε)
 ```
 
 The commutator of the power is computed coordinatewise, by the three pointwise
@@ -219,8 +214,8 @@ laws of [Classical.Structures.Group.Power][].
 
 ```agda
   -- The power commutator acts coordinatewise.
-  comm-pointwise : ∀ x y t → [ x ⸴ y ]ᴾ t ≈ [ x t ⸴ y t ]
-  comm-pointwise x y t = begin
+  commutator-pointwise : ∀ {x y t} → [ x ⸴ y ]ᴾ t ≈ [ x t ⸴ y t ]
+  commutator-pointwise {x} {y} {t} = begin
     [ x ⸴ y ]ᴾ t                     ≈⟨ ⊗-pointwise (x ⊗ y ⊗ invᴾ x) (invᴾ y) t ⟩
     (x ⊗ y ⊗ invᴾ x) t ∙ invᴾ y t    ≈⟨ ∙-cong  (⊗-pointwise (x ⊗ y) (invᴾ x) t)
                                                 (inv-pointwise y t) ⟩
@@ -236,19 +231,18 @@ values at those coordinates.  This is the kernel meet of the members read as
 functions of the coordinate, and it is the partition the theorem produces.
 
 ```agda
-  infix 4 _~_
-
   -- i ~ j: every member of U agrees at i and j.
   _~_ : Fin n → Fin n → Type 0ℓ
   i ~ j = ∀ u → u ∈ U → u i ≈ u j
+  infix 4 _~_
 ```
 
 The relation is an equivalence, by the corresponding laws of the base setoid.
 
 ```agda
   -- Reflexivity, symmetry, and transitivity of the joint kernel.
-  ~-refl : ∀ i → i ~ i
-  ~-refl i u _ = ≈refl
+  ~-refl : ∀ {i} → i ~ i
+  ~-refl u _ = ≈refl
 
   ~-sym : ∀ {i j} → i ~ j → j ~ i
   ~-sym p u u∈U = ≈sym (p u u∈U)
@@ -263,9 +257,9 @@ respects the pointwise equality.
 
 ```agda
   -- The joint kernel is decidable, by enumerating the power.
-  ~-dec : ∀ i j → Dec (i ~ j)
-  ~-dec i j = map′ toSem fromSem
-    (all? (λ ν → U-dec (enumᴾ ν) →-dec (enumᴾ ν i ≟ₛ enumᴾ ν j)))
+  ~-dec : ∀ {i j} → Dec (i ~ j)
+  ~-dec {i} {j} = map′ toSem fromSem
+    (all? (λ ν → U-dec (enumᴾ ν) →-dec (enumᴾ ν i ≟ enumᴾ ν j)))
     where
     toSem : (∀ ν → enumᴾ ν ∈ U → enumᴾ ν i ≈ enumᴾ ν j) → i ~ j
     toSem h u u∈U =
@@ -288,11 +282,11 @@ together with its minimality certificate.
 ```agda
   -- The least equivalent coordinate, with its two certificates.
   minRepΣ : (i : Fin n) → ∃[ r ∈ Fin n ] r ~ i × ((l : Fin′ r) → ¬ inject l ~ i)
-  minRepΣ i = r , decidable-stable (~-dec r i) r~~i , least
+  minRepΣ i = r , decidable-stable ~-dec r~~i , least
     where
     search : ∃[ r ∈ Fin n ] ¬ ¬ r ~ i × ((l : Fin′ r) → ¬ inject l ~ i)
-    search = ¬∀⟶∃¬-smallest n (λ k → ¬ k ~ i) (λ k → ¬? (~-dec k i))
-               λ all¬ → all¬ i (~-refl i)
+    search = ¬∀⟶∃¬-smallest n (λ k → ¬ k ~ i) (λ k → ¬? ~-dec)
+               λ all¬ → all¬ i ~-refl
 
     r : Fin n
     r = search .proj₁
@@ -314,7 +308,7 @@ together with its minimality certificate.
   minRep-least i = minRepΣ i .proj₂ .proj₂
 ```
 
-Equivalent coordinates receive the same representative: two least elements of the
+Equivalent coordinates receive the same representative.  Two least elements of the
 same equivalence class coincide, by trichotomy on their positions and the
 minimality certificates.
 
@@ -354,13 +348,13 @@ representative's own equivalences.
   π = tabulate minRep
 
   -- The tabulation lookup, once and for all.
-  parent-π : ∀ i → parent π i ≡ minRep i
-  parent-π i = lookup∘tabulate minRep i
+  parent-π : ∀ {i} → parent π i ≡ minRep i
+  parent-π {i} = lookup∘tabulate minRep i
 
   -- The block relation of π is the joint kernel (forward) ...
   ~→sameBlock : ∀ {i j} → i ~ j → SameBlock π i j
   ~→sameBlock {i} {j} i~j =
-    ≡trans (parent-π i) (≡trans (minRep-cong i~j) (≡sym (parent-π j)))
+    ≡trans parent-π (≡trans (minRep-cong i~j) (≡sym parent-π ))
 
   -- ... and (backward).
   sameBlock→~ : ∀ {i j} → SameBlock π i j → i ~ j
@@ -369,7 +363,7 @@ representative's own equivalences.
       (subst (_~ j) mr≡ (minRep-~ j))
     where
     mr≡ : minRep j ≡ minRep i
-    mr≡ = ≡trans (≡sym (parent-π j)) (≡trans (≡sym sb) (parent-π i))
+    mr≡ = ≡trans (≡sym parent-π) (≡trans (≡sym sb) parent-π)
 ```
 
 The first containment of the theorem is now the definition unwinding: a member of
@@ -378,7 +372,7 @@ The first containment of the theorem is now the definition unwinding: a member o
 ```agda
   -- U is contained in the partition subgroup of its joint kernel.
   U⊆Kπ : U ⊆ K π
-  U⊆Kπ {u} u∈U {i} {j} sb = sameBlock→~ sb u u∈U
+  U⊆Kπ {u} u∈U sb = sameBlock→~ sb u u∈U
 ```
 
 #### Killed projections
@@ -394,8 +388,7 @@ decision procedure.
 
     -- The projection: values at i of members vanishing on T.
     KP : Pred 𝕌[ 𝑺 ] 0ℓ
-    KP s = Σ[ ν ∈ Fin Nᴾ ]
-             (enumᴾ ν ∈ U × (∀ t → t ∈ T → enumᴾ ν t ≈ ε) × enumᴾ ν i ≈ s)
+    KP s = Σ[ ν ∈ Fin Nᴾ ](enumᴾ ν ∈ U × (∀ t → t ∈ T → enumᴾ ν t ≈ ε) × enumᴾ ν i ≈ s)
 ```
 
 **The constructor**.  Any member vanishing on `T` puts its value at `i` into the
@@ -404,11 +397,12 @@ projection, after a pass through the enumeration.
 ```agda
     -- Membership from an arbitrary member of U vanishing on T.
     KP-intro : ∀ u → u ∈ U → (∀ t → t ∈ T → u t ≈ ε) → ∀ {s} → u i ≈ s → KP s
-    KP-intro u u∈U kills {s} ui≈s =
+    KP-intro u u∈U kills ui≈s =
       ν , U-resp (≈ᴾ-sym e) u∈U
         , (λ t t∈T → ≈trans (e t) (kills t t∈T))
         , ≈trans (e i) ui≈s
       where
+      ν : Fin Nᴾ
       ν = surᴾ u .proj₁
       e : enumᴾ ν ≈ᴾ u
       e = surᴾ u .proj₂
@@ -424,20 +418,20 @@ and inverses of members vanishing on `T` vanish on `T`, coordinatewise.
 
     -- The projection is closed under the three group operations.
     KP-∙ : ∀ {s s'} → KP s → KP s' → KP (s ∙ s')
-    KP-∙ {s} {s'} (ν , mem , kills , val) (ν' , mem' , kills' , val') =
+    KP-∙ (ν , mem , kills , val) (ν' , mem' , kills' , val') =
       KP-intro (enumᴾ ν ⊗ enumᴾ ν') (U-∙ mem mem')
-        (λ t t∈T → ≈trans (⊗-pointwise (enumᴾ ν) (enumᴾ ν') t)
-                     (≈trans (∙-cong (kills t t∈T) (kills' t t∈T)) (idˡ-law ε)))
-        (≈trans (⊗-pointwise (enumᴾ ν) (enumᴾ ν') i) (∙-cong val val'))
+        (λ t t∈T → ≈trans  (⊗-pointwise (enumᴾ ν) (enumᴾ ν') t)
+                           (≈trans (∙-cong (kills t t∈T) (kills' t t∈T)) (idˡ-law ε)))
+          (≈trans (⊗-pointwise (enumᴾ ν) (enumᴾ ν') i) (∙-cong val val'))
 
     KP-ε : KP ε
     KP-ε = KP-intro εᴾ εᴾ∈U (λ t _ → e-pointwise t) (e-pointwise i)
 
     KP-⁻¹ : ∀ {s} → KP s → KP (s ⁻¹)
-    KP-⁻¹ {s} (ν , mem , kills , val) =
+    KP-⁻¹ (ν , mem , kills , val) =
       KP-intro (invᴾ (enumᴾ ν)) (U-inv mem)
-        (λ t t∈T → ≈trans (inv-pointwise (enumᴾ ν) t)
-                     (≈trans (⁻¹-cong (kills t t∈T)) ε⁻¹≈ε))
+        (λ t t∈T → ≈trans  (inv-pointwise (enumᴾ ν) t)
+                           (≈trans (⁻¹-cong (kills t t∈T)) ε⁻¹≈ε))
         (≈trans (inv-pointwise (enumᴾ ν) i) (⁻¹-cong val))
 ```
 
@@ -446,27 +440,28 @@ conjugating preserves both the vanishing set and membership, and at `i` it
 conjugates the value.
 
 ```agda
+    open Conjugate 𝒮 using (conj-syntax)
     -- The projection is normalized by conjugation.
-    KP-normal : ∀ g {s} → KP s → KP (g ∙ s ∙ g ⁻¹)
+    -- (recall conjugation syntax: s ^ g = g ∙ s ∙ g ⁻¹)
+    KP-normal : ∀ g {s} → KP s → KP  (s ^ g)
     KP-normal g {s} (ν , mem , kills , val) =
       KP-intro w (U-∙ (U-∙ (κ∈U g) mem) (U-inv (κ∈U g)))
-        (λ t t∈T → ≈trans (w-pt t)
-                     (≈trans (∙-cong (∙-cong ≈refl (kills t t∈T)) ≈refl)
-                       (≈trans (∙-cong (idʳ-law g) ≈refl) (invʳ-law g))))
+        (λ t t∈T → ≈trans  (w-pt t)
+                           (≈trans  (∙-cong (∙-cong ≈refl (kills t t∈T)) ≈refl)
+                                    (≈trans (∙-cong (idʳ-law g) ≈refl) (invʳ-law g))))
         (≈trans (w-pt i) (∙-cong (∙-cong ≈refl val) ≈refl))
       where
+      w : 𝕌[ Π𝑮 ]
       w = κ g ⊗ enumᴾ ν ⊗ invᴾ (κ g)
 
-      w-pt : ∀ t → w t ≈ g ∙ enumᴾ ν t ∙ g ⁻¹
-      w-pt t = ≈trans (⊗-pointwise (κ g ⊗ enumᴾ ν) (invᴾ (κ g)) t)
-                 (∙-cong (⊗-pointwise (κ g) (enumᴾ ν) t) (inv-pointwise (κ g) t))
+      w-pt : ∀ t → w t ≈ (enumᴾ ν t)^ g
+      w-pt t = ≈trans  (⊗-pointwise (κ g ⊗ enumᴾ ν) (invᴾ (κ g)) t)
+                       (∙-cong (⊗-pointwise (κ g) (enumᴾ ν) t) (inv-pointwise (κ g) t))
 
     -- The packaged normal subgroup.
     KP-nsg : IsNormalSubgroup KP
-    KP-nsg .isSubgroup =
-      mkIsSubgroup 𝒮 (λ {s} {s'} → KP-respects {s} {s'})
-        (λ {s} {s'} → KP-∙ {s} {s'}) KP-ε (λ {s} → KP-⁻¹ {s})
-    KP-nsg .isNormal g {s} = KP-normal g {s}
+    KP-nsg .isSubgroup = mkIsSubgroup 𝒮 KP-respects KP-∙ KP-ε KP-⁻¹
+    KP-nsg .isNormal g = KP-normal g
 ```
 
 **Simplicity turns one nontrivial member into all of them**.  This is the only way
@@ -474,7 +469,7 @@ the projection is ever consumed.
 
 ```agda
     -- A member of U vanishing on T and nontrivial at i makes the projection full.
-    KP-full : ∀ w → w ∈ U → (∀ t → t ∈ T → w t ≈ ε) → ¬ (w i ≈ ε) → ∀ s → KP s
+    KP-full : ∀ w → w ∈ U → (∀ t → t ∈ T → w t ≈ ε) → ¬ w i ≈ ε → ∀ s → KP s
     KP-full w w∈U kills wi≉ε =
       simple nas KP KP-nsg (w i , KP-intro w w∈U kills ≈refl , wi≉ε)
 ```
@@ -488,8 +483,7 @@ at `i`.
 
 ```agda
   -- A separator: it vanishes at j and not at i.
-  separator : ∀ {i j} → ¬ (i ~ j)
-    → Σ[ w ∈ 𝕌[ Π𝑮 ] ] (w ∈ U × w j ≈ ε × ¬ (w i ≈ ε))
+  separator : ∀ {i j} → ¬ (i ~ j) → Σ[ w ∈ 𝕌[ Π𝑮 ] ] (w ∈ U × w j ≈ ε × ¬ w i ≈ ε)
   separator {i} {j} ¬ij = w , w∈U , wj≈ε , wi≉ε
     where
     ¬all : ¬ (∀ ν → enumᴾ ν ∈ U → enumᴾ ν i ≈ enumᴾ ν j)
@@ -497,10 +491,12 @@ at `i`.
       ≈trans (≈sym (surᴾ u .proj₂ i))
         (≈trans (h (surᴾ u .proj₁) (U-resp (≈ᴾ-sym (surᴾ u .proj₂)) u∈U))
           (surᴾ u .proj₂ j))
-
+    open Setoid 𝔻[ 𝑺 ]  using () renaming (_≈_ to _≈ˢ_)
+    found : ∃[ w ] ¬ (enumᴾ w ∈ U → enumᴾ w i ≈ˢ enumᴾ w j)
     found = ¬∀⟶∃¬ Nᴾ (λ ν → enumᴾ ν ∈ U → enumᴾ ν i ≈ enumᴾ ν j)
-              (λ ν → U-dec (enumᴾ ν) →-dec (enumᴾ ν i ≟ₛ enumᴾ ν j)) ¬all
+              (λ ν → U-dec (enumᴾ ν) →-dec (enumᴾ ν i ≟ enumᴾ ν j)) ¬all
 
+    u₀ : 𝕌[ Π𝑮 ]
     u₀ = enumᴾ (found .proj₁)
 
     u₀∈U : u₀ ∈ U
@@ -511,7 +507,7 @@ at `i`.
       decide (no ¬p) = ⊥-elim (found .proj₂ (λ mem → ⊥-elim (¬p mem)))
 
     ¬agree : ¬ (u₀ i ≈ u₀ j)
-    ¬agree e = found .proj₂ (λ _ → e)
+    ¬agree e = found .proj₂ λ _ → e
 
     w = u₀ ⊗ invᴾ (κ (u₀ j))
 
@@ -525,7 +521,7 @@ at `i`.
     wj≈ε : w j ≈ ε
     wj≈ε = ≈trans (w-pt j) (invʳ-law (u₀ j))
 
-    wi≉ε : ¬ (w i ≈ ε)
+    wi≉ε : ¬ w i ≈ ε
     wi≉ε h = ¬agree (∙⁻¹≈ε→≈ (≈trans (≈sym (w-pt i)) h))
 ```
 
@@ -562,16 +558,16 @@ simple base supplies one, and the finite search finds it.
   -- Every non-identity element has a non-commuting partner.
   noncommuting-partner : ∀ {d} → ¬ (d ≈ ε) → Σ[ g ∈ 𝕌[ 𝑺 ] ] ¬ Commutes d g
   noncommuting-partner {d} d≉ε =
-    enumₛ (found .proj₁) , found .proj₂
+    enum (found .proj₁) , found .proj₂
     where
-    ¬all : ¬ (∀ ν → Commutes d (enumₛ ν))
-    ¬all h = d≉ε (center-trivial (≈-dec→Stable-≈ε _≟ₛ_) nas d central)
+    ¬all : ¬ (∀ ν → Commutes d (enum ν))
+    ¬all h = d≉ε (center-trivial (≈-dec→Stable-≈ε _≟_) nas d central)
       where
       central : d ∈ center
-      central x _ = Commutes-congʳ (surₛ x .proj₂) (h (surₛ x .proj₁))
+      central x _ = Commutes-congʳ (enum-sur x .proj₂) (h (enum-sur x .proj₁))
 
-    found = ¬∀⟶∃¬ Nₛ (λ ν → Commutes d (enumₛ ν))
-              (λ ν → (d ∙ enumₛ ν) ≟ₛ (enumₛ ν ∙ d)) ¬all
+    found = ¬∀⟶∃¬ card (λ ν → Commutes d (enum ν))
+              (λ ν → (d ∙ enum ν) ≟ (enum ν ∙ d)) ¬all
 ```
 
 #### Support shrinking
@@ -588,7 +584,7 @@ and the partner choice keeps the value at `i` alive.
     → Σ[ a ∈ 𝕌[ Π𝑮 ] ] (a ∈ U × (∀ t → ¬ (i ~ t) → a t ≈ ε) × ¬ (a i ≈ ε))
   block-support i =
     a , a∈U
-      , (λ t ¬it → kills t (∈-filter⁺ (λ t' → ¬? (~-dec i t')) (∈-allFin t) ¬it))
+      , (λ t ¬it → kills t (∈-filter⁺ (λ t' → ¬? ~-dec) (∈-allFin t) ¬it))
       , ai≉ε
     where
     kill : (L : List (Fin n)) → (∀ t → t ∈ˡ L → ¬ (i ~ t))
@@ -619,17 +615,17 @@ and the partner choice keeps the value at `i` alive.
 
       kills' : ∀ t → t ∈ˡ (j ∷ L) → a' t ≈ ε
       kills' t (here t≡j) =
-        ≈trans (comm-pointwise a w t)
+        ≈trans commutator-pointwise
           (comm-εʳ (a t) (subst (λ z → w z ≈ ε) (≡sym t≡j) wj≈ε))
       kills' t (there t∈L) =
-        ≈trans (comm-pointwise a w t) (comm-εˡ (w t) (kills t t∈L))
+        ≈trans commutator-pointwise (comm-εˡ (w t) (kills t t∈L))
 
       a'i≉ε : ¬ (a' i ≈ ε)
       a'i≉ε h = ¬cm (Commutes-congʳ wi≈g
-        (comm≈ε→commutes (a i) (w i) (≈trans (≈sym (comm-pointwise a w i)) h)))
+        (comm≈ε→commutes (a i) (w i) (≈trans (≈sym commutator-pointwise) h)))
 
-    result = kill (filter (λ t → ¬? (~-dec i t)) (allFin n))
-               (λ t t∈F → ∈-filter⁻ (λ t' → ¬? (~-dec i t')) {xs = allFin n} t∈F .proj₂)
+    result = kill (filter (λ t → ¬? ~-dec) (allFin n))
+               (λ t t∈F → ∈-filter⁻ (λ t' → ¬? ~-dec) {xs = allFin n} t∈F .proj₂)
     a     = result .proj₁
     a∈U   = result .proj₂ .proj₁
     kills = result .proj₂ .proj₂ .proj₁
@@ -764,7 +760,7 @@ pointwise.
               m<sk : toℕ (minRep t) < suc k
               m<sk = s≤s (≤-reflexive e)
               sb : SameBlock π t₀ t
-              sb = ≡trans (parent-π t₀) (≡trans (≡sym mr≡) (≡sym (parent-π t)))
+              sb = ≡trans parent-π (≡trans (≡sym mr≡) (≡sym parent-π))
             branch (tri> ¬lt _ gt) =
               ≈trans (∙-cong (reflexive (cB-eval-ε ne)) (reflexive (zsk-eval-y ¬msk)))
                 (≈trans (idˡ-law (y t)) (reflexive (≡sym (zk-eval-y ¬lt))))
