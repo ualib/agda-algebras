@@ -218,6 +218,9 @@ Reflection upgrades mutual inclusion of partition subgroups to equality of parti
       [Classical.Structures.Group.MinimalNormal][] supplies no witness to build the
       indicator from.
 
-[^2]: `K` is also *onto* the interval if `G` is a nonabelian simple group; this is
-      **Kurzweil's lemma**, registered as an explicit hypothesis where the FLRP
-      program consumes it ([FLRP.KurzweilNetter.Interval][]).
+[^2]: `K` is also *onto* the interval when `G` is a finite nonabelian simple group
+      and the interval is taken over subgroups with decidable membership; this is
+      **Kurzweil's lemma**, proved in [FLRP.KurzweilNetter.Surjectivity][] from the
+      blockwise collapse of [Classical.Structures.Group.PowerCollapse][].  Over
+      arbitrary subgroups the statement is classical, by the no-go theorem of
+      [FLRP.KurzweilNetter.Interval][].

@@ -222,7 +222,7 @@ completeness `completeᵈ`{.AgdaField} by transitivity.
       φ≑e = d≑e .proj₁ ∘ φ≑d .proj₁ , φ≑d .proj₂ ∘ d≑e .proj₂
 ```
 
-#### Entry 2: Kurzweil–Netter duality (reduced to Entry 4)
+#### Entry 2: Kurzweil–Netter duality (closed)
 
 **The theorem of Kurzweil and Netter**.  If a finite lattice is representable as
 the congruence lattice of a finite algebra, then so is its dual.

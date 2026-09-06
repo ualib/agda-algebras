@@ -127,7 +127,7 @@ feeding the witnessing pair to the assumed commutativity and deriving a contradi
 
 ```agda
 s3-not-abelian : ¬ (∀ a b → a · b ≡ b · a)
-s3-not-abelian comm = contradiction [ 1F ⸴ 3F ] λ ()
+s3-not-abelian comm = contradiction (comm 1F 3F) λ ()
 ```
 
 #### Acceptance checks

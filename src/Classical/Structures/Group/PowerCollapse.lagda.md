@@ -57,11 +57,12 @@ subgroups of the *base* group only.
     *constant*, so it is the block column with value `s`, and `Kπ ⊆ U` follows by
     peeling one block column off a `Kπ`-member per block representative.
 
-Nonabelianness enters exactly twice, both times through the derived triviality of
-the center of [Classical.Structures.Group.Simple][]: the seed `s₀` of the
-iteration is one element of the non-commuting pair, and the finite search for a
-non-commuting partner needs a centerless base.  Simplicity enters only through
-Steps 3 and 5.
+Nonabelianness enters exactly twice.  The seed `s₀` of the iteration is the left
+element of the non-commuting pair, which is not the identity because the identity
+commutes with everything; and the finite search for a non-commuting partner needs
+a centerless base, which is the derived triviality of the center of
+[Classical.Structures.Group.Simple][].  Simplicity enters only through Steps 3
+and 5.
 
 <!--
 ```agda
@@ -200,8 +201,8 @@ base group, and the power enumeration drives the searches over members of `U`.
     s₀≉ε = elt≉ε nas
 ```
 
-**Two membership facts used throughout**. The diagonal tuples are members, and the
-  power identity is a member.
+**Two membership facts used throughout**.  The diagonal tuples are members, and
+the power identity is a member.
 
 ```agda
   -- Every diagonal tuple κ g is a member of U.
