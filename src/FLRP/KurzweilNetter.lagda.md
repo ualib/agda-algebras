@@ -20,7 +20,7 @@ Given a decidable representation `𝑳 ≅ DecCon 𝑨`, the dual is represented
 
 The submodules, in that order:
 
-+  [FLRP.KurzweilNetter.Interval][]: Kurzweil's interval lemma, stated: the interval `[D , Sⁿ]`, the surjectivity statement in its two layers (the Layer-S statement of record, which the module's no-go theorem shows is excluded middle, and the decidable working form), the membership decider of the partition subgroups, the interval isomorphism `[D , Sⁿ] ≅ Eq(n)′` conditional on surjectivity, and the group representability of `Eq(n)′` that the wreath no-go consumes;
++  [FLRP.KurzweilNetter.Interval][]: Kurzweil's interval lemma, stated: the interval `[D , Sⁿ]`, the surjectivity statement in its two layers (the Layer-S statement of record, which the module's no-go theorem shows implies excluded middle at exponent `2` over a base group with an apartness witness, and the decidable working form), the membership decider of the partition subgroups, the interval isomorphism `[D , Sⁿ] ≅ Eq(n)′` conditional on surjectivity, and the group representability of `Eq(n)′` that the wreath no-go consumes;
 +  [FLRP.KurzweilNetter.Surjectivity][]: Kurzweil's interval lemma, proved: the blockwise collapse of [Classical.Structures.Group.PowerCollapse][] read through the interval vocabulary, giving the surjectivity family for every finite witnessed-nonabelian-simple base group and the unconditional decidable interval isomorphism;
 +  [FLRP.KurzweilNetter.Invariance][]: partitions invariant under an index map, the notion where the algebra side and the group side of the construction meet;
 +  [FLRP.KurzweilNetter.Blocks][]: decidable congruences of a finite carrier as partitions of its (irredundantly enumerated) index set, at the relation level;
