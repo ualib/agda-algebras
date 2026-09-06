@@ -1,24 +1,32 @@
 # RP-2 survey note: the enforcement catalog
 
-Research phase RP-2 (GitHub [issue #459](https://github.com/ualib/agda-algebras/issues/459)) builds the machine-readable catalog of "an interval of this shape forces a group of this kind" theorems, each recast as a precise (cf-/min-)interval-enforceability statement.  The formal artifact is [`src/FLRP/Reductions.lagda.md`](../../src/FLRP/Reductions.lagda.md), supported by the new reusable module [`src/Classical/Structures/Group/MinimalNormal.lagda.md`](../../src/Classical/Structures/Group/MinimalNormal.lagda.md); this note is its companion — the entry table, the verification status of every literature claim, the formalization decisions, and the entries considered and rejected.
+Research phase RP-2 (GitHub [Issue #459](https://github.com/ualib/agda-algebras/issues/459)) builds the machine-readable catalog of "an interval of this shape forces a group of this kind" theorems, each recast as a precise (cf-/min-)interval-enforceability statement.
+
+The formal artifact is [`src/FLRP/Reductions.lagda.md`](../../src/FLRP/Reductions.lagda.md), supported by the new reusable module [`src/Classical/Structures/Group/MinimalNormal.lagda.md`](../../src/Classical/Structures/Group/MinimalNormal.lagda.md); this note is its companion, consisting of the entry table, the verification status of every literature claim, the formalization decisions, and the entries considered and rejected.
 
 The framework the catalog is written in is RP-1's (`docs/notes/flrp-rp1-parachutes.md`, `FLRP.Enforceable`, `FLRP.Parachute*`); the program that consumes it is RP-3's hunt for cf-IE classes with empty intersection (roadmap § 4).
 
 ## 1.  The entries
 
-Nine entries (the ninth added by RP-3).  "Derived" means the enforcement is proved in the library from RP-1; "imported" means the theorem stays on paper and enters as a named, cited hypothesis (never a postulate).  The last column is the vacuity datum: whether the enforcing lattice is *known* to be group representable, which is what decides whether an entry says anything at all.
+Nine entries (the ninth added by RP-3).
 
-| # | Property | Enforcing lattice | Level | Source | Formal status | Lattice representable? |
-| --- | --- | --- | --- | --- | --- | --- |
-| 1 | `𝒢₂` — subdirectly irreducible | any parachute `𝒫(L₁ , … , Lₙ)`, `n ≥ 2`, two big canopies | cf-IE | note Lemma 3.7 (ii) | **derived** (`entry-𝒢₂`), modulo minimal-normal descent | unknown — *is* statement (C) |
-| 2 | `𝒢₃` — no nontrivial abelian normal subgroup | ditto | cf-IE | note Lemma 3.7, Remark | **derived** (`entry-𝒢₃`), ditto | unknown |
-| 3 | `𝒢₄` — `C_G(N) = 1` for all `1 ≠ N ⊴ G` | ditto | cf-IE | note Lemma 3.7 (i) | **derived** (`entry-𝒢₄`), ditto | unknown |
-| 4 | `𝒢₀` — nonsolvable | `M₇` | IE | Pálfy–Pudlák 1980; Pálfy 1995; Feit 1983 | exclusion imported, **upgrade derived** (`nonsolvable-IE`) | **yes** — Feit's `[H , A₃₁]`, imported as `FeitM₇` |
-| 5 | `𝒢₁` — neither alternating nor symmetric | `M₆` | IE | Basile 2001 (Thm D, Prop. 5.2.1); Pálfy 1988 | exclusion imported, **upgrade derived** (`nongiant-IE`) | yes — plane over `F₅`, imported as `M₆-representable` |
-| 6 | `𝒢₂ ∧ 𝒢₃` | `Mₙ`, `n − 1` not a prime power (`M₇`) | min-IE | Köhler 1983 (`𝒢₂`); Pálfy–Pudlák 1980 (`𝒢₃`) | both imported, **conjunction derived** | yes at `n = 7`, as in Entry 4 |
-| 7 | `𝒢₄ ∧ 𝒢₃ ∧ 𝒢₂ ∧ 𝒢₀` | `L7` | cf-IE | DeMeo 2012a, Thm 6.3.1 (ii)–(v) | imported; the conditional consequence derived | **unknown — the open problem** |
-| 8 | `𝒢₁` is **not** enforced | `𝟚³` (rank-3 Boolean) | refutation | Lucchini–Moscatiello–Palcoux–Spiga 2019, Thm 1.1 (1)–(2) | realization imported, **refutation derived** | yes, *inside* the excluded class |
-| 9 | every 2-chain-enforced class contains the core-free-maximal class `HasCoreFreeMaximal`, which is itself 2-chain-enforced | any two-element chain (`IsChain₂`) | cf-IE, both directions | elementary (this repository); closes the RP-4 reduction's two-element corner | **derived** (`chain₂-enforces`, `chain₂-cfIE-coreFreeMaximal`), on the new `Classical.Structures.Group.MaximalSubgroup`; wreath-richness derived in `FLRP.Hunt` | yes classically (`[1 , C₂]`); constructively oracle-strength, see the module prose |
+**Legend**:
+
++  **derived** means the enforcement is proved in the library from RP-1;
++  **imported** means the theorem stays on paper and enters as a named, cited hypothesis;
++  The "Lattice representable?" column indicates whether the enforcing lattice is *known* to be group representable, which is what decides whether an entry currently tells us something concrete.
+
+| #   | Property                                    | Enforcing lattice   | Level | Source | Formal status | Lattice representable? |
+| --- | ------------------------------------------- | ------------------- | ----- | --- | --- | --- |
+| 1   | `𝒢₂`: subdirectly irreducible               | any `𝒫(L₁ , … , Lₙ)`, `n ≥ 2` big canopies | cf-IE | note Lemma 3.7 (ii) | **derived** (`entry-𝒢₂`), modulo minimal-normal descent | unknown — *is* statement (C) |
+| 2   | `𝒢₃`: no nontrivial abelian normal subgroup | ditto               | cf-IE | note Lemma 3.7, Remark | **derived** (`entry-𝒢₃`), ditto | unknown |
+| 3   | `𝒢₄`: `C_G(N) = 1` for all `1 ≠ N ⊴ G`      | ditto               | cf-IE | note Lemma 3.7 (i) | **derived** (`entry-𝒢₄`), ditto | unknown |
+| 4   | `𝒢₀`: nonsolvable                           | `M₇`                | IE    | Pálfy–Pudlák 1980; Pálfy 1995; Feit 1983 | exclusion imported, **upgrade derived** (`nonsolvable-IE`) | **yes** — Feit's `[H , A₃₁]`, imported as `FeitM₇` |
+| 5   | `𝒢₁` neither alternating nor symmetric      | `M₆` | IE | Basile 2001 (Thm D, Prop. 5.2.1); Pálfy 1988 | exclusion imported, **upgrade derived** (`nongiant-IE`) | yes — plane over `F₅`, imported as `M₆-representable` |
+| 6   | `𝒢₂ ∧ 𝒢₃`                                   | `Mₙ`, `n − 1` not a prime power (`M₇`) | min-IE | Köhler 1983 (`𝒢₂`); Pálfy–Pudlák 1980 (`𝒢₃`) | both imported, **conjunction derived** | yes at `n = 7`, as in Entry 4 |
+| 7   | `𝒢₄ ∧ 𝒢₃ ∧ 𝒢₂ ∧ 𝒢₀`                         | `L7`                 | cf-IE | DeMeo 2012a, Thm 6.3.1 (ii)–(v) | imported; the conditional consequence derived | **unknown — the open problem** |
+| 8   | `𝒢₁` is **not** enforced                    | `𝟚³` (rank-3 Boolean) | refutation | Lucchini–Moscatiello–Palcoux–Spiga 2019, Thm 1.1 (1)–(2) | realization imported, **refutation derived** | yes, *inside* the excluded class |
+| 9   | every 2-chain-enforced class contains the cf-maximal class `HasCoreFreeMaximal`, which is itself 2-chain-enforced | any two-element chain (`IsChain₂`) | cf-IE, both directions | elementary (this repository); closes the RP-4 reduction's two-element corner | **derived** (`chain₂-enforces`, `chain₂-cfIE-coreFreeMaximal`), on the new `Classical.Structures.Group.MaximalSubgroup`; wreath-richness derived in `FLRP.Hunt` | yes classically (`[1 , C₂]`); constructively oracle-strength, see the module prose |
 
 Entries 1–3 discharge the note's three parachute classes as theorems rather than hypotheses, which is what the issue asked for; Entries 4 and 5 are the note's two IE classes; Entry 6 is the min-IE example the library was asked to record; Entries 7 and 8 are the two external entries whose statements could be pinned down exactly; Entry 9 was added by RP-3 (survey note `docs/notes/flrp-rp3-hunt.md`) to close the two-element corner of the RP-4 reduction.
 

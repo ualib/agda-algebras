@@ -111,8 +111,8 @@ private variable α ρ ℓ : Level
 #### Simplicity, in implication form
 
 Fix an algebra `𝑨`.  The hypothesis a consumer supplies is a related pair together
-with a proof that the setoid equality keeps the pair apart; it enters as positive
-Σ-data, in the same shape as the non-identity member the group-side definition
+with a proof that the setoid equality distinguishes the two elements of the pair;
+it enters as positive Σ-data, in the same shape as the non-identity member the group-side definition
 consumes.
 
 ```agda

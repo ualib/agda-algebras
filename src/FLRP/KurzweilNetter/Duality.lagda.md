@@ -40,7 +40,7 @@ simple group, and the module parameters are the deliverable list of properties t
 argument actually uses:
 
 +  **a finite carrier with decidable equality**
-   (`𝑭ₛ`{.AgdaBound}` : ``FiniteAlgebra`{.AgdaRecord}),
+   (`𝑭ₛ`{.AgdaBound}` : ` `FiniteAlgebra`{.AgdaRecord}),
    for finiteness of the power `Sᵐ`, decidable coset equality, and the membership
    deciders of the partition subgroups;
 
