@@ -488,8 +488,12 @@ those tuples.
 ```agda
   module ConNormal {ℓ : Level} ((_θ_ , θcon) : Con 𝑮 ℓ) where
 
+    -- The equivalence laws of θ, read off the record.
     θ-refl : ∀ {x} → x θ x
     θ-refl = IsEquivalence.refl (is-equivalence θcon)
+
+    θ-sym : ∀ {x y} → x θ y → y θ x
+    θ-sym = IsEquivalence.sym (is-equivalence θcon)
 
     θ-trans : ∀ {x y z} → x θ y → y θ z → x θ z
     θ-trans = IsEquivalence.trans (is-equivalence θcon)
@@ -813,13 +817,10 @@ the congruence-level notion unqualified, and the theorem names spell the latter 
     -- of a congruence relating a distinct pair contains a non-identity element, so
     -- it is the whole group, so the congruence relates every pair through ε.
     simple→simpleAlgebra : Simple.IsSimple 𝒢 ℓ₀ → IsSimple 𝑮 (α ⊔ ρ ⊔ ℓ₀)
-    simple→simpleAlgebra sim θ@(_ , θcon) (a , b , aθb , a≉b) x y =
+    simple→simpleAlgebra sim θ (a , b , aθb , a≉b) x y =
       θ-trans (all∈N x) (θ-sym (all∈N y))
       where
-      open ConNormal θ using ( θ-trans )
-
-      θ-sym : ∀ {u v} → proj₁ θ u v → proj₁ θ v u
-      θ-sym = IsEquivalence.sym (is-equivalence θcon)
+      open ConNormal θ using ( θ-trans ; θ-sym )
 
       𝑵 : NormalSubgroup (α ⊔ ρ ⊔ ℓ₀)
       𝑵 = normalOf θ
