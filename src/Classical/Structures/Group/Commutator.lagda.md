@@ -153,16 +153,16 @@ The contrapositive is the form the support-shrinking iteration consumes: a non-c
 
 ```agda
   -- Non-commuting elements have a nontrivial commutator.
-  ¬commutes→comm≉ε : ∀ x y → ¬ Commutes x y → ¬ [ x ⸴ y ] ≈ ε
-  ¬commutes→comm≉ε x y nc h = nc (commutator≈ε→commutes x y h)
+  ¬commutes→commutator≉ε : ∀ x y → ¬ Commutes x y → ¬ [ x ⸴ y ] ≈ ε
+  ¬commutes→commutator≉ε x y nc h = nc (commutator≈ε→commutes x y h)
 ```
 
 The forward direction closes the equivalence; it is the same telescope read backwards, recorded so that consumers never redo the rearrangement.
 
 ```agda
   -- Commuting elements have a trivial commutator.
-  commutes→comm≈ε : ∀ x y → Commutes x y → [ x ⸴ y ] ≈ ε
-  commutes→comm≈ε x y c = begin
+  commutes→commutator≈ε : ∀ x y → Commutes x y → [ x ⸴ y ] ≈ ε
+  commutes→commutator≈ε x y c = begin
     x ∙ y ∙ x ⁻¹ ∙ y ⁻¹        ≈⟨ ∙-cong (∙-cong c ≈refl) ≈refl ⟩
     y ∙ x ∙ x ⁻¹ ∙ y ⁻¹        ≈⟨ ∙-cong (assoc-law y x (x ⁻¹)) ≈refl ⟩
     y ∙ (x ∙ x ⁻¹) ∙ y ⁻¹      ≈⟨ ∙-cong (∙-cong ≈refl (invʳ-law x)) ≈refl ⟩

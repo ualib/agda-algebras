@@ -588,9 +588,6 @@ one, and the finite search finds it.
 
     ¬all : ¬ ∀ ν → Commutes d (enum ν)
     ¬all h = d≉ε (center-trivial (≈-dec→Stable-≈ε _≟_) nas d (central h))
-      -- where
-      -- central : d ∈ center
-      -- central x _ = Commutes-congʳ (enum-sur x .proj₂) (h (enum-sur x .proj₁))
 
     found : ∃[ i ∈ Fin card ] ¬ Commutes d (enum i)
     found = ¬∀⟶∃¬ card  (λ ν → Commutes d (enum ν))
@@ -676,7 +673,6 @@ and the partner choice keeps the value at `i` alive.
 
       a'i≉ε : ¬ a' i ≈ ε
       a'i≉ε = ¬cm ∘ cm
-      --
 
     γ : ∃[ a ∈ 𝕌[ Π𝑮 ] ]
           ( a ∈ U  × (∀ t  → t ∈ˡ filter (λ _ → ¬? ~-dec) (allFin n) → a t ≈ ε)

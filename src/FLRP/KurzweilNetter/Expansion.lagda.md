@@ -34,7 +34,7 @@ Three design points, each forced by a constraint worth recording, are the follow
 +  **The signature is an enumerated symbol type** (not `Sig-Unary 𝕌[ Sᵐ ]`).
    The carrier of the power is a function type `Fin m → S`, and a
    `FiniteSignature`{.AgdaRecord} requires its symbols to be enumerated up to
-   propositional equality, unprovable for a function type under  `--safe`.
+   propositional equality, unprovable for a function type under `--safe`
    without function extensionality.  So the expanded algebra's symbols are
    `Fin N ⊎ Fin T`: the action of `inj₁ ν` is left translation by the `ν`-th
    enumerated group element, and `inj₂ τ` is composition with `tr τ`.
