@@ -89,7 +89,8 @@ module PartitionSubgroups (n : ℕ) (𝒢@(𝑮 , _) : Group α ρ) where
   Π𝑮 : Algebra α ρ
   Π𝑮 = ⨅ᵍ-Group .proj₁
 
-  open Setoid 𝔻[ 𝑮 ] using (reflexive ; _≈_) renaming (sym to ≈sym ; trans to ≈trans)
+  open Setoid 𝔻[ 𝑮 ] using (reflexive ; _≈_) renaming  ( sym to ≈sym
+                                                        ; trans to ≈trans)
   open Setoid 𝔻[ Π𝑮 ] using () renaming ( _≈_ to _≈ᴵ_ )
   open Group-Op 𝒢 using ( ε )
 

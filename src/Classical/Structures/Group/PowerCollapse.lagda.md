@@ -100,6 +100,7 @@ open import Data.Product                           using  ( Σ-syntax ; ∃ ; _�
 open import Data.Vec.Base                          using  ( tabulate )
 open import Data.Vec.Properties                    using  ( lookup∘tabulate )
 open import Level                                  using  ( 0ℓ )
+open import Function                               using  ( _∘_ )
 open import Relation.Binary                        using  ( Setoid )
 open import Relation.Binary.Definitions            using  ( Tri ; tri< ; tri≈ ; tri> )
 open import Relation.Binary.PropositionalEquality  using  ( _≡_ ; refl ; cong ; subst )
@@ -107,29 +108,33 @@ open import Relation.Binary.PropositionalEquality  using  ( _≡_ ; refl ; cong 
                                                              ; trans to ≡trans )
 open import Relation.Nullary                       using  ( ¬_ ; Dec ; yes ; no ; ¬?
                                                           ; decidable-stable )
-open import Relation.Nullary.Decidable             using  ( does ; dec-true ; dec-false
-                                                          ; map′ ; _→-dec_ )
+open import Relation.Nullary.Decidable             using  ( dec-true ; dec-false
+                                                          ; does ; map′ ; _→-dec_ )
 open import Relation.Unary                         using  ( Pred ; _∈_ ; _⊆_ )
 
 import Algebra.Properties.Group as GroupProperties
 import Relation.Binary.Reasoning.Setoid as SetoidReasoning
 
 -- Imports from the Agda Universal Algebra Library ------------------------------
-open import Classical.Bundles.Group                       using ( ⟨_⟩ᵍᵖ )
-open import Classical.Structures.Group.Basic              using ( Group ; module Group-Op )
-open import Classical.Structures.Group.Commutator         using ( module Commutator )
-open import Classical.Structures.Group.Congruences        using ( module GroupCongruences )
-open import Classical.Structures.Group.Conjugation        using ( module Conjugate )
-open import Classical.Structures.Group.MinimalNormal      using ( module MinimalNormal )
-open import Classical.Structures.Group.PartitionSubgroup  using ( module PartitionSubgroups )
-open import Classical.Structures.Group.Simple             using ( module Simple )
-open import Classical.Structures.Group.Subgroups          using ( IsSubgroup ; mkIsSubgroup )
-open import Classical.Structures.Lattice.Partitions       using ( SameBlock )
-open import Overture                                      using ( ∃-syntax )
-open import Setoid.Algebras.Basic                         using ( 𝕌[_] ; 𝔻[_] )
-open import Setoid.Algebras.Finite                        using ( FiniteAlgebra )
-open import Setoid.Algebras.Products.Finite               using ( power-FiniteAlgebra )
-open import Setoid.Congruences.Certificates.Schema        using ( ParentVec ; parent )
+open import Classical.Bundles.Group                using  ( ⟨_⟩ᵍᵖ )
+open import Classical.Structures.Group.Basic       using  ( Group ; module Group-Op )
+open import Classical.Structures.Group.Commutator  using  ( module Commutator )
+open import Classical.Structures.Group.Congruences using  ( module GroupCongruences )
+open import Classical.Structures.Group.Conjugation using  ( module Conjugate )
+open import Classical.Structures.Group.MinimalNormal
+                                                   using  ( module MinimalNormal )
+open import Classical.Structures.Group.PartitionSubgroup
+                                                   using  ( module PartitionSubgroups )
+open import Classical.Structures.Group.Simple      using  ( module Simple )
+open import Classical.Structures.Group.Subgroups   using  ( IsSubgroup
+                                                          ; mkIsSubgroup )
+open import Classical.Structures.Lattice.Partitions
+                                                   using  ( SameBlock )
+open import Overture                               using  ( ∃-syntax )
+open import Setoid.Algebras.Basic                  using  ( 𝕌[_] ; 𝔻[_] )
+open import Setoid.Algebras.Finite                 using  ( FiniteAlgebra )
+open import Setoid.Algebras.Products.Finite        using  ( power-FiniteAlgebra )
+open import Setoid.Congruences.Certificates.Schema using  ( ParentVec ; parent )
 ```
 -->
 
@@ -153,29 +158,36 @@ module PowerCollapse
   (U-dec       : ∀ x → Dec (x ∈ U))
   (D⊆U         : Diag ⊆ U)
   where
-
-
-
-  open Setoid 𝔻[ 𝑺 ]            using  ( _≈_ ; reflexive )
-                                renaming  ( refl to ≈refl ; sym to ≈sym ; trans to ≈trans )
-  open Setoid 𝔻[ Π𝑮 ]           renaming  ( _≈_ to _≈ᴾ_ ; sym to ≈ᴾ-sym ) using ()
-  open SetoidReasoning 𝔻[ 𝑺 ]
-  open Group-Op 𝒮               using  ( _∙_ ; ε ; _⁻¹ ; ∙-cong ; ⁻¹-cong
-                                       ; idˡ-law ; idʳ-law ; invʳ-law )
-  open Group-Op ⨅ᵍ-Group        renaming  ( _∙_ to _⊗_ ; ε to εᴾ ; _⁻¹ to invᴾ )
-                                using  ()
-  open GroupProperties ⟨ 𝒮 ⟩ᵍᵖ  using  ( ε⁻¹≈ε )
-  open GroupCongruences 𝒮       using  ( ∙⁻¹≈ε→≈ )
-  open Commutator 𝒮             using  ( Commutes ; Commutes-congʳ ; [_⸴_]
-                                       ; comm-εˡ ; comm-εʳ ; comm≈ε→commutes )
-  open Commutator ⨅ᵍ-Group      renaming ( [_⸴_] to [_⸴_]ᴾ ) using ()
-  open Simple 𝒮 0ℓ              using  ( IsNonabelianSimple ; center ; center-trivial
-                                        ; ≈-dec→Stable-≈ε ; simple ; elt ; elt≉ε )
-  open MinimalNormal 𝒮 0ℓ       using  ( IsNormalSubgroup ; isSubgroup ; isNormal )
-  open IsSubgroup U-sg          renaming  ( respects to U-resp ; ∙-closed to U-∙
-                                          ; ⁻¹-closed to U-inv )
-                                using ()
 ```
+
+<!--
+```agda
+  open Setoid 𝔻[ 𝑺 ]   using ( _≈_ ; reflexive ) renaming  ( refl to ≈refl
+                                                           ; sym to ≈sym
+                                                           ; trans to ≈trans )
+  open Setoid 𝔻[ Π𝑮 ]  using () renaming ( _≈_ to _≈ᴾ_ ; sym to ≈ᴾ-sym )
+  open SetoidReasoning 𝔻[ 𝑺 ]
+
+  open Group-Op 𝒮         using  ( _∙_ ; ε ; _⁻¹ ; ∙-cong ; ⁻¹-cong
+                                 ; idˡ-law ; idʳ-law ; invʳ-law )
+  open Group-Op ⨅ᵍ-Group  renaming ( _∙_ to _⊗_ ; ε to εᴾ ; _⁻¹ to invᴾ ) using ()
+
+  open GroupProperties ⟨ 𝒮 ⟩ᵍᵖ  using ( ε⁻¹≈ε )
+  open GroupCongruences 𝒮       using ( ∙⁻¹≈ε→≈ )
+
+  open Commutator 𝒮         using  ( Commutes ; Commutes-congʳ ; commutator-εˡ
+                                   ; [_⸴_] ; commutator-εʳ ; commutator≈ε→commutes )
+  open Commutator ⨅ᵍ-Group  renaming ( [_⸴_] to [_⸴_]ᴾ ) using ()
+
+  open Simple 𝒮 0ℓ using  ( IsNonabelianSimple ; center ; center-trivial
+                           ; ≈-dec→Stable-≈ε ; simple ; elt ; elt≉ε )
+
+  open MinimalNormal 𝒮 0ℓ using  ( IsNormalSubgroup ; isSubgroup ; isNormal )
+
+  open IsSubgroup U-sg renaming  ( respects to U-resp ; ∙-closed to U-∙
+                                 ; ⁻¹-closed to U-inv ) using ()
+```
+-->
 
 **The finiteness witnesses**.  The base enumeration drives the searches inside the
 base group, and the power enumeration drives the searches over members of `U`.
@@ -483,18 +495,18 @@ at `i`.
 
 ```agda
   -- A separator: it vanishes at j and not at i.
-  separator : ∀ {i j} → ¬ (i ~ j) → Σ[ w ∈ 𝕌[ Π𝑮 ] ] (w ∈ U × w j ≈ ε × ¬ w i ≈ ε)
+  separator : ∀ {i j} → ¬ i ~ j → ∃[ w ∈ 𝕌[ Π𝑮 ] ] (w ∈ U × w j ≈ ε × ¬ w i ≈ ε)
   separator {i} {j} ¬ij = w , w∈U , wj≈ε , wi≉ε
     where
-    ¬all : ¬ (∀ ν → enumᴾ ν ∈ U → enumᴾ ν i ≈ enumᴾ ν j)
+    ¬all : ¬ ∀ ν → enumᴾ ν ∈ U → enumᴾ ν i ≈ enumᴾ ν j
     ¬all h = ¬ij λ u u∈U →
-      ≈trans (≈sym (surᴾ u .proj₂ i))
-        (≈trans (h (surᴾ u .proj₁) (U-resp (≈ᴾ-sym (surᴾ u .proj₂)) u∈U))
-          (surᴾ u .proj₂ j))
-    open Setoid 𝔻[ 𝑺 ]  using () renaming (_≈_ to _≈ˢ_)
+      ≈trans  (≈sym (surᴾ u .proj₂ i))
+              (≈trans  (h (surᴾ u .proj₁) (U-resp (≈ᴾ-sym (surᴾ u .proj₂)) u∈U))
+                       (surᴾ u .proj₂ j))
+    open Setoid 𝔻[ 𝑺 ] using () renaming (_≈_ to _≈ˢ_)
     found : ∃[ w ∈ Fin Nᴾ ] ¬ (enumᴾ w ∈ U → enumᴾ w i ≈ˢ enumᴾ w j)
-    found = ¬∀⟶∃¬ Nᴾ (λ ν → enumᴾ ν ∈ U → enumᴾ ν i ≈ enumᴾ ν j)
-              (λ ν → U-dec (enumᴾ ν) →-dec (enumᴾ ν i ≟ enumᴾ ν j)) ¬all
+    found = ¬∀⟶∃¬ Nᴾ  (λ ν → enumᴾ ν ∈ U → enumᴾ ν i ≈ enumᴾ ν j)
+                      (λ ν → U-dec (enumᴾ ν) →-dec (enumᴾ ν i ≟ enumᴾ ν j)) ¬all
 
     u₀ : 𝕌[ Π𝑮 ]
     u₀ = enumᴾ (found .proj₁)
@@ -504,16 +516,17 @@ at `i`.
       where
       decide : Dec (u₀ ∈ U) → u₀ ∈ U
       decide (yes p) = p
-      decide (no ¬p) = ⊥-elim (found .proj₂ (λ mem → ⊥-elim (¬p mem)))
+      decide (no ¬p) = ⊥-elim (found .proj₂ λ mem → ⊥-elim (¬p mem))
 
-    ¬agree : ¬ (u₀ i ≈ u₀ j)
+    ¬agree : ¬ u₀ i ≈ u₀ j
     ¬agree e = found .proj₂ λ _ → e
 
+    w : 𝕌[ Π𝑮 ]
     w = u₀ ⊗ invᴾ (κ (u₀ j))
 
     w-pt : ∀ t → w t ≈ u₀ t ∙ (u₀ j) ⁻¹
-    w-pt t = ≈trans (⊗-pointwise u₀ (invᴾ (κ (u₀ j))) t)
-               (∙-cong ≈refl (inv-pointwise (κ (u₀ j)) t))
+    w-pt t = ≈trans  (⊗-pointwise u₀ (invᴾ (κ (u₀ j))) t)
+                     (∙-cong ≈refl (inv-pointwise (κ (u₀ j)) t))
 
     w∈U : w ∈ U
     w∈U = U-∙ u₀∈U (U-inv (κ∈U (u₀ j)))
@@ -531,7 +544,7 @@ upgrades one separator to a separator with *any prescribed value* at `i`.
 ```agda
   -- Members of U vanishing at j realize every value at i.
   axis-full : ∀ {i j} → ¬ (i ~ j)
-    → ∀ v → Σ[ u ∈ 𝕌[ Π𝑮 ] ] (u ∈ U × u j ≈ ε × u i ≈ v)
+    → ∀ v → ∃[ u ∈ 𝕌[ Π𝑮 ] ] (u ∈ U × u j ≈ ε × u i ≈ v)
   axis-full {i} {j} ¬ij v =
     enumᴾ (kp .proj₁) , kp .proj₂ .proj₁
       , kp .proj₂ .proj₂ .proj₁ j refl
@@ -539,35 +552,49 @@ upgrades one separator to a separator with *any prescribed value* at `i`.
     where
     open KilledProj (_≡ j) i
 
-    sep = separator {i} {j} ¬ij
+    sep : ∃[ w ∈ 𝕌[ Π𝑮 ] ] (w ∈ U × w j ≈ ε × ¬ w i ≈ ε)
+    sep = separator ¬ij
+
+    w : 𝕌[ Π𝑮 ]
+    w = sep .proj₁
+
+    w∈U : w ∈ U
+    w∈U = sep .proj₂ .proj₁
+
+    wj≈ε : w j ≈ ε
+    wj≈ε = sep .proj₂ .proj₂ .proj₁
+
+    wi≉ε : ¬ w i ≈ ε
+    wi≉ε = sep .proj₂ .proj₂ .proj₂
 
     kp : KP v
-    kp = KP-full (sep .proj₁) (sep .proj₂ .proj₁)
-           (λ t t≡j → subst (λ z → sep .proj₁ z ≈ ε) (≡sym t≡j)
-                        (sep .proj₂ .proj₂ .proj₁))
-           (sep .proj₂ .proj₂ .proj₂) v
+    kp = KP-full w w∈U (λ t t≡j → subst (λ z → w z ≈ ε) (≡sym t≡j) wj≈ε) wi≉ε v
 ```
 
 #### The non-commuting partner
 
-The support-shrinking iteration needs, for a value `d` away from the identity, a
-partner that fails to commute with it.  Triviality of the center of the nonabelian
-simple base supplies one, and the finite search finds it.
+The support-shrinking iteration needs, for every `d ≉ ε`, a partner that fails to
+commute with `d`.  Triviality of the center of the nonabelian simple base supplies
+one, and the finite search finds it.
 
 ```agda
   -- Every non-identity element has a non-commuting partner.
-  noncommuting-partner : ∀ {d} → ¬ (d ≈ ε) → Σ[ g ∈ 𝕌[ 𝑺 ] ] ¬ Commutes d g
+  noncommuting-partner : ∀ {d} → ¬ d ≈ ε → Σ[ g ∈ 𝕌[ 𝑺 ] ] ¬ Commutes d g
   noncommuting-partner {d} d≉ε =
     enum (found .proj₁) , found .proj₂
     where
-    ¬all : ¬ (∀ ν → Commutes d (enum ν))
-    ¬all h = d≉ε (center-trivial (≈-dec→Stable-≈ε _≟_) nas d central)
-      where
-      central : d ∈ center
-      central x _ = Commutes-congʳ (enum-sur x .proj₂) (h (enum-sur x .proj₁))
+    central : (∀ ν → Commutes d (enum ν)) → d ∈ center
+    central h x _ = Commutes-congʳ (enum-sur x .proj₂) (h (enum-sur x .proj₁))
 
-    found = ¬∀⟶∃¬ card (λ ν → Commutes d (enum ν))
-              (λ ν → (d ∙ enum ν) ≟ (enum ν ∙ d)) ¬all
+    ¬all : ¬ ∀ ν → Commutes d (enum ν)
+    ¬all h = d≉ε (center-trivial (≈-dec→Stable-≈ε _≟_) nas d (central h))
+      -- where
+      -- central : d ∈ center
+      -- central x _ = Commutes-congʳ (enum-sur x .proj₂) (h (enum-sur x .proj₁))
+
+    found : ∃[ i ∈ Fin card ] ¬ Commutes d (enum i)
+    found = ¬∀⟶∃¬ card  (λ ν → Commutes d (enum ν))
+                        (λ ν → (d ∙ enum ν) ≟ (enum ν ∙ d)) ¬all
 ```
 
 #### Support shrinking
@@ -580,56 +607,95 @@ and the partner choice keeps the value at `i` alive.
 
 ```agda
   -- One member of U per block: supported in the block of i, nontrivial at i.
-  block-support : ∀ i
-    → Σ[ a ∈ 𝕌[ Π𝑮 ] ] (a ∈ U × (∀ t → ¬ (i ~ t) → a t ≈ ε) × ¬ (a i ≈ ε))
+  block-support : ∀ i → ∃[ a ∈ 𝕌[ Π𝑮 ] ] (a ∈ U × (∀ t → ¬ i ~ t → a t ≈ ε) × ¬ a i ≈ ε)
   block-support i =
     a , a∈U
       , (λ t ¬it → kills t (∈-filter⁺ (λ t' → ¬? ~-dec) (∈-allFin t) ¬it))
       , ai≉ε
     where
     kill : (L : List (Fin n)) → (∀ t → t ∈ˡ L → ¬ (i ~ t))
-      → Σ[ a ∈ 𝕌[ Π𝑮 ] ] (a ∈ U × (∀ t → t ∈ˡ L → a t ≈ ε) × ¬ (a i ≈ ε))
+      → ∃[ a ∈ 𝕌[ Π𝑮 ] ] (a ∈ U × (∀ t → t ∈ˡ L → a t ≈ ε) × ¬ a i ≈ ε)
     kill [] _ = κ s₀ , κ∈U s₀ , (λ t ()) , s₀≉ε
     kill (j ∷ L) outside = a' , a'∈U , kills' , a'i≉ε
       where
+      prev : ∃[ a ∈ 𝕌[ Π𝑮 ] ] (a ∈ U × ((t : Fin n) → t ∈ˡ L → a t ≈ ε) × ¬ a i ≈ ε)
       prev = kill L (λ t t∈L → outside t (there t∈L))
-      a     = prev .proj₁
-      a∈U   = prev .proj₂ .proj₁
-      kills = prev .proj₂ .proj₂ .proj₁
-      ai≉ε  = prev .proj₂ .proj₂ .proj₂
 
+      a : 𝕌[ Π𝑮 ]
+      a = prev .proj₁
+
+      a∈U : a ∈ U
+      a∈U = prev .proj₂ .proj₁
+
+      kills : ∀ t → t ∈ˡ L → a t ≈ ε
+      kills = prev .proj₂ .proj₂ .proj₁
+
+      ai≉ε : ¬ a i ≈ ε
+      ai≉ε = prev .proj₂ .proj₂ .proj₂
+
+      partner : ∃[ g ∈ 𝕌[ 𝑺 ] ] ¬ Commutes (a i) g
       partner = noncommuting-partner ai≉ε
-      g   = partner .proj₁
+
+      g : 𝕌[ 𝑺 ]
+      g = partner .proj₁
+
+      ¬cm : ¬ Commutes (a i) g
       ¬cm = partner .proj₂
 
+      axis : ∃[ w ∈ 𝕌[ Π𝑮 ] ] (w ∈ U × w j ≈ ε × w i ≈ g)
       axis = axis-full (outside j (here refl)) g
-      w     = axis .proj₁
+
+      w : 𝕌[ Π𝑮 ]
+      w = axis .proj₁
+
+      w∈U : w ∈ U
       w∈U   = axis .proj₂ .proj₁
-      wj≈ε  = axis .proj₂ .proj₂ .proj₁
+
+      wj≈ε : w j ≈ ε
+      wj≈ε = axis .proj₂ .proj₂ .proj₁
+
+      wi≈g : w i ≈ g
       wi≈g  = axis .proj₂ .proj₂ .proj₂
 
+      a' : 𝕌[ Π𝑮 ]
       a' = [ a ⸴ w ]ᴾ
 
       a'∈U : a' ∈ U
       a'∈U = U-∙ (U-∙ (U-∙ a∈U w∈U) (U-inv a∈U)) (U-inv w∈U)
 
-      kills' : ∀ t → t ∈ˡ (j ∷ L) → a' t ≈ ε
+      kills' : ∀ t → t ∈ˡ j ∷ L → a' t ≈ ε
       kills' t (here t≡j) =
-        ≈trans commutator-pointwise
-          (comm-εʳ (a t) (subst (λ z → w z ≈ ε) (≡sym t≡j) wj≈ε))
+        ≈trans  commutator-pointwise
+                (commutator-εʳ (a t) (subst (λ z → w z ≈ ε) (≡sym t≡j) wj≈ε))
       kills' t (there t∈L) =
-        ≈trans commutator-pointwise (comm-εˡ (w t) (kills t t∈L))
+        ≈trans commutator-pointwise (commutator-εˡ (w t) (kills t t∈L))
 
-      a'i≉ε : ¬ (a' i ≈ ε)
-      a'i≉ε h = ¬cm (Commutes-congʳ wi≈g
-        (comm≈ε→commutes (a i) (w i) (≈trans (≈sym commutator-pointwise) h)))
+      cm : a' i ≈ ε → Commutes (a i) g
+      cm h = Commutes-congʳ wi≈g (commutator≈ε→commutes (a i) (w i)
+                                   (≈trans (≈sym commutator-pointwise) h))
 
-    result = kill (filter (λ t → ¬? ~-dec) (allFin n))
-               (λ t t∈F → ∈-filter⁻ (λ t' → ¬? ~-dec) {xs = allFin n} t∈F .proj₂)
-    a     = result .proj₁
-    a∈U   = result .proj₂ .proj₁
-    kills = result .proj₂ .proj₂ .proj₁
-    ai≉ε  = result .proj₂ .proj₂ .proj₂
+      a'i≉ε : ¬ a' i ≈ ε
+      a'i≉ε = ¬cm ∘ cm
+      --
+
+    γ : ∃[ a ∈ 𝕌[ Π𝑮 ] ]
+          ( a ∈ U  × (∀ t  → t ∈ˡ filter (λ _ → ¬? ~-dec) (allFin n) → a t ≈ ε)
+                   × ¬ a i ≈ ε )
+
+    γ = kill  (filter (λ _ → ¬? ~-dec) (allFin n))
+              (λ _ t∈F → ∈-filter⁻ (λ _ → ¬? ~-dec) {xs = allFin n} t∈F .proj₂)
+
+    a : 𝕌[ Π𝑮 ]
+    a = γ .proj₁
+
+    a∈U : a ∈ U
+    a∈U = γ .proj₂ .proj₁
+
+    kills : (t : Fin n) → t ∈ˡ filter (λ z → ¬? ~-dec) (allFin n) → a t ≈ ε
+    kills = γ .proj₂ .proj₂ .proj₁
+
+    ai≉ε : ¬ a i ≈ ε
+    ai≉ε = γ .proj₂ .proj₂ .proj₂
 ```
 
 #### Block columns
@@ -669,19 +735,21 @@ joint kernel, so it *is* the column.
     ur≈s : u r ≈ s
     ur≈s = kp .proj₂ .proj₂ .proj₂
 
-    u≈cB : ∀ t → u t ≈ cB r s t
-    u≈cB t = decide (minRep t ≟f minRep r)
+    decide : ∀ t → Dec (minRep t ≡ minRep r) → u t ≈ cB r s t
+    decide t (no ne) =
+      ≈trans  (kills t (λ r~t → ne (≡sym (minRep-cong r~t))))
+              (reflexive (≡sym ( cong  (λ b → if b then s else ε)
+                                       (dec-false (minRep t ≟f minRep r) ne) )))
+    decide t (yes e) =
+      ≈trans  (≈trans (t~r u mem) ur≈s)
+              (reflexive (≡sym ( cong  (λ b → if b then s else ε)
+                                       (dec-true (minRep t ≟f minRep r) e) )))
       where
-      decide : Dec (minRep t ≡ minRep r) → u t ≈ cB r s t
-      decide (yes e) =
-        ≈trans (≈trans (t~r u mem) ur≈s)
-          (reflexive (≡sym (cong (λ b → if b then s else ε) (dec-true (minRep t ≟f minRep r) e))))
-        where
-        t~r : t ~ r
-        t~r = ~-trans (~-sym (minRep-~ t)) (subst (_~ r) (≡sym e) (minRep-~ r))
-      decide (no ne) =
-        ≈trans (kills t (λ r~t → ne (≡sym (minRep-cong r~t))))
-          (reflexive (≡sym (cong (λ b → if b then s else ε) (dec-false (minRep t ≟f minRep r) ne))))
+      t~r : t ~ r
+      t~r = ~-trans (~-sym (minRep-~ t)) (subst (_~ r) (≡sym e) (minRep-~ r))
+
+    u≈cB : ∀ t → u t ≈ cB r s t
+    u≈cB t = decide t (minRep t ≟f minRep r)
 ```
 
 #### The fold: peeling block columns
@@ -820,6 +888,6 @@ below `0`.
   Kπ⊆U {y} yK = peel y yK
 
   -- Kurzweil's surjectivity lemma, decidable form: U is a partition subgroup.
-  collapse : Σ[ p ∈ ParentVec n ] ((U ⊆ K p) × (K p ⊆ U))
+  collapse : ∃[ p ∈ ParentVec n ] ((U ⊆ K p) × (K p ⊆ U))
   collapse = π , U⊆Kπ , Kπ⊆U
 ```

@@ -11,46 +11,47 @@ author: "the agda-algebras development team"
 This is the [FLRP.KurzweilNetter.Expansion][] module of the [Agda Universal Algebra Library][].
 
 This is the heart of the Kurzweil–Netter construction.  The transitive `Sᵐ`-set on
-`Sᵐ / D` has (decidable) congruence lattice isomorphic to the interval `[D , Sᵐ]`
-([FLRP.Bridge][]), which is dually isomorphic to the partition lattice `Eq(m)`
-([FLRP.KurzweilNetter.Interval][]).
+`Sᵐ / D` has a lattice of (decidable) congruences, isomorphic to the
+interval `[D , Sᵐ]` ([FLRP.Bridge][]), which is dually isomorphic to the partition
+lattice `Eq(m)` ([FLRP.KurzweilNetter.Interval][]).
 
-**Expanding** the coset algebra by the lifted maps `x ↦ x ∘ t`, one per member `t`
-of a given family of index maps, cuts the congruences down to the partitions
-*invariant* under the family ([FLRP.KurzweilNetter.Invariance][]): the main result
+Expanding the coset algebra by the lifted maps `x ↦ x ∘ t`, one per member `t`
+of a given family of index maps, cuts the congruences down to the partitions that
+are invariant under the family ([FLRP.KurzweilNetter.Invariance][]): the main result
 here is the order isomorphism
 
 `expansionIso : DecCon 𝑬 ≅ `(invariant partitions of `Eq(m)`, order reversed),
 
-where `𝑬`{.AgdaBound} is the expanded coset algebra.
+where `𝑬` is the expanded coset algebra.
 
-The family of index maps is an *abstract parameter* `tr : Fin T → Fin m → Fin m`;
-this module knows nothing about the algebra being represented; instantiating `tr`
-at the basic translations of [FLRP.KurzweilNetter.Translations][] is the business
-of [FLRP.KurzweilNetter.Duality][].
+The family of index maps is an abstract parameter `tr : Fin T → Fin m → Fin m`;
+this module knows nothing about the algebra being represented.  Instantiating `tr`
+at the basic translations of [FLRP.KurzweilNetter.Translations][] is the
+responsibility of [FLRP.KurzweilNetter.Duality][].
 
-Three design points, each forced by a constraint worth recording.
+Three design points, each forced by a constraint worth recording, are the following:
 
-+  **The signature is an enumerated symbol type, not `Sig-Unary 𝕌[ Sᵐ ]`**.
++  **The signature is an enumerated symbol type** (not `Sig-Unary 𝕌[ Sᵐ ]`).
    The carrier of the power is a function type `Fin m → S`, and a
    `FiniteSignature`{.AgdaRecord} requires its symbols to be enumerated up to
-   propositional equality, unprovable for a function type under  `--safe`
-   (it is function extensionality).  So the expanded algebra's symbols are
-   `Fin N ⊎ Fin T`{.AgdaDatatype}: `inj₁ ν` acts by left translation by the `ν`-th
-   *enumerated* group element, `inj₂ τ` by composition with `tr τ`.  Compatibility
-   with the enumerated actions still forces compatibility with *every* group
-   element, because congruences respect the coset equality and the enumeration is
-   surjective up to the pointwise equality of the power (`forget`{.AgdaFunction}
-   below), so nothing is lost.
+   propositional equality, unprovable for a function type under  `--safe`.
+   without function extensionality.  So the expanded algebra's symbols are
+   `Fin N ⊎ Fin T`: the action of `inj₁ ν` is left translation by the `ν`-th
+   enumerated group element, and `inj₂ τ` is composition with `tr τ`.
+   Compatibility with the enumerated actions still forces compatibility with every
+   group element, because congruences respect the coset equality and the
+   enumeration is surjective up to the pointwise equality of the power
+   (`forget`{.AgdaFunction} below), so nothing is lost.
 
 +  **The two halves of the invariance transfer have different prices**.
 
-   That an invariant partition's subgroup `K_π` is closed under the lifts is one
-   line (`Inv→K-closed`{.AgdaFunction}).  The converse asserts that a congruence
-   of the expanded algebra has an *invariant* partition; this needs the
-   indicator-tuple argument of `K-reflects`{.AgdaFunction} of
-   [Classical.Structures.Group.PartitionSubgroup][], and with it the
-   *nontriviality witness* `s₀ ≉ ε` of the base group
+   Proving that an invariant partition's subgroup `Kπ` is closed under the lifts
+   is one line (`Inv→K-closed`{.AgdaFunction}).
+
+   The converse asserts that a congruence of the expanded algebra has an invariant
+   partition; this needs the indicator-tuple argument of
+   `K-reflects`{.AgdaFunction} of [Classical.Structures.Group.PartitionSubgroup][],
+   and with it the nontriviality witness `s₀ ≉ ε` of the base group
    (`K-closed→Inv`{.AgdaFunction}).  This is one of the few places the base
    group's properties enter the proof at all.
 

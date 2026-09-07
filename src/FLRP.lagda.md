@@ -32,9 +32,10 @@ Two standing warnings apply to everything under this namespace.
 
 **Current submodules**.
 
-+  [FLRP.Problem][]: the representability predicate `Representable`, the
-   formal statement of the problem, the first worked instance (the one-element
-   chain), and the constructive no-go theorem for the two-element chain.
++  [FLRP.Problem][]: the representability predicate `Representable`, the formal
+   statement of the problem, the first worked instance (the one-element chain),
+   and the constructive no-go theorem for the two-element chain.
+
 +  [FLRP.Enforceable][]: group representability of a lattice, the
    interval-enforceability classification (IE, cf-IE, min-IE), the fattening
    isomorphism `[H × K, G × K] ≅ [H, G]`, the no-contradictory-IE theorem
@@ -42,11 +43,11 @@ Two standing warnings apply to everything under this namespace.
    Lemma 3.1 and the parachute meta-theorem.
 +  [FLRP.Bridge][]: the easy (constructive) direction of the Pálfy–Pudlák
    correspondence, at both layers: the Layer-S order isomorphism
-   `Con (𝒢 ↷ 𝒢/H) ≅ [H, 𝒢]` between the semantic congruence lattice of the
+   `Con (𝒢 ↷ 𝒢 / H) ≅ [H, 𝒢]` between the semantic congruence lattice of the
    transitive G-set of cosets and the respecting upper interval in the subgroup
-   lattice, and its Layer-D counterpart `DecCon (𝒢 ↷ 𝒢/H) ≅ [H, 𝒢]ᵈ` over the
+   lattice, and its Layer-D counterpart `DecCon (𝒢 ↷ 𝒢 / H) ≅ [H, 𝒢]ᵈ` over the
    decidably presented interval (`bridgeᵈ`), proved directly with no classical
-   assumption, together with the representability corollaries — in particular
+   assumption, together with the representability corollaries; in particular
    `GroupRepresentable→Representableᵈ`: every group-representable lattice is
    decidably representable (issue #454).
 +  [FLRP.Representable][]: the Layer-D reformulation of the problem:
@@ -60,8 +61,8 @@ Two standing warnings apply to everything under this namespace.
    `CongruenceCompleteness`, the single Layer-S→Layer-D assumption of ADR-008;
    Entry 2 (Kurzweil–Netter duality) is reduced by the proof in
    [FLRP.KurzweilNetter][] to Entry 4 (Kurzweil surjectivity), which
-   [FLRP.KurzweilNetter.Surjectivity][] proves in its decidable working form, so both
-   entries are retired and neither enters anywhere as a hypothesis.
+   [FLRP.KurzweilNetter.Surjectivity][] proves in its decidable working form, so
+   both entries are retired and neither enters anywhere as a hypothesis.
 +  [FLRP.Closure][]: the WP-5 closure toolkit: product and ordinal-sum
    closure of `Representableᵈ` (issue #456), the adjoin-a-new-extremum
    corollaries at `chain₂`, and the duality theorem `dual-Representableᵈ`,
@@ -71,7 +72,7 @@ Two standing warnings apply to everything under this namespace.
    excluded-middle no-go for its Layer-S form) and proved (the blockwise
    collapse, retiring Entry 4), the algebra-side reduction of congruences to
    translation-invariant partitions, the expansion of the coset algebra on
-   `Sᵐ/D`, the assembled theorem `kurzweilNetterDuality` parameterized by
+   `Sᵐ / D`, the assembled theorem `kurzweilNetterDuality` parameterized by
    exactly the properties of the base group the argument uses, and the closed
    instantiation `kurzweilNetterDuality-A₅` at the certified `A₅`.
 +  [FLRP.LayerBridge][]: the cross-layer bridge: under the congruence-completeness
@@ -79,10 +80,9 @@ Two standing warnings apply to everything under this namespace.
    (`conDecIso`), whence `Representable 𝑳 ↔ Representableᵈ 𝑳`.
 +  [FLRP.Certificates][]: machine-checked representation certificates: the
    assembly turning a checked whole-lattice certificate (Freese traces and
-   pointer tables, verified search-free by the
-   `Setoid.Congruences.Certificates` checkers) into a `Representableᵈ` witness
-   for the target lattice, so external searches (GAP, UACalc, SAT) enter the
-   corpus only through the checker.
+   pointer tables, verified search-free by the `Setoid.Congruences.Certificates`
+   checkers) into a `Representableᵈ` witness for the target lattice, so external
+   searches (GAP, UACalc, SAT) enter the corpus only through the checker.
 +  [FLRP.L7EqSix][]: the explicit Pudlák–Tůma witness for the distinguished
    open instance: seven partitions of a six-element set (the minimum possible)
    forming a sublattice of `Eq(6)` isomorphic to `L7`, with meets, join upper
@@ -107,9 +107,9 @@ Two standing warnings apply to everything under this namespace.
    *derived* from the parachute theorems; Entries 4–8 import their sources'
    theorems as named hypotheses (Pálfy–Pudlák, Feit, Köhler, Basile, DeMeo's
    `L7` analysis, Lucchini–Moscatiello–Palcoux–Spiga).  The module also proves
-   the note's Lemma 3.1, exposes the vacuity theorem
-   `not-representable→IE`, and repairs `minIE` as `MinimallyIE`; the survey note
-   is `docs/notes/flrp-rp2-catalog.md`.
+   the note's Lemma 3.1, exposes the vacuity theorem `not-representable→IE`, and
+   repairs `minIE` as `MinimallyIE`; the survey note is
+   `docs/notes/flrp-rp2-catalog.md`.
 
 +  [FLRP.Hunt][]: the RP-3 **constraint dossier** for the hunt for an
    empty-intersection family: the degenerate enforcements of the one- and
@@ -133,20 +133,20 @@ Two standing warnings apply to everything under this namespace.
 
 module FLRP where
 
-open import FLRP.Problem        public
-open import FLRP.Enforceable    public
-open import FLRP.Parachute      public
-open import FLRP.Parachute.Representation public
-open import FLRP.Parachute.Theorems       public
-open import FLRP.Reductions     public
-open import FLRP.Bridge         public
-open import FLRP.Representable  public
-open import FLRP.Assumptions    public
-open import FLRP.Closure        public
-open import FLRP.KurzweilNetter public
-open import FLRP.LayerBridge    public
-open import FLRP.WreathNoGo     public
-open import FLRP.Hunt           public
-open import FLRP.Certificates   public
-open import FLRP.L7EqSix        public
+open import FLRP.Problem                   public
+open import FLRP.Enforceable               public
+open import FLRP.Parachute                 public
+open import FLRP.Parachute.Representation  public
+open import FLRP.Parachute.Theorems        public
+open import FLRP.Reductions                public
+open import FLRP.Bridge                    public
+open import FLRP.Representable             public
+open import FLRP.Assumptions               public
+open import FLRP.Closure                   public
+open import FLRP.KurzweilNetter            public
+open import FLRP.LayerBridge               public
+open import FLRP.WreathNoGo                public
+open import FLRP.Hunt                      public
+open import FLRP.Certificates              public
+open import FLRP.L7EqSix                   public
 ```

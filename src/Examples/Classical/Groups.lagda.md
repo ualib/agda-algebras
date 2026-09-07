@@ -28,9 +28,9 @@ nothing to gain (and names to clash) from re-exporting them through a barrel.
 
 module Examples.Classical.Groups where
 
-open import Examples.Classical.Groups.AbelianGroup
-open import Examples.Classical.Groups.AlternatingGroup5
-open import Examples.Classical.Groups.CyclicGroup
+open import Examples.Classical.Groups.AbelianGroup       public
+open import Examples.Classical.Groups.AlternatingGroup5  public
+open import Examples.Classical.Groups.CyclicGroup        public
 open import Examples.Classical.Groups.CyclicGroup3
 open import Examples.Classical.Groups.KleinFourGroup
 open import Examples.Classical.Groups.SymmetricGroup3

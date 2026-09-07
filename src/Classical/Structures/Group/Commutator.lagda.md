@@ -97,8 +97,8 @@ The commutator is a congruence in both slots at once, by the congruences of the 
 
 ```agda
   -- The commutator respects ≈ in both slots.
-  comm-cong : ∀ {x x' y y'} → x ≈ x' → y ≈ y' → [ x ⸴ y ] ≈ [ x' ⸴ y' ]
-  comm-cong ex ey = ∙-cong (∙-cong (∙-cong ex ey) (⁻¹-cong ex)) (⁻¹-cong ey)
+  commutator-cong : ∀ {x x' y y'} → x ≈ x' → y ≈ y' → [ x ⸴ y ] ≈ [ x' ⸴ y' ]
+  commutator-cong ex ey = ∙-cong (∙-cong (∙-cong ex ey) (⁻¹-cong ex)) (⁻¹-cong ey)
 ```
 
 #### The absorption laws
@@ -107,8 +107,8 @@ A commutator with the identity in the left slot collapses: the two `x`-factors b
 
 ```agda
   -- A commutator with the identity on the left is the identity.
-  comm-εˡ : ∀ {x} y → x ≈ ε → [ x ⸴ y ] ≈ ε
-  comm-εˡ {x} y x≈ε = begin
+  commutator-εˡ : ∀ {x} y → x ≈ ε → [ x ⸴ y ] ≈ ε
+  commutator-εˡ {x} y x≈ε = begin
     x ∙ y ∙ x ⁻¹ ∙ y ⁻¹  ≈⟨ ∙-cong (∙-cong (∙-cong x≈ε ≈refl) (⁻¹-cong x≈ε)) ≈refl ⟩
     ε ∙ y ∙ ε ⁻¹ ∙ y ⁻¹  ≈⟨ ∙-cong (∙-cong (idˡ-law y) ε⁻¹≈ε) ≈refl ⟩
     y ∙ ε ∙ y ⁻¹         ≈⟨ ∙-cong (idʳ-law y) ≈refl ⟩
@@ -120,8 +120,8 @@ Symmetrically for the right slot, where what remains is `x ∙ x ⁻¹`.
 
 ```agda
   -- A commutator with the identity on the right is the identity.
-  comm-εʳ : ∀ x {y} → y ≈ ε → [ x ⸴ y ] ≈ ε
-  comm-εʳ x {y} y≈ε = begin
+  commutator-εʳ : ∀ x {y} → y ≈ ε → [ x ⸴ y ] ≈ ε
+  commutator-εʳ x {y} y≈ε = begin
     x ∙ y ∙ x ⁻¹ ∙ y ⁻¹  ≈⟨ ∙-cong (∙-cong (∙-cong ≈refl y≈ε) ≈refl) (⁻¹-cong y≈ε) ⟩
     x ∙ ε ∙ x ⁻¹ ∙ ε ⁻¹  ≈⟨ ∙-cong (∙-cong (idʳ-law x) ≈refl) ε⁻¹≈ε ⟩
     x ∙ x ⁻¹ ∙ ε         ≈⟨ idʳ-law (x ∙ x ⁻¹) ⟩
@@ -135,18 +135,18 @@ Multiplying the commutator by `y ∙ x` on the right telescopes back to `x ∙ y
 
 ```agda
   -- A trivial commutator means the elements commute.
-  comm≈ε→commutes : ∀ x y → [ x ⸴ y ] ≈ ε → Commutes x y
-  comm≈ε→commutes x y h = begin
-    x ∙ y                              ≈˘⟨ idʳ-law (x ∙ y) ⟩
-    x ∙ y ∙ ε                          ≈˘⟨ ∙-cong ≈refl (invˡ-law x) ⟩
-    x ∙ y ∙ (x ⁻¹ ∙ x)                 ≈˘⟨ assoc-law (x ∙ y) (x ⁻¹) x ⟩
-    x ∙ y ∙ x ⁻¹ ∙ x                   ≈˘⟨ ∙-cong (idʳ-law (x ∙ y ∙ x ⁻¹)) ≈refl ⟩
-    x ∙ y ∙ x ⁻¹ ∙ ε ∙ x               ≈˘⟨ ∙-cong (∙-cong ≈refl (invˡ-law y)) ≈refl ⟩
-    x ∙ y ∙ x ⁻¹ ∙ (y ⁻¹ ∙ y) ∙ x      ≈˘⟨ ∙-cong (assoc-law (x ∙ y ∙ x ⁻¹) (y ⁻¹) y) ≈refl ⟩
-    x ∙ y ∙ x ⁻¹ ∙ y ⁻¹ ∙ y ∙ x        ≈⟨ assoc-law [ x ⸴ y ] y x ⟩
-    [ x ⸴ y ] ∙ (y ∙ x)                ≈⟨ ∙-cong h ≈refl ⟩
-    ε ∙ (y ∙ x)                        ≈⟨ idˡ-law (y ∙ x) ⟩
-    y ∙ x                              ∎
+  commutator≈ε→commutes : ∀ x y → [ x ⸴ y ] ≈ ε → Commutes x y
+  commutator≈ε→commutes x y h = begin
+    x ∙ y                          ≈˘⟨ idʳ-law (x ∙ y) ⟩
+    x ∙ y ∙ ε                      ≈˘⟨ ∙-cong ≈refl (invˡ-law x) ⟩
+    x ∙ y ∙ (x ⁻¹ ∙ x)             ≈˘⟨ assoc-law (x ∙ y) (x ⁻¹) x ⟩
+    x ∙ y ∙ x ⁻¹ ∙ x               ≈˘⟨ ∙-cong (idʳ-law (x ∙ y ∙ x ⁻¹)) ≈refl ⟩
+    x ∙ y ∙ x ⁻¹ ∙ ε ∙ x           ≈˘⟨ ∙-cong (∙-cong ≈refl (invˡ-law y)) ≈refl ⟩
+    x ∙ y ∙ x ⁻¹ ∙ (y ⁻¹ ∙ y) ∙ x  ≈˘⟨ ∙-cong (assoc-law (x ∙ y ∙ x ⁻¹) (y ⁻¹) y) ≈refl ⟩
+    x ∙ y ∙ x ⁻¹ ∙ y ⁻¹ ∙ y ∙ x    ≈⟨ assoc-law [ x ⸴ y ] y x ⟩
+    [ x ⸴ y ] ∙ (y ∙ x)            ≈⟨ ∙-cong h ≈refl ⟩
+    ε ∙ (y ∙ x)                    ≈⟨ idˡ-law (y ∙ x) ⟩
+    y ∙ x                          ∎
 ```
 
 The contrapositive is the form the support-shrinking iteration consumes: a non-commuting pair of coordinate values keeps the commutator of the tuples away from the identity at that coordinate.
@@ -154,7 +154,7 @@ The contrapositive is the form the support-shrinking iteration consumes: a non-c
 ```agda
   -- Non-commuting elements have a nontrivial commutator.
   ¬commutes→comm≉ε : ∀ x y → ¬ Commutes x y → ¬ [ x ⸴ y ] ≈ ε
-  ¬commutes→comm≉ε x y nc h = nc (comm≈ε→commutes x y h)
+  ¬commutes→comm≉ε x y nc h = nc (commutator≈ε→commutes x y h)
 ```
 
 The forward direction closes the equivalence; it is the same telescope read backwards, recorded so that consumers never redo the rearrangement.

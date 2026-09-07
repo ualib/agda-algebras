@@ -68,40 +68,40 @@ module FLRP.KurzweilNetter.Interval where
 open import Agda.Primitive using () renaming ( Set to Type )
 
 -- Imports from the Agda Standard Library ---------------------------------------
-open import Data.Empty        using ( ⊥-elim )
-open import Data.Fin.Patterns using ( 0F ; 1F )
-open import Data.Fin.Properties using ( _≟_ ; all? )
-open import Data.Nat.Base     using ( ℕ )
-open import Data.Product      using ( Σ-syntax ; _×_ ; _,_ ; proj₁ ; proj₂ )
-open import Data.Sum.Base     using ( _⊎_ ; inj₁ ; inj₂ )
-open import Level             using ( 0ℓ ) renaming ( suc to lsuc )
-open import Relation.Binary   using ( Setoid )
-open import Relation.Binary.Definitions using ( _Respects_ )
-open import Relation.Binary.PropositionalEquality as ≡ using ()
-open import Relation.Nullary  using ( ¬_ ; Dec ; yes ; no )
-open import Relation.Nullary.Decidable using ( map′ ; _→-dec_ )
-open import Relation.Unary    using ( Pred ; _∈_ ; _⊆_ )
+open import Data.Empty                             using  ( ⊥-elim )
+open import Data.Fin.Patterns                      using  ( 0F ; 1F )
+open import Data.Fin.Properties                    using  ( _≟_ ; all? )
+open import Data.Nat.Base                          using  ( ℕ )
+open import Data.Product                           using  ( Σ-syntax ; _×_ ; _,_
+                                                          ; proj₁ ; proj₂ )
+open import Data.Sum.Base                          using  ( _⊎_ ; inj₁ ; inj₂ )
+open import Level                                  using  ( 0ℓ )
+                                                   renaming ( suc to lsuc )
+open import Relation.Binary                        using  ( Setoid )
+open import Relation.Binary.Definitions            using  ( _Respects_ )
+open import Relation.Binary.PropositionalEquality  using  (sym)
+open import Relation.Nullary                       using  ( ¬_ ; Dec ; yes ; no )
+open import Relation.Nullary.Decidable             using ( map′ ; _→-dec_ )
+open import Relation.Unary                         using ( Pred ; _∈_ ; _⊆_ )
 
 -- Imports from the Agda Universal Algebra Library ------------------------------
-open import Classical.Structures.Group.Basic             using  ( Group
-                                                                ; module Group-Op )
-open import Classical.Structures.Group.GSet              using  ( module CosetAction )
-open import Classical.Signatures.Group                   using  ( ∙-Op ; ⁻¹-Op )
-open import Classical.Structures.Group.PartitionSubgroup using  ( module PartitionSubgroups )
-open import Classical.Structures.Group.Subgroups         using  ( mkIsSubgroup )
-open import Classical.Structures.Interpret               using  ( interp-cong )
-open import Classical.Structures.Lattice.Dual            using  ( module LatticeDual
-                                                                ; dualLattice )
-open import Classical.Structures.Lattice.Partitions      using  ( EqLattice ; SameBlock
-                                                                ; _⊑_ ; ⊑→≤ ; ≤→⊑ )
-open import FLRP.Enforceable                             using  ( module UpperInterval
-                                                                ; IntervalIso
-                                                                ; GroupRepresentable )
-open import FLRP.Problem                                 using  ( ConIso ; EM₀ ; WLEM₀
-                                                                ; EM₀→WLEM₀ )
-open import Setoid.Algebras                              using  ( 𝕌[_] ; 𝔻[_] ; Algebra)
-open import Setoid.Algebras.Finite                       using  ( FiniteAlgebra )
-open import Setoid.Congruences.Certificates.Schema       using  ( ParentVec ; parent )
+open import Classical.Signatures.Group       using  ( ∙-Op ; ⁻¹-Op )
+open import Classical.Structures.Group       using  ( Group ; module Group-Op
+                                                    ; module CosetAction
+                                                    ; module PartitionSubgroups
+                                                    ; mkIsSubgroup )
+open import Classical.Structures.Interpret   using  ( interp-cong )
+open import Classical.Structures.Lattice     using  ( module LatticeDual
+                                                    ; dualLattice ; EqLattice
+                                                    ; SameBlock ; _⊑_ ; ⊑→≤ ; ≤→⊑ )
+open import FLRP.Enforceable                 using  ( module UpperInterval
+                                                    ; IntervalIso
+                                                    ; GroupRepresentable )
+open import FLRP.Problem                     using  ( ConIso ; EM₀ ; WLEM₀
+                                                    ; EM₀→WLEM₀ )
+open import Setoid.Algebras                  using  ( 𝕌[_] ; 𝔻[_] ; Algebra
+                                                    ; FiniteAlgebra )
+open import Setoid.Congruences.Certificates  using  ( ParentVec ; parent )
 ```
 -->
 
@@ -130,7 +130,10 @@ module KurzweilInterval (𝒮@(𝑺 , _) : Group 0ℓ 0ℓ) (n : ℕ) where
   toInterval pv = mk (K pv) (K-isSubgroup pv) (Diag⊆K pv)
 ```
 
-Over a finite base group, membership in a partition subgroup is a finite conjunction of decidable base equalities, so each partition subgroup is a *decidable* interval element; the expansion stage of the Kurzweil–Netter route and the decidable interval isomorphism both consume this decider.
+Over a finite base group, membership in a partition subgroup is a finite
+conjunction of decidable base equalities, so each partition subgroup is a
+*decidable* interval element; the expansion stage of the Kurzweil–Netter route and
+the decidable interval isomorphism both consume this decider.
 
 ```agda
   -- Membership in a partition subgroup is decidable over a finite base.
@@ -269,16 +272,18 @@ the probe tuple `(ε , s₀)` under hypothesis `P` forces `ε ≈ s₀`, refutin
 containment hands over `(ε ≈ s₀) ⊎ P` with the left branch absurd.
 
 ```agda
-module _ (𝒮@(𝑺 , _)  : Group 0ℓ 0ℓ)  (open Setoid 𝔻[ 𝑺 ] using ( _≈_ ))
-                                      (open Group-Op 𝒮 using ( ε ))
-         (s₀          : 𝕌[ 𝑺 ])
-         (s₀≉ε        : ¬ s₀ ≈ ε)
+module _
+  (𝒮@(𝑺 , _)  : Group 0ℓ 0ℓ)  (open Setoid 𝔻[ 𝑺 ] using ( _≈_ ))
+                               (open Group-Op 𝒮 using ( ε ))
+  (s₀          : 𝕌[ 𝑺 ])
+  (s₀≉ε        : ¬ s₀ ≈ ε)
   where
 
   open KurzweilInterval 𝒮 2
-  open Setoid 𝔻[ 𝑺 ]  using () renaming ( refl to ≈refl ; sym to ≈sym ; trans to ≈trans )
-  open Setoid 𝔻[ Sⁿ ] using () renaming ( _≈_ to _≈ₚ_ )
-  open Group-Op 𝑺ⁿ    using () renaming ( _∙_ to _∙ₚ_ ; ε to εₚ ; _⁻¹ to _⁻¹ₚ )
+  open Setoid 𝔻[ 𝑺 ]   renaming ( refl to ≈refl ; sym to ≈sym ; trans to ≈trans )
+                       using ()
+  open Setoid 𝔻[ Sⁿ ]  using () renaming ( _≈_ to _≈ₚ_ )
+  open Group-Op 𝑺ⁿ     using () renaming ( _∙_ to _∙ₚ_ ; ε to εₚ ; _⁻¹ to _⁻¹ₚ )
 
   -- Kurzweil surjectivity at Layer S decides every level-zero proposition.
   kurzweilSurjectivity→EM : KurzweilSurjectivity → EM₀
@@ -289,16 +294,16 @@ module _ (𝒮@(𝑺 , _)  : Group 0ℓ 0ℓ)  (open Setoid 𝔻[ 𝑺 ] using (
     U u = (u 0F ≈ u 1F) ⊎ P
 
     U-respects : U Respects _≈ₚ_
-    U-respects e (inj₁ q)  = inj₁ (≈trans (≈sym (e 0F)) (≈trans q (e 1F)))
-    U-respects e (inj₂ p)  = inj₂ p
+    U-respects e (inj₁ q) = inj₁ (≈trans (≈sym (e 0F)) (≈trans q (e 1F)))
+    U-respects e (inj₂ p) = inj₂ p
 
     U-∙ : ∀ {x y} → x ∈ U → y ∈ U → (x ∙ₚ y) ∈ U
     U-∙ {x} {y} (inj₁ qx) (inj₁ qy) =
       inj₁ (≈trans  (⊗-pointwise x y 0F)
                     (≈trans  (interp-cong 𝑺 ∙-Op λ { 0F → qx ; 1F → qy })
                              (≈sym (⊗-pointwise x y 1F))))
-    U-∙ (inj₁ _)   (inj₂ p) = inj₂ p
-    U-∙ (inj₂ p)   _        = inj₂ p
+    U-∙ (inj₁ _) (inj₂ p) = inj₂ p
+    U-∙ (inj₂ p) _ = inj₂ p
 
     U-ε : εₚ ∈ U
     U-ε = inj₁ (≈trans (e-pointwise 0F) (≈sym (e-pointwise 1F)))
@@ -338,7 +343,7 @@ module _ (𝒮@(𝑺 , _)  : Group 0ℓ 0ℓ)  (open Setoid 𝔻[ 𝑺 ] using (
       w∈K : w ∈ K pv
       w∈K {0F} {0F} _   = ≈refl
       w∈K {0F} {1F} sb  = ⊥-elim (¬e sb)
-      w∈K {1F} {0F} sb  = ⊥-elim (¬e (≡.sym sb))
+      w∈K {1F} {0F} sb  = ⊥-elim (¬e (sym sb))
       w∈K {1F} {1F} _   = ≈refl
 
       fromU : w ∈ U → P ⊎ ¬ P
