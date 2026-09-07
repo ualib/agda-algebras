@@ -58,7 +58,7 @@ open import Classical.Structures.Lattice.Parachute  using  ( Parachute
                                                             ; module LatticeParachute )
 open import FLRP.Enforceable                        using  ( module UpperInterval
                                                            ; IntervalIso )
-open import FLRP.Parachute                          using  ( module GroupParachute )
+open import FLRP.Parachute.Basic                    using  ( module GroupParachute )
 open import FLRP.Problem                            using  ( OrderIso )
 open import Setoid.Algebras                         using  ( 𝕌[_] ; 𝔻[_] )
 ```

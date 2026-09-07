@@ -37,12 +37,12 @@ module Order.Interval where
 open import Agda.Primitive using () renaming ( Set to Type )
 
 -- Imports from the Agda Standard Library ---------------------------------------
-open import Data.Product                  using ( _,_ ; _×_ ; Σ-syntax ; proj₁ ; proj₂ )
-open import Level                         using ( Level ; _⊔_ )
-open import Relation.Binary               using ( IsEquivalence ; IsPartialOrder )
-open import Relation.Binary.Definitions   using ( Maximum ; Minimum )
-open import Relation.Binary.Lattice       using ( Supremum ; Infimum ; IsLattice ; Lattice
-                                                ; IsBoundedLattice ; BoundedLattice )
+open import Data.Product                  using  ( _,_ ; _×_ ; Σ-syntax ; proj₁ ; proj₂ )
+open import Level                         using  ( Level ; _⊔_ )
+open import Relation.Binary               using  ( IsEquivalence ; IsPartialOrder )
+open import Relation.Binary.Definitions   using  ( Maximum ; Minimum )
+open import Relation.Binary.Lattice       using  ( Supremum ; Infimum ; IsLattice ; Lattice
+                                                 ; IsBoundedLattice ; BoundedLattice )
 ```
 -->
 

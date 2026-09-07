@@ -44,25 +44,27 @@ module Setoid.Algebras.Finite.Irredundant where
 open import Agda.Primitive using () renaming ( Set to Type )
 
 -- Imports from the Agda Standard Library ---------------------------------------
-open import Data.Empty          using ( ⊥-elim )
-open import Data.Fin.Base       using ( Fin ; zero ; suc ) renaming ( _<_ to _<ᶠ_ )
-open import Data.Fin.Properties using ( <-cmp )
-open import Data.List.Base      using ( List ; length ; lookup ; tabulate
-                                      ; deduplicate )
-open import Data.Nat.Base       using ( ℕ ; s≤s )
-open import Data.Product        using ( _,_ ; proj₁ ; proj₂ ; ∃-syntax )
-open import Level               using ( Level ; _⊔_ )
-open import Relation.Binary     using ( Setoid ; DecSetoid )
-open import Relation.Binary.Definitions           using ( tri< ; tri≈ ; tri> )
-open import Relation.Binary.PropositionalEquality using ( _≡_ )
-open import Relation.Nullary    using ( ¬_ )
+open import Data.Empty                               using ( ⊥-elim )
+open import Data.Fin.Base                            using  ( Fin ; zero ; suc )
+                                                     renaming ( _<_ to _<ᶠ_ )
+open import Data.Fin.Properties                      using  ( <-cmp )
+open import Data.List.Base                           using  ( List ; length ; lookup
+                                                            ; tabulate ; deduplicate )
+open import Data.Nat.Base                            using  ( ℕ ; s≤s )
+open import Data.Product                             using  ( _,_ ; proj₁ ; proj₂
+                                                            ; ∃-syntax )
+open import Level                                    using  ( Level ; _⊔_ )
+open import Relation.Binary                          using  ( Setoid ; DecSetoid )
+open import Relation.Binary.Definitions              using  ( tri< ; tri≈ ; tri> )
+open import Relation.Binary.PropositionalEquality    using  ( _≡_ )
+open import Relation.Nullary                         using  ( ¬_ )
 
-open import Data.List.Relation.Unary.All       using ( All ; [] ; _∷_ )
-open import Data.List.Relation.Unary.AllPairs  using ( AllPairs ; [] ; _∷_ )
-open import Data.List.Relation.Unary.Any       using ( Any ; index )
-open import Data.List.Relation.Unary.Any.Properties  using ( lookup-index )
+open import Data.List.Relation.Unary.All             using  ( All ; [] ; _∷_ )
+open import Data.List.Relation.Unary.AllPairs        using  ( AllPairs ; [] ; _∷_ )
+open import Data.List.Relation.Unary.Any             using  ( Any ; index )
+open import Data.List.Relation.Unary.Any.Properties  using  ( lookup-index )
 
-import Data.List.Membership.Setoid.Properties             as MembershipP
+import Data.List.Membership.Setoid.Properties as MembershipP
 import Data.List.Relation.Unary.Unique.DecSetoid.Properties as UniqueP
 
 -- Imports from the Agda Universal Algebra Library ------------------------------

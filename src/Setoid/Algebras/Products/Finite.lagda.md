@@ -38,13 +38,13 @@ algebra on `Sᵐ/D` inherits finiteness through
 module Setoid.Algebras.Products.Finite where
 
 -- Imports from the Agda Standard Library ---------------------------------------
-open import Data.Fin.Base        using ( Fin ; finToFun ; funToFin )
-open import Data.Fin.Properties  using ( all? ; finToFun-funToFin )
-open import Data.Nat.Base        using ( ℕ ; _^_ )
-open import Data.Product         using ( _,_ ; proj₁ ; proj₂ )
-open import Level                using ( Level )
-open import Relation.Binary      using ( Setoid )
-open import Relation.Binary.PropositionalEquality using ( cong )
+open import Data.Fin.Base                          using ( Fin ; finToFun ; funToFin )
+open import Data.Fin.Properties                    using ( all? ; finToFun-funToFin )
+open import Data.Nat.Base                          using ( ℕ ; _^_ )
+open import Data.Product                           using ( _,_ ; proj₁ ; proj₂ )
+open import Level                                  using ( Level )
+open import Relation.Binary                        using ( Setoid )
+open import Relation.Binary.PropositionalEquality  using ( cong )
 
 -- Imports from the Agda Universal Algebra Library ------------------------------
 open import Overture                  using ( 𝓞 ; 𝓥 ; Signature )
@@ -75,13 +75,13 @@ module _ {𝑆 : Signature 𝓞 𝓥} {𝑨 : Algebra {𝑆 = 𝑆} α ρ} {n : 
 
     -- The index encoding a tuple: the digits are the base indices of its values.
     pidx : 𝕌[ 𝑷 ] → Fin (card ^ n)
-    pidx x = funToFin (λ i → proj₁ (enum-sur (x i)))
+    pidx x = funToFin λ i → enum-sur (x i) .proj₁
 
     -- The round trip hits the tuple coordinatewise, up to ≈.
     penum-pidx : (x : 𝕌[ 𝑷 ]) (i : Fin n) → penum (pidx x) i ≈ x i
     penum-pidx x i = trans
-      (≈-reflexive (cong enum (finToFun-funToFin (λ j → proj₁ (enum-sur (x j))) i)))
-      (proj₂ (enum-sur (x i)))
+      (≈-reflexive (cong enum (finToFun-funToFin (λ j → enum-sur (x j) .proj₁) i)))
+      (enum-sur (x i) .proj₂)
 
   -- A finite power of a finite algebra is finite.
   power-FiniteAlgebra : FiniteAlgebra 𝑷

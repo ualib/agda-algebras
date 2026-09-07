@@ -36,23 +36,26 @@ products of isomorphic families are isomorphic.
 module Setoid.Algebras.Products where
 
 -- Imports from Agda and the Agda Standard Library --------------------------------
-open import Agda.Primitive    using () renaming ( Set to Type )
-open import Data.Product      using ( _,_ ; Σ-syntax )
-open import Function          using ( flip ; Func )
-open import Level             using( _⊔_ ; Level )
-open import Relation.Binary   using ( Setoid ;  IsEquivalence ; Decidable )
-open import Relation.Binary.PropositionalEquality  using ( refl ; _≡_ )
-open import Relation.Unary    using ( Pred ; _∈_ )
-
-open Func           using ( cong ) renaming ( to to _⟨$⟩_ )
-open Setoid         using ( Carrier ; _≈_ ) renaming ( isEquivalence to isEqv )
-open IsEquivalence  using () renaming ( refl to reflE ; sym to symE ; trans to transE )
-
+open import Agda.Primitive                         using  () renaming ( Set to Type )
+open import Data.Product                           using  ( _,_ ; Σ-syntax )
+open import Function                               using  ( flip ; Func )
+open import Level                                  using  ( _⊔_ ; Level )
+open import Relation.Binary                        using  ( Setoid ; IsEquivalence
+                                                          ; Decidable )
+open import Relation.Binary.PropositionalEquality  using  ( refl ; _≡_ )
+open import Relation.Unary                         using  ( Pred ; _∈_ )
+open Func                                          using  ( cong )
+                                                   renaming ( to to _⟨$⟩_ )
+open Setoid                                        using  ( Carrier ; _≈_ )
+                                                   renaming ( isEquivalence to isEqv )
+open IsEquivalence                                 using  ()
+                                                   renaming  ( refl to reflE
+                                                             ; sym to symE
+                                                             ; trans to transE )
 
 -- Imports from agda-algebras -----------------------------------------------------
 open import Overture               using ( proj ; projIsOnto ; 𝓞 ; 𝓥 ; Signature ; 𝑆 )
                                    renaming ( IsSurjective to onto )
-
 open import Setoid.Algebras.Basic  using ( Algebra ; _^_ ; ov ; 𝔻[_] ; 𝕌[_])
 
 private variable α ρ ι : Level

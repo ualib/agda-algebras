@@ -133,20 +133,18 @@ Two standing warnings apply to everything under this namespace.
 
 module FLRP where
 
-open import FLRP.Problem                   public
-open import FLRP.Enforceable               public
-open import FLRP.Parachute                 public
-open import FLRP.Parachute.Representation  public
-open import FLRP.Parachute.Theorems        public
-open import FLRP.Reductions                public
-open import FLRP.Bridge                    public
-open import FLRP.Representable             public
-open import FLRP.Assumptions               public
-open import FLRP.Closure                   public
-open import FLRP.KurzweilNetter            public
-open import FLRP.LayerBridge               public
-open import FLRP.WreathNoGo                public
-open import FLRP.Hunt                      public
-open import FLRP.Certificates              public
-open import FLRP.L7EqSix                   public
+open import FLRP.Problem         public
+open import FLRP.Enforceable     public
+open import FLRP.Parachute       public
+open import FLRP.Reductions      public
+open import FLRP.Bridge          public
+open import FLRP.Representable   public
+open import FLRP.Assumptions     public
+open import FLRP.Closure         public
+open import FLRP.KurzweilNetter  public
+open import FLRP.LayerBridge     public
+open import FLRP.WreathNoGo      public
+open import FLRP.Hunt            public
+open import FLRP.Certificates    public
+open import FLRP.L7EqSix         public
 ```

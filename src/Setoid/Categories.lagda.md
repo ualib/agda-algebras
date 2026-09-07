@@ -17,12 +17,12 @@ the library.
 
 module Setoid.Categories where
 
-open import Setoid.Categories.Adjunction public
-open import Setoid.Categories.Algebra public
-open import Setoid.Categories.Category public
-open import Setoid.Categories.FullSubcategory public
-open import Setoid.Categories.Functor public
-open import Setoid.Categories.Monad public
-open import Setoid.Categories.NaturalTransformation public
-open import Setoid.Categories.Reduct public
+open import Setoid.Categories.Adjunction             public
+open import Setoid.Categories.Algebra                public
+open import Setoid.Categories.Category               public
+open import Setoid.Categories.FullSubcategory        public
+open import Setoid.Categories.Functor                public
+open import Setoid.Categories.Monad                  public
+open import Setoid.Categories.NaturalTransformation  public
+open import Setoid.Categories.Reduct                 public
 ```

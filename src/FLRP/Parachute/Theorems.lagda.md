@@ -68,32 +68,34 @@ module FLRP.Parachute.Theorems where
 open import Agda.Primitive using () renaming ( Set to Type )
 
 -- Imports from the Agda Standard Library ---------------------------------------
-open import Data.Fin.Base    using  ( Fin )
-open import Data.Fin.Patterns using ( 0F ; 1F )
-open import Data.Fin.Properties using ( _≟_ )
-open import Data.Nat.Base    using  ( ℕ ; suc ; _+_ )
-open import Data.Product     using  ( _,_ ; _×_ ; Σ-syntax ; proj₁ ; proj₂ )
-open import Level            using  ( Level ; 0ℓ )
-open import Relation.Binary  using  ( Setoid )
+open import Data.Fin.Base                          using  ( Fin )
+open import Data.Fin.Patterns                      using ( 0F ; 1F )
+open import Data.Fin.Properties                    using ( _≟_ )
+open import Data.Nat.Base                          using  ( ℕ ; suc ; _+_ )
+open import Data.Product                           using  ( _,_ ; _×_ ; Σ-syntax
+                                                          ; proj₁ ; proj₂ )
+open import Level                                  using  ( Level ; 0ℓ )
+open import Relation.Binary                        using  ( Setoid )
 open import Relation.Binary.PropositionalEquality  using  ( _≡_ ; sym ; trans )
-open import Relation.Nullary using  ( ¬_ ; yes ; no )
-open import Relation.Unary   using  ( Pred ; _∈_ )
+open import Relation.Nullary                       using  ( ¬_ ; yes ; no )
+open import Relation.Unary                         using  ( Pred ; _∈_ )
 
 -- Imports from the Agda Universal Algebra Library ------------------------------
-open import Classical.Small.Structures    using  ( Lattice )
-open import Classical.Structures.Group    using  ( Group ; IsSubgroup )
-open import Classical.Structures.Lattice.Parachute  using  ( Parachute )
-open import FLRP.Assumptions              using  ( PalfyPudlak )
-open import FLRP.Enforceable  using  ( module UpperInterval ; CoreFree ; cfIE
-                                     ; CoreFreeReduction ; GroupProperty
-                                     ; GroupRepresentable ; IntervalIso )
-open import FLRP.Parachute    using  ( module GroupParachute )
-open import FLRP.Parachute.Representation
-                              using  ( module ParachuteRep ; LatticeIso
-                                     ; compose-IntervalIsoʳ )
-open import FLRP.Problem      using  ( FiniteLattice ; toLattice ; FLRP-Statement )
-open import Overture          using  ( ∃-syntax )
-open import Setoid.Algebras   using  ( 𝕌[_] ; 𝔻[_] )
+open import Classical.Small.Structures     using  ( Lattice )
+open import Classical.Structures.Group     using  ( Group ; IsSubgroup )
+open import Classical.Structures.Lattice   using  ( Parachute )
+open import FLRP.Assumptions               using  ( PalfyPudlak )
+open import FLRP.Enforceable               using  ( module UpperInterval ; CoreFree
+                                                  ; cfIE ; CoreFreeReduction
+                                                  ; GroupProperty ; IntervalIso
+                                                  ; GroupRepresentable )
+open import FLRP.Parachute.Basic           using  ( module GroupParachute )
+open import FLRP.Parachute.Representation  using  ( module ParachuteRep ; LatticeIso
+                                                  ; compose-IntervalIsoʳ )
+open import FLRP.Problem                   using  ( FiniteLattice ; toLattice
+                                                  ; FLRP-Statement )
+open import Overture                       using  ( ∃-syntax )
+open import Setoid.Algebras                using  ( 𝕌[_] ; 𝔻[_] )
 ```
 -->
 
@@ -104,7 +106,6 @@ core-free enforceable by each canopy.
 
 ```agda
 module ParachuteTheorems {ℓP : Level} {m : ℕ} (𝒫 : Parachute 0ℓ 0ℓ (suc m)) where
-
   open ParachuteRep 𝒫 public
 ```
 

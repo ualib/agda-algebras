@@ -41,16 +41,16 @@ following:
 
 module Setoid.Congruences where
 
-open import Setoid.Congruences.Basic                    public
-open import Setoid.Congruences.Permutability public
-open import Setoid.Congruences.Lattice public
-open import Setoid.Congruences.CompleteLattice public
-open import Setoid.Congruences.Monolith public
-open import Setoid.Congruences.Simple public
-open import Setoid.Congruences.Properties public
-open import Setoid.Congruences.ChainJoin                public
-open import Setoid.Congruences.Generation               public
-open import Setoid.Congruences.Finite                   public
-open import Setoid.Congruences.Presented                public
-open import Setoid.Congruences.Certificates             public
+open import Setoid.Congruences.Basic            public
+open import Setoid.Congruences.Certificates     public
+open import Setoid.Congruences.ChainJoin        public
+open import Setoid.Congruences.CompleteLattice  public
+open import Setoid.Congruences.Finite           public
+open import Setoid.Congruences.Generation       public
+open import Setoid.Congruences.Lattice          public
+open import Setoid.Congruences.Monolith         public
+open import Setoid.Congruences.Permutability    public
+open import Setoid.Congruences.Presented        public
+open import Setoid.Congruences.Properties       public
+open import Setoid.Congruences.Simple           public
 ```
