@@ -101,10 +101,13 @@ Here we prove closure under dualization (the Kurzweil–Netter theorem) using
 [FLRP.KurzweilNetter.Duality][].  The parameters are the simple-group package of
 the proof module: a finite group with a nontriviality witness and the
 Kurzweil-surjectivity family in its decidable working form (Entry 4 of
-[FLRP.Assumptions][], classically true for `𝒮` finite nonabelian simple).
+[FLRP.Assumptions][], now a theorem: [FLRP.KurzweilNetter.Surjectivity][] proves the
+family for any finite witnessed-nonabelian-simple base, and
+[FLRP.KurzweilNetter.A5][] closes the composite at the certified `A₅`).
 
-Every consumer displays its remaining classical debt (Entry 4 at the chosen group)
-in its own type, exactly as the registry discipline demands.
+The parameterized form is kept so that census consumers can thread any base
+group's package explicitly; a consumer wanting no package at all takes the
+closed `kurzweilNetterDuality-A₅`{.AgdaFunction} instead.
 
 ```agda
 module _ ((𝑺 , eqns) : Group 0ℓ 0ℓ) where
@@ -127,16 +130,16 @@ module _ ((𝑺 , eqns) : Group 0ℓ 0ℓ) where
       deriving the rest.
 
 [^2]: Entry 2 of the assumptions registry ([FLRP.Assumptions][]) provided the
-      duality theorem as an imported hypothesis, but is now retired; what remains
-      classical is exactly Entry 4 and the choice of a concrete nonabelian simple
-      instantiation; this will soon be replaced by a fully constructive proof of
-      the Kurzweil–Netter theorem in [FLRP.KurzweilNetter.Duality][].
+      duality theorem as an imported hypothesis; it is now closed.  Entry 4 is a
+      theorem at the decidable layer ([FLRP.KurzweilNetter.Surjectivity][]) and
+      the nonabelian simple instantiation is the certified `A₅`
+      ([FLRP.KurzweilNetter.A5][]), so the Kurzweil–Netter theorem of
+      [FLRP.KurzweilNetter.Duality][] carries no classical residue.
 
       **The payoff downstream**.  The two dual entries of the small-lattice census
-      (`L18` and `L22`, duals of the certified `SLR19` and `SLR23`) rest only on
-      Entry 4 and an instantiation rather than on the full duality theorem;
-      materializing those conditional certificates seemed computationally out of
-      reach, since the construction would require an `n`-element algebra's dual
-      on `|S|ⁿ⁻¹ ≥ 60ⁿ⁻¹` elements.  However, there is work in progress that
-      should offer a way around this; see PR
-      [#569](https://github.com/ualib/agda-algebras/pull/569).
+      (`L18` and `L22`, duals of the certified `SLR19` and `SLR23`) rested only on
+      Entry 4 and an instantiation rather than on the full duality theorem, and
+      both of those are now theorems.  Materializing explicit certificates for
+      them would still be computationally out of reach, since the construction
+      requires an `n`-element algebra's dual on `|S|ⁿ⁻¹ ≥ 60ⁿ⁻¹` elements; the
+      closed theorem is what makes that unnecessary.

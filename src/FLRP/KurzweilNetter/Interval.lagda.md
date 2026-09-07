@@ -1,14 +1,14 @@
 ---
 layout: default
-file: "src/FLRP/KurzweilInterval.lagda.md"
-title: "FLRP.KurzweilInterval module (The Agda Universal Algebra Library)"
+file: "src/FLRP/KurzweilNetter/Interval.lagda.md"
+title: "FLRP.KurzweilNetter.Interval module (The Agda Universal Algebra Library)"
 date: "2026-07-27"
 author: "the agda-algebras development team"
 ---
 
 ### Kurzweil's interval `[D , Sⁿ] ≅ Eq(n)′`
 
-This is the [FLRP.KurzweilInterval][] module of the [Agda Universal Algebra Library][].
+This is the [FLRP.KurzweilNetter.Interval][] module of the [Agda Universal Algebra Library][].
 
 This module packages the group infrastructure of
 
@@ -32,23 +32,22 @@ characters, and the formal treatment mirrors the split honestly:[^1]
    prove, it is finite combinatorics, and it needs only a *nontrivial* base
    group ([Classical.Structures.Group.PartitionSubgroup][]).
 
-+  **Surjectivity is a registered hypothesis**.  That every respecting subgroup
-   between `D` and `Sⁿ` is a partition subgroup is the half where `S` must be a
-   finite nonabelian simple group; the sources cite it to Kurzweil's article
-   without reproof, and its formalization needs the normal-subgroup structure
-   theory of powers of a simple group (subdirect products, block inductions) that
-   the library does not yet have.  Per the `--safe` discipline it enters as the
-   explicit hypothesis `KurzweilSurjectivity`{.AgdaFunction}, registered as
-   **Entry 4** of [FLRP.Assumptions][]; it is stated in the Σ-form that
-   *hands the consumer the partition witness*, which is exactly what the
-   isomorphism's inverse map needs.  The Σ-form now comes in two layers: over
++  **Surjectivity is stated here, and proved at the decidable layer**.  That
+   every respecting subgroup between `D` and `Sⁿ` is a partition subgroup is
+   the half where `S` must be a finite nonabelian simple group; the sources
+   cite it to Kurzweil's article without reproof.  This module states it in
+   the Σ-form that *hands the consumer the partition witness*, which is
+   exactly what the isomorphism's inverse map needs, in two layers: over
    semantic interval elements (`KurzweilSurjectivity`{.AgdaFunction}, the
-   classical statement of record) and over decidable ones
-   (`KurzweilSurjectivityᵈ`{.AgdaFunction}, the working form the
-   Kurzweil–Netter route consumes).  The split is forced, not stylistic: the
-   closing theorem of this module shows the Layer-S form implies full excluded
-   middle at level zero, so the retirement of Entry 4, proving surjectivity
-   for a nonabelian simple base, can only ever land on the decidable form.
+   classical statement of record, **Entry 4** of [FLRP.Assumptions][]) and
+   over decidable ones (`KurzweilSurjectivityᵈ`{.AgdaFunction}, the working
+   form).  The split is forced, not stylistic: the closing theorem of this
+   module shows the Layer-S form implies full excluded middle at level zero,
+   so only the decidable form is provable, and it *is* proved: for a finite
+   witnessed-nonabelian-simple base, the blockwise collapse that
+   [FLRP.KurzweilNetter.Surjectivity][] reads through this module's vocabulary
+   retires the entry and closes `kurzweilIntervalIso`{.AgdaFunction}'s
+   decidable sibling unconditionally.
 
 Given the hypothesis, `kurzweilIntervalIso`{.AgdaFunction} is a theorem:
 `[D , Sⁿ] ≅ (Eq n)′` in the `IntervalIso` presentation, with the dual order
@@ -64,43 +63,45 @@ Kurzweil–Netter duality proof will call.
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
 
-module FLRP.KurzweilInterval where
+module FLRP.KurzweilNetter.Interval where
 
 open import Agda.Primitive using () renaming ( Set to Type )
 
 -- Imports from the Agda Standard Library ---------------------------------------
-open import Data.Empty        using ( ⊥-elim )
-open import Data.Fin.Patterns using ( 0F ; 1F )
-open import Data.Fin.Properties using ( _≟_ )
-open import Data.Nat.Base     using ( ℕ )
-open import Data.Product      using ( Σ-syntax ; _×_ ; _,_ ; proj₁ ; proj₂ )
-open import Data.Sum.Base     using ( _⊎_ ; inj₁ ; inj₂ )
-open import Level             using ( 0ℓ ) renaming ( suc to lsuc )
-open import Relation.Binary   using ( Setoid )
-open import Relation.Binary.Definitions using ( _Respects_ )
-open import Relation.Binary.PropositionalEquality as ≡ using ()
-open import Relation.Nullary  using ( ¬_ ; Dec ; yes ; no )
-open import Relation.Unary    using ( Pred ; _∈_ ; _⊆_ )
+open import Data.Empty                             using  ( ⊥-elim )
+open import Data.Fin.Patterns                      using  ( 0F ; 1F )
+open import Data.Fin.Properties                    using  ( _≟_ ; all? )
+open import Data.Nat.Base                          using  ( ℕ )
+open import Data.Product                           using  ( Σ-syntax ; _×_ ; _,_
+                                                          ; proj₁ ; proj₂ )
+open import Data.Sum.Base                          using  ( _⊎_ ; inj₁ ; inj₂ )
+open import Level                                  using  ( 0ℓ )
+                                                   renaming ( suc to lsuc )
+open import Relation.Binary                        using  ( Setoid )
+open import Relation.Binary.Definitions            using  ( _Respects_ )
+open import Relation.Binary.PropositionalEquality  using  (sym)
+open import Relation.Nullary                       using  ( ¬_ ; Dec ; yes ; no )
+open import Relation.Nullary.Decidable             using ( map′ ; _→-dec_ )
+open import Relation.Unary                         using ( Pred ; _∈_ ; _⊆_ )
 
 -- Imports from the Agda Universal Algebra Library ------------------------------
-open import Classical.Structures.Group.Basic             using  ( Group
-                                                                ; module Group-Op )
-open import Classical.Structures.Group.GSet              using  ( module CosetAction )
-open import Classical.Signatures.Group                   using  ( ∙-Op ; ⁻¹-Op )
-open import Classical.Structures.Group.PartitionSubgroup using  ( module PartitionSubgroups )
-open import Classical.Structures.Group.Subgroups         using  ( mkIsSubgroup )
-open import Classical.Structures.Interpret               using  ( interp-cong )
-open import Classical.Structures.Lattice.Dual            using  ( module LatticeDual
-                                                                ; dualLattice )
-open import Classical.Structures.Lattice.Partitions      using  ( EqLattice ; SameBlock
-                                                                ; _⊑_ ; ⊑→≤ ; ≤→⊑ )
-open import FLRP.Enforceable                             using  ( module UpperInterval
-                                                                ; IntervalIso
-                                                                ; GroupRepresentable )
-open import FLRP.Problem                                 using  ( ConIso ; EM₀ ; WLEM₀
-                                                                ; EM₀→WLEM₀ )
-open import Setoid.Algebras                              using  ( 𝕌[_] ; 𝔻[_] ; Algebra)
-open import Setoid.Congruences.Certificates.Schema       using  ( ParentVec ; parent )
+open import Classical.Signatures.Group       using  ( ∙-Op ; ⁻¹-Op )
+open import Classical.Structures.Group       using  ( Group ; module Group-Op
+                                                    ; module CosetAction
+                                                    ; module PartitionSubgroups
+                                                    ; mkIsSubgroup )
+open import Classical.Structures.Interpret   using  ( interp-cong )
+open import Classical.Structures.Lattice     using  ( module LatticeDual
+                                                    ; dualLattice ; EqLattice
+                                                    ; SameBlock ; _⊑_ ; ⊑→≤ ; ≤→⊑ )
+open import FLRP.Enforceable                 using  ( module UpperInterval
+                                                    ; IntervalIso
+                                                    ; GroupRepresentable )
+open import FLRP.Problem                     using  ( ConIso ; EM₀ ; WLEM₀
+                                                    ; EM₀→WLEM₀ )
+open import Setoid.Algebras                  using  ( 𝕌[_] ; 𝔻[_] ; Algebra
+                                                    ; FiniteAlgebra )
+open import Setoid.Congruences.Certificates  using  ( ParentVec ; parent )
 ```
 -->
 
@@ -129,6 +130,22 @@ module KurzweilInterval (𝒮@(𝑺 , _) : Group 0ℓ 0ℓ) (n : ℕ) where
   toInterval pv = mk (K pv) (K-isSubgroup pv) (Diag⊆K pv)
 ```
 
+Over a finite base group, membership in a partition subgroup is a finite
+conjunction of decidable base equalities, so each partition subgroup is a
+*decidable* interval element; the expansion stage of the Kurzweil–Netter route and
+the decidable interval isomorphism both consume this decider.
+
+```agda
+  -- Membership in a partition subgroup is decidable over a finite base.
+  module _ (𝑭ₛ : FiniteAlgebra 𝑺) where
+
+    K-dec : (pv : ParentVec n) → ∀ x → Dec (x ∈ K pv)
+    K-dec pv x =
+      map′ (λ f {i} {j} → f i j) (λ g i j → g)
+        (all? (λ i → all? (λ j →
+          (parent pv i ≟ parent pv j) →-dec FiniteAlgebra._≟_ 𝑭ₛ (x i) (x j))))
+```
+
 **Entry 4 of the assumptions registry** ([FLRP.Assumptions][]): every interval
 element is extensionally a partition subgroup, *with the partition produced as
 data*.  The classical theorem asserts this whenever `𝒮` is a finite nonabelian
@@ -147,11 +164,11 @@ sibling quantifies instead over the decidable interval elements
 `Intervalᵈ`{.AgdaFunction} of [FLRP.Enforceable][]: the same Σ-form, taken over
 elements that carry a membership decider.  This is the form the Kurzweil–Netter
 route consumes, because every interval element it manipulates is the base-coset
-class of a *decidable* congruence, and it is the form whose proof for a finite
-nonabelian simple base group retires Entry 4; the closing theorem of this
-module shows that the Layer-S form above, at exponent `2` over a base group
-with an apartness witness, implies excluded middle, so no proof of it for such
-a group can land in the safe fragment.
+class of a *decidable* congruence, and it is the form [FLRP.KurzweilNetter.Surjectivity][]
+proves for a finite witnessed-nonabelian-simple base group, retiring Entry 4;
+the closing theorem of this module shows that the Layer-S form above, at
+exponent `2` over a base group with an apartness witness, implies excluded
+middle, so no proof of it for such a group can land in the safe fragment.
 
 ```agda
   -- Kurzweil surjectivity, Layer-D form: the partition witness over interval
@@ -255,16 +272,18 @@ the probe tuple `(ε , s₀)` under hypothesis `P` forces `ε ≈ s₀`, refutin
 containment hands over `(ε ≈ s₀) ⊎ P` with the left branch absurd.
 
 ```agda
-module _ (𝒮@(𝑺 , _)  : Group 0ℓ 0ℓ)  (open Setoid 𝔻[ 𝑺 ] using ( _≈_ ))
-                                      (open Group-Op 𝒮 using ( ε ))
-         (s₀          : 𝕌[ 𝑺 ])
-         (s₀≉ε        : ¬ s₀ ≈ ε)
+module _
+  (𝒮@(𝑺 , _)  : Group 0ℓ 0ℓ)  (open Setoid 𝔻[ 𝑺 ] using ( _≈_ ))
+                               (open Group-Op 𝒮 using ( ε ))
+  (s₀          : 𝕌[ 𝑺 ])
+  (s₀≉ε        : ¬ s₀ ≈ ε)
   where
 
   open KurzweilInterval 𝒮 2
-  open Setoid 𝔻[ 𝑺 ]  using () renaming ( refl to ≈refl ; sym to ≈sym ; trans to ≈trans )
-  open Setoid 𝔻[ Sⁿ ] using () renaming ( _≈_ to _≈ₚ_ )
-  open Group-Op 𝑺ⁿ    using () renaming ( _∙_ to _∙ₚ_ ; ε to εₚ ; _⁻¹ to _⁻¹ₚ )
+  open Setoid 𝔻[ 𝑺 ]   renaming ( refl to ≈refl ; sym to ≈sym ; trans to ≈trans )
+                       using ()
+  open Setoid 𝔻[ Sⁿ ]  using () renaming ( _≈_ to _≈ₚ_ )
+  open Group-Op 𝑺ⁿ     using () renaming ( _∙_ to _∙ₚ_ ; ε to εₚ ; _⁻¹ to _⁻¹ₚ )
 
   -- Kurzweil surjectivity at Layer S decides every level-zero proposition.
   kurzweilSurjectivity→EM : KurzweilSurjectivity → EM₀
@@ -275,16 +294,16 @@ module _ (𝒮@(𝑺 , _)  : Group 0ℓ 0ℓ)  (open Setoid 𝔻[ 𝑺 ] using (
     U u = (u 0F ≈ u 1F) ⊎ P
 
     U-respects : U Respects _≈ₚ_
-    U-respects e (inj₁ q)  = inj₁ (≈trans (≈sym (e 0F)) (≈trans q (e 1F)))
-    U-respects e (inj₂ p)  = inj₂ p
+    U-respects e (inj₁ q) = inj₁ (≈trans (≈sym (e 0F)) (≈trans q (e 1F)))
+    U-respects e (inj₂ p) = inj₂ p
 
     U-∙ : ∀ {x y} → x ∈ U → y ∈ U → (x ∙ₚ y) ∈ U
     U-∙ {x} {y} (inj₁ qx) (inj₁ qy) =
       inj₁ (≈trans  (⊗-pointwise x y 0F)
                     (≈trans  (interp-cong 𝑺 ∙-Op λ { 0F → qx ; 1F → qy })
                              (≈sym (⊗-pointwise x y 1F))))
-    U-∙ (inj₁ _)   (inj₂ p) = inj₂ p
-    U-∙ (inj₂ p)   _        = inj₂ p
+    U-∙ (inj₁ _) (inj₂ p) = inj₂ p
+    U-∙ (inj₂ p) _ = inj₂ p
 
     U-ε : εₚ ∈ U
     U-ε = inj₁ (≈trans (e-pointwise 0F) (≈sym (e-pointwise 1F)))
@@ -324,7 +343,7 @@ module _ (𝒮@(𝑺 , _)  : Group 0ℓ 0ℓ)  (open Setoid 𝔻[ 𝑺 ] using (
       w∈K : w ∈ K pv
       w∈K {0F} {0F} _   = ≈refl
       w∈K {0F} {1F} sb  = ⊥-elim (¬e sb)
-      w∈K {1F} {0F} sb  = ⊥-elim (¬e (≡.sym sb))
+      w∈K {1F} {0F} sb  = ⊥-elim (¬e (sym sb))
       w∈K {1F} {1F} _   = ≈refl
 
       fromU : w ∈ U → P ⊎ ¬ P
@@ -358,7 +377,7 @@ module ConsumerChecks (𝒮 : Group 0ℓ 0ℓ) (n : ℕ) where
   open KurzweilInterval 𝒮 n
   open CosetAction 𝑺ⁿ Diag Diag-isSubgroup using ( cosetAlgebra )
 
-  -- The Kurzweil-etter proof inhabits this by composing the WP-3 bridge with
+  -- The Kurzweil–Netter proof inhabits this by composing the WP-3 bridge with
   -- kurzweilIntervalIso.
   DualityConIso : Type (lsuc 0ℓ)
   DualityConIso = ConIso cosetAlgebra (dualLattice (EqLattice n))

@@ -11,46 +11,47 @@ author: "the agda-algebras development team"
 This is the [FLRP.KurzweilNetter.Expansion][] module of the [Agda Universal Algebra Library][].
 
 This is the heart of the Kurzweil–Netter construction.  The transitive `Sᵐ`-set on
-`Sᵐ / D` has (decidable) congruence lattice isomorphic to the interval `[D , Sᵐ]`
-([FLRP.Bridge][]), which is dually isomorphic to the partition lattice `Eq(m)`
-([FLRP.KurzweilInterval][]).
+`Sᵐ / D` has a lattice of (decidable) congruences, isomorphic to the
+interval `[D , Sᵐ]` ([FLRP.Bridge][]), which is dually isomorphic to the partition
+lattice `Eq(m)` ([FLRP.KurzweilNetter.Interval][]).
 
-**Expanding** the coset algebra by the lifted maps `x ↦ x ∘ t`, one per member `t`
-of a given family of index maps, cuts the congruences down to the partitions
-*invariant* under the family ([FLRP.KurzweilNetter.Invariance][]): the main result
+Expanding the coset algebra by the lifted maps `x ↦ x ∘ t`, one per member `t`
+of a given family of index maps, cuts the congruences down to the partitions that
+are invariant under the family ([FLRP.KurzweilNetter.Invariance][]): the main result
 here is the order isomorphism
 
 `expansionIso : DecCon 𝑬 ≅ `(invariant partitions of `Eq(m)`, order reversed),
 
-where `𝑬`{.AgdaBound} is the expanded coset algebra.
+where `𝑬` is the expanded coset algebra.
 
-The family of index maps is an *abstract parameter* `tr : Fin T → Fin m → Fin m`;
-this module knows nothing about the algebra being represented; instantiating `tr`
-at the basic translations of [FLRP.KurzweilNetter.Translations][] is the business
-of [FLRP.KurzweilNetter.Duality][].
+The family of index maps is an abstract parameter `tr : Fin T → Fin m → Fin m`;
+this module knows nothing about the algebra being represented.  Instantiating `tr`
+at the basic translations of [FLRP.KurzweilNetter.Translations][] is the
+responsibility of [FLRP.KurzweilNetter.Duality][].
 
-Three design points, each forced by a constraint worth recording.
+Three design points, each forced by a constraint worth recording, are the following:
 
-+  **The signature is an enumerated symbol type, not `Sig-Unary 𝕌[ Sᵐ ]`**.
++  **The signature is an enumerated symbol type** (not `Sig-Unary 𝕌[ Sᵐ ]`).
    The carrier of the power is a function type `Fin m → S`, and a
    `FiniteSignature`{.AgdaRecord} requires its symbols to be enumerated up to
-   propositional equality, unprovable for a function type under  `--safe`
-   (it is function extensionality).  So the expanded algebra's symbols are
-   `Fin N ⊎ Fin T`{.AgdaDatatype}: `inj₁ ν` acts by left translation by the `ν`-th
-   *enumerated* group element, `inj₂ τ` by composition with `tr τ`.  Compatibility
-   with the enumerated actions still forces compatibility with *every* group
-   element, because congruences respect the coset equality and the enumeration is
-   surjective up to the pointwise equality of the power (`forget`{.AgdaFunction}
-   below), so nothing is lost.
+   propositional equality, unprovable for a function type under `--safe`
+   without function extensionality.  So the expanded algebra's symbols are
+   `Fin N ⊎ Fin T`: the action of `inj₁ ν` is left translation by the `ν`-th
+   enumerated group element, and `inj₂ τ` is composition with `tr τ`.
+   Compatibility with the enumerated actions still forces compatibility with every
+   group element, because congruences respect the coset equality and the
+   enumeration is surjective up to the pointwise equality of the power
+   (`forget`{.AgdaFunction} below), so nothing is lost.
 
 +  **The two halves of the invariance transfer have different prices**.
 
-   That an invariant partition's subgroup `K_π` is closed under the lifts is one
-   line (`Inv→K-closed`{.AgdaFunction}).  The converse asserts that a congruence
-   of the expanded algebra has an *invariant* partition; this needs the
-   indicator-tuple argument of `K-reflects`{.AgdaFunction} of
-   [Classical.Structures.Group.PartitionSubgroup][], and with it the
-   *nontriviality witness* `s₀ ≉ ε` of the base group
+   Proving that an invariant partition's subgroup `Kπ` is closed under the lifts
+   is one line (`Inv→K-closed`{.AgdaFunction}).
+
+   The converse asserts that a congruence of the expanded algebra has an invariant
+   partition; this needs the indicator-tuple argument of
+   `K-reflects`{.AgdaFunction} of [Classical.Structures.Group.PartitionSubgroup][],
+   and with it the nontriviality witness `s₀ ≉ ε` of the base group
    (`K-closed→Inv`{.AgdaFunction}).  This is one of the few places the base
    group's properties enter the proof at all.
 
@@ -64,7 +65,7 @@ Three design points, each forced by a constraint worth recording.
    of a *decidable* congruence, delivered with its decider by the Layer-D bridge
    map `toᵈ`{.AgdaFunction}, so the semantic form is never needed; that matters,
    because the semantic form is unprovable outright (the no-go of
-   [FLRP.KurzweilInterval][]).
+   [FLRP.KurzweilNetter.Interval][]).
 
 <!--
 ```agda
@@ -89,8 +90,7 @@ open import Level                                  using  ( 0ℓ )
 open import Relation.Binary                        using  ( Setoid ; IsEquivalence )
 open import Relation.Binary.PropositionalEquality as ≡ using  ( _≡_ ; cong )
 open import Relation.Nullary                       using  ( ¬_ ; Dec ; yes ; no )
-open import Relation.Nullary.Decidable             using  ( does ; dec-true ; dec-false
-                                                          ; map′ ; _→-dec_ )
+open import Relation.Nullary.Decidable             using  ( does ; dec-true ; dec-false )
 open import Relation.Unary                         using  ( _∈_ ; _⊆_ )
 
 -- Imports from the Agda Universal Algebra Library ------------------------------
@@ -103,7 +103,7 @@ open import Classical.Structures.Group.GSet          using  ( module CosetAction
 open import Classical.Structures.Interpret           using  ( interp-cong )
 open import Classical.Structures.Lattice.Partitions  using  ( SameBlock ; _⊑_ ; _≈ᵖ_ )
 open import FLRP.Bridge                              using  ( module Bridge )
-open import FLRP.KurzweilInterval                    using  ( module KurzweilInterval )
+open import FLRP.KurzweilNetter.Interval                    using  ( module KurzweilInterval )
 open import FLRP.KurzweilNetter.Invariance           using  ( Inv )
 open import FLRP.Representable                       using  ( _⊆ᵈ_ ; _≑ᵈ_ )
 open import Order.Iso                                using  ( OrderIso )
@@ -159,23 +159,17 @@ module KNExpansion
     G = 𝕌[ Sⁿ ]
 ```
 
-#### Decidability of the diagonal and of the partition subgroups
+#### Decidability of the diagonal
 
-Membership in the diagonal and in a partition subgroup is a finite conjunction
-of decidable base-group equalities, so both are decidable (the Layer-D
-presentation data of the interval elements the construction manipulates).
+Membership in the diagonal is a finite conjunction of decidable base-group
+equalities, so it is decidable; the partition subgroups have their decider
+`K-dec`{.AgdaFunction} upstream in [FLRP.KurzweilNetter.Interval][], shared with the
+decidable interval isomorphism.
 
 ```agda
   -- The diagonal has decidable membership.
   Diag-dec : ∀ x → Dec (x ∈ Diag)
   Diag-dec x = all? (λ i → all? (λ j → 𝑭ₛ ._≟_ (x i) (x j)))
-    where open FiniteAlgebra
-
-  -- Each partition subgroup has decidable membership.
-  K-dec : (pv : ParentVec m) → ∀ x → Dec (x ∈ K pv)
-  K-dec pv x =
-    map′ (λ f {i} {j} → f i j) (λ g i j → g)
-      (all? (λ i → all? (λ j → (parent pv i ≟ᶠ parent pv j) →-dec 𝑭ₛ ._≟_ (x i) (x j))))
     where open FiniteAlgebra
 ```
 
@@ -427,8 +421,8 @@ lift-compatibility supplied by the easy half of the invariance transfer.
   private
     -- the coset relation of an invariant partition is closed under the lifts
     θK-comp : (pv : ParentVec m) → ((τ : Fin T) → Inv (tr τ) pv) → (τ : Fin T)
-      → ∀ {x y} → ConRel (B.fromᵈ (toInterval pv , K-dec pv)) x y
-      → ConRel (B.fromᵈ (toInterval pv , K-dec pv)) (x ∘ tr τ) (y ∘ tr τ)
+      → ∀ {x y} → ConRel (B.fromᵈ (toInterval pv , K-dec 𝑭ₛ pv)) x y
+      → ConRel (B.fromᵈ (toInterval pv , K-dec 𝑭ₛ pv)) (x ∘ tr τ) (y ∘ tr τ)
     θK-comp pv invτ τ {x} {y} mem =
       K-respects pv (λ i → sym (quot-comp x y (tr τ) i))
         (Inv→K-closed (tr τ) pv (invτ τ) mem)
@@ -466,7 +460,7 @@ The two maps of the isomorphism.
 
   -- ... and an invariant partition yields a congruence of the expanded algebra.
   fromInvPart : InvPart → DecCon expandedAlgebra 0ℓ
-  fromInvPart (pv , invτ) = extend (B.fromᵈ (toInterval pv , K-dec pv)) (θK-comp pv invτ)
+  fromInvPart (pv , invτ) = extend (B.fromᵈ (toInterval pv , K-dec 𝑭ₛ pv)) (θK-comp pv invτ)
 ```
 
 **Monotonicity**.  Forward: a containment of congruences passes through the bridge
