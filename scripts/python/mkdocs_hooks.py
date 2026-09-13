@@ -147,8 +147,9 @@ def on_files(files, config):
 # what `make corpus-stats` writes into the source and what CI holds the
 # committed values to (issue #575); the hook calls that one function so the
 # deployed site and the committed file cannot disagree.  It is a single pass
-# over the canonical (non-Legacy) modules, a few hundred files and ~50 ms, run
-# only when rendering index.md, so it adds nothing meaningful to the build.
+# over the canonical (non-Legacy) modules plus the three toolchain files, 88 ms
+# measured over 339 modules, run only when rendering index.md, so it adds
+# nothing meaningful to a build that takes four minutes.
 #
 # Before #575 the substitution here was the *only* thing that refreshed the
 # figures, and it rewrote the rendered page without ever writing back, so the
@@ -161,6 +162,9 @@ def _fill_corpus_stats(markdown: str) -> str:
     A failure to count (a toolchain pin whose file was reshaped, say) leaves the
     committed values in place and warns: they are gated by CI, so they are the
     right fallback, but falling back silently is the very failure #575 records.
+    The warning is deliberately loud enough to stop `mkdocs build --strict`,
+    which is `make site`: the same failure fails the gate on the same commit,
+    so a red docs build here is consistent rather than extra damage.
     """
     values = landing_values()
     if values.is_err:
