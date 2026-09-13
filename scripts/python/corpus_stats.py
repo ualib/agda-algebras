@@ -46,7 +46,13 @@ Design Principles:
        actually bind: ``agda-algebras.agda-lib``'s ``depend:`` line, whose
        stdlib version Agda enforces exactly, and ``flake.nix``'s version-floor
        guards, which state the series the dev shell expects.  Bumping the
-       toolchain without updating the docs therefore fails the check.
+       toolchain without updating the docs therefore fails the check, with one
+       limit worth stating plainly: the stdlib comparison is exact, the Agda one
+       is by series, because ``flake.nix`` deliberately guards ``2.8.*`` and no
+       file in this repository states a patch level.  A move from Agda 2.8.0 to
+       2.8.1 shows in the dev shell's banner and is checked nowhere; pinning it
+       would mean tightening the flake's own guard, which is a decision about
+       the toolchain, not about the docs.
 
   A source of truth that cannot be read is an error, never a skipped check.  If
   one of those files is reshaped so a pattern stops matching, the tool says
@@ -73,7 +79,7 @@ if str(_SCRIPT_DIR) not in sys.path:
 
 from _utils import ErrorType, PipelineError, Result, sequence_results  # noqa: E402
 from _utils.file_ops import read_text, write_text  # noqa: E402
-from _utils.literate import fences  # noqa: E402
+from _utils.literate import fences, options_pragma  # noqa: E402
 
 # -- Sources of truth ---------------------------------------------------------
 
@@ -153,25 +159,21 @@ class Stats:
         }
 
 
-# The module's OPTIONS pragma.  `[^#]*` stops at the closing `#-}` and cannot
-# run past it into the body.
-_OPTIONS = re.compile(r"\{-#\s*OPTIONS\b([^#]*)#-\}")
-
-
 def module_stats(text: str) -> tuple[int, bool]:
     """``(lines of Agda, checked under --safe)`` for one literate module.
 
-    One pass over the fences serves both: the lines are everything between the
+    One pass over the fences serves both.  The lines are everything between the
     fence delimiters of the module's ```` ```agda ```` blocks (the hidden
     preamble fence counts, because Agda checks it; prose and the delimiters
-    themselves do not), and the pragma is read from that same code, so an
-    OPTIONS line quoted in prose cannot be mistaken for the module's own.
+    themselves do not).  The pragma is read from that same code, so an OPTIONS
+    line quoted in *prose* cannot be mistaken for the module's own, and read by
+    :func:`options_pragma`, so neither can one that is commented *out*.
     """
     blocks = fences(text)
     code = "\n".join(line for block in blocks for line in block.body)
-    pragma = _OPTIONS.search(code)
+    options = options_pragma(code)
     return (sum(len(block.body) for block in blocks),
-            pragma is not None and "--safe" in pragma.group(1).split())
+            options is not None and "--safe" in options.split())
 
 
 def corpus(texts: Sequence[str]) -> Corpus:
@@ -193,8 +195,24 @@ def canonical_modules(src: Path = SRC) -> list[Path]:
 
 
 def measure(src: Path = SRC) -> Result[Corpus, PipelineError]:
-    """Read and count the canonical tree."""
-    return sequence_results([read_text(p) for p in canonical_modules(src)]).map(corpus)
+    """Read and count the canonical tree.
+
+    An absent or empty ``src/`` is an error, not a corpus of size zero.  Both
+    mean the tool is looking at the wrong place (it is run from the repo root,
+    like its siblings), and a tree of 0 modules and 0 lines is a figure it would
+    otherwise publish or, worse, write into the page.
+    """
+    if not src.is_dir():
+        return Result.err(PipelineError(
+            ErrorType.FILE_NOT_FOUND,
+            f"{src} is not a directory; run this from the repository root"))
+    modules = canonical_modules(src)
+    if not modules:
+        return Result.err(PipelineError(
+            ErrorType.VALIDATION_ERROR,
+            f"{src} holds no literate modules outside {LEGACY}/; "
+            "that is not a corpus, so nothing is counted"))
+    return sequence_results([read_text(p) for p in modules]).map(corpus)
 
 
 # =============================================================================

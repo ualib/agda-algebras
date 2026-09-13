@@ -276,15 +276,19 @@ into the `<!-- ualib:stat:NAME -->…<!-- /ualib:stat:NAME -->` marker pairs in
 +  `agda` and `stdlib`, read from `mkdocs.yml`'s `extra:` site variables and
    reconciled against the two pins that bind them: the `depend:` line of
    `agda-algebras.agda-lib`, whose stdlib version Agda enforces exactly, and the
-   version-floor guards in `flake.nix`.
+   version-floor guards in `flake.nix`.  The stdlib half is therefore exact; the
+   Agda half is by *series*, because `flake.nix` deliberately guards `2.8.*` and
+   nothing in the repository states a patch level.  A move from Agda 2.8.0 to
+   2.8.1 is thus visible in the dev shell's banner on entry, but no check in this
+   repository fails on it.
 
-Two commands, one gate:
+Three commands, one gate:
 
 +  `make corpus-stats` rewrites the figures in `docs/index.md`;
 +  `make corpus-stats-check` fails, with a diff, when a committed figure has
    drifted from the tree.  CI runs it as the *Landing-page stats* job, so the
-   pull request that moves a number is the one that refreshes the page.
-   `make corpus-stats-test` exercises the tool's own unit tests.
+   pull request that moves a number is the one that refreshes the page;
++  `make corpus-stats-test` exercises the tool's own unit tests.
 
 The MkDocs hook substitutes the same values into the rendered page at build
 time, but that is a convenience, not the mechanism: it rewrites only the built

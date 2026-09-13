@@ -20,6 +20,9 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 import corpus_stats as cs  # noqa: E402
 
+# One scratch directory for the whole suite; cleaned up at interpreter exit.
+_TMP = tempfile.TemporaryDirectory(prefix="corpus-stats-test-")
+
 
 def module(*blocks: str, pragma: str = "--cubical-compatible --exact-split --safe") -> str:
     """A minimal literate module: a hidden preamble fence carrying the OPTIONS
@@ -74,12 +77,61 @@ def test_options_pragma_quoted_in_prose_is_ignored() -> None:
     assert cs.module_stats(text)[1] is False
 
 
+def test_a_commented_out_safe_pragma_does_not_count() -> None:
+    # Agda applies the pragma on the next line, not the disabled one; a raw
+    # search over the fence body would take the first and call this safe.
+    text = ("<!--\n```agda\n-- {-# OPTIONS --safe #-}\n"
+            "{-# OPTIONS --cubical-compatible #-}\nmodule M where\n```\n-->\n")
+    assert cs.module_stats(text)[1] is False
+
+
+def test_a_safe_pragma_inside_a_block_comment_does_not_count() -> None:
+    text = ("<!--\n```agda\n{- a note:\n{-# OPTIONS --safe #-}\n-}\n"
+            "module M where\n```\n-->\n")
+    assert cs.module_stats(text)[1] is False
+
+
+def test_a_pragma_after_the_module_header_does_not_count() -> None:
+    # Agda requires OPTIONS before the header and rejects it after, so a tool
+    # that honored one there would disagree with the type-checker.
+    text = "<!--\n```agda\nmodule M where\n{-# OPTIONS --safe #-}\n```\n-->\n"
+    assert cs.module_stats(text)[1] is False
+
+
+def test_a_pragma_behind_another_pragma_still_counts() -> None:
+    text = ("<!--\n```agda\n{-# BUILTIN NATURAL N #-}\n"
+            "{-# OPTIONS --safe #-}\nmodule M where\n```\n-->\n")
+    assert cs.module_stats(text)[1] is True
+
+
+def test_a_pragma_split_across_lines_still_counts() -> None:
+    text = ("<!--\n```agda\n{-# OPTIONS --cubical-compatible\n"
+            "            --safe #-}\nmodule M where\n```\n-->\n")
+    assert cs.module_stats(text)[1] is True
+
+
 # --------------------------------------------------------------------------- #
 # corpus: the aggregate over the tree.
 # --------------------------------------------------------------------------- #
 def test_corpus_aggregates_modules_loc_and_safe() -> None:
     texts = [module("f = ?"), module("g = ?", pragma="--cubical-compatible")]
     assert cs.corpus(texts) == cs.Corpus(modules=2, loc=6, safe=1)
+
+
+def test_measure_rejects_a_missing_src_rather_than_counting_zero() -> None:
+    # Publishing "0 literate modules", or writing it into the page, is worse
+    # than failing: it means the tool is looking at the wrong place.
+    got = cs.measure(Path(_TMP.name) / "no-such-tree")
+    assert got.is_err
+    assert "not a directory" in got.unwrap_err().message
+
+
+def test_measure_rejects_an_empty_src() -> None:
+    empty = Path(_TMP.name) / "empty-src"
+    empty.mkdir(exist_ok=True)
+    got = cs.measure(empty)
+    assert got.is_err
+    assert "no literate modules" in got.unwrap_err().message
 
 
 # --------------------------------------------------------------------------- #
@@ -218,9 +270,6 @@ def test_in_series_does_not_accept_a_bare_string_prefix() -> None:
 # --------------------------------------------------------------------------- #
 # analyze: what the gate reports about a page on disk.
 # --------------------------------------------------------------------------- #
-_TMP = tempfile.TemporaryDirectory(prefix="corpus-stats-test-")
-
-
 def page(text: str, name: str) -> Path:
     """Write ``text`` to a page in the suite's temporary directory."""
     path = Path(_TMP.name) / name
