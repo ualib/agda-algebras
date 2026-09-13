@@ -224,7 +224,8 @@ section) are defined in `scripts/python/mkdocs_gen_library.py` in the
 `custom.css` (`§8`–`§11`):
 
 +  the **hero** (`.ualib-hero`) — title, tagline, the formula, the buttons;
-+  the **stat strip** (`.ualib-stats`) — edit the four numbers inline;
++  the **stat strip** (`.ualib-stats`), whose four figures are counted from the
+   tree and must never be edited by hand (see [Corpus stats](#corpus-stats));
 +  the **Featured results gallery** (`.ualib-figures`) — each card is one
    `<a class="ualib-figure">`; swap a monogram for a photo by replacing the
    `<span class="ualib-portrait">GB</span>` with
@@ -261,6 +262,37 @@ does not error, it renders as literal text and sails past `mkdocs build
 Run `make check-links` before pushing docs changes; `make check-links-test`
 exercises the scanner's own unit tests.
 
+### Corpus stats
+
+The landing page's four figures are facts about this repository, so none of them
+is typed by hand.  `scripts/python/corpus_stats.py` counts them and writes them
+into the `<!-- ualib:stat:NAME -->…<!-- /ualib:stat:NAME -->` marker pairs in
+`docs/index.md`:
+
++  `modules` and `loc`, the literate modules under `src/` outside the frozen
+   `Legacy/` tree and the lines of Agda inside their code fences;
++  `checked`, the share of those modules whose `OPTIONS` pragma carries
+   `--safe`, which is what "100% machine-checked" asserts;
++  `agda` and `stdlib`, read from `mkdocs.yml`'s `extra:` site variables and
+   reconciled against the two pins that bind them: the `depend:` line of
+   `agda-algebras.agda-lib`, whose stdlib version Agda enforces exactly, and the
+   version-floor guards in `flake.nix`.
+
+Two commands, one gate:
+
++  `make corpus-stats` rewrites the figures in `docs/index.md`;
++  `make corpus-stats-check` fails, with a diff, when a committed figure has
+   drifted from the tree.  CI runs it as the *Landing-page stats* job, so the
+   pull request that moves a number is the one that refreshes the page.
+   `make corpus-stats-test` exercises the tool's own unit tests.
+
+The MkDocs hook substitutes the same values into the rendered page at build
+time, but that is a convenience, not the mechanism: it rewrites only the built
+HTML, so before the gate existed the committed values, which are the ones GitHub
+renders, sat six weeks behind the tree and were quoted elsewhere as current.
+`corpus_stats.py --json` prints the figures as one record for anything outside
+this repository that wants to cite them.
+
 ## Where things live
 
 ```
@@ -277,5 +309,6 @@ scripts/python/
   mkdocs_hooks.py                       link rewriting + per-page build log
   gen_links.py                          regenerates the module + ADR sections of _links.md
   check_links.py                        fails CI on any undefined reference-style link
+  corpus_stats.py                       counts the landing page's figures; refreshes and gates them
 .github/workflows/docs.yml              build (make site-full) + deploy to gh-pages
 ```

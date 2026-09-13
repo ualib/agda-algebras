@@ -2,11 +2,12 @@
 #  ci.yml — CI Pipeline for agda-algebras
 #  ----------------------------------------------------------------------------
 #
-#  Two Agda lanes plus a docs lane: the library (and the frozen Legacy tree),
-#  the FLRP certificate census, and the reference-link check.  The census is a
-#  separate lane because it is 44% of a clean full type-check and no library
-#  module imports it (issue #515); running it in parallel keeps the library
-#  result fast without leaving anything unchecked.
+#  Two Agda lanes plus three pure-Python docs lanes: the library (and the frozen
+#  Legacy tree), the FLRP certificate census, the reference-link check, the
+#  docstring-coverage ratchet, and the landing page's corpus stats.  The census
+#  is a separate lane because it is 44% of a clean full type-check and no
+#  library module imports it (issue #515); running it in parallel keeps the
+#  library result fast without leaving anything unchecked.
 #
 #  The workflow reuses the project's Nix flake, so CI runs exactly the same
 #  command a developer runs locally: `nix develop --command make check`.
@@ -215,6 +216,38 @@ jobs:
           make docstrings
 
   # ---------------------------------------------------------------------------
+  # Landing-page stats.  Pure-Python, like the two checks above.  docs/index.md
+  # advertises a module count, a line count, a machine-checked share and the
+  # pinned toolchain; all of them are facts about this repository, and all of
+  # them are counted by scripts/python/corpus_stats.py.  The MkDocs hook already
+  # substituted the counted values into the *rendered* page, but never wrote
+  # them back, so the values committed in the source (the ones GitHub renders)
+  # went stale for six weeks and were quoted elsewhere as current (issue #575).
+  # This job fails when a committed value has drifted from the tree, so the PR
+  # that moves a number is the PR that refreshes the page.  See
+  # `make corpus-stats`.
+  # ---------------------------------------------------------------------------
+  landing-stats:
+    name: Landing-page stats
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: docs/index.md's committed figures match the tree
+        run: |
+          set -euxo pipefail
+          make corpus-stats-test
+          make corpus-stats-check
+
+  # ---------------------------------------------------------------------------
   # Aggregate status: a single stable required-check name for branch
   # protection.  Uses `if: always()` so that skipped/conditional jobs added
   # in the future don't block the gate.
@@ -224,12 +257,12 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 2
     if: always()
-    needs: [check, certificates, link-check, docstrings]
+    needs: [check, certificates, link-check, docstrings, landing-stats]
     steps:
       - name: Verify all required jobs passed
         run: |
           set -euxo pipefail
-          results=( "${{ needs.check.result }}" "${{ needs.certificates.result }}" "${{ needs.link-check.result }}" "${{ needs.docstrings.result }}" )
+          results=( "${{ needs.check.result }}" "${{ needs.certificates.result }}" "${{ needs.link-check.result }}" "${{ needs.docstrings.result }}" "${{ needs.landing-stats.result }}" )
           for r in "${results[@]}"; do
             if [ "$r" = "failure" ] || [ "$r" = "cancelled" ]; then
               echo "A required job ended with result: $r"

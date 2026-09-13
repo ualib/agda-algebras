@@ -18,7 +18,17 @@ from __future__ import annotations
 import hashlib
 import logging
 import re
+import sys
 from pathlib import Path
+
+# MkDocs loads this file by path, so its directory is not importable by default;
+# make it so, the way the sibling scripts do, and share the corpus counting with
+# the tool that writes those same figures back into docs/index.md.
+_SCRIPT_DIR = Path(__file__).resolve().parent
+if str(_SCRIPT_DIR) not in sys.path:
+    sys.path.insert(0, str(_SCRIPT_DIR))
+
+from corpus_stats import fill, landing_values  # noqa: E402
 
 log = logging.getLogger("mkdocs.plugins.ualib.render")
 
@@ -131,51 +141,36 @@ def on_files(files, config):
 
 
 # --- Landing-page corpus stats, kept current at build time -------------------
-# docs/index.md advertises "<N> literate modules, <M>k lines of Agda".  Rather
-# than let those drift, the hook recomputes them from the tree and substitutes
-# them into the `<!-- ualib:stat:… -->` markers on that one page.  It is a single
-# pass over the canonical (non-Legacy) modules — a few hundred files, ~50 ms —
-# run only when rendering index.md, so it adds nothing meaningful to the build.
-SRC = Path("src")
-# DOTALL so the markers keep matching even if index.md is reformatted with the
-# open/close comments on separate lines; the \1 backreference pins each pair.
-STAT = re.compile(r"<!-- ualib:stat:(\w+) -->.*?<!-- /ualib:stat:\1 -->", re.DOTALL)
-
-
-def _agda_loc(text: str) -> int:
-    """Lines inside the module's ```agda fenced blocks — its actual Agda code
-    (the hidden import scaffolding counts; prose and the fence lines do not)."""
-    n, in_agda = 0, False
-    for line in text.splitlines():
-        stripped = line.lstrip()
-        if stripped.startswith("```"):
-            if in_agda:
-                in_agda = False
-            elif stripped[3:].strip().lower().startswith("agda"):
-                in_agda = True
-            continue
-        if in_agda:
-            n += 1
-    return n
-
-
-def _corpus_stats() -> tuple[int, int]:
-    """(literate-module count, Agda-code lines) over src/ minus the frozen
-    Legacy/ tree — the canonical library the landing page advertises."""
-    mods = [p for p in SRC.rglob("*.lagda.md")
-            if p.relative_to(SRC).parts[0] != "Legacy"]
-    loc = sum(_agda_loc(p.read_text(encoding="utf-8")) for p in mods)
-    return len(mods), loc
-
-
+# docs/index.md advertises a module count, a line count, a machine-checked
+# share, and the pinned toolchain, all of them inside `<!-- ualib:stat:… -->`
+# markers.  The counting lives in scripts/python/corpus_stats.py, which is also
+# what `make corpus-stats` writes into the source and what CI holds the
+# committed values to (issue #575); the hook calls that one function so the
+# deployed site and the committed file cannot disagree.  It is a single pass
+# over the canonical (non-Legacy) modules, a few hundred files and ~50 ms, run
+# only when rendering index.md, so it adds nothing meaningful to the build.
+#
+# Before #575 the substitution here was the *only* thing that refreshed the
+# figures, and it rewrote the rendered page without ever writing back, so the
+# committed values, the ones GitHub renders, sat at July's numbers.  The gate
+# is what fixed that; this remains so the published site is current even between
+# refreshes.
 def _fill_corpus_stats(markdown: str) -> str:
-    """Replace the landing page's stat markers with freshly counted values."""
-    mods, loc = _corpus_stats()
-    # Half-up rounding to thousands (round() would round ties to even, e.g.
-    # 60_500 → "60k"; readers of a "…k" stat expect 60_500 → "61k").
-    values = {"modules": str(mods), "loc": f"{(loc + 500) // 1000}k"}
-    log.info(f"📊  corpus stats: {values['modules']} modules, {values['loc']} lines of Agda")
-    return STAT.sub(lambda m: values.get(m.group(1), m.group(0)), markdown)
+    """Replace the landing page's stat markers with freshly counted values.
+
+    A failure to count (a toolchain pin whose file was reshaped, say) leaves the
+    committed values in place and warns: they are gated by CI, so they are the
+    right fallback, but falling back silently is the very failure #575 records.
+    """
+    values = landing_values()
+    if values.is_err:
+        log.warning(f"⚠  corpus stats not recomputed: {values.unwrap_err().message}")
+        return markdown
+    filled = values.unwrap()
+    log.info(f"📊  corpus stats: {filled['modules']} modules, "
+             f"{filled['loc']} lines of Agda, {filled['checked']} machine-checked, "
+             f"Agda {filled['agda']} · stdlib {filled['stdlib']}")
+    return fill(markdown, filled)
 
 
 def on_page_markdown(markdown: str, *, page=None, config=None, files=None) -> str:

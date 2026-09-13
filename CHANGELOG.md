@@ -112,7 +112,23 @@ Migration recipe for the M2-7 destinations: replace `open import Legacy.Base.Rel
 
 ### Fixed
 
-Nothing to report.  3.0 is a forward-looking reconstruction rather than a bug-fix release.
++  **The landing page's corpus stats no longer rot** (#575).  `docs/index.md`
+   advertises how many literate modules the library holds and how many lines of
+   Agda they contain.  Those two figures were recomputed by the MkDocs hook on
+   every build, but the hook rewrote only the *rendered* page and never wrote
+   back, so the values committed in the source, which are the ones GitHub
+   renders, stayed at their 2026-07-28 reading (302 modules, 60k lines) while
+   the library grew to 339 modules and 67k lines.  The stale pair was quoted
+   outside this repository as current.  [`scripts/python/corpus_stats.py`](scripts/python/corpus_stats.py)
+   now counts the figures and writes them into the page (`make corpus-stats`),
+   and CI fails when a committed value has drifted (`make corpus-stats-check`,
+   the *Landing-page stats* job), so the pull request that moves a number is the
+   one that refreshes the page.  The two hand-written literals beside them are
+   counted as well: the machine-checked share is the proportion of canonical
+   modules whose `OPTIONS` pragma carries `--safe`, and the Agda and
+   standard-library versions are read from `mkdocs.yml`'s site variables and
+   reconciled against `agda-algebras.agda-lib`'s `depend:` line and the
+   version-floor guards in `flake.nix`.
 
 ---
 

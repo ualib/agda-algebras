@@ -27,14 +27,14 @@ every commit.
 </div>
 
 <div class="ualib-stats">
-  <!-- The two figures below are recomputed from the src/ tree on every build by
-       scripts/python/mkdocs_hooks.py (via the ualib:stat markers).  The values
-       here are only a fallback for non-MkDocs (e.g. GitHub) views — do not
-       hand-tune them; run `make site` and they refresh. -->
-  <div class="ualib-stat"><span class="ualib-stat__num"><!-- ualib:stat:modules -->302<!-- /ualib:stat:modules --></span><span class="ualib-stat__label">literate modules</span></div>
-  <div class="ualib-stat"><span class="ualib-stat__num"><!-- ualib:stat:loc -->60k<!-- /ualib:stat:loc --></span><span class="ualib-stat__label">lines of Agda</span></div>
-  <div class="ualib-stat"><span class="ualib-stat__num">100%</span><span class="ualib-stat__label">machine-checked</span></div>
-  <div class="ualib-stat"><span class="ualib-stat__num">2.8.0</span><span class="ualib-stat__label">Agda · stdlib 2.3</span></div>
+  <!-- Counted, not typed: scripts/python/corpus_stats.py writes these figures
+       into the markers below (`make corpus-stats`), and CI fails when a
+       committed value has drifted from the tree (`make corpus-stats-check`).
+       Do not hand-tune them.  See docs/site-guide.md, "Corpus stats". -->
+  <div class="ualib-stat"><span class="ualib-stat__num"><!-- ualib:stat:modules -->339<!-- /ualib:stat:modules --></span><span class="ualib-stat__label">literate modules</span></div>
+  <div class="ualib-stat"><span class="ualib-stat__num"><!-- ualib:stat:loc -->67k<!-- /ualib:stat:loc --></span><span class="ualib-stat__label">lines of Agda</span></div>
+  <div class="ualib-stat"><span class="ualib-stat__num"><!-- ualib:stat:checked -->100%<!-- /ualib:stat:checked --></span><span class="ualib-stat__label">machine-checked</span></div>
+  <div class="ualib-stat"><span class="ualib-stat__num"><!-- ualib:stat:agda -->2.8.0<!-- /ualib:stat:agda --></span><span class="ualib-stat__label">Agda · stdlib <!-- ualib:stat:stdlib -->2.3<!-- /ualib:stat:stdlib --></span></div>
 </div>
 
 ## Featured results
