@@ -202,6 +202,9 @@ def measure(src: Path = SRC) -> Result[Corpus, PipelineError]:
 # =============================================================================
 
 # mkdocs.yml's `extra:` site variables (two-space indented under `extra:`).
+# Read by pattern rather than parsed: the CI job is stdlib-only (no PyYAML), and
+# mkdocs.yml carries `!!python/name:` tags for the Material emoji extension, so
+# `yaml.safe_load` refuses it outright.
 _EXTRA_AGDA = re.compile(r"^\s+agda_version:\s*\"?([0-9][0-9.]*)\"?\s*$", re.MULTILINE)
 _EXTRA_STDLIB = re.compile(r"^\s+stdlib_version:\s*\"?([0-9][0-9.]*)\"?\s*$", re.MULTILINE)
 
