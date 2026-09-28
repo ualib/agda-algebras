@@ -100,7 +100,6 @@ open import Data.Product                           using  ( Σ-syntax ; _,_ ; _�
                                                           ; ∃-syntax ; proj₁ ; proj₂ )
 open import Data.Sum.Base                          using  ( _⊎_ ; inj₁ ; inj₂ )
 open import Data.Unit.Base                         using  ( ⊤ ; tt )
-open import Data.Vec.Base                          using  ( _∷_ ; [] )
 open import Function                               using  ( id )
 open import Level                                  using  ( Level ; 0ℓ ; _⊔_
                                                           ; Lift ; lift ; lower )
@@ -127,17 +126,14 @@ open import FLRP.Enforceable                using  ( CoreFree ; GroupProperty
                                                    ; threeDistinct→nontrivial
                                                    ; module UpperInterval )
 open import FLRP.Problem                    using  ( FiniteLattice ; chain₁-lattice
-                                                   ; toLattice ; chain₁ ; OrderIso )
+                                                   ; toLattice ; chain₁ ; chain₃
+                                                   ; OrderIso )
 open import FLRP.Reductions                 using  ( module Chain₂Interval
                                                    ; IsChain₂ )
 open import FLRP.WreathNoGo                 using  ( NontrivialCenterless
                                                    ; KurzweilWreathInterval
                                                    ; cfIE-must-have-wreaths
                                                    ; cfIE-no-contradictory-Statement )
-open import Overture.Cayley                 using  ( Table ; ⟦_⟧ ; from-yes )
-open import Overture.Operations.Properties  using  ( Associative? ; Commutative?
-                                                   ; Absorbsˡ? ; Absorbsʳ?
-                                                   ; Idempotent? )
 open import Setoid.Algebras                 using  ( 𝕌[_] ; 𝔻[_] ; FiniteAlgebra )
 
 open GroupRepresentable
@@ -289,33 +285,8 @@ would be simultaneously trivial and nontrivial.  The repaired
 construction requires; the defective form is kept there as
 `Statement-C-unguarded`{.AgdaFunction}, and here is its refutation.
 
-The three-element chain, in the Cayley style of `chain₂`{.AgdaFunction} of
-[FLRP.Problem][]: meet is minimum, join is maximum.
-
-```agda
-∧₃-table ∨₃-table : Table 3
-∧₃-table = (0F ∷ 0F ∷ 0F ∷ []) ∷ (0F ∷ 1F ∷ 1F ∷ []) ∷ (0F ∷ 1F ∷ 2F ∷ []) ∷ []
-∨₃-table = (0F ∷ 1F ∷ 2F ∷ []) ∷ (1F ∷ 1F ∷ 2F ∷ []) ∷ (2F ∷ 2F ∷ 2F ∷ []) ∷ []
-
-_∧₃_ _∨₃_ : Fin 3 → Fin 3 → Fin 3
-_∧₃_ = ⟦ ∧₃-table ⟧
-_∨₃_ = ⟦ ∨₃-table ⟧
-
-open FiniteLattice
-
-chain₃ : FiniteLattice
-chain₃ .size     = 2
-chain₃ ._∧_      = _∧₃_
-chain₃ ._∨_      = _∨₃_
-chain₃ .∧-assoc  = from-yes (Associative? _∧₃_)
-chain₃ .∧-comm   = from-yes (Commutative? _∧₃_)
-chain₃ .∧-idem   = from-yes (Idempotent? _∧₃_)
-chain₃ .∨-assoc  = from-yes (Associative? _∨₃_)
-chain₃ .∨-comm   = from-yes (Commutative? _∨₃_)
-chain₃ .∨-idem   = from-yes (Idempotent? _∨₃_)
-chain₃ .absorbˡ  = from-yes (Absorbsˡ? _∧₃_ _∨₃_)
-chain₃ .absorbʳ  = from-yes (Absorbsʳ? _∧₃_ _∨₃_)
-```
+The three-element chain is `chain₃`{.AgdaFunction} of [FLRP.Problem][], in the
+Cayley style of `chain₂`{.AgdaFunction}: meet is minimum, join is maximum.
 
 **The refutation**.  Nothing about it is hypothetical: every ingredient is one of
 the degenerate enforcements proved above, at the concrete chains.

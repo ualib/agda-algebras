@@ -45,7 +45,7 @@ module FLRP.Problem where
 open import Agda.Primitive       using () renaming ( Set to Type )
 open import Data.Empty           using ( ⊥ ; ⊥-elim )
 open import Data.Fin             using ( Fin )
-open import Data.Fin.Patterns    using ( 0F ; 1F )
+open import Data.Fin.Patterns    using ( 0F ; 1F ; 2F )
 open import Data.Fin.Properties  using ( _≟_ )
 open import Data.Nat.Base        using ( ℕ ; suc )
 open import Data.Product         using ( _,_ ; proj₁ ; proj₂ )
@@ -368,6 +368,37 @@ chain₂ .absorbʳ  = from-yes (Absorbsʳ? _∧₂_ _∨₂_)
 
 chain₂-lattice : Lattice
 chain₂-lattice = toLattice chain₂
+```
+
+The three-element chain `0 < 1 < 2`, in the same Cayley style.  It is the
+smallest lattice with an element strictly between its two ends, which makes it
+the smallest *big canopy* of the parachute construction: the hexagon is the
+parachute of two copies of it.
+
+```agda
+∧₃-table ∨₃-table : Table 3
+∧₃-table = (0F ∷ 0F ∷ 0F ∷ []) ∷ (0F ∷ 1F ∷ 1F ∷ []) ∷ (0F ∷ 1F ∷ 2F ∷ []) ∷ []
+∨₃-table = (0F ∷ 1F ∷ 2F ∷ []) ∷ (1F ∷ 1F ∷ 2F ∷ []) ∷ (2F ∷ 2F ∷ 2F ∷ []) ∷ []
+
+_∧₃_ _∨₃_ : Fin 3 → Fin 3 → Fin 3
+_∧₃_ = ⟦ ∧₃-table ⟧
+_∨₃_ = ⟦ ∨₃-table ⟧
+
+chain₃ : FiniteLattice
+chain₃ .size     = 2
+chain₃ ._∧_      = _∧₃_
+chain₃ ._∨_      = _∨₃_
+chain₃ .∧-assoc  = from-yes (Associative? _∧₃_)
+chain₃ .∧-comm   = from-yes (Commutative? _∧₃_)
+chain₃ .∧-idem   = from-yes (Idempotent? _∧₃_)
+chain₃ .∨-assoc  = from-yes (Associative? _∨₃_)
+chain₃ .∨-comm   = from-yes (Commutative? _∨₃_)
+chain₃ .∨-idem   = from-yes (Idempotent? _∨₃_)
+chain₃ .absorbˡ  = from-yes (Absorbsˡ? _∧₃_ _∨₃_)
+chain₃ .absorbʳ  = from-yes (Absorbsʳ? _∧₃_ _∨₃_)
+
+chain₃-lattice : Lattice
+chain₃-lattice = toLattice chain₃
 ```
 
 Classically, representing `chain₂`{.AgdaFunction} is trivial: the two-element
