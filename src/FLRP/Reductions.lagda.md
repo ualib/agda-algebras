@@ -68,6 +68,20 @@ they assume; when the predicates land, the schemas instantiate unchanged.
 +  **Entry 9**: the two-element chain enforces exactly on the class of groups with
    a core-free maximal subgroup; elementary, both directions derived, closing the
    two-element corner of the RP-4 reduction.
++  **The hexagon**, the parachute of two three-element chains, as a concrete
+   lattice value; both of its canopies are big.
++  **Entry 10**: parachutes with two big canopies are Aschbacher's D-lattices,
+   hence A-lattices (derived, on [Classical.Structures.Lattice.Disconnected][]),
+   and Aschbacher's Proposition 2 on A-lattices enters as an imported hypothesis
+   whose parachute instance the derived entries already cover.
++  **Entry 11**: a *negative* entry, and vacuity data: the hexagon does not enforce
+   `𝒢₁`, witnessed by an interval in `A₁₁`; the hexagon is group representable
+   (Aschbacher, and two smaller intervals found by the tables-of-marks scan), so
+   any two classes core-free enforced by the three-element chain intersect.
++  **Entry 12**: Aschbacher–Shareshian's exclusion of the `DΔ`-lattices from the
+   alternating and symmetric groups, as a schema in a lattice predicate the library
+   does not define yet; representability of its lattices is Shareshian's open
+   Conjecture D.
 
 <!--
 ```agda
@@ -80,7 +94,7 @@ open import Agda.Primitive using () renaming ( Set to Type )
 -- Imports from the Agda Standard Library ---------------------------------------
 open import Data.Empty                             using  ( ⊥-elim )
 open import Data.Fin.Base                          using  ( Fin )
-open import Data.Fin.Patterns                      using  ( 0F ; 1F )
+open import Data.Fin.Patterns                      using  ( 0F ; 1F ; 2F )
 open import Data.Fin.Properties                    using  ( _≟_ )
 open import Data.Nat.Base renaming ( _≤_ to _≤ⁿ_ ) using  ( ℕ ; zero ; suc ; _+_ )
 open import Data.Nat.Properties                    using  ( ≤-refl )
@@ -105,10 +119,13 @@ open import Classical.Structures.Group              using  ( Group ; IsSubgroup
                                                            ; module MaximalSubgroup
                                                            ; module MinimalNormal
                                                            ; fullSubgroup )
+open import Classical.Structures.Lattice.Disconnected
+                                                     using  ( module Disconnected
+                                                            ; module ParachuteDisconnected )
 open import Classical.Structures.Lattice.Parachute   using  ( Parachute ; parachuteLattice )
 open import Classical.Structures.Lattice.Product     using  ( _×ˡ_ )
 open import Examples.Classical.Lattices.L7           using  ( L7-lattice )
-open import FLRP.Closure.Basic  using  ( chain₂-top ; chain₂-bot )
+open import FLRP.Closure.Basic  using  ( chain₂-top ; chain₂-bot ; chain₃-top ; chain₃-bot )
 open import FLRP.Enforceable    using  ( ComplementHClosed ; CoreFree
                                        ; CoreFreeReduction ; GroupProperty
                                        ; GroupRepresentable ; IE ; IE→cfIE
@@ -118,8 +135,9 @@ open import FLRP.Enforceable    using  ( ComplementHClosed ; CoreFree
 open import FLRP.Parachute      using  ( module GroupParachute )
 
 import Classical.Structures.Group.MinimalNormalDescent as Descent
+open import FLRP.Parachute.Representation  using  ( module ParachuteRep )
 open import FLRP.Parachute.Theorems  using  ( module ParachuteTheorems )
-open import FLRP.Problem        using  ( chain₂-lattice ; OrderIso )
+open import FLRP.Problem        using  ( chain₂-lattice ; chain₃-lattice ; OrderIso )
 open import Setoid.Algebras     using  ( 𝕌[_] ; 𝔻[_] ; FiniteAlgebra )
 open import Setoid.Homomorphisms  using  ( _IsHomImageOf_ )
 ```
@@ -1279,6 +1297,261 @@ chain₂-cfIE-coreFreeMaximal : (𝑳 : Lattice) → IsChain₂ 𝑳
   → cfIE HasCoreFreeMaximal 𝑳
 chain₂-cfIE-coreFreeMaximal 𝑳 c₂ 𝒢 H H-sg cf iso =
   H , H-sg , cf , Chain₂Interval.intervalIso→maximal 𝑳 c₂ 𝒢 H H-sg iso
+```
+
+#### The hexagon
+
+The parachute of two three-element chains, `𝒫(𝟛 , 𝟛)`: six elements, two
+chains of length two sharing their ends.  It is the smallest parachute with two
+big canopies, so the smallest lattice to which the parachute theorems apply, and
+it is the first target of the RP-3 realizability sweep; it is also the smallest
+of Aschbacher's D-lattices (Entry 10) and the lattice his Proposition 1
+represents (Entry 11).  The construction is the one `M[_]`{.AgdaFunction} uses,
+with the three-element chain of [FLRP.Problem][] in place of the two-element
+one; its extremum data is in [FLRP.Closure.Basic][].
+
+```agda
+private
+  chain₃-top? : (x : 𝕌[ proj₁ chain₃-lattice ])
+    →  Dec (Setoid._≈_ 𝔻[ proj₁ chain₃-lattice ] x (proj₁ chain₃-top))
+  chain₃-top? x = x ≟ 2F
+
+  chain₃-nondeg :
+    ¬ (Setoid._≈_ 𝔻[ proj₁ chain₃-lattice ] (proj₁ chain₃-bot) (proj₁ chain₃-top))
+  chain₃-nondeg ()
+
+-- The hexagon, as the parachute of two three-element chains.
+hexagonᵃ : Parachute 0ℓ 0ℓ 1
+hexagonᵃ = record
+  { 𝓛       = λ _ → chain₃-lattice
+  ; 𝒕       = chain₃-top
+  ; top?    = chain₃-top?
+  ; 𝒃       = chain₃-bot
+  ; nondeg  = λ _ → chain₃-nondeg
+  }
+
+hexagon : Lattice
+hexagon = parachuteLattice hexagonᵃ
+
+-- Both canopies are big: 1 lies strictly between 0 and 2.
+hexagon-big : (i : Fin 2) → ParachuteRep.BigCanopyᴸ hexagonᵃ i
+hexagon-big i = record { elt = 1F ; elt-not-bot = λ () ; elt-not-top = λ () }
+```
+
+#### Entry 10: Aschbacher's D-lattices, and his Proposition 2
+
+**Property**.  `𝒢₂ ∧ 𝒢₃ ∧ 𝒢₄`, the three parachute classes of Entries 1 through 3.
+
+**Enforcing lattice**.  Every *A-lattice*: a lattice with more than two elements
+whose only modular elements are its bottom and its top, in the sense of
+[Classical.Structures.Lattice.Disconnected][].  Every parachute with two big
+canopies is one, by the theorem derived there: such a parachute is a D-lattice
+(its proper part falls into the canopies, two of which carry a nontrivial
+chain), and D-lattices are A-lattices by Aschbacher's (1.2).
+
+**Source**.  Aschbacher [2008], *On intervals in subgroup lattices of finite
+groups*, J. Amer. Math. Soc. 21, 809–830, **Proposition 2**, read in the
+published text: if `ker_H(G) = 1` and `O_G(H)` is an A-lattice, then (1) `G` has
+a unique minimal normal subgroup `D`; (2) `G = HD`; (3) `D` is the direct product
+of the components of `G`, which are nonabelian simple groups permuted
+transitively by `H`; (4) `U ↦ U ∩ D` is a poset isomorphism of `O_G(H)` with the
+`H`-invariant subgroups of `D` containing `H ∩ D`.
+
+**Level**.  cf-IE, the hypothesis `ker_H(G) = 1` being core-freeness; the
+theorem is about finite groups, so finiteness is an antecedent of the enforced
+property, in the style of the descent antecedent of Entries 1 through 3.
+
+**What is imported and what is derived**.  The lattice-side facts (the parachute
+is a D-lattice, hence an A-lattice) are *derived*.  Proposition 2 itself is
+*imported*, in the part of it the catalog's vocabulary can state: conclusion (1)
+is `𝒢₂` for a finite group, and conclusion (3) makes the monolith nonabelian,
+whence `𝒢₃` and `𝒢₄` by the two-line arguments the survey note records for
+Entries 2 and 3 (every nontrivial normal subgroup contains the monolith, and a
+nontrivial centralizer would be a normal subgroup meeting it in an abelian
+group).  Conclusions (2) and (4) are statements about the pair `(H , G)`, not
+group properties, and the transitivity clause of (3) needs the component
+decomposition of a minimal normal subgroup, which the library does not have;
+all three are recorded in the survey note as the content Proposition 2 adds to
+Lemma 3.7 of the note, since on parachutes Entries 1 through 3 already derive
+everything the import states.  The import therefore extends the parachute
+classes to the A-lattices that are *not* parachutes; on the parachutes it is a
+consistency check between the two structure theories, and they agree.
+
+**Representability status**.  The A-lattices include the hexagon, which is
+group representable (Entry 11), so the entry is not vacuous.
+
+```agda
+-- Aschbacher [2008], Proposition 2, conclusions (1) and (3) as group properties.
+AschbacherProp2 : Type (lsuc 0ℓ)
+AschbacherProp2 =
+  (𝑳 : Lattice) (⊥ᴸ : BottomOf 𝑳) (⊤ᴸ : TopOf 𝑳)
+  → Disconnected.IsALattice 𝑳 ⊥ᴸ ⊤ᴸ
+  → cfIE (λ 𝒢 → FiniteAlgebra (proj₁ 𝒢) → 𝒢₂ 𝒢 × 𝒢₃ 𝒢 × 𝒢₄ 𝒢) 𝑳
+
+module Entry-Aschbacher {m : ℕ} (𝒫 : Parachute 0ℓ 0ℓ (suc m)) where
+
+  open ParachuteTheorems {0ℓ} 𝒫  using  ( BigCanopyᴸ ; ⊕ᵖ-Lattice
+                                         ; ⊥ᵖ-isBottom ; ⊤ᵖ-isTop )
+  open ParachuteDisconnected 𝒫    using  ( module TwoBig ; IsALattice )
+
+  module TwoBigCanopies
+    (p q    : Fin (2 + m))
+    (p≢q    : ¬ (p ≡ q))
+    (big-p  : BigCanopyᴸ p)
+    (big-q  : BigCanopyᴸ q)
+    where
+
+    -- Derived: the parachute is a D-lattice, hence an A-lattice.
+    open TwoBig p q p≢q
+      (BigCanopyᴸ.elt big-p) (BigCanopyᴸ.elt-not-bot big-p) (BigCanopyᴸ.elt-not-top big-p)
+      (BigCanopyᴸ.elt big-q) (BigCanopyᴸ.elt-not-bot big-q) (BigCanopyᴸ.elt-not-top big-q)
+      public using ( parachute-DPartition ; parachute-ALattice )
+
+    -- Imported: Proposition 2 applies to every core-free representation of the
+    -- parachute; on parachutes this is Entries 1 through 3 again.
+    aschbacher-parachute : AschbacherProp2
+      → cfIE (λ 𝒢 → FiniteAlgebra (proj₁ 𝒢) → 𝒢₂ 𝒢 × 𝒢₃ 𝒢 × 𝒢₄ 𝒢) ⊕ᵖ-Lattice
+    aschbacher-parachute prop2 = prop2 ⊕ᵖ-Lattice ⊥ᵖ-isBottom ⊤ᵖ-isTop parachute-ALattice
+```
+
+#### Entry 11: the hexagon is group representable, and does not enforce `𝒢₁`
+
+**Property**.  `𝒢₁ = ¬ AltOrSym`, as in Entry 5.
+
+**Lattice**.  The hexagon.
+
+**Sources**.
+
++  Aschbacher [2008], **Proposition 1** and Example 8.5, read in the published
+   text: the hexagon is a finite group interval lattice, realized by his
+   signalizer construction with `L = A₅` and `H = A₆ × A₆` over the diagonal
+   `A₅`; the tuple is faithful, so `H` is core-free in the group it builds, whose
+   socle is `A₅^2160`.  Example 8.7 does the same for every parachute of two
+   chains.
++  The tables-of-marks scan of 2026-09-28 (skill `hunting-lattice-intervals-in-tomlib`,
+   verdicts under `scripts/gap/flrp/out/hexagon_*`): the hexagon is an upper
+   interval over a core-free subgroup in sixteen of the 414 tables, the smallest
+   carrier being `U₄(2)` (order 25920, `H` of order 24, index 1080), and one of
+   them is the **alternating** group `A₁₁`, over the normalizer `11 : 5` of a
+   Sylow 11-subgroup, with the two `PSL(2 , 11)` and the two `M₁₁` above it as
+   the two chains.  No group of order at most 300 carries the hexagon over a
+   core-free subgroup (the RP-3 sweep), and no table of a group of order below
+   25920 does.
+
+**Level**.  The `A₁₁` interval is a core-free representation inside the class
+`AltOrSym`, so it refutes cf-IE, and hence IE, of `𝒢₁` via the hexagon: the same
+shape as Entry 8, through `witness→¬cfIE`{.AgdaFunction}.  Representability is
+the vacuity datum for every class the hexagon enforces, and it kills, in the
+RP-3 hunt, every pair of classes core-free enforced by the three-element chain:
+by Theorem 3.6 a core-free representation of `𝒫(𝟛 , 𝟛)` puts one group in both.
+
+**Imported as hypotheses**: the representation (`AschbacherHexagon`) and the
+`A₁₁` witness (`HexagonInA₁₁`), the latter a schema in the `AltOrSym`
+predicate like Entry 5.  Neither is certified in Agda: the direct certificate
+route needs the interval's coset action on 1080 points, beyond the census
+renderer's cap.  **Formalized here**: the refutation and the pair kill.
+
+```agda
+-- Aschbacher [2008], Proposition 1: the hexagon is a finite group interval lattice.
+AschbacherHexagon : Type (lsuc 0ℓ)
+AschbacherHexagon = GroupRepresentable hexagon
+
+-- Any two classes core-free enforced by the three-element chain share a member.
+chain₃-pair-intersects : {ℓP : Level} (P Q : GroupProperty ℓP)
+  → cfIE P chain₃-lattice → cfIE Q chain₃-lattice
+  → AschbacherHexagon → CoreFreeReduction
+  → Σ[ 𝒢 ∈ Group 0ℓ 0ℓ ] (P 𝒢 × Q 𝒢)
+chain₃-pair-intersects {ℓP} P Q cfP cfQ hex cfr =
+  proj₁ joint , proj₁ (proj₂ joint) 0F , proj₁ (proj₂ joint) 1F
+  where
+  Ps : Fin 2 → GroupProperty ℓP
+  Ps 0F = P
+  Ps 1F = Q
+
+  cfs : ∀ i → cfIE (Ps i) chain₃-lattice
+  cfs 0F = cfP
+  cfs 1F = cfQ
+
+  open ParachuteTheorems {ℓP} hexagonᵃ
+  open Enforced 0F 1F (λ ()) (hexagon-big 0F) (hexagon-big 1F) Ps cfs
+
+  joint = parachute-representable hex cfr
+
+module Entry-Hexagon {ℓA : Level} (AltOrSym : GroupProperty ℓA) where
+
+  open Entry-𝒢₁ AltOrSym  using  ( 𝒢₁ )
+
+  -- [11 : 5 , A₁₁] is the hexagon, over a core-free subgroup of an alternating group.
+  HexagonInA₁₁ : Type (lsuc 0ℓ ⊔ ℓA)
+  HexagonInA₁₁ =
+    Σ[ 𝒢 ∈ Group 0ℓ 0ℓ ] ( AltOrSym 𝒢
+      × Σ[ H ∈ Pred 𝕌[ proj₁ 𝒢 ] 0ℓ ] Σ[ H-sg ∈ IsSubgroup 𝒢 H ]
+          ( CoreFree 𝒢 H H-sg × IntervalIso 𝒢 H H-sg hexagon ) )
+
+  -- The negative entry: the hexagon does not enforce 𝒢₁, at either level.
+  hexagon-¬cfIE-𝒢₁ : HexagonInA₁₁ → ¬ cfIE 𝒢₁ hexagon
+  hexagon-¬cfIE-𝒢₁ (𝒢 , alt , H , H-sg , cf , iso) =
+    witness→¬cfIE 𝒢₁ hexagon 𝒢 H H-sg cf iso (λ ¬alt → ¬alt alt)
+
+  hexagon-¬IE-𝒢₁ : HexagonInA₁₁ → ¬ IE 𝒢₁ hexagon
+  hexagon-¬IE-𝒢₁ w ie = hexagon-¬cfIE-𝒢₁ w (IE→cfIE {P = 𝒢₁} {𝑳 = hexagon} ie)
+```
+
+#### Entry 12: Aschbacher–Shareshian's `DΔ`-lattices
+
+**Property**.  `𝒢₁`, again.
+
+**Enforcing lattices**.  The `DΔ(m₁ , … , mₜ)`-lattices, `t > 1` and every
+`mᵢ ≥ 3`: the lattices whose proper part is the disjoint union of the proper
+parts of the Boolean lattices of ranks `m₁ , … , mₜ`, no two components
+comparable.  These are Aschbacher's CD-lattices *par excellence*, the
+conjectural counterexamples of Shareshian's Conjecture D, and they are *not*
+parachutes: their components have no least element, while every component of a
+parachute is a canopy with its atom.  (Deleting the `t` atoms of the parachute
+of `t` Boolean lattices produces exactly `DΔ(m₁ , … , mₜ)`.)  The library has no
+construction of them yet, so the entry is a schema in a lattice predicate
+`IsDΔ`, as Entries 4 and 5 are schemas in group predicates.
+
+**Source**.  Aschbacher–Shareshian [2009], *Restrictions on the structure of
+subgroup lattices of finite alternating and symmetric groups*, J. Algebra 322,
+2449–2463: no alternating or symmetric group has a subgroup `H` with
+`O_G(H) ≅ DΔ(m₁ , … , mₜ)`.  `verify`: the statement is taken from the zbMATH
+review of the paper (Zbl 1183.20017) and from Aschbacher's own summary in the
+introduction of his 2012 paper on lower signalizer lattices; the primary text
+sits behind the publisher's access wall and was not read.  The 2012 summary
+says "not a D-lattice", meaning the class `D` of his 2012 paper, which is this
+class; it is **not** the class of D-lattices of Entry 10, and Entry 11's `A₁₁`
+interval shows that the wider reading would be false.
+
+**Level**.  cf-IE from the exclusion, upgraded to IE by Lemma 3.1 as in Entry 5.
+The source's statement is unrestricted (no core-freeness), so the entry consumes
+the weaker hypothesis.
+
+**Representability status**.  Unknown: it is Conjecture D that no
+`DΔ`-lattice is a finite group interval lattice, and Aschbacher's program has
+reduced it to two questions about almost simple groups, both settled for the
+alternating and symmetric groups (this entry and his 2012 theorem) and open in
+general.  If the conjecture holds the entry is vacuous; the catalog records it
+as it recorded Entry 7 while `L7` was open.
+
+```agda
+module Entry-AschbacherShareshian {ℓA ℓD : Level}
+  (AltOrSym : GroupProperty ℓA) (IsDΔ : Lattice → Type ℓD) where
+
+  open Entry-𝒢₁ AltOrSym  using  ( 𝒢₁ ; AltSymHClosed )
+
+  -- Aschbacher–Shareshian [2009]: no DΔ-lattice is an interval in an
+  -- alternating or symmetric group (stated at the core-free hypothesis).
+  DΔExclusion : Type (lsuc 0ℓ ⊔ ℓA ⊔ ℓD)
+  DΔExclusion = (𝑳 : Lattice) → IsDΔ 𝑳 → CoreFreeExclusion AltOrSym 𝑳
+
+  -- The entry, at both levels, for every DΔ-lattice.
+  nongiant-cfIE-DΔ : DΔExclusion → (𝑳 : Lattice) → IsDΔ 𝑳 → cfIE 𝒢₁ 𝑳
+  nongiant-cfIE-DΔ exc 𝑳 d = exclusion→cfIE AltOrSym 𝑳 (exc 𝑳 d)
+
+  nongiant-IE-DΔ : CoreFreeReduction → AltSymHClosed → DΔExclusion
+    → (𝑳 : Lattice) → IsDΔ 𝑳 → IE 𝒢₁ 𝑳
+  nongiant-IE-DΔ cfr hcl exc 𝑳 d = exclusion→IE AltOrSym 𝑳 cfr hcl (exc 𝑳 d)
 ```
 
 ---
