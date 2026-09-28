@@ -41,7 +41,7 @@
 #      where a path segment happens to contain the substring `agda`.
 # =============================================================================
 
-.PHONY: default all check check-certificates check-all test clean site serve serve-full html agda-md site-full profile project-plan unused-imports unused-imports-test check-links check-links-test gen-links gap-hunt docstrings docstrings-test docstrings-list docstrings-unused docstrings-json flrp-test flrp-slr gap-smoke Everything.agda EverythingLegacy.agda EverythingCertificates.agda
+.PHONY: default all check check-certificates check-all test clean site serve serve-full html agda-md site-full profile project-plan unused-imports unused-imports-test check-links check-links-test gen-links corpus-stats corpus-stats-check corpus-stats-test gap-hunt docstrings docstrings-test docstrings-list docstrings-unused docstrings-json flrp-test flrp-slr gap-smoke Everything.agda EverythingLegacy.agda EverythingCertificates.agda
 
 # -- Configuration -----------------------------------------------------------
 SRCDIR    := src
@@ -305,6 +305,31 @@ check-links-test:
 gen-links:
 	@echo "target: $@"
 	python3 scripts/python/gen_links.py
+
+# The landing page's headline figures (issue #575).  docs/index.md advertises a
+# module count, a line count, a machine-checked share, and the pinned toolchain;
+# every one is a fact about this repository, so scripts/python/corpus_stats.py
+# counts them (from src/ minus Legacy/, and from the toolchain pins) and writes
+# them into the page's `ualib:stat` markers.  The MkDocs hook substitutes the
+# same values at build time, but it rewrites only the *rendered* page: before
+# this gate, nothing refreshed the committed values, which are the ones GitHub
+# renders, and they sat at July's numbers for six weeks while the library grew
+# 12.7%.  The check is therefore the point: a PR that moves a number cannot
+# merge without refreshing the page.
+#   corpus-stats        refresh docs/index.md from the tree
+#   corpus-stats-check  fail (with a diff) if a committed value has drifted
+#   corpus-stats-test   the tool's own test suite
+corpus-stats:
+	@echo "target: $@"
+	python3 scripts/python/corpus_stats.py
+
+corpus-stats-check:
+	@echo "target: $@"
+	python3 scripts/python/corpus_stats.py --check
+
+corpus-stats-test:
+	@echo "target: $@"
+	python3 scripts/python/test_corpus_stats.py
 
 # Audit the prose block attached to every public definition (STYLE_GUIDE
 # § "Every public definition has a prose comment block", issue #268, ADR-010).

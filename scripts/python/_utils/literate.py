@@ -5,10 +5,11 @@ Description: Literate-Agda (``.lagda.md``) front end shared by the corpus tools.
 
   Every module under ``src/`` is literate Markdown (ADR-004): Agda code lives
   inside ```` ```agda ```` fenced blocks and everything outside a fence is
-  prose.  Two tools now need to read that structure — ``unused_imports.py``
-  (which needs the Agda code with comments blanked) and ``docstring_audit.py``
-  (which needs the *prose* attached to each fence as well) — so the front end
-  lives here rather than in either of them.
+  prose.  Three tools now read that structure: ``unused_imports.py`` (which
+  needs the Agda code with comments blanked), ``docstring_audit.py`` (which
+  needs the *prose* attached to each fence as well), and ``corpus_stats.py``
+  (which counts the code and reads each module's pragma), so the front end
+  lives here rather than in any one of them.
 
   Three layers, each a pure function of the file text:
 
@@ -19,6 +20,10 @@ Description: Literate-Agda (``.lagda.md``) front end shared by the corpus tools.
                                 ``''``, so diagnostics keep real line numbers;
     3. ``clean_code_lines``   -> the same, with comments and string literals
                                 blanked (length-preserving, so columns survive).
+
+  Then ``options_pragma``, which reads the ``OPTIONS`` a module is checked
+  under.  It stands apart from the three because it must see what they erase:
+  layer 3 blanks pragmas along with comments, by design.
 
 Design Principles:
   Line numbering is preserved at every layer: a tool reports ``path:line`` into
@@ -256,6 +261,59 @@ def clean_code_lines(agda_lines: list[str]) -> list[str]:
 def file_code_lines(text: str) -> list[str]:
     """Full front end: ``.lagda.md`` text -> comment-free Agda, line-numbered."""
     return clean_code_lines(extract_agda_lines(text))
+
+
+# =============================================================================
+# The OPTIONS pragma a module is actually checked under
+# =============================================================================
+
+_OPTIONS_PRAGMA = re.compile(r"\{-#\s*OPTIONS\b([^#]*)#-\}")
+
+
+def options_pragma(code: str) -> str | None:
+    """The options Agda applies to a module, or ``None`` if it declares none.
+
+    Agda requires ``{-# OPTIONS … #-}`` to precede the module header, so only
+    whitespace and comments may come before it.  This walks the code that way:
+    a line comment (Agda's ``--`` rule, as :func:`_line_comment_at` states it)
+    and a block comment (``{- … -}``, which nests, and which ``{-#`` does *not*
+    open) are skipped, another pragma is skipped, the first ``OPTIONS`` pragma
+    reached is the answer, and anything else is real code, which means the
+    module carries no pragma.
+
+    Neither simpler reading works.  :func:`clean_code_lines` blanks pragmas
+    along with comments, by design, so a search over cleaned code finds no
+    pragma at all; a search over raw code accepts a pragma that is *commented
+    out*, and would call a module ``--safe`` on the strength of a line its
+    author had disabled.
+    """
+    i, n, depth = 0, len(code), 0
+    while i < n:
+        if code[i].isspace():
+            i += 1
+        elif depth:                              # inside {- … -}: everything is text
+            if code.startswith("{-", i):
+                depth, i = depth + 1, i + 2
+            elif code.startswith("-}", i):
+                depth, i = depth - 1, i + 2
+            else:
+                i += 1
+        elif code.startswith("{-#", i):          # a pragma, not a comment
+            end = code.find("#-}", i)
+            if end < 0:
+                return None                      # unterminated; Agda applies nothing
+            match = _OPTIONS_PRAGMA.fullmatch(code[i:end + 3])
+            if match:
+                return match.group(1)
+            i = end + 3                          # some other pragma; keep looking
+        elif code.startswith("{-", i):
+            depth, i = 1, i + 2
+        elif _line_comment_at(code, i):
+            newline = code.find("\n", i)
+            i = n if newline < 0 else newline
+        else:
+            return None                          # real code before any OPTIONS
+    return None
 
 
 # =============================================================================
