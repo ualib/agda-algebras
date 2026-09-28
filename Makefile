@@ -41,7 +41,7 @@
 #      where a path segment happens to contain the substring `agda`.
 # =============================================================================
 
-.PHONY: default all check check-certificates check-all test clean site serve serve-full html agda-md site-full profile project-plan unused-imports unused-imports-test check-links check-links-test gen-links corpus-stats corpus-stats-check corpus-stats-test gap-hunt gap-tomscan docstrings docstrings-test docstrings-list docstrings-unused docstrings-json flrp-test flrp-slr gap-smoke Everything.agda EverythingLegacy.agda EverythingCertificates.agda
+.PHONY: default all check check-certificates check-all test clean site serve serve-full html agda-md site-full profile project-plan unused-imports unused-imports-test check-links check-links-test gen-links corpus-stats corpus-stats-check corpus-stats-test gap-hunt gap-tomscan gap-wreath-labels docstrings docstrings-test docstrings-list docstrings-unused docstrings-json flrp-test flrp-slr gap-smoke Everything.agda EverythingLegacy.agda EverythingCertificates.agda
 
 # -- Configuration -----------------------------------------------------------
 SRCDIR    := src
@@ -432,13 +432,15 @@ gap-hunt:
 # cases explicitly up to the scan's default bound, and record each run as
 # scripts/gap/flrp/out/tomscan_<stem>.json (the raw logs are git-ignored; the
 # summarizer drops timings, so a rerun re-derives the records byte for byte).
-# The P(3,2x2) tables above the bound get a second pass with the bound lifted.
-# About a minute per target plus the resolutions.  Run inside `nix develop .#gap`.
+# The P(3,2x2) tables above the bound get a second pass with the bound lifted,
+# and so does the one P(2x2,2x2) table above it (issue #578, which added the
+# P(2x2,2x2) and DDelta(3,3) targets).  About a minute per target plus the
+# resolutions.  Run inside `nix develop .#gap`.
 TOMSCAN_DATE := 2026-09-28
 TOMSCAN := scripts/python/flrp/tomscan_summary.py
 gap-tomscan:
 	@echo "target: $@"
-	for stem in p33 p332 p34 p3m2; do \
+	for stem in p33 p332 p34 p3m2 pm2m2 pm2m2d dd33; do \
 	  gap -A -q -c "FLRP_TARGET := $$(python3 $(TOMSCAN) --upsets scripts/gap/flrp/inputs/$$stem.json);;" \
 	    -b scripts/gap/flrp/bin/tomscan.g > scripts/gap/flrp/out/tomscan_$$stem.log 2>&1; \
 	  python3 $(TOMSCAN) scripts/gap/flrp/out/tomscan_$$stem.log --target scripts/gap/flrp/inputs/$$stem.json \
@@ -449,3 +451,17 @@ gap-tomscan:
 	python3 $(TOMSCAN) scripts/gap/flrp/out/tomscan_p3m2_big.log --target scripts/gap/flrp/inputs/p3m2.json \
 	  --tables 'HS,A12,M24,G2(4),S12' --bound 10^12 \
 	  --out scripts/gap/flrp/out/tomscan_p3m2_big.json --date $(TOMSCAN_DATE)
+	gap -A -q -o 12g -c "FLRP_TARGET := $$(python3 $(TOMSCAN) --upsets scripts/gap/flrp/inputs/pm2m2.json);; FLRP_TABLES := [\"He.2\"];; FLRP_RESOLVE_BOUND := 10^12;;" \
+	  -b scripts/gap/flrp/bin/tomscan.g > scripts/gap/flrp/out/tomscan_pm2m2_big.log 2>&1
+	python3 $(TOMSCAN) scripts/gap/flrp/out/tomscan_pm2m2_big.log --target scripts/gap/flrp/inputs/pm2m2.json \
+	  --tables 'He.2' --bound 10^12 \
+	  --out scripts/gap/flrp/out/tomscan_pm2m2_big.json --date $(TOMSCAN_DATE)
+
+# The type of the coatoms of a Kurzweil wreath interval (issue #578, path 3):
+# on [Diag x C4, A5 wr C4] the coatom meets the socle in a product of full
+# diagonal subgroups, so it is of Aschbacher's diagonal type, not of product
+# type.  Writes scripts/gap/flrp/out/wreath_coatom_type_a5_c4.json, date
+# pinned so the record re-derives byte for byte.  Run inside `nix develop .#gap`.
+gap-wreath-labels:
+	@echo "target: $@"
+	gap -A -q -b scripts/gap/flrp/bin/wreath_coatom_type.g

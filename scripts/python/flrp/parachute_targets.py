@@ -14,6 +14,15 @@ Description: Target lattice stanzas for the RP-3 parachute realizability sweep.
   eqsearch.parse_target; the meet/join tables come from the one canonical
   implementation, eqsearch.tables_from_leq, never re-derived by hand.
 
+  The M6-27 pass (docs/notes/flrp-m6-27-paths.md) adds two targets that are
+  not seven-element parachutes: P(2x2, 2x2), the smallest coatomistic
+  parachute with two big canopies, which is the least lattice the parachute
+  analog of Aschbacher's Theorem 3 reaches; and the fourteen-element
+  DDelta(3,3), the smallest lattice of Shareshian's Conjecture D, which is not
+  a parachute at all (its two components have no least element).  The
+  generator is indifferent to the shape: a target is any bounded lattice
+  given by its Hasse diagram.
+
   Regenerate with `python3 scripts/python/flrp/parachute_targets.py`; verify
   that the committed copies re-derive byte for byte with `--check` (run by
   test_parachute_targets.py, part of make flrp-test).
@@ -71,6 +80,37 @@ TARGETS: Tuple[TargetSpec, ...] = (
         name="P(3,2x2): parachute of a three-chain and the four-element Boolean lattice",
         size=7,
         covers=((0, 1), (1, 2), (2, 6), (0, 3), (3, 4), (3, 5), (4, 6), (5, 6))),
+    # M6-27: the smallest coatomistic parachute with two big canopies.  Element
+    # order: bottom; canopy 1 (atom 1, coatoms 2 and 3); canopy 2 (atom 4,
+    # coatoms 5 and 6); top.
+    TargetSpec(
+        stem="pm2m2",
+        name="P(2x2,2x2): parachute of two four-element Boolean lattices",
+        size=8,
+        covers=((0, 1), (1, 2), (1, 3), (2, 7), (3, 7),
+                (0, 4), (4, 5), (4, 6), (5, 7), (6, 7))),
+    # M6-27: the dual of P(2x2,2x2), scanned as well since Kurzweil-Netter
+    # duality makes the two representability questions one.  Element order:
+    # bottom; the two dual coatoms of canopy 1 (1, 2) below the dual atom 5;
+    # those of canopy 2 (3, 4) below the dual atom 6; top.
+    TargetSpec(
+        stem="pm2m2d",
+        name="dual of P(2x2,2x2): two four-element Boolean lattices hanging from the top",
+        size=8,
+        covers=((0, 1), (0, 2), (0, 3), (0, 4), (1, 5), (2, 5), (3, 6), (4, 6),
+                (5, 7), (6, 7))),
+    # M6-27: DDelta(3,3), the smallest lattice of Shareshian's Conjecture D.
+    # Element order: bottom; component 1 (atoms 1, 2, 3, coatoms 4 = {1,2},
+    # 5 = {1,3}, 6 = {2,3}); component 2 (atoms 7, 8, 9, coatoms 10, 11, 12
+    # likewise); top.  Not a parachute: neither component has a least element.
+    TargetSpec(
+        stem="dd33",
+        name="DDelta(3,3): two copies of the proper part of the rank-3 Boolean lattice",
+        size=14,
+        covers=((0, 1), (0, 2), (0, 3), (1, 4), (1, 5), (2, 4), (2, 6), (3, 5), (3, 6),
+                (4, 13), (5, 13), (6, 13),
+                (0, 7), (0, 8), (0, 9), (7, 10), (7, 11), (8, 10), (8, 12), (9, 11), (9, 12),
+                (10, 13), (11, 13), (12, 13))),
 )
 
 

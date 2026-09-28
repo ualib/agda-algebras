@@ -8,8 +8,9 @@ GAP-free by design: the stanzas are pure functions of the cover lists in
 + the committed stanzas under scripts/gap/flrp/inputs/ re-derive byte for
   byte (the golden discipline shared with the SLR catalog);
 + every target parses back as a valid bounded lattice through the canonical
-  `parse_target`, and the four targets have the intended sizes and atom
-  counts (two big canopies, plus the extra two-chain canopy of P(3,3,2));
+  `parse_target`, and the targets have the intended sizes and atom counts
+  (two big canopies, plus the extra two-chain canopy of P(3,3,2); six atoms
+  for DDelta(3,3), three per component);
 + the three seven-element targets are pairwise non-isomorphic, so a sweep
   confirmation against one of them says nothing accidental about another.
 """
@@ -31,7 +32,7 @@ class ParachuteTargetTests(unittest.TestCase):
 
     def test_targets_parse_and_have_expected_shape(self) -> None:
         """Every target parses as a bounded lattice with the intended size and atom count."""
-        atoms = {"p33": 2, "p332": 3, "p34": 2, "p3m2": 2}
+        atoms = {"p33": 2, "p332": 3, "p34": 2, "p3m2": 2, "pm2m2": 2, "pm2m2d": 4, "dd33": 6}
         for spec in TARGETS:
             lat = parse_target(stanza_path(spec))
             self.assertEqual(lat.size, spec.size)

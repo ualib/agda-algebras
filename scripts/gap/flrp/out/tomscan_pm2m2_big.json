@@ -1,0 +1,60 @@
+{
+  "ambiguous": [
+    {
+      "cls": 1051,
+      "index": 559776,
+      "order": 8060774400,
+      "subgroupOrder": 14400,
+      "table": "He.2"
+    }
+  ],
+  "config": {
+    "resolveBound": "10^12",
+    "tables": [
+      "He.2"
+    ]
+  },
+  "date": "2026-09-28",
+  "engine": {
+    "gap": "4.15.1",
+    "script": "scripts/gap/flrp/bin/tomscan.g",
+    "tomlib": "1.2.11"
+  },
+  "explicit": [
+    {
+      "cls": 1051,
+      "coreFree": true,
+      "index": 559776,
+      "intervalOrders": [
+        28800,
+        1958400,
+        1958400,
+        3916800,
+        3916800,
+        4030387200
+      ],
+      "intervalSize": 8,
+      "order": 8060774400,
+      "structure": "(A5 x A5) : (C2 x C2)",
+      "subgroupOrder": 14400,
+      "table": "He.2",
+      "target": false
+    }
+  ],
+  "format": "flrp-tomscan v1",
+  "hits": [],
+  "scanned": {
+    "ambiguous": 1,
+    "hits": 0,
+    "intervals": 48,
+    "tables": 1,
+    "targetSize": 8
+  },
+  "target": {
+    "name": "P(2x2,2x2): parachute of two four-element Boolean lattices",
+    "size": 8,
+    "stem": "pm2m2"
+  },
+  "unparsed": [],
+  "unresolved": []
+}

@@ -1,0 +1,56 @@
+{
+  "date": "2026-09-28",
+  "engine": {
+    "gap": "4.15.1",
+    "libraries": {
+      "primgrp": "4.0.1",
+      "smallgrp": "1.5.4",
+      "transgrp": "3.6.5"
+    }
+  },
+  "format": "flrp-wreath-coatom-type v1",
+  "instance": "[Diag x C4, A5 wr C4], the Kurzweil wreath over [1, C4]",
+  "result": {
+    "H": {
+      "coreFree": true,
+      "description": "Diag x C_n",
+      "index": 216000,
+      "order": 240
+    },
+    "base": {
+      "name": "A5",
+      "order": 60
+    },
+    "coatoms": [
+      {
+        "cosetActionDegree": 3600,
+        "gapONanScottType": "4b",
+        "meetBaseOrder": 3600,
+        "meetCoordinateOrders": [
+          1,
+          1,
+          1,
+          1
+        ],
+        "order": 14400,
+        "primitive": true,
+        "type": "diagonal"
+      }
+    ],
+    "interval": {
+      "intermediateOrders": [
+        14400
+      ],
+      "size": 3
+    },
+    "top": {
+      "action": "regular, the coset action of [1, C_n]",
+      "name": "C4",
+      "order": 4
+    },
+    "wreath": {
+      "degree": 20,
+      "order": 51840000
+    }
+  }
+}
