@@ -423,6 +423,7 @@
 [FLRP.Parachute.Theorems]: /FLRP/Parachute/Theorems/
 [FLRP.Problem]: /FLRP/Problem/
 [FLRP.Reductions]: /FLRP/Reductions/
+[FLRP.Reductions.Coatomistic]: /FLRP/Reductions/Coatomistic/
 [FLRP.Representable]: /FLRP/Representable/
 [FLRP.WreathNoGo]: /FLRP/WreathNoGo/
 
@@ -841,6 +842,7 @@
 [FLRP/Parachute/Theorems.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/Parachute/Theorems.lagda.md
 [FLRP/Problem.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/Problem.lagda.md
 [FLRP/Reductions.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/Reductions.lagda.md
+[FLRP/Reductions/Coatomistic.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/Reductions/Coatomistic.lagda.md
 [FLRP/Representable.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/Representable.lagda.md
 [FLRP/WreathNoGo.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/WreathNoGo.lagda.md
 
