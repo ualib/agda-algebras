@@ -213,6 +213,7 @@
 [Classical.Structures.Interpret]: /Classical/Structures/Interpret/
 [Classical.Structures.Lattice]: /Classical/Structures/Lattice/
 [Classical.Structures.Lattice.Basic]: /Classical/Structures/Lattice/Basic/
+[Classical.Structures.Lattice.Disconnected]: /Classical/Structures/Lattice/Disconnected/
 [Classical.Structures.Lattice.DistributiveLattice]: /Classical/Structures/Lattice/DistributiveLattice/
 [Classical.Structures.Lattice.Dual]: /Classical/Structures/Lattice/Dual/
 [Classical.Structures.Lattice.FilterIdeal]: /Classical/Structures/Lattice/FilterIdeal/
@@ -630,6 +631,7 @@
 [Classical/Structures/Interpret.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Interpret.lagda.md
 [Classical/Structures/Lattice.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Lattice.lagda.md
 [Classical/Structures/Lattice/Basic.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Lattice/Basic.lagda.md
+[Classical/Structures/Lattice/Disconnected.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Lattice/Disconnected.lagda.md
 [Classical/Structures/Lattice/DistributiveLattice.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Lattice/DistributiveLattice.lagda.md
 [Classical/Structures/Lattice/Dual.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Lattice/Dual.lagda.md
 [Classical/Structures/Lattice/FilterIdeal.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Lattice/FilterIdeal.lagda.md

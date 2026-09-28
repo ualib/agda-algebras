@@ -34,7 +34,7 @@ The class of representable lattices is closed under a catalogue of operations.[^
 module FLRP.Closure.Basic where
 
 -- Imports from the Agda Standard Library -----------------------------------
-open import Data.Fin.Patterns                      using  ( 0F ; 1F )
+open import Data.Fin.Patterns                      using  ( 0F ; 1F ; 2F )
 open import Data.Product                           using  ( _,_ )
 open import Level                                  using  ( 0ℓ )
 open import Relation.Binary                        using  ( Setoid )
@@ -49,7 +49,8 @@ open import Classical.Structures.Lattice.Dual         using  ( dualLattice )
 open import Classical.Structures.Lattice.OrdinalSum   using  ( ordinalSum )
 open import FLRP.Assumptions                          using  ( KurzweilSurjectivityᵈAt )
 open import FLRP.KurzweilNetter.Duality               using  ( module KurzweilNetterProof )
-open import FLRP.Problem                              using  ( chain₂-lattice )
+open import FLRP.Problem                              using  ( chain₂-lattice
+                                                             ; chain₃-lattice )
 open import FLRP.Representable                        using  ( Representableᵈ
                                                              ; chain₂-Representableᵈ )
 open import Setoid.Algebras.Basic                     using  ( 𝕌[_] ; 𝔻[_] )
@@ -71,6 +72,18 @@ chain₂-top = 1F , λ { 0F → refl ; 1F → refl }
 
 chain₂-bot : BottomOf chain₂-lattice
 chain₂-bot = 0F , λ { 0F → refl ; 1F → refl }
+```
+
+The three-element chain's extremum data, decided the same way; the parachute of
+two three-element chains (the hexagon) is built from these in
+[FLRP.Reductions][].
+
+```agda
+chain₃-top : TopOf chain₃-lattice
+chain₃-top = 2F , λ { 0F → refl ; 1F → refl ; 2F → refl }
+
+chain₃-bot : BottomOf chain₃-lattice
+chain₃-bot = 0F , λ { 0F → refl ; 1F → refl ; 2F → refl }
 ```
 
 Adjoining a fresh extremum to a lattice is the special case of the glued ordinal
