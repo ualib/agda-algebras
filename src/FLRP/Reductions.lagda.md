@@ -1514,14 +1514,15 @@ construction of them yet, so the entry is a schema in a lattice predicate
 
 **Source**.  Aschbacher–Shareshian [2009], *Restrictions on the structure of
 subgroup lattices of finite alternating and symmetric groups*, J. Algebra 322,
-2449–2463: no alternating or symmetric group has a subgroup `H` with
-`O_G(H) ≅ DΔ(m₁ , … , mₜ)`.  `verify`: the statement is taken from the zbMATH
-review of the paper (Zbl 1183.20017) and from Aschbacher's own summary in the
-introduction of his 2012 paper on lower signalizer lattices; the primary text
-sits behind the publisher's access wall and was not read.  The 2012 summary
-says "not a D-lattice", meaning the class `D` of his 2012 paper, which is this
-class; it is **not** the class of D-lattices of Entry 10, and Entry 11's `A₁₁`
-interval shows that the wider reading would be false.
+2449–2463, **Theorem 1.1**, read in the published text: for integers `t > 1`
+and `m₁ ≥ m₂ ≥ ⋯ ≥ mₜ ≥ 3`, there is no pair `H ≤ G` with `G` a finite
+alternating or symmetric group and `O_G(H) ≅ DΔ(m₁ , … , mₜ)`.  The paper's
+Lemma 6.2 adds a fact about arbitrary finite groups: every member of an
+interval isomorphic to such a `DΔ`-lattice is self-normalizing.  Aschbacher's
+2012 summary of the theorem says "not a D-lattice", meaning the class `D` of
+his 2012 paper, which is this class (his 2013 paper calls its members
+`DΔ`-lattices outright); it is **not** the class of D-lattices of Entry 10,
+and Entry 11's `A₁₁` interval shows that the wider reading would be false.
 
 **Level**.  cf-IE from the exclusion, upgraded to IE by Lemma 3.1 as in Entry 5.
 The source's statement is unrestricted (no core-freeness), so the entry consumes
