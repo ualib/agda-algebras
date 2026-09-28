@@ -128,7 +128,8 @@ open import Examples.Classical.Lattices.L7           using  ( L7-lattice )
 open import FLRP.Closure.Basic  using  ( chain₂-top ; chain₂-bot ; chain₃-top ; chain₃-bot )
 open import FLRP.Enforceable    using  ( ComplementHClosed ; CoreFree
                                        ; CoreFreeReduction ; GroupProperty
-                                       ; GroupRepresentable ; IE ; IE→cfIE
+                                       ; GroupRepresentable ; HasThreeDistinct
+                                       ; IE ; IE→cfIE
                                        ; IntervalIso ; PropertyStable ; cfIE
                                        ; cfIE→IE-Statement ; minIE
                                        ; module UpperInterval )
@@ -1343,11 +1344,16 @@ hexagon-big i = record { elt = 1F ; elt-not-bot = λ () ; elt-not-top = λ () }
 **Property**.  `𝒢₂ ∧ 𝒢₃ ∧ 𝒢₄`, the three parachute classes of Entries 1 through 3.
 
 **Enforcing lattice**.  Every *A-lattice*: a lattice with more than two elements
-whose only modular elements are its bottom and its top, in the sense of
-[Classical.Structures.Lattice.Disconnected][].  Every parachute with two big
-canopies is one, by the theorem derived there: such a parachute is a D-lattice
-(its proper part falls into the canopies, two of which carry a nontrivial
-chain), and D-lattices are A-lattices by Aschbacher's (1.2).
+whose only modular elements are its bottom and its top.  The modularity half is
+`IsALattice`{.AgdaFunction} of [Classical.Structures.Lattice.Disconnected][],
+and the size half is `HasThreeDistinct`{.AgdaFunction} of [FLRP.Enforceable][];
+the import below takes both, since without the size clause the proposition is
+false (a two-element interval `[1 , C₂]` is core-free and its group is abelian).
+Every parachute with two big canopies is an A-lattice, by the theorem derived
+in the lattice module: such a parachute is a D-lattice (its proper part falls
+into the canopies, two of which carry a nontrivial chain), D-lattices are
+A-lattices by Aschbacher's (1.2), and its bottom, an atom, and its top are
+three distinct elements.
 
 **Source**.  Aschbacher [2008], *On intervals in subgroup lattices of finite
 groups*, J. Amer. Math. Soc. 21, 809–830, **Proposition 2**, read in the
@@ -1381,17 +1387,20 @@ consistency check between the two structure theories, and they agree.
 group representable (Entry 11), so the entry is not vacuous.
 
 ```agda
--- Aschbacher [2008], Proposition 2, conclusions (1) and (3) as group properties.
+-- Aschbacher [2008], Proposition 2, conclusions (1) and (3) as group properties,
+-- for A-lattices in his sense: more than two elements, only the ends modular.
 AschbacherProp2 : Type (lsuc 0ℓ)
 AschbacherProp2 =
   (𝑳 : Lattice) (⊥ᴸ : BottomOf 𝑳) (⊤ᴸ : TopOf 𝑳)
+  → HasThreeDistinct 𝑳
   → Disconnected.IsALattice 𝑳 ⊥ᴸ ⊤ᴸ
   → cfIE (λ 𝒢 → FiniteAlgebra (proj₁ 𝒢) → 𝒢₂ 𝒢 × 𝒢₃ 𝒢 × 𝒢₄ 𝒢) 𝑳
 
 module Entry-Aschbacher {m : ℕ} (𝒫 : Parachute 0ℓ 0ℓ (suc m)) where
 
   open ParachuteTheorems {0ℓ} 𝒫  using  ( BigCanopyᴸ ; ⊕ᵖ-Lattice
-                                         ; ⊥ᵖ-isBottom ; ⊤ᵖ-isTop )
+                                         ; ⊥ᵖ-isBottom ; ⊤ᵖ-isTop
+                                         ; ⊥ᵖ ; ⊤ᵖ ; atom ; atom-≢⊥ ; _≤ᵖ_ )
   open ParachuteDisconnected 𝒫    using  ( module TwoBig ; IsALattice )
 
   module TwoBigCanopies
@@ -1407,11 +1416,26 @@ module Entry-Aschbacher {m : ℕ} (𝒫 : Parachute 0ℓ 0ℓ (suc m)) where
       (BigCanopyᴸ.elt big-q) (BigCanopyᴸ.elt-not-bot big-q) (BigCanopyᴸ.elt-not-top big-q)
       public using ( parachute-DPartition ; parachute-ALattice )
 
+    -- Derived: the parachute has more than two elements.  Its bottom, the
+    -- p-th atom, and its top are pairwise distinct, each inequation being an
+    -- impossible comparison in the inductive order.
+    parachute-three : HasThreeDistinct ⊕ᵖ-Lattice
+    parachute-three =
+      ⊥ᵖ , atom p , ⊤ᵖ
+      , (λ e → atom-≢⊥ (proj₂ e)) , (λ e → ⊤≰⊥ (proj₂ e)) , (λ e → ⊤≰atom (proj₂ e))
+      where
+      ⊤≰⊥ : ¬ (⊤ᵖ ≤ᵖ ⊥ᵖ)
+      ⊤≰⊥ ()
+
+      ⊤≰atom : ¬ (⊤ᵖ ≤ᵖ atom p)
+      ⊤≰atom ()
+
     -- Imported: Proposition 2 applies to every core-free representation of the
     -- parachute; on parachutes this is Entries 1 through 3 again.
     aschbacher-parachute : AschbacherProp2
       → cfIE (λ 𝒢 → FiniteAlgebra (proj₁ 𝒢) → 𝒢₂ 𝒢 × 𝒢₃ 𝒢 × 𝒢₄ 𝒢) ⊕ᵖ-Lattice
-    aschbacher-parachute prop2 = prop2 ⊕ᵖ-Lattice ⊥ᵖ-isBottom ⊤ᵖ-isTop parachute-ALattice
+    aschbacher-parachute prop2 =
+      prop2 ⊕ᵖ-Lattice ⊥ᵖ-isBottom ⊤ᵖ-isTop parachute-three parachute-ALattice
 ```
 
 #### Entry 11: the hexagon is group representable, and does not enforce `𝒢₁`
@@ -1526,7 +1550,12 @@ and Entry 11's `A₁₁` interval shows that the wider reading would be false.
 
 **Level**.  cf-IE from the exclusion, upgraded to IE by Lemma 3.1 as in Entry 5.
 The source's statement is unrestricted (no core-freeness), so the entry consumes
-the weaker hypothesis.
+the weaker hypothesis.  It is a theorem about *finite* groups, so the excluded
+class is "finite and alternating or symmetric", and the enforced property
+carries the finiteness antecedent, as Entry 10's does; the H-closure the
+upgrade needs is that of this finite class (a homomorphic image of a finite
+alternating or symmetric group is finite and, the note asserts, alternating or
+symmetric), imported by name like Entry 5's.
 
 **Representability status**.  Unknown: it is Conjecture D that no
 `DΔ`-lattice is a finite group interval lattice, and Aschbacher's program has
@@ -1539,20 +1568,36 @@ as it recorded Entry 7 while `L7` was open.
 module Entry-AschbacherShareshian {ℓA ℓD : Level}
   (AltOrSym : GroupProperty ℓA) (IsDΔ : Lattice → Type ℓD) where
 
-  open Entry-𝒢₁ AltOrSym  using  ( 𝒢₁ ; AltSymHClosed )
+  open Entry-𝒢₁ AltOrSym  using  ( 𝒢₁ )
 
-  -- Aschbacher–Shareshian [2009]: no DΔ-lattice is an interval in an
-  -- alternating or symmetric group (stated at the core-free hypothesis).
+  -- The class the theorem is about: finite, and alternating or symmetric.
+  FiniteAltOrSym : GroupProperty ℓA
+  FiniteAltOrSym 𝒢 = FiniteAlgebra (proj₁ 𝒢) × AltOrSym 𝒢
+
+  -- 𝒢₁ under a finiteness antecedent, the form Entry 10 uses.
+  𝒢₁ᶠ : GroupProperty ℓA
+  𝒢₁ᶠ 𝒢 = FiniteAlgebra (proj₁ 𝒢) → 𝒢₁ 𝒢
+
+  -- Aschbacher–Shareshian [2009], Theorem 1.1: no DΔ-lattice is an interval
+  -- in a finite alternating or symmetric group (stated at the core-free
+  -- hypothesis).
   DΔExclusion : Type (lsuc 0ℓ ⊔ ℓA ⊔ ℓD)
-  DΔExclusion = (𝑳 : Lattice) → IsDΔ 𝑳 → CoreFreeExclusion AltOrSym 𝑳
+  DΔExclusion = (𝑳 : Lattice) → IsDΔ 𝑳 → CoreFreeExclusion FiniteAltOrSym 𝑳
+
+  -- Homomorphic images of finite alternating or symmetric groups are finite
+  -- and alternating or symmetric.
+  FiniteAltSymHClosed : Type (lsuc 0ℓ ⊔ ℓA)
+  FiniteAltSymHClosed = HClosed FiniteAltOrSym
 
   -- The entry, at both levels, for every DΔ-lattice.
-  nongiant-cfIE-DΔ : DΔExclusion → (𝑳 : Lattice) → IsDΔ 𝑳 → cfIE 𝒢₁ 𝑳
-  nongiant-cfIE-DΔ exc 𝑳 d = exclusion→cfIE AltOrSym 𝑳 (exc 𝑳 d)
+  nongiant-cfIE-DΔ : DΔExclusion → (𝑳 : Lattice) → IsDΔ 𝑳 → cfIE 𝒢₁ᶠ 𝑳
+  nongiant-cfIE-DΔ exc 𝑳 d 𝒢 H H-sg cf iso fin alt =
+    exclusion→cfIE FiniteAltOrSym 𝑳 (exc 𝑳 d) 𝒢 H H-sg cf iso (fin , alt)
 
-  nongiant-IE-DΔ : CoreFreeReduction → AltSymHClosed → DΔExclusion
-    → (𝑳 : Lattice) → IsDΔ 𝑳 → IE 𝒢₁ 𝑳
-  nongiant-IE-DΔ cfr hcl exc 𝑳 d = exclusion→IE AltOrSym 𝑳 cfr hcl (exc 𝑳 d)
+  nongiant-IE-DΔ : CoreFreeReduction → FiniteAltSymHClosed → DΔExclusion
+    → (𝑳 : Lattice) → IsDΔ 𝑳 → IE 𝒢₁ᶠ 𝑳
+  nongiant-IE-DΔ cfr hcl exc 𝑳 d 𝒢 H H-sg iso fin alt =
+    exclusion→IE FiniteAltOrSym 𝑳 cfr hcl (exc 𝑳 d) 𝒢 H H-sg iso (fin , alt)
 ```
 
 ---

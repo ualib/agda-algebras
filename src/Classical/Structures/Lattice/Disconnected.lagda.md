@@ -24,8 +24,10 @@ cares about.
    and `0` and `∞` are its only modular elements.
 +  A lattice is a **D-lattice** when its proper part splits into two parts,
    each a union of connected components (condition (D1)) and each containing a
-   nontrivial chain `k < m` (condition (D2)).  D-lattices are the domain of
-   Aschbacher's reduction theorems; the hexagon is the smallest one.
+   nontrivial chain `k < m` (condition (D2)).  D-lattices are the class whose
+   minimal representations Aschbacher's Section 6 analyzes; his reduction
+   theorem there needs the narrower CD-lattices defined below.  The hexagon is
+   the smallest D-lattice.
 +  Aschbacher's (1.2): **every D-lattice is an A-lattice**, because an element
    `m` of one part, together with a chain `a < b` of the other part, violates
    modularity: `(a ∨ m) ∧ b = ∞ ∧ b = b` while `a ∨ (m ∧ b) = a ∨ 0 = a`.

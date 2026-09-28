@@ -41,7 +41,7 @@
 #      where a path segment happens to contain the substring `agda`.
 # =============================================================================
 
-.PHONY: default all check check-certificates check-all test clean site serve serve-full html agda-md site-full profile project-plan unused-imports unused-imports-test check-links check-links-test gen-links corpus-stats corpus-stats-check corpus-stats-test gap-hunt docstrings docstrings-test docstrings-list docstrings-unused docstrings-json flrp-test flrp-slr gap-smoke Everything.agda EverythingLegacy.agda EverythingCertificates.agda
+.PHONY: default all check check-certificates check-all test clean site serve serve-full html agda-md site-full profile project-plan unused-imports unused-imports-test check-links check-links-test gen-links corpus-stats corpus-stats-check corpus-stats-test gap-hunt gap-tomscan docstrings docstrings-test docstrings-list docstrings-unused docstrings-json flrp-test flrp-slr gap-smoke Everything.agda EverythingLegacy.agda EverythingCertificates.agda
 
 # -- Configuration -----------------------------------------------------------
 SRCDIR    := src
@@ -390,6 +390,7 @@ flrp-test:
 	python3 scripts/python/flrp/test_eqfast.py
 	python3 scripts/python/flrp/test_gap_interval.py
 	python3 scripts/python/flrp/test_parachute_targets.py
+	python3 scripts/python/flrp/test_tomscan_summary.py
 
 # Regenerate the SmallLatticeReps catalog artifacts (issue #485) from the
 # manuscript source: claim files under scripts/python/flrp/inputs/slr/, audit
@@ -425,3 +426,26 @@ gap-hunt:
 	python3 scripts/python/flrp/gap_search.py scripts/gap/flrp/out/rp3_parachutes_s7.raw.json --target scripts/gap/flrp/inputs/p332.json --out scripts/gap/flrp/out/rp3_p332.search.json --date $(RP3_SWEEP_DATE)
 	python3 scripts/python/flrp/gap_search.py scripts/gap/flrp/out/rp3_parachutes_s7.raw.json --target scripts/gap/flrp/inputs/p34.json --out scripts/gap/flrp/out/rp3_p34.search.json --date $(RP3_SWEEP_DATE)
 	python3 scripts/python/flrp/gap_search.py scripts/gap/flrp/out/rp3_parachutes_s7.raw.json --target scripts/gap/flrp/inputs/p3m2.json --out scripts/gap/flrp/out/rp3_p3m2.search.json --date $(RP3_SWEEP_DATE)
+
+# The tables-of-marks scan (issue #513): hunt each RP-3 parachute target as an
+# upper interval across TomLib's 414 tables by marks, resolve the ambiguous
+# cases explicitly up to the scan's default bound, and record each run as
+# scripts/gap/flrp/out/tomscan_<stem>.json (the raw logs are git-ignored; the
+# summarizer drops timings, so a rerun re-derives the records byte for byte).
+# The P(3,2x2) tables above the bound get a second pass with the bound lifted.
+# About a minute per target plus the resolutions.  Run inside `nix develop .#gap`.
+TOMSCAN_DATE := 2026-09-28
+TOMSCAN := scripts/python/flrp/tomscan_summary.py
+gap-tomscan:
+	@echo "target: $@"
+	for stem in p33 p332 p34 p3m2; do \
+	  gap -A -q -c "FLRP_TARGET := $$(python3 $(TOMSCAN) --upsets scripts/gap/flrp/inputs/$$stem.json);;" \
+	    -b scripts/gap/flrp/bin/tomscan.g > scripts/gap/flrp/out/tomscan_$$stem.log 2>&1; \
+	  python3 $(TOMSCAN) scripts/gap/flrp/out/tomscan_$$stem.log --target scripts/gap/flrp/inputs/$$stem.json \
+	    --out scripts/gap/flrp/out/tomscan_$$stem.json --date $(TOMSCAN_DATE) || exit 1; \
+	done
+	gap -A -q -o 12g -c "FLRP_TARGET := $$(python3 $(TOMSCAN) --upsets scripts/gap/flrp/inputs/p3m2.json);; FLRP_TABLES := [\"HS\",\"A12\",\"M24\",\"G2(4)\",\"S12\"];; FLRP_RESOLVE_BOUND := 10^12;;" \
+	  -b scripts/gap/flrp/bin/tomscan.g > scripts/gap/flrp/out/tomscan_p3m2_big.log 2>&1
+	python3 $(TOMSCAN) scripts/gap/flrp/out/tomscan_p3m2_big.log --target scripts/gap/flrp/inputs/p3m2.json \
+	  --tables 'HS,A12,M24,G2(4),S12' --bound 10^12 \
+	  --out scripts/gap/flrp/out/tomscan_p3m2_big.json --date $(TOMSCAN_DATE)

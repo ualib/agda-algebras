@@ -1,0 +1,163 @@
+{
+  "ambiguous": [
+    {
+      "cls": 511,
+      "index": 115500,
+      "order": 44352000,
+      "subgroupOrder": 384,
+      "table": "HS"
+    },
+    {
+      "cls": 2481,
+      "index": 18480,
+      "order": 239500800,
+      "subgroupOrder": 12960,
+      "table": "A12"
+    },
+    {
+      "cls": 1478,
+      "index": 63756,
+      "order": 244823040,
+      "subgroupOrder": 3840,
+      "table": "M24"
+    },
+    {
+      "cls": 4226,
+      "index": 131040,
+      "order": 251596800,
+      "subgroupOrder": 1920,
+      "table": "G2(4)"
+    },
+    {
+      "cls": 10611,
+      "index": 18480,
+      "order": 479001600,
+      "subgroupOrder": 25920,
+      "table": "S12"
+    }
+  ],
+  "config": {
+    "resolveBound": "10^12",
+    "tables": [
+      "HS",
+      "A12",
+      "M24",
+      "G2(4)",
+      "S12"
+    ]
+  },
+  "date": "2026-09-28",
+  "engine": {
+    "gap": "4.15.1",
+    "script": "scripts/gap/flrp/bin/tomscan.g",
+    "tomlib": "1.2.11"
+  },
+  "explicit": [
+    {
+      "cls": 511,
+      "coreFree": true,
+      "index": 115500,
+      "intervalOrders": [
+        768,
+        1536,
+        10752,
+        40320,
+        40320
+      ],
+      "intervalSize": 7,
+      "order": 44352000,
+      "structure": "((C4 x C4) : (C2 x C2)) : S3",
+      "subgroupOrder": 384,
+      "table": "HS",
+      "target": false
+    },
+    {
+      "cls": 2481,
+      "coreFree": true,
+      "index": 18480,
+      "intervalOrders": [
+        25920,
+        259200,
+        518400,
+        1088640,
+        1088640
+      ],
+      "intervalSize": 7,
+      "order": 239500800,
+      "structure": "C3 : (S6 x S3)",
+      "subgroupOrder": 12960,
+      "table": "A12",
+      "target": false
+    },
+    {
+      "cls": 1478,
+      "coreFree": true,
+      "index": 63756,
+      "intervalOrders": [
+        7680,
+        23040,
+        138240,
+        887040,
+        887040
+      ],
+      "intervalSize": 7,
+      "order": 244823040,
+      "structure": "(C2 x C2 x C2 x C2 x C2) : S5",
+      "subgroupOrder": 3840,
+      "table": "M24",
+      "target": false
+    },
+    {
+      "cls": 4226,
+      "coreFree": true,
+      "index": 131040,
+      "intervalOrders": [
+        3840,
+        61440,
+        184320,
+        604800,
+        604800
+      ],
+      "intervalSize": 7,
+      "order": 251596800,
+      "structure": "((C2 x Q8) : C2) : A5",
+      "subgroupOrder": 1920,
+      "table": "G2(4)",
+      "target": false
+    },
+    {
+      "cls": 10611,
+      "coreFree": true,
+      "index": 18480,
+      "intervalOrders": [
+        51840,
+        518400,
+        1036800,
+        2177280,
+        2177280
+      ],
+      "intervalSize": 7,
+      "order": 479001600,
+      "structure": "S6 x S3 x S3",
+      "subgroupOrder": 25920,
+      "table": "S12",
+      "target": false
+    }
+  ],
+  "format": "flrp-tomscan v1",
+  "hits": [],
+  "scanned": {
+    "ambiguous": 5,
+    "hits": 0,
+    "intervals": 177,
+    "tables": 5,
+    "targetSize": 7
+  },
+  "target": {
+    "name": "P(3,2x2): parachute of a three-chain and the four-element Boolean lattice",
+    "size": 7,
+    "stem": "p3m2"
+  },
+  "unparsed": [],
+  "unresolved": []
+}
