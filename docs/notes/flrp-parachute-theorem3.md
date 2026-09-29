@@ -200,6 +200,71 @@ Theorem B, alternative 3; diagonal type is Theorem C, alternatives 2 and 4.
 The two minimality statements follow because 3 and 4 each exhibit a smaller
 group with an interval isomorphic to `Λ` or to its dual.  ∎
 
+### 4.1  The signalizer case, one step further
+
+Alternative 2 hands the problem to Aschbacher's signalizer lattices: `H`
+complements `D`, and `O_G(H) ≅ Λ(τ)` for `τ = (H, N_H(L), C_H(L))`.  His
+2009 paper (*Signalizer lattices in finite groups*, Michigan Math. J. 58,
+79–103) studies such `τ`, and its two theorems were read for their uses of
+the condition (C): Theorem 1, that a minimal signalizer realization of a
+CD-lattice has `F*(H)` a transitive product of simple groups, and Theorem 2,
+that a `D(m₁, …, mₜ)`-lattice which is a group interval is an interval in an
+almost simple group or a lower signalizer lattice in one.  The audit, lemma
+by lemma:
+
++  1.1 needs the *atomistic* half (`C∗`): a poset map `ϕ` on `Λ#` with
+   `ϕ(p) ≤ p` is the identity because every element is a join of atoms.
++  1.2 needs only the coatomistic half with (D): in some component other
+   than a given one, two coatoms meet above `0`.  This is the input of
+   Theorem A over again.
++  2.14: for `|H|` least, `H = H(τ)` (the subgroup the pairs `(V, K)`
+   generate), and `τ` is faithful when `Λ′` has neither a least nor a
+   greatest element; a parachute with two canopies has neither.
++  2.15(1): coatomistic makes `H(τ) = H*(τ)`.
++  Theorem 4.10 and Corollary 4.11: for `H = H(τ)`, `Λ(τ)` a coatomistic
+   D-lattice, and `τ` faithful, `F*(H)` is the direct product of the
+   components of `H`, nonabelian simple and permuted transitively by `H`.
+   Their proofs use Sections 3 and 4, which need disconnectedness and
+   faithfulness only, and 2.15(1).
++  4.12 (`F*(H) I_H ∉ W`) uses 1.2, so coatomistic again.
++  5.8, the transitivity of `N_H` on the components, is stated for
+   coatomistic lattices *in which no connected component has a least
+   element*; a parachute's components have least elements, their atoms.
++  5.10 needs the atomistic half, through 1.1.
++  5.15 and 6.4 need Boolean components (the `D(m₁, …, mₜ)` shape), and the
+   last lines of Section 6 use that such lattices are self-dual.
+
+**Theorem D (the socle of `H`).**  Let `Λ` be a coatomistic parachute with
+two big canopies and `(H, G)` a core-free representation of `Λ` with `|G|`
+least among the representations of `Λ`, in alternative 2 with `|𝓛| ≥ 2`.
+Put `τ = (H, N_H(L), C_H(L))`.  Then `τ` is faithful, `H = H(τ) = H*(τ)`,
+and `F*(H)` is the direct product of the components of `H`, which are
+nonabelian simple groups permuted transitively by `H`.
+
+*Proof.*  By the construction of the 2008 paper's Section 7, `|G(τ′)| =
+|H′| · |L′|^{|H′ : N_{H′}|}` for every `τ′ = (H′, N_{H′}, I_{H′}) ∈ T(L′)`, and
+`G(τ′)` carries `Λ(τ′)` as `O_{G(τ′)}(H′)`; for our `τ`, `|G(τ)| = |H| · |D| =
+|G|`.  If `H(τ) < H` then `τ_{H(τ)}` has the same lattice by 2.3(4) and a
+smaller group, against the minimality of `|G|`; so `H = H(τ)`, and then
+`H = H*(τ)` by 2.15(1), `Λ` being coatomistic.  If `X = ker_{N_H}(H) ≠ 1`
+then by 2.13 either `H/X` carries the same poset with a smaller `G(τ*)`,
+against minimality, or `P` has a least element, which would be a least
+element of `Λ′`; a parachute with two canopies has two atoms.  So `τ` is
+faithful, and Corollary 4.11 applies to `τ`, whose lattice is a coatomistic
+D-lattice.  ∎
+
+So in the signalizer case one more reduction is free, the analog of
+Baddeley–Lucchini's "key step" for `Mₙ`.  What is *not* free is the next one:
+Aschbacher's Section 5 passes from `H` to the almost simple group
+`Aut_H(E)` of one component `E` of `F*(H)`, and its two entry points fail for
+parachutes, 5.8 because the canopies have least elements and 5.10 because
+the parachute is not atomistic.  For a coatomistic parachute the signalizer
+case therefore splits into two open lemmas: (i) `F*(H)` simple, so `H`
+almost simple and `Λ` a signalizer lattice `Λ(τ)` in an almost simple group,
+the parachute form of the 2009 paper's condition (SA); (ii) `F*(H) = Eᵐ`
+with `m ≥ 2`, where the descent to `Aut_H(E)` needs a proof that does not go
+through 5.8 and 5.10, or a counterexample.
+
 ## 5.  The caveat: the dual
 
 Aschbacher's minimality ranges over `Λ` and its dual, and his class of
@@ -280,27 +345,145 @@ almost simple group is of O'Nan–Scott type "almost simple".
 +  **The reduction imports the almost simple machinery** for coatomistic
    parachutes exactly as Theorem 3 does for CD-lattices: to show such a
    parachute is not a group interval one must exclude an almost simple
-   representation of it or of its dual, a signalizer-lattice representation,
-   and the two dual-side cases of § 5.  That is the shape of Aschbacher's
+   representation of it or of its dual, a signalizer-lattice representation
+   (which § 4.1 reduces one step further, to `H` with a transitive product
+   of simple groups as socle, and leaves at the descent to `Aut_H(E)`), and
+   the two dual-side cases of § 5.  That is the shape of Aschbacher's
    program for the `DΔ`-lattices (2009, 2012, 2013), which after fifteen
    years has settled the alternating and symmetric groups and started the
    Lie-type case.  Nothing here shortens it.
-+  **The smallest target** is `P(2×2, 2×2)`, the parachute of two
-   four-element Boolean lattices, eight elements, the least coatomistic
-   parachute with two big canopies.  Whether it is a group interval is open.
-   The tables-of-marks scan of 2026-09-28 (`scripts/gap/flrp/out/tomscan_pm2m2.json`,
-   `tomscan_pm2m2_big.json`, `tomscan_pm2m2d.json`) finds neither it nor
-   its dual in any of the 414 tables: no marks-exact hit, and the two
-   ambiguous cases for each resolved negative explicitly (for the lattice,
-   `M12.2` and `He.2`, the latter with a 12 GB heap; both intervals have
-   three atoms).  So its minimal carrier, if any, lies outside TomLib; the
-   SmallGroups sweep has not been run for eight-element targets.
++  **The smallest target, `P(2×2, 2×2)`, is of unknown status: no
+   representation of it is known, of any kind.**  It is the parachute of
+   two four-element Boolean lattices, eight elements, the least coatomistic
+   parachute with two big canopies.  The tables-of-marks scan of 2026-09-28
+   (`scripts/gap/flrp/out/tomscan_pm2m2.json`, `tomscan_pm2m2_big.json`,
+   `tomscan_pm2m2d.json`) finds neither it nor its dual in any of the 414
+   tables (no marks-exact hit; the two ambiguous cases for each resolved
+   negative, `M12.2` and `He.2` with a 12 GB heap, both intervals having
+   three atoms), the SmallGroups sweep finds it in no group of order at most
+   300 (`rp3_pm2m2.search.json`, `rp3_pm2m2d.search.json`), the closure
+   search finds no `0`–`1` sublattice copy of it in `Eq(n)` for `n ≤ 7`,
+   and the transitive-group scan finds it over no point stabilizer of
+   composite degree up to 22 (`pm2m2_transitive_deg*.search.json`).
+   Kjos-Hanssen's September 2026 note on the eight-element lattices counts
+   it among the 168 lattices representable "for formal reasons", as a
+   *parallel sum*, and the first version of this section followed the
+   note.  That was an error, corrected the same day (§ 7.1 and
+   `docs/notes/flrp-lattices8-census.md`): the parallel sum of Snow's
+   lemma adjoins a new top and a new bottom, a parachute identifies the
+   tops of its canopies, and the glued operation the note describes is not
+   a closure property anyone has proved.  Since `P(2×2, 2×2)` is a simple
+   lattice whose coatoms meet to `0`, it is representable if and only if it
+   is a group interval (Theorem E), so the searches above test its
+   existence, not its size.
++  **The hexagon shows the two scales.**  The same closure search finds the
+   hexagon `P(3, 3)` as the congruence lattice of a *six-element* unary
+   algebra (one closed class in `Eq(6)`, the chains `012|34|5 < 012|345`
+   and `03|15|2|4 < 03|15|24`, preserved by 45 unary maps of which four
+   generate), certified in Agda as `FLRP.Certificates.Parachute.HexagonEq6`;
+   its least known carrier as a group interval has order 25920, and no
+   group of order at most 300 carries it.  A congruence representation and
+   a group representation of a parachute are different questions at
+   different scales, and the RP-3 sweeps addressed only the second.
 +  **The parachute of two rank-3 Boolean lattices** `P(2³, 2³)` is the
    coatomistic parachute closest to Shareshian's `DΔ(3,3)`, which is that
    parachute with its two atoms deleted.  The scan of the same day finds
    `DΔ(3,3)` in none of the 414 tables either, with no ambiguous case at all
    (`scripts/gap/flrp/out/tomscan_dd33.json`): among the 3396 upper
    intervals of size fourteen in the library, none has its up-count profile.
+
+### 7.1  Simple parachutes are group intervals, if they are congruence lattices at all
+
+Three facts, all checked here, and one correction.
+
++  **Parallel sums, read in Snow's text** (Snow 2000, pp. 286–288;
+   `verified`, the paper having been supplied by William on the day).  The
+   parallel sum `L ∓ N` of Snow's Lemmas 3.9 and 3.10 is the disjoint union
+   of `L` and `N` *with a new top and a new bottom adjoined*; the class of
+   congruence lattices of finite algebras is closed under it (the
+   constructions are summarized in `docs/notes/flrp-lattices8-census.md`
+   § 1).  It is not closed, so far as anyone knows, under the *glued*
+   parallel sum that identifies the tops and the bottoms, which is the
+   operation Kjos-Hanssen's note describes and tests for: `Mₙ` is the glued
+   sum of `n` three-element chains, so closure under the glued sum would
+   make every `Mₙ` a congruence lattice, and `M₁₆` is open.  Nor is it
+   known to be closed under the flat sum of three or more lattices with one
+   new top and bottom, `Mₙ` being the flat sum of `n` one-element lattices.
++  **Parachutes are not parallel sums.**  A parachute `𝒫(L₁, …, Lₙ)`
+   identifies the tops of its canopies; it is the glued sum of the
+   `2 ⊕a Lᵢ`, and a Snow sum only when `n = 2` and both canopies have a
+   unique coatom, in which case `𝒫(L₁, L₂) = L₁⁻ ∓ L₂⁻` for the canopies
+   with their tops removed.  So the hexagon `P(3, 3) = 2 ∓ 2` and
+   `P(3, 4) = 2 ∓ 3` are congruence lattices by Snow's lemma, while
+   `P(3, 3, 2)`, `P(3, 2×2)` (both representable anyway, having seven
+   elements), and `P(2×2, 2×2)` are not covered by it.  The first version
+   of this section said the opposite, with the roadmap, the RP-2 and RP-3
+   notes, the paths note, and the prose of `FLRP.Reductions.Coatomistic`
+   following it for part of 2026-09-28; the census note records the
+   correction and what it costs Kjos-Hanssen's classification (61 of his
+   168 "formal" lattices, `P(2×2, 2×2)` and its dual among them, have no
+   formal reason left).
++  **Which parachutes are simple lattices.**  Let `n ≥ 2` and let every
+   canopy have at least two coatoms.  A congruence of `𝒫` identifying `0`
+   with a proper element `x` of canopy `i` puts every other canopy with `⊤`
+   in one class and `{0} ∪ Cᵢ` in another, which is a congruence only if
+   `Cᵢ = Lᵢ − {⊤}` is closed under joins, that is, only if `Lᵢ` has a unique
+   coatom; dually for `⊤`.  A congruence identifying proper elements of two
+   canopies identifies `0` with a proper element.  What remains are the
+   congruences of the canopies themselves, extended by the identity
+   elsewhere, and such an extension is a congruence of `𝒫` exactly when the
+   canopy's congruence keeps `⊤` in a class by itself.  So `𝒫` is simple
+   iff no canopy has a nontrivial congruence keeping its top alone.
+   Boolean canopies `2ᵏ` (`k ≥ 2`) and `Mₖ` canopies (`k ≥ 2`) qualify.
+   Checked from the tables: `|Con|` is `2` for `P(2×2, 2×2)` and for its
+   dual, and `7`, `5`, `11`, `4` for the hexagon, `P(3,3,2)`, `P(3,4)`,
+   `P(3, 2×2)`.
++  **Theorem E.**  Let `𝒫` be a parachute with at least two canopies that is
+   a congruence lattice and is simple as a lattice.  Then `𝒫` is a group
+   interval, and a congruence representation of least size is a transitive
+   `G`-set.  *Proof.*  The coatoms of a parachute meet to `0`.  By the
+   theorem of Pálfy–Pudlák and McKenzie, as stated in the fin-lat-rep
+   manuscript's § 5 (conditions (A) and (B″)), every nonconstant operation
+   of a representation `⟨A, F⟩` of least size is a permutation, so
+   `Con ⟨A, F⟩ = Con ⟨A, G⟩` for the group `G` they generate.  Suppose `G`
+   has `k ≥ 2` orbits and let `τ` be the orbit partition.  By the
+   manuscript's Theorem on intransitive actions (thm:intrans), `[τ, 1]` is
+   a partition lattice `Eq(k)` and `[0, τ]` is the product of the orbits'
+   congruence lattices.  If `τ` is a proper element of a canopy or a coatom,
+   `[0, τ]` has the canopy's atom as its unique atom, so it is directly
+   indecomposable, so all orbits but one are singletons, and by item (6)
+   every coatom of `𝒫` lies above `τ`; but a coatom of another canopy does
+   not.  `τ = 0` would make `𝒫` a partition lattice, which no parachute with
+   a big canopy is, and `τ = ⊤` is the transitive case.  ∎
++  **Corollary, in its corrected form.**  A simple parachute is a
+   congruence lattice if and only if it is a group interval, and then its
+   least congruence representation is a transitive `G`-set of degree the
+   least index `|G : H|` over its group representations.  For
+   `P(2×2, 2×2)`, its dual, and the parachutes of Boolean lattices of rank
+   at least two, no group interval is known, so no representation is
+   known; the closure search puts the degree of a representation of
+   `P(2×2, 2×2)`, if one exists, at eight or more, and the transitive scan
+   at 24 or more among the composite degrees.  Entry 13's class, the
+   coatomistic parachutes with two big canopies, has no member known to be
+   representable at all: its vacuity datum is "unknown", and it is recorded
+   so in the RP-2 catalog.
++  **Consequence for the hunt.**  For a simple parachute the strategy
+   meta-theorem is not needed: if it is not a group interval it is not a
+   congruence lattice, and the FLRP has a negative answer with that
+   parachute as the witness, no auxiliary construction required.  So the
+   RP-3 hunt for a group interval isomorphic to `P(2×2, 2×2)` *is* the
+   representation problem for that lattice, and Entry 13 constrains any
+   representation it might have.  The mixed parachutes, one canopy with a
+   unique coatom and one with several, remain the other place a kill shot
+   can land: `P(3, 2×2)` is a congruence lattice (seven elements) whose
+   group-interval status is open, the pointwise form of the Pálfy–Pudlák
+   equivalence, which their theorem leaves open.  Aschbacher's Section 8
+   realizes the parachutes all of whose canopies are duals of intervals
+   with a top adjoined, unique-coatom canopies all, and those are group
+   intervals outright.  The eight-element census
+   (`docs/notes/flrp-lattices8-census.md` § 3) lists fourteen simple
+   eight-element lattices in the position of `P(2×2, 2×2)`, thirteen once
+   `M₆` is set aside.
 
 ## 8.  Verification status
 
@@ -312,6 +495,15 @@ about it; `computed` means checked in GAP with a committed record.
 | Proposition 2; (1.2); (2.1)–(2.3); (4.2)–(4.14); (5.2), (5.3); (6.2)–(6.8); (7.1); (8.4) | Aschbacher 2008 | **verified** | the published text in full; the page images of pp. 818–822 and 825–826 for every `≠` and `≰` in (4.5), (4.7), (4.9)–(4.14), (6.5)–(6.8) |
 | (6.6)(3)'s proof needs two coatoms of `O₂` with `M₂ ∩ M′ ≠ H` | Aschbacher 2008, p. 825 | **verified** | the page image; the extracted text drops the symbol |
 | (4.7) rests on Theorem 1, case (C), of Aschbacher–Scott 1985 | cited by Aschbacher 2008 | **secondary** | not read; consumed only through (4.7) as stated in the 2008 text |
+| 1.1, 1.2, 2.3, 2.13, 2.14, 2.15, Theorem 4.10, Corollary 4.11, 4.12, 5.8, 5.10, 5.15, Section 6, and which half of (C) each uses | Aschbacher 2009 | **verified** | the published text, fetched again from Project Euclid and read in full for § 4.1 |
+| Theorem D of § 4.1 | this note | proof written here from the lemmas above; the minimality transfer from `|H|` to `|G|` uses the order formula of the 2008 paper's Section 7 | not formalized: it needs the component decomposition of a minimal normal subgroup |
+| The representable class is closed under Snow's parallel sum `L ∓ N`, which adjoins a new top and bottom (Lemmas 3.9, 3.10) | Snow 2000, pp. 286–288 | **verified** | the published text, supplied by William; both proofs checked (`docs/notes/flrp-lattices8-census.md` § 1, with two remarks on the proofs) |
+| The glued parallel sum, which identifies the tops and the bottoms, is not a known closure operation; a parachute is a glued sum, not a Snow sum, unless it has two unique-coatom canopies | this note § 7.1, the census note § 2 | argument written here | `Mₙ` is the glued sum of `n` three-element chains and the flat Snow sum of `n` points |
+| Pálfy–Pudlák, McKenzie: (A) and (B″) make the nonconstant operations of a minimal representation permutations | the fin-lat-rep manuscript § 5, citing Pálfy–Pudlák 1980 and McKenzie 1983 | **verified** as stated there; the two originals not read (the 1980 paper is in the fin-lat-rep `misc/` folder) | consumed by Theorem E |
+| The theorem on intransitive actions (thm:intrans), items (2), (3), (6), (7), (9) | the fin-lat-rep manuscript § 5 | **verified**, with its proof | consumed by Theorem E |
+| Simplicity of `P(2×2, 2×2)` and its dual; non-simplicity of the four RP-3 targets | this repository | **computed** | the congruence lattices of the target stanzas, by brute force over their partitions |
+| The hexagon is the congruence lattice of a six-element algebra | this repository | **certified** | `FLRP.Certificates.Parachute.HexagonEq6`, from the closed class of the `Eq(6)` closure search |
+| `P(2×2, 2×2)` has no `0`–`1` sublattice copy in `Eq(n)`, `n ≤ 7` | this repository | **computed** | `eqsearch.py --fast`, runs of 2026-09-28 |
 | The Kurzweil wreath's coatom over `Diag × Ū` is of diagonal type | this note, § 6 | **computed** at `A₅ ≀ C₄` | `scripts/gap/flrp/out/wreath_coatom_type_a5_c4.json`; the general statement is the identification of the coatoms with the partition subgroups `S^{π_K} ⋊ G`, an elementary reading of Kurzweil's isomorphism |
 | `P(2×2, 2×2)`, its dual, and `DΔ(3,3)` are upper intervals in none of TomLib's 414 tables | this repository | **computed** | `tomscan_pm2m2.json`, `tomscan_pm2m2_big.json`, `tomscan_pm2m2d.json`, `tomscan_dd33.json` |
 | The isomorphism test of the scan agrees with the brute-force one | this repository | **computed** | the hexagon re-scan reproduced the committed sixteen hits and 143 ambiguous cases |
@@ -327,6 +519,14 @@ about it; `computed` means checked in GAP with a committed record.
    `ParachuteTheorem3` with the four alternatives; the minimality notions
    `Minimal`, `DualMinimal`; and the two derived corollaries
    `theorem3-dualMinimal` and `theorem3-minimal`.
++  `FLRP.Certificates.Parachute.HexagonEq6`: the hexagon as the congruence
+   lattice of a six-element unary algebra, machine-checked.
 +  Not formalized, recorded here: Theorem A (it needs the component
-   decomposition of the monolith to state "type"), the signalizer-lattice
-   clause of alternative 2, and the structure of alternative 4.
+   decomposition of the monolith to state "type"), Theorem D (the same
+   decomposition, for the socle of `H`), the signalizer-lattice clause of
+   alternative 2, the structure of alternative 4, and Theorem E with its
+   input, the minimal-representation theorems, which need the notion of a
+   minimal representation over `Representableᵈ`.  Snow's Lemma 3.10 is a
+   natural closure theorem for `FLRP.Closure` in its own right, but it is
+   no input to Theorem E, whose hypothesis is that the parachute is a
+   congruence lattice, which no closure theorem supplies.

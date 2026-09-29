@@ -41,7 +41,7 @@
 #      where a path segment happens to contain the substring `agda`.
 # =============================================================================
 
-.PHONY: default all check check-certificates check-all test clean site serve serve-full html agda-md site-full profile project-plan unused-imports unused-imports-test check-links check-links-test gen-links corpus-stats corpus-stats-check corpus-stats-test gap-hunt gap-tomscan gap-wreath-labels docstrings docstrings-test docstrings-list docstrings-unused docstrings-json flrp-test flrp-slr gap-smoke Everything.agda EverythingLegacy.agda EverythingCertificates.agda
+.PHONY: default all check check-certificates check-all test clean site serve serve-full html agda-md site-full profile project-plan unused-imports unused-imports-test check-links check-links-test gen-links corpus-stats corpus-stats-check corpus-stats-test gap-hunt gap-tomscan gap-wreath-labels docstrings docstrings-test docstrings-list docstrings-unused docstrings-json flrp-test flrp-slr flrp-lat8 gap-smoke Everything.agda EverythingLegacy.agda EverythingCertificates.agda
 
 # -- Configuration -----------------------------------------------------------
 SRCDIR    := src
@@ -391,6 +391,18 @@ flrp-test:
 	python3 scripts/python/flrp/test_gap_interval.py
 	python3 scripts/python/flrp/test_parachute_targets.py
 	python3 scripts/python/flrp/test_tomscan_summary.py
+	python3 scripts/python/flrp/test_lattices8.py
+
+# Regenerate the eight-element lattice census (issue #578): the 222 lattices
+# classified by the formal closure properties of Kjos-Hanssen's note, with
+# the note's 69 "parallel sums" split into the 8 that Snow's Lemma 3.10
+# covers and the 61 it does not.  Writes scripts/python/flrp/out/
+# lattices8_census.json and the eqsearch/GAP target stanzas of the 61 under
+# scripts/python/flrp/inputs/lat8/.  Deterministic; the committed copies must
+# re-derive byte for byte (checked by flrp-test).
+flrp-lat8:
+	@echo "target: $@"
+	python3 scripts/python/flrp/lattices8.py --json scripts/python/flrp/out/lattices8_census.json --stanzas scripts/python/flrp/inputs/lat8
 
 # Regenerate the SmallLatticeReps catalog artifacts (issue #485) from the
 # manuscript source: claim files under scripts/python/flrp/inputs/slr/, audit
@@ -418,6 +430,8 @@ gap-smoke:
 # `nix develop .#gap` (that shell carries python3); the sweep takes a few
 # minutes.
 RP3_SWEEP_DATE := 2026-08-29
+# The eight-element slice (P(2x2,2x2) and its dual) was added by issue #578.
+RP3_SWEEP8_DATE := 2026-09-28
 gap-hunt:
 	@echo "target: $@"
 	gap -A -q -b scripts/gap/flrp/bin/hunt_parachutes.g
@@ -426,6 +440,8 @@ gap-hunt:
 	python3 scripts/python/flrp/gap_search.py scripts/gap/flrp/out/rp3_parachutes_s7.raw.json --target scripts/gap/flrp/inputs/p332.json --out scripts/gap/flrp/out/rp3_p332.search.json --date $(RP3_SWEEP_DATE)
 	python3 scripts/python/flrp/gap_search.py scripts/gap/flrp/out/rp3_parachutes_s7.raw.json --target scripts/gap/flrp/inputs/p34.json --out scripts/gap/flrp/out/rp3_p34.search.json --date $(RP3_SWEEP_DATE)
 	python3 scripts/python/flrp/gap_search.py scripts/gap/flrp/out/rp3_parachutes_s7.raw.json --target scripts/gap/flrp/inputs/p3m2.json --out scripts/gap/flrp/out/rp3_p3m2.search.json --date $(RP3_SWEEP_DATE)
+	python3 scripts/python/flrp/gap_search.py scripts/gap/flrp/out/rp3_parachutes_s8.raw.json --target scripts/gap/flrp/inputs/pm2m2.json --out scripts/gap/flrp/out/rp3_pm2m2.search.json --date $(RP3_SWEEP8_DATE)
+	python3 scripts/python/flrp/gap_search.py scripts/gap/flrp/out/rp3_parachutes_s8.raw.json --target scripts/gap/flrp/inputs/pm2m2d.json --out scripts/gap/flrp/out/rp3_pm2m2d.search.json --date $(RP3_SWEEP8_DATE)
 
 # The tables-of-marks scan (issue #513): hunt each RP-3 parachute target as an
 # upper interval across TomLib's 414 tables by marks, resolve the ambiguous
