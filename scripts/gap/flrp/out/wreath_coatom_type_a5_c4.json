@@ -24,6 +24,7 @@
     "coatoms": [
       {
         "cosetActionDegree": 3600,
+        "diagonalBlocks": 2,
         "gapONanScottType": "4b",
         "meetBaseOrder": 3600,
         "meetCoordinateOrders": [

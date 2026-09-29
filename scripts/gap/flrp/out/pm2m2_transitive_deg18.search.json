@@ -1,0 +1,42 @@
+{
+  "format": "flrp-gap-search v1",
+  "date": "2026-09-28",
+  "engine": {
+    "gap": "4.15.1",
+    "libraries": {
+      "primgrp": "4.0.1",
+      "smallgrp": "1.5.4",
+      "transgrp": "3.6.5"
+    }
+  },
+  "config": {
+    "degree": 18,
+    "mode": "transitive-point-stabilizer",
+    "target": "P(2x2,2x2)",
+    "targetSize": 8
+  },
+  "target": {
+    "name": "P(2x2,2x2): parachute of two four-element Boolean lattices",
+    "size": 8
+  },
+  "scanned": {
+    "groups": 983
+  },
+  "sizeHistogram": {
+    "10": 5,
+    "12": 3,
+    "14": 1,
+    "16": 1,
+    "2": 4,
+    "28": 1,
+    "3": 187,
+    "4": 458,
+    "5": 199,
+    "6": 45,
+    "7": 55,
+    "8": 24
+  },
+  "candidates": 24,
+  "verdict": "negative",
+  "hits": []
+}

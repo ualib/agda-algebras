@@ -43,6 +43,20 @@ fi;
 
 targetName := "L7";;
 targetSize := 7;;      # library L7 has seven elements
+outStem := "l7";;
+##  Other targets (issue #578): set the name, the element count, and the
+##  output stem with -c, e.g.
+##    -c 'FLRP_TARGETNAME := "P(2x2,2x2)";; FLRP_TARGETSIZE := 8;; FLRP_OUTSTEM := "pm2m2";;'
+##  and confirm against scripts/gap/flrp/inputs/<stem>.json.
+if IsBoundGlobal("FLRP_TARGETNAME") then
+  targetName := ValueGlobal("FLRP_TARGETNAME");
+fi;
+if IsBoundGlobal("FLRP_TARGETSIZE") then
+  targetSize := ValueGlobal("FLRP_TARGETSIZE");
+fi;
+if IsBoundGlobal("FLRP_OUTSTEM") then
+  outStem := ValueGlobal("FLRP_OUTSTEM");
+fi;
 
 Print("scanning TransitiveGroup(", degree, ", *) by point stabilizer for [H,G] of size ",
       targetSize, " ...\n");
@@ -59,7 +73,7 @@ out := rec(
   sizeHistogram := report.sizeHistogram,
   candidates := report.candidates );;
 
-path := Concatenation("scripts/gap/flrp/out/l7_transitive_deg", String(degree), ".raw.json");;
+path := Concatenation("scripts/gap/flrp/out/", outStem, "_transitive_deg", String(degree), ".raw.json");;
 JSON_WriteFile(path, out);
 
 Print("\ndegree ", degree, ": scanned ", report.groupsScanned, " transitive groups\n");
