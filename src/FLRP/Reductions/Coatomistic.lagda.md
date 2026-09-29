@@ -105,10 +105,15 @@ alternative is realized by known constructions (alternative 3 by the
 wreathed almost simple representations `Ḡ ≀ C₂`, alternative 4 by the double
 Kurzweil wreaths, alternative 2 by his Section 8 for canopies with a unique
 coatom).  The smallest lattice the entry reaches is `P(2×2 , 2×2)`, the
-parachute of two four-element Boolean lattices, eight elements; the
-tables-of-marks scan of 2026-09-28 finds it in none of the 414 tables
-(`scripts/gap/flrp/out/tomscan_pm2m2.json`), so its representability is
-open, and with it the entry's vacuity datum.
+parachute of two four-element Boolean lattices, eight elements.  No
+representation of it is known: it is in none of the 414 tables of marks
+(`scripts/gap/flrp/out/tomscan_pm2m2.json`), in no group of order at most
+300, in no `Eq(n)` with `n ≤ 7`, and over no point stabilizer of a
+transitive group of composite degree at most 22.  It is a simple lattice
+whose coatoms meet to `0`, so by the theorem of Pálfy–Pudlák and McKenzie
+with DeMeo–Freese's transitivity theorem it is a congruence lattice if and
+only if it is a group interval (`docs/notes/flrp-parachute-theorem3.md`
+§ 7.1); the searches test whether it is representable at all.
 
 <!--
 ```agda
@@ -123,10 +128,12 @@ open import Data.Empty                             using  ( ⊥-elim )
 open import Data.Nat.Base                          using  ( ℕ ; suc )
                                                    renaming ( _≤_ to _≤ⁿ_ ; _<_ to _<ⁿ_ )
 open import Data.Nat.Properties                    using  ( <⇒≱ )
-open import Data.Product                           using  ( _×_ ; _,_ ; Σ-syntax ; proj₁ )
+open import Data.Product                           using  ( _×_ ; _,_ ; Σ-syntax
+                                                           ; proj₁ ; proj₂ )
 open import Data.Sum.Base                          using  ( _⊎_ ; inj₁ ; inj₂ )
 open import Level                                  using  ( 0ℓ )
                                                    renaming ( suc to lsuc )
+open import Relation.Binary                        using  ( Setoid )
 open import Relation.Binary.PropositionalEquality  using  ( _≡_ )
 open import Relation.Nullary                       using  ( ¬_ )
 open import Relation.Unary                         using  ( Pred ; _∈_ ; _⊆_ ; _∩_ )
@@ -134,16 +141,19 @@ open import Relation.Unary                         using  ( Pred ; _∈_ ; _⊆_
 -- Imports from the Agda Universal Algebra Library ------------------------------
 open import Classical.Small.Structures              using  ( Lattice )
 open import Classical.Structures.Group              using  ( Group ; IsSubgroup
+                                                           ; module Centralizer
                                                            ; module Complements
                                                            ; module Conjugate
+                                                           ; module Group-Op
                                                            ; module MinimalNormal )
 open import Classical.Structures.Lattice.Disconnected
                                                     using  ( module ParachuteDisconnected )
 open import Classical.Structures.Lattice.Dual       using  ( dualLattice )
 open import Classical.Structures.Lattice.Parachute  using  ( Parachute )
 open import FLRP.Enforceable                        using  ( CoreFree ; IntervalIso )
+open import FLRP.Parachute.Basic                    using  ( module GroupParachute )
 open import FLRP.Parachute.Representation           using  ( module ParachuteRep )
-open import Setoid.Algebras                         using  ( 𝕌[_] ; FiniteAlgebra )
+open import Setoid.Algebras                         using  ( 𝕌[_] ; 𝔻[_] ; FiniteAlgebra )
 
 open FiniteAlgebra using ( card )
 ```
@@ -189,6 +199,22 @@ minimal→¬smaller 𝒢 fin 𝑳 least (𝒬 , J , J-sg , fin′ , lt , rep) =
   <⇒≱ lt (least 𝒬 J J-sg fin′ rep)
 ```
 
+**Certified cardinality and exact order**.  The `card`{.AgdaField} of a
+`FiniteAlgebra`{.AgdaRecord} is only an upper bound on the carrier, so one
+may ask whether `Minimal`{.AgdaFunction}, which compares bounds, is the
+literature's minimality, which compares orders.  It is, on both sides.  A
+minimal representation's bound is exact: a finite group with decidable
+equality has an exact enumeration, and `𝒢` with its own exact enumeration
+is a representation of `𝑳` whose certified order is `|G|`, so any `fin`
+satisfying `Minimal 𝒢 fin 𝑳` has `card ≤ |G|`, hence `card = |G|`, and
+`Minimal`{.AgdaFunction} then says precisely that no group of order below
+`|G|` carries `𝑳`.  And the imported alternatives 3 and 4 are implied by
+Aschbacher's: a group of order below `|G|` carrying `𝑳`, with its exact
+enumeration, inhabits `SmallerRepresentation`{.AgdaFunction} against every
+bound of `𝒢`, exact or not.  So the corollaries below eliminate exactly the
+alternatives the literature eliminates.  (`MinimallyIE`{.AgdaFunction} of
+[FLRP.Reductions][] uses the same convention.)
+
 #### The lattice-side hypotheses
 
 Fix a parachute with at least two canopies.  The hypotheses of the entry are
@@ -231,11 +257,13 @@ Over a group `𝒢` with a subgroup `H` and a monolith `M` (the least nontrivial
 normal subgroup, `HasMonolithᵍ`{.AgdaFunction} of
 [Classical.Structures.Group.MinimalNormal][]), the first two alternatives.
 A monolith that is simple *as a group* makes `G` almost simple: it is the
-unique minimal normal subgroup, and in a parachute representation its
-centralizer is trivial (Lemma 3.7).  Simplicity is stated in the implication
-form of `IsSimple`{.AgdaFunction} of [Classical.Structures.Group.Simple][],
-relativized to `M`: a subgroup of `M` that `M` normalizes and that has a
-non-identity member is all of `M`.
+unique minimal normal subgroup, and in a parachute representation it is
+nonabelian with trivial centralizer (Lemma 3.7), which the module
+`AlmostSimple`{.AgdaModule} at the end of this file derives from the
+parachute theorems, so that alternative 1 carries the full conclusion.
+Simplicity is stated in the implication form of `IsSimple`{.AgdaFunction} of
+[Classical.Structures.Group.Simple][], relativized to `M`: a subgroup of `M`
+that `M` normalizes and that has a non-identity member is all of `M`.
 
 ```agda
 module Alternatives (𝒢@(𝑮 , _) : Group 0ℓ 0ℓ) (H : Pred 𝕌[ 𝑮 ] 0ℓ) where
@@ -244,7 +272,8 @@ module Alternatives (𝒢@(𝑮 , _) : Group 0ℓ 0ℓ) (H : Pred 𝕌[ 𝑮 ] 0
   open Conjugate 𝒢         using  ( conj )
   open Complements 𝒢       using  ( Factors )
 
-  -- The monolith is simple as a group: G is almost simple.
+  -- The monolith is simple as a group; with Lemma 3.7 (nonabelian, trivial
+  -- centralizer; see AlmostSimple below) G is almost simple.
   MonolithSimple : HasMonolithᵍ → Type (lsuc 0ℓ)
   MonolithSimple (M , _) =
     (N : Pred 𝕌[ 𝑮 ] 0ℓ) → IsSubgroup 𝒢 N → N ⊆ M
@@ -273,11 +302,20 @@ minimality is assumed in the statement, minimality being what the corollaries
 add.  The core-free hypothesis is his (6.3) made explicit rather than derived
 from minimality.
 
-**Representability status**.  Unknown for every instance: no coatomistic
-parachute with two big canopies is known to be a group interval, and the
-smallest, `P(2×2 , 2×2)`, is absent from the tables of marks.  Until one is
-found the entry is potentially vacuous, exactly as Entry 7 was while `L7`
-was open, and it is recorded on the same terms.
+**Representability status**.  Unknown.  No coatomistic parachute with two
+big canopies is known to be a congruence lattice.  For every instance whose
+canopies have no nontrivial congruence keeping the top alone (Boolean and
+`Mₖ` canopies qualify) the parachute is a simple lattice whose coatoms meet
+to `0`, so by the argument of the survey note
+`docs/notes/flrp-parachute-theorem3.md` § 7.1 it is a congruence lattice if
+and only if it is a group interval, its minimal congruence representation
+being then a transitive `G`-set; and no group interval is known for any
+instance.  The least, `P(2×2 , 2×2)`, is absent from the tables of marks,
+from the groups of order at most 300, from `Eq(n)` for `n ≤ 7`, and from
+the transitive groups of composite degree at most 22.  The entry may
+therefore be vacuous, and it is recorded on those terms; a proof that it is
+vacuous, that is, that `P(2×2 , 2×2)` is no group interval, would be a
+negative answer to the representation problem itself.
 
 ```agda
 -- Entry 13: Aschbacher's Theorem 3 for coatomistic parachutes with two big
@@ -363,6 +401,82 @@ module Corollaries {m : ℕ} (𝒫 : Parachute 0ℓ 0ℓ (suc m))
     → MonolithSimple mono ⊎ ComplementsMonolith mono ⊎ SmallerRepresentation 𝒢 fin Λ′
   theorem3-minimal thm coat big two H-sg cf iso least =
     dispatch (minimal→¬smaller 𝒢 fin Λ least) (thm 𝒫 coat big two 𝒢 H H-sg cf fin iso mono)
+```
+
+#### The almost simple alternative, spelled out
+
+Alternative 1 says the monolith is simple as a group.  For `G` to be almost
+simple two more facts are needed, that the monolith is nonabelian and that its
+centralizer is trivial, and both are Lemma 3.7 of the note, proved in
+[FLRP.Parachute.Basic][] (`Structure.Minimal`{.AgdaModule}) for every
+core-free representation of a parachute with two big canopies and every
+minimal normal subgroup of the group.  The monolith is such a subgroup, so
+the bundle below derives both facts for it and packages alternative 1 with
+them: `IsAlmostSimple`{.AgdaRecord} is the conclusion the catalog advertises,
+and `almostSimple`{.AgdaFunction} turns the alternative into it.
+
+```agda
+module AlmostSimple {m : ℕ} (𝒫 : Parachute 0ℓ 0ℓ (suc m))
+  (𝒢 : Group 0ℓ 0ℓ) (H : Pred 𝕌[ proj₁ 𝒢 ] 0ℓ) (H-sg : IsSubgroup 𝒢 H)
+  (H-cf : CoreFree 𝒢 H H-sg)
+  (iso  : IntervalIso 𝒢 H H-sg (CoatomisticParachute.⊕ᵖ-Lattice 𝒫))
+  (two  : CoatomisticParachute.TwoBigCanopiesᴸ 𝒫)
+  (mono : MinimalNormal.HasMonolithᵍ 𝒢 0ℓ)
+  where
+
+  open MinimalNormal 𝒢 0ℓ   using  ( Triv ; IsMonolithᵍ ; IsMinimalNormal ; IsNormalSubgroup )
+  open Centralizer 𝒢        using  ( C[_] )
+  open Group-Op 𝒢           using  ( _∙_ )
+  open Setoid 𝔻[ proj₁ 𝒢 ]  using  ( _≈_ )
+  open GroupParachute 𝒢 H H-sg
+  open ParachuteRep 𝒫       using  ( module Over )
+  open Over 𝒢 H H-sg iso    using  ( config ; K ; K-proper ; K-⊄H ; IsAll? ; bigCanopy )
+
+  private
+    M : Pred 𝕌[ proj₁ 𝒢 ] 0ℓ
+    M = proj₁ mono
+
+    M-min : IsMinimalNormal M
+    M-min = IsMonolithᵍ.isMinimalNormal (proj₂ mono)
+
+    -- The two big canopies, unpacked.
+    p q : CoatomisticParachute.Ix 𝒫
+    p = proj₁ two
+    q = proj₁ (proj₂ two)
+
+    -- Lemma 3.7 over this representation, with the p-th atom as the strictly
+    -- intermediate member (it is proper because q is another canopy).
+    module S = Structure config H-cf (proj₁ (proj₂ (proj₂ two)))
+                 (bigCanopy p (proj₁ (proj₂ (proj₂ (proj₂ two)))))
+                 (bigCanopy q (proj₂ (proj₂ (proj₂ (proj₂ two)))))
+                 IsAll? (K p) (K-proper p q (proj₁ (proj₂ (proj₂ two)))) (K-⊄H p)
+
+    -- ... at the monolith, a minimal normal subgroup.
+    module S-M = S.Minimal M
+                   (IsNormalSubgroup.isSubgroup (IsMinimalNormal.normalSubgroup M-min))
+                   (IsNormalSubgroup.isNormal (IsMinimalNormal.normalSubgroup M-min))
+                   (IsMinimalNormal.nontrivial M-min)
+                   (λ {N} N-sg N-nrm N⊆M N-nontriv →
+                      IsMinimalNormal.minimal M-min N
+                        (record { isSubgroup = N-sg ; isNormal = N-nrm }) N⊆M N-nontriv)
+
+  -- Lemma 3.7 (i) at the monolith: its centralizer is trivial, so it is nonabelian.
+  open S-M public using () renaming ( centralizer-trivial to monolith-centralizer-trivial
+                                     ; nonabelian          to monolith-nonabelian )
+
+  -- G is almost simple: its monolith is nonabelian simple with trivial centralizer.
+  record IsAlmostSimple : Type (lsuc 0ℓ) where
+    field
+      monolithSimple     : Alternatives.MonolithSimple 𝒢 H mono
+      centralizerTrivial : C[ M ] ⊆ Triv
+      nonabelian         : ¬ (∀ x y → x ∈ M → y ∈ M → x ∙ y ≈ y ∙ x)
+
+  -- Alternative 1 of Entry 13 is the almost simple conclusion.
+  almostSimple : Alternatives.MonolithSimple 𝒢 H mono → IsAlmostSimple
+  almostSimple s = record
+    { monolithSimple     = s
+    ; centralizerTrivial = S-M.centralizer-trivial
+    ; nonabelian         = S-M.nonabelian }
 ```
 
 ---
