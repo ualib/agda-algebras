@@ -109,7 +109,12 @@ Two standing warnings apply to everything under this namespace.
    `L7` analysis, Lucchini–Moscatiello–Palcoux–Spiga).  The module also proves
    the note's Lemma 3.1, exposes the vacuity theorem `not-representable→IE`, and
    repairs `minIE` as `MinimallyIE`; the survey note is
-   `docs/notes/flrp-rp2-catalog.md`.
+   `docs/notes/flrp-rp2-catalog.md`.  Two entries live in submodules of
+   their own and are re-exported here: [FLRP.Reductions.Coatomistic][]
+   (Entry 13, the parachute analog of Aschbacher's Theorem 3 for coatomistic
+   parachutes with two big canopies, with its minimality corollaries derived)
+   and [FLRP.Reductions.Lucchini][] (Entry 14, Lucchini's dichotomy for
+   minimal representations of `Mₙ`, composed with Köhler's Entry 6).
 
 +  [FLRP.Hunt][]: the RP-3 **constraint dossier** for the hunt for an
    empty-intersection family: the degenerate enforcements of the one- and
@@ -137,6 +142,8 @@ open import FLRP.Problem         public
 open import FLRP.Enforceable     public
 open import FLRP.Parachute       public
 open import FLRP.Reductions      public
+open import FLRP.Reductions.Coatomistic  public
+open import FLRP.Reductions.Lucchini     public
 open import FLRP.Bridge          public
 open import FLRP.Representable   public
 open import FLRP.Assumptions     public

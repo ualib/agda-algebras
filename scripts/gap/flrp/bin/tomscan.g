@@ -60,25 +60,60 @@ FLRP_N := Length(FLRP_TARGET);;
 FLRP_TargetUpProfile := SortedList(List(FLRP_TARGET, Length));;
 
 ##  Is the poset given by up-sets `leq` (1 = bottom, N = top) isomorphic to
-##  the target?  Brute force over the permutations of the interior elements.
+##  the target?  Backtracking over the elements in target order, each mapped
+##  to an unused element with the same up-count and down-count (both are
+##  isomorphism invariants) and checked, against every earlier assignment,
+##  to preserve and reflect the order.  The brute force over the interior
+##  permutations this replaces (M6-21) was fine at seven elements and is
+##  12! steps at the fourteen of DDelta(3,3); the two agree on every target
+##  (the M6-27 pass re-ran the hexagon scan against the committed record).
 FLRP_IsTarget := function(leq)
-  local p, i, ok;
-  if Length(leq) <> FLRP_N then
+  local N, downT, downL, invT, invL, cand, assign, used, extend;
+  N := FLRP_N;
+  if Length(leq) <> N then
     return false;
   fi;
-  for p in SymmetricGroup([2 .. FLRP_N - 1]) do
-    ok := true;
-    for i in [1 .. FLRP_N] do
-      if Set(List(leq[i], j -> j ^ p)) <> Set(FLRP_TARGET[i ^ p]) then
-        ok := false;
-        break;
-      fi;
-    od;
-    if ok then
+  downT := List([1 .. N], j -> Filtered([1 .. N], i -> j in FLRP_TARGET[i]));
+  downL := List([1 .. N], j -> Filtered([1 .. N], i -> j in leq[i]));
+  invT := List([1 .. N], i -> [Length(FLRP_TARGET[i]), Length(downT[i])]);
+  invL := List([1 .. N], i -> [Length(leq[i]), Length(downL[i])]);
+  if SortedList(invT) <> SortedList(invL) then
+    return false;
+  fi;
+  # cand[i]: the elements of leq that target element i may be sent to.
+  cand := List([1 .. N], i -> Filtered([1 .. N], k -> invL[k] = invT[i]));
+  assign := ListWithIdenticalEntries(N, 0);
+  used := BlistList([1 .. N], []);
+  # Extend the partial isomorphism on target elements 1 .. i - 1 to i.
+  extend := function(i)
+    local k, j, ok;
+    if i > N then
       return true;
     fi;
-  od;
-  return false;
+    for k in cand[i] do
+      if not used[k] then
+        ok := true;
+        for j in [1 .. i - 1] do
+          if (j in FLRP_TARGET[i]) <> (assign[j] in leq[k])
+             or (i in FLRP_TARGET[j]) <> (k in leq[assign[j]]) then
+            ok := false;
+            break;
+          fi;
+        od;
+        if ok then
+          assign[i] := k;
+          used[k] := true;
+          if extend(i + 1) then
+            return true;
+          fi;
+          used[k] := false;
+          assign[i] := 0;
+        fi;
+      fi;
+    od;
+    return false;
+  end;
+  return extend(1);
 end;;
 
 ##  1-based up-sets from Hulpke's 0-based cover list (0 = H, size - 1 = G).

@@ -80,6 +80,7 @@ open import Agda.Primitive using () renaming ( Set to Type )
 open import Data.Bool.Base                         using ( Bool ; true ; false ; not )
 open import Data.Empty                             using ( ⊥-elim )
 open import Data.Fin.Properties                    using ( _≟_ )
+open import Data.List.NonEmpty                     using ( List⁺ ; foldr₁ ; map )
 open import Data.Nat.Base                          using ( ℕ )
 open import Data.Product                           using ( _,_ ; _×_ ; Σ-syntax
                                                          ; proj₁ ; proj₂ )
@@ -157,6 +158,35 @@ instance below, since a D-lattice has at least six elements.)
   -- No proper element is modular.
   IsALattice : Type (α ⊔ ρ)
   IsALattice = ∀ m → Proper m → ¬ IsModularElement m
+```
+
+#### Coatoms and Aschbacher's `C*`-lattices
+
+A **coatom** is a proper element with nothing proper strictly above it: every
+element above it is either below it, hence equal to it, or is the top.  The
+disjunction is data, as the covering property of a parachute is; for a lattice
+on a finite carrier it is a computation.
+
+```agda
+  -- m is a coatom: proper, and every element above it is m itself or the top.
+  IsCoatom : 𝕌[ proj₁ 𝑳 ] → Type (α ⊔ ρ)
+  IsCoatom m = Proper m × (∀ y → m ≤ y → (y ≤ m) ⊎ (𝟏 ≤ y))
+```
+
+Aschbacher's condition (C), which defines his `C*`-lattices: every proper
+element is a meet of finitely many coatoms.  We say **coatomistic**.  The
+coatoms are supplied as a nonempty list, whose meet is folded from the right.
+This is the condition the two C-dependent steps of his Theorem 3 consume, and
+a parachute satisfies it exactly when every canopy is coatomistic *including
+its bottom*, so that its atom is a meet of that canopy's coatoms; a canopy
+that is a chain fails it, and one whose top covers at least two elements
+whose meet is its bottom satisfies it (see [FLRP.Reductions.Coatomistic][]).
+
+```agda
+  -- Aschbacher's C*-condition: every proper element is a meet of coatoms.
+  IsCoatomistic : Type (α ⊔ ρ)
+  IsCoatomistic = ∀ x → Proper x
+    → Σ[ ms ∈ List⁺ (Σ[ m ∈ 𝕌[ proj₁ 𝑳 ] ] IsCoatom m) ] x ≈ foldr₁ _∧_ (map proj₁ ms)
 ```
 
 Comparability is the adjacency of the graph `Λ′`; a **proper chain** is a
@@ -294,6 +324,25 @@ module ParachuteDisconnected {m : ℕ} (𝒫 : Parachute α ρ m) where
   can-proper : {i : Ix} (x : U i) (r : NonTop x) → Proper (can x r)
   can-proper x r =
     (λ le → can≰⊥ (≤ᵖ-complete {can x r} {⊥ᵖ} le)) , (λ ge → ⊤≰can (≤ᵖ-complete {⊤ᵖ} {can x r} ge))
+```
+
+Two elements of one canopy meet inside that canopy, above its atom, so their
+meet is never the bottom.  In particular two coatoms of a parachute that lie
+in the same canopy meet strictly above the bottom.  This is the fact
+Aschbacher's (6.6)(3) consumes from the condition (C) (a coatom `M₂` and a
+second coatom `M′` of the same component with `M₂ ∩ M′ ≠ H`), and a parachute
+supplies it whenever a canopy has two coatoms at all.
+
+```agda
+  -- Two elements of canopy i meet above the i-th atom ...
+  same-canopy-meet : {i : Ix} (x y : U i) (r : NonTop x) (s : NonTop y)
+    → atom i ≤ᵖ (can x r ∧ᵖ can y s)
+  same-canopy-meet x y r s = ∧ᵖ-greatest (atom-≤ x r) (atom-≤ y s)
+
+  -- ... so their meet is not the bottom.
+  same-canopy-meet-≢⊥ : {i : Ix} (x y : U i) (r : NonTop x) (s : NonTop y)
+    → ¬ ((can x r ∧ᵖ can y s) ≤ᵖ ⊥ᵖ)
+  same-canopy-meet-≢⊥ x y r s le = atom-≢⊥ (≤ᵖ-trans (same-canopy-meet x y r s) le)
 ```
 
 Two big canopies `p ≢ q`, each given by an element strictly between its atom

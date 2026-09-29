@@ -1,0 +1,165 @@
+{
+  "format": "flrp-cert-input v1",
+  "name": "HexagonEq6",
+  "date": "2026-09-28",
+  "algebra": {
+    "name": "hexagon closure witness on 6 points, a generating set of the preserving monoid",
+    "card": 6,
+    "operations": [
+      {
+        "name": "u0",
+        "arity": 1,
+        "table": [
+          0,
+          2,
+          1,
+          0,
+          1,
+          2
+        ]
+      },
+      {
+        "name": "u1",
+        "arity": 1,
+        "table": [
+          1,
+          0,
+          1,
+          5,
+          5,
+          3
+        ]
+      },
+      {
+        "name": "u2",
+        "arity": 1,
+        "table": [
+          1,
+          0,
+          2,
+          1,
+          2,
+          0
+        ]
+      },
+      {
+        "name": "u3",
+        "arity": 1,
+        "table": [
+          3,
+          3,
+          4,
+          0,
+          2,
+          0
+        ]
+      }
+    ]
+  },
+  "lattice": {
+    "name": "P(3,3): parachute of two three-chains",
+    "size": 6,
+    "meet": [
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        1,
+        1,
+        0,
+        0,
+        1
+      ],
+      [
+        0,
+        1,
+        2,
+        0,
+        0,
+        2
+      ],
+      [
+        0,
+        0,
+        0,
+        3,
+        3,
+        3
+      ],
+      [
+        0,
+        0,
+        0,
+        3,
+        4,
+        4
+      ],
+      [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    ],
+    "join": [
+      [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      [
+        1,
+        1,
+        2,
+        5,
+        5,
+        5
+      ],
+      [
+        2,
+        2,
+        2,
+        5,
+        5,
+        5
+      ],
+      [
+        3,
+        5,
+        5,
+        3,
+        4,
+        5
+      ],
+      [
+        4,
+        5,
+        5,
+        4,
+        4,
+        5
+      ],
+      [
+        5,
+        5,
+        5,
+        5,
+        5,
+        5
+      ]
+    ]
+  },
+  "module": "FLRP.Certificates.Parachute",
+  "provenance": "The hexagon P(3,3), the parachute of two three-element chains, as the congruence lattice of a six-element unary algebra. The Eq(6) closure search of issue #578 found one closed class, the chains 012|34|5 < 012|345 and 03|15|2|4 < 03|15|24; the witness is the monoid of the 45 unary maps preserving those four partitions, and the operations below are a generating set of it, so the congruence lattice is the same. Its smallest known carrier as a group interval has order 25920 (U4(2), index 1080), and no group of order at most 300 carries it core-freely: the congruence-lattice question and the group-interval question live at different scales."
+}

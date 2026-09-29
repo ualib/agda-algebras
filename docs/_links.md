@@ -371,6 +371,7 @@
 [FLRP.Certificates.FilterIdeal.A5Data]: /FLRP/Certificates/FilterIdeal/A5Data/
 [FLRP.Certificates.FilterIdeal.L16SubA5]: /FLRP/Certificates/FilterIdeal/L16SubA5/
 [FLRP.Certificates.Group.TG9x4TwoByTwo]: /FLRP/Certificates/Group/TG9x4TwoByTwo/
+[FLRP.Certificates.Parachute.HexagonEq6]: /FLRP/Certificates/Parachute/HexagonEq6/
 [FLRP.Certificates.Pilot.V4RegularM3]: /FLRP/Certificates/Pilot/V4RegularM3/
 [FLRP.Certificates.SmallLatticeReps.SLR01]: /FLRP/Certificates/SmallLatticeReps/SLR01/
 [FLRP.Certificates.SmallLatticeReps.SLR02]: /FLRP/Certificates/SmallLatticeReps/SLR02/
@@ -423,6 +424,8 @@
 [FLRP.Parachute.Theorems]: /FLRP/Parachute/Theorems/
 [FLRP.Problem]: /FLRP/Problem/
 [FLRP.Reductions]: /FLRP/Reductions/
+[FLRP.Reductions.Coatomistic]: /FLRP/Reductions/Coatomistic/
+[FLRP.Reductions.Lucchini]: /FLRP/Reductions/Lucchini/
 [FLRP.Representable]: /FLRP/Representable/
 [FLRP.WreathNoGo]: /FLRP/WreathNoGo/
 
@@ -789,6 +792,7 @@
 [FLRP/Certificates/FilterIdeal/A5Data.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/Certificates/FilterIdeal/A5Data.lagda.md
 [FLRP/Certificates/FilterIdeal/L16SubA5.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/Certificates/FilterIdeal/L16SubA5.lagda.md
 [FLRP/Certificates/Group/TG9x4TwoByTwo.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/Certificates/Group/TG9x4TwoByTwo.lagda.md
+[FLRP/Certificates/Parachute/HexagonEq6.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/Certificates/Parachute/HexagonEq6.lagda.md
 [FLRP/Certificates/Pilot/V4RegularM3.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/Certificates/Pilot/V4RegularM3.lagda.md
 [FLRP/Certificates/SmallLatticeReps/SLR01.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/Certificates/SmallLatticeReps/SLR01.lagda.md
 [FLRP/Certificates/SmallLatticeReps/SLR02.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/Certificates/SmallLatticeReps/SLR02.lagda.md
@@ -841,6 +845,8 @@
 [FLRP/Parachute/Theorems.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/Parachute/Theorems.lagda.md
 [FLRP/Problem.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/Problem.lagda.md
 [FLRP/Reductions.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/Reductions.lagda.md
+[FLRP/Reductions/Coatomistic.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/Reductions/Coatomistic.lagda.md
+[FLRP/Reductions/Lucchini.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/Reductions/Lucchini.lagda.md
 [FLRP/Representable.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/Representable.lagda.md
 [FLRP/WreathNoGo.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/FLRP/WreathNoGo.lagda.md
 
