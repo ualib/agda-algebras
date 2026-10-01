@@ -684,13 +684,13 @@ Type-checking the whole library has roughly doubled in wall-clock time, and a la
 | whole clean type-check | **395.2 s** (6.6 min, 6.3 GB peak RSS) | 100 % |
 | `FLRP.Certificates.SmallLatticeReps.*` (27 modules) | **175.2 s** | **44.3 %** |
 | the other two certificates (`Pilot`, `Group`) | 3.4 s | 0.9 % |
-| `Legacy.*`, pulled in transitively by `Examples.Structures` and `Exercises.Complexity.FiniteCSP` (#322, #323) | 24.1 s | 6.1 % |
+| `Legacy.*`, pulled in transitively by `Examples.Structures` and `Exercises.Complexity.FiniteCSP` (#322, ualib/agda-algebras#323) | 24.1 s | 6.1 % |
 | core library and everything else | 192.4 s | 48.7 % |
 
 So **the census costs as much as the entire rest of the library**, and it is concentrated: the four slowest certificates (`SLR13` 45.2 s, `SLR27` 29.6 s, `SLR09` 25.2 s, `SLR33` 23.6 s) are 71 % of the census total.  Two further data points worth recording here, both actionable independently of this issue:
 
-+  the slowest single module in the whole library is **not** a certificate — it is `Classical.Structures.Lattice.Parachute` at **45.4 s** (currently in review on #506), just ahead of `SLR13`;
-+  `Setoid.Subalgebras.Subdirect.Finite` costs **22.1 s**, which corroborates #439's guess about that module from measurement rather than impression.
++  the slowest single module in the whole library is **not** a certificate — it is `Classical.Structures.Lattice.Parachute` at **45.4 s** (currently in review on ualib/agda-algebras#506), just ahead of `SLR13`;
++  `Setoid.Subalgebras.Subdirect.Finite` costs **22.1 s**, which corroborates ualib/agda-algebras#439's guess about that module from measurement rather than impression.
 
 For scale on the other axis: the census is 36,095 lines, 39 % of all source under `src/`, but only 12 % of interface bytes.
 
@@ -715,7 +715,7 @@ Three structural facts make this cheap to fix.
 +  it also gives up M8 corpus value — machine-checked certificates are among the most valuable training artifacts the repository has;
 +  and the manuscript source is itself vendored *here*, at `docs/papers/fin-lat-rep/SmallLatticeReps.tex`, so moving only the evidence would separate the paper from its checked artifacts rather than co-locating them.
 
-**C.  Make the certificates cheaper to check** (worth doing regardless, and it feeds #439).  The per-module profile attached above says where the time actually goes; candidate levers are `abstract`/`opaque` boundaries around the big tables so downstream normalization cannot unfold them, replacing compile-time `from-yes (… ?)` evaluation with tabulated structural proofs, and splitting the largest modules so interface caching is finer-grained.  This should be a follow-up issue driven by the profile, not guesswork.
+**C.  Make the certificates cheaper to check** (worth doing regardless, and it feeds ualib/agda-algebras#439).  The per-module profile attached above says where the time actually goes; candidate levers are `abstract`/`opaque` boundaries around the big tables so downstream normalization cannot unfold them, replacing compile-time `from-yes (… ?)` evaluation with tabulated structural proofs, and splitting the largest modules so interface caching is finer-grained.  This should be a follow-up issue driven by the profile, not guesswork.
 
 ## Proposal
 
@@ -729,7 +729,7 @@ Do the independent CI cache fix and option A now; open a data-driven follow-up f
 - [ ] Targets: `make check` (core + Legacy, as now, minus the census), `make check-certificates` (the new tier), `make check-all` (both).  Update the Makefile header, `README.md`, and `CONTRIBUTING.md`, which currently tell contributors that `make check` type-checks *the entire library*.
 - [ ] CI: add a `Type-check certificates` job running `make check-certificates`, in parallel with the existing job and required by `all-green`.  Nothing goes unchecked; core feedback arrives sooner and total wall-clock drops because the jobs run concurrently.
 - [ ] `make html` and `make agda-md` keep rendering the certificate tier, so the published site and `/classic/` do not lose pages.
-- [ ] Attach the per-module profile to #439 and open a follow-up for the worst offenders.
+- [ ] Attach the per-module profile to ualib/agda-algebras#439 and open a follow-up for the worst offenders.
 
 ## Acceptance criteria
 
@@ -738,7 +738,7 @@ Do the independent CI cache fix and option A now; open a data-driven follow-up f
 - [ ] The site still renders every certificate page.
 - [ ] No core-tier module imports a census certificate (guaranteed today; `make check-all` would catch a regression).
 
-Related: #439 (profile type-checking times), #483 and #485 (the census that produces these certificates), #451 (FLRP program).
+Related: ualib/agda-algebras#439 (profile type-checking times), ualib/agda-flrp#13 and ualib/agda-flrp#15 (the census that produces these certificates), ualib/agda-flrp#2 (FLRP program).
 
 <!-- END GENERATED: milestone-1 -->
 
@@ -2220,7 +2220,7 @@ Part of Milestone 4 (style and naming uniformity sweep); see also the umbrella #
 
 ---
 
-### Issue M4-2: Docstring pass for all user-facing definitions (#268)
+### Issue M4-2: Docstring pass for all user-facing definitions (#268, closed)
 
 **Labels**: `documentation`, `milestone-4-style`, `help-wanted`
 
@@ -2236,22 +2236,22 @@ Measured by `make docstrings` (#537) over the live trees: **3226 public definiti
 
 ## Tasks
 
-- [ ] #539 — Setoid/Algebras and Setoid/Homomorphisms (25 gaps, 10 headers)
-- [ ] #540 — Setoid/Subalgebras (23, 5)
-- [ ] #541 — Setoid/Varieties, Congruences, Terms, Categories (11, 9)
-- [ ] #542 — Setoid/Functions, Setoid/Relations, Setoid barrels (6, 5)
-- [ ] #543 — Classical/Structures, root and Lattice (34, 1)
-- [ ] #544 — Classical/Structures/Group (31, 1)
-- [ ] #545 — Classical/Bundles, Signatures, rest of Classical (37, 1)
-- [ ] #546 — Examples (30, 8)
-- [ ] #547 — Overture, FLRP, Exercises, top-level barrels (4, 10)
+- [x] #539 — Setoid/Algebras and Setoid/Homomorphisms (25 gaps, 10 headers)
+- [x] #540 — Setoid/Subalgebras (23, 5)
+- [x] #541 — Setoid/Varieties, Congruences, Terms, Categories (11, 9)
+- [x] #542 — Setoid/Functions, Setoid/Relations, Setoid barrels (6, 5)
+- [x] #543 — Classical/Structures, root and Lattice (34, 1)
+- [x] #544 — Classical/Structures/Group (31, 1)
+- [x] #545 — Classical/Bundles, Signatures, rest of Classical (37, 1)
+- [x] #546 — Examples (30, 8)
+- [x] #547 — Overture, FLRP, Exercises, top-level barrels (4, 10)
 
 Done: #537 (the audit tool, the baseline, the CI ratchet) · #538 (exemplar: `Setoid.Algebras.Basic`) · #387 (the `<a id>` anchor sweep).
 
 ## Acceptance criteria
 
-- [ ] `make docstrings` reports **0** definitions without a prose block, with `DOCSTRING_MAX_GAPS` at 0.
-- [ ] No module opens with only the boilerplate sentence.
+- [x] `make docstrings` reports **0** definitions without a prose block, with `DOCSTRING_MAX_GAPS` at 0.
+- [x] No module opens with only the boilerplate sentence.
 
 The original criterion said a "`grep`-based audit".  A grep cannot do this — the corpus has no `-- |` docstrings, prose lives in Markdown outside the fences, and almost every definition is indented inside an anonymous `module _ … where`.  `scripts/python/docstring_audit.py` parses literate structure and Agda's layout rule instead; it is validated against Agda's own scope checker.
 
@@ -2353,7 +2353,7 @@ Sub-issue of #268.  Tooling: #537.
 
 ---
 
-### Issue M4-2c: Docstrings: Setoid/Varieties, Congruences, Terms, Categories (#541)
+### Issue M4-2c: Docstrings: Setoid/Varieties, Congruences, Terms, Categories (#541, closed)
 
 **Labels**: `documentation`, `milestone-4-style`, `help-wanted`
 
@@ -2390,7 +2390,7 @@ Sub-issue of #268.  Tooling: #537.
 
 ---
 
-### Issue M4-2d: Docstrings: Setoid/Functions, Setoid/Relations, and the Setoid barrels (#542)
+### Issue M4-2d: Docstrings: Setoid/Functions, Setoid/Relations, and the Setoid barrels (#542, closed)
 
 **Labels**: `documentation`, `milestone-4-style`, `help-wanted`
 
@@ -2427,7 +2427,7 @@ Sub-issue of #268.  Tooling: #537.
 
 ---
 
-### Issue M4-2e: Docstrings: Classical/Structures (root and Lattice) (#543)
+### Issue M4-2e: Docstrings: Classical/Structures (root and Lattice) (#543, closed)
 
 **Labels**: `documentation`, `milestone-4-style`, `help-wanted`
 
@@ -2464,7 +2464,7 @@ Sub-issue of #268.  Tooling: #537.
 
 ---
 
-### Issue M4-2f: Docstrings: Classical/Structures/Group (#544)
+### Issue M4-2f: Docstrings: Classical/Structures/Group (#544, closed)
 
 **Labels**: `documentation`, `milestone-4-style`, `help-wanted`
 
@@ -2501,7 +2501,7 @@ Sub-issue of #268.  Tooling: #537.
 
 ---
 
-### Issue M4-2g: Docstrings: Classical/Bundles, Signatures, and the rest of Classical (#545)
+### Issue M4-2g: Docstrings: Classical/Bundles, Signatures, and the rest of Classical (#545, closed)
 
 **Labels**: `documentation`, `milestone-4-style`, `help-wanted`
 
@@ -2538,7 +2538,7 @@ Sub-issue of #268.  Tooling: #537.
 
 ---
 
-### Issue M4-2h: Docstrings: Examples (#546)
+### Issue M4-2h: Docstrings: Examples (#546, closed)
 
 **Labels**: `documentation`, `milestone-4-style`, `help-wanted`
 
@@ -2575,7 +2575,7 @@ Sub-issue of #268.  Tooling: #537.
 
 ---
 
-### Issue M4-2i: Docstrings: Overture, FLRP, Exercises, and the top-level barrels (#547)
+### Issue M4-2i: Docstrings: Overture, FLRP, Exercises, and the top-level barrels (#547, closed)
 
 **Labels**: `documentation`, `milestone-4-style`, `help-wanted`
 
@@ -4007,55 +4007,6 @@ This is separated from #373 because it is a sizeable undertaking on its own:
 
 ---
 
-### Issue M6-13: FLRP research program — tracking issue (#451)
-
-**Labels**: `milestone-6-flrp`, `research-exploratory`, `flrp-research`
-
-## Description
-
-Umbrella issue for the research program on the Finite Lattice Representation Problem.  The roadmap is `docs/notes/flrp-research-roadmap.md` (added in #450), and the interval-enforceable-properties note it builds on is vendored at `docs/papers/flrp/ieprops/` (arXiv:1205.1927, v4).
-
-The program is organized as six PR-sized work packages (WP-1…WP-6) building the formal infrastructure, and four research phases (RP-1…RP-4) pursuing the interval-enforceable-properties attack described in roadmap § 4.  The critical path to RP-1 is WP-1 → WP-2 → WP-3 → WP-4.
-
-This program is a separate research track from the M7 algebraic-complexity / CSP work and from the M6 infrastructure milestone; do not conflate them (see `CLAUDE.md`).
-
-## Structure
-
-+  WP-1…WP-6 — infrastructure and formalization steps, each intended to land as one focused PR; tracked as sub-issues.
-+  RP-1…RP-4 — open-ended research phases with the success/kill criteria of roadmap § 4; tracked as sub-issues and reviewed quarterly.
-
-## Acceptance criteria
-
-- [ ] All WP sub-issues are closed.
-- [ ] Each RP phase has either produced results or hit its documented kill criterion.
-
----
-
-### Issue M6-13a: FLRP WP-1: FLRP.Problem — formal statement and representability predicate (#452, closed)
-
-**Labels**: `research-exploratory`, `flrp-research`
-
-## Description
-
-Create the new top-level tree `src/FLRP/` (barrel plus first submodule `FLRP.Problem`) containing the formal core of the problem: a `Representable` predicate — "there exists a finite algebra whose congruence lattice is isomorphic to `L`" — and the FLRP statement as a type, together with at least one worked instance.  Design guidance: roadmap §§ 6–7 (`docs/notes/flrp-research-roadmap.md`).  Reuse the `FiniteAlgebra` interface from `Setoid.Subalgebras.Subdirect.Finite` and the congruence lattice from `Setoid.Congruences.CompleteLattice`.
-
-Part of #451.
-
-## Tasks
-
-- [ ] `src/FLRP.lagda.md` barrel and `src/FLRP/Problem.lagda.md`, scaffolded per house conventions.
-- [ ] `Representable L` for a finite lattice `L`; choose and document the lattice-presentation and isomorphism notions, preferring existing library or stdlib infrastructure.
-- [ ] The FLRP statement as a type, with prose making clear that it is stated, not asserted.
-- [ ] One worked instance wired to existing examples (e.g. the two-element chain as `Con` of a two-element algebra with no operations), with `L7` referenced in prose as the distinguished open instance.
-
-## Acceptance criteria
-
-- [ ] New modules type-check under `--cubical-compatible --exact-split --safe`.
-- [ ] Every public definition has an explicit type signature and a prose comment.
-- [ ] Changes to existing modules are limited to what promotion of `FiniteAlgebra` (if needed) strictly requires.
-
----
-
 ### Issue M6-13b: FLRP WP-2: group-action infrastructure — subgroups, core, cosets, G-sets, Sub(G), intervals (#453, closed)
 
 **Labels**: `research-exploratory`, `flrp-research`
@@ -4064,7 +4015,7 @@ Part of #451.
 
 Reusable group-theoretic infrastructure needed by the Pálfy–Pudlák bridge (WP-3) and the enforceability framework (WP-4): subgroups as subalgebras with `Sub(G)` as a complete lattice (generalizing the Klein-four worked example `Examples.Setoid.SubgroupLattice`), conjugation/normality and the normal core `Core_G(H)`, cosets with the transitive coset G-set as a unary algebra, and upper intervals `[H, G]` as bounded lattices.  Per roadmap § 6 this lands in the `Classical/` and `Setoid/` trees, not in `FLRP/`, so the library gains value independently of the research program.
 
-Part of #451.
+Part of ualib/agda-flrp#2.
 
 ## Tasks
 
@@ -4080,492 +4031,6 @@ Part of #451.
 - [ ] The Klein-four subgroup-lattice example still type-checks.
 
 Scope note: this is the largest WP; splitting into WP-2a (subgroups/core) and WP-2b (cosets/G-sets/intervals) at PR time is acceptable and expected if the diff grows.
-
----
-
-### Issue M6-13c: FLRP WP-3: Pálfy–Pudlák bridge, easy direction — Con(G ↷ G/H) ≅ [H, G] (#454, closed)
-
-**Labels**: `research-exploratory`, `flrp-research`
-
-## Description
-
-The first substantive FLRP theorem in the library: the congruence lattice of the transitive G-set on the cosets `G/H` is isomorphic to the upper interval `[H, G]` in `Sub(G)`.  Classical references: McKenzie–McNulty–Taylor (Lemma 4.20) and Dixon–Mortimer (Theorem 1.5A); see roadmap § 2 and the introduction of the vendored note `docs/papers/flrp/ieprops/`.  Corollary, wired into `FLRP.Problem`: every group-representable lattice is representable as the congruence lattice of a finite algebra.
-
-Depends on WP-1 and WP-2.  Part of #451.
-
-## Scope update — 2026-07-12 (ADR-008)
-
-Per the ratified two-layer congruence discipline (`docs/adr/008-two-layer-congruence-discipline.md`; design note `docs/notes/flrp-two-layer-congruences.md` on #462), this theorem is to be stated at **Layer D**: for a finite group `G` carrying the standard finiteness data (surjective enumeration plus decidable equality) and a decidable subgroup `H`, the isomorphism is between the `DecCon` poset of the coset algebra and the interval `[H, G]` in `Sub(G)`, both of which are finite lattices with decidable order.  The Layer S version follows from the registered classical bridge if ever needed.  Consequently this issue now also depends on WP-7 (#466), which lands first per the ratified ordering; the corollary targets `Representableᵈ`.
-
-## Tasks
-
-- [ ] Congruences of the coset G-set correspond to intermediate subgroups (both directions as separate named lemmas), at Layer D.
-- [ ] The order/lattice isomorphism `Con (G ↷ G/H) ≅ [H, G]`, assembled from small lemmas.
-- [ ] Corollary: group representable implies `Representableᵈ`, in `FLRP.Problem`/`FLRP.ProblemDec` terms.
-
-## Acceptance criteria
-
-- [ ] Type-checks under `--safe` with no classical assumptions; each direction of the correspondence is its own lemma; every public definition carries prose.
-
----
-
-### Issue M6-13d: FLRP WP-4: FLRP.Enforceable — IE, cf-IE, min-IE, and the no-go lemmas (#455, closed)
-
-**Labels**: `research-exploratory`, `flrp-research`
-
-## Description
-
-Formalize § 2 of the vendored note (`docs/papers/flrp/ieprops/`): the definitions of *interval enforceable* (IE), *core-free interval enforceable* (cf-IE), *min-IE*, and *group representable*, with the vacuity subtlety handled by tracking group representability of the enforcing lattice explicitly.  Then the first structural results of its § 3: Lemma 3.1 (if the complementary class is closed under homomorphic images, cf-IE upgrades to IE), the fattening remark (`[H × K, G × K] ≅ [H, G]`, so solvability is not IE), and Lemma 3.2 (a property and its negation cannot both be IE via group-representable lattices).  This machine-checks why the program lives at the core-free level (roadmap § 4).
-
-Depends on WP-2 (WP-3 is helpful but not required).  Part of #451.
-
-## Tasks
-
-- [ ] `FLRP/Enforceable.lagda.md` with the four definitions and representability tracking.
-- [ ] Fattening lemma `[H × K, G × K] ≅ [H, G]` (needs direct products of groups).
-- [ ] Lemma 3.1 and Lemma 3.2, with names traceable to the note.
-- [ ] Statement (hypotheses named, proof deferred to RP-1) of the parachute meta-theorem.
-
-## Acceptance criteria
-
-- [ ] Type-checks under `--safe`; no postulates; deferred results appear only as explicit hypotheses.
-
----
-
-### Issue M6-13e: FLRP WP-5: closure toolkit — products, ordinal sums, Kurzweil–Netter duality (#456, closed)
-
-**Labels**: `milestone-6-flrp`, `research-exploratory`, `flrp-research`
-
-## Description
-
-Formalize closure of the class of representable lattices under finite direct products and ordinal sums, and establish the `FLRP.Assumptions` registry pattern by recording duality (Kurzweil 1985, Netter 1986) as its first entry — a precise statement with citation, imported as an explicit hypothesis, keeping `--safe`.  Stretch goal: reprove Netter's duality construction formally; the content is finite and combinatorial, plausibly tractable, and Netter's proof may never have been published, so a formal reproof is independently valuable (roadmap § 7).
-
-Depends on WP-1.  Part of #451.
-
-## Tasks
-
-- [ ] Product closure of `Representable`.
-- [ ] Ordinal-sum closure of `Representable`.
-- [ ] `FLRP/Assumptions.lagda.md` with the duality entry (statement, source, citation discipline documented).
-- [ ] Stretch: formal proof of duality closure via the Kurzweil–Netter construction.
-
-## Acceptance criteria
-
-- [ ] Type-checks under `--safe`; the assumptions registry documents every imported statement with its citation.
-
----
-
-### Issue M6-13f: FLRP WP-6: certificate pipeline — schema, Agda checker, GAP/SAT emitters (#457, closed)
-
-**Labels**: `research-exploratory`, `flrp-research`
-
-## Description
-
-External searches (GAP, UACalc, SAT/model finders) must never be trusted directly: they emit finite certificate data which Agda re-checks, in the style of `Examples.Classical.Lattices.L7`.  Build the certificate schema, the generic Agda checker, at least one emitter, and a pilot re-verification of one thesis-era small-lattice representation end-to-end.  Search scripts and raw logs live outside `src/` (roadmap § 6; they move to a companion repo if they grow).
-
-Depends on WP-1.  Part of #451.
-
-## Design — fixed 2026-07-13 (Freese traces)
-
-Full design: `docs/notes/flrp-wp6-freese-certificates.md`.  Guiding principle: **the checker never searches** — all fixpoint iteration happens in the external engine, and Agda verifies a linear-size witness.
-
-+  **Per-congruence certificate** for `θ ≑ Cg(fromPairs P)`: the claimed partition as a parent vector in Freese *normal form*, plus the **Freese trace** — the justified merge list of the `Cg` worklist algorithm of R. Freese, *Computing congruences efficiently* (https://math.hawaii.edu/~ralph/Preprints/cg2.pdf), which is literally a `Gen`-derivation skeleton (seeds ↦ `base`, translate applications ↦ operation compatibility).
-+  **Checker obligations**, each linear and search-free: C1 trace soundness (every merge derivable); C2 claimed ⊆ generated (forest edges covered by the trace); C3 generated ⊆ claimed (contains `P`; compatibility checked on the `≤ n − 1` forest edges only, extended by symmetry/transitivity through roots).
-+  **Whole-lattice certificates** (`FiniteCongruencesᵈ` instances, `Representableᵈ` targets): the congruence list plus, for every carrier pair, a pointer to its principal congruence with trace; order/meet/join verified definitionally by root lookups.  The union-find join and **root-pair-hashing meet** of R. Freese, *Partition algorithms* (https://math.hawaii.edu/~ralph/Notes/Partitions/partitions.pdf, Algorithm 4) are the *engine-side* devices for producing these tables; `cg2` supersedes that note for generation only, so the 3-pager remains the lattice-structure reference.
-+  **Engine**: UACalc instrumented to emit its merge trace, or a ~100-line reimplementation of the `cg2` worklist algorithm in the scripts layer.
-+  **Non-goal (parked)**: a verified in-Agda union-find.  The Layer-D abstraction boundary (`Cg-dec` is `Dec`-valued with an `abstract` implementation, #467) makes a fast decider a drop-in later if a concrete consumer ever needs in-Agda computation at scale.
-+  Background: Tarjan, *Efficiency of a good but not linear set union algorithm*, J. ACM 22 (1975) — the `O(m·α(m,n))` union-find analysis both notes rest on.
-
-## Tasks
-
-- [ ] Certificate schema: normal-form parent vectors + Freese traces (per-congruence), plus the whole-lattice pointer structure (design note § 4).
-- [ ] Generic checker discharging obligations C1–C3 and the whole-lattice verifications, with no fixpoint iteration or search.
-- [ ] One emitter producing traces (instrumented UACalc or standalone `cg2` reimplementation).
-- [ ] Pilot: re-verify one small-lattice representation from the thesis era end-to-end through the pipeline.
-
-## Acceptance criteria
-
-- [ ] A certificate produced by an external tool round-trips to a type-checked Agda proof with no manual editing beyond file placement.
-- [ ] Checking cost is linear in trace + table size (no `Cg-dec` execution in the checking path).
-
----
-
-### Issue M6-13g: FLRP RP-1: formalize the IE framework end-to-end (parachute theorems) (#458, closed)
-
-**Labels**: `milestone-6-flrp`, `research-exploratory`, `flrp-research`
-
-## Description
-
-Research phase continuing from WP-4 through § 3 of the vendored note (`docs/papers/flrp/ieprops/`): Dedekind's rule and the antichain corollary (Corollary 3.5), the parachute construction `𝒫(L₁, …, Lₙ)`, Theorem 3.6 ((B) ⟺ (C)), Lemma 3.7 (a core-free parachute representation forces `G` subdirectly irreducible, nonsolvable, with `NH = G` and `C_G(N) = 1` for all nontrivial `N ⊴ G`), and Corollary 3.8 (cf-IE properties are closed under finite conjunction).  The phase is capped by the machine-checked strategy meta-theorem: finitely many cf-IE classes with empty intersection imply the corresponding parachute is not group representable, hence — with Pálfy–Pudlák imported as an explicit hypothesis — the FLRP has a negative answer.  The wreath Lemma 3.3 (requires wreath products and the double Kurzweil construction) either closes this phase or moves to RP-4.
-
-Depends on WP-2 and WP-4.  Part of #451; roadmap § 4.
-
-## Exit criterion
-
-- [ ] The strategy meta-theorem type-checks under `--safe` with an explicit, auditable assumption registry.
-- [ ] A short design note in `docs/notes/` records the formalization decisions and any divergences from the note's paper proofs.
-
----
-
-### Issue M6-13h: FLRP RP-2: the enforcement catalog (#459, closed)
-
-**Labels**: `milestone-6-flrp`, `research-exploratory`, `flrp-research`
-
-## Description
-
-Build the machine-readable catalog of "interval shape forces group structure" theorems, each recast as a precise (cf-/min-)IE statement with an Agda statement — assumption-parameterized wherever the proof stays on paper.  Seed entries, per roadmap § 4: the note's classes `𝒢₀` (nonsolvable; IE), `𝒢₁` (neither alternating nor symmetric; IE), `𝒢₂` (subdirectly irreducible), `𝒢₃` (no nontrivial abelian normal subgroup), `𝒢₄` (`C_G(M) = 1` for all nontrivial normal `M`) — the last three cf-IE via parachutes.  External entries: Pálfy's solvable-exclusion lattices; Köhler/Feit `M₇` and Pálfy's minimality analysis of Feit's examples (min-IE); Baddeley–Lucchini reductions; Börner; Aschbacher's `D∆`/signalizer theorems specialized to parachutes (whose interiors are disconnected); Lucchini–Moscatiello–Palcoux–Spiga Boolean overgroup lattices.
-
-Depends on WP-4; grows alongside RP-1.  Part of #451.
-
-## Exit criterion
-
-- [ ] A catalog module plus survey note exists, with at least the note's five classes and two external entries formalized as statements.
-- [ ] Each entry records its source, its enforcing lattice(s), and whether the proof is formalized or imported as a hypothesis.
-
----
-
-### Issue M6-13i: FLRP RP-3: hunt for an empty intersection of cf-IE classes (#460)
-
-**Labels**: `milestone-6-flrp`, `research-exploratory`, `flrp-research`
-
-## Description
-
-The kill shot, per Theorem 3.6 of the vendored note: exhibit finitely many cf-IE classes whose intersection is empty, and the FLRP has a negative answer (a property and its negation is the special case `n = 2`).  The wreath no-go (Lemma 3.3) constrains the hunt: every cf-IE-by-group-representable class contains wreath products `S ≀ Ū` for every finite nonabelian simple `S`, so every member of a candidate family is wreath-rich, and the joint tension must come from finer invariants — the structure of the unique minimal normal subgroup forced by Lemma 3.7, its centralizer and complement behavior, and the permutation action on it.
-
-Method discipline: use computation as cheap falsification.  Before investing in a non-representability proof for a candidate parachute, search for representations of it over the small-groups and primitive-groups libraries (Hulpke's intermediate-subgroup algorithms), and attempt UA-side representations of small candidates directly; certificates flow through the WP-6 pipeline.
-
-Depends on RP-1 and RP-2.  Part of #451; success/kill criteria in roadmap § 4.
-
-## Exit criterion
-
-- [ ] Success: a finite lattice with a machine-checked non-representability proof (modulo the explicit assumption registry).
-- [ ] Kill: two consecutive quarterly reviews with no viable candidate family, documented in the tracking issue.
-
----
-
-### Issue M6-13j: FLRP RP-4: dead-end branch — can a property and its negation both be cf-IE? (#461)
-
-**Labels**: `milestone-6-flrp`, `research-exploratory`, `flrp-research`
-
-## Description
-
-Prove or refute the implicit conjecture of the vendored note: a group property and its negation cannot both be core-free interval enforceable by group-representable lattices.  The wreath no-go (Lemma 3.3, via the double Kurzweil construction) is the prototype tool and already excludes the classes omitting wreath products `S ≀ Ū` (solvable, alternating/symmetric, almost simple); the phase extends it toward a structure theory of the cf-IE class, and more generally characterizes what an empty-intersection family (RP-3) would have to look like.
-
-Either outcome is valuable.  A proof is the honorable dead end for the `n = 2` case and independently a publishable structure theorem about intervals in subgroup lattices; a refutation is a concrete path toward a negative FLRP answer.  A sobering asymmetry to keep in view: the existence of empty-intersection families cannot be ruled out without proving statement (B) itself, so the realistic aim is structure theorems constraining the families we can actually construct.
-
-Depends on RP-1 (wreath products, Kurzweil construction).  Part of #451; roadmap § 4.
-
-## Exit criterion
-
-- [ ] A theorem (formalized, or paper-proved with a formal statement) settling the `n = 2` conjecture in either direction, or a documented reduction of it to named open questions.
-
----
-
-### Issue M6-13k: FLRP WP-7: the decidable layer — presented congruences, FiniteAlgebraᵈ, Representableᵈ (#466, closed)
-
-**Labels**: `flrp-research`
-
-## Description
-
-Implement Layer D of the two-layer congruence discipline ratified in ADR-008 (`docs/adr/008-two-layer-congruence-discipline.md`; design note `docs/notes/flrp-two-layer-congruences.md`, PR #462): finitely presented congruences with decidable membership on finite finitary algebras, the reconstruction theorem, a constructive completeness theorem yielding `FiniteCongruencesᵈ`, the single registered classical bridge, and `Representableᵈ` as the FLRP program's working notion.  Per the ratified ordering this lands before WP-3 (#454), which will be stated at Layer D.
-
-Interface update: #465 has since split the old interface into the bare carrier record `FiniteAlgebra` (`Setoid.Algebras.Finite`, no classical content) and the congruence-side `FiniteCongruences` (`Setoid.Congruences.Finite`, home of `DecCon` and the classical `complete` field), so Layer D's constructive completeness record is the congruence-side counterpart, working name `FiniteCongruencesᵈ`.
-
-Part of #451.
-
-## Tasks (three PR-sized slices)
-
-- [x] Slice (i) — L1 + L2: `Cg` of a finite pair list on a finite finitary algebra has decidable membership (congruence-closure computation), and every `DecCon` is `≑` to `Cg` of its related-pairs list; includes fixing the Agda packaging of finite finitary signatures (audit A3).  *(merged #467)*
-- [x] Slice (ii) — L3 + audits: constructive completeness for `DecCon` via enumeration of Bool-valued tables; the `FiniteCongruencesᵈ` interface; audit A1 (which m6-8 consumers, in particular finite Birkhoff, survive on `FiniteAlgebra` + `FiniteCongruencesᵈ` alone) and audit A2 (WP-2 group modules are Layer-D ready).  *(merged #468)*
-- [ ] Slice (iii) — L4 + L5.  **Constructive core merged in #479; the classical-bridge parts remain** — see the status update below.
-  - [x] `Representableᵈ`, `FLRP-Statementᵈ`, the decidable-congruence poset order (`_⊆ᵈ_`, `_≑ᵈ_`, `ConIsoᵈ`), and the constructive `chain₂` instance `chain₂-Representableᵈ`, all `--safe` with no postulates (`src/FLRP/Representable.lagda.md`, #479).
-  - [ ] `FLRP.Assumptions` registry with the classical bridge (`complete` of `FiniteCongruences`) as its first entry, strength documented (between WLEM and LEM at the working level).
-  - [ ] Under that bridge, `Representable 𝑳 ↔ Representableᵈ 𝑳`.
-  - [ ] The `DecCon` poset as a finite lattice with decidable order (meets, joins) — deferred to WP-6 (#457) certificate tooling; #479 provides only the `OrderIso` target that representability needs.
-
-## Status update — 2026-07-20 (slice iii core merged)
-
-Slices (i) and (ii) merged in #467 and #468.  The **constructive core of slice (iii)** merged in #479 (`src/FLRP/Representable.lagda.md`): `Representableᵈ`, `FLRP-Statementᵈ`, the decidable-congruence poset order (`ConIsoᵈ`), and the postulate-free two-element-chain representation `chain₂-Representableᵈ` — the object the WP-1 no-go theorem forbids at Layer S, now attained constructively at Layer D.
-
-Remaining to close this issue (narrowed scope):
-
-+  `src/FLRP/Assumptions.lagda.md` — the `--safe` registry naming the classical bridge (`FiniteCongruences.complete : ∀ φ → Σ[ d ∈ DecCon 𝑨 _ ] (d ∈ cons) × (φ ≑ proj₁ d)`) as an explicit hypothesis, never a postulate; strength documented between WLEM and LEM (ADR-008 L4).
-+  Under that bridge, the cross-layer equivalence `Representable 𝑳 ↔ Representableᵈ 𝑳` — the `Con` and `DecCon` posets of a finite finitary algebra coincide once `complete` holds; `Representable`/`Representableᵈ` differ exactly by `ConIso` vs `ConIsoᵈ` plus the `finsig` field.
-+  Wiring the now-unblocked Layer-D corollary of WP-3 (#454): `FLRP.Bridge.interval-Con-representable` can target `Representableᵈ` (may land here or as a sibling PR).
-
-Coordination: WP-5 (#456) also plans `FLRP.Assumptions` with the Kurzweil–Netter duality as "its first entry."  This issue **creates** the module with the classical `complete` bridge as entry 1; WP-5 appends the duality entry.
-
-## Acceptance criteria
-
-- [ ] All new modules type-check under `--cubical-compatible --exact-split --safe`; no postulates; the bridge appears only as an explicit hypothesis.  *(FLRP.Representable satisfies this in #479; completes when FLRP.Assumptions lands.)*
-- [x] `Representableᵈ (toLattice chain₂)` is inhabited with no classical assumptions.  *(`chain₂-Representableᵈ`, #479.)*
-- [x] The m6-8 note gains an addendum recording the A1 audit outcome.  *(`docs/notes/m6-8-finite-birkhoff.md` § "Update (WP-7 A1)"; full findings in `docs/notes/flrp-wp7-audits.md`.)*
-
----
-
-### Issue M6-14: FLRP computational campaign: small-lattice certificates and the L7 hunt — tracking issue (#483)
-
-**Labels**: `milestone-6-flrp`, `research-exploratory`, `flrp-research`
-
-## Description
-
-This tracking issue registers the computational campaign of roadmap § 5, Avenue A (`docs/notes/flrp-research-roadmap.md`): systematic small-lattice representation work under the certificate discipline, now that the WP-6 pipeline (#457, PR #482) provides the certificate schema, the search-free Agda checker, and the `cg2` emitter.  Three inputs converge here.
-
-+  The WP-6 certificate pipeline (PR #482): external engines emit Freese-trace certificates and Agda re-checks them into `Representableᵈ` witnesses; nothing enters `src/` on the authority of an external tool.
-+  The DeMeo–Freese–Jipsen manuscript *Representing Finite Lattices as Congruence Lattices of Finite Algebras* (`article/SmallLatticeReps.tex` in https://github.com/UniversalAlgebra/fin-lat-rep), whose § 6 catalogs 35 nondistributive, non-ordinal-sum lattices `L1`–`L35` of size ≤ 7 together with explicit minimal unary algebras `B1`–`B35` for most of them, and whose lone open case `L10` is this library's `L7`.
-+  A 2026-07-22 working session on `L7` that produced its minimal sublattice-of-`Eq(6)` representation and machine-checked closure obstructions on 6 and 7 points (recorded in #484).
-
-**Naming**.  The lattice this library calls `L7` (`Examples.Classical.Lattices.L7`) is `L10` in the manuscript's numbering, and the manuscript's `L7` is a different lattice.  Every module, note, and issue in this family must state which numbering it uses; #485 includes a dictionary task.
-
-## Sub-issues
-
-+  #484
-+  #485
-+  #486
-+  #487
-+  #494
-+  #499
-
-## Dependency sketch
-
-+  #486 is infrastructure for #484 (the Eq(8) sweep) and produces candidate algebras that the #485 pipeline certifies.
-+  #487 feeds both #484 (minimal representations must be transitive, by the manuscript's § 5 theorem, so transitive-degree scans settle the frontier degree by degree) and #485 (the group-representation entries `L11`, `L14`, `L16`, `L20`); its Agda import route is the WP-3 bridge (#454).
-+  Everything follows roadmap § 6: search scripts and raw logs live outside `src/`, and external results enter only as re-checked certificates.
-
-## Acceptance criteria
-
-- [ ] Each sub-issue is closed or explicitly re-scoped, with its artifacts (scripts, certificates, notes) merged.
-- [ ] A census status note in `docs/notes/` records, for all 35 catalog entries plus `L7`, whether an Agda-checked certificate exists and by which route.
-
----
-
-### Issue M6-14a: L7 (= L10 of SmallLatticeReps): Eq(6) sublattice representation, closure obstructions on ≤ 7 points, and the Eq(8) frontier (#484, closed)
-
-**Labels**: `research-exploratory`, `flrp-research`
-
-## Description
-
-`L7` (this library's name; `L10` in the SmallLatticeReps manuscript — see the naming note on #483) is the smallest lattice not known to be representable as the congruence lattice of a finite algebra (`Examples.Classical.Lattices.L7`, roadmap § 5.A.1).  A 2026-07-22 working session established the results below by exhaustive machine search; this issue records them and drives the next steps.  Part of #483.
-
-## Session results (2026-07-22)
-
-Element names follow the module's grid labeling: carrier `⊥, (1,0), (0,1), x, (1,1), (0,2), ⊤`, with `x` the doubly irreducible atom-and-coatom.  Partitions are written in bar notation on `{0,…,5}` with singleton blocks suppressed.
-
-+  **Minimal sublattice representation**.  `L7` embeds in `Eq(6)` and in no `Eq(n)` with `n ≤ 5` (bounds normalize to `Δ`/`∇`: quotient by the bottom partition; simplicity of `L7` handles the top).  An explicit embedding:  `⊥ ↦ Δ`,  `x ↦ |0,4|1,3|2,5|`,  `(1,0) ↦ |0,2|3,4|`,  `(0,1) ↦ |0,1|4,5|`,  `(1,1) ↦ |0,1,2|3,4,5|`,  `(0,2) ↦ |0,1|2,3|4,5|`,  `⊤ ↦ ∇`.
-+  **Classification**.  `Eq(6)` contains 1080 labelled copies of `L7`, and exactly two up to relabeling of the six points: the copy above, which is invariant under the involution `(0 4)(1 5)(2 3)`, and a rigid copy obtained from it by replacing `x ↦ |0,3|1,4|2,5|`.
-+  **Closure fails on 6 points**.  For both classes, the monoid of unary maps preserving the five nontrivial relations consists of the stabilizer group plus the constants — there is no non-bijective non-constant preserving map — so `Inv(M)` has 31 (symmetric class) resp. 203 (rigid class) members instead of 7.  Since the congruence lattice of an arbitrary algebra is determined by its unary polynomials, no algebra on 6 elements has `Con ≅ L7`.
-+  **Closure fails on 7 points**.  `Eq(7)` contains 55,440 labelled copies in 12 classes (2 with a `ℤ₂` stabilizer, 10 rigid); again no class admits any non-bijective non-constant preserving map, and `Inv(M)` has 59 resp. 877 members.  Hence **no algebra on at most 7 elements has congruence lattice `L7`**.
-+  Combined with the manuscript's § 5 theorem that a minimal representation of `L10 = L7` must come from a transitive permutation group: a minimal representation, if one exists, is a transitive `G`-set on at least 8 points.
-
-## Tasks
-
-- [ ] Record the session computation as a docs note (proposed: `docs/notes/flrp-l7-eq6.md`) with the partitions, the two-class classification, the closure data, and reproduction instructions via the #486 tooling.
-- [ ] Formalize the positive fact in Agda: the seven listed partitions form a sublattice of `Eq(6)` isomorphic to `L7`, verified by decision over the finite carrier in the style of `Examples.Classical.Lattices.L7`; this is the library's explicit Pudlák–Tůma witness for `L7`, on a base set of provably minimal size.
-- [ ] Eq(8) closure sweep with the vectorized #486 tooling: enumerate the relabeling classes of copies of `L7` in `Eq(8)` (bounds at `Δ`/`∇`) and closure-test each.  A closed class yields a finite algebra with `Con ≅ L7` — feed it directly to the PR #482 emitter for a certificate; if all classes fail, the negative census extends to `|A| ≤ 8`.
-- [ ] Group-side cross-check with #487: for each `TransitiveGroup(n, k)` with point stabilizer `H`, starting at degree `n = 8`, test `[H, G] ≅ L7`; by the transitivity theorem this settles existence of minimal representations degree by degree and cross-validates the Eq(8) sweep.
-- [ ] Decide how much of the negative sweep is certifiable in Agda (the per-class `Inv(M)` computations are plain finite checks; exhaustiveness of the embedding enumeration is the hard part) and record the decision in the docs note.
-
-## Acceptance criteria
-
-- [ ] The Eq(6) representation and its classification are stated in a committed note and reproducible from committed scripts.
-- [ ] The Agda module with the Eq(6) sublattice witness type-checks under the standard pragma set.
-- [ ] The 8-point frontier is resolved: either a closed class is found and certified, or the census extends to `|A| ≤ 8` with the transitive-degree-8 cross-check recorded.
-
----
-
-### Issue M6-14b: Certificates of representability for the SmallLatticeReps catalog (L1–L35) (#485, closed)
-
-**Labels**: `research-exploratory`, `flrp-research`
-
-## Description
-
-Run the WP-6 pipeline (#457, PR #482) over the small-lattice catalog of the SmallLatticeReps manuscript (DeMeo–Freese–Jipsen, `article/SmallLatticeReps.tex` in https://github.com/UniversalAlgebra/fin-lat-rep; orientation here is from the 2016-06-10 draft).  Manuscript § 6 lists 35 nondistributive, non-ordinal-sum lattices `L1`–`L35` of size ≤ 7, most with explicit minimal unary algebras `B1`–`B35` given as value tables on `{0,…,n−1}` — exactly the input format of `scripts/flrp/cg2.py`, and all unary, matching the v1 renderer.  Target: each catalog entry becomes a generated module under `src/FLRP/Certificates/SmallLatticeReps/` proving `Representableᵈ`, with no manual editing beyond file placement, plus a census note recording status.  This also machine-audits every `Con(Bᵢ) ≅ Lᵢ` claim in the manuscript, so discrepancies feed back as errata.  Part of #483.
-
-**Naming**.  The manuscript numbering clashes with ours: manuscript `L10` is this library's `L7`, and manuscript `L7` is a different lattice.  Certificate modules use the manuscript numbering, with the dictionary task below resolving the clash explicitly.
-
-## Coverage plan
-
-+  **Immediately emittable** (unary, carrier ≤ 10, inside the v1 renderer's `0F`–`9F` limit): `B1`–`B4`, `B6`–`B8`, `B12`, `B15`, `B19`, `B21`, `B23`–`B26`, `B29`–`B32`, `B34`, `B35` — about 21 entries.  Note `B2` is the regular `V4` action, so manuscript `L2 = M3` is already certified by the pilot `FLRP.Certificates.Pilot.V4RegularM3` up to naming and placement.
-+  **Needs the renderer extension** (carrier > 10): `B5` (12), `B9` (16), `B13` (19), `B17` (12), `B33` (16); the engine is size-agnostic, only `Fin`-literal rendering must grow past `9F`.
-+  **Group-representation entries**: `L11` (108-element coset algebra from `SmallGroup(216,153)`), `L14` (upper interval in `Sub(A6)`, size 90), `L16` (`Sub(C2.A6)`, size 180), `L20` (filter-ideal in `SmallGroup(216,153)`).  Route: the WP-3 bridge (#454) when available, or direct big-carrier certificates if checking cost stays acceptable; concrete group data comes from #487.
-+  **Duals without explicit algebras**: `L18` (dual of `L19`) and `L22` (dual of `L23`) carry no explicit small algebra in the manuscript; they follow from Kurzweil–Netter duality, which is a registered assumption per WP-5 (#456).  Either find explicit algebras (searches via #486/#487, or the mechanized overalgebra route of roadmap § 5.C) or record them as assumption-conditional.
-+  **The open case**: manuscript `L10` (our `L7`) is #484's subject and is excluded here.
-
-## Tasks
-
-- [ ] Naming dictionary: a docs note mapping manuscript `L1`–`L35` to existing agda-algebras names (`M3`, `N5`, the hexagon, our `L7`, …), linked from every certificate module header.
-- [ ] Batch-emit the ~21 immediately emittable entries; commit engine inputs (`scripts/flrp/inputs/`), audit JSONs, and the generated modules; wire them into the barrels and `make check`.
-- [ ] Extend the renderer past `9F` (carriers up to at least 19) and emit `B5`, `B9`, `B13`, `B17`, `B33`.
-- [ ] Decide and implement the route for `L11`, `L14`, `L16`, `L20` (WP-3 bridge vs direct big-carrier certificates), coordinating with #454 and #487.
-- [ ] Resolve `L18` and `L22`: explicit algebras found by search, or assumption-conditional statements through the WP-5 duality registration.
-- [ ] Census note in `docs/notes/` (entry ↦ certified / pending renderer / pending bridge / assumption-conditional / open), updated as batches land; consider feeding the table back to the manuscript repo.
-- [ ] Report any discrepancy the pipeline finds in a manuscript table as an erratum to https://github.com/UniversalAlgebra/fin-lat-rep.
-
-## Acceptance criteria
-
-- [ ] Every unary catalog entry with carrier ≤ 19 has a type-checked certificate module produced by the emitter with no manual editing beyond file placement.
-- [ ] The census note states the status of all 35 entries and is regenerable from committed artifacts.
-
----
-
-### Issue M6-14c: FLRP search tooling: generalized Eq(n) sublattice search and Snow closure tests in scripts/flrp (#486, closed)
-
-**Labels**: `research-exploratory`, `flrp-research`
-
-## Description
-
-Fold the 2026-07-22 session's search programs into `scripts/flrp/` (the directory established by PR #482) as first-class, generalized tools.  The session versions live outside the repository and are hard-coded to `L7`; the campaign needs them for arbitrary finite target lattices.  Part of #483.
-
-## What exists and how it fits together
-
-+  **From PR #482** (`scripts/flrp/`): `cg2.py` (Freese worklist with trace recording), `lattice.py`, `emit_agda.py`, `test_flrp.py`, and the JSON conventions of `README.md`.  Direction: given an algebra, compute its congruence lattice with traces and emit an Agda certificate.
-+  **From the session** (currently outside the repo): exhaustive `Eq(n)` sublattice search for a target lattice with bounds at `Δ`/`∇` (restricted-growth-string partitions, precomputed meet/join tables), `Sₙ`-orbit classification of the copies, and the Snow-style closure test — backtracking enumeration of the monoid `M` of relation-preserving unary maps, then progressive filtering to `Inv(M)`.  Direction: given a lattice, find candidate representations and decide whether each is a congruence lattice on that base set.
-+  The two directions are complementary, with a small overlap in partition utilities.  When a closure test succeeds, the unary algebra `⟨X, M⟩` is exactly a `cg2.py` input, closing the loop: lattice ⇒ search ⇒ algebra ⇒ certificate ⇒ `Representableᵈ`.
-
-## Tasks
-
-- [ ] Generalize the search from the hard-coded `L7` constraint schedule to an arbitrary finite target lattice (input: covers or meet/join tables in a JSON format shared with `lattice.py`; derive the generator-driven pruning order automatically).
-- [ ] Unify partition representations: adopt the Freese normal-form parent vectors already used by `cg2.py` as the shared type, in one utilities module, so union-find and canonical forms are not duplicated.
-- [ ] Vectorize for `Eq(8)`: numpy `int16` meet/join tables (2 × 4140² entries ≈ 69 MB), mask-based candidate enumeration, and an invariant-bucketed orbit sweep, so the #484 Eq(8) run completes in minutes to hours rather than days.
-- [ ] Port the session's checks into the test suite: Bell-number counts, `M3` in `Eq(4)`, the `Eq(6)` results (1080 copies, 2 classes, closure verdicts), and the `Eq(7)` results (55,440 copies, 12 classes, closure verdicts).
-- [ ] Output discipline: deterministic JSON artifacts under the `inputs/` and `out/` conventions of PR #482, so sweeps are citable and re-runs are byte-identical no-ops.
-- [ ] SAT/model-finder encoder, first step per roadmap § 5.A.3: encode `Con(𝑨) ≅ L` for operation tables on ≤ n elements; a small working prototype that documents the encoding suffices at this stage.
-
-## Acceptance criteria
-
-- [ ] `scripts/flrp/` contains the generalized search and closure tools, tests are green, and the README documents the formats and workflows.
-- [ ] The `Eq(6)` and `Eq(7)` session results are reproduced by the committed tools from a clean checkout.
-- [ ] An end-to-end demo exists: the search finds a closed class for some small lattice (for instance `N5` on 4 points), and its `⟨X, M⟩` flows through `cg2.py` and `emit_agda.py` to a type-checked certificate with no manual editing.
-
----
-
-### Issue M6-14d: GAP subgroup-interval search: Hulpke intermediate-subgroup routines over the small-groups libraries (#487, closed)
-
-**Labels**: `milestone-6-flrp`, `research-exploratory`, `flrp-research`
-
-## Description
-
-Build GAP scripts that hunt for a given finite lattice as an upper interval `[H, G]` in subgroup lattices across the GAP group libraries — SmallGroups first, then the perfect- and primitive-groups libraries per roadmap § 5.A.1 — using A. Hulpke's intermediate-subgroup machinery (`IntermediateSubgroups` and his latest interval routines).  The SmallLatticeReps manuscript already ran such searches by hand (`SmallGroup(216,153)` for the minimal pentagonal upper interval and for the `L11`/`L20` constructions); this issue makes them systematic, scripted, and repo-resident, with outputs both the certificate pipeline and the manuscript can consume.  Part of #483.
-
-## Tasks
-
-- [x] Scripted search: given a target lattice (JSON format shared with #486), scan a configurable slice of the SmallGroups library for upper intervals `[H, G]` isomorphic to it, with core-free normalization of `H` and lattice-isomorphism testing on the interval; record `(G, H, interval, isomorphism witness)` as JSON artifacts under the `scripts/flrp/` conventions, raw logs outside `src/` per roadmap § 6.
-- [x] Transitive-degree scan for `L7` (with #484): for each `TransitiveGroup(n, k)` with point stabilizer `H`, starting at degree `n = 8`, test `[H, G] ≅ L7`; by the manuscript's § 5 transitivity theorem, a degree-by-degree exhaustion settles existence of minimal representations of that size.
-- [x] Reproduce and script the manuscript's concrete claims: `SmallGroup(216,153)` as the smallest group with a pentagonal upper interval (the manuscript's TODO appendix), the `L11` filter-ideal construction, and the interval data behind `L14`, `L16`, `L20` for #485.
-- [x] Import route into Agda: coordinate with the WP-3 bridge (#454) so a found interval becomes `Representableᵈ` via `Con(G ↷ G/H) ≅ [H, G]`; for small indices, alternatively dump the coset algebra's operation tables into `cg2.py` for a direct certificate.
-- [x] Environment: GAP is not in the flake; document a pinned GAP setup, and provide it by specifying a new nix devshell in flake.nix that provides GAP and the SmallGroups library, so runs are reproducible; note the library versions in every emitted artifact.
-
-## Acceptance criteria
-
-- [ ] A clean-checkout run reproduces the `SmallGroup(216,153)` pentagon-minimality claim and emits its JSON artifact.
-- [ ] The degree-8 transitive scan for `L7` is complete with a recorded verdict.
-- [ ] At least one found interval flows into an Agda-checked `Representableᵈ` witness, by the bridge or by direct certificate.
-
----
-
-### Issue M6-14e: eqsearch --group-rep: restrict the Eq(n) sweep to uniform (coset-block) copies (#494, closed)
-
-**Labels**: `milestone-6-flrp`, `research-exploratory`, `flrp-research`
-
-## Description
-
-Extend the #486 search tooling (`eqsearch.py` / `eqfast.py`, PR #493) with a `--group-rep` flag that restricts the sublattice sweep to copies all of whose members are **uniform** partitions: for each relation `r` in the copy there is a `k` (necessarily dividing `n`) such that every block of `r` has exactly `k` elements.  This mechanizes remark iv of the manuscript's closure-algorithm discussion (SmallLatticeReps § 6.1): "If it can be shown that the algebra of a minimal representation of `L` has a transitive permutation group for its nonconstant unary polynomials, then we can restrict our search in `Eq(k)` to uniform equivalence relations."  Congruences of a transitive `G`-set are its systems of imprimitivity — the blocks are cosets of intermediate subgroups, hence all of equal size — so every congruence lattice of a transitive group action occurs among uniform copies.
-
-**Naming** (per #483): the library's `L7` (`Examples.Classical.Lattices.L7`) is the manuscript's `L10`; the dictionary is `docs/notes/flrp-slr-naming.md`.
-
-## Why this is the right restriction for the `L7` hunt
-
-+  By the manuscript's § 5 analysis of intransitive group actions (its Theorem on the orbit congruence `τ` and the intervals it pins) a minimal representation of library `L7` cannot come from an intransitive action, and the machine-checked closure obstructions through eight points (#484, `docs/notes/flrp-l7-eq6.md` § 6) push the frontier to nine; so a minimal representation, if one exists, is the congruence lattice of a transitive `G`-set on at least nine points — and every congruence of such an algebra is a uniform partition.
-+  Positive verdicts keep exactly their current meaning: the Snow closure test (the preserving monoid `M` over *all* unary maps, and `Inv(M)`) is unchanged, so a closed uniform class still yields the honest witness algebra `⟨X, M⟩` and a ready-made claim file for the WP-6 certificate pipeline.
-+  Negative verdicts weaken, and the README must say so explicitly: "no closed uniform class on `n` points" rules out algebras whose congruence lattices consist of uniform partitions — in particular every transitive group action — rather than all algebras; for library `L7` at the minimal frontier that is exactly the statement needed.
-
-## Why this is fast
-
-Nontrivial uniform partitions are vanishingly rare among all partitions:
-
-| `n` | Bell(`n`) | nontrivial uniform | by block size |
-|---|---|---|---|
-| 6 | 203 | 25 | 15 of shape `2³`, 10 of shape `3²` |
-| 7 | 877 | 0 | (7 is prime) |
-| 8 | 4,140 | 140 | 105 of shape `2⁴`, 35 of shape `4²` |
-| 9 | 21,147 | 280 | 280 of shape `3³` |
-| 10 | 115,975 | 1,071 | 945 of shape `2⁵`, 126 of shape `5²` |
-| 12 | 4,213,597 | 32,032 | 10,395 + 15,400 + 5,775 + 462 (shapes `2⁶`, `3⁴`, `4³`, `6²`) |
-
-+  At nine points the candidate pool collapses from 21,145 nontrivial partitions to **280**, and the ~1.8 GB `Eq(9)` meet/join tables that currently block the unrestricted sweep (#486 follow-up) shrink to a `282 × 282` table — the table problem disappears entirely rather than needing the blocked build.
-+  The prefix ballooning that made the committed unrestricted `Eq(8)` run take about three hours acts on a pool two orders of magnitude smaller; a uniform `Eq(9)` sweep should take minutes even in the pure engine, and `Eq(10)` and `Eq(12)` come into range — sizes the unrestricted table-driven design cannot touch at all.
-+  Prime degrees degenerate gracefully and correctly: `Eq(7)` and `Eq(11)` have no nontrivial uniform partitions, matching the group fact that a transitive action of prime degree is primitive, so its congruence lattice is the two-element chain; the sweep can skip prime `n` and the enumerator's empty pool there is a wired-correctly cross-check.
-
-## Implementation sketch
-
-+  Enumerate the uniform pool directly, one divisor `k` of `n` at a time (never through the full `Bell(n)` enumeration), in the engines' canonical min-rooted parent-vector order.
-+  A copy is closed under the target's meets and joins by definition, so the assignment plan only ever needs meet/join of pool members followed by a **membership test in the pool**: compute them on the fly with the existing pure kernels or precompute pool² tables — both trivial at these pool sizes.  A meet or join of two uniform partitions need not be uniform; that case simply fails the placement, which is the pruning doing its work.
-+  Classification and orbit generation are unchanged: relabeling points preserves uniformity, so class representatives, stabilizers, and orbit sizes work exactly as today.
-+  The closure test is unchanged (the full unary-map monoid).  Remark iv's second sentence — restricting the *polymorph* search to permutations — is a separable optimization with different verdict semantics (`Inv` of the permutation group alone) and should stay out of this flag, or land later as its own flag with its own documentation.
-+  Reports keep the `flrp-eqsearch v1` format with a field recording the restriction, so uniform censuses are never mistaken for full ones.
-
-## Tests
-
-+  Parity with the unrestricted engine: for `n ≤ 7`, filter the full census's classes to those whose members are all uniform and require the `--group-rep` sweep to produce exactly those classes; behind `FLRP_EQSEARCH_SLOW=1`, apply the same filter to the committed `Eq(8)` report (`out/l7_eq8_report.json`).  For `L7`/`Eq(6)` both known classes contain non-uniform members (the grid element `(1,0)` is `|0,2|3,4|` with singleton blocks), so the uniform census there is empty — pin it.
-+  Pool pins: the uniform counts in the table above for `n = 6, 8, 9, 10` as unit tests of the enumerator.
-+  Fast/pure backend parity, as for the existing `--fast` tests.
-
-## The headline runs
-
-+  The `--group-rep` sweep of `Eq(9)` for library `L7` (manuscript `L10`), with the verdict — a closed class and hence a witness algebra flowing into the certificate pipeline, or a machine-checked "no transitive representation on nine points" — recorded in `docs/notes/flrp-l7-eq6.md` and #484.
-+  Then `Eq(10)` and `Eq(12)` as budget permits (`Eq(11)` is prime and skips itself).
-+  Cross-validation with #487's transitive-degree scan: the GAP side enumerates transitive groups of degree `n` and tests intermediate-subgroup intervals `[H, G] ≅ L7`; a closed uniform class found here must be visible there and vice versa, so disagreement in either direction is a bug or a discovery.
-
-## Acceptance criteria
-
-- [ ] `--group-rep` lands in both engines with byte-identical reports, a recorded restriction field, and documented negative-verdict semantics in the README.
-- [ ] The pool enumerator's counts and the filter-parity tests (including the empty `L7`/`Eq(6)` uniform census) are pinned in `make flrp-test`.
-- [ ] The `Eq(9)` uniform sweep for library `L7` is run and its outcome recorded in the `L7` note and #484.
-
-Part of #483; extends #486 (search tooling); serves #484 (the `L7` hunt) and cross-validates #487 (the GAP transitive-degree scan).
-
----
-
-### Issue M6-14f: eqsearch --group-rep: bring the Eq(12) uniform sweep within reach (orbit–stabilizer classification, blocked pool tables) (#499, closed)
-
-**Labels**: `milestone-6-flrp`, `research-exploratory`, `flrp-research`
-
-## Description
-
-Extend the #494 uniform restriction (`--group-rep`, PR #498) so the `Eq(12)` sweep runs to a verdict.  Twelve is now the frontier: the `Eq(9)` and `Eq(10)` uniform censuses are empty and eleven is prime (`docs/notes/flrp-l7-eq6.md` § 8), so a minimal representation of library `L7` (manuscript `L10`; dictionary `docs/notes/flrp-slr-naming.md`), if one exists, has at least twelve elements — and `n = 12` is the first ground-set size whose uniform pool contains comparable nontrivial partitions (divisor chains `2 | 4`, `2 | 6`, `3 | 6`), hence the first where a uniform copy of `L7` is even conceivable.
-
-## Why Eq(12) is decisive
-
-+  A closed uniform class at twelve is a candidate minimal representation of the open lattice, flowing directly into the WP-6 certificate pipeline (carrier 12 is well inside the renderer's literal cap of 32).
-+  An empty or unclosed census pushes the frontier from twelve to **sixteen** in one step: thirteen is prime, and fourteen (`2 ∤ 7`) and fifteen (`3 ∤ 5`) have antichain pools by the divisor argument of the `L7` note § 8, so with the manuscript's § 5 transitivity theorem the next size where a uniform copy is conceivable is `16 = 2⁴` (chains `2 | 4 | 8`).
-+  Cross-validation with #487 (the GAP transitive-degree scan, `scripts/gap/flrp/`): degree 12 is the first degree where both attacks probe genuinely new ground; a closed class found here must be visible there and vice versa, so disagreement in either direction is a bug or a discovery.
-
-## What breaks at twelve, and the known fixes
-
-The #494 engines were sized for pools of a few hundred to a thousand; at twelve the nontrivial pool is 32,032 (shapes `2⁶`: 10,395, `3⁴`: 15,400, `4³`: 5,775, `6²`: 462).
-
-+  **Tables**.  Eager pool² meet/join at `int16` is ~4.1 GB; replace with a blocked (row-band) build or with on-the-fly membership — per-prefix `meet_rows`/`join_rows` against the pool matrix plus binary search over the sorted pool codes, memoized by prefix index.  The 2026-07-24 `Eq(10)` measurements (pure 6 m 59 s versus fast 24 m 12 s: the constant per-prefix mask cost dominates at narrow pools) say to benchmark both engines rather than assume vectorization wins.
-+  **Classification**.  Materialized orbits are `12! ≈ 4.79 × 10⁸` relabelings per class — hours apiece even with #494's chunking.  Replace with orbit–stabilizer: backtrack for the stabilizer of the relation set, report orbit size `12!/|stab|`, keep the first-found-representative order, and keep a conservation cross-check (`Σ 12!/|stab|` equals the number of distinct relation sets) so reports stay byte-identical wherever the materialized classifier also runs.
-+  **Closure universe**.  `Inv(M)` must still range over all of `Eq(12)` (`Bell(12) = 4,213,597`): the tuple-of-tuples universe costs on the order of a gigabyte and a progressive filter pass is seconds per map, so either accept that, pack the universe as an `int8` matrix with a vectorized invariance filter, or stream the filter — decided by measurement, without changing `invariant_partitions` semantics.
-+  **Sweep order**.  The prefix ballooning of the generic height-ordered assignment plan (#486's known follow-up) may finally bite once the pool has real chains; the constraint-density-guided order is the fix if it does.
-
-## Tests
-
-+  Pool pins at twelve: 32,032 nontrivial members with the shape split 10,395 + 15,400 + 5,775 + 462, plus the structural facts at 13, 14, 15 (empty or antichain pools) as cheap cross-checks.
-+  Byte-parity of the orbit–stabilizer classifier against the materialized one on every existing census (`M3` on 4 and 6 points, the uniform `L7` censuses through ten, and the committed unrestricted reports).
-+  The committed `Eq(12)` report re-derived under `FLRP_EQSEARCH_SLOW=1`, with fast/pure cross-validation of whatever engine variants land.
-
-## The headline run
-
-+  The `--group-rep` sweep of `Eq(12)` for library `L7`, with the verdict — a closed class and hence a witness algebra flowing into the certificate pipeline, or a machine-checked "no transitive representation on twelve points", which by the chaining above moves the frontier to sixteen — recorded in `docs/notes/flrp-l7-eq6.md` and #484.
-
-## Acceptance criteria
-
-- [ ] The `Eq(12)` uniform sweep completes on one core with recorded wall-clock, byte-deterministic output, and a committed report.
-- [ ] The classification and table costs are brought down as sketched, with parity pinned against the existing engines on all committed censuses in `make flrp-test`.
-- [ ] The verdict is recorded in the `L7` note and #484; if a class closes, the witness flows through `claim_input`/`emit_agda.py` to an Agda-checked certificate.
-
-Part of #483; extends #494 (PR #498) and #486; serves #484 (the `L7` hunt); cross-validates #487 (the GAP transitive-degree scan).
 
 ---
 
@@ -4592,70 +4057,7 @@ Context: the WP-5 closure toolkit (#456) deliberately avoided this reduction —
 
 ---
 
-### Issue M6-16: FLRP WP-5 stretch: formal Kurzweil–Netter duality proof, retiring Assumptions Entry 2 (#502)
-
-**Labels**: `milestone-6-flrp`, `research-exploratory`, `flrp-research`
-
-## Description
-
-Prove **Kurzweil–Netter duality closure** formally, retiring Entry 2 of `FLRP.Assumptions`: if a finite lattice is decidably representable then so is its dual, with no hypothesis.  This is the stretch goal of WP-5 (#456), split out so the closure-toolkit PR could land without it; roadmap § 7 flags the payoff explicitly — the content is finite and combinatorial, and Netter's 1986 proof may never have been published, so a machine-checked reproof is independently valuable (a standalone paper).
-
-The target argument is the one presented in `docs/papers/fin-lat-rep/SmallLatticeReps.tex` § "Lattice duals: the theorem of Kurzweil and Netter" (after Pálfy's 2009 lectures): the idempotent-contraction lattice `IC(n) ≅ Eq(n)`; the dual isomorphism `f ↦ f̂[Sⁿ]` from `Eq(n)` onto the interval `[D, Sⁿ]` of the subgroup lattice of a power of a finite nonabelian simple group `S` (Lemma lem:latt-duals); the transitive-G-set bridge `Con ⟨Sⁿ/D, Sⁿ⟩ ≅ [D, Sⁿ]`; and the expansion of the coset algebra by the lifted operations `F̂`, cutting the congruences down to the `F`-invariant partitions.
-
-On completion, `KurzweilNetterDuality` becomes a proved theorem, `dual-Representableᵈ` of `FLRP.Closure` drops its hypothesis, and the census's assumption-conditional entries `L18`/`L22` (#485) become unconditional.
-
-## Prerequisites
-
-+  The WP-3 bridge `Con (G ↷ G/H) ≅ [H, G]` at Layer D on the needed scale (#454), plus WP-2 group infrastructure for the power `Sⁿ`, its diagonal subgroup `D`, and the interval `[D, Sⁿ]`.
-+  The unary-reduction theorem `Con 𝑨 = Con ⟨A, Pol₁(𝑨)⟩` (#501), or a reworked argument that lifts general-arity operations through the construction directly.
-+  A finite nonabelian simple group in the library to instantiate `S`: either formalize simplicity of `A₅` (a substantial task in itself), or state the closure theorem parameterized by such an `S` and track the `A₅` instantiation separately.
-
-## Tasks
-
-- [ ] `Eq(n) ≅ IC(n)` and the dual isomorphism onto `[D, Sⁿ]` (the manuscript's Lemma lem:latt-duals).
-- [ ] The expansion step: congruences of the expanded coset algebra correspond to `F`-invariant partitions, i.e. to the congruences of the original algebra, dually ordered.
-- [ ] Assemble `(𝑳 : Lattice) → Representableᵈ 𝑳 → Representableᵈ (dualLattice 𝑳)` and retire Entry 2 per the registry's documented retirement path (deprecate the assumption, rewire `dual-Representableᵈ`).
-
-## Acceptance criteria
-
-- [ ] Type-checks under `--safe` with no postulates and no registry hypothesis; `FLRP.Assumptions` Entry 2 is retired with its documentation updated to point at the theorem.
-
----
-
-### Issue M6-17: Retire the degenerate `minIE` in favour of `MinimallyIE` (#509)
-
-**Labels**: `bug`, `milestone-6-flrp`, `flrp-research`
-
-## Description
-
-`minIE` of `FLRP.Enforceable` (WP-4) does not define minimal interval enforceability.  It quantifies minimality against a **single** other representation:
-
-```agda
-minIE P 𝑳 = ∀ 𝒢 𝒬 H J H-sg J-sg → (fin : FiniteAlgebra …) → IntervalIso 𝒢 H H-sg 𝑳
-           → (fin' : FiniteAlgebra …) → IntervalIso 𝒬 J J-sg 𝑳 → fin .card ≤ⁿ fin' .card → P 𝒢
-```
-
-Instantiating `𝒬 := 𝒢` and `fin' := fin` makes the cardinality premise `card ≤ card`, so `minIE P 𝑳` implies `P` of **every** finitely presented representation of `𝑳`.  It is therefore plain interval enforceability restricted to finite groups, not min-IE.  `minIE-degenerate` in `FLRP.Reductions` (#507) proves the collapse in one line, and the RP-2 catalog states its min-IE entry (Köhler, Pálfy–Pudlák on minimal representations of `Mₙ`) over the repaired notion `MinimallyIE` instead, in which minimality is quantified over all finite representations.
-
-This was left unfixed on #507 deliberately, to keep that branch additive while #506 was in review.
-
-## Tasks
-
-- [ ] Move `MinimallyIE`, `IE→MinimallyIE`, and `MinimallyIE-∧` from `FLRP.Reductions` into `FLRP.Enforceable`, replacing `minIE` under that name (one canonical form per concept — no synonym pair).
-- [ ] Keep `minIE-degenerate` as a regression witness, restated against whatever the replacement is called, or record the defect in the module prose if the old definition disappears entirely.
-- [ ] Update `FLRP.Reductions` Entry 6 and `docs/notes/flrp-rp2-catalog.md` § 4.7 to point at the canonical definition.
-- [ ] While there: consider whether the exactness caveat on `card` (it bounds the carrier from above, so this is minimality of *certified* cardinalities) deserves a `FiniteAlgebra` with an exact enumeration, or stays a documented approximation.
-
-## Acceptance criteria
-
-- [ ] `make check` green; no definition in the tree has the degenerate quantifier shape.
-- [ ] Blocked until #506 and #507 land, so the edit does not collide with review fixes.
-
-Follow-up to #459 / #507.  Part of #451.
-
----
-
-### Issue M6-18: Minimal normal subgroups exist in finite groups (well-founded descent) (#510)
+### Issue M6-18: Minimal normal subgroups exist in finite groups (well-founded descent) (#510, closed)
 
 **Labels**: `enhancement`, `milestone-6-flrp`, `flrp-research`
 
@@ -4682,35 +4084,7 @@ Discharging it turns those entries into the note's statements verbatim.
 - [ ] Type-checks under `--safe`, no postulates; the Layer-D requirement (if any) is stated explicitly per ADR-008 rather than smuggled in.
 - [ ] `FLRP.Reductions` Entries 1–3 read `cfIE 𝒢ᵢ ⊕ᵖ-Lattice` with no conditional antecedent, for finite groups.
 
-Follow-up to #458 / #459.  Part of #451.
-
----
-
-### Issue M6-19: Certify `M₆` as an interval: discharge Entry 5 vacuity by computation (#511)
-
-**Labels**: `enhancement`, `milestone-6-flrp`, `flrp-research`
-
-## Description
-
-Discharge the **group representability of `M₆`** by computation instead of importing it, so that the non-vacuity of RP-2's Entry 5 becomes a theorem.
-
-The vacuity discipline of the enforcement catalog (#507) requires every entry to track whether its enforcing lattice is known to be group representable, since a lattice that is no interval enforces *everything* (`not-representable→IE`).  Entry 5 (`𝒢₁`, neither alternating nor symmetric, IE via `M₆`) currently imports its witness as the hypothesis `M₆-representable`, justified by the folklore construction quoted in `docs/notes/flrp-rp2-catalog.md` § 3: for a prime power `q`, `M_{q+1}` is the subspace lattice of a two-dimensional space `V` over `F_q`, realized as the interval `[K , V ⋊ K]` where `K ≅ F_q^*` acts by scalars.
-
-For `q = 5` the witness group has order `25 · 4 = 100` and the interval has 8 elements — small enough for the WP-6 certificate pipeline, and it would be the first *group-side* certificate in the catalog.
-
-## Tasks
-
-- [ ] GAP side (`scripts/gap/flrp/`): emit `V ⋊ F₅^*` of order 100 with the scalar action, the subgroup `K`, and the interval `[K , G]`; check `[K , G] ≅ M₆` there first.
-- [ ] Certificate side: the interval is a congruence lattice by `FLRP.Bridge` (`Con (𝒢 ↷ 𝒢/K) ≅ [K , 𝒢]`), so the existing algebra-side certificate schema applies to the coset action on the 25 cosets; alternatively certify the interval directly if that is cheaper.
-- [ ] Agda side: check the emitted certificate and derive `GroupRepresentable M[ 6 ]`, then instantiate `Entry-𝒢₁.nongiant-nonvacuous` with it in place of the hypothesis.
-- [ ] Record in the survey note that Entry 5's vacuity datum is discharged, and note that Entry 4's (`M₇` in `A₃₁`, index `30!/10`) is out of computational reach and stays an import.
-
-## Acceptance criteria
-
-- [ ] `GroupRepresentable M[ 6 ]` is inhabited in the library with no new assumption, and Entry 5's non-vacuity no longer takes `M₆-representable` as an argument.
-- [ ] The emitter and its golden test live under `scripts/` with a Makefile target, per `CLAUDE.md`.
-
-Follow-up to #459 / #507; uses the WP-6 pipeline (#457) and the WP-3 bridge.  Part of #451.
+Follow-up to ualib/agda-flrp#8 / ualib/agda-flrp#9.  Part of ualib/agda-flrp#2.
 
 ---
 
@@ -4738,43 +4112,7 @@ Solvability additionally closes an RP-1 open item: the second half of the note's
 - [ ] Both predicates are defined in `Classical/` (reusable mathematics, roadmap § 6), not under `FLRP/`.
 - [ ] The two H-closure hypotheses of `FLRP.Reductions` are proved rather than assumed, and the entries no longer take an abstract predicate.
 
-Follow-up to #459 / #507; also closes an open item of #458.  Part of #451.
-
----
-
-### Issue M6-21: Aschbacher's D∆ and signalizer theorems, specialized to parachutes (#513)
-
-**Labels**: `milestone-6-flrp`, `blocked-upstream`, `research-exploratory`, `flrp-research`
-
-## Description
-
-Obtain Aschbacher's `D∆` and signalizer-lattice papers and work out what they say about **minimal parachute representations**, then add the resulting entries to the RP-2 catalog.
-
-This is roadmap avenue B and the highest-value external entry still missing.  Parachutes have disconnected interiors, which is exactly the domain of Aschbacher's class `D∆`, so his reductions plausibly apply to them directly — but RP-2 **rejected** the entry rather than guess it (`docs/notes/flrp-rp2-catalog.md` § 5): the statements are inseparable from his own apparatus (`O_G(H)''`, `M_G(H)`, signalizer lattices), and transcribing them from secondary descriptions would produce exactly the plausible-sounding non-theorem the phase's discipline exists to prevent.  Specializing them to parachutes is research, not transcription.
-
-Sources needed (none reachable in the current environment; all paywalled, no preprints located):
-
-+  M. Aschbacher, *On intervals in subgroup lattices of finite groups*, J. Amer. Math. Soc. 21 (2008), 809–830.
-+  M. Aschbacher, *Signalizer lattices in finite groups*, Michigan Math. J. 58 (2009), 79–103.
-+  M. Aschbacher, *Lower signalizer lattices in alternating and symmetric groups*, J. Group Theory 15 (2012), 151–225.
-+  M. Aschbacher, *Overgroup lattices in finite groups of Lie type containing a parabolic*, J. Algebra 382 (2013), 71–99.
-+  M. Aschbacher and J. Shareshian, *Restrictions on the structure of subgroup lattices of finite alternating and symmetric groups*, J. Algebra 322 (2009), 2449–2463 — cited by the note beside Basile for `𝒢₁`, currently named but **not consumed** by the catalog.
-
-One usable lead: §§ 2 of arXiv:1911.04516 (Lucchini–Moscatiello–Palcoux–Spiga) is a careful secondary presentation of Aschbacher's notation and of the overgroup results his program supplies, and is a reasonable entry point while the primary texts are being obtained.  This is also the avenue most likely to benefit from expert correspondence (roadmap § 5 B).
-
-## Tasks
-
-- [ ] Obtain the primary texts (library access or correspondence).
-- [ ] State the `D∆` hypothesis and the minimal-representation conclusion precisely enough to write down, in the vocabulary of `FLRP.Enforceable`; expect a min-IE disjunction ("`G` almost simple, or a signalizer lattice arises").
-- [ ] Decide what it says when the lattice is a parachute with two big canopies, where RP-1 already forces a unique nonabelian minimal normal subgroup with trivial centralizer and `NH = G` (Lemma 3.7) — the two structure theories should either compose or conflict, and either outcome is informative.
-- [ ] Add the resulting entries to `FLRP.Reductions` with their citations, and record verification status in the survey note § 3.  If a claim cannot be pinned down from the primary text, leave it rejected in § 5 rather than approximating it.
-- [ ] Same treatment for Aschbacher–Shareshian, which would give Entry 5 a second independent source.
-
-## Acceptance criteria
-
-- [ ] Either new catalog entries whose statements are verified against the primary texts, or an updated § 5 explaining precisely which statement resisted formalization and why.
-
-Follow-up to #459 / #507.  Part of #451; roadmap avenue B.
+Follow-up to ualib/agda-flrp#9 / ualib/agda-algebras#507; also closes an open item of ualib/agda-flrp#8.  Part of ualib/agda-flrp#2.
 
 ---
 
@@ -4786,7 +4124,7 @@ Follow-up to #459 / #507.  Part of #451; roadmap avenue B.
 
 Formalize the correspondence between **normal subgroups of a group and congruences of it**, and use it to identify the group-side monolith notion with the library's congruence-side one.
 
-`Classical.Structures.Group.MinimalNormal` (added by #507) defines `HasMonolithᵍ` — a least nontrivial normal subgroup — because the library has no way to say "this *group* is subdirectly irreducible" in the sense of `Setoid.Congruences.Monolith.IsSubdirectlyIrreducible`, which is a statement about `Con 𝑨`.  The RP-2 catalog's Entry 1 (`𝒢₂`) is therefore stated group-side, with the divergence recorded in `docs/notes/flrp-rp2-catalog.md` § 4.1.  This issue retires that divergence.
+`Classical.Structures.Group.MinimalNormal` (added by ualib/agda-algebras#507) defines `HasMonolithᵍ` — a least nontrivial normal subgroup — because the library has no way to say "this *group* is subdirectly irreducible" in the sense of `Setoid.Congruences.Monolith.IsSubdirectlyIrreducible`, which is a statement about `Con 𝑨`.  The RP-2 catalog's Entry 1 (`𝒢₂`) is therefore stated group-side, with the divergence recorded in `docs/notes/flrp-rp2-catalog.md` § 4.1.  This issue retires that divergence.
 
 The work is ordinary — no obstruction and no classical input — and it is reusable mathematics, so per roadmap § 6 it belongs in `Classical/Structures/Group/`, beside `FLRP.Bridge`'s Pálfy–Pudlák correspondence, not under `FLRP/`.
 
@@ -4803,7 +4141,7 @@ The work is ordinary — no obstruction and no classical input — and it is reu
 - [ ] Type-checks under `--cubical-compatible --exact-split --safe` with no postulates.
 - [ ] `𝒢₂` of `FLRP.Reductions` is stated with the library's `IsSubdirectlyIrreducible`, and the survey note's § 4.1 divergence is replaced by a pointer to the bridge.
 
-Follow-up to #459 / #507.  Part of #451.
+Follow-up to ualib/agda-flrp#9 / ualib/agda-algebras#507.  Part of ualib/agda-flrp#2.
 
 ---
 
@@ -4835,184 +4173,7 @@ The mathematical target is Kurzweil's lemma (`lem:latt-duals` of `docs/papers/fi
 - [ ] Type-checks under `--cubical-compatible --exact-split --safe` with no postulates; classical inputs enter only through the named Entry 4 hypothesis.
 - [ ] `make check`, `make unused-imports`, and `make check-links` (after `make gen-links`) are green.
 
-Consumers: #461, #502.  Part of #451; roadmap §§ 2, 6.
-
----
-
-### Issue M6-24: Kurzweil surjectivity: every subgroup in `[D , Sⁿ]` is a partition subgroup (retire Assumptions Entry 4) (#522)
-
-**Labels**: `enhancement`, `milestone-6-flrp`, `flrp-research`
-
-## Description
-
-Prove **Kurzweil surjectivity** — for a finite nonabelian simple group `S`, every subgroup of `Sⁿ` containing the diagonal `D` is a partition subgroup `K_π` — and retire Entry 4 of `FLRP.Assumptions` per its documented retirement path.  This is the *onto* half of Kurzweil's lemma `[D , Sⁿ] ≅ Eq(n)′`; the dual order embedding and the conditional isomorphism `kurzweilIntervalIso` landed with #521, so discharging this entry upgrades the isomorphism to an unconditional theorem at simple instantiations, with no change to consumers (#461, #502).
-
-The missing mathematics is the normal-subgroup structure theory of powers of a nonabelian simple group.  The classical argument (Kurzweil 1985; Pálfy's 2009 lectures): the kernel meet `π` of a subgroup `U ∈ [D , Sⁿ]` satisfies `U = K_π`, by showing each block column `{ c_B(s) ∣ s ∈ S }` lies in `U` — the set `N_B = { s ∣ c_B(s) ∈ U }` is normal in `S` by conjugating with diagonal elements, so by simplicity it is trivial or everything, and nontriviality of `N_B` is where nonabelianness enters (normal subgroups of `Sᵐ` are partial products, so a surjection `Sᵐ → S` is a coordinate followed by an automorphism, which the diagonal forces to be the identity).
-
-## Prerequisites
-
-+  A simplicity predicate for groups (issue #512 owns the alternating/symmetric and solvability predicates; simplicity in the "every normal subgroup is trivial or full" form can land there or here).
-+  `Classical.Structures.Group.{Power, Diagonal, PartitionSubgroup}` and `FLRP.KurzweilInterval` from #521.
-
-## Tasks
-
-- [ ] Normal subgroups of a finite power `Sⁿ` of a nonabelian simple group are the partial products (the commutator argument: a normal subgroup with a nontrivial `i`-th coordinate contains the full `i`-th factor).
-- [ ] A subgroup of `Sⁿ` containing the diagonal collapses blockwise: with `π` its kernel meet, each block column lies in it.
-- [ ] Assemble `KurzweilSurjectivityAt 𝒮 n` for `𝒮` simple nonabelian, at Layer S; derive the Layer-D reading over decidable interval elements.
-- [ ] Retire Entry 4: deprecate `KurzweilSurjectivityAt` as a hypothesis, rewire `kurzweilIntervalIso` and `eqDual-groupRepresentable`, and update the registry documentation.
-
-## Acceptance criteria
-
-- [ ] Type-checks under `--cubical-compatible --exact-split --safe` with no postulates; the nonabelian-simple side condition of Entry 4 becomes a formal hypothesis rather than prose.
-
-Follow-up to #521.  Feeds #461 and #502; part of #451.
-
----
-
-### Issue M6-25: L16 erratum: the printed Sub(C2.A6) interval does not reproduce — and three parked census entries are duals of certified ones (#529)
-
-**Labels**: `milestone-6-flrp`, `research-exploratory`, `flrp-research`
-
-## Description
-
-Two findings about the `L16` entry of the SmallLatticeReps § 6 catalog, one negative and one positive.  The negative one extends erratum E2 of `docs/notes/flrp-slr-census.md`; the positive one settles `L16`'s census status outright and, in passing, two other parked entries.  All numbering is the **manuscript's** (`docs/papers/fin-lat-rep/SmallLatticeReps.tex`, 2016-06-10 draft); the dictionary is `docs/notes/flrp-slr-naming.md`.
-
-## 1. The printed group representation does not reproduce (E2, extended)
-
-The manuscript prints, for `L16` (covers `0 ≺ 1, 2`; `1 ≺ 3, 4, 5`; `2, 3, 4, 5 ≺ 6`):
-
-> Upper interval in Sub(`C_2.A_6`), algebra of size 180
-
-That asserts a subgroup `H ≤ C2.A6` of index 180 — so `|H| = 4` in a group of order 720 — with `[H, C2.A6] ≅ L16`.  Both readings of `C2.A6` fail, and the failure is not a near miss:
-
-+  **`C2.A6 = 2.A6 = SL(2,9)`** (the ATLAS double cover, the reading of E2).  A single conjugacy class of index-180 subgroups; its interval has **38** elements.
-+  **`C2 × A6`** (the split reading, checked here for the first time).  Index-180 classes give intervals of sizes **16, 28, 38** — no seven-element interval at all.
-
-Stronger, and independent of which group was meant: **no finite group has an upper interval `≅ L16` of index ≤ 16.**  The transitive-groups scan settles every index it covers, because a counterexample of index `n` can be taken core-free (if `N = Core_G(H) ≠ 1` then `[H/N, G/N] ≅ [H, G]` at the same index), hence is a faithful transitive action of degree `n`; degrees 4, 6, 8, 9, 10, 12, 14, 15, 16 were scanned exhaustively — 2340 transitive groups, 1954 of them at degree 16 — and every prime degree is a free negative (transitive of prime degree ⇒ primitive ⇒ two-element interval).  The `Eq(n)` uniform-partition filter (#494) agrees independently: `L16` has **no** uniform copy in `Eq(n)` for `n ≤ 10`, so no transitive G-set of those degrees can have it as a congruence lattice.
-
-Either the group or the index is wrong in the printed entry; this issue does not guess which.
-
-## 2. `L16` is the dual of `L17` — and so are two other parked entries
-
-`L16 ≅ dual(L17)`, verified by exhaustive order-isomorphism search over the committed stanzas (`L16` is not self-dual).  `L17` is **certified** in this library (`FLRP.Certificates.SmallLatticeReps.SLR17`, from the manuscript's own 12-element algebra `B17`), so `L16` is representable through `dual-Representableᵈ` of `FLRP.Closure.Basic`, conditional on `FLRP.Assumptions` Entry 2 (Kurzweil–Netter) — exactly the route the census already uses for `L18` and `L22`.  **`L16` therefore needs no group representation at all** to leave the parked list; the erratum above concerns only the manuscript's stated construction.
-
-Sweeping the same test across every parked entry turns up two more:
-
-| parked entry | dual is | census status today |
-|---|---|---|
-| `L14` | `L15` (certified, `SLR15`) | group representation, `Sub(A6)` index 90 — reproduced, but parked on the WP-3 bridge |
-| `L16` | `L17` (certified, `SLR17`) | group representation, `Sub(C2.A6)` — **does not reproduce** |
-| `L20` | `L21` (certified, `SLR21`) | filter-ideal in `SmallGroup(216,153)`; the draft prints no explicit construction |
-| `L18` | `L19` (certified) | already recorded as a dual |
-| `L22` | `L23` (certified) | already recorded as a dual |
-| `L10`, `L11`, `L28` | self-dual | duality gives nothing new |
-
-The manuscript lists dual pairs adjacently (14/15, 16/17, 18/19, 20/21, 22/23), so the pairing looks deliberate; the census and `FLRP.Closure.Basic` simply track it for only two of the five pairs.
-
-## Tasks
-
-- [ ] Extend erratum E2 in `docs/notes/flrp-slr-census.md` with the `C2 × A6` result, the index-≤-16 non-existence, and the `Eq(n)` uniform-filter cross-check; commit the GAP artifacts under `scripts/gap/flrp/out/`.
-- [ ] Record the duality finding in the census: reclassify `L14`, `L16`, `L20` as assumption-conditional duals of `SLR15`, `SLR17`, `SLR21`, keeping the group-representation notes as the (independent) second route for `L14`.
-- [ ] Update the payoff prose in `src/FLRP/Closure/Basic.lagda.md`, which names only `L18` and `L22` as the census's dual entries — five of the seven parked entries are duals of certified ones.
-- [ ] Consider a `bin/sweep_smallgroups.g` driver: `FLRP_ScanSmallGroups` exists in `lib/search.g` with no command-line front end, which is why the searches above had to go through `find_interval.g` and `scan_transitive.g`.
-- [ ] Optional, if cheap: push the transitive scan past degree 16 to sharpen the non-existence bound (degree 18 has 983 groups, 20 has 1117, 24 has 25000 — the last is likely out of reach), and note that `scan_transitive.g` hard-codes `L7` naming and output paths while its prescreen (interval size 7) serves any seven-element target — worth parameterizing.
-- [ ] Report the erratum upstream to https://github.com/UniversalAlgebra/fin-lat-rep alongside E1, with the suggested repair: cite duality with `L17` (as the draft already does for `L18` and `L22`), or supply a corrected group and index.
-
-## Acceptance criteria
-
-- [ ] The census records `L16`'s status as settled-by-duality, with the failed group representation logged as an erratum rather than a pending search.
-- [ ] Every claim above is reproducible from committed artifacts and documented commands.
-
-Part of #483; follows up the census of #485 and the GAP engine of #487.  The duality route retires unconditionally when #502 discharges Entry 2.
-
----
-
-### Issue M6-25: Instantiate Kurzweil–Netter duality at a concrete simple group (A₅) (#527)
-
-**Labels**: 
-
-## Description
-
-The formal Kurzweil–Netter duality proof of #502 (`FLRP.KurzweilNetter.Duality`) is deliberately *parameterized* by the base group rather than instantiated: `KurzweilNetterProof` takes a group `𝒮` together with exactly the properties the argument uses — a `FiniteAlgebra` witness (finite carrier, decidable equality), a nontriviality witness `s₀` with `¬ (s₀ ≈ ε)`, and the Kurzweil-surjectivity family `(n : ℕ) → KurzweilSurjectivityAt 𝒮 n` (Assumptions Entry 4).  Nonabelianness and simplicity of `𝒮` enter the mathematics only through Entry 4, so no simplicity predicate occurs in the formal development.
-
-This issue tracks the instantiation at a concrete finite nonabelian simple group, canonically `A₅`, so that `kurzweilNetterDuality` (and `dual-Representableᵈ` of `FLRP.Closure`) can be consumed with no group-shaped parameter at all.
-
-## Tasks
-
-+  Construct `A₅` as a `Group 0ℓ 0ℓ` with a `FiniteAlgebra` witness (a Cayley-table presentation on `Fin 60`, or the even permutations of `Fin 5`), and exhibit a nontrivial element.
-+  Either supply Entry 4 for `A₅` — blocked on #522 in general form, or provable directly for the specific group — or thread the per-group hypothesis to the census consumers explicitly.
-+  Provide the specialized corollary `kurzweilNetterDuality-A₅ : ((n : ℕ) → KurzweilSurjectivityAt A₅ n) → KurzweilNetterDuality`, collapsing to the unconditional theorem once #522 lands.
-
-## Relations
-
-+  #502 provides the parameterized theorem this issue instantiates.
-+  #522 retires Entry 4, the surjectivity family the instantiation must supply.
-+  #512 owns the solvability and alternating/symmetric predicates; simplicity of `A₅` as a *stated property* belongs there, but is not needed for this instantiation — only Entry 4 is.
-
-## Acceptance criteria
-
-+  A concrete group value instantiates `KurzweilNetterProof` under `--safe` with no postulate, with any remaining hypothesis being exactly Entry 4 at that group.
-
----
-
-### Issue M6-26: Formalize Snow's filter-ideal lemma, and use it to represent L11 and L16 unconditionally (#530)
-
-**Labels**: `enhancement`, `milestone-6-flrp`, `research-exploratory`, `flrp-research`
-
-## Description
-
-Formalize the **union-of-a-filter-and-an-ideal** closure lemma — Snow's theorem, in the direct form the manuscript proves — and apply it to the two census entries whose manuscript representations are filter-ideal constructions.  The payoff is that `L11` and `L16` become representable **unconditionally**: no Kurzweil–Netter assumption (Entry 2, needed for the duality route of #529) and no emitted certificate at carrier 60 or 216.
-
-The lemma (`lemma:union-filter-ideal` of `docs/papers/fin-lat-rep/SmallLatticeReps.tex` § "Union of a filter and ideal"; Snow, Algebra Universalis 43 (2000), reproved there directly rather than via primitive positive formulas):
-
-> Let `X` be a finite set.  If `L ≤ Eq(X)` is representable and `L₀ ≤ L` is a sublattice with universe `α↑ ∪ β↓`, then `L₀` is representable.
-
-Its proof is four lines and entirely constructive, which is what makes this worth formalizing.  Writing `λ(L) = { f ∈ Xˣ ∣ f respects every θ ∈ L }`, representability of `L` means `L = Con ⟨X , λ(L)⟩`.  Given `θ ∈ L \ L₀`, pick `(a,b) ∈ α \ θ` and `(u,v) ∈ θ \ β`, and define the **two-valued** map `h(x) = a` if `x ∈ u/β`, else `b`.  Then `β ≤ ker h`, so `h` respects everything below `β`; and `(a,b) ∈ γ` for every `γ ≥ α`, so `h` respects everything above `α`.  Hence `h ∈ λ(L₀)` violates `θ`.  Since `λ(L) ⊆ λ(L₀)`, every `θ ∉ L₀` is violated by something in `λ(L₀)`, i.e. `L₀ = Con ⟨X , λ(L₀)⟩`.
-
-No search, no enumeration, no fixpoint — the same "witness, not decision" shape as the WP-6 checkers, and a good fit for `--safe` Agda.
-
-## The concrete witnesses
-
-+  **`L16`** — found by a search over all groups of order ≤ 100 (the *only* configuration in that range).  In `Sub(A5)` take `H = C3` (index 20):
-
-   ```text
-   [C3 , A5]  =  { C3 , S3 , A4 , A4′ , A5 }  ≅  M3
-   ```
-
-   (the two `A4`s are the alternating subgroups containing that `C3`, the `S3` is its normalizer; GAP's `IntermediateSubgroups` reports exactly three middles with no containments among them).  Take `K = C5`: it lies in none of the three middles, meets each trivially, and joins each to `A5`.  So
-
-   ```text
-   L16  ≅  [C3 , A5]  ∪  [1 , C5]        inside Sub(A5),
-   ```
-
-   a filter-ideal union, with ambient set `X = A5` — an algebra of size **60**, against the erroneous 180 of the printed entry (#529).
-+  **`L11`** — the manuscript's own construction, already reproduced by the #487 engine (`scripts/gap/flrp/out/l11_filter_ideal_216_153.json`): the pentagon filter `[H , G] ≅ N5` in `SmallGroup(216,153)` together with the order-3 minimal subgroup `K` below `β` but below neither `α` nor `γ`.  Ambient set of size 216.
-
-## Why the ambient lattice is closed, without waiting on #501
-
-The lemma needs the ambient `L ≤ Eq(X)` to satisfy `L = Con ⟨X , λ(L)⟩`.  In general that follows from the unary-reduction theorem (#501, open), but **both instances here avoid it**: the ambient is `Sub(G)` presented as the left-coset partitions of `X = G`, and `Con ⟨G , right translations⟩ ≅ Sub(G)` is the WP-3 bridge (#454, merged) at `H = 1`.  So `Inv(λ(L)) ⊆ Inv({right translations}) = Sub(G) = L`, and closedness is immediate.  Recording this because it decides the dependency order: this issue does **not** block on #501.
-
-## Tasks
-
-- [ ] The `λ` operator and the concrete representability predicate for a set of equivalence relations on a finite set — the "closed" notion `L = Con ⟨X , λ(L)⟩` (this is exactly what `eqsearch.py`'s closure test computes engine-side, so the naming should match the tooling's).
-- [ ] Filters and ideals of a lattice, and the fact that `α↑ ∪ β↓` is always a sublattice (one line each way: `x ∧ y ≤ y ≤ β` and `x ∨ y ≥ x ≥ α`).
-- [ ] The lemma itself, following the manuscript's proof; the `h` construction is a two-valued map defined by a decidable `β`-class membership test, so it should be smooth over a finite carrier.
-- [ ] Bridge to `Representableᵈ`: a closed `L₀ ≤ Eq(X)` yields the unary algebra `⟨X , λ(L₀)⟩` with `Con ≅ L₀`.  Check whether `Classical.Structures.Unary` (from the WP-6 pilot) already provides the algebra side.
-- [ ] The `Sub(G)` ambient: instantiate the WP-3 bridge at `H = 1` to get `Sub(G)` as a closed sublattice of `Eq(G)`; state it as a reusable lemma in `Classical/`, not under `FLRP/`.
-- [ ] Apply to `L16` (the `A5` data above) and `L11` (the committed `SmallGroup(216,153)` data), producing `Representableᵈ` witnesses; update `docs/notes/flrp-slr-census.md` and the tally.
-- [ ] GAP side: promote the ad-hoc probe into `bin/find_filter_ideal.g` — given a target filter shape and an ideal length, hunt for `(G, H, K)` — and commit the `A5` artifact in the `flrp-gap-filter-ideal v1` format that `bin/filter_ideal_216.g` already uses.
-- [ ] Cross-check with the manuscript's derivation: it obtains **adjoined ordinal sums** as a corollary of this lemma (`α = β = 1_{L₁} × 0_{L₂}` inside `L₁ × L₂`).  `FLRP.Closure` proves ordinal-sum closure directly (#456), so deriving it a second way is a free consistency check on both.
-
-## Scope note
-
-An alternative route is to emit a 60-element certificate for `⟨A5 , λ(L₀)⟩` through the WP-6 pipeline, but that needs the renderer's `Fin`-literal cap lifted past 31 and the type-check cost at carrier 60 is untested (27.9 s at carrier 19, growing with the `n²` trace tables).  The abstract route above avoids both, and is the reason to prefer formalizing the lemma over brute-forcing the instance.
-
-## Acceptance criteria
-
-- [ ] The lemma type-checks under `--cubical-compatible --exact-split --safe` with no postulates and no registry assumption.
-- [ ] `L11` and `L16` are `Representableᵈ` in the library without Entry 2, and the census records them as certified by the filter-ideal route.
-
-Part of #483; relates to #529 (which currently parks `L16` on the conditional duality route) and to the manuscript's `L17`/`L20` entries, which use the same method.
+Consumers: ualib/agda-flrp#11, ualib/agda-flrp#20.  Part of ualib/agda-flrp#2; roadmap §§ 2, 6.
 
 <!-- END GENERATED: milestone-6 -->
 
