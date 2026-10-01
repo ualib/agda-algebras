@@ -158,9 +158,8 @@ in `H`{.AgdaBound} is decidable.[^2]
 
 `cosetAlgebra` is an ordinary algebra, so its congruence lattice needs no new
 definitions.  The demonstration below type-checks against the stock
-`Con`{.AgdaFunction} of [Setoid.Congruences.Basic][].  We will eventually show
-that this type is isomorphic (as a lattice) to the interval `[H, G]` in
-`Sub(G)`.[^1]
+`Con`{.AgdaFunction} of [Setoid.Congruences.Basic][].  Classically, this type is
+isomorphic (as a lattice) to the interval `[H, G]` in `Sub(G)`.[^1]
 
 ```agda
   private
@@ -170,10 +169,10 @@ that this type is isomorphic (as a lattice) to the interval `[H, G]` in
 
 ---
 
-[^1]:  The `cosetAlgebra` algebra is the object of work package WP-3 of the FLRP
-       program in which we prove `Con (G ↷ G / H) ≅ [H, G]`.
-       (See `docs/notes/flrp-research-roadmap.md` § 7.)
+[^1]:  The isomorphism `Con (G ↷ G / H) ≅ [H, G]` is classical; it underlies the
+       theorem of Pálfy and Pudlák (Algebra Universalis 11, 1980) relating
+       congruence lattices of finite algebras to intervals in subgroup lattices of
+       finite groups.
 
-[^2]:  This discharges, constructively, the finiteness hypothesis of the
-       Pálfy–Pudlák corollaries of [FLRP.Bridge][].  (Audit A2 of
-       `docs/notes/flrp-wp7-audits.md` sketches precisely this argument.)
+[^2]:  This discharges, constructively, the finiteness hypothesis that
+       applications of the Pálfy–Pudlák theorem place on the coset algebra.

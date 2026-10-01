@@ -104,8 +104,8 @@ prototypical use of the toolkit and a lemma the interval arguments reuse.
 
 ---
 
-[^1] The role played by `_∙ᶜ_`{.AgdaFunction} in this development is as the
-     vocabulary of **Dedekind's rule** (`A ≤ B → A(C ∩ B) = AC ∩ B`, in
-     [Classical.Structures.Group.Dedekind][]) and, downstream, of the
-     permuting-complement and parachute arguments of the FLRP research program
-     (`docs/notes/flrp-research-roadmap.md` § 4).
+[^1]: The role played by `_∙ᶜ_`{.AgdaFunction} in this development is as the
+      vocabulary of **Dedekind's rule** (`A ≤ B → A(C ∩ B) = AC ∩ B`, in
+      [Classical.Structures.Group.Dedekind][]) and, downstream, of the
+      permuting-complement and parachute arguments of the note *Interval
+      enforceable properties of finite groups* (arXiv:1205.1927v4, §§ 3.2 and 3.3).

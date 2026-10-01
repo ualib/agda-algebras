@@ -54,8 +54,8 @@ same generated congruence, one `Cg`-of-cons step at a time (`Cg-++-∨`{.AgdaFun
 The fold executes only `d`'s own decision procedure and table lookups — never a
 closure computation — so `completeᵈ`{.AgdaField} is both constructive and cheap.
 
-The module also exports the order-theoretic consequences the FLRP layer needs
-(`FLRP.Certificates`): `entryInj`{.AgdaFunction} (`≑` forces equal positions),
+The module also exports the order-theoretic consequences downstream consumers
+need: `entryInj`{.AgdaFunction} (`≑` forces equal positions),
 `⊆→meetIdem`{.AgdaFunction} / `meetIdem→⊆`{.AgdaFunction} (containment of
 entries is meet-table idempotence), `indexOf`{.AgdaFunction} with
 `d≑fold`{.AgdaFunction} / `fold-entry`{.AgdaFunction} /

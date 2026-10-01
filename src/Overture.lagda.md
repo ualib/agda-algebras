@@ -10,7 +10,7 @@ author: "the agda-algebras development team"
 This is the [Overture][] module of the [Agda Universal Algebra Library][].
 
 The Overture is the foundation layer: the vocabulary every later tree (`Setoid/`,
-`Classical/`, `FLRP/`) imports.  In re-export order:
+`Classical/`) imports.  In re-export order:
 
 +  [Overture.Preface][] is the front door: why the library exists, why Agda, and
    how to read what follows.

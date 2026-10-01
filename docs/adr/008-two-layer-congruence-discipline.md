@@ -4,6 +4,11 @@
 
 Accepted — 2026-07-12.
 
+Note (2026-09-30): the research-program modules and design notes this record
+cites (the `FLRP.*` modules, the work packages WP-1 to WP-7, and the `flrp-*`
+notes) are no longer part of this repository.  The decision stands for the
+library's two congruence layers.
+
 ## Context
 
 Congruences in this library are `Type`-valued compatible equivalence relations (`Con`, in `Setoid.Congruences`), which is what kernels, quotient algebras, the isomorphism theorems, subdirect representation, and the HSP theorem consume, for finite and infinite algebras alike.  Work package WP-1 of the FLRP research program (PR #462) proved that this semantic type is classically loaded even over finite carriers: `Con 𝑨` contains the *oracle congruence* `Cg (λ _ _ → P)` for every proposition `P`, so any order isomorphism `Con 𝑨 ≅ 𝟚` decides between `¬ P` and `¬ ¬ P` — weak excluded middle.  Constructively `Con 𝟚` is the lattice of propositions, not the two-element lattice, so no re-encoding of `Con` avoids this (including the planned Cubical port), and banning oracle congruences is not possible without losing the kernel property, since every oracle congruence is the kernel of a quotient map.
@@ -37,7 +42,5 @@ Keep the semantic congruence layer unchanged; build a first-class decidable laye
 
 ## References
 
-+  Design note — `docs/notes/flrp-two-layer-congruences.md` (lemma stack, audits, work-package impact).
-+  Roadmap — `docs/notes/flrp-research-roadmap.md` (§§ 4, 6).
 +  Pull requests — ualib/agda-algebras#462 (WP-1: `FLRP.Problem`, the no-go theorem) and #465 (the finiteness-interface split, issue #464); issues #452 (WP-1), #466 (WP-7, the Layer-D implementation), and #451 (tracking).
 +  Prior art — `Setoid.Algebras.Finite` and `Setoid.Congruences.Finite` (split from `Setoid.Subalgebras.Subdirect.Finite`) and `docs/notes/m6-8-finite-birkhoff.md` (the `DecCon` interface and the "classical content of finiteness" observation this ADR builds on).

@@ -15,7 +15,7 @@ This module constructs it concretely, on the carrier `Fin 60` with propositional
 equality, and certifies its simplicity by finite computation: the result is an
 inhabitant of `IsSimple`{.AgdaFunction} of [Classical.Structures.Group.Simple][],
 the nonabelian-simple bundle `IsNonabelianSimple`{.AgdaRecord}, the discharged
-`NontrivialCenterless`{.AgdaRecord} of [FLRP.WreathNoGo][],[^1] and, through the
+`NontrivialCenterless`{.AgdaRecord} of the same module, and, through the
 correspondence of [Classical.Structures.Group.Congruences][], the congruence-level
 `IsSimple`{.AgdaFunction} of [Setoid.Congruences.Simple][].
 
@@ -24,14 +24,13 @@ The raw data lives in the generated companion
 on the lexicographic even-permutation encoding (index 0 is the identity), the
 inverse vector, the action of each element on the five points, and the simplicity
 certificate.  Nothing rests on the generator's authority: every claim in the data
-is replayed here by decision procedures over the finite carrier, exactly as in the
-certificate discipline of [FLRP.Certificates][].
+is replayed here by decision procedures over the finite carrier.
 
 #### Presentation choice, with measurements
 
 Three presentations were candidates, and we naturally chose the one that is easily
 integrated into our existing finite group theory framework and has good
-computational properties.[^2]
+computational properties.[^1]
 
 We represent `A₅` by a Cayley table, exploiting the fact that `A₅` acts
 faithfully on its five points: the action tables are data.
@@ -83,7 +82,8 @@ open import Examples.Classical.Groups.AlternatingGroup5.Tables
                                        using  ( a5-mul-table ; a5-inv-vec ; a5-gen-s
                                               ; a5-act-table ; a5-gen-t ; a5-gen-words
                                               ; a5-seed-words-s ; a5-seed-words-t )
-open import FLRP.WreathNoGo            using  ( NontrivialCenterless
+open import Classical.Structures.Group.Simple
+                                       using  ( NontrivialCenterless
                                               ; nonabelianSimple→nontrivialCenterless )
 open import Setoid.Algebras.Finite     using  ( FiniteAlgebra )
 import Classical.Structures.Group as Polymorphic
@@ -226,13 +226,14 @@ a5-center-trivial : ∀ d → d ∈ center → d ≡ 0F
 a5-center-trivial = center-trivial a5-Stable-≈ε a5-isNonabelianSimple
 ```
 
-**An important consequence**: `A₅` discharges the `NontrivialCenterless`
-record of [FLRP.WreathNoGo][], so it is an admissible base group for the Kurzweil
-entries of [FLRP.Assumptions][] with the nonabelian-simple side condition
-witnessed rather than assumed.
+**An important consequence**: `A₅` discharges the
+`NontrivialCenterless`{.AgdaRecord} record of
+[Classical.Structures.Group.Simple][], so a consumer that needs a nontrivial
+centerless base group can take `A₅` with the side condition witnessed rather
+than assumed.
 
 ```agda
--- A₅ is nontrivial and centerless, as FLRP.WreathNoGo consumes it.
+-- A₅ is nontrivial and centerless.
 a5-nontrivialCenterless : NontrivialCenterless a5-group
 a5-nontrivialCenterless =
   nonabelianSimple→nontrivialCenterless a5-group a5-Stable-≈ε a5-isNonabelianSimple
@@ -294,10 +295,7 @@ open Polymorphic.Group-Op a5-group using ( _∙_ ; ε ; _⁻¹ )
 
 ---
 
-[^1]: This is what makes `A₅` an admissible base group for the Kurzweil entries of
-      [FLRP.Assumptions][].
-
-[^2]: The two candidate formalizations that were rejected:
+[^1]: The two candidate formalizations that were rejected:
       +  **A Cayley table with all laws decided**, as in
          [Examples.Classical.Groups.SymmetricGroup3][].  At `Fin 60` the associativity
          decision ranges over `60³ = 216000` triples of table lookups; measured on this

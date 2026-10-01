@@ -21,18 +21,14 @@ because `a ≤ x ≤ x ∨ y`; an ideal is closed dually.
 The result this module exists for is the closure of the **union**
 `a ↑ ∪ b ↓`{.AgdaFunction}: the union of a principal filter and a principal ideal
 is again a sublattice universe, for *any* two elements `a`{.AgdaBound} and
-`b`{.AgdaBound}.  The proof is one line in each direction, exactly as in the
-manuscript (`docs/papers/fin-lat-rep/SmallLatticeReps.tex`
-§ "Union of a filter and ideal"): if either argument lies in the ideal then so
-does the meet, since `x ∧ y ≤ y ≤ b`; if either argument lies in the filter then
+`b`{.AgdaBound}.  The proof is one line in each direction: if either argument lies
+in the ideal then so does the meet, since `x ∧ y ≤ y ≤ b`; if either argument lies in the filter then
 so does the join, since `a ≤ x ≤ x ∨ y`; and the remaining homogeneous cases are
 the filter's meet-closure and the ideal's join-closure.
 
 This is the order-theoretic half of Snow's filter-ideal lemma (Snow, *Algebra
-Universalis* 43 (2000)); the congruence-theoretic half, saying that a sublattice
-of a representable lattice with universe `a ↑ ∪ b ↓` is itself representable, is
-[FLRP.Closure.FilterIdeal][], which proves the corresponding closure at the level
-of decidable congruences and consumes the same case analysis.
+Universalis* 43 (2000)); the congruence-theoretic half says that a sublattice of a
+representable lattice with universe `a ↑ ∪ b ↓` is itself representable.
 
 <!--
 ```agda

@@ -400,10 +400,10 @@ def _logical_items(lines: Iterable[tuple[int, str]]) -> list[_Item]:
     item.  The two are equivalent — parts are stripped and joined with a space,
     so no token can straddle the boundary, and the negative lookbehind is
     satisfied by both a space and a start-of-string — but searching the
-    accumulation is quadratic in the item's length, which the FLRP certificate
-    modules punish severely: a single list literal there runs to thousands of
-    lines and is one logical item.  Measured over ``src/``, the accumulating
-    form cost 38 s of a 41 s run.
+    accumulation is quadratic in the item's length, which generated certificate
+    modules punish severely: a single list literal there can run to thousands
+    of lines and is one logical item.  Measured over ``src/`` when such modules
+    lived there, the accumulating form cost 38 s of a 41 s run.
     """
     items: list[_Item] = []
     start, indent, parts, done = 0, -1, [], True

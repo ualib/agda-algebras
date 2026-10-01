@@ -20,7 +20,7 @@ subgroup: for the partition `π` computed as the joint kernel of the members of
 The classical sources state this for arbitrary subgroups; over arbitrary
 respecting predicates the statement is *unprovable* in the `--safe` fragment of
 Agda (producing the partition from an oracle subgroup decides an arbitrary
-proposition, the no-go of the FLRP development), so the decidable-membership
+proposition), so the decidable-membership
 hypothesis is load-bearing, not a convenience.  With it, every quantifier the
 argument opens is a search over a finite enumeration, and the proof is fully
 constructive.
@@ -145,7 +145,7 @@ finiteness witness and nonabelian-simplicity bundle, and the subgroup: a
 respecting subgroup `U` of the power with a membership decider, containing the
 diagonal.  The four `U`-hypotheses are exactly the unbundled content of a
 decidable interval element of `[D , Sⁿ]`, stated here without interval vocabulary
-so that the module stays below the FLRP layer.
+so that the module does not depend on one.
 
 ```agda
 module PowerCollapse
@@ -876,7 +876,7 @@ below `0`.
 
 #### The theorem
 
-**The two containments**, packaged in the Σ-form the FLRP consumers unwrap.
+**The two containments**, packaged in the Σ-form downstream consumers unwrap.
 
 ```agda
   -- The second containment, from the fold.

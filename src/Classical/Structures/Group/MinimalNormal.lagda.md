@@ -18,8 +18,7 @@ A group has a monolith exactly when it is subdirectly irreducible: for groups,
 subdirect irreducibility is equivalent to having a unique minimal normal
 subgroup.[^1]
 
-This module collects the following set of facts about these notions that the
-enforcement catalog of [FLRP.Reductions][] needs:
+This module collects the following facts about these notions:
 
 +  the notions themselves: `IsNormalSubgroup`{.AgdaRecord},
    `Nontrivial`{.AgdaFunction}, `IsMinimalNormal`{.AgdaRecord},
@@ -258,8 +257,8 @@ classical content in a single place rather than spread over the consumers.
 A **monolith** is a minimal normal subgroup contained in every nontrivial normal
 subgroup.  A group has a monolith exactly when it is subdirectly irreducible.[^1]
 `HasMonolithᵍ`{.AgdaFunction} is therefore the group-side statement of subdirect
-irreducibility, and `minimal-meets→least`{.AgdaFunction} is how the parachute
-theorems of [FLRP.Parachute][] reach this characterization.
+irreducibility, and `minimal-meets→least`{.AgdaFunction} is how a pairwise form of
+subdirect irreducibility reaches this characterization.
 
 ```agda
   record IsMonolithᵍ (M : Pred G L) : Type (α ⊔ ρ ⊔ lsuc L) where
@@ -312,7 +311,7 @@ parachute representation has no nontrivial abelian normal subgroup.[^4]
 
 ---
 
-[^1]: See `docs/papers/flrp/ieprops/IEProps-1205.1927v4.tex`, the footnote to
+[^1]: See arXiv:1205.1927v4, the footnote to
       § 3: "Recall, for groups *subdirectly irreducible* is equivalent to having a
       unique minimal normal subgroup."  The universal-algebra-side notion is
       `IsSubdirectlyIrreducible`{.AgdaFunction} of [Setoid.Congruences.Monolith][],
@@ -321,7 +320,6 @@ parachute representation has no nontrivial abelian normal subgroup.[^4]
       [Classical.Structures.Group.Congruences][] (see footnote 3).
 
 [^2]: This is the step that turns the pairwise form of subdirect irreducibility
-      (the constructive form the parachute theorems of [FLRP.Parachute][] prove)
       into the least-element form the algebra-side `IsMonolith`{.AgdaRecord} of
       [Setoid.Congruences.Monolith][] uses.
 
@@ -335,6 +333,6 @@ parachute representation has no nontrivial abelian normal subgroup.[^4]
       congruence-level `IsSimple`{.AgdaFunction} of [Setoid.Congruences.Simple][],
       constructively in both directions.
 
-[^4]: `docs/papers/flrp/ieprops/IEProps-1205.1927v4.tex`, the Remark after
+[^4]: arXiv:1205.1927v4, the Remark after
       Lemma 3.7: "If `N` is abelian, then `N ≤ C_G(N)`, so (i) implies that every
       nontrivial normal subgroup of `G` is nonabelian."

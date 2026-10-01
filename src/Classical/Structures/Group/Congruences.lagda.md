@@ -80,7 +80,7 @@ mechanized version has to make.
    `N`{.AgdaBound} from `θ_N` produces `{ x ∣ x ∙ ε ⁻¹ ∈ N }`, and identifying that with
    `N`{.AgdaBound} moves membership across `x ∙ ε ⁻¹ ≈ x`.  A normal *subuniverse* that
    does not respect the setoid equality therefore need not be recovered by the round
-   trip, exactly as in the respecting-interval finding of [FLRP.Bridge][].  This is why
+   trip.  This is why
    `NormalSubgroup`{.AgdaFunction} is built on `IsSubgroup`{.AgdaRecord} (which carries
    `respects`{.AgdaField}) rather than on bare `Subuniverses`{.AgdaFunction}.
 
@@ -96,8 +96,8 @@ mechanized version has to make.
 
 **On the choice of relation**.  `x ∙ y ⁻¹ ∈ N` is the *right*-coset relation of
 `N`{.AgdaBound}, whereas `Coset._∼_`{.AgdaFunction} of
-[Classical.Structures.Group.Cosets][] — the relation [FLRP.Bridge][] uses — is the
-*left*-coset relation `x ⁻¹ ∙ y ∈ N`.  For a general subgroup the two need not agree;
+[Classical.Structures.Group.Cosets][] is the *left*-coset relation
+`x ⁻¹ ∙ y ∈ N`.  For a general subgroup the two need not agree;
 for a normal subgroup they do, which we prove (`rel→coset`{.AgdaFunction},
 `coset→rel`{.AgdaFunction}) rather than assume, so that either presentation may be used
 downstream.
@@ -109,8 +109,8 @@ equivalent to the congruence-level `IsSimple`{.AgdaFunction} of
 [Setoid.Congruences.Simple][], constructively in both directions.  The retirement
 program built on the correspondence also asks that `HasMonolithᵍ`{.AgdaFunction} of
 `Classical.Structures.Group.MinimalNormal` be transported to
-`HasMonolith`{.AgdaFunction}, that the `ᵍ` superscript be retired, and that `𝒢₂` of
-`FLRP.Reductions` be restated.  Those steps remain open, with the simplicity
+`HasMonolith`{.AgdaFunction}, and that the `ᵍ` superscript be retired.  Those steps
+remain open, with the simplicity
 equivalence as their template; the `Nonzero`{.AgdaFunction}/nontriviality equivalences
 proved here (`nonzero→nontrivial`{.AgdaFunction} and friends) are precisely the
 ingredient the monolith transport will need beyond the isomorphism itself.
@@ -452,8 +452,8 @@ conjugation as well; with `ε-Op`{.AgdaInductiveConstructor} it is reflexivity.
 ```
 
 For a normal subgroup the right-handed relation used here agrees with the left-handed
-coset relation `Coset._∼_`{.AgdaFunction} of [Classical.Structures.Group.Cosets][],
-which is the one [FLRP.Bridge][] builds on.  Both directions are one application of
+coset relation `Coset._∼_`{.AgdaFunction} of [Classical.Structures.Group.Cosets][].
+Both directions are one application of
 `∼-⁻¹`{.AgdaFunction} followed by an involutivity rewrite, so nothing about the
 development depends on which of the two presentations a consumer prefers.
 

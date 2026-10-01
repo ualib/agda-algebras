@@ -20,9 +20,8 @@ bundles except through the bridge of [Classical.Bundles.Group][].
 
 #### Guide to the submodules of <span class="AgdaModule">Classical.Structures.Group</span>
 
-This is currently the largest structure tree in `Classical/`, because it is the
-one the FLRP research track is built on, so a thematic map is of more use than a
-list.
+This is currently the largest structure tree in `Classical/`, so a thematic map is
+of more use than a list.
 
 +  **Structures**.
 

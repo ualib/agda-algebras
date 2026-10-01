@@ -17,15 +17,14 @@ whose operations act componentwise, together with componentwise proofs of the fi
 group laws.  The library's indexed product `⨅`{.AgdaFunction} of
 [Setoid.Algebras.Products][] would give a product with a *function-typed* carrier
 `∀ i → 𝕌[ 𝒜 i ]`; the binary product here instead has the pair carrier `G × K`, which
-is the form the fattening arguments of the FLRP program consume (a fattened subgroup
-is literally a predicate composed with `proj₁`{.AgdaFunction}).  The construction is
+is the form fattening arguments consume (a fattened subgroup is literally a
+predicate composed with `proj₁`{.AgdaFunction}).  The construction is
 level-general (`Group α ρ → Group β σ → Group (α ⊔ β) (ρ ⊔ σ)`), since full
 generality costs nothing here.
 
-Besides the product itself, the module provides the ingredients of the
-*fattening lemma* `[H × K, G × K] ≅ [H, G]` (the remark following Lemma
-`lemma:ie-prop-and-neg` in the note vendored at `docs/papers/flrp/ieprops/`; see
-`docs/notes/flrp-research-roadmap.md` § 4):
+Besides the product itself, the module provides the following ingredients of the
+*fattening lemma* `[H × K, G × K] ≅ [H, G]` (used in the proof of Lemma 3.2 of
+arXiv:1205.1927v4 and in the discussion after it):
 
 +  the **fattened subgroup predicates** `H ×ᶠ 𝒦`{.AgdaFunction} (subgroup in the
    first coordinate, full second factor) and `𝒢 ᶠ× J`{.AgdaFunction} (mirrored), each
@@ -37,9 +36,8 @@ Besides the product itself, the module provides the ingredients of the
    because `(g , k) ≈ (g , ε) ∙ (ε , k)` and `(ε , k)` lies in `H ×ᶠ 𝒦 ⊆ M`; hence
    the restriction of `M` to one coordinate is again a respecting subgroup.
 
-The order-isomorphism packaging of the fattening lemma lives in `FLRP.Enforceable`,
-which consumes exactly these lemmas; everything here is plain group theory, kept in
-the `Classical/` tree per the roadmap's placement discipline.
+Everything here is plain group theory; the order-isomorphism packaging of the
+fattening lemma is left to its consumers.
 
 Following the Cubical-port discipline, the underlying equivalence of the product is
 isolated in `G×K`{.AgdaFunction} — the pointwise pair of the component

@@ -14,8 +14,8 @@ This module specializes [`Classical.Structures.Semigroup`][Classical.Structures.
 the universe level of both the carrier and the equivalence is `0ℓ` (i.e., Set-valued
 carriers with propositional or set-truncated equivalence).  The motivation matches
 the corresponding magma veneer in [`Classical.Small.Structures.Magma`][Classical.Small.Structures.Magma]:
-finite-template CSP, finite cases relevant to FLRP intuition, and tutorial contexts
-in [`Examples/`][Examples], including [`Examples/Demos/`][Examples.Demos], live in this small case, and pulling
+finite-template CSP, finite cases relevant to the finite lattice representation
+problem, and tutorial contexts in [`Examples/`][Examples], including [`Examples/Demos/`][Examples.Demos], live in this small case, and pulling
 the level-fixed specialization out keeps the polymorphic core unencumbered.
 
 <!--

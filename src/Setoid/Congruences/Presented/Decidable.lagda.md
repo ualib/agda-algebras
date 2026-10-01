@@ -763,7 +763,7 @@ passage.
 
 --------------------------------------
 
-[^1]: Lemma L1 of `docs/notes/flrp-two-layer-congruences.md` § 3.
+[^1]: Part of the Layer-D discipline of [ADR-008][].
 
 [^2]: The module is deliberately built from many small named lemmas; the feasibility
       remark of [ADR-008][] applies here as well — the computation exists to discharge the

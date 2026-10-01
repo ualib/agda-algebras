@@ -24,7 +24,11 @@ consequences:
 +  `center-¬¬trivial`{.AgdaFunction}, `center-trivial`{.AgdaFunction}: the
    triviality of the center of a nonabelian simple group;
 +  `simple→core-¬¬trivial`{.AgdaFunction}, `simple→coreFree`{.AgdaFunction}:
-   every proper subgroup of a simple group is core-free.
+   every proper subgroup of a simple group is core-free;
++  `NontrivialCenterless`{.AgdaRecord},
+   `nonabelianSimple→nontrivialCenterless`{.AgdaFunction}: the two fragments of
+   nonabelian simplicity that many arguments consume (a non-identity element and
+   a trivial center), and their derivation from the bundle.
 
 #### Design note: the implication form, and where its limits bite
 
@@ -90,7 +94,7 @@ open import Agda.Primitive using () renaming ( Set to Type )
 -- Imports from the Agda Standard Library ---------------------------------------
 open import Data.Product     using  ( proj₁ ; proj₂ ; _,_ ; ∃-syntax )
 open import Data.Unit.Base   using  ( tt )
-open import Level            using  ( Level ; _⊔_ ; lift ) renaming ( suc to lsuc )
+open import Level            using  ( Level ; 0ℓ ; _⊔_ ; lift ) renaming ( suc to lsuc )
 open import Function         using  ( _∘_ )
 open import Relation.Binary  using  ( Setoid )
 open import Relation.Nullary using  ( ¬_ ; Dec ; Stable ; decidable-stable )
@@ -284,9 +288,56 @@ negated at Layer S and positive under stability.
       st x (simple→core-¬¬trivial sim proper x x∈core)
 ```
 
+#### Nontrivial and centerless
+
+Many arguments about a nonabelian simple group consume only two of its
+properties: it has a non-identity element, and its center is trivial.  The record
+`NontrivialCenterless`{.AgdaRecord} packages exactly these two fragments, for a
+group at the base universe level, so that a consumer can state its hypotheses
+without the whole simplicity interface.  A nontrivial centerless group is
+automatically nonabelian.
+
+```agda
+-- A group with a non-identity element and a trivial center: an element that
+-- commutes with every element is the identity.
+record NontrivialCenterless (𝒮 : Group 0ℓ 0ℓ) : Type 0ℓ where
+  open Group-Op 𝒮 using ( _∙_ ; ε )
+  open Setoid 𝔻[ 𝒮 .proj₁ ] using ( _≈_ )
+
+  field
+    elt         : 𝕌[ 𝒮 .proj₁ ]
+    elt≉ε       : ¬ elt ≈ ε
+    centerless  : ∀ d → (∀ t → t ∙ d ≈ d ∙ t) → d ≈ ε
+```
+
+The nonabelian-simple bundle discharges the record: the non-commuting pair
+supplies the non-identity element, and `center-trivial`{.AgdaFunction} supplies
+`centerless`{.AgdaField}, positively, given stability of identity equations.
+Decidable equality supplies stability (`≈-dec→Stable-≈ε`{.AgdaFunction}), so a
+consumer holding a certified concrete nonabelian simple group discharges the
+record once, instead of exhibiting the two fragments by hand.
+
+```agda
+-- Nonabelian simple, with stable identity equations, implies nontrivial
+-- and centerless.  The stability antecedent is the constructive caveat
+-- recorded in the design note above.
+nonabelianSimple→nontrivialCenterless : (𝒮 : Group 0ℓ 0ℓ)
+  → Simple.Stable-≈ε 𝒮 0ℓ
+  → Simple.IsNonabelianSimple 𝒮 0ℓ
+  → NontrivialCenterless 𝒮
+nonabelianSimple→nontrivialCenterless 𝒮 st nas = record
+  { elt         = S.elt nas
+  ; elt≉ε       = S.elt≉ε nas
+  ; centerless  = λ d central → S.center-trivial st nas d (λ x _ → ≈sym (central x))
+  }
+  where
+  module S = Simple 𝒮 0ℓ
+  open Setoid 𝔻[ 𝒮 .proj₁ ] using () renaming ( sym to ≈sym )
+```
+
 ---
 
 [^1]: See the discussion of Layer D in [ADR-008][].
 
-[^2]: At the level setting the FLRP program fixes (`α = ρ = ℓ₀ = 0ℓ`) this `L` is
-      `0ℓ`, exactly as in the sibling modules.
+[^2]: At the level setting `α = ρ = ℓ₀ = 0ℓ`, where the concrete finite instances
+      live, this `L` is `0ℓ`, exactly as in the sibling modules.

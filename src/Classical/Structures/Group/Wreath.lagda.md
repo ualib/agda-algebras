@@ -57,7 +57,7 @@ identity elsewhere yields `d ∙ a ⁻¹ ≈ a ∙ d` for every `a`, which makes
 conjugation by `d` an inversion, forces the base group to be abelian
 (`inv-conj→comm`{.AgdaFunction}), and precludes a nontrivial base group with a
 trivial center.  One uniform argument covers every index set with two points; the
-theorem is *false* for a one-point index set, where `D Ḡ` is all of `S ≀ G`.[^2]
+theorem is *false* for a one-point index set, where `D Ḡ` is all of `S ≀ G`.
 
 <!--
 ```agda
@@ -523,8 +523,7 @@ by `a` is itself commutes with `a`.
 ```
 
 **The theorem**.  The core of `D Ḡ` is contained in the identity class of the
-wreath product, which is the exact shape into which `CoreFree`{.AgdaFunction} of
-[FLRP.Enforceable][] unfolds, so FLRP consumers apply it directly.
+wreath product; that is, `D Ḡ` is core-free in `S ≀ G`.
 
 ```agda
     -- D Ḡ is core-free in S ≀ G.
@@ -547,7 +546,4 @@ _≀ᵍ_ : (𝒮 : Group α ρ) {I : Type ι} {𝒢 : Group β σ}
 
 --------------------------------------
 
-[^1]: arXiv:1205.1927, vendored at `docs/papers/flrp/ieprops/`; Lemma 3.3 and
-      its proof.  The FLRP-side consumer is [FLRP.WreathNoGo][].
-
-[^2]: See `docs/notes/flrp-rp4-wreath.md` § 4 for the full account.
+[^1]: arXiv:1205.1927v4, Lemma 3.3 and its proof.

@@ -14,9 +14,9 @@ A **maximal subgroup** of `G` is a proper subgroup `H` such that no subgroup lie
 strictly between `H` and `G`; equivalently, the interval `[H , G]` in the subgroup
 lattice is the two-element chain.  Groups with a *core-free* maximal subgroup are
 classically exactly the groups with a faithful primitive permutation action, which
-is why the notion matters to the enforcement catalog of [FLRP.Reductions][]:
-core-free interval enforceability via a two-element chain constrains precisely this
-class of groups.
+is why the notion matters to the interval enforceable properties of
+arXiv:1205.1927v4: core-free interval enforceability via a two-element chain
+constrains precisely this class of groups.
 
 The definition is stated in the form the proofs consume, and that form deserves a
 constructive health warning.  The field `classify`{.AgdaField} places every
@@ -27,7 +27,7 @@ proposition `P`, the predicate `λ x → x ∈ H ⊎ P` respects equality and is
 under the group operations), so `classify`{.AgdaField} applied to such a predicate
 decides the proposition up to double negation.  Consequently no concrete group can
 inhabit `IsMaximalSubgroup`{.AgdaRecord} in safe Agda; the record is a *named
-classical hypothesis* in the sense of the FLRP assumption discipline, inhabited by
+classical hypothesis*, inhabited by
 classical mathematics (where it is ordinary maximality) and consumed by theorems
 that are honest about assuming it.  A decidable-membership sibling in the Layer-D
 style of ADR-008, quantifying only over subgroups packaged with decision

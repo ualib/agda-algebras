@@ -191,7 +191,8 @@ of `N`, so the trivial-intersection hypothesis forces it to be `ε`, which is ex
 
 ---
 
-[^1]: The FLRP program's Lemma 3.7 (`docs/papers/flrp/ieprops/`, `lemma-wjd-5`): in a
+[^1]: Normality of centralizers is what Lemma 3.7 of the note *Interval
+      enforceable properties of finite groups* (arXiv:1205.1927v4) uses: in a
       core-free parachute representation the centralizer of every nontrivial normal
       subgroup is trivial, whence the group is subdirectly irreducible with a
-      nonabelian monolith.  See [FLRP.Parachute][].
+      nonabelian monolith.

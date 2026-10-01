@@ -179,5 +179,4 @@ quotient construction of [Setoid.Relations.Quotients][].
 ---
 
 [^1]:  This is the Layer-D decision procedure that sits beside the semantic
-       relation, per the two-layer discipline ([ADR-008]; audit A2 of
-       `docs/notes/flrp-wp7-audits.md`).
+       relation, per the two-layer discipline of [ADR-008].
