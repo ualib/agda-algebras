@@ -92,9 +92,19 @@ def adrs() -> list[tuple[str, str]]:
     return out
 
 
+def is_module_page_link(label: str, target: str) -> bool:
+    """A rendered-module-page link in the shape ``render`` emits, ``[A.B]: /A/B/``.
+
+    Such links belong to the generated section, so carry-over drops them: a
+    module that still exists is re-emitted there, and one that was deleted must
+    not survive as a stale entry among the external links."""
+    return target == "/" + label.replace(".", "/") + "/"
+
+
 def carried_over_links(skip: set[str]) -> list[str]:
     """External + non-generated link definitions from the current file, in file
-    order, minus any label that is (re)generated here (``skip``)."""
+    order, minus any label that is (re)generated here (``skip``) and any
+    module-page link (``is_module_page_link``)."""
     out, seen = [], set()
     existing = LINKS.read_text(encoding="utf-8").splitlines() if LINKS.exists() else []
     for line in existing + EXTRA:
@@ -103,7 +113,7 @@ def carried_over_links(skip: set[str]) -> list[str]:
             continue
         label, target = m.group(1), m.group(2)
         key = label.lower()
-        if key in skip or key in seen:
+        if key in skip or key in seen or is_module_page_link(label, target):
             continue
         external = target.startswith("http") and "/blob/master/src/" not in target
         internal = target.startswith("/")
