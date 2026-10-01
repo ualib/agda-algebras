@@ -16,9 +16,7 @@ stacks `𝓛₂`{.AgdaBound} on top of `𝓛₁`{.AgdaBound} and *glues* the top
 lower summand lies below every element of the upper one, and the two chosen
 extrema become a single element.
 
-We denote this operation by `L ⊕ₐ M` in the small-lattice representations manuscript
-([docs/papers/fin-lat-rep/SmallLatticeReps.tex](docs/papers/fin-lat-rep/SmallLatticeReps.tex),
-§ Ordinal Sums).
+We denote this operation by `L ⊕ₐ M`.
 
 The (unglued) **ordinal sum**, in which the top of the lower summand is covered by the
 bottom of the upper, is the derived composite `(𝓛₁ ⊕ₐ chain₂) ⊕ₐ 𝓛₂`, gluing a
@@ -57,8 +55,8 @@ Because the sum glues at chosen extrema, the construction takes them as data: a
    the operations interacts with the glue, and there the extremum laws (`x ∧ ⊤ ≈ x`,
    `⊥ ∨ x ≈ x`, and their mirrors) discharge every case.
 
-The first consumer is the FLRP closure toolkit ([FLRP.Closure][]), which represents
-the ordinal sum as a congruence lattice whenever its summands are so representable.[^3]
+A typical consumer is the theorem that an ordinal sum of lattices representable as
+congruence lattices of finite algebras is again so representable.
 
 <!--
 ```agda
@@ -206,7 +204,7 @@ A constraint `?x ≈ᵍ ?y ≟ a ≈ᵍ b` now solves the endpoints *before* any
 exposed, so implicit-endpoint lemmas (`Setoid.refl`/`sym`/`trans` at `≈ᵍ`,
 congruences passed under-applied to record-constructor arguments,
 parameterized-module applications) all infer.  The "canary" below fails to type-check
-the moment that property is lost.[^4]
+the moment that property is lost.[^3]
 
 The idiom generalizes: *any* relation defined by restriction along a non-injective
 map, including relations built downstream through these same retractions, should
@@ -539,9 +537,5 @@ ordinalSum 𝓛₁ t 𝓛₂ b = LatticeOrdinalSum.⊕-Lattice 𝓛₁ t 𝓛₂
 
 [^2]: The same idiom should be applied to any relation built by restriction along a non-injective map.
 
-[^3]: See Work Package 5 (WP-5) of [the roadmap](docs/notes/flrp-research-roadmap.md).
-
-[^4]: The full failure analysis, the minimal reproduction, and the rejected
-      alternatives (a four-constructor inductive family, an `opaque` block, an
-      injectivity pragma) are in
-      [Issue #504](https://github.com/ualib/agda-algebras/issues/504).
+[^3]: The rejected alternatives were a four-constructor inductive family, an
+      `opaque` block, and an injectivity pragma.

@@ -29,11 +29,11 @@ surjectivity instead of an explicit inverse; the two presentations are
 interconvertible, and the inverse-pair form is the convenient one for transporting
 structure.)
 
-The record was introduced in [FLRP.Problem][], next to its first use, with a note
-that it should migrate here once the group-theoretic side of the library needed it.
-[Classical.Structures.Group.Congruences][] is that consumer — the correspondence
-between normal subgroups and congruences is ordinary group theory, below the FLRP
-tree — so the record now lives in `Order/` and [FLRP.Problem][] re-exports it.
+The record was first introduced next to its first use in a downstream development,
+with a note that it should migrate here once the group-theoretic side of the
+library needed it.  [Classical.Structures.Group.Congruences][] is that consumer
+(the correspondence between normal subgroups and congruences is ordinary group
+theory), so the record now lives in `Order/`.
 
 <!--
 ```agda

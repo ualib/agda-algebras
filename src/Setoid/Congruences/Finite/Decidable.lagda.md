@@ -57,7 +57,7 @@ congruence `decodeCon`{.AgdaFunction} and an `abstract` decision procedure
 decider carries is never normalized into a completeness goal — the elaboration-cost
 analogue of L1's own `with`-normalization caution.)
 
-This is a deliberate deviation from the design note's suggested recipe of *filtering*
+This deliberately avoids the more obvious recipe of *filtering*
 the matrices to congruences and decoding each to a raw Boolean-lookup relation:
 filtering is unnecessary because `Cg`{.AgdaFunction} of *any* pair list is already
 a congruence, so decoding through `Cg-DecCon`{.AgdaFunction} reuses all of L1's
@@ -407,13 +407,12 @@ FiniteAlgebra→FiniteCongruencesᵈ 𝑭 𝑺 .completeᵈ = allDecCons-complet
 [^1]: It is the single Layer-S→Layer-D bridge of ADR-008
       (`docs/adr/008-two-layer-congruence-discipline.md`).
 
-[^2]: first described as Lemma L3 in the design note
-      `docs/notes/flrp-two-layer-congruences.md` § 3.
+[^2]: ADR-008 specifies it as the constructive completeness theorem of Layer D.
 
-[^3]: `FiniteCongruencesᵈ`{.AgdaRecord} is the working notion the FLRP program
-      quantifies over, while `FiniteCongruences`{.AgdaRecord} remains the semantic form,
+[^3]: `FiniteCongruencesᵈ`{.AgdaRecord} is the working notion downstream developments
+      quantify over, while `FiniteCongruences`{.AgdaRecord} remains the semantic form,
       crossed to exactly once through the bridge.
 
 [^4]: As ADR-008 records, the enumeration is exponential and exists to discharge the
       completeness *theorem*; in practice the congruence list is supplied by certificates
-      (WP-6), not by running `allGrids`{.AgdaFunction}.
+      ([Setoid.Congruences.Certificates][]), not by running `allGrids`{.AgdaFunction}.

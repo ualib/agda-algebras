@@ -13,8 +13,7 @@ This is the [Classical.Structures.Group.TableGroup][] module of the [Agda Univer
 The worked Cayley-table groups of [Examples.Classical.Groups][] discharge
 associativity by brute decision, a cubic sweep involving `n³` equality tests.
 At `n = 6` (the symmetric group `S₃`) that is 216 tests and instantaneous; at
-`n = 60` (the alternating group `A₅` needed by the filter-ideal census entries[^1])
-it is 216,000 tests, each through three table lookups, and the sweep dominates
+`n = 60` (the alternating group `A₅`) it is 216,000 tests, each through three table lookups, and the sweep dominates
 type-checking.
 
 This module removes the cubic sweep: when the group is presented *with a faithful
@@ -200,7 +199,3 @@ membership test is one vector lookup.
       boolSubgroup c∙ cε c⁻¹ =
         (chiPred , boolIsSubgroup c∙ cε c⁻¹) , (λ x → T? (lookup chi x))
 ```
-
---------------------------------------
-
-[^1]: See Issue #530, and the filter-ideal design note `docs/notes/flrp-530-filter-ideal.md`.

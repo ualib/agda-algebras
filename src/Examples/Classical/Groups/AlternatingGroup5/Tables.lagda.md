@@ -12,7 +12,7 @@ This is the [Examples.Classical.Groups.AlternatingGroup5.Tables][] module of the
 
 **Generated file: do not edit by hand.**  Regenerate with
 
-    python3 scripts/python/flrp/a5_simple_cert.py
+    python3 scripts/python/groups/a5_simple_cert.py
 
 The module carries the raw data for the certified `A₅` of
 [Examples.Classical.Groups.AlternatingGroup5][]: the Cayley table, inverse

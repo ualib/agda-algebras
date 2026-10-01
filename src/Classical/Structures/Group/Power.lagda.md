@@ -169,7 +169,7 @@ _^ᵍ_ : Group α ρ → ℕ → Group α ρ
 ---
 
 [^1]:  The binary module deliberately keeps the *pair* carrier `G × K`, which is the
-       form the FLRP fattening arguments consume, whereas the function-typed carrier
+       form fattening arguments consume, whereas the function-typed carrier
        here is the form Kurzweil's construction consumes.
 
 [^2]:  This bridges the `Fin`-tuple η-gap exactly as in the binary module; the curried

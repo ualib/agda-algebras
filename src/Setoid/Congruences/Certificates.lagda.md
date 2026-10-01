@@ -12,8 +12,7 @@ This is the [Setoid.Congruences.Certificates][] module of the [Agda Universal Al
 
 Machine-checked import of externally computed congruence-lattice facts: the
 certificate schema (normal-form parent vectors and Freese traces) and the
-search-free checkers that turn a certificate into a theorem.  The design is fixed
-in `docs/notes/flrp-wp6-freese-certificates.md`.
+search-free checkers that turn a certificate into a theorem.
 
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}

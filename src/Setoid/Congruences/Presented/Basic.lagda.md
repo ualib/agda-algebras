@@ -211,9 +211,11 @@ the generation closure absorbs the operation, arity, and carrier levels.
 
 --------------------------------------
 
-[^1]: Recall the oracle congruences and the "no-go" theorem of [FLRP.Problem][].
+[^1]: The oracle congruence `Cg (λ _ _ → P)` lies in `Con 𝑨` for every proposition
+      `P`, so any order isomorphism `Con 𝑨 ≅ 𝟚` decides between `¬ P` and `¬ ¬ P`;
+      see [ADR-008][].
 
-[^2]: See [ADR-008][] and Lemma L2 of `docs/notes/flrp-two-layer-congruences.md` § 3.
+[^2]: See [ADR-008][].
 
 [^3]: Two scope remarks.
 

@@ -36,8 +36,8 @@ Each concrete structure `X` ships as a quintuple of files, organized into five p
    bidirectional conversion to and from the Σ-typed core.
 
 +  [`Classical/Small`][Classical.Small]: a level-fixed veneer specialized to the
-   `ℓ₀`–`ℓ₀` case, for downstream consumers (finite-template CSP, FLRP intuition,
-   tutorial contexts) that do not need polymorphism.
+   `ℓ₀`–`ℓ₀` case, for downstream consumers (finite-template CSP, small finite
+   lattices and groups, tutorial contexts) that do not need polymorphism.
 
 The five subtrees above are the *constituent* files of each structure.  A sixth
 parallel subtree, [`Classical/Properties`][Classical.Properties], collects

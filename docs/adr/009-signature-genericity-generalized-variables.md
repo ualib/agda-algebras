@@ -6,6 +6,9 @@
 
 Accepted — 2026-07-19.
 
+Note (2026-09-30): `FLRP.Problem`, the consumer this record cites as its
+motivating case, is no longer part of this repository.  The decision stands.
+
 ## Context
 
 A generic module of the `Setoid/` core can carry its signature in one of two ways.  It can take the signature as a *module parameter* — `module M {𝑆 : Signature 𝓞 𝓥} where` — so that `𝑆` is fixed for the module's whole scope and every definition inside reads against it.  Or it can leave the module un-parametrized — `module M where` — and let each definition generalize over a `variable 𝑆 : Signature 𝓞 𝓥`, so that `𝑆` is inferred per use, almost always from an algebra or structure argument whose type already carries it.

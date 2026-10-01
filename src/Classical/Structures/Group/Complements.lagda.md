@@ -44,7 +44,7 @@ inherited by any subgroup containing `A` and `B` (`Factors-least`{.AgdaFunction}
 which is the universal property of the join.
 
 The module also collects the small facts about complex products that the argument and
-its FLRP consumers need: a permuting product of subgroups is a subgroup
+its downstream consumers need: a permuting product of subgroups is a subgroup
 (`permuting-∙ᶜ-isSubgroup`{.AgdaFunction}), a normal subgroup permutes with
 every subgroup (`normal-permutes`{.AgdaFunction}), hence `NB` is a subgroup for `N`
 normal (`normal-∙ᶜ-isSubgroup`{.AgdaFunction}).
@@ -339,7 +339,5 @@ reading of "pairwise incomparable" for subsets ordered by inclusion, where equal
 
 ---
 
-[^1]: `docs/papers/flrp/ieprops/IEProps-1205.1927v4.tex`, § 3.2 (Dedekind's rule)
-      and § 3.3 (parachute lattices); see also
-      [`docs/notes/flrp-research-roadmap.md`](docs/notes/flrp-research-roadmap.md) § 4
-      and the design note `docs/notes/flrp-rp1-parachutes.md`.
+[^1]: *Interval enforceable properties of finite groups*, arXiv:1205.1927v4,
+      § 3.2 (Dedekind's rule) and § 3.3 (parachute lattices).

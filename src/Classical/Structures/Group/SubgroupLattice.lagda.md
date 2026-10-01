@@ -128,8 +128,8 @@ An upper interval `[B, C]` in the subgroup lattice — the subgroups sandwiched
 between `B` and `C` — is a bounded lattice, by the generic interval construction of
 [Order.Interval][] applied to the lattice bundle `Sub-Lattice`{.AgdaFunction}.
 Opening `SubInterval B C B≤C` provides the interval carrier, its order, and the
-`Lattice`/`BoundedLattice` bundles; the FLRP-side intervals `[H, G]` of the
-Pálfy–Pudlák correspondence are the instances with `C` the full subgroup.
+`Lattice`/`BoundedLattice` bundles; the intervals `[H, G]` of the Pálfy–Pudlák
+correspondence are the instances with `C` the full subgroup.
 
 ```agda
   module SubInterval (B C : Subᴸ) (B≤C : B ≤ C) = IntervalLattice Sub-Lattice B C B≤C

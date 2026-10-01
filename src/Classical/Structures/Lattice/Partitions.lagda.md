@@ -13,13 +13,10 @@ This is the [Classical.Structures.Lattice.Partitions][] module of the [Agda Univ
 This module constructs the **partition lattice** `Eq(n)`{.AgdaFunction} — the
 equivalence relations on an `n`-element set, ordered by refinement — as a
 level-zero equational `Lattice`{.AgdaFunction} of
-[Classical.Structures.Lattice.Basic][], the presentation the FLRP program's
-`IntervalIso`{.AgdaFunction} and `ConIso`{.AgdaFunction} target.  It is the lattice
-whose *dual* Kurzweil's construction realizes as the interval `[D , Sⁿ]` in the
-subgroup lattice of a power of a group (issue #521), and the classical sources
-(`docs/papers/fin-lat-rep/SmallLatticeReps.tex` § "Lattice duals") work with the
-same small carrier used here: a partition is a *function* `Fin n → Fin n`,
-identified with its kernel.
+[Classical.Structures.Lattice.Basic][].  It is the lattice whose *dual*
+Kurzweil's construction realizes as the interval `[D , Sⁿ]` in the subgroup
+lattice of a power of a group.  The carrier is small: a partition is a *function*
+`Fin n → Fin n`, identified with its kernel.
 
 **The presentation.**  A partition of `Fin n` is stored as a
 `ParentVec`{.AgdaFunction} of [Setoid.Congruences.Certificates.Schema][] — a vector

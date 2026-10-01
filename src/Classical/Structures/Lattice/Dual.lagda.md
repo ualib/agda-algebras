@@ -34,10 +34,9 @@ propositional equality of `Lattice`{.AgdaFunction} values it would need function
 extensionality — and no current consumer requires it; a consumer that dualizes
 twice should transport along the identity carrier map.
 
-The first consumer is the Kurzweil–Netter duality entry of the FLRP assumptions
-registry: the classical theorem that the
-class of representable lattices is closed under dualization is *stated* over
-`dualLattice`{.AgdaFunction} and imported as an explicit hypothesis.[^1]
+A typical consumer is the classical theorem of Kurzweil and Netter that the class
+of representable lattices is closed under dualization, which can be *stated* over
+`dualLattice`{.AgdaFunction}.
 
 <!--
 ```agda
@@ -145,7 +144,3 @@ The standalone operator, for consumers that need only the lattice.
 dualLattice : Lattice α ρ → Lattice α ρ
 dualLattice 𝑳 = LatticeDual.dual-Lattice 𝑳
 ```
-
---------------------------------------
-
-[^1]: See [FLRP.Assumptions][] and work package WP-5.

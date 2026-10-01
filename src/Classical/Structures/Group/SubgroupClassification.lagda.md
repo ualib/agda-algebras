@@ -14,8 +14,8 @@ This module answers questions of the form "which subgroups of a finite group
 contain `H`?" or "which subgroups lie in a given interval of `Sub(G)`?".
 
 An answer to such a question consists of a **certificate** which is derived
-*verbally*, as follows: the engine (GAP, or the Python generator of
-`scripts/python/flrp/`) supplies *words* (products of designated generators) and
+*verbally*, as follows: the engine (GAP, or a Python generator) supplies *words*
+(products of designated generators) and
 the checkers here re-verify every word by evaluating it, so nothing is believed on
 the engine's authority.
 
@@ -42,11 +42,11 @@ are as follows.
    `EscalationOK`{.AgdaFunction} that a data module discharges with
    `from-yes`{.AgdaFunction}, and the classifier `classify`{.AgdaFunction}.
 
-The first consumer is the filter-ideal route to the census entries `L16` (interval
-`[C3 , A5]` in `Sub(A5)`, exactly three intermediate subgroups) and `L11`: there the
-classifier turns "a congruence of the regular action whose `ε`-class contains `C3`"
-into one of five named subgroups.  The machinery is deliberately independent of
-that application; any finite group with emitted word certificates can use it.
+A typical use is an argument about the interval `[C3 , A5]` in `Sub(A5)`, which
+has exactly three intermediate subgroups: there the classifier turns "a congruence
+of the regular action whose `ε`-class contains `C3`" into one of five named
+subgroups.  The machinery is independent of any one application; any finite group
+with emitted word certificates can use it.
 
 <!--
 ```agda

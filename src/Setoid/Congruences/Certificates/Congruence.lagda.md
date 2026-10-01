@@ -26,9 +26,8 @@ enumeration indices have the same parent — two constant-time lookups and one
 specification-grade decision procedure `Cg-dec`{.AgdaFunction},[^1]
 which never appears here.
 
-The checker obligations of
-[the design note](docs/notes/flrp-wp6-freese-certificates.md),
-each search-free and linear in the trace and table size, are as follows:
+The checker obligations, each search-free and linear in the trace and table size,
+are as follows:
 
 +  **C1 (trace soundness)**.  Every merge of the Freese trace is derivable:
    seed entries point into `P`, and translate entries apply one
@@ -36,13 +35,13 @@ each search-free and linear in the trace and table size, are as follows:
    `Gen`{.AgdaDatatype} ([Setoid.Congruences.Generation][]) to an earlier merge.
    The checker *constructs* the `Gen`{.AgdaDatatype} derivations by a single
    fold over the trace — it never decides `Gen`{.AgdaDatatype}-membership.
-+  **C2 (claimed ⊆ generated)**.  The design note offered two implementations
-   and defaulted to (a), checking each forest edge of the claimed vector for
-   membership in the trace's merged pairs.  Implementing against honest `cg2`
-   traces shows option (a) as literally stated is unattainable: the run's merged
++  **C2 (claimed ⊆ generated)**.  The obvious implementation, option (a), checks
+   each forest edge of the claimed vector for membership in the trace's merged
+   pairs.  Implementing against honest engine traces shows option (a) as literally
+   stated is unattainable: the run's merged
    pairs need not contain the *normal-form* edges, because normal form re-roots
    every block at its least element after the run.  We therefore implement the
-   note's sanctioned option (b) in its simplest form: **replay** the trace's
+   alternative, option (b), in its simplest form: **replay** the trace's
    unions through an eager re-pointing root vector — no ranks, no path
    compression; those are engine-side devices — carrying a
    `Gen`{.AgdaDatatype}-proof invariant, and then align the replayed partition

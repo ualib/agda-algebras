@@ -17,9 +17,8 @@ times.  That is the right interface for searching, but some constructions need
 the enumeration to be a *bijection up to `≈`* — one index per `≈`-class — so that
 the index set `Fin`{.AgdaDatatype}` m` is a faithful copy of the carrier.
 
-The first consumer is the Kurzweil–Netter duality proof ([FLRP.KurzweilNetter][],
-issue #502), which represents the dual of `Con 𝑨` on a power `S^m` *indexed by the
-carrier* of `𝑨`{.AgdaBound}: there the partitions of the index set must correspond
+A typical consumer is the Kurzweil–Netter duality argument, which represents the
+dual of `Con 𝑨` on a power `S^m` *indexed by the carrier* of `𝑨`{.AgdaBound}: there the partitions of the index set must correspond
 exactly to the decidable equivalences on the carrier, which forces the enumeration
 to identify no two indices (a redundant index would admit partitions separating
 two copies of one element, and the correspondence would break).

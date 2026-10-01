@@ -221,7 +221,6 @@ Reflection upgrades mutual inclusion of partition subgroups to equality of parti
 
 [^2]: `K` is also *onto* the interval when `G` is a finite nonabelian simple group
       and the interval is taken over subgroups with decidable membership; this is
-      **Kurzweil's lemma**, proved in [FLRP.KurzweilNetter.Surjectivity][] from the
-      blockwise collapse of [Classical.Structures.Group.PowerCollapse][].  Over
-      arbitrary subgroups the statement is classical, by the no-go theorem of
-      [FLRP.KurzweilNetter.Interval][].
+      **Kurzweil's lemma**, proved in that decidable form by the blockwise collapse
+      of [Classical.Structures.Group.PowerCollapse][].  Over arbitrary subgroups the
+      statement is classical.

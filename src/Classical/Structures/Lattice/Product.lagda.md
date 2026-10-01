@@ -26,10 +26,9 @@ Besides the product itself, the module characterizes the induced meet order of
 [Classical.Properties.Lattice][]: the product order is the componentwise order,
 definitionally, and the three accessors `≤ₓ-fst`{.AgdaFunction},
 `≤ₓ-snd`{.AgdaFunction}, `≤ₓ-pair`{.AgdaFunction} name the two projections and the
-pairing.  The first consumer is the FLRP closure toolkit
-([FLRP.Closure][]; roadmap § 3, work package WP-5), which represents
-`𝑳₁ ×ˡ 𝑳₂`{.AgdaFunction} as a congruence lattice whenever its factors are so
-representable.
+pairing.  A typical consumer is the theorem that `𝑳₁ ×ˡ 𝑳₂`{.AgdaFunction} is
+representable as a congruence lattice of a finite algebra whenever its factors
+are.
 
 Following the Cubical-port discipline, the underlying equivalence of the product is
 isolated in `A×B`{.AgdaFunction} — the pointwise pair of the component
@@ -166,8 +165,8 @@ The meet order of `×ˡ-Lattice`{.AgdaFunction} at `(p , q)` unfolds definitiona
 to the pair of the component meet orders, because the builder's interpretation
 applies its argument tuple and the product setoid's equality is the pointwise pair.
 The three accessors below are therefore projections and pairing, but we name them:
-they are the interface through which consumers (the FLRP closure lemmas) read the
-product order without unfolding the builder.
+they are the interface through which consumers read the product order without
+unfolding the builder.
 
 ```agda
   open Lattice-Order ×ˡ-Lattice using () renaming ( _≤_ to _≤ₓ_ )

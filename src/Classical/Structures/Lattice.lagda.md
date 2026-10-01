@@ -29,13 +29,13 @@ build instead.
    Dualizing twice recovers each operation *pointwise*, but the involution is not
    formalized there, because stating it as an equality of `Lattice`{.AgdaFunction}
    values would need function extensionality and no consumer has required it;
++  [Classical.Structures.Lattice.FilterIdeal][]: principal filters and principal
+   ideals, and the fact that the union of a principal filter and a principal ideal
+   is again a sublattice universe;
 +  [Classical.Structures.Lattice.Product][]: the direct product of two lattices,
    coordinatewise;
 +  [Classical.Structures.Lattice.OrdinalSum][]: one lattice stacked on another with
-   the top of the lower glued to the bottom of the upper, written `L ⊕ₐ M` in the
-   small-lattice-representations manuscript;
-+  [Classical.Structures.Lattice.Parachute][]: a fresh bottom element beneath `n`
-   side-by-side canopies, the construction the FLRP work is built on;
+   the top of the lower glued to the bottom of the upper, written `L ⊕ₐ M`;
 +  [Classical.Structures.Lattice.Partitions][]: the partition lattice
    `Eq(n)`{.AgdaFunction}, the equivalence relations on an `n`-element set ordered
    by refinement.
@@ -50,7 +50,6 @@ open import Classical.Structures.Lattice.DistributiveLattice  public
 open import Classical.Structures.Lattice.Dual                 public
 open import Classical.Structures.Lattice.FilterIdeal          public
 open import Classical.Structures.Lattice.OrdinalSum           public
-open import Classical.Structures.Lattice.Parachute            public
 open import Classical.Structures.Lattice.Partitions           public
 open import Classical.Structures.Lattice.Product              public
 

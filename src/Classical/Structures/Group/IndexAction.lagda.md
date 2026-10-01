@@ -39,8 +39,8 @@ law `(x ∙ y) i = y (x i)`.
 
 +  **Relation to [Classical.Structures.Group.GSet][]**.  The library encoding of
    G-sets presents the coset action as a unary algebra on the coset *setoid* (one
-   operation per group element); that form feeds the congruence bridge of
-   [FLRP.Bridge][].  The present module is the *enumerated* counterpart: an action
+   operation per group element); that is the form the library's congruence
+   machinery applies to.  The present module is the *enumerated* counterpart: an action
    on a bare index set, which is what underlies `Sᴵ` and the wreath product.
    The two meet in the coset-action specification below.
 
@@ -164,8 +164,7 @@ normal core `Core_G(H)`.
 
 Both directions are proved outright below, against the library's constructive core
 (the meet of all conjugates, [Classical.Structures.Group.NormalCore][]);
-"core-free" is the containment of the core in the ≈-class of the identity, exactly
-the form `CoreFree`{.AgdaFunction} of [FLRP.Enforceable][] unfolds to.
+"core-free" is the containment of the core in the ≈-class of the identity.
 
 `ActionKernel`{.AgdaModule} fixes the data once for both directions.
 
@@ -241,8 +240,8 @@ to the identity class.
 
 --------------------------------------
 
-[^1]: arXiv:1205.1927 ("the note"), proof of Lemma `lem:IE-must-have-wreaths`,
-      vendored at `docs/papers/flrp/ieprops/`; the wreath product itself is
-      [Classical.Structures.Group.Wreath][].
+[^1]: arXiv:1205.1927v4 ("the note"), proof of Lemma 3.3; the wreath product
+      itself is [Classical.Structures.Group.Wreath][].
 
-[^2]: This is the fact `ker φ = 1 ⟺ Core_G(H) = 1` that the wreath no-go argument of RP-4 turns on.
+[^2]: This is the fact `ker φ = 1 ⟺ Core_G(H) = 1` that arguments about
+      core-free coset actions, such as the proof of Lemma 3.3 of the note, rely on.

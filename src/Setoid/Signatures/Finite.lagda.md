@@ -26,10 +26,9 @@ consumer can demand exactly the finiteness it uses.  The first consumer of
 symbols and all arity-tuples of carrier indices; by contrast, the reconstruction
 theorem of [Setoid.Congruences.Presented][] needs only carrier finiteness, which is
 why signature finiteness is not a field of `FiniteAlgebra`{.AgdaRecord}.  This
-packaging — a standalone record parameterized by the signature, rather than extra
-fields on an algebra-level record — resolves audit A3 of the two-layer congruence
-discipline (see `docs/adr/008-two-layer-congruence-discipline.md` and § 3–4 of
-`docs/notes/flrp-two-layer-congruences.md`).
+packaging, a standalone record parameterized by the signature rather than extra
+fields on an algebra-level record, settles where signature finiteness lives in the
+two-layer congruence discipline (see `docs/adr/008-two-layer-congruence-discipline.md`).
 
 #### Why this module lives here
 

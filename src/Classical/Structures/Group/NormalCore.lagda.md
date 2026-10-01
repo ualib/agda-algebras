@@ -180,6 +180,5 @@ inclusion does not make two predicates definitionally equal.
 ```
 
 ---
-[^1]:   This is the normalization step behind the core-free reduction
-        `[H, G] ≅ [H/N, G/N]` of the FLRP program (see
-        `docs/notes/flrp-research-roadmap.md` § 4).
+[^1]:   This is the normalization step behind the classical core-free reduction
+        `[H, G] ≅ [H/N, G/N]`, with `N` the normal core of `H`.

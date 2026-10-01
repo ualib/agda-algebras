@@ -28,13 +28,11 @@ records the classical correspondence for that instance.
 
 In words: **the congruence lattice of the regular action is the full subgroup
 lattice `Sub(G)`**.  This is the `H = 1` instance of the Pálfy–Pudlák
-correspondence `Con (G ↷ G/H) ≅ [H , G]`, whose general form, stated over the
-respecting interval at both layers, is the WP-3 bridge [FLRP.Bridge][].  The
-instance is restated here, in the `Classical/` tree, for two reasons.
+correspondence `Con (G ↷ G/H) ≅ [H , G]`.  The instance is stated here on its own,
+in the `Classical/` tree, for two reasons.
 
-First, layering: `Classical/` cannot import `FLRP/`, and the consumers of the
-regular action are not FLRP-specific (any development wanting `Sub G` as a
-concrete congruence lattice can use this module).
+First, generality: any development wanting `Sub G` as a concrete congruence
+lattice can use this module, without the general correspondence.
 
 Second, the trivial-subgroup instance needs none of the interval apparatus:
 "subgroup above the trivial subgroup" is no constraint at all; reflexivity of the
@@ -42,12 +40,11 @@ coset congruence over the carrier's coset equality is exactly `ε`-closedness pl
 `respects`{.AgdaField}.  Therefore, the statements simplify to plain
 `Subgroup`{.AgdaFunction}s and `DecSubgroup`{.AgdaFunction}s.
 
-The FLRP consumer of this module is the ambient-closedness step of Snow's
-filter-ideal lemma: both concrete filter-ideal instances present their ambient
+A typical consumer is the ambient-closedness step of Snow's filter-ideal lemma
+(Snow, Algebra Universalis 43, 2000): an instance that presents its ambient
 lattice as `Sub(G) = Con (G ↷ G)`, with the translations as the ambient
-operations, so "every congruence respecting the translations is a coset
-partition" is `cosetCon-Kθ`{.AgdaFunction}; no unary-reduction theorem is
-consumed.
+operations, gets "every congruence respecting the translations is a coset
+partition" as `cosetCon-Kθ`{.AgdaFunction}, and needs no unary-reduction theorem.
 
 #### A note on opacity
 

@@ -10,24 +10,15 @@
 # Primary targets:
 #   make                     Regenerate the aggregators from the current tree.
 #   make check               Type-check the library and the Legacy tree.
-#   make check-certificates  Type-check the small-lattice certificate census.
-#   make check-all           Both of the above — everything under src/.
 #   make test                Alias for `make check`.
 #   make site                Build the MkDocs documentation site (in ./site/).
 #   make serve               Preview the docs site locally (http://127.0.0.1:8000).
 #   make profile             Type-check with Agda profiling enabled.
 #   make clean               Remove .agdai artifacts and the generated aggregators.
 #
-# The three tiers (issue #515):
+# The two aggregators:
 #   +  Everything.agda              the canonical library.
 #   +  EverythingLegacy.agda        the frozen Legacy/ tree.
-#   +  EverythingCertificates.agda  the small-lattice representation
-#      certificates of `src/FLRP/Certificates/SmallLatticeReps/` — generated
-#      artifacts specific to the FLRP research track and the fin-lat-rep
-#      manuscript, which cost 44% of a clean full type-check (175 s of 395 s,
-#      measured with `agda --profile=modules`).  No module imports them, so
-#      they are checked by their own aggregator and their own CI job rather
-#      than on every `make check`.  `make check-all` is the whole tree.
 #
 # Notes:
 #   +  The aggregators are PHONY targets — always regenerated — so that
@@ -41,7 +32,7 @@
 #      where a path segment happens to contain the substring `agda`.
 # =============================================================================
 
-.PHONY: default all check check-certificates check-all test clean site serve serve-full html agda-md site-full profile project-plan unused-imports unused-imports-test check-links check-links-test gen-links corpus-stats corpus-stats-check corpus-stats-test gap-hunt gap-tomscan gap-wreath-labels docstrings docstrings-test docstrings-list docstrings-unused docstrings-json flrp-test flrp-slr flrp-lat8 gap-smoke Everything.agda EverythingLegacy.agda EverythingCertificates.agda
+.PHONY: default all check test clean site serve serve-full html agda-md site-full profile project-plan unused-imports unused-imports-test check-links check-links-test gen-links corpus-stats corpus-stats-check corpus-stats-test docstrings docstrings-test docstrings-list docstrings-unused docstrings-json groups-test Everything.agda EverythingLegacy.agda
 
 # -- Configuration -----------------------------------------------------------
 SRCDIR    := src
@@ -54,34 +45,27 @@ REPO      ?= ualib/agda-algebras
 # when the number of public definitions lacking a prose block exceeds this
 # ceiling, so the backlog can only shrink while the per-subtree prose PRs land.
 # Lower it whenever a PR clears definitions; never raise it.
-DOCSTRING_MAX_GAPS ?= 67
+DOCSTRING_MAX_GAPS ?= 7
 # The other half of the bar ADR-010 states: modules whose header is only the
 # boilerplate sentence.  Ratcheted the same way; never raise it.
-DOCSTRING_MAX_WEAK_HEADERS ?= 10
-
-# The certificate census: generated representation certificates for the FLRP
-# research track (issue #515).  Excluded from Everything.agda and checked by
-# EverythingCertificates.agda instead.
-CERTDIR   := $(SRCDIR)/FLRP/Certificates/SmallLatticeReps
+DOCSTRING_MAX_WEAK_HEADERS ?= 0
 
 # -- Targets -----------------------------------------------------------------
 
-# Bare `make` refreshes every tier's index, so that adding or removing a module
-# anywhere is picked up in one command.  The individual check targets depend on
-# just the aggregators they need.
-default: Everything.agda EverythingLegacy.agda EverythingCertificates.agda
+# Bare `make` refreshes both aggregators, so that adding or removing a module
+# anywhere is picked up in one command.
+default: Everything.agda EverythingLegacy.agda
 
-# On the OPTIONS pragma the three aggregators emit: `--exact-split` is
+# On the OPTIONS pragma the two aggregators emit: `--exact-split` is
 # deliberately absent.  It constrains *definitions* (it requires a definition's
 # clauses to hold as definitional equalities), and an aggregator contains
 # nothing but imports, so the flag has nothing to check here.  It is neither
 # infective nor coinfective, so omitting it does not weaken the modules being
 # imported: each library module carries `--exact-split` in its own header and is
-# checked under it.  All three aggregators therefore share one pragma.
+# checked under it.  Both aggregators therefore share one pragma.
 
-# The canonical library aggregator.  Excludes Legacy/ and the certificate
-# census (see the tier note in the header).  Feeds HTML rendering and is the
-# natural entry point for downstream consumers.
+# The canonical library aggregator.  Excludes Legacy/.  Feeds HTML rendering
+# and is the natural entry point for downstream consumers.
 Everything.agda:
 	@echo "target: $@"
 	@{ \
@@ -93,9 +77,7 @@ Everything.agda:
 	      \( -name '*.lagda.md' -o -name '*.agda' \) \
 	      ! -name 'Everything.agda' \
 	      ! -name 'EverythingLegacy.agda' \
-	      ! -name 'EverythingCertificates.agda' \
 	      ! -path '$(SRCDIR)/Legacy/*' \
-	      ! -path '$(CERTDIR)/*' \
 	    | sed -e 's|^$(SRCDIR)/||' \
 	          -e 's|\.lagda\.md$$||' \
 	          -e 's|\.agda$$||' \
@@ -132,51 +114,10 @@ EverythingLegacy.agda:
 	} > $(SRCDIR)/EverythingLegacy.agda
 	@echo "  wrote $(SRCDIR)/EverythingLegacy.agda ($$(grep -c '^import' $(SRCDIR)/EverythingLegacy.agda) modules)"
 
-# CI gate over the certificate census.  These are generated representation
-# certificates for the FLRP research track and the fin-lat-rep manuscript: no
-# module imports them, they are 44% of a clean full type-check, and they grow
-# with the census (issues #483, #485).  They are checked by their own target and
-# their own CI job so that `make check` stays fast for everyone else, and they
-# are still rendered to HTML so the published site keeps their pages.
-# See issue #515.
-EverythingCertificates.agda:
-	@echo "target: $@"
-	@{ \
-	  echo "{-# OPTIONS --cubical-compatible --safe #-}"; \
-	  echo ""; \
-	  echo "-- This file exists to gate CI on the small-lattice certificate census."; \
-	  echo "-- It is NOT part of the canonical library aggregator; see issue #515."; \
-	  echo ""; \
-	  echo "module EverythingCertificates where"; \
-	  echo ""; \
-	  find $(CERTDIR) \
-	      \( -name '*.lagda.md' -o -name '*.agda' \) \
-	    | sed -e 's|^$(SRCDIR)/||' \
-	          -e 's|\.lagda\.md$$||' \
-	          -e 's|\.agda$$||' \
-	          -e 's|/|.|g' \
-	          -e 's|^|import |' \
-	    | LC_ALL=C sort; \
-	} > $(SRCDIR)/EverythingCertificates.agda
-	@echo "  wrote $(SRCDIR)/EverythingCertificates.agda ($$(grep -c '^import' $(SRCDIR)/EverythingCertificates.agda) modules)"
-
 check test: Everything.agda EverythingLegacy.agda
 	@echo "target: $@"
 	$(AGDA) $(RTS_OPTS) $(AGDA_OPTS) $(SRCDIR)/Everything.agda
 	$(AGDA) $(RTS_OPTS) $(AGDA_OPTS) $(SRCDIR)/EverythingLegacy.agda
-
-# The certificate tier on its own (what the dedicated CI job runs).
-check-certificates: EverythingCertificates.agda
-	@echo "target: $@"
-	$(AGDA) $(RTS_OPTS) $(AGDA_OPTS) $(SRCDIR)/EverythingCertificates.agda
-
-# Everything under src/, in one command.  Use this before a release, and when
-# touching anything the certificates depend on (the checkers of
-# `Setoid.Congruences.Certificates` and `FLRP.Certificates`).
-check-all:
-	@echo "target: $@"
-	$(MAKE) check
-	$(MAKE) check-certificates
 
 # Build the documentation site (ADR-007).  MkDocs reads the `.lagda.md`
 # sources directly via scripts/python/mkdocs_gen_library.py.  Output goes to
@@ -218,22 +159,17 @@ serve-full:
 # hyperlinks, Everything.html as the index.  Standalone in ./html (gitignored);
 # gen-files also publishes it at /classic/ and points the highlighted code's
 # stdlib links there.  Type-checks (warm .agdai cache makes it quick).
-# All three tiers are rendered: the published site must keep every page it has
-# today, certificates included, even though they are not in the library
-# aggregator (issue #515).
-html: Everything.agda EverythingLegacy.agda EverythingCertificates.agda
+html: Everything.agda EverythingLegacy.agda
 	@echo "target: $@"
 	$(AGDA) $(RTS_OPTS) $(AGDA_OPTS) --html --html-dir=html $(SRCDIR)/Everything.agda
 	$(AGDA) $(RTS_OPTS) $(AGDA_OPTS) --html --html-dir=html $(SRCDIR)/EverythingLegacy.agda
-	$(AGDA) $(RTS_OPTS) $(AGDA_OPTS) --html --html-dir=html $(SRCDIR)/EverythingCertificates.agda
 
 # Highlighted Markdown for embedding in the MkDocs pages (#3a).
-agda-md: Everything.agda EverythingLegacy.agda EverythingCertificates.agda
+agda-md: Everything.agda EverythingLegacy.agda
 	@echo "target: $@"
 	rm -rf $(AGDA_HTML)/md
 	$(AGDA) $(RTS_OPTS) $(AGDA_OPTS) --html --html-highlight=code --html-dir=$(AGDA_HTML)/md $(SRCDIR)/Everything.agda
 	$(AGDA) $(RTS_OPTS) $(AGDA_OPTS) --html --html-highlight=code --html-dir=$(AGDA_HTML)/md $(SRCDIR)/EverythingLegacy.agda
-	$(AGDA) $(RTS_OPTS) $(AGDA_OPTS) --html --html-highlight=code --html-dir=$(AGDA_HTML)/md $(SRCDIR)/EverythingCertificates.agda
 
 # The fully-featured published site.  Recursive make keeps the steps ordered
 # even under `make -j`.
@@ -262,8 +198,7 @@ profile: Everything.agda
 clean:
 	@echo "target: $@"
 	find . -name '*.agdai' -delete
-	rm -f $(SRCDIR)/Everything.agda $(SRCDIR)/EverythingLegacy.agda \
-	      $(SRCDIR)/EverythingCertificates.agda
+	rm -f $(SRCDIR)/Everything.agda $(SRCDIR)/EverythingLegacy.agda
 	rm -rf site html .agda-html .cache
 
 # Regenerate the issue listings in docs/GITHUB_PROJECT.md from current
@@ -368,116 +303,12 @@ docstrings-test:
 	@echo "target: $@"
 	python3 scripts/python/test_docstring_audit.py
 
-# Test the FLRP certificate emitter (scripts/python/flrp/): engine unit tests, a
-# Python mirror of the Agda checker's obligations as a regression tripwire,
-# and golden round-trip tests re-emitting the committed pilot byte for byte.
-# The Agda side needs no separate harness: the emitted pilot module is part
-# of the library, so `make check` is the end-to-end verification.
-# Also tests the search side (eqsearch.py): partition kernel against brute
-# force, the L7 session census (issue #484), and the search-to-certificate
-# loop; set FLRP_EQSEARCH_SLOW=1 to include the Eq(7) sweep (~5 minutes).
-# The numpy backend's tests (eqfast.py: table/report parity with the pure
-# engine, the Eq(7) census, and — behind the same slow flag — the Eq(8)
-# sweep against the committed report) skip cleanly when numpy is absent;
-# the nix dev shell ships numpy (flake.nix), so under `nix develop` they run.
-flrp-test:
+# Test the generator of the certified A5 tables (scripts/python/groups/): the
+# group construction, an engine-side replay of the certificate, and a golden test
+# that re-emits the committed
+# src/Examples/Classical/Groups/AlternatingGroup5/Tables.lagda.md byte for byte.
+# The Agda side needs no separate harness: the tables module is part of the
+# library, so `make check` replays every claim in it.
+groups-test:
 	@echo "target: $@"
-	python3 scripts/python/flrp/test_a5_simple_cert.py
-	python3 scripts/python/flrp/test_flrp.py
-	python3 scripts/python/flrp/test_eqsearch.py
-	python3 scripts/python/flrp/test_slr_catalog.py
-	python3 scripts/python/flrp/test_filter_ideal_certs.py
-	python3 scripts/python/flrp/test_eqfast.py
-	python3 scripts/python/flrp/test_gap_interval.py
-	python3 scripts/python/flrp/test_parachute_targets.py
-	python3 scripts/python/flrp/test_tomscan_summary.py
-	python3 scripts/python/flrp/test_lattices8.py
-
-# Regenerate the eight-element lattice census (issue #578): the 222 lattices
-# classified by the formal closure properties of Kjos-Hanssen's note, with
-# the note's 69 "parallel sums" split into the 8 that Snow's Lemma 3.10
-# covers and the 61 it does not.  Writes scripts/python/flrp/out/
-# lattices8_census.json and the eqsearch/GAP target stanzas of the 61 under
-# scripts/python/flrp/inputs/lat8/.  Deterministic; the committed copies must
-# re-derive byte for byte (checked by flrp-test).
-flrp-lat8:
-	@echo "target: $@"
-	python3 scripts/python/flrp/lattices8.py --json scripts/python/flrp/out/lattices8_census.json --stanzas scripts/python/flrp/inputs/lat8
-
-# Regenerate the SmallLatticeReps catalog artifacts (issue #485) from the
-# manuscript source: claim files under scripts/python/flrp/inputs/slr/, audit
-# JSONs under scripts/python/flrp/out/slr/, and the certificate modules under
-# src/FLRP/Certificates/SmallLatticeReps/.  Deterministic; the committed
-# copies must re-derive byte for byte (checked by flrp-test).
-flrp-slr:
-	@echo "target: $@"
-	python3 scripts/python/flrp/slr_catalog.py --write-inputs --emit
-
-# Smoke-test the GAP subgroup-interval engine (scripts/gap/flrp/, issue #487):
-# confirm the group libraries it depends on load (SmallGroup(216,153) and
-# TransitiveGroup(8,1)) and the JSON/provenance helpers work.  Requires the
-# dedicated GAP devshell (`nix develop .#gap`); GAP is an untrusted engine, so
-# this is deliberately NOT a dependency of `check` or `flrp-test`, which stay
-# GAP-free.  Run from the repo root.
-gap-smoke:
-	@echo "target: $@"
-	gap -A -q -b scripts/gap/flrp/bin/smoke.g
-
-# The RP-3 hunt runs (issue #460): the parachute realizability sweep, the
-# candidate-table witness checks, and the gap_search.py confirmations that
-# regenerate the four committed rp3_*.search.json verdicts (the date is
-# pinned so a reproduction run is byte-identical).  Run inside
-# `nix develop .#gap` (that shell carries python3); the sweep takes a few
-# minutes.
-RP3_SWEEP_DATE := 2026-08-29
-# The eight-element slice (P(2x2,2x2) and its dual) was added by issue #578.
-RP3_SWEEP8_DATE := 2026-09-28
-gap-hunt:
-	@echo "target: $@"
-	gap -A -q -b scripts/gap/flrp/bin/hunt_parachutes.g
-	gap -A -q -b scripts/gap/flrp/bin/hunt_witnesses.g
-	python3 scripts/python/flrp/gap_search.py scripts/gap/flrp/out/rp3_parachutes_s6.raw.json --target scripts/gap/flrp/inputs/p33.json --out scripts/gap/flrp/out/rp3_p33.search.json --date $(RP3_SWEEP_DATE)
-	python3 scripts/python/flrp/gap_search.py scripts/gap/flrp/out/rp3_parachutes_s7.raw.json --target scripts/gap/flrp/inputs/p332.json --out scripts/gap/flrp/out/rp3_p332.search.json --date $(RP3_SWEEP_DATE)
-	python3 scripts/python/flrp/gap_search.py scripts/gap/flrp/out/rp3_parachutes_s7.raw.json --target scripts/gap/flrp/inputs/p34.json --out scripts/gap/flrp/out/rp3_p34.search.json --date $(RP3_SWEEP_DATE)
-	python3 scripts/python/flrp/gap_search.py scripts/gap/flrp/out/rp3_parachutes_s7.raw.json --target scripts/gap/flrp/inputs/p3m2.json --out scripts/gap/flrp/out/rp3_p3m2.search.json --date $(RP3_SWEEP_DATE)
-	python3 scripts/python/flrp/gap_search.py scripts/gap/flrp/out/rp3_parachutes_s8.raw.json --target scripts/gap/flrp/inputs/pm2m2.json --out scripts/gap/flrp/out/rp3_pm2m2.search.json --date $(RP3_SWEEP8_DATE)
-	python3 scripts/python/flrp/gap_search.py scripts/gap/flrp/out/rp3_parachutes_s8.raw.json --target scripts/gap/flrp/inputs/pm2m2d.json --out scripts/gap/flrp/out/rp3_pm2m2d.search.json --date $(RP3_SWEEP8_DATE)
-
-# The tables-of-marks scan (issue #513): hunt each RP-3 parachute target as an
-# upper interval across TomLib's 414 tables by marks, resolve the ambiguous
-# cases explicitly up to the scan's default bound, and record each run as
-# scripts/gap/flrp/out/tomscan_<stem>.json (the raw logs are git-ignored; the
-# summarizer drops timings, so a rerun re-derives the records byte for byte).
-# The P(3,2x2) tables above the bound get a second pass with the bound lifted,
-# and so does the one P(2x2,2x2) table above it (issue #578, which added the
-# P(2x2,2x2) and DDelta(3,3) targets).  About a minute per target plus the
-# resolutions.  Run inside `nix develop .#gap`.
-TOMSCAN_DATE := 2026-09-28
-TOMSCAN := scripts/python/flrp/tomscan_summary.py
-gap-tomscan:
-	@echo "target: $@"
-	for stem in p33 p332 p34 p3m2 pm2m2 pm2m2d dd33; do \
-	  gap -A -q -c "FLRP_TARGET := $$(python3 $(TOMSCAN) --upsets scripts/gap/flrp/inputs/$$stem.json);;" \
-	    -b scripts/gap/flrp/bin/tomscan.g > scripts/gap/flrp/out/tomscan_$$stem.log 2>&1; \
-	  python3 $(TOMSCAN) scripts/gap/flrp/out/tomscan_$$stem.log --target scripts/gap/flrp/inputs/$$stem.json \
-	    --out scripts/gap/flrp/out/tomscan_$$stem.json --date $(TOMSCAN_DATE) || exit 1; \
-	done
-	gap -A -q -o 12g -c "FLRP_TARGET := $$(python3 $(TOMSCAN) --upsets scripts/gap/flrp/inputs/p3m2.json);; FLRP_TABLES := [\"HS\",\"A12\",\"M24\",\"G2(4)\",\"S12\"];; FLRP_RESOLVE_BOUND := 10^12;;" \
-	  -b scripts/gap/flrp/bin/tomscan.g > scripts/gap/flrp/out/tomscan_p3m2_big.log 2>&1
-	python3 $(TOMSCAN) scripts/gap/flrp/out/tomscan_p3m2_big.log --target scripts/gap/flrp/inputs/p3m2.json \
-	  --tables 'HS,A12,M24,G2(4),S12' --bound 10^12 \
-	  --out scripts/gap/flrp/out/tomscan_p3m2_big.json --date $(TOMSCAN_DATE)
-	gap -A -q -o 12g -c "FLRP_TARGET := $$(python3 $(TOMSCAN) --upsets scripts/gap/flrp/inputs/pm2m2.json);; FLRP_TABLES := [\"He.2\"];; FLRP_RESOLVE_BOUND := 10^12;;" \
-	  -b scripts/gap/flrp/bin/tomscan.g > scripts/gap/flrp/out/tomscan_pm2m2_big.log 2>&1
-	python3 $(TOMSCAN) scripts/gap/flrp/out/tomscan_pm2m2_big.log --target scripts/gap/flrp/inputs/pm2m2.json \
-	  --tables 'He.2' --bound 10^12 \
-	  --out scripts/gap/flrp/out/tomscan_pm2m2_big.json --date $(TOMSCAN_DATE)
-
-# The type of the coatoms of a Kurzweil wreath interval (issue #578, path 3):
-# on [Diag x C4, A5 wr C4] the coatom meets the socle in a product of full
-# diagonal subgroups, so it is of Aschbacher's diagonal type, not of product
-# type.  Writes scripts/gap/flrp/out/wreath_coatom_type_a5_c4.json, date
-# pinned so the record re-derives byte for byte.  Run inside `nix develop .#gap`.
-gap-wreath-labels:
-	@echo "target: $@"
-	gap -A -q -b scripts/gap/flrp/bin/wreath_coatom_type.g
+	python3 scripts/python/groups/test_a5_simple_cert.py

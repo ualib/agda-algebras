@@ -74,21 +74,16 @@
       # each other rather than merge, so every Python dependency of the repo
       # belongs in this list.
       #
-      # Group 1 — the MkDocs rendering pipeline (ADR-007).  `make site` /
+      # The list is the MkDocs rendering pipeline (ADR-007).  `make site` and
       # `make serve` build the documentation site directly from the
-      # `.lagda.md` sources — no `agda --html` step — relying on kramdown
-      # attribute spans + custom CSS for inline Agda highlighting.  Pinning
+      # `.lagda.md` sources, with no `agda --html` step, relying on kramdown
+      # attribute spans and custom CSS for inline Agda highlighting.  Pinning
       # the whole stack here makes `nix develop --command make site`
       # reproduce CI's site build exactly, the same way the Agda env
       # reproduces `make check`.  mkdocs-material transitively supplies
       # pymdown-extensions (attr_list / snippets), but we list it explicitly
-      # to document intent.
-      #
-      # Group 2 — the script tooling under scripts/python/ (`make flrp-test`
-      # and exploratory research runs).  The pure engines are stdlib-only by
-      # design; numpy powers the optional vectorized search backend
-      # (`eqsearch.py --fast`, issue #486), which otherwise degrades to a
-      # clear error and whose tests skip.
+      # to document intent.  The rest of the script tooling under
+      # scripts/python/ is stdlib-only by design, so it adds nothing here.
       mkPythonEnv = pkgs: pkgs.python3.withPackages (p: [
         # -- documentation site (ADR-007) --
         p.mkdocs                  # static-site generator
@@ -99,8 +94,6 @@
         p.mkdocs-literate-nav     # library nav from a generated SUMMARY.md
         p.mkdocs-section-index    # clickable section-landing pages
         p.pymdown-extensions      # attr_list companions + snippets auto_append
-        # -- script tooling (scripts/python/) --
-        p.numpy                   # eqsearch.py --fast vectorized backend (#486)
       ]);
 
       # ---- Project-local AGDA_DIR + agda() wrapper ------------------------
@@ -162,9 +155,6 @@ EOF
           agdaVer = pkgs.agda.version;
           mkdocsVer = pkgs.python3Packages.mkdocs.version;
           materialVer = pkgs.python3Packages.mkdocs-material.version;
-          numpyVer = pkgs.python3Packages.numpy.version;
-          gapPkg = pkgs.gap;
-          gapVer = pkgs.gap.version;
         in {
           default = pkgs.mkShell {
             name = "agda-algebras-dev";
@@ -187,7 +177,6 @@ EOF
               echo "   Agda     : ${agdaVer}    ($(agda --version 2>/dev/null | head -n1))"
               echo "   stdlib   : ${stdlibVer}"
               echo "   MkDocs   : ${mkdocsVer} + Material ${materialVer}  (make site / make serve)"
-              echo "   numpy    : ${numpyVer}  (eqsearch.py --fast)"
               echo "   AGDA_DIR : $AGDA_DIR"
               echo "   repo     : $ROOT"
               echo ""
@@ -203,44 +192,6 @@ EOF
                 2.3*) : ;;
                 *) echo "⚠  expected standard-library 2.3, got ${stdlibVer}" ;;
               esac
-            '';
-          };
-
-          # ---- GAP dev shell (`nix develop .#gap`) ---------------------------
-          # Dedicated to the FLRP subgroup-interval search engine (issue #487):
-          # A. Hulpke's intermediate-subgroup routines over the GAP group
-          # libraries.  GAP plus its group libraries is far heavier than the
-          # default shell's numpy, so it is kept OUT of `default`; and nothing
-          # in `make check` or `make flrp-test` may depend on it — GAP is an
-          # untrusted engine whose results enter the repo only as deterministic
-          # JSON artifacts (roadmap § 6).  nixpkgs' default `packageSet =
-          # "standard"` bundles the libraries #487 needs as required packages:
-          # smallgrp (SmallGroups), transgrp (transitive groups), primgrp
-          # (primitive groups).  Bare python3 suffices for the lattice bridge
-          # and the certificate emitter, both stdlib-only (see flake comment on
-          # mkPythonEnv); Agda type-checking of an emitted certificate happens
-          # in the default shell, not here.
-          gap = pkgs.mkShell {
-            name = "agda-algebras-gap";
-
-            packages = [
-              gapPkg
-              pkgs.python3
-              pkgs.gnumake
-              pkgs.git
-            ];
-
-            LANG = "C.UTF-8";
-            LC_ALL = "C.UTF-8";
-
-            shellHook = ''
-              echo ""
-              echo "🧮 agda-algebras GAP shell (issue #487)"
-              echo "   GAP      : ${gapVer}"
-              echo "   libraries: smallgrp / transgrp / primgrp  (packageSet=standard)"
-              echo "   engine   : scripts/gap/flrp/   (run scripts from the repo root)"
-              echo "   smoke    : make gap-smoke"
-              echo ""
             '';
           };
         });

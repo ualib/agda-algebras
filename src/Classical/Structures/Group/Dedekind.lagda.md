@@ -123,7 +123,7 @@ module _ {α ρ : Level} (𝒢 : Group α ρ) where
 
 ---
 
-[^1]: In the FLRP program (`docs/papers/flrp/ieprops/`, § 3.2) Dedekind's rule drives the
-      antichain lemma for permuting complements and, through it, the parachute theorems;
-      those corollaries are the first RP-1 targets and will build directly on this
-      module.
+[^1]: In the note *Interval enforceable properties of finite groups*
+      (arXiv:1205.1927v4, § 3.2), Dedekind's rule drives the antichain lemma for
+      permuting complements and, through it, the parachute theorems; the antichain
+      lemma is formalized in [Classical.Structures.Group.Complements][].

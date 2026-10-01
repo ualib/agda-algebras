@@ -61,10 +61,10 @@ subgroup, which is therefore inside the competitor.  Nothing here needs to
 enumerate the normal subgroups of the group; the search ranges over its elements,
 which is what carrier finiteness gives.
 
-#### The no-go, and what it means for the FLRP program
+#### The no-go for unrestricted minimal normal subgroups
 
-`MinimalNormalDescent`{.AgdaFunction} of [FLRP.Reductions][] (the hypothesis
-appearing in Entries 1–3 of the RP-2 enforcement catalog) asks for a minimal
+The classical statement of minimal-normal descent, that every nontrivial normal
+subgroup of a finite group contains a minimal normal subgroup, asks for a minimal
 normal subgroup in the unrestricted sense: minimality against every normal
 subgroup whose nontriviality is the negative statement.
 `minimal→DNE`{.AgdaFunction} shows that the witnessed reading of that demand is
@@ -73,7 +73,7 @@ not merely harder to prove, but classical.
 Indeed, an unrestricted minimal normal subgroup of a finite group, taken together
 with a witnessed non-identity element, decides `¬ ¬ P → P` for every proposition
 `P`{.AgdaBound} at the working level.  The instrument is the normal subgroup
-`M ∩ (1 ∪ P)`, an "oracle subgroup."[^2]
+`M ∩ (1 ∪ P)`, an "oracle subgroup."
 The witness hypothesis is doing real work in that statement; extracting an element
 from the negative `Nontrivial`{.AgdaFunction} is itself a classical step
 (`witnessing→DNE`{.AgdaFunction} below).
@@ -91,7 +91,7 @@ is the witnessed form over decidably presented subgroups, which is strictly
 stronger than the Layer-D form and is what a consumer with decidably presented
 subgroups actually needs; `minimal-normal-descent`{.AgdaFunction} records the
 remaining gap as one named principle, `WitnessedNontriviality`{.AgdaFunction},
-rather than leaving it distributed over the catalog entries.
+rather than leaving it distributed over its consumers.
 
 <!--
 ```agda
@@ -540,8 +540,7 @@ behind the first; there is exactly one, and this is it.
 #### The unrestricted descent, modulo the one principle
 
 Granted `WitnessedNontriviality`{.AgdaFunction}, the principle the no-go above
-prices as double-negation elimination, the descent lands in the form
-[FLRP.Reductions][] threads.
+prices as double-negation elimination, the descent lands in the unrestricted form.
 
 ```agda
   -- Minimal-normal descent in the unrestricted form, modulo the witnessing principle.
@@ -556,12 +555,12 @@ prices as double-negation elimination, the descent lands in the form
     descended = minimal-normal-descentᵈ 𝑴 nontriv
 ```
 
-That still asks its input to be decidably presented, so it is not yet the property
-`MinimalNormalDescent`{.AgdaFunction} of [FLRP.Reductions][], which quantifies over
-*semantic* normal subgroups.  The gap is one hypothesis, and it is not a new one: it is
+That still asks its input to be decidably presented, so it is not yet the classical
+statement, which quantifies over *semantic* normal subgroups.  The gap is one
+hypothesis, and it is not a new one: it is
 the group-side reading of `complete`{.AgdaField} of
 `FiniteCongruences`{.AgdaRecord} ([Setoid.Congruences.Finite.Basic][]) (every normal
-subgroup is `⊆`-equal to a decidably presented one) which the two-layer note already
+subgroup is `⊆`-equal to a decidably presented one) which [ADR-008][] already
 identifies as the library's single Layer-S bridge, of strength between weak excluded
 middle and excluded middle.
 
@@ -591,7 +590,7 @@ nontrivial, hence witnessed by the finite search, and the witness travels back.
     w = witness (proj₁ presentation) nontrivᵈ
 ```
 
-And with it the descent is the property the catalog threads, verbatim.
+And with it the descent is the classical statement, verbatim.
 
 ```agda
   -- Minimal-normal descent, semantic form: every nontrivial normal subgroup of a
@@ -615,9 +614,4 @@ And with it the descent is the property the catalog threads, verbatim.
 
 --------------------------------------
 
-[^1]: Exactly as `Intervalᵈ`{.AgdaFunction} of [FLRP.Enforceable][] bundles an
-      interval element with one; this is [ADR-008][]'s discipline, stated rather
-      than smuggled in.
-
-[^2]: This is just like the oracle congruence `θ[ P ]`{.AgdaFunction} that drives
-      the WP-1 no-go of [FLRP.Problem][].
+[^1]: This is [ADR-008][]'s discipline, stated rather than smuggled in.

@@ -16,7 +16,6 @@ Each submodule is the home of one concrete lattice.
 + `L2` is the two-element Boolean lattice.
 + `L2Distributive` is the two-element Boolean lattice as a `DistributiveLattice`.
 + `L3Heyting` is the three-element chain as a Heyting algebra.
-+ `L7` is the seven-element lattice of interest in the Finite Lattice Representation Problem (FLRP).
 
 ```agda
 {-# OPTIONS --cubical-compatible --exact-split --safe #-}
@@ -26,5 +25,4 @@ module Examples.Classical.Lattices where
 open import Examples.Classical.Lattices.L2
 open import Examples.Classical.Lattices.L2Distributive
 open import Examples.Classical.Lattices.L3Heyting
-open import Examples.Classical.Lattices.L7
 ```

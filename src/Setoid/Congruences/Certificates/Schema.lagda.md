@@ -14,8 +14,7 @@ External engines (GAP, UACalc, SAT and model finders) compute congruence lattice
 of finite algebras far faster than any in-Agda decision procedure, but nothing they
 report is believed until Agda has re-checked it.
 
-The certificate discipline that makes this possible is fixed in
-[the design note](docs/notes/flrp-wp6-freese-certificates.md): the engine emits a
+The certificate discipline that makes this possible is simple: the engine emits a
 *linear-size witness* of each claim, and a checker verifies the witness with
 *no fixpoint iteration and no search*.
 
@@ -190,7 +189,7 @@ Trace n ops ar = List (Merge n ops ar)
 #### The per-congruence certificate
 
 The certificate for a single claim `θ ≑ Cg (fromPairs P)` consists of the following
-data:[^1]
+data:
 
 +  the seed list `P` as index pairs,
 +  the claimed partition as a normal-form parent vector, and
@@ -212,7 +211,7 @@ record CgCert (n ops : ℕ) (ar : Fin ops → ℕ) : Type where
 #### The whole-lattice certificate
 
 The certificate for a claim about the *entire* congruence lattice of a finite
-finitary algebra consists of the following data:[^1]
+finitary algebra consists of the following data:
 
 +  `parts`{.AgdaField} — the list of all claimed congruences as normal-form parent vectors;
 
@@ -268,7 +267,3 @@ record LatticeCert (n ops : ℕ) (ar : Fin ops → ℕ) (m : ℕ) : Type where
   joinTrace : Fin m → Fin m → Trace n ops ar
   joinTrace k l = lookup (lookup joinTr k) l
 ```
-
---------------------------------------
-
-[^1]: see [the design note](docs/notes/flrp-wp6-freese-certificates.md) § 4.
