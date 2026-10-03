@@ -41,7 +41,7 @@ We recommend Emacs with `agda-mode` or VSCode with the `banacorn.agda-mode` exte
 `nix develop` writes, at the root of the checkout it is entered in, the
 library registry `.agda/libraries` and a self-contained wrapper
 `.agda/bin/agda` that runs the pinned Agda with that registry.  agda-mode runs
-one Agda process for every buffer, and reads `agda2-program-name` and
+one Agda process for all buffers, and reads `agda2-program-name` and
 `agda2-program-args` only when it starts that process, so the process checks
 every file against the checkout it was started for.  A file from another
 worktree then fails with `ModuleDefinedInOtherFile`, because the registry
