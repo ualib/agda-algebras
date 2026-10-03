@@ -52,6 +52,11 @@ To exit the shell, type `exit` or Ctrl-D.
 
 Contributors who prefer a persistent editor configuration across shells may find [`nix-direnv`](https://github.com/nix-community/nix-direnv) useful for auto-entering the shell when they `cd` into the repo.
 
+An Emacs launched from one checkout's shell checks every file against that
+checkout, so several checkouts (worktrees, or another Agda project beside this
+one) need one more step: see
+[Emacs with several checkouts](CONTRIBUTING.md#emacs-with-several-checkouts).
+
 ---
 
 ## Option 2: Agda's official Python installer

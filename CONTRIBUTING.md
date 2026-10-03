@@ -34,7 +34,86 @@ This pins Agda 2.8.0 and standard-library 2.3 automatically via the repository's
 
 ### Editor
 
-We recommend Emacs with `agda-mode` or VSCode with the `banacorn.agda-mode` extension.  Launch your editor from inside `nix develop` so the pinned Agda is on `PATH`.
+We recommend Emacs with `agda-mode` or VSCode with the `banacorn.agda-mode` extension.  Launch your editor from inside `nix develop` so the pinned Agda is on `PATH`; if you keep several checkouts, read the next section.
+
+### Emacs with several checkouts
+
+`nix develop` writes, at the root of the checkout it is entered in, the
+library registry `.agda/libraries` and a self-contained wrapper
+`.agda/bin/agda` that runs the pinned Agda with that registry.  agda-mode runs
+one Agda process for all buffers, and reads `agda2-program-name` and
+`agda2-program-args` only when it starts that process, so the process checks
+every file against the checkout it was started for.  A file from another
+worktree then fails with `ModuleDefinedInOtherFile`, because the registry
+finds the file's module in the first checkout, and a file of another Agda
+project fails too.
+
+The following, added to your Emacs configuration (`~/.config/doom/config.el`
+under Doom Emacs, your `init.el` otherwise), runs each checkout's own wrapper,
+and restarts Agda when `C-c C-l` comes from a different checkout from the one
+the running process was started for.  Emacs need not be started inside
+`nix develop`.
+
+```elisp
+;; Agda per checkout.  One Agda process serves every buffer, and agda-mode
+;; reads `agda2-program-name' and `agda2-program-args' only when it starts
+;; that process, so the process keeps the library registry of the checkout it
+;; was started for.  This runs the wrapper .agda/bin/agda that the checkout's
+;; dev shell wrote, which names that checkout's registry, and restarts the
+;; process when C-c C-l comes from a different checkout.  Files outside such a
+;; checkout keep `agda2-program-name' as configured.  agda-mode starts Agda
+;; from the mode's body, before any hook or directory-local variable applies,
+;; so the settings are bound around `agda2-restart' itself.
+(defvar my/agda-process-root nil
+  "The checkout the running Agda process was started for, or nil.")
+
+(defun my/agda-checkout (file)
+  "The list (ROOT PROGRAM ARGS AGDA-DIR) for FILE's checkout, or nil."
+  (when-let* ((root (locate-dominating-file file ".agda/bin/agda")))
+    (list root (expand-file-name ".agda/bin/agda" root) nil
+          (expand-file-name ".agda" root))))
+
+(defun my/agda-restart (restart &rest args)
+  "Around `agda2-restart': start the Agda of the current buffer's checkout."
+  (let ((checkout (and (buffer-file-name) (my/agda-checkout (buffer-file-name)))))
+    (setq my/agda-process-root (car checkout))
+    (if (null checkout)
+        (apply restart args)
+      (pcase-let ((`(,_root ,program ,program-args ,agda-dir) checkout))
+        (let ((agda2-program-name program)
+              (agda2-program-args program-args)
+              (process-environment (cons (concat "AGDA_DIR=" agda-dir)
+                                         process-environment)))
+          (apply restart args))))))
+
+(defun my/agda-load (load &rest args)
+  "Around `agda2-load': restart Agda first if the buffer is in another checkout."
+  (let ((root (and (buffer-file-name) (car (my/agda-checkout (buffer-file-name))))))
+    (unless (equal root my/agda-process-root)
+      (agda2-restart))
+    (apply load args)))
+
+(with-eval-after-load 'agda2-mode
+  (advice-add 'agda2-restart :around #'my/agda-restart)
+  (advice-add 'agda2-load :around #'my/agda-load))
+```
+
+A few facts complete the setup, as follows:
+
++  Enter `nix develop` once in each new worktree, and again when its
+   `flake.lock` moves, to write the wrapper.
++  The wrapper calls an Agda in the Nix store by its path.  If garbage
+   collection removes that Agda, agda-mode reports its version as "unknown";
+   entering `nix develop` there again restores it.
++  agda-mode refuses an Agda whose version differs from its own
+   (`agda2-version`), so use agda-mode 2.8.0, the version this repository
+   pins; inside `nix develop`, `agda-mode locate` prints the path of its
+   `agda2.el`.
++  The same snippet with one more clause, for checkouts of
+   [agda-native-air](https://github.com/formalverification/agda-native-air),
+   is in that repository's
+   [`CONTRIBUTING.md`](https://github.com/formalverification/agda-native-air/blob/main/CONTRIBUTING.md#editing-agda-in-emacs);
+   use that version if you work in both.
 
 ---
 
