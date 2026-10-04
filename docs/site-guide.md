@@ -297,6 +297,85 @@ renders, sat six weeks behind the tree and were quoted elsewhere as current.
 `corpus_stats.py --json` prints the figures as one record for anything outside
 this repository that wants to cite them.
 
+## The playground
+
+The [playground](playground.md) runs Agda 2.8.0, compiled to WebAssembly, in
+the reader's browser tab, on exercises taken from this library.
+[ADR-011](adr/011-interactive-playground.md) records why it is built the way
+it is and what it costs; this section is how to keep it working.
+
+### What it is made of
+
++  **The exercises** are files: `docs/playground/<Name>.agda`, as the page
+   shows it, with the goals the reader fills, and
+   `docs/playground/solutions/<Name>.agda`, a finished version.  Both are
+   `module <Name> where`.  The page's code block, the editor's first text and
+   the build's checks all read these files.
++  **The images** are built by `scripts/python/playground/build_assets.py`
+   into `.playground/` (gitignored): the checker, `agda-opt.wasm.gz`, one
+   `<image>.tar.gz` per entry of the builder's `IMAGES`, and `manifest.json`.
+   An image holds the sources and compiled interfaces of one closure of this
+   library and of the standard library.
++  **The hook**, `scripts/python/playground/mkdocs_hook.py`, publishes those
+   files under `assets/agda/`, publishes the worker under a directory named
+   by its content's hash, and turns each `<!-- playground: Name -->` marker in
+   `docs/playground.md` into the exercise: Agda's highlighting and goal
+   display as the build recorded them, and the consent sentence with the
+   sizes from the manifest.  `<!-- playground-assets -->` becomes the table of
+   downloads.
++  **The page's scripts**: `docs/assets/js/playground.js` (the controller),
+   `playground-paint.js` (the editor's colored copy of its text) and
+   `playground-input.js` (the backslash input method), added to the
+   playground page only; and the worker, `docs/assets/js/playground/`:
+   `checker.js`, `wasi.js` (the WASI host), `tar.js`, `protocol.js` (Agda's
+   interaction protocol), `session.js` (which command to send next) and
+   `edits.js` (what a give or a case split does to the text).
+
+### Building it
+
+`make playground` builds the images, and `make site-full` runs it before the
+site, which is what CI does.  `make site` without it still builds: the page
+then shows its exercises as plain code with a sentence saying the checker is
+not part of the build.  If the images exist but were built from other
+exercise text than the files hold, the site build stops and asks for `make
+playground`.
+
+The build fetches its three inputs from the flake on first use: the pinned
+release of `agda-web/agda-wasm-dist`, wasmtime, and the standard library.  It
+type-checks each closure with the native Agda, then checks every exercise on
+a fresh unpacking of its images under the WebAssembly, and fails unless each
+check type-checked exactly one module; that is the proof that the images'
+compiled interfaces are accepted, and it takes most of the build's minute.
+It refuses library sources or exercise files that differ from `HEAD`;
+`make playground PLAYGROUND_FLAGS=--allow-dirty` builds anyway, for a local
+preview, and the published manifest then says so.
+
+`make playground-check` checks built assets against their manifest, offline;
+`make playground-test` runs the builder's and the hook's tests and the
+worker's JavaScript under node.
+
+### Adding an exercise
+
+1.  Write `docs/playground/<Name>.agda` and its solution, and check the
+    solution with `agda -i docs/playground/solutions
+    docs/playground/solutions/<Name>.agda`.
+2.  Add it to an image in the builder's `IMAGES`, or add an image.  Keep an
+    exercise's imports narrow: the image is everything they reach, and
+    `Overture.Basic`, for one, reaches 6 MB of the standard library.
+3.  Put `<!-- playground: <Name> -->` in `docs/playground.md`, with prose
+    and hints around it, and drive the hints through the page before
+    publishing them: Agda names the variables a case split introduces after
+    the constructors' own arguments.
+4.  `make playground` and `make serve`, and try every command on it.
+
+### Moving to another Agda
+
+Change the pins at the top of `build_assets.py` and the `agda-wasm-dist`
+fetch in `flake.nix` together, to a release built from the same Agda the
+flake's `nixpkgs` gives: the native Agda builds the interfaces and the
+WebAssembly must accept them, which it does only for the same version.  Then
+`make playground` and read its output: every module count and size moves.
+
 ## Where things live
 
 ```
@@ -308,9 +387,15 @@ docs/
   stylesheets/custom.css                all bespoke styling
   assets/                               logo, favicon, portraits, vendored JS
   adr/                                  architecture decision records
+  playground.md                         the playground page (ADR-011)
+  playground/                           its exercises, and their solutions
+  assets/js/playground*.js              the playground's page scripts
+  assets/js/playground/                 the playground's worker: WASI host, protocol
+  assets/agda/NOTICE.txt                the notices for what the playground downloads
 scripts/python/
   mkdocs_gen_library.py                 mounts src/ as pages + builds the nav
   mkdocs_hooks.py                       link rewriting + per-page build log
+  playground/                           the playground's image builder and hook (ADR-011)
   gen_links.py                          regenerates the module + ADR sections of _links.md
   check_links.py                        fails CI on any undefined reference-style link
   corpus_stats.py                       counts the landing page's figures; refreshes and gates them

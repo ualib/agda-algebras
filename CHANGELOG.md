@@ -14,6 +14,7 @@ The 3.0 release is a major reconstruction of agda-algebras building on the Setoi
 
 ### Added
 
++  **The playground: Agda in the browser, on this library's code** (#577, [ADR-011](docs/adr/011-interactive-playground.md)).  A new page, [`docs/playground.md`](docs/playground.md), runs Agda 2.8.0 compiled to WebAssembly in the reader's tab: three exercises taken from the library (`graft` and `_✦_` of `Overture.Terms.Interpretation`, `⊙-is-hom` of `Setoid.Homomorphisms.Properties`) open in an editor that shows each goal's type and context and offers agda-mode's give, refine, case split and type query.  Nothing is downloaded until the reader asks, each exercise states its download first (0.38 MB to 38.7 MB of library files, and 9.3 MB for the checker), and no cross-origin isolation is needed.  `make playground` builds the checker's filesystem images into `.playground/` and proves each one under the shipped WebAssembly; `make site-full` runs it.  The WASI host, worker, input method and editor are adapted from williamdemeo.org's playground (see NOTICE).
 +  **ADR-001 — `Setoid/` as canonical development tree**.
    `docs/adr/001-setoid-as-canonical.md` records the architectural decision
    and the alternatives considered.

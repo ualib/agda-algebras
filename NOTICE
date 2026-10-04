@@ -10,6 +10,52 @@ the top of each file for per-file attribution.
 That vendored code is licensed under the Apache License 2.0, the license of the
 project it came from, and it sits among this repository's Apache-2.0 material.
 
+scripts/python/_utils/command_runner.py adds an `accept` parameter (the exit
+statuses that are answers rather than failures) and an `input_text` parameter
+to the vendored copy, as williamdemeo/website's copy of the same file does.
+
+The playground (docs/playground.md, ADR-011) adapts files of the playground of
+williamdemeo/website (https://williamdemeo.org/playground/) at commit 952e5eb,
+MIT License, Copyright (c) 2026 William DeMeo:
+
+  docs/assets/js/playground/wasi.js     from docs/javascripts/playground/wasi.js
+  docs/assets/js/playground/tar.js      from docs/javascripts/playground/tar.js
+  docs/assets/js/playground/checker.js  from docs/javascripts/playground/checker.js
+  docs/assets/js/playground.js          from docs/javascripts/playground.js
+  docs/assets/js/playground-paint.js    from docs/javascripts/playground-highlight.js
+  docs/assets/js/playground-input.js    from docs/javascripts/playground-input.js
+  scripts/python/playground/build_assets.py
+                                        from scripts/python/build_playground_assets.py
+  scripts/python/playground/mkdocs_hook.py
+                                        from scripts/python/playground_hook.py
+  docs/stylesheets/custom.css, its section 17
+                                        from docs/stylesheets/extra.css
+
+Each file's header says what it took and what is new.  The MIT notice:
+
+  Permission is hereby granted, free of charge, to any person obtaining a copy
+  of this software and associated documentation files (the "Software"), to deal
+  in the Software without restriction, including without limitation the rights
+  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+  copies of the Software, and to permit persons to whom the Software is
+  furnished to do so, subject to the following conditions:
+
+  The above copyright notice and this permission notice shall be included in
+  all copies or substantial portions of the Software.
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+  SOFTWARE.
+
+The playground's built assets, published with the site but not kept in this
+repository, carry Agda, the Agda standard library and agda-web/agda-wasm-dist
+under their own terms; docs/assets/agda/NOTICE.txt, published beside them,
+reproduces those terms.
+
 This repository is licensed in parts, not as a whole:
 
   src/ and the other source code   Apache License 2.0        LICENSE

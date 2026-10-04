@@ -13,6 +13,14 @@
 #  key.  Pull requests build only (a broken site fails the PR), they do not
 #  deploy.
 #
+#  The playground (ADR-011): `make site-full` runs `make playground`, which
+#  builds the in-browser checker's filesystem images from this checkout and
+#  proves each one under the shipped WebAssembly, so a pull request that
+#  breaks an exercise, or an image's acceptance, fails here.  The images are
+#  tens of megabytes and change whenever a module they hold does, so the
+#  deploy publishes an orphan commit each time: the published branch keeps one
+#  copy of the site rather than every copy it ever had.
+#
 #  Hosting (ADR-007, #430): the new MkDocs site is served from a subdomain of
 #  `universalalgebra.org`, while the legacy Jekyll site stays parked at
 #  `ualib.org` — this repository's own `gh-pages` branch.  This workflow no
@@ -74,10 +82,21 @@ jobs:
           restore-keys: |
             agda-${{ runner.os }}-${{ hashFiles('flake.lock') }}-
 
+      # wasmtime compiles the playground's 31 MB checker before its first run,
+      # about a minute of a runner's CPU, and keeps the result in this
+      # directory; the key is the module's pinned hash, which only an Agda
+      # bump moves.
+      - name: Cache wasmtime's compiled checker
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/wasmtime
+          key: wasmtime-${{ runner.os }}-${{ hashFiles('flake.lock') }}-0eb63cef
+
       - name: Build the site
         run: |
           set -euxo pipefail
           nix develop --command make site-full
+          nix develop --command make playground-check
 
       - name: Cross-deploy to universalalgebra/agda-algebras gh-pages
         if: github.event_name == 'push' && github.ref == 'refs/heads/master'
@@ -91,3 +110,6 @@ jobs:
           publish_branch: gh-pages
           # Writes the custom-domain CNAME into the published site on every deploy.
           cname: agda-algebras.universalalgebra.org
+          # One commit, not a history: the playground's images are tens of
+          # megabytes and change with the library (ADR-011).
+          force_orphan: true
