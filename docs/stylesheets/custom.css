@@ -985,3 +985,410 @@ body.reveal-agda-source .md-typeset .ualib-hidden-note {
 
 /* The header "Tooltips" control is the shared `.ualib-switch` (styled with the
    Show-all-Agda control in §15); agda-hover.js only sets its aria-checked. */
+
+/* ==========================================================================
+   17. The playground (ADR-011) — docs/playground.md.  Everything below styles
+       elements docs/assets/js/playground.js creates, with three exceptions
+       that scripts/python/playground/mkdocs_hook.py renders and that are the
+       page with JavaScript off: the exercise's code (`pre.Agda`, so it wears
+       §2 and §4 like every other block), the goals the build recorded, and
+       the consent sentence.  Adapted from williamdemeo/website's playground
+       rules (MIT; see NOTICE), restated in this site's Material variables.
+       No motion: the only thing that moves is a download's <progress>.
+   ========================================================================== */
+.md-typeset .agda-exercise {
+  margin: 1.6em 0 2.4em;
+}
+/* playground.js hides parts of an exercise with the `hidden` attribute (the
+   code block once the editor replaces it, an empty output), and Material's
+   own `display` on `pre` and `div` outranks the browser's rule for it. */
+.md-typeset .agda-exercise [hidden] {
+  display: none;
+}
+
+/* The consent sentence: a claim about what pressing the button costs, set
+   apart so that a reader skimming for the button does not skim past it. */
+.md-typeset .agda-exercise__gate {
+  color: var(--md-default-fg-color--light);
+  font-size: 0.72rem;
+  border-left: 2px solid var(--md-default-fg-color--lighter);
+  padding-left: 0.8rem;
+  margin: 1em 0;
+}
+
+.md-typeset .agda-exercise__controls,
+.md-typeset .agda-exercise__bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem;
+  margin: 0.8em 0;
+}
+
+/* Real <button>s, so Tab reaches them and Enter and Space fire them. */
+.md-typeset .agda-button {
+  appearance: none;
+  background: none;
+  font: inherit;
+  font-size: 0.72rem;
+  color: var(--md-default-fg-color--light);
+  border: 1px solid var(--md-default-fg-color--lighter);
+  border-radius: 0.2rem;
+  padding: 0.3em 0.9em;
+  cursor: pointer;
+}
+.md-typeset .agda-button:hover,
+.md-typeset .agda-button:focus-visible {
+  color: var(--md-accent-fg-color);
+  border-color: var(--md-accent-fg-color);
+}
+.md-typeset .agda-button--primary {
+  color: var(--md-default-fg-color);
+  border-color: var(--md-typeset-a-color);
+}
+.md-typeset .agda-button[disabled] {
+  cursor: default;
+  opacity: 0.55;
+}
+.md-typeset .agda-button[disabled]:hover {
+  color: var(--md-default-fg-color--light);
+  border-color: var(--md-default-fg-color--lighter);
+}
+
+.md-typeset .agda-exercise__status,
+.md-typeset .agda-exercise__hint {
+  font-size: 0.72rem;
+  color: var(--md-default-fg-color--light);
+  font-variant-numeric: tabular-nums;
+}
+.md-typeset .agda-exercise__controls progress {
+  inline-size: 12rem;
+  block-size: 0.4rem;
+}
+.md-typeset .agda-exercise__controls--failed .agda-exercise__status {
+  color: var(--md-code-hl-special-color, #d32f2f);
+}
+.md-typeset .agda-select {
+  font: inherit;
+  color: inherit;
+  background: var(--md-default-bg-color);
+  border: 1px solid var(--md-default-fg-color--lighter);
+  border-radius: 0.2rem;
+  padding: 0.1em 0.3em;
+}
+
+/* The editor is two boxes in one frame: the <textarea>, and under it a
+   `<pre class="Agda">` that playground-paint.js paints with the same text in
+   Agda's colors (the §2 rules color it, as they color every code block).  The
+   two agree only if every glyph sits in the same place in both, so
+   everything that decides where a glyph goes is set on both by this one rule
+   rather than trusted to two sets of defaults (§4 gives `pre.Agda` its own
+   padding and border).  Lines do not wrap, in either box, as they do not in
+   a code block; long ones scroll, and the mirror follows the box's scroll. */
+.md-typeset .agda-editor,
+.md-typeset pre.Agda.agda-editor__mirror {
+  box-sizing: border-box;
+  margin: 0;
+  border: 1px solid color-mix(in srgb, var(--code-accent) 20%, transparent);
+  border-left: 3px solid var(--code-accent);
+  border-radius: 0.25rem;
+  padding: 0.8em 1em;
+  font-family: var(--md-code-font);
+  font-size: 0.6rem;
+  font-weight: 400;
+  font-style: normal;
+  line-height: 1.6;
+  font-variant-ligatures: none;
+  font-feature-settings: "ss20" 1;
+  font-kerning: none;
+  letter-spacing: normal;
+  word-spacing: normal;
+  text-indent: 0;
+  text-transform: none;
+  text-align: start;
+  tab-size: 2;
+  white-space: pre;
+  overflow-wrap: normal;
+  word-break: normal;
+  scrollbar-gutter: stable;
+}
+.md-typeset .agda-editor {
+  display: block;
+  inline-size: 100%;
+  color: var(--md-code-fg-color);
+  background: var(--md-code-bg-color);
+  resize: vertical;
+  overflow: auto;
+}
+.md-typeset .agda-editor:focus-visible {
+  outline: 2px solid var(--md-accent-fg-color);
+  outline-offset: 1px;
+}
+.md-typeset .agda-editor[readonly] {
+  cursor: progress;
+}
+
+/* The textarea stays in the flow and sizes the frame; the mirror is pinned
+   to the frame's edges. */
+.md-typeset .agda-editor__frame {
+  position: relative;
+}
+.md-typeset pre.Agda.agda-editor__mirror {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  color: var(--md-code-fg-color);
+  background: var(--md-code-bg-color);
+  pointer-events: none;
+  user-select: none;
+}
+/* §2 sets comments in italic; a slanted glyph is not always as wide as an
+   upright one, so nothing in the mirror changes style or weight. */
+.md-typeset pre.Agda.agda-editor__mirror * {
+  font-style: normal;
+  font-weight: inherit;
+}
+
+/* Only when a mirror is there to show through: the box's own text is
+   transparent, and its caret and selection are drawn over the colored copy. */
+.md-typeset .agda-editor__mirror + .agda-editor {
+  position: relative;
+  color: transparent;
+  background: transparent;
+  caret-color: var(--md-code-fg-color);
+}
+.md-typeset .agda-editor__mirror + .agda-editor::selection {
+  color: var(--md-code-fg-color);
+  background-color: color-mix(in srgb, var(--md-typeset-a-color) 30%, var(--md-code-bg-color));
+}
+
+/* A goal Agda reports open, and an error's span.  Neither changes a glyph's
+   box: the goal is a background and a ring drawn as a shadow, the error a
+   wavy underline under whatever colors the text already has. */
+.md-typeset .agda-editor__mirror :where(.agda-mark) {
+  background: none;
+  color: inherit;
+  padding: 0;
+}
+.md-typeset .agda-editor__mirror .agda-mark--goal,
+.md-typeset .agda-goal__id {
+  background-color: color-mix(in srgb, var(--md-accent-fg-color) 16%, transparent);
+  border-radius: 0.15rem;
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--md-accent-fg-color) 45%, transparent);
+}
+.md-typeset .agda-editor__mirror .agda-mark--error {
+  text-decoration: underline wavy #e53935;
+  text-decoration-skip-ink: none;
+}
+
+/* In forced colors the system owns every color, and a transparent textarea
+   over a repainted mirror would be two copies of the text: the box alone is
+   the editor there. */
+@media (forced-colors: active) {
+  .md-typeset pre.Agda.agda-editor__mirror {
+    display: none;
+  }
+  .md-typeset .agda-editor__mirror + .agda-editor {
+    color: CanvasText;
+    caret-color: CanvasText;
+  }
+}
+
+.md-typeset .agda-editor__label {
+  display: block;
+  font-size: 0.64rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--md-default-fg-color--light);
+  margin: 1.2em 0 0.4em;
+}
+
+/* The verdict is one line and it is the answer. */
+.md-typeset .agda-verdict {
+  margin: 0.8em 0 0;
+  font-family: var(--md-code-font);
+  font-size: 0.66rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--md-default-fg-color--light);
+}
+[data-md-color-scheme="default"] .md-typeset .agda-verdict--ok { color: #1b7f3b; }
+[data-md-color-scheme="slate"] .md-typeset .agda-verdict--ok { color: #5eead4; }
+[data-md-color-scheme="default"] .md-typeset .agda-verdict--error { color: #c62828; }
+[data-md-color-scheme="slate"] .md-typeset .agda-verdict--error { color: #ff8a80; }
+.md-typeset .agda-verdict.agda-verdict--stale {
+  color: var(--md-default-fg-color--light);
+}
+.md-typeset .agda-verdict__where {
+  appearance: none;
+  background: none;
+  font: inherit;
+  color: inherit;
+  border: 0;
+  border-bottom: 1px dotted currentcolor;
+  padding: 0;
+  cursor: pointer;
+}
+.md-typeset .agda-verdict__where[disabled] {
+  border-bottom-color: transparent;
+  cursor: default;
+}
+
+/* Agda's own words, verbatim and in its own layout: a wrapped error message
+   puts a caret under the wrong column, so it scrolls instead. */
+.md-typeset .agda-output {
+  margin: 0.6em 0 0;
+  font-family: var(--md-code-font);
+  font-size: 0.6rem;
+  line-height: 1.6;
+  white-space: pre;
+  overflow-x: auto;
+  background: var(--md-default-bg-color--light);
+  border: 1px solid var(--md-default-fg-color--lightest);
+  border-radius: 0.25rem;
+  padding: 0.8em 1em;
+  color: var(--md-default-fg-color);
+}
+
+/* The input-method palette, under the box it types into. */
+.md-typeset .agda-palette {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.3rem;
+  margin: 0.6em 0 0;
+}
+.md-typeset .agda-palette__lead {
+  font-size: 0.68rem;
+  color: var(--md-default-fg-color--light);
+  margin-right: 0.3rem;
+}
+.md-typeset .agda-palette__key {
+  appearance: none;
+  background: var(--md-code-bg-color);
+  font-family: var(--md-code-font);
+  font-size: 0.68rem;
+  line-height: 1;
+  color: var(--md-code-fg-color);
+  border: 1px solid var(--md-default-fg-color--lightest);
+  border-radius: 0.2rem;
+  min-inline-size: 1.9em;
+  padding: 0.35em;
+  cursor: pointer;
+}
+.md-typeset .agda-palette__key:hover,
+.md-typeset .agda-palette__key:focus-visible {
+  color: var(--md-accent-fg-color);
+  border-color: var(--md-accent-fg-color);
+}
+
+/* The goals: each goal's type, then its context, newest binding first, as
+   Emacs's goal-and-context buffer lays it out: names in one column, types in
+   the other, the bindings not in scope at the goal dimmed and said so. */
+.md-typeset .agda-goals {
+  margin: 0.8em 0 0;
+}
+.md-typeset .agda-goals__note {
+  font-size: 0.68rem;
+  color: var(--md-default-fg-color--light);
+  margin: 0 0 0.4em;
+}
+.md-typeset .agda-goal {
+  border: 1px solid var(--md-default-fg-color--lightest);
+  border-radius: 0.25rem;
+  padding: 0.6em 0.9em;
+  margin: 0 0 0.6em;
+  background: var(--md-default-bg-color--light);
+}
+.md-typeset .agda-goal__head,
+.md-typeset .agda-goal__have {
+  margin: 0;
+  font-family: var(--md-code-font);
+  font-size: 0.64rem;
+  line-height: 1.6;
+  white-space: pre-wrap;
+}
+.md-typeset .agda-goal__id {
+  appearance: none;
+  font: inherit;
+  color: inherit;
+  border: 0;
+  padding: 0 0.2em;
+  cursor: pointer;
+}
+.md-typeset .agda-goal__id[disabled] {
+  cursor: default;
+}
+.md-typeset .agda-goal__have-label {
+  color: var(--md-default-fg-color--light);
+}
+.md-typeset .agda-context {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  column-gap: 0.8em;
+  row-gap: 0;
+  margin: 0.4em 0 0;
+  padding: 0.4em 0 0;
+  border-top: 1px solid var(--md-default-fg-color--lightest);
+  font-family: var(--md-code-font);
+  font-size: 0.6rem;
+  line-height: 1.6;
+}
+.md-typeset .agda-context dt,
+.md-typeset .agda-context dd {
+  margin: 0;
+  font-weight: 400;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.md-typeset .agda-context dt::after {
+  content: " :";
+  color: var(--md-default-fg-color--light);
+}
+.md-typeset .agda-context .agda-context__hidden {
+  color: var(--md-default-fg-color--light);
+}
+.md-typeset .agda-context__note {
+  font-family: var(--md-text-font);
+  font-size: 0.6rem;
+}
+.md-typeset .agda-goal__commands {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+  margin: 0.6em 0 0;
+}
+/* The field's label names it for assistive technology; on screen, its
+   placeholder and the buttons beside it say what it is for. */
+.md-typeset .agda-goal__label {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+.md-typeset .agda-goal__field {
+  flex: 1 1 14rem;
+  min-inline-size: 0;
+  font-family: var(--md-code-font);
+  font-size: 0.64rem;
+  color: var(--md-code-fg-color);
+  background: var(--md-code-bg-color);
+  border: 1px solid var(--md-default-fg-color--lighter);
+  border-radius: 0.2rem;
+  padding: 0.3em 0.5em;
+}
+.md-typeset .agda-goal__field:focus-visible {
+  outline: 2px solid var(--md-accent-fg-color);
+  outline-offset: 1px;
+}
+
+/* The table of downloads, and what they were built from. */
+.md-typeset table.agda-assets {
+  font-size: 0.72rem;
+}
+.md-typeset .agda-assets__provenance {
+  font-size: 0.72rem;
+  color: var(--md-default-fg-color--light);
+}

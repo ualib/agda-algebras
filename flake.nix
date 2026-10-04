@@ -96,6 +96,20 @@
         p.pymdown-extensions      # attr_list companions + snippets auto_append
       ]);
 
+      # ---- The playground's checker (ADR-011) ------------------------------
+      # Agda 2.8.0 compiled to wasm32-wasi by agda-web/agda-wasm-dist, the
+      # release the playground page runs.  A fixed-output fetch, so the zip is
+      # cached (and pushed to Cachix by CI) like any other input, and
+      # scripts/python/playground/build_assets.py checks the same sha256
+      # again, and the module inside it, before it ships anything.  Not in
+      # the dev shell: only `make playground` needs it, and it fetches it with
+      # `nix build .#agda-wasm-dist` on first use.
+      mkAgdaWasmDist = pkgs: pkgs.fetchurl {
+        url = "https://github.com/agda-web/agda-wasm-dist/releases/download/"
+            + "v2.8.0-ghc9.10.3-r0/agda-wasm-v2.8.0-ghc9.10.3-r0.zip";
+        hash = "sha256-GqL7IOjHi/sO4bryS+lRe2GtL35FxcGW33Kgn2DZgdQ=";
+      };
+
       # ---- Project-local AGDA_DIR + agda() wrapper ------------------------
       # Writes $ROOT/.agda/{libraries,defaults} and defines an agda() shell
       # function that bypasses the Nix wrapper's baked-in --library-file by
@@ -197,8 +211,15 @@ EOF
         });
 
       # ---- Packages (handy for CI and downstream flakes) -------------------
+      # The last three are what `make playground` builds the playground's
+      # assets with (ADR-011): the pinned checker, a WASI runtime to prove its
+      # interfaces under, and the standard library whose prebuilt interfaces
+      # the images carry, the same store path the dev shell's Agda uses.
       packages = forAllSystems ({ pkgs }: {
         default = mkAgdaEnv pkgs;
+        agda-wasm-dist = mkAgdaWasmDist pkgs;
+        wasmtime = pkgs.wasmtime;
+        standard-library = pkgs.agdaPackages.standard-library;
       });
 
       # ---- Minimal overlay for downstream consumers ------------------------

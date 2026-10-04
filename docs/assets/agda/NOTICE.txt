@@ -1,0 +1,159 @@
+Notices for what the playground downloads
+=========================================
+
+Pressing a button on https://agda-algebras.universalalgebra.org/playground/
+fetches a build of Agda compiled to WebAssembly and one or more filesystem
+images: archives of Agda source files and the compiled interface files the
+checker needs.  Those files are the work of the projects below and reach you
+under their terms, which are reproduced here in full.
+
+Versions: Agda 2.8.0; the Agda standard library 2.3; agda-wasm-dist release
+v2.8.0-ghc9.10.3-r0.  The manifest published beside this file
+(manifest.json) lists every module each image carries, and the commit of
+ualib/agda-algebras and the standard library's store path it was built from.
+
+
+1.  agda-opt.wasm.gz: Agda compiled to WebAssembly
+--------------------------------------------------
+
+opt/agda-opt.wasm from agda-web/agda-wasm-dist, release v2.8.0-ghc9.10.3-r0
+(https://github.com/agda-web/agda-wasm-dist), gzipped and otherwise
+unmodified.
+
+    MIT License
+
+    Copyright (c) 2024 Agda Web
+
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+    of this software and associated documentation files (the "Software"), to deal
+    in the Software without restriction, including without limitation the rights
+    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+    copies of the Software, and to permit persons to whom the Software is
+    furnished to do so, subject to the following conditions:
+
+    The above copyright notice and this permission notice shall be included in all
+    copies or substantial portions of the Software.
+
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+    SOFTWARE.
+
+
+2.  Agda's builtin modules, in every image under data/2.8.0/lib/prim/
+---------------------------------------------------------------------
+
+Agda's own lib/prim, as that release ships it, with interface files compiled
+from it.  Agda's LICENSE, at tag v2.8.0 of https://github.com/agda/agda:
+
+    Copyright (c) 2005-2025 remains with the authors.
+    Agda 2 was originally written by Ulf Norell,
+    partially based on code from Agda 1 by Catarina Coquand and Makoto Takeyama,
+    and from Agdalight by Ulf Norell and Andreas Abel.
+    Cubical Agda was originally contributed by Andrea Vezzosi.
+
+    Agda 2 is currently actively developed mainly by Andreas Abel,
+    Liang-Ting Chen, Lawrence Chonavel, Jesper Cockx,
+    Nils Anders Danielsson, Amélia Liao, Ulf Norell, and Szumi Xie.
+
+    Further, Agda 2 has received contributions by, amongst others,
+    Arthur Adjedj,  Guillaume Allais, Malin Altenmüller, Stevan Andjelkovic,
+    Marcin Benke, Jean-Philippe Bernardy, Guillaume Brunerie,
+    James Chapman, Joris Ceulemans, Jonathan Coates,
+    Matthew Daggitt, Dominique Devriese, Péter Diviánszky,
+    Lucas Escot, Robert Estelle,
+    Naïm Favier, Kuen-Bang Hou (Favonia), Olle Fredriksson,
+    Adam Gundry, Daniel Gustafsson,
+    Philipp Hausmann, Alex Haršáni,
+    Alan Jeffrey, Phil de Joux,
+    Wolfram Kahl, Andre Knispel, Wen Kokke, András Kovács,
+    John Leo, Fredrik Lindblad, Víctor López Juan, Ting-Gan Lua,
+    Francesco Mazzoli, Stefan Monnier, Guilhem Moulin,
+    Konstantin Nisht, Fredrik Nordvall Forsberg, Andreas Nuyts,
+    Josselin Poiret, Nicolas Pouillard, Jonathan Prieto,
+    Christian Sattler, Michael Shulman, Andrés Sicard-Ramírez,
+    Makoto Takeyama, Andrea Vezzosi, Noam Zeilberger, and Tesla Ice Zhang.
+    The full list of contributors is available at
+    https://github.com/agda/agda/graphs/contributors or from the git
+    repository via ``git shortlog -sne``.
+
+    Permission is hereby granted, free of charge, to any person obtaining
+    a copy of this software and associated documentation files (the
+    "Software"), to deal in the Software without restriction, including
+    without limitation the rights to use, copy, modify, merge, publish,
+    distribute, sublicense, and/or sell copies of the Software, and to
+    permit persons to whom the Software is furnished to do so, subject to
+    the following conditions:
+
+    The above copyright notice and this permission notice shall be
+    included in all copies or substantial portions of the Software.
+
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+    EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+    MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+    IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+    CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+    TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+    SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+
+3.  The Agda standard library 2.3, in every image under lib/standard-library/
+-----------------------------------------------------------------------------
+
+The modules of https://github.com/agda/agda-stdlib at tag v2.3 that each
+image's exercises close over, unmodified, with standard-library.agda-lib and
+their interface files.  The library's LICENCE, at that tag:
+
+    Copyright (c) 2007-2025 Nils Anders Danielsson, Ulf Norell, Shin-Cheng
+    Mu, Bradley Hardy, Samuel Bronson, Dan Doel, Patrik Jansson,
+    Liang-Ting Chen, Jean-Philippe Bernardy, Andrés Sicard-Ramírez,
+    Nicolas Pouillard, Darin Morrison, Peter Berry, Daniel Brown,
+    Simon Foster, Dominique Devriese, Andreas Abel, Alcatel-Lucent,
+    Eric Mertens, Joachim Breitner, Liyang Hu, Noam Zeilberger, Érdi Gergő,
+    Stevan Andjelkovic, Helmut Grohne, Guilhem Moulin, Noriyuki Ohkawa,
+    Evgeny Kotelnikov, James Chapman, Wen Kokke, Matthew Daggitt, Jason Hu,
+    Sandro Stucki, Milo Turner, Zack Grannan, Lex van der Stoep,
+    Jacques Carette, James McKinna, Guillaume Allais
+    and some anonymous contributors.
+
+    Permission is hereby granted, free of charge, to any person obtaining a
+    copy of this software and associated documentation files (the
+    "Software"), to deal in the Software without restriction, including
+    without limitation the rights to use, copy, modify, merge, publish,
+    distribute, sublicense, and/or sell copies of the Software, and to
+    permit persons to whom the Software is furnished to do so, subject to
+    the following conditions:
+
+    The above copyright notice and this permission notice shall be included
+    in all copies or substantial portions of the Software.
+
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+    OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+    MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+    NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+    LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+    OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+    WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+
+4.  The Agda Universal Algebra Library, in every image under lib/agda-algebras/
+-------------------------------------------------------------------------------
+
+The modules of https://github.com/ualib/agda-algebras that each image's
+exercises close over, with agda-algebras.agda-lib and their interface files,
+and the exercises themselves.  Copyright 2018-2026 the agda-algebras
+development team, licensed under the Apache License, Version 2.0, whose text
+is the LICENSE file of that repository:
+https://github.com/ualib/agda-algebras/blob/master/LICENSE
+
+
+5.  The page's own scripts
+--------------------------
+
+The WASI host, the tar reader, the worker, the input method and the editor's
+painter are adapted from the playground of williamdemeo/website (MIT,
+Copyright 2026 William DeMeo); the NOTICE file of ualib/agda-algebras says
+which file came from where.

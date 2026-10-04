@@ -32,7 +32,7 @@
 #      where a path segment happens to contain the substring `agda`.
 # =============================================================================
 
-.PHONY: default all check test clean site serve serve-full html agda-md site-full profile project-plan unused-imports unused-imports-test check-links check-links-test gen-links corpus-stats corpus-stats-check corpus-stats-test docstrings docstrings-test docstrings-list docstrings-unused docstrings-json groups-test Everything.agda EverythingLegacy.agda
+.PHONY: default all check test clean site serve serve-full html agda-md site-full profile project-plan unused-imports unused-imports-test check-links check-links-test gen-links corpus-stats corpus-stats-check corpus-stats-test docstrings docstrings-test docstrings-list docstrings-unused docstrings-json groups-test playground playground-check playground-test Everything.agda EverythingLegacy.agda
 
 # -- Configuration -----------------------------------------------------------
 SRCDIR    := src
@@ -130,8 +130,8 @@ check test: Everything.agda EverythingLegacy.agda
 #                    (highlighted, hyperlinked code blocks for the site, #3a).
 #   make html        Classic clickable HTML (agda-categories style) -> ./html,
 #                    Everything.html as index; also published at /classic/ (#1).
-#   make site-full   html + agda-md + site: the fully-featured published site
-#                    (what CI builds and deploys).
+#   make site-full   html + agda-md + playground + site: the fully-featured
+#                    published site (what CI builds and deploys).
 MKDOCS    ?= mkdocs
 AGDA_HTML := .agda-html
 
@@ -177,6 +177,7 @@ site-full:
 	@echo "target: $@"
 	$(MAKE) html
 	$(MAKE) agda-md
+	$(MAKE) playground
 	$(MAKE) site
 
 # Profile a whole-library type-check.  Agda accepts one profiling mode at a time,
@@ -199,7 +200,7 @@ clean:
 	@echo "target: $@"
 	find . -name '*.agdai' -delete
 	rm -f $(SRCDIR)/Everything.agda $(SRCDIR)/EverythingLegacy.agda
-	rm -rf site html .agda-html .cache
+	rm -rf site html .agda-html .cache .playground
 
 # Regenerate the issue listings in docs/GITHUB_PROJECT.md from current
 # GitHub state.  Hand-edited prose outside the BEGIN/END GENERATED markers
@@ -312,3 +313,51 @@ docstrings-test:
 groups-test:
 	@echo "target: $@"
 	python3 scripts/python/groups/test_a5_simple_cert.py
+
+# The playground (ADR-011, docs/playground.md): Agda 2.8.0 compiled to
+# WebAssembly, run in the reader's browser on exercises from this library.
+#   playground        build the checker and the filesystem images into
+#                     $(PLAYGROUND_OUT) (gitignored), where the site build
+#                     publishes them from.  The library's closures are
+#                     type-checked by the native Agda the flake pins, then every
+#                     exercise is checked under the shipped WebAssembly, and the
+#                     build fails unless each check type-checks exactly one
+#                     module: the images' interfaces were accepted.  About a
+#                     minute, most of it the WebAssembly proving the largest
+#                     image.  PLAYGROUND_FLAGS=--allow-dirty builds with
+#                     uncommitted library or exercise files, and the manifest
+#                     then says so.
+#   playground-check  the built assets are what their manifest says, offline
+#   playground-test   the builder's and the hook's tests, and the page's
+#                     JavaScript under node (the tar reader, the WASI host, the
+#                     protocol, the edits, the session plan, the painter)
+# The three inputs come from the flake on first use, so nothing here costs a
+# fetch unless these targets run.
+PLAYGROUND_OUT   ?= .playground
+PLAYGROUND_FLAGS ?=
+PLAYGROUND_DIST  ?= $(shell nix build --no-link --print-out-paths .\#agda-wasm-dist)
+PLAYGROUND_STDLIB ?= $(shell nix build --no-link --print-out-paths .\#standard-library)
+WASMTIME         ?= $(shell nix build --no-link --print-out-paths .\#wasmtime)/bin/wasmtime
+
+playground:
+	@echo "target: $@"
+	python3 scripts/python/playground/build_assets.py --out $(PLAYGROUND_OUT) \
+	  --dist "$(PLAYGROUND_DIST)" --stdlib "$(PLAYGROUND_STDLIB)" \
+	  --wasmtime "$(WASMTIME)" --agda "$(AGDA)" $(PLAYGROUND_FLAGS)
+
+playground-check:
+	@echo "target: $@"
+	python3 scripts/python/playground/build_assets.py --check --out $(PLAYGROUND_OUT)
+
+playground-test:
+	@echo "target: $@"
+	python3 scripts/python/playground/test_build_assets.py
+	python3 scripts/python/playground/test_mkdocs_hook.py
+	@command -v node >/dev/null || { echo "error: node is required for the JavaScript tests"; exit 1; }
+	node scripts/js/playground/test_tar.mjs
+	node scripts/js/playground/test_wasi.mjs
+	node scripts/js/playground/test_protocol.mjs
+	node scripts/js/playground/test_edits.mjs
+	node scripts/js/playground/test_session.mjs
+	node scripts/js/playground/test_paint.mjs
+	node scripts/js/playground/test_input.mjs

@@ -35,6 +35,7 @@ src/EverythingLegacy.agda
 scripts/python/__pycache__/
 scripts/python/_utils/__pycache__/
 scripts/python/groups/__pycache__/
+scripts/python/playground/__pycache__/
 
 # -- LaTeX build artifacts ---------------------------------------------------------
 *.aux
@@ -78,6 +79,9 @@ source.zip
 # MkDocs site build (ADR-007) and its caches.
 site/
 .cache/
+# The playground's built assets (ADR-011): `make playground` writes them, the
+# site build publishes them, and nothing commits them.
+/.playground/
 # agda --html artifacts: highlighted Markdown embedded into the MkDocs site
 # (#3a) and the classic clickable-HTML site published at /classic/ (#1).
 .agda-html/

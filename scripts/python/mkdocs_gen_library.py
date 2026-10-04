@@ -304,6 +304,7 @@ if everything_page is not None:
 if CLASSIC_DIR.is_dir():
     nav.append("    - [Classic Agda HTML ↗](classic/Everything.html)")
 nav.append("- [Constellation](constellation.md)")
+nav.append("- [Playground](playground.md)")
 
 nav += [
     "- Project",

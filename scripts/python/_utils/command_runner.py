@@ -6,12 +6,14 @@ Description:
 
 Provenance:
   Adapted from formalverification/agda-native-air/ at SHA 664b919.  See NOTICE.
+  The `accept` parameter is this repository's addition (the same addition
+  williamdemeo/website made to its copy), for the playground's asset builder.
 """
 from __future__ import annotations
 import subprocess
 import logging
 from pathlib import Path
-from typing import List, Optional
+from typing import List, Optional, Tuple
 
 from .pipeline_types import Result, PipelineError, ErrorType
 
@@ -21,11 +23,20 @@ def run_command(
     capture_output: bool = False,
     text: bool = False,
     stdout_file: Optional[Path] = None,
-    stream_output: bool = False  # --- NEW: Parameter to enable live streaming
+    stream_output: bool = False,  # --- NEW: Parameter to enable live streaming
+    accept: Tuple[int, ...] = (0,),
+    input_text: Optional[str] = None,
 ) -> Result[subprocess.CompletedProcess, PipelineError]:
     """
     Runs a shell command and returns a Result object.
     Can either capture output or stream it live to the logger.
+
+    `accept` names the exit statuses that are results rather than failures.
+    Some tools answer through their status: Agda exits 42 for a file that is
+    type-incorrect or has a hole in it, and a caller asking whether a file
+    checks needs that answer and the text beside it, not an error that has
+    dropped the text.  `input_text` is written to the command's stdin.
+    Captured mode only, both of them; streamed mode still requires 0.
     """
     command_str = ' '.join(map(str, command))
     logging.debug(f"Running: {command_str}")
@@ -74,12 +85,13 @@ def run_command(
             process = subprocess.run(
                 [str(arg) for arg in command],
                 cwd=cwd, stdout=stdout_target, stderr=subprocess.PIPE,
-                text=text, check=False, encoding='utf-8' if text else None
+                text=text, check=False, encoding='utf-8' if text else None,
+                input=input_text,
             )
 
             if process.stderr:
                 logging.debug(f"Stderr for '{command_str}':\n{process.stderr}")
-            if process.returncode != 0:
+            if process.returncode not in accept:
                 return Result.err(PipelineError(
                     error_type=ErrorType.COMMAND_FAILED,
                     message=f"Command failed with exit code {process.returncode}",

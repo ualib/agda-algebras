@@ -35,6 +35,11 @@ docs_dir: docs
 # files) into site URLs.  Never touches fenced Agda code.
 hooks:
   - scripts/python/mkdocs_hooks.py
+  # The playground (ADR-011): publish the checker's assets that `make
+  # playground` built, and expand each `<!-- playground: NAME -->` marker in
+  # docs/playground.md into an exercise.  After the link rewriter, which then
+  # sees the marker and not the Agda it becomes.
+  - scripts/python/playground/mkdocs_hook.py
 
 # `mkdocs serve` watches docs/ and mkdocs.yml by default; the library is mounted
 # from src/ by gen-files, so add it (and the generators) for live reload while
@@ -43,6 +48,7 @@ watch:
   - src
   - scripts/python/mkdocs_gen_library.py
   - scripts/python/mkdocs_hooks.py
+  - scripts/python/playground
 
 # -- Theme --------------------------------------------------------------------
 theme:
@@ -168,6 +174,7 @@ exclude_docs: |
   notes/
   papers/
   _links.md
+  /playground/
 
 # -- Link validation ----------------------------------------------------------
 # Internal cross-references use ROOT-RELATIVE targets (/Module/Submodule/) from
