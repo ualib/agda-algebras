@@ -211,15 +211,18 @@ EOF
         });
 
       # ---- Packages (handy for CI and downstream flakes) -------------------
-      # The last three are what `make playground` builds the playground's
-      # assets with (ADR-011): the pinned checker, a WASI runtime to prove its
-      # interfaces under, and the standard library whose prebuilt interfaces
-      # the images carry, the same store path the dev shell's Agda uses.
+      # The others are what the playground (ADR-011) is built and tested
+      # with: the pinned checker, a WASI runtime to prove its interfaces
+      # under, the standard library whose prebuilt interfaces the images
+      # carry (the same store path the dev shell's Agda uses), and node for
+      # the tests of its JavaScript.  None is in the dev shell; the Makefile
+      # builds each on first use.
       packages = forAllSystems ({ pkgs }: {
         default = mkAgdaEnv pkgs;
         agda-wasm-dist = mkAgdaWasmDist pkgs;
         wasmtime = pkgs.wasmtime;
         standard-library = pkgs.agdaPackages.standard-library;
+        nodejs = pkgs.nodejs_22;
       });
 
       # ---- Minimal overlay for downstream consumers ------------------------

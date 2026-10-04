@@ -9,7 +9,7 @@ Description: Tests for build_assets.py, the builder of the playground's
   WebAssembly and refuses to finish unless each check type-checks exactly one
   module.  Nothing here repeats that.  What these tests pin is the pure half
   that the build and `--check` rest on, each rule against the defect it
-  exists for:
+  exists for, as follows:
 
   +  the plan: which modules seed an image, which images can serve an
      exercise, and every way a plan can be unbuildable;
@@ -172,6 +172,30 @@ class PlanErrors(unittest.TestCase):
         read = B.read_exercises(ROOT / B.EXERCISE_DIR, names)
         self.assertTrue(read.is_ok, read)
         self.assertEqual(B.plan_errors(B.IMAGES, read.unwrap()), [])
+
+    def test_a_solution_that_states_something_else_is_refused(self) -> None:
+        """plan_errors: a solution that differs from its exercise before the
+        exercise's first goal is refused, naming the line."""
+        # The build proves the solution, not the exercise; an exercise edited
+        # without its solution would otherwise ship a statement nobody
+        # checked (found in review: plan_errors passed a Compose exercise
+        # with a hypothesis dropped).
+        base = self.exercises["Graft"]
+        lines = base.solution.split("\n")
+        lines[0] = lines[0] + " -- edited"
+        drifted = B.Exercise(base.name, base.source, "\n".join(lines))
+        errors = self.errors(self.images, {**self.exercises, "Graft": drifted})
+        self.assertIn("Graft: the solution differs from the exercise at line 1, "
+                      "before the exercise's first goal", errors)
+
+    def test_drift_allows_the_goal_line_and_after_to_change(self) -> None:
+        """drift: None while the text before the first goal agrees, whatever
+        follows it; otherwise the first line, from 1, that differs."""
+        exercise_text = "module M where\nx : T\nx = ?\n"
+        self.assertIsNone(B.drift(exercise_text, "module M where\nx : T\nx = a\ny = b\n"))
+        self.assertEqual(B.drift(exercise_text, "module M where\nx : U\nx = a\n"), 2)
+        self.assertEqual(B.drift(exercise_text, "module M where\n"), 2)
+        self.assertIsNone(B.drift("{-# OPTIONS --safe #-}\nx = {! !}\n", "{-# OPTIONS --safe #-}\nx = a\n"))
 
     def test_an_image_no_exercise_names_is_refused(self) -> None:
         """plan_errors: an image with no exercises is refused."""
@@ -584,20 +608,51 @@ class Responses(unittest.TestCase):
 
 def manifest() -> Dict:
     """A coherent manifest in the builder's shape: two images, the larger
-    serving both exercises."""
+    serving both exercises.  Every key the hook and the page read is present
+    (`shape_errors`), with stand-in values the gate's tests replace."""
+    image = {"interfaces": 1, "closure": ["Overture.Signatures"], "tar_bytes": 0,
+             "tar_sha256": "", "gzip_bytes": 0}
+    exercise = {"closure": ["Overture.Signatures"], "goals": [], "highlighting": [],
+                "file": "", "source_sha256": ""}
     return {
+        "agda": B.AGDA_VERSION,
         "argv": list(B.ARGV),
+        "upstream": {"repository": B.UPSTREAM_REPO, "release": B.UPSTREAM_RELEASE,
+                     "asset": B.UPSTREAM_ASSET, "sha256": B.UPSTREAM_SHA256},
+        "built_from": {"standard-library": {"version": B.STDLIB_VERSION, "path": "/nix/store/x"},
+                       "agda-algebras": {"repository": "ualib/agda-algebras",
+                                         "commit": "0" * 40, "dirty": False}},
+        "checker": {"file": B.CHECKER, "wasm_bytes": 0, "wasm_sha256": "", "gzip_bytes": 0},
         "images": {
-            "terms.tar.gz": {"exercises": ["Graft"]},
-            "interpretations.tar.gz": {"exercises": ["Interpret"]},
+            "terms.tar.gz": {**image, "exercises": ["Graft"]},
+            "interpretations.tar.gz": {**image, "exercises": ["Interpret"]},
         },
         "exercises": {
-            "Graft": {"image": "terms.tar.gz",
+            "Graft": {**exercise, "image": "terms.tar.gz",
                       "served_by": ["terms.tar.gz", "interpretations.tar.gz"]},
-            "Interpret": {"image": "interpretations.tar.gz",
+            "Interpret": {**exercise, "image": "interpretations.tar.gz",
                           "served_by": ["interpretations.tar.gz"]},
         },
     }
+
+
+class ShapeErrors(unittest.TestCase):
+
+    def test_a_whole_manifest_has_its_shape(self) -> None:
+        """shape_errors: none when every key the hook and the page read is there."""
+        self.assertEqual(B.shape_errors(manifest()), [])
+
+    def test_a_missing_key_is_named_where_it_is_missing(self) -> None:
+        """shape_errors: a manifest without an exercise's highlighting, or
+        without `built_from`, is named, not left to a KeyError in the hook
+        (found in review: such a manifest passed --check)."""
+        m = manifest()
+        del m["exercises"]["Graft"]["highlighting"]
+        self.assertEqual(B.shape_errors(m), ["exercises.Graft has no `highlighting`"])
+        m = manifest()
+        del m["built_from"]
+        self.assertEqual(B.shape_errors(m), ["no `built_from`"])
+        self.assertEqual(B.shape_errors([1, 2]), ["the manifest is not an object"])
 
 
 class ManifestErrors(unittest.TestCase):

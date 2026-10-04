@@ -6,8 +6,9 @@ Description:
 
 Provenance:
   Adapted from formalverification/agda-native-air/ at SHA 664b919.  See NOTICE.
-  The `accept` parameter is this repository's addition (the same addition
-  williamdemeo/website made to its copy), for the playground's asset builder.
+  Two parameters are this repository's additions, for the playground's
+  asset builder: `accept` (the same addition williamdemeo/website made to its
+  copy) and `input_text`.
 """
 from __future__ import annotations
 import subprocess
@@ -86,7 +87,8 @@ def run_command(
                 [str(arg) for arg in command],
                 cwd=cwd, stdout=stdout_target, stderr=subprocess.PIPE,
                 text=text, check=False, encoding='utf-8' if text else None,
-                input=input_text,
+                input=input_text if text or input_text is None
+                else input_text.encode('utf-8'),
             )
 
             if process.stderr:

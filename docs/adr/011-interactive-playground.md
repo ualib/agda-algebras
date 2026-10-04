@@ -26,7 +26,8 @@ web worker in the reader's tab.
 
 The shape follows from three measurements.  The plain command-line `agda`,
 not the Agda language server, answers every goal command through its
-interaction protocol (the JSON dialect agda-mode speaks), so the page needs
+interaction protocol (the commands Agda's Emacs mode, *agda-mode*, sends it;
+with `--interaction-json` the answers come back as JSON), so the page needs
 no language server.  The protocol can be driven from inside one run, one
 command at a time, by a host that decides each next command when Agda has
 finished answering the last one, so a command costs one load and a failed
@@ -35,19 +36,21 @@ cross-origin isolation (the two HTTP headers that make `SharedArrayBuffer`
 available), so the page works on this site's host as it is, with no header
 rule.
 
-What a command costs is the size of the part of the library the exercise
-imports, because each command loads it again.  The page ships three images
-(an *image* is an archive of that part: each module's source and its compiled
-interface file), from 0.38 MB, answering in under a second, to 38.7 MB,
-answering in about ten seconds; each exercise states its download before
-anything is fetched.  The images are built in the site build
-and never committed.
+What a command costs is the size of the exercise's *closure* (the modules it
+imports, transitively, with the standard library's among them), because each
+command loads it again.  The page ships three images (an *image* is an
+archive of a closure: each module's source and its compiled interface file),
+from 370 KB, answering in under a second, to 37 MB, answering in about ten
+seconds; each exercise states its download before anything is fetched.  The
+images are built in the site build and never committed.  Sizes in this record
+are given as the page gives them: a KB is 1,024 bytes and an MB 1,048,576.
 
 What remains open: a session that outlives one command, which a probe
 showed JavaScript Promise Integration can give without isolation, cutting the
 largest image's ten seconds a command to a second and a half for a reload and
-a twentieth of a second for a query; and an exercise from deeper
-in the library, which waits on the closure sizes recorded below.
+a twentieth of a second for a query; an exercise from deeper in the library,
+which waits on the closure sizes recorded below; and a first check of the
+page on the live site once it is deployed.
 
 ---
 
@@ -119,8 +122,11 @@ host type-checked it once and stopped.  A fixed stream also cannot know the
 goals' numbers in advance; the paced host asks for exactly the goals Agda
 reported.
 
-**Status**.  Adopted.  The fixed-stream mode stays in the host, for a caller
-that knows its whole conversation, and the build uses it (below).
+**Status**.  Adopted.  The host keeps its fixed-stream mode (a buffer, then
+end of input) for a caller that knows its whole conversation; its tests use
+it, and the page does not.  The build's interaction check needs no pacing,
+since every solution it checks loads, and feeds wasmtime a fixed stream of
+its own.
 
 ---
 
@@ -172,10 +178,13 @@ interaction needs it.
 
 **Evidence**.  The live host, 2026-10-04: `agda-algebras.universalalgebra.org`
 resolves to Cloudflare, whose nameservers serve the zone, in front of GitHub
-Pages; its responses carry neither header.  The page works there as built,
-since every run in every browser check reported `crossOriginIsolated` false.
-The zone's Transform Rules were not inspected (that needs access to the
-Cloudflare account) and nothing here depends on them.
+Pages; its responses carry neither header.  So the page is expected to work
+there as built: every browser check ran on a local server that sent neither
+header either, and reported `crossOriginIsolated` false in every run.  The
+page itself has not run on the live host, since it is not deployed until this
+record's pull request merges.  The zone's Transform Rules were not inspected
+(that needs access to the Cloudflare account) and nothing here depends on
+them.
 
 **Status**.  Adopted.  A persistent session is the one future change that
 would bring isolation back; see what remains open.
@@ -187,12 +196,13 @@ would bring isolation back; see what remains open.
 (See also [#577][] and [the image builder][build-assets].)
 
 **Decision**.  Record the closure tiers measured here, against the figures the
-issue inherited, and choose the exercises by them.  A module's *closure* is
-the set of modules it imports, transitively; Agda's `--dependency-graph`
-writes it, and the size of an image is one `stat` per interface in it.
+issue inherited, and choose the exercises by them.  Agda's
+`--dependency-graph` writes a module's closure, and the size of an image is
+one `stat` per interface in it.
 
 **Evidence**.  Each tier populated by the shipped WebAssembly from source,
-under wasmtime 43.0.1, then packed and checked again from a fresh unpacking
+under wasmtime 43.0.1 (a command-line WebAssembly runtime, the version the
+flake pins), then packed and checked again from a fresh unpacking
 (each check type-checked exactly one module, the seed's).  Bytes are the
 gzipped image; the issue's figures came from williamdemeo/website's issue
 144, measured in September.
@@ -222,18 +232,18 @@ summed, uncompressed, builtins excluded):
 | `Overture.Terms.Interpretation`                 |      72 |         7,122,138 |
 | `Setoid.Relations`                              |     182 |        27,078,570 |
 
-+  The standard library is most of every closure: 40.8 of the 45.1 MB of
++  The standard library is most of every closure: 38.9 of the 43.0 MB of
    interfaces in the `Setoid.Homomorphisms.Basic` tier, led by
-   `Data.Nat.Properties` (2.3 MB), `Data.List.Relation.Unary.All.Properties`
-   (1.9 MB) and `Data.List.Properties` (1.7 MB).
+   `Data.Nat.Properties` (2.2 MB), `Data.List.Relation.Unary.All.Properties`
+   (1.8 MB) and `Data.List.Properties` (1.6 MB).
 +  Two imports of this library decide the sizes.  `Overture.Basic` and
    `Overture.Signatures.Morphisms` import the standard library's whole
-   propositional equality, which costs about 6.5 MB of interfaces; and
+   propositional equality, which costs about 6.4 MB of interfaces; and
    `Setoid.Algebras.Basic` imports the whole `Overture`, which brings
    `Overture.Cayley` and `Overture.Counting`, and with them the properties of
    the natural numbers, lists and finite sets.
 +  This library's own signatures, operations and terms close over 16 modules
-   and 0.3 MB.
+   and 290 KB.
 
 **Status**.  Recorded.  Narrowing those two imports is the cheapest way to
 make the homomorphisms tier smaller, and is left to its own issue.
@@ -263,14 +273,14 @@ any image whose closure contains its own.
    imports, so the image it runs on does not change the time.
 +  `graft` reproduces the library's definition over the two modules it needs,
    rather than importing the module that defines it, because that module's
-   other imports cost 6 MB: the page says so.  The other two import the
+   other imports cost 6.5 MB: the page says so.  The other two import the
    library as the library does.
-+  The issue weighed the `Overture` tier (about 6 MB) against the `Setoid`
-   tier (about 38 MB) and called the second "a different project".  Both are
-   here, because the smallest closure turned out to be the library's own
-   universal algebra (signatures and terms, 0.38 MB), and because a reader
-   who chooses the 38.7 MB exercise is told its size and its pace before
-   choosing.
++  The issue weighed the `Overture` tier (about 6 MB, in its figures) against
+   the `Setoid` tier (about 38 MB) and called the second "a different
+   project".  Both are here, because the smallest closure turned out to be
+   the library's own universal algebra (signatures and terms, 370 KB), and
+   because a reader who chooses the 37 MB exercise is told its size and its
+   pace before choosing.
 +  A larger image serves a smaller exercise: the build proves each solution
    on every image that claims to serve it, and the page fetches nothing for
    an exercise one of whose images is already loaded.
@@ -280,8 +290,8 @@ request for the worker, the checker or an image before a button is pressed;
 after loading the `⊙-is-hom` exercise and then opening the other two, the
 server had served the checker and exactly one image.  Consent to first verdict
 was 0.72 s for `graft` and 10.3 s for `⊙-is-hom` (local server, so without
-network time).  Peak WebAssembly memory 73.5 MiB on the `Overture.Basic`
-tier and 343.8 MiB on the homomorphisms image.
+network time).  Peak WebAssembly memory 73.5 MB on the `Overture.Basic`
+tier and 343.8 MB on the homomorphisms image.
 
 **Status**.  Adopted.
 
@@ -354,6 +364,31 @@ the scripts are added to this one page, deferred, with content hashes.
 
 ---
 
+## Publishing one commit, not a history
+
+(See also [the docs workflow][docs-workflow].)
+
+**Decision**.  The docs workflow deploys with `force_orphan: true`: every
+deploy replaces the published branch (`gh-pages` of
+universalalgebra/agda-algebras) with one commit holding the built site.
+
++  The images change whenever a module in their closure does, so a branch
+   that kept its history would gain tens of megabytes on most deploys and
+   never lose them.
++  The cost: the published branch's existing history is discarded on the
+   first deploy after this merges, and no earlier deployed site can be
+   restored from it.  Every deployed site is a build of this repository's
+   `master`, so any of them can be rebuilt from its commit.
+
+**Evidence**.  The largest published file is the homomorphisms image,
+38,727,934 bytes; GitHub warns about a file over 50 MB and refuses one over
+100 MB, so it fits as one file, but a history of its versions would not stay
+small.
+
+**Status**.  Adopted.
+
+---
+
 ## What remains open
 
 +  **A session that outlives one command**.  Keeping the checker running
@@ -374,10 +409,9 @@ the scripts are added to this one page, deferred, with content hashes.
    tried, so a page built on it needs today's one-run-per-command path as
    its fallback.  That is the follow-up this record proposes.
 +  **Smaller deep closures**.  The two imports named in the closures section.
-+  **Deploying the images**.  The images change whenever a module in their
-   closure does, and the deploy keeps the history of the published branch;
-   the docs workflow now publishes an orphan commit each time, so the branch
-   holds one copy.
++  **The live site**.  The page has run on a local server, not yet on the live
+   host; the first check after the deploy is to open one exercise there and
+   confirm the verdict and `crossOriginIsolated` false.
 +  **Browsers other than Chromium** were not driven.
 
 ---
@@ -395,6 +429,7 @@ the scripts are added to this one page, deferred, with content hashes.
 | 7 | Build natively, prove under the WebAssembly, publish from the site build | Adopted | native interfaces accepted, 1.89 to 1.92 s against 1.90 to 1.94 s |
 | 8 | Reuse williamdemeo.org's component with provenance | Adopted | provenance headers and NOTICE |
 | 9 | Exercise files as the single source; goals shown without JavaScript | Adopted | the built page's HTML |
+| 10 | Deploy one orphan commit, discarding the published branch's history | Adopted | the largest file is 38,727,934 bytes and changes with the library |
 
 ---
 
@@ -407,6 +442,7 @@ the scripts are added to this one page, deferred, with content hashes.
    hook][hook] that publishes and renders.
 +  [`wasi.js`][wasi], [`protocol.js`][protocol], [`session.js`][session] and
    [`edits.js`][edits], the worker's modules.
++  [The docs workflow][docs-workflow], which builds and deploys the site.
 +  [agda-wasm-dist][], the checker (MIT, Copyright 2024 Agda Web);
    [als-demo][] (MIT, Copyright 2026 Andy Pan); [plfa-playground][] (MIT,
    Copyright 2026 Andy Pan), the reference implementation at
@@ -415,13 +451,14 @@ the scripts are added to this one page, deferred, with content hashes.
 [#577]: https://github.com/ualib/agda-algebras/issues/577
 [site-guide-playground]: ../site-guide.md#the-playground
 [page]: ../playground.md
-[build-assets]: https://github.com/ualib/agda-algebras/blob/master/scripts/python/playground/build_assets.py
-[hook]: https://github.com/ualib/agda-algebras/blob/master/scripts/python/playground/mkdocs_hook.py
-[wasi]: https://github.com/ualib/agda-algebras/blob/master/docs/assets/js/playground/wasi.js
-[protocol]: https://github.com/ualib/agda-algebras/blob/master/docs/assets/js/playground/protocol.js
-[session]: https://github.com/ualib/agda-algebras/blob/master/docs/assets/js/playground/session.js
-[edits]: https://github.com/ualib/agda-algebras/blob/master/docs/assets/js/playground/edits.js
-[notice]: https://github.com/ualib/agda-algebras/blob/master/NOTICE
+[build-assets]: ../../scripts/python/playground/build_assets.py
+[hook]: ../../scripts/python/playground/mkdocs_hook.py
+[wasi]: ../../docs/assets/js/playground/wasi.js
+[protocol]: ../../docs/assets/js/playground/protocol.js
+[session]: ../../docs/assets/js/playground/session.js
+[edits]: ../../docs/assets/js/playground/edits.js
+[notice]: ../../NOTICE
+[docs-workflow]: ../../.github/workflows/docs.yml
 [agda-wasm-dist]: https://github.com/agda-web/agda-wasm-dist
 [als-demo]: https://github.com/agda-web/als-demo
 [plfa-playground]: https://github.com/SeungheonOh/plfa-playground

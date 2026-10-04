@@ -33,8 +33,9 @@ Design Principles:
   is silent: the module is simply checked again from source (the
   `measuring-agda-under-wasi` skill records both traps).  williamdemeo/website
   answers that by populating each image with the shipped wasm itself, which
-  is exact and slow: 63 s for the smallest closure here, 352 s for the
-  Setoid one, under wasmtime (measured 2026-10-04).  This builder populates
+  is exact and slow: 63 s for the closure of `Overture.Basic` (66 modules),
+  352 s for that of `Setoid.Homomorphisms.Basic`, under wasmtime (measured
+  2026-10-04).  This builder populates
   with the native Agda the flake pins, the same version, in seconds, and then
   proves acceptance under the shipped wasm, which is the step that matters:
   every image is unpacked fresh and every module the page will check on it is
@@ -93,11 +94,12 @@ import tempfile
 import time
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Callable, Dict, List, Optional, Sequence, Tuple
+from typing import Any, Callable, Dict, Iterable, List, Optional, Sequence, Tuple, TypeVar
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from _utils.command_runner import run_command  # noqa: E402
+from _utils.file_ops import load_json  # noqa: E402
 from _utils.pipeline_types import (  # noqa: E402
     ErrorType,
     PipelineError,
@@ -166,11 +168,11 @@ class Image:
 
 
 #: The plan.  Smallest first, which is also the order of the page.  The
-#: closures, measured 2026-10-04 (modules, gzipped image): terms 16 modules,
-#: about 0.3 MB; interpretations 72, about 7 MB (`Overture.Signatures.Morphisms`
-#: brings `Relation.Binary.PropositionalEquality`); homomorphisms 244, about
-#: 39 MB (`Setoid.Algebras.Basic` imports the whole `Overture`, which brings
-#: `Data.Nat.Properties` and its kind).
+#: closures, measured 2026-10-04 (modules, gzipped image in bytes): terms 16,
+#: 378,681; interpretations 72, 6,251,569 (`Overture.Signatures.Morphisms`
+#: brings `Relation.Binary.PropositionalEquality`); homomorphisms 244,
+#: 38,727,934 (`Setoid.Algebras.Basic` imports the whole `Overture`, which
+#: brings `Data.Nat.Properties` and its kind).
 IMAGES: Tuple[Image, ...] = (
     Image("terms", ("Graft",)),
     Image("interpretations", ("Interpret",)),
@@ -187,10 +189,38 @@ class Exercise:
     solution: str
 
 
+T = TypeVar("T")
+
+
 def fail(message: str, **context: object) -> PipelineError:
     return PipelineError(
         error_type=ErrorType.COMMAND_FAILED, message=message, context=dict(context)
     )
+
+
+def attempt(what: str, thunk: Callable[[], T]) -> Result[T, PipelineError]:
+    """Run one filesystem or archive effect, turning the exception it raises,
+    if it raises one, into an error naming `what`.  The one place this module
+    meets the exceptions `shutil`, `pathlib`, `tarfile` and `json` raise, so
+    that every effect below returns a Result, as `_utils.file_ops` does, and
+    the command line reports a refusal rather than a traceback."""
+    try:
+        return Result.ok(thunk())
+    except (OSError, shutil.Error, tarfile.TarError, EOFError, ValueError) as err:
+        return Result.err(fail(f"{what}: {err}"))
+
+
+def in_order(steps: Iterable[Callable[[], Result[T, PipelineError]]]) -> Result[List[T], PipelineError]:
+    """Run the steps one by one and stop at the first error.  Unlike
+    `sequence_results` over a list, nothing after a failure runs: a failed
+    proof of one image is not followed by minutes of others."""
+    done: List[T] = []
+    for step in steps:
+        result = step()
+        if result.is_err:
+            return Result.err(result.unwrap_err())
+        done.append(result.unwrap())
+    return Result.ok(done)
 
 
 # ── Pure ────────────────────────────────────────────────────────────────────
@@ -229,6 +259,20 @@ def seed_of(modules: Sequence[str]) -> str:
     return f"module {SEED} where\n" + "".join(f"import {m}\n" for m in sorted(set(modules)))
 
 
+def drift(exercise: str, solution: str) -> Optional[int]:
+    """The first line (from 1) where a solution stops being its exercise
+    before the exercise's first goal, or None.
+
+    The build proves the solution, not the exercise, so a solution that
+    states something else (an exercise edited and its solution not, say)
+    would pass while the page offered a statement nobody checked.  Up to the
+    line of the first goal the two must be the same text; after it the
+    solution is free, since filling a goal can add clauses."""
+    ex, so = exercise.split("\n"), solution.split("\n")
+    first = next((i for i, line in enumerate(ex) if "?" in line or "{!" in line), len(ex))
+    return next((i + 1 for i in range(first) if i >= len(so) or so[i] != ex[i]), None)
+
+
 def plan_errors(images: Sequence[Image], exercises: Dict[str, Exercise]) -> List[str]:
     """What is wrong with the plan before anything is built, if anything."""
     names = [n for image in images for n in image.exercises]
@@ -247,6 +291,9 @@ def plan_errors(images: Sequence[Image], exercises: Dict[str, Exercise]) -> List
            for ex in exercises.values() if holes_in(ex.source) == 0]
         + [f"{ex.name}: the solution still has a goal in it"
            for ex in exercises.values() if holes_in(ex.solution) != 0]
+        + [f"{ex.name}: the solution differs from the exercise at line "
+           f"{drift(ex.source, ex.solution)}, before the exercise's first goal"
+           for ex in exercises.values() if drift(ex.source, ex.solution) is not None]
     )
 
 
@@ -406,10 +453,7 @@ def responses(output: str) -> List[Dict]:
             line = line[len("JSON> "):]
         if line.strip() in ("", "JSON>"):
             continue
-        try:
-            parsed = json.loads(line)
-        except json.JSONDecodeError:
-            parsed = None
+        parsed = attempt("a response", lambda line=line: json.loads(line)).unwrap_or(None)
         # Every response is an object; anything else is text Agda printed,
         # kept as text as `protocol.js` keeps it.
         found.append(parsed if isinstance(parsed, dict) else {"kind": "Text", "text": line})
@@ -475,6 +519,31 @@ def goals_of(found: Sequence[Dict]) -> Result[List[Dict], PipelineError]:
         }
         for p in points
     ])
+
+
+#: What the hook and the page read from the manifest, by section.
+MANIFEST_KEYS: Dict[str, Tuple[str, ...]] = {
+    "": ("agda", "checker", "images", "exercises", "built_from", "argv", "upstream"),
+    "checker": ("file", "wasm_bytes", "wasm_sha256", "gzip_bytes"),
+    "image": ("exercises", "interfaces", "closure", "tar_bytes", "tar_sha256", "gzip_bytes"),
+    "exercise": ("file", "image", "served_by", "closure", "source_sha256", "goals", "highlighting"),
+}
+
+
+def shape_errors(manifest: Any) -> List[str]:
+    """The keys the hook and the page read that a manifest lacks.  A manifest
+    an older builder wrote, or one cut short, would otherwise pass `--check`
+    and then fail the site build with a KeyError."""
+    if not isinstance(manifest, dict):
+        return ["the manifest is not an object"]
+    missing = [f"`{k}`" for k in MANIFEST_KEYS[""] if k not in manifest]
+    if missing:
+        return [f"no {', '.join(missing)}"]
+    sections = ([("checker", "checker", manifest["checker"])]
+                + [(f"images.{n}", "image", v) for n, v in manifest["images"].items()]
+                + [(f"exercises.{n}", "exercise", v) for n, v in manifest["exercises"].items()])
+    return [f"{where} has no `{k}`" for where, kind, value in sections
+            for k in MANIFEST_KEYS[kind] if not isinstance(value, dict) or k not in value]
 
 
 def manifest_errors(manifest: Dict) -> List[str]:
@@ -556,50 +625,50 @@ def copy_library(source: Path, target: Path, built: Optional[Path]) -> Result[Tu
     if len(libs) != 1:
         return Result.err(fail(f"expected exactly one .agda-lib in {source}",
                                found=[p.name for p in libs]))
-    target.mkdir(parents=True)
-    shutil.copy2(libs[0], target / libs[0].name)
     includes = include_dirs(libs[0].read_text(encoding="utf-8"))
     if not includes:
         return Result.err(fail(f"{libs[0].name} declares no include directory"))
-    for include in includes:
-        shutil.copytree(source / include, target / include,
-                        ignore=shutil.ignore_patterns("*.agdai", "_build"))
-    if built is not None and built.is_dir():
-        shutil.copytree(built, target / "_build",
-                        ignore=lambda d, names: [n for n in names if (Path(d) / n).is_file()
-                                                 and not n.endswith(".agdai")])
-    make_writable(target)
-    return Result.ok(tuple(Path(i) for i in includes))
+
+    def copy() -> Tuple[Path, ...]:
+        target.mkdir(parents=True)
+        shutil.copy2(libs[0], target / libs[0].name)
+        for include in includes:
+            shutil.copytree(source / include, target / include,
+                            ignore=shutil.ignore_patterns("*.agdai", "_build"))
+        if built is not None and built.is_dir():
+            shutil.copytree(built, target / "_build",
+                            ignore=lambda d, names: [n for n in names if (Path(d) / n).is_file()
+                                                     and not n.endswith(".agdai")])
+        make_writable(target)
+        return tuple(Path(i) for i in includes)
+
+    return attempt(f"copying {source} into the image", copy)
 
 
 def stage(work: Path, prim: Path, stdlib: Path, library: Path) -> Result[Dict[str, Tuple[Path, ...]], PipelineError]:
     """The tree every image is cut from, laid out as the guest sees it at `/`.
     Returns each library's include directories, which the pruning needs."""
-    (work / "work").mkdir(parents=True)
-    (work / "home/.config/agda").mkdir(parents=True)
-    (work / "data/2.8.0").mkdir(parents=True)
-    shutil.copytree(prim, work / "data/2.8.0/lib",
-                    ignore=shutil.ignore_patterns("*.agdai", "_build"))
-    make_writable(work / "data/2.8.0/lib")
-    (work / "home/.config/agda/libraries").write_text(
-        "".join(line + "\n" for line in LIBRARIES), encoding="utf-8")
-    (work / "agda.argv").write_text("".join(a + "\n" for a in ARGV), encoding="utf-8")
+    def skeleton() -> Path:
+        (work / "work").mkdir(parents=True)
+        (work / "home/.config/agda").mkdir(parents=True)
+        (work / "data/2.8.0").mkdir(parents=True)
+        shutil.copytree(prim, work / "data/2.8.0/lib",
+                        ignore=shutil.ignore_patterns("*.agdai", "_build"))
+        make_writable(work / "data/2.8.0/lib")
+        (work / "home/.config/agda/libraries").write_text(
+            "".join(line + "\n" for line in LIBRARIES), encoding="utf-8")
+        (work / "agda.argv").write_text("".join(a + "\n" for a in ARGV), encoding="utf-8")
+        return work
+
     copies = [
         ("standard-library", stdlib, stdlib / "_build"),
         ("agda-algebras", library, library / "_build"),
     ]
-    return sequence_results([
-        copy_library(source, work / "lib" / name, built) for name, source, built in copies
-    ]).map(lambda includes: {name: inc for (name, _, _), inc in zip(copies, includes)})
-
-
-def native_libraries(work: Path, scratch: Path) -> Path:
-    """A libraries file naming the staged libraries at their host paths, for
-    the native Agda, which cannot see the tree at `/`.  Kept out of the tree:
-    it does not ship."""
-    path = scratch / "native-libraries"
-    path.write_text("".join(f"{work}{line}\n" for line in LIBRARIES), encoding="utf-8")
-    return path
+    return attempt("staging the image tree", skeleton).and_then(
+        lambda _: in_order([
+            lambda name=name, source=source, built=built: copy_library(source, work / "lib" / name, built)
+            for name, source, built in copies
+        ])).map(lambda includes: {name: inc for (name, _, _), inc in zip(copies, includes)})
 
 
 def run_native(agda: Sequence[str], work: Path, libraries: Path, module: str,
@@ -621,7 +690,6 @@ def closure_native(agda: Sequence[str], work: Path, libraries: Path, module: str
     """The closure of `source` (a module named `module`), from the dependency
     graph a native check of it writes.  The module itself is left out, and so
     is any file it leaves behind in `work/`."""
-    (work / "work" / f"{module}.agda").write_text(source, encoding="utf-8")
     graph = work / "work" / f"{module}.dot"
 
     def read(done: Tuple[int, str]) -> Result[Tuple[str, ...], PipelineError]:
@@ -632,13 +700,19 @@ def closure_native(agda: Sequence[str], work: Path, libraries: Path, module: str
         return Result.ok(tuple(m for m in modules_of(graph.read_text(encoding="utf-8"))
                                if m != module))
 
-    found = run_native(agda, work, libraries, module, (f"--dependency-graph={graph}",)).and_then(read)
-    for leftover in (work / "work").iterdir():
-        if leftover.is_dir():
-            shutil.rmtree(leftover)
-        else:
-            leftover.unlink()
-    return found
+    def clear() -> Path:
+        for leftover in (work / "work").iterdir():
+            if leftover.is_dir():
+                shutil.rmtree(leftover)
+            else:
+                leftover.unlink()
+        return work
+
+    found = attempt(f"writing {module}", lambda: (work / "work" / f"{module}.agda").write_text(
+        source, encoding="utf-8")).and_then(
+        lambda _: run_native(agda, work, libraries, module, (f"--dependency-graph={graph}",))
+        .and_then(read))
+    return attempt("clearing work/", clear).and_then(lambda _: found)
 
 
 def prune_to_closure(image_dir: Path, includes: Dict[str, Tuple[Path, ...]],
@@ -664,14 +738,17 @@ def prune_to_closure(image_dir: Path, includes: Dict[str, Tuple[Path, ...]],
 
 
 def cut_image(work: Path, target: Path, includes: Dict[str, Tuple[Path, ...]],
-              closure: Sequence[str]) -> bytes:
+              closure: Sequence[str]) -> Result[bytes, PipelineError]:
     """One image: a copy of the staged tree pruned to `closure`, packed.
     The copy is of hard links, so cutting three images costs no disk."""
-    shutil.copytree(work, target, copy_function=os.link)
-    prune_to_closure(target, includes, closure)
-    for leftover in (target / "work").iterdir():
-        leftover.unlink()
-    return tar_bytes(target)
+    def cut() -> bytes:
+        shutil.copytree(work, target, copy_function=os.link)
+        prune_to_closure(target, includes, closure)
+        for leftover in (target / "work").iterdir():
+            leftover.unlink()
+        return tar_bytes(target)
+
+    return attempt(f"cutting the image {target.name}", cut)
 
 
 def run_wasm(runtime: Sequence[str], wasm: Path, image: Path, args: Sequence[str],
@@ -692,22 +769,23 @@ def run_wasm(runtime: Sequence[str], wasm: Path, image: Path, args: Sequence[str
                       time.monotonic() - started))
 
 
-def unpacked(tar: bytes, target: Path) -> Path:
-    """A fresh unpacking of an image, so that no check leans on an interface
-    an earlier one wrote."""
-    target.mkdir(parents=True)
-    with tarfile.open(fileobj=io.BytesIO(tar), mode="r:") as fh:
-        fh.extractall(target, filter="data")
-    return target
+def unpacked(tar: bytes, target: Path, file: str, source: str) -> Result[Path, PipelineError]:
+    """A fresh unpacking of an image, with `source` written as `work/<file>`,
+    so that no check leans on an interface an earlier one wrote."""
+    def unpack() -> Path:
+        target.mkdir(parents=True)
+        with tarfile.open(fileobj=io.BytesIO(tar), mode="r:") as fh:
+            fh.extractall(target, filter="data")
+        (target / "work" / file).write_text(source, encoding="utf-8")
+        return target
+
+    return attempt(f"unpacking an image into {target}", unpack)
 
 
 def batch_check(runtime: Sequence[str], wasm: Path, tar: bytes, scratch: Path,
                 module: str, source: str) -> Result[Dict[str, object], PipelineError]:
     """Check `source` on a fresh unpacking of an image as the page's checker
     would, and require exit 0 and exactly one module type-checked."""
-    root = unpacked(tar, scratch)
-    (root / "work" / f"{module}.agda").write_text(source, encoding="utf-8")
-
     def judged(done: Tuple[int, str, float]) -> Result[Dict[str, object], PipelineError]:
         status, output, seconds = done
         count = checking_count(output)
@@ -718,7 +796,9 @@ def batch_check(runtime: Sequence[str], wasm: Path, tar: bytes, scratch: Path,
                 output=output[-2000:]))
         return Result.ok({"seconds": round(seconds, 2), "checked": count})
 
-    return run_wasm(runtime, wasm, root, [*ARGV[1:], f"/work/{module}.agda"]).and_then(judged)
+    return unpacked(tar, scratch, f"{module}.agda", source).and_then(
+        lambda root: run_wasm(runtime, wasm, root, [*ARGV[1:], f"/work/{module}.agda"])
+        .and_then(judged))
 
 
 def interaction_check(runtime: Sequence[str], wasm: Path, tar: bytes, scratch: Path,
@@ -726,10 +806,7 @@ def interaction_check(runtime: Sequence[str], wasm: Path, tar: bytes, scratch: P
     """Load an exercise as the page shows it, ask for every goal's context,
     and keep Agda's answers: the goals, as the page's static display shows
     them, and the highlighting, which colors the page's code block."""
-    root = unpacked(tar, scratch)
-    path = f"/work/{exercise.name}.agda"
-    (root / "work" / f"{exercise.name}.agda").write_text(exercise.source, encoding="utf-8")
-    stream = interaction_stream(path, holes_in(exercise.source))
+    stream = interaction_stream(f"/work/{exercise.name}.agda", holes_in(exercise.source))
 
     def judged(done: Tuple[int, str, float]) -> Result[Dict[str, object], PipelineError]:
         status, output, seconds = done
@@ -746,8 +823,9 @@ def interaction_check(runtime: Sequence[str], wasm: Path, tar: bytes, scratch: P
             "highlighting": highlighting_of(found),
         })
 
-    return run_wasm(runtime, wasm, root, [*ARGV[1:], "--interaction-json"],
-                    stdin=stream).and_then(judged)
+    return unpacked(tar, scratch, f"{exercise.name}.agda", exercise.source).and_then(
+        lambda root: run_wasm(runtime, wasm, root, [*ARGV[1:], "--interaction-json"],
+                              stdin=stream).and_then(judged))
 
 
 def git_lines(repo: Path, *args: str) -> Result[str, PipelineError]:
@@ -816,6 +894,20 @@ class Tools:
     wasm: Path
 
 
+def native_version(agda: Sequence[str]) -> Result[str, PipelineError]:
+    """The native Agda's version, which must be the shipped checker's: the
+    native Agda builds the interfaces and the WebAssembly reads them, and
+    another version writes them where this one does not look, so every proof
+    below would check the whole closure from source and then fail, blaming
+    the interfaces rather than the version."""
+    def same(done: Any) -> Result[str, PipelineError]:
+        found = (done.stdout or "").strip()
+        return (Result.ok(found) if found == AGDA_VERSION else
+                Result.err(fail(f"the native Agda is {found or 'unknown'}, and the checker "
+                                f"is {AGDA_VERSION}; build with the flake's Agda")))
+    return run_command([*agda, "--numeric-version"], capture_output=True, text=True).and_then(same)
+
+
 def build(args: argparse.Namespace) -> Result[Dict[str, object], PipelineError]:
     """Produce every asset and the manifest that describes them."""
     names = [n for image in IMAGES for n in image.exercises]
@@ -826,25 +918,28 @@ def build(args: argparse.Namespace) -> Result[Dict[str, object], PipelineError]:
     problems = plan_errors(IMAGES, exercises)
     if problems:
         return Result.err(fail("the plan is not buildable", problems=problems))
-    dist = verified_dist(Path(args.dist))
-    if dist.is_err:
-        return Result.err(dist.unwrap_err())
-    stdlib_record = stdlib_provenance(Path(args.stdlib))
-    if stdlib_record.is_err:
-        return Result.err(stdlib_record.unwrap_err())
+    agda = tuple(shlex.split(args.agda))
+    checks = (verified_dist(Path(args.dist))
+              .and_then(lambda dist: native_version(agda).map(lambda _: dist))
+              .and_then(lambda dist: stdlib_provenance(Path(args.stdlib)).map(lambda r: (dist, r))))
+    if checks.is_err:
+        return Result.err(checks.unwrap_err())
+    dist, stdlib_record = checks.unwrap()
 
     with tempfile.TemporaryDirectory(prefix="playground-assets-") as tmp:
         scratch = Path(tmp)
-        shutil.unpack_archive(str(dist.unwrap()), str(scratch / "dist"), "zip")
         wasm = scratch / "dist/opt/agda-opt.wasm"
-        if not wasm.is_file():
-            return Result.err(fail(f"the release has no opt/agda-opt.wasm ({wasm})"))
-        wasm_raw = wasm.read_bytes()
+        unzipped = attempt("unpacking the release", lambda: shutil.unpack_archive(
+            str(dist), str(scratch / "dist"), "zip")).and_then(
+            lambda _: attempt("reading opt/agda-opt.wasm", wasm.read_bytes))
+        if unzipped.is_err:
+            return Result.err(unzipped.unwrap_err())
+        wasm_raw = unzipped.unwrap()
         if sha256(wasm_raw) != UPSTREAM_MODULE_SHA256:
             return Result.err(fail("opt/agda-opt.wasm is not the pinned module",
                                    expected=UPSTREAM_MODULE_SHA256, got=sha256(wasm_raw)))
-        tools = Tools(tuple(shlex.split(args.agda)), tuple(shlex.split(args.wasmtime)), wasm)
-        return assemble(args, scratch, tools, exercises, stdlib_record.unwrap(),
+        tools = Tools(agda, tuple(shlex.split(args.wasmtime)), wasm)
+        return assemble(args, scratch, tools, exercises, stdlib_record,
                         gzip_bytes(wasm_raw), len(wasm_raw), sha256(wasm_raw))
 
 
@@ -857,12 +952,16 @@ def assemble(args: argparse.Namespace, scratch: Path, tools: Tools,
     if staged.is_err:
         return Result.err(staged.unwrap_err())
     includes = staged.unwrap()
-    libraries = native_libraries(work, scratch)
+    libraries = scratch / "native-libraries"
+    written = attempt("writing the native libraries file", lambda: libraries.write_text(
+        "".join(f"{work}{line}\n" for line in LIBRARIES), encoding="utf-8"))
+    if written.is_err:
+        return Result.err(written.unwrap_err())
 
     # The closure of each exercise, from its solution.  The first native run
     # populates everything the solutions need; the rest find it built.
-    closures_by_exercise = sequence_results([
-        closure_native(tools.agda, work, libraries, ex.name, ex.solution)
+    closures_by_exercise = in_order([
+        lambda ex=ex: closure_native(tools.agda, work, libraries, ex.name, ex.solution)
         for ex in exercises.values()
     ])
     if closures_by_exercise.is_err:
@@ -871,8 +970,9 @@ def assemble(args: argparse.Namespace, scratch: Path, tools: Tools,
     # An image's closure is its seed's, which is the union of its exercises'.
     seeds = {image.name: seed_of([m for n in image.exercises for m in imports_of(exercises[n].solution)])
              for image in IMAGES}
-    image_closures = sequence_results([
-        closure_native(tools.agda, work, libraries, SEED, seeds[image.name]) for image in IMAGES
+    image_closures = in_order([
+        lambda image=image: closure_native(tools.agda, work, libraries, SEED, seeds[image.name])
+        for image in IMAGES
     ])
     if image_closures.is_err:
         return Result.err(image_closures.unwrap_err())
@@ -883,8 +983,14 @@ def assemble(args: argparse.Namespace, scratch: Path, tools: Tools,
         return Result.err(fail("an exercise's closure is not inside its own image's",
                                exercises=uncovered))
 
-    tars = {image.name: cut_image(work, scratch / "images" / image.name, includes,
-                                  closures[image.name]) for image in IMAGES}
+    cut = in_order([
+        lambda image=image: cut_image(work, scratch / "images" / image.name, includes,
+                                      closures[image.name])
+        for image in IMAGES
+    ])
+    if cut.is_err:
+        return Result.err(cut.unwrap_err())
+    tars = {image.name: tar for image, tar in zip(IMAGES, cut.unwrap())}
     served = {n: serving(closures, needs[n]) for n in exercises}
     # Own image first, then the others in plan order.
     owner = {n: image.name for image in IMAGES for n in image.exercises}
@@ -906,16 +1012,28 @@ def assemble(args: argparse.Namespace, scratch: Path, tools: Tools,
     manifest = describe(tars, closures, needs, served, owner, exercises, proved,
                         {"standard-library": stdlib_record, "agda-algebras": library_record.unwrap()},
                         payloads, wasm_bytes, wasm_sha)
-    out = Path(args.out)
-    out.mkdir(parents=True, exist_ok=True)
-    for stale in out.glob("*.tar.gz"):
-        if stale.name not in payloads:
-            stale.unlink()
-    for name, blob in payloads.items():
-        (out / name).write_bytes(blob)
-    (out / MANIFEST).write_text(json.dumps(manifest, indent=2, ensure_ascii=False) + "\n",
-                                encoding="utf-8")
-    return Result.ok(manifest)
+    return publish(Path(args.out), payloads, manifest)
+
+
+def publish(out: Path, payloads: Dict[str, bytes], manifest: Dict[str, object]) -> Result[Dict[str, object], PipelineError]:
+    """Write the assets, drop images the plan no longer names, and write the
+    manifest last, through a temporary file renamed into place: a build cut
+    short leaves the old manifest or the new one, never half of one, and the
+    hook refuses files a manifest does not describe."""
+    def write() -> Dict[str, object]:
+        out.mkdir(parents=True, exist_ok=True)
+        for stale in out.glob("*.tar.gz"):
+            if stale.name not in payloads:
+                stale.unlink()
+        for name, blob in payloads.items():
+            (out / name).write_bytes(blob)
+        partial = out / f"{MANIFEST}.partial"
+        partial.write_text(json.dumps(manifest, indent=2, ensure_ascii=False) + "\n",
+                           encoding="utf-8")
+        os.replace(partial, out / MANIFEST)
+        return manifest
+
+    return attempt(f"writing the assets into {out}", write)
 
 
 def prove(tools: Tools, tars: Dict[str, bytes], seeds: Dict[str, str],
@@ -924,35 +1042,32 @@ def prove(tools: Tools, tars: Dict[str, bytes], seeds: Dict[str, str],
     """Every check the page relies on, on fresh unpackings of the packed
     images, under the shipped wasm: each image's seed; each exercise's
     solution on every image that claims to serve it; and each exercise as the
-    page shows it, by the interaction protocol, on its own image."""
-    counter = iter(range(10_000))
-    fresh = lambda: scratch / str(next(counter))  # noqa: E731
-    seed_runs = sequence_results([
-        batch_check(tools.runtime, tools.wasm, tars[name], fresh(), SEED, seeds[name])
-        for name in tars
-    ])
-    if seed_runs.is_err:
-        return Result.err(seed_runs.unwrap_err())
-    solution_runs = sequence_results([
-        batch_check(tools.runtime, tools.wasm, tars[image], fresh(), n, exercises[n].solution)
-        .map(lambda r, image=image: {**r, "image": image})
-        for n in exercises for image in served[n]
-    ])
-    if solution_runs.is_err:
-        return Result.err(solution_runs.unwrap_err())
-    shown = sequence_results([
-        interaction_check(tools.runtime, tools.wasm, tars[owner[n]], fresh(), exercises[n])
-        for n in exercises
-    ])
-    if shown.is_err:
-        return Result.err(shown.unwrap_err())
-    by_name = dict(zip(exercises, shown.unwrap()))
-    seconds = {(r["image"], n): r["seconds"] for n, r in zip(
-        [n for n in exercises for _ in served[n]], solution_runs.unwrap())}
+    page shows it, by the interaction protocol, on its own image.  In that
+    order, stopping at the first failure: a seed whose interfaces were not
+    accepted is checked from source, which takes minutes, and the rest would
+    only repeat it."""
+    pairs = [(n, image) for n in exercises for image in served[n]]
+    seed_steps = [lambda k=k, name=name: batch_check(
+        tools.runtime, tools.wasm, tars[name], scratch / f"seed-{k}", SEED, seeds[name])
+        for k, name in enumerate(tars)]
+    solution_steps = [lambda k=k, n=n, image=image: batch_check(
+        tools.runtime, tools.wasm, tars[image], scratch / f"solution-{k}", n, exercises[n].solution)
+        for k, (n, image) in enumerate(pairs)]
+    shown_steps = [lambda k=k, n=n: interaction_check(
+        tools.runtime, tools.wasm, tars[owner[n]], scratch / f"shown-{k}", exercises[n])
+        for k, n in enumerate(exercises)]
+    runs = in_order(seed_steps).and_then(
+        lambda seed_runs: in_order(solution_steps).and_then(
+            lambda solution_runs: in_order(shown_steps).map(
+                lambda shown: (seed_runs, solution_runs, shown))))
+    if runs.is_err:
+        return Result.err(runs.unwrap_err())
+    seed_runs, solution_runs, shown = runs.unwrap()
+    seconds = {pair: r["seconds"] for pair, r in zip(pairs, solution_runs)}
     return Result.ok({
-        n: {**by_name[n], "solution_seconds": {image: seconds[(image, n)] for image in served[n]}}
-        for n in exercises
-    } | {f"seed:{name}": r for name, r in zip(tars, seed_runs.unwrap())})
+        n: {**r, "solution_seconds": {image: seconds[(n, image)] for image in served[n]}}
+        for n, r in zip(exercises, shown)
+    } | {f"seed:{name}": r for name, r in zip(tars, seed_runs)})
 
 
 def describe(tars: Dict[str, bytes], closures: Dict[str, Tuple[str, ...]],
@@ -1053,7 +1168,16 @@ def check(out: Path, exercises_dir: Path) -> Result[List[str], PipelineError]:
     manifest_path = out / MANIFEST
     if not manifest_path.is_file():
         return Result.err(fail(f"no manifest: {manifest_path}; run `make playground`"))
-    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    loaded = load_json(manifest_path).map_err(
+        lambda err: fail(f"{manifest_path} is not readable JSON; run `make playground`",
+                         cause=err.message))
+    if loaded.is_err:
+        return Result.err(loaded.unwrap_err())
+    manifest = loaded.unwrap()
+    shape = shape_errors(manifest)
+    if shape:
+        return Result.err(fail(f"{manifest_path} lacks what the page reads; run `make playground`",
+                               problems=shape))
     checker = manifest["checker"]
     claims: List[Result[str, PipelineError]] = [
         verified_asset(out, checker["file"], UPSTREAM_MODULE_SHA256, UPSTREAM_MODULE_BYTES,

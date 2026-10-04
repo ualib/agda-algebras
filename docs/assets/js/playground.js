@@ -55,7 +55,7 @@
   var REWRITES = [
     ["Simplified", "Simplified"],
     ["AsIs", "As written"],
-    ["Normalised", "Normalised"],
+    ["Normalised", "Normalized"],
   ];
 
   function bytes(n) {
@@ -140,6 +140,25 @@
    * button, and an open editor learns whether its checker is still there. */
   Session.prototype.announce = function () {
     this.exercises.forEach(function (exercise) { exercise.announce(); });
+  };
+
+  /* Stop whatever the worker is doing, by ending it: a run is one call into
+   * WebAssembly and cannot be interrupted from outside, and a definition
+   * that never terminates (a TERMINATING pragma over a loop, say) would hold
+   * the worker, and every exercise on the page, for good (found in review).
+   * The worker goes with everything it held; the downloads stay in the
+   * browser's cache, and each editor's button says what loading again costs. */
+  Session.prototype.stop = function () {
+    var self = this;
+    if (!this.worker) return;
+    var reason = new Error("you stopped it");
+    this.worker.terminate();
+    this.worker = null;
+    Object.keys(this.pending).forEach(function (id) {
+      self.pending[id].reject(reason);
+      delete self.pending[id];
+    });
+    this.forget();
   };
 
   Session.prototype.start = function () {
@@ -287,9 +306,15 @@
    * unless an image that serves it is already mounted. */
   Exercise.prototype.fetch = function (onProgress) {
     var self = this;
-    this.session.listeners.push(onProgress);
+    /* Progress is posted for every download in flight, and two gates pressed
+     * together would show each other's (found in review): this exercise
+     * follows the checker and its own image only. */
+    var own = function (message) {
+      if (message.label === "checker" || !message.url || message.url === self.imageUrl) onProgress(message);
+    };
+    this.session.listeners.push(own);
     var stop = function () {
-      var at = self.session.listeners.indexOf(onProgress);
+      var at = self.session.listeners.indexOf(own);
       if (at !== -1) self.session.listeners.splice(at, 1);
     };
     return this.session.boot(this.checkerUrl)
@@ -317,8 +342,10 @@
     this.progress.max = 1;
     this.progress.value = 0;
     this.progress.setAttribute("aria-label", "Download progress");
+    /* Not a live region: it changes with every chunk of a 37 MB download, and
+     * a screen reader would queue every change (found in review).  The
+     * <progress> carries the state, and the editor's arrival ends it. */
     this.progressLabel = element("span", "agda-exercise__status");
-    this.progressLabel.setAttribute("role", "status");
     this.controls.appendChild(this.progress);
     this.controls.appendChild(this.progressLabel);
     this.say("Starting...");
@@ -327,9 +354,13 @@
       self.progress.value = message.got / message.total;
       self.say(progressText(message));
     }).then(function () {
+      /* The editor takes the focus only from the gate's own button, or from
+       * nowhere: a reader typing in another exercise while this one
+       * downloaded keeps their place (found in review). */
+      var focus = document.activeElement === self.button || document.activeElement === document.body;
       self.loading = false;
       self.controls.remove();
-      self.renderEditor();
+      self.renderEditor(focus);
     }, function (err) {
       self.loading = false;
       self.progress.remove();
@@ -343,7 +374,7 @@
 
   /* ---- The editor ------------------------------------------------------ */
 
-  Exercise.prototype.renderEditor = function () {
+  Exercise.prototype.renderEditor = function (focus) {
     var self = this;
     var id = "agda-editor-" + (this.root.id || this.file);
 
@@ -379,7 +410,8 @@
     frame.appendChild(this.editor);
 
     /* Ctrl-Enter checks; Tab is left alone, so the box is never a keyboard
-     * trap.  Agda is indentation-sensitive but not tab-sensitive. */
+     * trap.  Agda rejects tab characters outright ("Lexical error"), which is
+     * one more reason not to let Tab type one. */
     this.editor.addEventListener("keydown", function (event) {
       if (event.key === "Enter" && (event.ctrlKey || event.metaKey)) {
         event.preventDefault();
@@ -390,25 +422,38 @@
       if (window.AgdaInput) window.AgdaInput.commit(self.editor);
       self.edited();
     });
+    /* The palette types where the reader last was: the editor, or the field
+     * under a goal they are composing a give in (found in review: it always
+     * typed into the editor, which outdated the goal being worked on). */
+    this.target = this.editor;
+    this.editor.addEventListener("focus", function () { self.target = self.editor; });
 
     this.checkButton = button("Check", "agda-button--primary");
     this.checkButton.addEventListener("click", function () {
       if (self.lost()) self.reload(); else self.check();
     });
     this.undoButton = button("Undo");
-    this.undoButton.title = "Put back the text before the last give, refine or case split";
     this.undoButton.disabled = true;
     this.undoButton.addEventListener("click", function () { self.undo(); });
+    /* Reset is a change like a give, and Undo takes it back. */
     this.resetButton = button("Reset");
     this.resetButton.addEventListener("click", function () {
-      self.history = [];
+      if (self.editor.value !== self.source) {
+        self.history.push({ before: self.editor.value, after: self.source });
+      }
       self.replace(self.source);
       self.editor.focus();
       self.check();
     });
 
+    this.stopButton = button("Stop");
+    this.stopButton.title = "End the checker, and with it every exercise's downloads in this tab";
+    this.stopButton.hidden = true;
+    this.stopButton.addEventListener("click", function () { self.session.stop(); });
+
     var bar = element("p", "agda-exercise__bar");
     bar.appendChild(this.checkButton);
+    bar.appendChild(this.stopButton);
     bar.appendChild(this.undoButton);
     bar.appendChild(this.resetButton);
     this.hint = element("span", "agda-exercise__hint", "or press Ctrl and Enter");
@@ -440,6 +485,11 @@
         key.title = entry.keys.map(function (k) { return "\\" + k; }).join("  ");
         key.setAttribute("aria-label", "Insert " + entry.glyph + how);
         key.addEventListener("click", function () {
+          var field = self.target !== self.editor && self.target.isConnected ? self.target : null;
+          if (field) {
+            window.AgdaInput.insert(field, entry.glyph);
+            return;
+          }
           /* A script's insertion ignores `readOnly`, so the box's hold
            * during a give or a case split is kept here as well. */
           if (self.editor.readOnly) return;
@@ -468,7 +518,10 @@
     this.verdict.after(this.output);
     this.output.after(this.panel);
     this.paint();
-    this.editor.focus();
+    if (focus) this.editor.focus();
+    if (typeof ResizeObserver !== "undefined" && this.mirror) {
+      new ResizeObserver(function () { self.follow(); }).observe(this.editor);
+    }
     this.check();
   };
 
@@ -485,6 +538,7 @@
     }
     this.text = now;
     if (now !== this.checked) this.outdate();
+    this.updateUndo();
     this.paint();
   };
 
@@ -507,10 +561,20 @@
       this.panelNote.textContent = "These goals are about the text before your edit; " +
         "Check again to work on them.";
     }
-    if (this.verdict.textContent && !this.running) {
+    /* Only a verdict about a run is about a text; "the checker stopped" or
+     * "Give needs an expression" is not (found in review). */
+    if (this.verdictIsRun && !this.running) {
+      this.verdictIsRun = false;
       this.verdict.classList.add("agda-verdict--stale");
       this.verdict.appendChild(document.createTextNode(" · about the text before your edit"));
     }
+  };
+
+  /* Say something in the verdict line that is not a run's answer. */
+  Exercise.prototype.tell = function (kind, text) {
+    this.verdictIsRun = false;
+    this.verdict.className = "agda-verdict" + (kind ? " agda-verdict--" + kind : "");
+    this.verdict.textContent = text;
   };
 
   Exercise.prototype.paint = function () {
@@ -519,9 +583,19 @@
     this.follow();
   };
 
+  /* The box scrolls and the mirror follows.  A classic horizontal scrollbar
+   * takes height from the box's content and none from the mirror's, and the
+   * two could then scroll different distances (found in review, with
+   * scrollbars always shown): the mirror is cut short by the bar's height,
+   * so that both scroll through the same area. */
   Exercise.prototype.follow = function () {
-    this.mirror.scrollTop = this.editor.scrollTop;
-    this.mirror.scrollLeft = this.editor.scrollLeft;
+    var e = this.editor;
+    var style = window.getComputedStyle(e);
+    var bar = e.offsetHeight - e.clientHeight
+      - parseFloat(style.borderTopWidth) - parseFloat(style.borderBottomWidth);
+    this.mirror.style.bottom = Math.max(0, Math.round(bar)) + "px";
+    this.mirror.scrollTop = e.scrollTop;
+    this.mirror.scrollLeft = e.scrollLeft;
   };
 
   /* Whether the worker behind this editor, or every image that serves it,
@@ -543,26 +617,28 @@
       this.paint();
       this.output.hidden = true;
       this.panel.hidden = true;
-      this.verdict.className = "agda-verdict agda-verdict--error";
-      this.verdict.textContent = "The checker stopped, so this text has not been checked.  " +
-        "It is kept, and the button above says what checking it again would download.";
+      this.tell("error", "The checker stopped, so this text has not been checked.  " +
+        "It is kept, and the button above says what checking it again would download.");
     } else if (!lost && this.stopped) {
       this.stopped = false;
-      this.verdict.className = "agda-verdict";
-      this.verdict.textContent = "The checker is loaded again.  Check will check this text.";
+      this.tell("", "The checker is loaded again.  Check will check this text.");
     }
   };
 
   Exercise.prototype.busy = function (on, editing) {
     this.running = on;
     this.checkButton.disabled = on;
+    this.stopButton.hidden = !on;
     this.resetButton.disabled = on;
-    this.undoButton.disabled = on || this.history.length === 0;
+    this.updateUndo();
     this.rewriteSelect.disabled = on;
     /* A command that rewrites the text holds the box until it does. */
     this.editor.readOnly = on && editing;
-    this.root.querySelectorAll(".agda-goal__command").forEach(function (b) {
-      b.disabled = on || b.dataset.stale === "1";
+    /* Goal commands about text the reader has since changed stay off, run or
+     * no run (found in review: a run that failed turned them back on). */
+    var stale = this.stale;
+    this.root.querySelectorAll(".agda-goal__command, .agda-verdict__where").forEach(function (b) {
+      b.disabled = on || stale || b.dataset.stale === "1";
     });
     if (!on) this.relabel();
   };
@@ -571,21 +647,22 @@
   Exercise.prototype.reload = function () {
     var self = this;
     this.busy(true, false);
-    this.verdict.className = "agda-verdict agda-verdict--working";
-    this.verdict.textContent = "Starting...";
+    this.tell("working", "Starting...");
     var failure = null;
+    var step = -1;
+    /* The verdict is a live region, so it moves in quarters, not chunks. */
     this.fetch(function (message) {
-      if (message.total) self.verdict.textContent = progressText(message);
+      if (!message.total) return;
+      var quarter = Math.floor(4 * message.got / message.total);
+      if (quarter === step) return;
+      step = quarter;
+      self.tell("working", progressText(message));
     }).catch(function (err) {
       failure = "The checker could not be loaded: " + err.message;
     }).then(function () {
       self.busy(false, false);
-      if (failure) {
-        self.verdict.className = "agda-verdict agda-verdict--error";
-        self.verdict.textContent = failure;
-      } else {
-        self.check();
-      }
+      if (failure) self.tell("error", failure);
+      else self.check();
     });
   };
 
@@ -598,9 +675,28 @@
     this.run({ op: op, goal: goal, text: text }, label + " at ?" + goal + "...");
   };
 
+  /* Undo takes back the last give, refine, case split or Reset, and only
+   * while the box still holds the text that change produced: once the reader
+   * has typed since, undoing it would throw their typing away with no way
+   * back, and the box's own undo (Ctrl-Z) is theirs to use instead (found in
+   * review). */
+  Exercise.prototype.undoable = function () {
+    var last = this.history[this.history.length - 1];
+    return !!last && this.editor.value === last.after;
+  };
+
+  Exercise.prototype.updateUndo = function () {
+    if (!this.undoButton) return;
+    var last = this.history[this.history.length - 1];
+    this.undoButton.disabled = this.running || !this.undoable();
+    this.undoButton.title = !last ? "Nothing to undo yet"
+      : this.undoable() ? "Put back the text before the last give, refine, case split or Reset"
+      : "You have typed since the last change; your editor's own undo (Ctrl-Z) takes that back";
+  };
+
   Exercise.prototype.undo = function () {
-    if (!this.history.length) return;
-    this.replace(this.history.pop());
+    if (!this.undoable()) return;
+    this.replace(this.history.pop().before);
     this.check();
   };
 
@@ -609,23 +705,45 @@
     var self = this;
     if (this.running) return;
     if (this.lost()) { this.relabel(); return; }
+    /* A byte-order mark is invisible, and Agda drops one before it counts
+     * positions, so every position it answered would be one character off
+     * in this box (found in review).  It goes before the run. */
+    if (this.editor.value.charCodeAt(0) === 0xfeff) this.replace(this.editor.value.slice(1));
     var source = this.editor.value;
     var editing = action !== null && action.op !== "have";
+    /* Where the reader was, so that the keyboard is not left on the page's
+     * body when the panel is rebuilt (found in review). */
+    var origin = document.activeElement;
+    var goal = action ? action.goal : null;
+    var sent = performance.now();
     this.busy(true, editing);
     this.stopped = false;
-    this.verdict.className = "agda-verdict agda-verdict--working";
-    this.verdict.textContent = working;
+    this.tell("working", working);
     this.session.send({
       cmd: "run", url: this.image(), file: this.file, source: source,
       action: action, rewrite: this.rewrite,
     })
-      .then(function (result) { self.report(result, source, action); })
+      .then(function (result) { self.report(result, source, action, performance.now() - sent); })
       .catch(function (err) {
-        self.verdict.className = "agda-verdict agda-verdict--error";
-        self.verdict.textContent = "The checker stopped: " + err.message;
+        self.tell("error", "The checker stopped: " + err.message);
         self.output.hidden = true;
       })
-      .then(function () { self.busy(false, editing); });
+      .then(function () {
+        self.busy(false, editing);
+        self.refocus(origin, goal);
+      });
+  };
+
+  /* Put the keyboard back where the reader was, or on the same goal's field
+   * in the rebuilt panel, when the run took it away. */
+  Exercise.prototype.refocus = function (origin, goal) {
+    var here = document.activeElement;
+    if (here && here !== document.body) return;
+    var field = goal === null ? null
+      : this.panel.querySelector('.agda-goal__field[data-goal="' + goal + '"]')
+        || this.panel.querySelector(".agda-goal__field");
+    if (field) { field.focus(); return; }
+    if (origin && origin.isConnected && !origin.disabled) origin.focus();
   };
 
   /* Agda reports a position as `File.agda:10.1-11.36`: line.column to
@@ -664,7 +782,7 @@
 
   /* Show what a run found.  `source` is the text sent, and `result.source`
    * the text the run ended with, which a goal command changed. */
-  Exercise.prototype.report = function (result, source, action) {
+  Exercise.prototype.report = function (result, source, action, wall) {
     var self = this;
     var load = result.load;
     var text = result.source;
@@ -672,7 +790,7 @@
      * taken for an edit that outdates the run. */
     this.checked = text;
     if (result.edited) {
-      this.history.push(source);
+      this.history.push({ before: source, after: text });
       this.replace(text);
     }
     var current = this.editor.value === text;
@@ -694,14 +812,22 @@
       headline = "Agda rejected this" + (tag ? ": " + tag : "");
       notes.push(load.error.message);
       where = position(load.error.message, this.file);
+    } else if (load.errors.length) {
+      /* Errors that do not stop the load: a definition that fails the
+       * termination check, or a postulate under `--safe`.  Batch Agda
+       * rejects such a file (exit 42), and so does the page. */
+      kind = "error";
+      var first = tagOf(load.errors[0]);
+      headline = "Agda rejected this" + (first ? ": " + first : "");
+      load.errors.forEach(function (e) { notes.push(e); });
+      where = position(load.errors[0], this.file);
     } else {
       var open = load.goals.length;
-      var unsolved = load.hidden.length + load.errors.length;
+      var unsolved = load.hidden.length;
       kind = open || unsolved ? "open" : "ok";
       headline = open ? "Type-correct so far, with " + (open === 1 ? "one goal" : open + " goals") + " open"
         : unsolved ? "Type-correct so far, but Agda could not solve everything"
         : "Module checked, no goals left";
-      load.errors.forEach(function (e) { notes.push(e); });
       load.hidden.forEach(function (h) { notes.push("Unsolved: " + h.name + " : " + h.type); });
     }
     if (load) {
@@ -720,8 +846,14 @@
 
     this.verdict.className = "agda-verdict agda-verdict--" + kind + (current ? "" : " agda-verdict--stale");
     this.verdict.textContent = "";
+    this.verdictIsRun = current;
+    /* One worker serves every exercise, so a command can wait behind
+     * another's run; the time shown is this run's own, and the wait is
+     * said beside it (found in review). */
+    var waited = wall !== undefined && wall - result.ms > 1000
+      ? " (after " + seconds(wall - result.ms) + " waiting for another exercise)" : "";
     this.verdict.appendChild(document.createTextNode(
-      (said ? capitalize(verb(action.op)) + " refused · " : "") + headline + " · " + seconds(result.ms)));
+      (said ? capitalize(verb(action.op)) + " refused · " : "") + headline + " · " + seconds(result.ms) + waited));
     if (where) {
       var go = element("button", "agda-verdict__where",
         "line " + where.line + ", column " + where.column);
@@ -760,7 +892,14 @@
       });
       this.paint();
     }
-    this.renderGoals(load && !load.error ? load.goals : [], result.contexts || {}, text, current);
+    /* What the reader typed under each goal survives a run that changed no
+     * text: a refused give keeps its expression to be fixed (found in
+     * review). */
+    var typed = {};
+    if (!result.edited) {
+      this.panel.querySelectorAll(".agda-goal__field").forEach(function (f) { typed[f.dataset.goal] = f.value; });
+    }
+    this.renderGoals(load && !load.error ? load.goals : [], result.contexts || {}, text, current, typed);
     if (this.built) this.built.hidden = true;
   };
 
@@ -781,7 +920,7 @@
 
   /* The goals panel: each goal's type and context, as Emacs's goal-and-
    * context display shows them, and Agda's goal commands under each. */
-  Exercise.prototype.renderGoals = function (goals, contexts, text, current) {
+  Exercise.prototype.renderGoals = function (goals, contexts, text, current, typed) {
     var self = this;
     this.panel.textContent = "";
     this.goals = goals;
@@ -838,11 +977,13 @@
       field.spellcheck = false;
       field.setAttribute("autocapitalize", "off");
       field.setAttribute("autocomplete", "off");
-      field.value = holeContent(text, span);
+      field.dataset.goal = String(g.id);
+      field.value = typed && typed[g.id] ? typed[g.id] : holeContent(text, span);
       field.placeholder = "an expression, or variables to split on";
       field.addEventListener("input", function () {
         if (window.AgdaInput) window.AgdaInput.commit(field);
       });
+      field.addEventListener("focus", function () { self.target = field; });
       field.addEventListener("keydown", function (event) {
         if (event.key === "Enter") { event.preventDefault(); give.click(); }
       });
@@ -863,8 +1004,7 @@
           var value = field.value.trim();
           if ((c[0] === "give" || c[0] === "have") && value === "") {
             field.focus();
-            self.verdict.className = "agda-verdict agda-verdict--error";
-            self.verdict.textContent = capitalize(verb(c[0])) + " needs an expression in the field for ?" + g.id + ".";
+            self.tell("error", capitalize(verb(c[0])) + " needs an expression in the field for ?" + g.id + ".");
             return;
           }
           self.command(c[0], g.id, value, c[1]);

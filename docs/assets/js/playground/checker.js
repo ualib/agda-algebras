@@ -60,10 +60,11 @@ const GZIP_MAGIC = [0x1f, 0x8b];
  * of everything after them.  Exported so a test can hand it a stream cut
  * exactly there.
  */
-export async function inflating(res, label) {
+export async function inflating(res, label, url = null) {
   const total = Number(res.headers.get('content-length') || 0);
   let got = 0;
-  const report = () => postMessage({ type: 'progress', label, got, total });
+  // The URL lets each exercise follow its own download (two can run at once).
+  const report = () => postMessage({ type: 'progress', label, url, got, total });
 
   const reader = res.body.getReader();
   const held = [];
@@ -106,7 +107,7 @@ export async function inflating(res, label) {
 async function fetchInflating(url, label) {
   const res = await fetch(url);
   if (!res.ok) throw new Error(`${url}: HTTP ${res.status}`);
-  return inflating(res, label);
+  return inflating(res, label, url);
 }
 
 async function boot(url) {
@@ -157,7 +158,6 @@ async function run({ url, file, source, action, rewrite }) {
     write: (text) => work.set(file, newFile(encode(text))),
   });
   const marks = [];
-  const started = performance.now();
   const wasi = new WASI({
     args: [...image.argv, '--interaction-json'],
     env: {
@@ -166,13 +166,16 @@ async function run({ url, file, source, action, rewrite }) {
     },
     root,
     next: (output) => {
-      marks.push(performance.now() - started);
+      marks.push(performance.now() - wasi.startedAt);
       const line = plan.next(output);
       return line === null ? null : encode(line + '\n');
     },
   });
   const exit = await wasi.run(agda);
-  const ms = performance.now() - started;
+  // From the guest's own start (`startedAt`), not from this message: two
+  // exercises' runs queue on this one thread, and the second would otherwise
+  // report the first's time as its own (found in review).
+  const ms = performance.now() - wasi.startedAt;
   // Agda writes absolute paths into its messages, and `/work/` is an
   // implementation detail of the filesystem this page invents.  The text
   // itself is left alone: a reader may write `/work/` in a comment.

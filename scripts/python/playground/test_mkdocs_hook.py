@@ -7,7 +7,8 @@ Description: Tests for mkdocs_hook.py, the playground's half of the site
   build.
 
   What the hook writes is what a reader without JavaScript gets, and what the
-  page script reads its URLs and sizes from, so these tests pin it closely:
+  page script reads its URLs and sizes from, so these tests pin it closely,
+  as follows:
 
   +  the code block: Agda's highlighting positions are code points counted
      from 1 with the end exclusive, astral characters count once, the input
@@ -40,6 +41,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import os
 import sys
 import tempfile
 import unittest
@@ -85,13 +87,18 @@ def manifest() -> Dict:
         "argv": ["agda", "-i", "/work"],
         "images": {
             "terms.tar.gz": {"exercises": ["Graft"], "interfaces": 22, "gzip_bytes": 378681,
-                             "tar_sha256": "edeff17d" + "2" * 56},
+                             "tar_sha256": "edeff17d" + "2" * 56, "tar_bytes": 573440,
+                             "closure": ["Overture.Signatures", "Overture.Terms.Basic"]},
             "interpretations.tar.gz": {"exercises": ["Interpret"], "interfaces": 75,
-                                       "gzip_bytes": 6251569, "tar_sha256": "bf08982a" + "3" * 56},
+                                       "gzip_bytes": 6251569, "tar_sha256": "bf08982a" + "3" * 56,
+                                       "tar_bytes": 7802880,
+                                       "closure": ["Overture.Signatures", "Overture.Terms.Basic",
+                                                   "Overture.Terms.Interpretation"]},
         },
         "exercises": {
             "Graft": {
                 "file": "Graft.agda", "image": "terms.tar.gz",
+                "closure": ["Overture.Signatures", "Overture.Terms.Basic"],
                 "served_by": ["terms.tar.gz", "interpretations.tar.gz"],
                 "source_sha256": sha(GRAFT),
                 "goals": [{"id": 0, "range": None, "type": "Term X", "context": [
@@ -104,6 +111,7 @@ def manifest() -> Dict:
             },
             "Interpret": {
                 "file": "Interpret.agda", "image": "interpretations.tar.gz",
+                "closure": ["Overture.Terms.Interpretation"],
                 "served_by": ["interpretations.tar.gz"],
                 "source_sha256": sha(INTERPRET),
                 "goals": [{"id": 0, "range": None, "type": "Term X", "context": []},
@@ -163,8 +171,14 @@ class Site:
         out = self.root / H.BUILT
         out.mkdir(exist_ok=True)
         (out / "manifest.json").write_text(json.dumps(built, ensure_ascii=False), encoding="utf-8")
-        for name in [built["checker"]["file"], *built["images"]]:
-            (out / name).write_bytes(b"\x1f\x8b stand-in")
+        # Each stand-in is the size the manifest quotes, because the hook
+        # refuses a file of another size; a sparse file costs no disk.
+        sizes = {built["checker"]["file"]: built["checker"]["gzip_bytes"],
+                 **{name: image["gzip_bytes"] for name, image in built["images"].items()}}
+        for name, size in sizes.items():
+            with (out / name).open("wb") as fh:
+                fh.write(b"\x1f\x8b stand-in")
+                fh.truncate(size)
 
     def file(self, uri: str) -> File:
         return File(uri, str(self.docs), str(self.site), True)
@@ -176,9 +190,9 @@ class Site:
                      + [self.page.file])
 
     def published(self, built: Optional[Dict]) -> Files:
-        """The files after `on_files`, written out by hand: the worker where
-        the hook's global says, and the assets under `assets/agda/`."""
-        uris = [*H.PAGE_SCRIPTS, *[f"{H._worker_dir}/{n}" for n in H.WORKER_FILES]]
+        """The files after `on_files`, written out by hand: the worker in its
+        plain directory, and the assets under `assets/agda/`."""
+        uris = [*H.PAGE_SCRIPTS, *[f"{H.WORKER_DIR}/{n}" for n in H.WORKER_FILES]]
         if built is not None:
             uris += [f"{H.ASSETS}/{n}" for n in ["manifest.json", built["checker"]["file"],
                                                   *built["images"]]]
@@ -189,14 +203,15 @@ class Site:
 
 
 class HookTest(unittest.TestCase):
-    """Every test starts and ends with the worker where the hook keeps it
-    before `on_files` runs, since `on_files` moves it, module-wide."""
+    """Every test builds in `.playground`, whatever the environment says."""
 
     def setUp(self) -> None:
-        H._worker_dir = H.WORKER_DIR
+        # The Makefile exports PLAYGROUND_OUT; these tests build in .playground.
+        self.saved_out = os.environ.pop("PLAYGROUND_OUT", None)
 
     def tearDown(self) -> None:
-        H._worker_dir = H.WORKER_DIR
+        if self.saved_out is not None:
+            os.environ["PLAYGROUND_OUT"] = self.saved_out
 
     def refused(self, run: Callable[[], object], *needles: str) -> None:
         with self.assertRaises(PluginError) as caught:
@@ -331,7 +346,7 @@ class Exercise(HookTest):
 
     def test_without_a_manifest_the_code_is_plain_and_the_reason_said(self) -> None:
         """exercise_html: no build gives the escaped code and the not-built sentence, no gate."""
-        html = H.exercise_html("Graft", GRAFT, None, {}, self.site.page, Files([]))
+        html = H.exercise_html("Graft", GRAFT, None, {}, self.site.page, Files([]), H.WORKER_DIR)
         self.assertTrue(html.startswith('<div class="agda-exercise" id="ex-graft">\n'), html)
         self.assertIn('<pre class="agda-exercise__code"><code>module Graft where\n\n'
                       '-- 𝑨 &lt; 𝑩 &amp; &quot;so&quot;\n', html)
@@ -341,14 +356,15 @@ class Exercise(HookTest):
 
     def test_the_slug_splits_a_camel_case_name(self) -> None:
         """exercise_html: the anchor of ComposeHoms is ex-compose-homs."""
-        html = H.exercise_html("ComposeHoms", "x", None, {}, self.site.page, Files([]))
+        html = H.exercise_html("ComposeHoms", "x", None, {}, self.site.page, Files([]),
+                               H.WORKER_DIR)
         self.assertIn('id="ex-compose-homs"', html)
 
     def test_with_a_manifest_the_gate_carries_versioned_relative_urls(self) -> None:
         """exercise_html: data attributes relative to the page, each with its hash, own image first."""
         m = manifest()
         html = H.exercise_html("Graft", GRAFT, m, {"terms.tar.gz": 1}, self.site.page,
-                               self.site.published(m))
+                               self.site.published(m), H.WORKER_DIR)
         expected = {
             "class": "agda-exercise__gate",
             "data-file": "Graft.agda",
@@ -368,14 +384,14 @@ class Exercise(HookTest):
         """exercise_html: Agda's classes on the code, then the goal display for one goal."""
         m = manifest()
         html = H.exercise_html("Graft", GRAFT, m, {"terms.tar.gz": 1}, self.site.page,
-                               self.site.published(m))
+                               self.site.published(m), H.WORKER_DIR)
         self.assertIn('<pre class="Agda agda-exercise__code"><code>module Graft where', html)
         self.assertIn('-- 𝑨 &lt; 𝑩 &amp; &quot;so&quot;\n<span class="Function">graft</span> : Term', html)
         self.assertIn('graft t σ = <span class="Hole">?</span>\n</code></pre>', html)
         self.assertIn("What Agda says about this goal,", html)
         self.assertIn("<dt>σ</dt>", html)
         two = H.exercise_html("Interpret", INTERPRET, m, {"interpretations.tar.gz": 1},
-                              self.site.page, self.site.published(m))
+                              self.site.page, self.site.published(m), H.WORKER_DIR)
         self.assertIn("What Agda says about these goals,", two)
 
     def test_an_asset_the_build_does_not_carry_fails_the_build(self) -> None:
@@ -384,7 +400,7 @@ class Exercise(HookTest):
         files = self.site.published(m)
         files.remove(files.get_file_from_path("assets/agda/interpretations.tar.gz"))
         self.refused(lambda: H.exercise_html("Graft", GRAFT, m, {"terms.tar.gz": 1},
-                                             self.site.page, files),
+                                             self.site.page, files, H.WORKER_DIR),
                      "assets/agda/interpretations.tar.gz")
 
 
@@ -468,7 +484,7 @@ class OnFiles(HookTest):
             for name in ("manifest.json", "agda-opt.wasm.gz", "terms.tar.gz",
                          "interpretations.tar.gz"):
                 self.assertIn(f"{H.ASSETS}/{name}", got)
-            self.assertEqual(H._worker_dir, f"{H.WORKER_DIR}-{tag}")
+            self.assertEqual(H.worker_dir(site.docs), f"{H.WORKER_DIR}-{tag}")
         finally:
             site.close()
 
@@ -488,6 +504,42 @@ class OnFiles(HookTest):
             (site.root / H.BUILT / "terms.tar.gz").unlink()
             self.refused(lambda: H.on_files(site.discovered(), site.config), "terms.tar.gz")
         finally:
+            site.close()
+
+    def test_an_image_of_another_size_fails_the_build(self) -> None:
+        """on_files: an image whose size is not the manifest's is a PluginError,
+        since the consent sentence quotes the manifest's size (a build cut
+        short can leave new files beside an old manifest; found in review)."""
+        site = Site(built=manifest())
+        try:
+            with (site.root / H.BUILT / "terms.tar.gz").open("ab") as fh:
+                fh.write(b"more")
+            self.refused(lambda: H.on_files(site.discovered(), site.config),
+                         "terms.tar.gz", "not the size")
+        finally:
+            site.close()
+
+    def test_a_manifest_that_does_not_parse_fails_the_build(self) -> None:
+        """_manifest: a manifest cut short is a PluginError, not a traceback."""
+        site = Site(built=manifest())
+        try:
+            path = site.root / H.BUILT / "manifest.json"
+            path.write_text(path.read_text(encoding="utf-8")[:200], encoding="utf-8")
+            self.refused(lambda: H.on_files(site.discovered(), site.config),
+                         "not readable JSON")
+        finally:
+            site.close()
+
+    def test_playground_out_names_the_build_directory(self) -> None:
+        """_built_dir: PLAYGROUND_OUT, which the Makefile exports, wins over
+        .playground, so the site publishes what that build wrote."""
+        site = Site(built=manifest())
+        try:
+            os.environ["PLAYGROUND_OUT"] = "elsewhere"
+            self.assertEqual(H._built_dir(site.config), site.root / "elsewhere")
+            self.assertIsNone(H._manifest(site.config))
+        finally:
+            os.environ.pop("PLAYGROUND_OUT", None)
             site.close()
 
     def test_a_manifest_without_a_section_fails_the_build(self) -> None:

@@ -10,9 +10,10 @@ the top of each file for per-file attribution.
 That vendored code is licensed under the Apache License 2.0, the license of the
 project it came from, and it sits among this repository's Apache-2.0 material.
 
-scripts/python/_utils/command_runner.py adds an `accept` parameter (the exit
-statuses that are answers rather than failures) and an `input_text` parameter
-to the vendored copy, as williamdemeo/website's copy of the same file does.
+scripts/python/_utils/command_runner.py adds two parameters to the vendored
+copy: `accept` (the exit statuses that are answers rather than failures), as
+williamdemeo/website's copy of the same file does, and `input_text` (what to
+write to the command's stdin), this repository's own.
 
 The playground (docs/playground.md, ADR-011) adapts files of the playground of
 williamdemeo/website (https://williamdemeo.org/playground/) at commit 952e5eb,
@@ -30,6 +31,10 @@ MIT License, Copyright (c) 2026 William DeMeo:
                                         from scripts/python/playground_hook.py
   docs/stylesheets/custom.css, its section 17
                                         from docs/stylesheets/extra.css
+  scripts/js/playground/test_tar.mjs, test_wasi.mjs and test_input.mjs
+                                        from scripts/js/test_playground_tar.mjs,
+                                        test_playground_wasi.mjs and
+                                        test_playground_input.mjs
 
 Each file's header says what it took and what is new.  The MIT notice:
 

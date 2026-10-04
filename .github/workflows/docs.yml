@@ -84,13 +84,15 @@ jobs:
 
       # wasmtime compiles the playground's 31 MB checker before its first run,
       # about a minute of a runner's CPU, and keeps the result in this
-      # directory; the key is the module's pinned hash, which only an Agda
-      # bump moves.
+      # directory.  The key follows the pins (flake.lock, and flake.nix, where
+      # the checker's release is pinned).  wasmtime's own cache is also keyed
+      # by the host CPU's features, so a run on a different CPU compiles once
+      # more without saving; that costs the minute, not correctness.
       - name: Cache wasmtime's compiled checker
         uses: actions/cache@v4
         with:
           path: ~/.cache/wasmtime
-          key: wasmtime-${{ runner.os }}-${{ hashFiles('flake.lock') }}-0eb63cef
+          key: wasmtime-${{ runner.os }}-${{ hashFiles('flake.lock', 'flake.nix') }}
 
       - name: Build the site
         run: |

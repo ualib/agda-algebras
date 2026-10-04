@@ -987,13 +987,14 @@ body.reveal-agda-source .md-typeset .ualib-hidden-note {
    Show-all-Agda control in §15); agda-hover.js only sets its aria-checked. */
 
 /* ==========================================================================
-   17. The playground (ADR-011) — docs/playground.md.  Everything below styles
+   17. The playground (ADR-011), docs/playground.md.  Everything below styles
        elements docs/assets/js/playground.js creates, with three exceptions
        that scripts/python/playground/mkdocs_hook.py renders and that are the
        page with JavaScript off: the exercise's code (`pre.Agda`, so it wears
        §2 and §4 like every other block), the goals the build recorded, and
-       the consent sentence.  Adapted from williamdemeo/website's playground
-       rules (MIT; see NOTICE), restated in this site's Material variables.
+       the consent sentence.  Adapted from the playground rules of
+       docs/stylesheets/extra.css in williamdemeo/website at commit 952e5eb
+       (MIT; see NOTICE), restated in this site's Material variables.
        No motion: the only thing that moves is a download's <progress>.
    ========================================================================== */
 .md-typeset .agda-exercise {
@@ -1308,14 +1309,19 @@ body.reveal-agda-source .md-typeset .ualib-hidden-note {
   white-space: pre-wrap;
 }
 .md-typeset .agda-goal__id {
+  padding: 0 0.2em;
+}
+/* Only the live panel's ?n is a control; the build's, shown before the
+   editor opens and without JavaScript, is a label and does not look like
+   one (found in review). */
+.md-typeset button.agda-goal__id {
   appearance: none;
   font: inherit;
   color: inherit;
   border: 0;
-  padding: 0 0.2em;
   cursor: pointer;
 }
-.md-typeset .agda-goal__id[disabled] {
+.md-typeset button.agda-goal__id[disabled] {
   cursor: default;
 }
 .md-typeset .agda-goal__have-label {

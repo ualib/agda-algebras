@@ -62,10 +62,20 @@ export function holeContent(text, range) {
  * put in (`text`: a refine's `cong suc ?`, or the given expression as Agda
  * reprinted it) or with "what you sent", parenthesized or not (`paren`), and
  * `sent` is what was sent.  Emacs's `agda2-update` does the same, removing
- * the goal's braces in both cases. */
+ * the goal's braces in both cases.
+ *
+ * Agda's reprint breaks a long expression over lines (at about 66
+ * characters), and its later lines start at column 0, where they would end
+ * the clause: the reload then fails with a ParseError on a give Agda had just
+ * accepted (found in review, an 80-character give in the homomorphism
+ * exercise).  So every line after the first is moved right to two columns
+ * past the goal's own column, past any layout the clause opened before it;
+ * Agda's relative indentation within the reprint is kept. */
 export function applyGive(text, give, sent) {
   const [from, to] = span(text, give.range);
-  const put = 'text' in give ? give.text : give.paren ? `(${sent.trim()})` : sent.trim();
+  const raw = 'text' in give ? give.text : give.paren ? `(${sent.trim()})` : sent.trim();
+  const pad = ' '.repeat(give.range.start.col + 1);
+  const put = raw.split('\n').map((line, i) => (i === 0 || line === '' ? line : pad + line)).join('\n');
   return text.slice(0, from) + put + text.slice(to);
 }
 

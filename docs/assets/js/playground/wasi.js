@@ -28,8 +28,8 @@
 // wait for anything, and waiting in a worker needs a SharedArrayBuffer and so
 // cross-origin isolation.  It is not needed either, because the next command
 // is computed from Agda's output alone, synchronously, in this host.  What
-// has to be right is *when* it is computed, and that took two measurements
-// (2026-10-04, this guest under node 22 and in Chromium 153):
+// has to be right is *when* it is computed, and two measurements decided it
+// (2026-10-04, this guest under node 22 and in Chromium 153), as follows:
 //
 //   +  Agda reads stdin on a thread of its own, which reads ahead: it asked
 //      for the second line before it had written a byte of the answer to the
@@ -513,6 +513,9 @@ export class WASI {
   async run(module) {
     const instance = await WebAssembly.instantiate(module, this.imports());
     this.memory = instance.exports.memory;
+    // When the guest itself starts: a caller timing a run from before the
+    // `await` above would count the time it waited behind another run.
+    this.startedAt = performance.now();
     try { instance.exports._start(); return 0; }
     catch (err) {
       if (err instanceof Exit) return err.code;

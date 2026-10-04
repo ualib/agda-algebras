@@ -1,3 +1,5 @@
+{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+
 module Compose where
 
 open import Function.Bundles            using ( Func )
@@ -16,7 +18,7 @@ private variable
   𝑆 : Signature 𝓞 𝓥
 
 module _ {𝑨 : Algebra {𝑆 = 𝑆} α ρᵃ} {𝑩 : Algebra β ρᵇ} {𝑪 : Algebra γ ρᶜ} where
-  open Setoid 𝔻[ 𝑪 ] using ( trans )
+  open Setoid 𝔻[ 𝑪 ] using ( _≈_ ; trans )
   open IsHom
 
   -- The composite of two homomorphisms is a homomorphism.

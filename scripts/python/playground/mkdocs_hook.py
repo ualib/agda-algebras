@@ -5,7 +5,7 @@ Description: The playground's half of the site build: publish what
   `build_assets.py` built, and expand each `<!-- playground: NAME -->` marker
   into an exercise.
 
-  An exercise on the page is three things, in this order:
+  An exercise on the page is three things, in the following order:
 
     +  the code, from `docs/playground/NAME.agda`, colored by Agda's own
        highlighting, which the build recorded when it checked the file, with
@@ -58,15 +58,24 @@ from __future__ import annotations
 import hashlib
 import json
 import logging
+import os
 import re
+import sys
 from decimal import ROUND_HALF_UP, Decimal
 from html import escape
 from pathlib import Path
 from typing import Dict, List, Optional, Sequence, Tuple
 
+from mkdocs.config.defaults import MkDocsConfig
 from mkdocs.exceptions import PluginError
-from mkdocs.structure.files import File
+from mkdocs.structure.files import File, Files
+from mkdocs.structure.pages import Page
 from mkdocs.utils import get_relative_url
+
+# MkDocs loads this file by path; the builder beside it holds the manifest's
+# shape, which the hook and `make playground-check` must agree on.
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from build_assets import shape_errors  # noqa: E402
 
 log = logging.getLogger("mkdocs.plugins.ualib.playground")
 
@@ -75,7 +84,9 @@ log = logging.getLogger("mkdocs.plugins.ualib.playground")
 MARKER = re.compile(r"^[ \t]*<!--\s*playground:\s*([A-Za-z0-9]+)\s*-->[ \t]*$", re.MULTILINE)
 ASSETS_MARKER = re.compile(r"^[ \t]*<!--\s*playground-assets\s*-->[ \t]*$", re.MULTILINE)
 
-#: Where `make playground` writes, relative to the repository root.
+#: Where `make playground` writes, relative to the repository root, unless
+#: `PLAYGROUND_OUT` names another directory; the Makefile exports it, so the
+#: site publishes what the build it ran wrote and checked.
 BUILT = ".playground"
 #: Where the built files are published in the site.
 ASSETS = "assets/agda"
@@ -90,46 +101,57 @@ PAGE_SCRIPTS = ("assets/js/playground-input.js", "assets/js/playground-paint.js"
 WORKER_DIR = "assets/js/playground"
 WORKER_FILES = ("checker.js", "wasi.js", "tar.js", "protocol.js", "edits.js", "session.js")
 
-#: Where the worker was published in this build; set by `on_files`.
-_worker_dir = WORKER_DIR
-
-
-def _built_dir(config) -> Path:
-    return Path(config["config_file_path"]).resolve().parent / BUILT
-
-
-def _manifest(config) -> Optional[Dict]:
-    """The asset build's manifest, or None when there has been no build."""
-    path = _built_dir(config) / "manifest.json"
-    if not path.is_file():
-        return None
-    data = json.loads(path.read_text(encoding="utf-8"))
-    for key in ("checker", "images", "exercises", "built_from"):
-        if key not in data:
-            raise PluginError(f"{path} has no `{key}`; run `make playground`.")
-    return data
-
-
-def on_files(files, config):
-    """Publish the worker's directory under a name that changes with its
-    content, and the built assets, if there are any, under `assets/agda/`.
-
-    The plain copies of the worker are removed from the build, so the site
-    carries one worker and it is the versioned one.  The hash covers all its
-    files together: they are one program."""
-    global _worker_dir
-    docs_dir = Path(config["docs_dir"])
+def worker_dir(docs_dir: Path) -> str:
+    """Where the worker is published: `assets/js/playground-<hash>`, a name
+    that changes with its content.  The hash covers all its files together,
+    since they are one program.  A function of the files on disk, so that
+    `on_files`, which publishes the worker there, and `on_page_markdown`,
+    which points the page at it, agree without sharing state."""
     sources = [docs_dir / WORKER_DIR / name for name in WORKER_FILES]
     missing = [str(p) for p in sources if not p.is_file()]
     if missing:
         raise PluginError(f"the playground's worker is incomplete: {missing}")
     tag = hashlib.sha256(b"".join(p.read_bytes() for p in sources)).hexdigest()[:8]
-    _worker_dir = f"{WORKER_DIR}-{tag}"
-    for name, source in zip(WORKER_FILES, sources):
+    return f"{WORKER_DIR}-{tag}"
+
+
+def _built_dir(config: MkDocsConfig) -> Path:
+    root = Path(config["config_file_path"]).resolve().parent
+    return root / os.environ.get("PLAYGROUND_OUT", BUILT)
+
+
+def _manifest(config: MkDocsConfig) -> Optional[Dict]:
+    """The asset build's manifest, or None when there has been no build.  One
+    that does not parse, or lacks what the page reads, stops the build with a
+    message saying so, not a traceback."""
+    path = _built_dir(config) / "manifest.json"
+    if not path.is_file():
+        return None
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+    except ValueError as err:
+        raise PluginError(f"{path} is not readable JSON ({err}); run `make playground`.")
+    problems = shape_errors(data)
+    if problems:
+        raise PluginError(f"{path} lacks what the page reads ({'; '.join(problems)}); "
+                          "run `make playground`.")
+    return data
+
+
+def on_files(files: Files, config: MkDocsConfig) -> Files:
+    """Publish the worker under `worker_dir`, and the built assets, if there
+    are any, under `assets/agda/`.
+
+    The plain copies of the worker are removed from the build, so the site
+    carries one worker and it is the versioned one."""
+    docs_dir = Path(config["docs_dir"])
+    worker = worker_dir(docs_dir)
+    for name in WORKER_FILES:
         plain = files.get_file_from_path(f"{WORKER_DIR}/{name}")
         if plain is not None:
             files.remove(plain)
-        files.append(File.generated(config, f"{_worker_dir}/{name}", abs_src_path=str(source)))
+        files.append(File.generated(config, f"{worker}/{name}",
+                                    abs_src_path=str(docs_dir / WORKER_DIR / name)))
 
     manifest = _manifest(config)
     if manifest is None:
@@ -142,6 +164,15 @@ def on_files(files, config):
     if absent:
         raise PluginError(f"the playground's manifest names files {built} does not "
                           f"hold: {absent}; run `make playground`.")
+    # The sizes are what the consent sentences quote; a build cut short can
+    # leave new files beside an old manifest, and a reader would then be told
+    # one size and sent another.  (`make playground-check` also hashes them.)
+    sizes = {manifest["checker"]["file"]: manifest["checker"]["gzip_bytes"],
+             **{name: image["gzip_bytes"] for name, image in manifest["images"].items()}}
+    wrong = [name for name, size in sizes.items() if (built / name).stat().st_size != size]
+    if wrong:
+        raise PluginError(f"{wrong} in {built} are not the size the manifest says; "
+                          "run `make playground`.")
     for name in published:
         files.append(File.generated(config, f"{ASSETS}/{name}", abs_src_path=str(built / name)))
     log.info(f"🧩  playground: published {len(published)} assets under {ASSETS}/")
@@ -220,7 +251,7 @@ def sentence(manifest: Dict, image: str, peers: int) -> str:
             f"ask, and nothing you type leaves this tab.")
 
 
-def _url(uri: str, page, files) -> str:
+def _url(uri: str, page: Page, files: Files) -> str:
     """An asset's URL relative to the page, resolved through the build, so
     that a gate naming a file the build does not carry fails the build."""
     file = files.get_file_from_path(uri)
@@ -230,9 +261,10 @@ def _url(uri: str, page, files) -> str:
 
 
 def exercise_html(name: str, source: str, manifest: Optional[Dict], peers: Dict[str, int],
-                  page, files) -> str:
-    """One exercise: the code, the goals, and the gate.  Without a manifest,
-    the code alone, plainly, and a sentence saying why."""
+                  page: Page, files: Files, worker: str) -> str:
+    """One exercise: the code, the goals, and the gate, whose worker is the
+    one published under `worker`.  Without a manifest, the code alone,
+    plainly, and a sentence saying why."""
     slug = re.sub(r"(?<!^)(?=[A-Z])", "-", name).lower()
     if manifest is None:
         return (f'<div class="agda-exercise" id="ex-{slug}">\n'
@@ -247,7 +279,7 @@ def exercise_html(name: str, source: str, manifest: Optional[Dict], peers: Dict[
     attributes = {
         "class": "agda-exercise__gate",
         "data-file": ex["file"],
-        "data-worker": _url(f"{_worker_dir}/checker.js", page, files),
+        "data-worker": _url(f"{worker}/checker.js", page, files),
         "data-checker": _url(f"{ASSETS}/{checker['file']}", page, files)
                         + "?h=" + checker["wasm_sha256"][:8],
         "data-checker-bytes": str(checker["gzip_bytes"]),
@@ -302,7 +334,7 @@ def assets_table(manifest: Optional[Dict]) -> str:
     )
 
 
-def scripts(page, files, docs_dir: Path) -> str:
+def scripts(page: Page, files: Files, docs_dir: Path) -> str:
     """The page's scripts, deferred, each URL carrying its content's hash.
 
     Deferred, so that they run after the document is parsed and after
@@ -325,7 +357,7 @@ def check_fresh(manifest: Dict, sources: Dict[str, str]) -> None:
                           f"{stale} than docs/{EXERCISES}/ holds; run `make playground`.")
 
 
-def on_page_markdown(markdown, page, config, files):
+def on_page_markdown(markdown: str, page: Page, config: MkDocsConfig, files: Files) -> str:
     names = MARKER.findall(markdown)
     if not names and not ASSETS_MARKER.search(markdown):
         return markdown
@@ -350,7 +382,8 @@ def on_page_markdown(markdown, page, config, files):
         for n in names:
             image = manifest["exercises"][n]["image"]
             peers[image] = peers.get(image, 0) + 1
+    worker = worker_dir(docs_dir) if manifest is not None else WORKER_DIR
     out = MARKER.sub(lambda m: exercise_html(m.group(1), sources[m.group(1)], manifest,
-                                             peers, page, files), markdown)
+                                             peers, page, files, worker), markdown)
     out = ASSETS_MARKER.sub(lambda m: assets_table(manifest), out)
     return out + ("\n\n" + scripts(page, files, docs_dir) + "\n" if names and manifest else "")

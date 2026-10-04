@@ -9,6 +9,10 @@ GitHub viewing into the site's URL scheme, so cross-references resolve both in
     ](CONTRIBUTING.md)                       ->  ](/contributing/)
     ](LICENSE)                               ->  ](https://github.com/…/LICENSE)
 
+Reference-style definitions get the same treatment when their target climbs
+out of the page's directory (`[notice]: ../../NOTICE`); a sibling page's
+definition is left to MkDocs, and a footnote is not a definition.
+
 Only link/image targets OUTSIDE fenced code blocks are touched, so Agda source
 is never altered.  External (http/mailto), root-relative (/…), and pure-anchor
 (#…) targets pass through unchanged.
@@ -49,6 +53,13 @@ ON_SITE = {
 TO_BLOB = {"README.md", "LICENSE", "LICENSE-docs", "CODE_OF_CONDUCT.md", "NOTICE"}
 
 LINK = re.compile(r"(\]\()([^)\s]+)(\))")
+# A reference-style link definition whose target climbs out of its directory
+# (`[build]: ../../scripts/python/x.py`, as an ADR writes one so that it also
+# resolves on GitHub).  Footnotes (`[^1]: ...`) are not definitions, and a
+# target that does not start with `../` is left to MkDocs, which resolves it
+# against the page.  The author climbs to the repository root, as for inline
+# links, so that the rest is a repository path.
+REFDEF = re.compile(r"^(\[(?!\^)[^\]]+\]:[ \t]+)(\.\./\S+)(.*)$")
 FENCE = re.compile(r"^\s*```")
 
 
@@ -193,6 +204,7 @@ def on_page_markdown(markdown: str, *, page=None, config=None, files=None) -> st
             in_code = not in_code
         elif not in_code:
             new = LINK.sub(lambda m: m.group(1) + _retarget(m.group(2)) + m.group(3), line)
+            new = REFDEF.sub(lambda m: m.group(1) + _retarget(m.group(2)) + m.group(3), new)
             if new != line:
                 rewrites += 1
             line = new

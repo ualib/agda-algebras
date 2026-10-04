@@ -8,7 +8,7 @@
 // guest's filesystem; `scripts/js/playground/test_session.mjs` drives it with
 // recorded answers.
 //
-// The plan is always the same shape:
+// The plan always has the same shape, as follows:
 //
 //   1.  Load the reader's text.  If that fails, stop: the reader needs the
 //       error, and every further command would load the file again first.

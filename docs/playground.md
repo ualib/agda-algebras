@@ -45,7 +45,7 @@ download before you press its button.  Nothing you type leaves this tab.
 
 Every command is one run of the checker: it loads your text, does what you
 asked, and reports every goal.  The first exercise answers in a fraction of a
-second; the last loads more of the library and takes several seconds a
+second; the last loads more of the library and takes about ten seconds a
 command.
 
 ## Grafting
@@ -59,8 +59,9 @@ substitution, the bind of the term monad, and [Overture.Terms.Interpretation][]
 defines it as `graft`.
 
 Try a **Case split** on `t` first: Agda writes the two clauses, one per
-constructor, each with a goal of its own, and names the new variables after
-the constructors' own arguments (`x`, `f` and `t`).
+constructor, each with a goal of its own.  It names the new variables after
+the constructors' own arguments where those have names (`f` and `t`, for
+`node`), and picks a name where they do not (`x`, for the argument of `ℊ`).
 
 <!-- playground: Graft -->
 
@@ -89,6 +90,11 @@ This exercise imports `graft` and `Interpretation` from
 [Overture.Terms.Interpretation][] itself, and that module's other imports
 make this download larger than the last one.
 
+One thing to watch: the signature of a term is an implicit argument, so Agda
+prints a term of either signature as `Term X`.  The goal is a term of the
+second signature and `t` a term of the first, and giving `t` is refused with
+`𝑆₁ != 𝑆₂`, beside a goal and a hypothesis that print the same.
+
 <!-- playground: Interpret -->
 
 ??? question "Two hints"
@@ -113,7 +119,7 @@ as `⊙-is-hom`.
 Look at the goal before you write anything.  It is an equation in `𝑪`'s
 setoid, and its context holds the two compatibility proofs you need.  This
 exercise loads 244 modules of the library and the standard library, and that
-is the price: a large download, and several seconds for every command.
+is the price: a large download, and about ten seconds for every command.
 
 <!-- playground: Compose -->
 
@@ -166,8 +172,8 @@ measurements behind them, including the closure of every image.
    their MIT-style licenses.
 +  [agda-web/agda-wasm-dist][agda-wasm-dist], MIT, Copyright 2024 Agda Web:
    the build of Agda this page runs.
-+  [agda-web/als-demo][als-demo], MIT, Copyright 2026 Andy Pan: the first
-   demonstration of Agda in a browser, by way of the Agda language server.  No
++  [agda-web/als-demo][als-demo], MIT, Copyright 2026 Andy Pan: a
+   demonstration of Agda in a browser through the Agda language server.  No
    code of it is used here.
 +  [plfa.isotopy.xyz][plfa-playground-live], built from
    [SeungheonOh/plfa-playground][plfa-playground] (MIT, Copyright 2026 Andy

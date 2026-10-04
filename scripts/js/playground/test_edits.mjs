@@ -227,6 +227,25 @@ for (const { sent, response, line, why } of GIVES) {
     '𝑩 𝔻 = id ℊ 𝔻', "applyGive puts Agda's text, not what was sent");
 }
 
+// By hand, in the shape the review captured from the homomorphism exercise:
+// Agda's reprint of a long give breaks over lines, and its later lines start
+// at column 0, where the reload would read them as a new clause.  Each later
+// line moves right to two columns past the goal's column (the goal is at
+// column 26, counted from 1, so 27 spaces), an empty line stays empty, and
+// Agda's own indentation within the reprint is kept on top of that.
+{
+  const before = '  compatible-h {f} {a} = ?\n  next = ?\n';
+  const range = rangeOf(before, '?');
+  range.start = { ...range.start, col: 26 };
+  const pad = ' '.repeat(27);
+  same(applyGive(before, { range, text: 'trans (cong h p)\n(compatible q)' }, 'sent'),
+    `  compatible-h {f} {a} = trans (cong h p)\n${pad}(compatible q)\n  next = ?\n`,
+    'applyGive moves a reprint\'s later lines past the goal');
+  same(applyGive(before, { range, text: 'f\n\n  (g x)' }, 'sent'),
+    `  compatible-h {f} {a} = f\n\n${pad}  (g x)\n  next = ?\n`,
+    'applyGive keeps an empty line empty and the reprint\'s own indentation');
+}
+
 // ---- case split: a function clause ------------------------------------------
 
 // agda2-make-case-action, Agda 2.8.0:

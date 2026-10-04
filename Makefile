@@ -131,7 +131,8 @@ check test: Everything.agda EverythingLegacy.agda
 #   make html        Classic clickable HTML (agda-categories style) -> ./html,
 #                    Everything.html as index; also published at /classic/ (#1).
 #   make site-full   html + agda-md + playground + site: the fully-featured
-#                    published site (what CI builds and deploys).
+#                    published site (what CI builds and deploys).  The
+#                    playground step needs nix, for its pinned inputs.
 MKDOCS    ?= mkdocs
 AGDA_HTML := .agda-html
 
@@ -237,6 +238,7 @@ check-links:
 check-links-test:
 	@echo "target: $@"
 	python3 scripts/python/test_check_links.py
+	python3 scripts/python/test_mkdocs_hooks.py
 
 gen-links:
 	@echo "target: $@"
@@ -331,16 +333,26 @@ groups-test:
 #   playground-test   the builder's and the hook's tests, and the page's
 #                     JavaScript under node (the tar reader, the WASI host, the
 #                     protocol, the edits, the session plan, the painter)
-# The three inputs come from the flake on first use, so nothing here costs a
-# fetch unless these targets run.
+# The inputs come from the flake on first use, so nothing here costs a fetch
+# unless these targets run; each can be given instead (`make playground
+# PLAYGROUND_DIST=... WASMTIME=...`, `make playground-test NODE=node`).
+# PLAYGROUND_OUT is exported, so the site build publishes the directory this
+# build wrote (scripts/python/playground/mkdocs_hook.py reads it).
 PLAYGROUND_OUT   ?= .playground
+export PLAYGROUND_OUT
 PLAYGROUND_FLAGS ?=
 PLAYGROUND_DIST  ?= $(shell nix build --no-link --print-out-paths .\#agda-wasm-dist)
 PLAYGROUND_STDLIB ?= $(shell nix build --no-link --print-out-paths .\#standard-library)
 WASMTIME         ?= $(shell nix build --no-link --print-out-paths .\#wasmtime)/bin/wasmtime
+NODE             ?= $(shell nix build --no-link --print-out-paths .\#nodejs)/bin/node
 
+# A `$(shell nix build ...)` that failed leaves its variable empty, and the
+# builder would then complain about a missing argument rather than the cause.
 playground:
 	@echo "target: $@"
+	@test -n "$(PLAYGROUND_DIST)" && test -n "$(PLAYGROUND_STDLIB)" && test -x "$(WASMTIME)" || { \
+	  echo "error: the playground's inputs did not resolve; it needs nix, for"; \
+	  echo "       nix build .#agda-wasm-dist .#standard-library .#wasmtime"; exit 1; }
 	python3 scripts/python/playground/build_assets.py --out $(PLAYGROUND_OUT) \
 	  --dist "$(PLAYGROUND_DIST)" --stdlib "$(PLAYGROUND_STDLIB)" \
 	  --wasmtime "$(WASMTIME)" --agda "$(AGDA)" $(PLAYGROUND_FLAGS)
@@ -353,11 +365,12 @@ playground-test:
 	@echo "target: $@"
 	python3 scripts/python/playground/test_build_assets.py
 	python3 scripts/python/playground/test_mkdocs_hook.py
-	@command -v node >/dev/null || { echo "error: node is required for the JavaScript tests"; exit 1; }
-	node scripts/js/playground/test_tar.mjs
-	node scripts/js/playground/test_wasi.mjs
-	node scripts/js/playground/test_protocol.mjs
-	node scripts/js/playground/test_edits.mjs
-	node scripts/js/playground/test_session.mjs
-	node scripts/js/playground/test_paint.mjs
-	node scripts/js/playground/test_input.mjs
+	@test -x "$(NODE)" || command -v "$(NODE)" >/dev/null || { \
+	  echo "error: no node for the JavaScript tests (nix build .#nodejs, or NODE=node)"; exit 1; }
+	$(NODE) scripts/js/playground/test_tar.mjs
+	$(NODE) scripts/js/playground/test_wasi.mjs
+	$(NODE) scripts/js/playground/test_protocol.mjs
+	$(NODE) scripts/js/playground/test_edits.mjs
+	$(NODE) scripts/js/playground/test_session.mjs
+	$(NODE) scripts/js/playground/test_paint.mjs
+	$(NODE) scripts/js/playground/test_input.mjs

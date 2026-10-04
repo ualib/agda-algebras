@@ -221,7 +221,7 @@ section('a refused have', () => {
 
 // A have shows its goal in the form the reader chose for every goal.  (A
 // defect once: the page's action carries no form, and the have went out
-// Simplified while the other goals were Normalised.)
+// `Simplified` while the other goals went out `Normalised`.)
 
 section('a have in the chosen form', () => {
   const answers = [RUN.have.answers[0], RUN.have.answers[1], RUN['case-split'].answers[3]];

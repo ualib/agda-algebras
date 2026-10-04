@@ -144,34 +144,35 @@ jobs:
   # hook in Python, and the page's worker and scripts under node (the tar
   # reader, the WASI host and its paced input, Agda's interaction protocol,
   # the session plan, the edits a goal command makes, the editor's painter
-  # and the input method).  No Agda and no WebAssembly: the docs workflow
-  # builds the real images and proves them under the checker.  The hook needs
-  # mkdocs itself, pinned to the flake's version.
+  # and the input method).  No WebAssembly: the docs workflow builds the real
+  # images and proves them under the checker.  Run in the flake, so the hook
+  # is tested against the mkdocs the site is built with, and node is the
+  # flake's (`nix build .#nodejs`), not the runner's.
   # ---------------------------------------------------------------------------
   playground:
     name: Playground units
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 15
 
     steps:
       - name: Checkout
         uses: actions/checkout@v6
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - name: Install Nix
+        uses: cachix/install-nix-action@v31
         with:
-          python-version: '3.12'
+          nix_path: nixpkgs=channel:nixos-unstable
 
-      - name: Set up node
-        uses: actions/setup-node@v4
+      - name: Set up Cachix
+        uses: cachix/cachix-action@v16
         with:
-          node-version: '22'
+          name: formalverification
+          authToken: ${{ secrets.CACHIX_AUTH_TOKEN }}
 
       - name: Run the playground's tests
         run: |
           set -euxo pipefail
-          python -m pip install --quiet mkdocs==1.6.1
-          make playground-test
+          nix develop --command make playground-test
 
   # ---------------------------------------------------------------------------
   # Docstring coverage.  Pure-Python, like the link check.  STYLE_GUIDE

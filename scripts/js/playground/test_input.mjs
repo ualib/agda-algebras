@@ -26,8 +26,8 @@
 // through a box standing in for a `<textarea>`: `setRangeText` and the two
 // selection offsets are the whole surface it touches.
 //
-// Ported from the personal site's `scripts/js/test_playground_input.mjs`
-// (williamdemeo/williamdemeo.github.io), whose cases come first below.
+// Ported from `scripts/js/test_playground_input.mjs` of williamdemeo/website
+// at commit 952e5eb (MIT; see NOTICE), whose cases come first below.
 //
 // Usage:  node scripts/js/playground/test_input.mjs
 //         make playground-test
@@ -135,6 +135,8 @@ const PALETTE_KEYS = {
   '>': '⟩',           //  830  (">" . ,(... "⟩>≫...")), the first
   'equiv': '≡',       // TeX's \equiv, inherited
   '==': '≡',          //  200  ("=="   . ("≡"))
+  'Gs': 'σ',          //  947  ("Gs"  . ("σ"))
+  'sigma': 'σ',       // TeX's \sigma, inherited
 };
 for (const [key, glyph] of LIBRARY) PALETTE_KEYS[key] = glyph;
 

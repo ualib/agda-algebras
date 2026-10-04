@@ -12,10 +12,9 @@
  * records.  The palette shows the characters these exercises use.
  *
  * A proof assistant whose notation a visitor cannot type is a proof assistant
- * they can only read.  The two drafted exercises are completable in ASCII, so
- * this is not what stands between a reader and the verdict; it is what stands
- * between them and changing the *statement*, which is the first thing anybody
- * curious does.  `→` and `≡` are on no keyboard.
+ * they can only read.  Every exercise here needs it: the answers name σ, ℊ
+ * and ✦, and the library's own names are mostly mathematical letters
+ * (𝑨, 𝔻, ⊙), none of them on a keyboard.
  *
  * ## The rule, and why it is one rule
  *
@@ -101,7 +100,7 @@
 
   /* The characters worth a button, each carrying the sequences that type it,
    * so the palette teaches the mechanism instead of replacing it. */
-  var PALETTE = ['→', 'λ', '∀', '≈', '⊙', '⟶', 'ℊ', '✦', '𝑨', '𝑩', '𝑪', '𝑆', '𝔻', '⟨', '⟩', '≡']
+  var PALETTE = ['→', 'λ', '∀', '≈', '⊙', '⟶', 'σ', 'ℊ', '✦', '𝑨', '𝑩', '𝑪', '𝑆', '𝔻', '⟨', '⟩', '≡']
     .map(function (glyph) {
       return {
         glyph: glyph,
@@ -114,11 +113,24 @@
     return Math.max(n, k.length);
   }, 0);
 
-  /* Commit a pending `\name` in a text box, if the caret has just passed one.
-   *
-   * `setRangeText` rather than rewriting `value`: it keeps the caret where the
-   * reader left it, and it does not blow away the box's own undo stack, which
-   * a wholesale assignment does. */
+  /* Replace `[from, to)` of a text box with `text`, leaving the caret after
+   * it, through the editing command where the browser has one: that is what
+   * keeps the box's own undo (Ctrl-Z) able to go back past the change.
+   * `setRangeText`, the fallback, keeps the caret but not the undo history in
+   * Chrome (found in review: after one substitution, Ctrl-Z stopped there). */
+  function put(el, text, from, to) {
+    var doc = el.ownerDocument;
+    var done = false;
+    if (doc && typeof doc.execCommand === "function") {
+      el.focus();
+      el.setSelectionRange(from, to);
+      try { done = doc.execCommand("insertText", false, text); } catch (err) { done = false; }
+    }
+    if (!done) el.setRangeText(text, from, to, "end");
+  }
+
+  /* Commit a pending `\name` in a text box, if the caret has just passed one,
+   * rewriting only the sequence, never the whole value. */
   function commit(el) {
     var at = el.selectionStart;
     if (at === 0 || at !== el.selectionEnd) return false;
@@ -137,13 +149,13 @@
      * that ate the space would silently turn `a \== b` into something that
      * means something else.  Costing a reader one backspace to put two glyphs
      * side by side is the cheaper mistake. */
-    el.setRangeText(glyph + terminator, at - 1 - match[0].length, at, "end");
+    put(el, glyph + terminator, at - 1 - match[0].length, at);
     return true;
   }
 
   /* Insert one character at the caret, replacing any selection. */
   function insert(el, glyph) {
-    el.setRangeText(glyph, el.selectionStart, el.selectionEnd, "end");
+    put(el, glyph, el.selectionStart, el.selectionEnd);
     el.focus();
   }
 

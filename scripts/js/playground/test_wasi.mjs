@@ -4,6 +4,10 @@
 // resolution, stdin from a buffer, and the paced stdin that lets one run of
 // Agda answer a command before the next is chosen.
 //
+// The cases that predate the paced stdin follow
+// `scripts/js/test_playground_wasi.mjs` of williamdemeo/website at commit
+// 952e5eb (MIT; see NOTICE).
+//
 // The host can fail in two quiet ways.  It can answer with the wrong file:
 // the first version on the site this code comes from resolved `a/b/../x` to
 // the root's `x` rather than to `a/x`, and a `..` from any directory fd other

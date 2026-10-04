@@ -9,8 +9,9 @@ under their terms, which are reproduced here in full.
 
 Versions: Agda 2.8.0; the Agda standard library 2.3; agda-wasm-dist release
 v2.8.0-ghc9.10.3-r0.  The manifest published beside this file
-(manifest.json) lists every module each image carries, and the commit of
-ualib/agda-algebras and the standard library's store path it was built from.
+(manifest.json) lists each image's module closure, and the commit of
+ualib/agda-algebras and the standard library's store path it was built from;
+every image also carries Agda's builtin modules, section 2.
 
 
 1.  agda-opt.wasm.gz: Agda compiled to WebAssembly
@@ -105,7 +106,7 @@ from it.  Agda's LICENSE, at tag v2.8.0 of https://github.com/agda/agda:
 
 The modules of https://github.com/agda/agda-stdlib at tag v2.3 that each
 image's exercises close over, unmodified, with standard-library.agda-lib and
-their interface files.  The library's LICENCE, at that tag:
+their interface files.  The library's LICENCE file (so spelled), at that tag:
 
     Copyright (c) 2007-2025 Nils Anders Danielsson, Ulf Norell, Shin-Cheng
     Mu, Bradley Hardy, Samuel Bronson, Dan Doel, Patrik Jansson,
@@ -143,11 +144,16 @@ their interface files.  The library's LICENCE, at that tag:
 -------------------------------------------------------------------------------
 
 The modules of https://github.com/ualib/agda-algebras that each image's
-exercises close over, with agda-algebras.agda-lib and their interface files,
-and the exercises themselves.  Copyright 2018-2026 the agda-algebras
-development team, licensed under the Apache License, Version 2.0, whose text
-is the LICENSE file of that repository:
+exercises close over, with agda-algebras.agda-lib and their interface files.
+Copyright 2018-2026 William DeMeo and the agda-algebras development team,
+licensed under the Apache License, Version 2.0, whose text is the LICENSE
+file of that repository:
 https://github.com/ualib/agda-algebras/blob/master/LICENSE
+
+The exercises the page loads into its editor are files under docs/playground/
+of that repository, which its license table puts with the rest of docs/ under
+the Creative Commons Attribution 4.0 International License (LICENSE-docs):
+https://github.com/ualib/agda-algebras/blob/master/LICENSE-docs
 
 
 5.  The page's own scripts

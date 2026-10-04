@@ -4,6 +4,9 @@
 // archives built here header by header, and against the built images when
 // there are any.
 //
+// It began as `scripts/js/test_playground_tar.mjs` of williamdemeo/website
+// at commit 952e5eb (MIT; see NOTICE); the archives built by hand are new.
+//
 // The reader is the only thing between a filesystem image and Agda's view of
 // the world, and when it puts a file in the wrong place nothing reports an
 // error: Agda does not find an interface where it looks, type-checks the

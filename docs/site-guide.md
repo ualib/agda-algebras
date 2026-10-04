@@ -365,7 +365,8 @@ worker's JavaScript under node.
 3.  Put `<!-- playground: <Name> -->` in `docs/playground.md`, with prose
     and hints around it, and drive the hints through the page before
     publishing them: Agda names the variables a case split introduces after
-    the constructors' own arguments.
+    the constructors' arguments where those have names, and picks a name
+    (often `x`) where they do not.
 4.  `make playground` and `make serve`, and try every command on it.
 
 ### Moving to another Agda

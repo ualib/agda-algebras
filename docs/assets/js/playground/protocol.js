@@ -4,9 +4,11 @@
 // write a command, and how to read what comes back.  Pure functions only, so
 // that `scripts/js/playground/test_protocol.mjs` can run them under node.
 //
-// The protocol is `--interaction-json`, the one Agda's Emacs mode and its
-// language server speak.  It has no documentation worth the name; the source
-// of truth is `src/full/Agda/Interaction/` in Agda 2.8.0 (`Base.hs` for the
+// The commands are the ones Agda's Emacs mode sends (it runs `agda
+// --interaction` and reads answers written as Emacs Lisp); `--interaction-json`
+// answers the same commands in JSON, which agda-mode for VS Code reads.  The
+// protocol has no documentation worth the name; the source of truth is
+// `src/full/Agda/Interaction/` in Agda 2.8.0 (`Base.hs` for the
 // command grammar, `JSONTop.hs` for every response's shape), and every shape
 // read below was also observed from this site's own checker.
 //
@@ -28,7 +30,8 @@
 // prompts on one line, which is why a line may start with several.
 
 /** The forms a goal's type and context can be shown in, as the page offers
- * them: as written, simplified (agda-mode's default), or normalised. */
+ * them: as written, simplified (agda-mode's default), or normalized.  The
+ * tokens are Agda's, and Agda spells the last one `Normalised`. */
 export const REWRITES = ['AsIs', 'Simplified', 'Normalised'];
 
 /** A Haskell string literal for `text`, as agda2-mode quotes one. */
