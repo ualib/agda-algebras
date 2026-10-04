@@ -1,0 +1,2 @@
+IOTCM "/work/Graft.agda" NonInteractive Direct (Cmd_load "/work/Graft.agda" [])
+IOTCM "/work/Graft.agda" None Direct (Cmd_goal_type_context Simplified 0 noRange "")

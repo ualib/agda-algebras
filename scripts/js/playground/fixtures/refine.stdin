@@ -1,0 +1,5 @@
+IOTCM "/work/Graft.agda" NonInteractive Direct (Cmd_load "/work/Graft.agda" [])
+IOTCM "/work/Graft.agda" None Direct (Cmd_refine_or_intro False 1 noRange "node f")
+IOTCM "/work/Graft.agda" NonInteractive Direct (Cmd_load "/work/Graft.agda" [])
+IOTCM "/work/Graft.agda" None Direct (Cmd_goal_type_context Simplified 0 noRange "")
+IOTCM "/work/Graft.agda" None Direct (Cmd_goal_type_context Simplified 1 noRange "")
