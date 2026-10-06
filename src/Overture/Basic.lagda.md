@@ -93,8 +93,6 @@ module _ {A : Type a}{B : A → Type b} where
   ∥_∥ : (z : Σ[ a ∈ A ] B a) → B (proj₁ z)
   ∥_∥ = proj₂
 
-  infix  40 ∣_∣
-
   {-# WARNING_ON_USAGE ∣_∣
   "The bracket projection `∣_∣` is deprecated (v3.0); it is being replaced
    library-wide by `proj₁` (from `Data.Product`), with `OperationSymbolsOf` for
