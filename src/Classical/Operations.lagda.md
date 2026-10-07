@@ -14,7 +14,7 @@ The foundational layer of `agda-algebras` represents an `I`-ary operation on a c
 
 The user-facing layer of `Classical/` — every accessor that consumers of a classical structure actually read at use sites — exposes operations in *curried* form: a binary operation as `A → A → A`, a nullary operation as `A`, a unary operation as `A → A`.  This is the form working algebraists write (`x ∙ y`, not `pair x y 0F · pair x y 1F`) and the form that supports straightforward partial application, sectioning, and infix syntax.
 
-This module provides the bridge: per-arity `Curry`/`Uncurry` helpers that translate between the two forms.  They are written once here and reused by every per-structure file across the `Classical/` tree.  The Fin n η-failure under `--cubical-compatible` is contained inside `Uncurry₂` / `Curry₂` and similar — per-structure files never write `pair`-style argument wrappers inline; the wrapping is the responsibility of this module alone.
+This module provides the bridge: per-arity `Curry`/`Uncurry` helpers that translate between the two forms.  They are written once here and reused by every per-structure file across the `Classical/` tree.  The Fin n η-failure (described below) is contained inside `Uncurry₂` / `Curry₂` and similar; per-structure files never write `pair`-style argument wrappers inline; the wrapping is the responsibility of this module alone.
 
 See [ADR-002 v2 §1](../../docs/adr/002-classical-layer-design.md) for the design rationale.
 
@@ -55,7 +55,7 @@ pair a b 1F = b
 
 #### Curry and Uncurry, per arity
 
-The translation between tuple-indexed and curried operations.  Each pair is a two-line definition; the obligation that they form a definitional inverse on the curried side (`Curry₂ (Uncurry₂ f) ≡ f` as functions `A → A → A → A`) holds by `refl`.  The reverse direction (`Uncurry₂ (Curry₂ f) ≡ f` as `(Fin 2 → A) → A`) holds *pointwise* but not definitionally as functions, because the lack of η on `Fin 2`-pattern lambdas under `--cubical-compatible` prevents the lambda repackaging from collapsing.  This asymmetry is contained here and surfaced as the pointwise round-trip statement in per-structure bundle bridges (per [ADR-002 v2 §6](docs/adr/002-classical-layer-design.md)).
+The translation between tuple-indexed and curried operations.  Each pair is a two-line definition; the obligation that they form a definitional inverse on the curried side (`Curry₂ (Uncurry₂ f) ≡ f` as functions `A → A → A`) holds by `refl`.  The reverse direction (`Uncurry₂ (Curry₂ f) ≡ f` as `(Fin 2 → A) → A`) does not hold definitionally, because Agda has no η-rule for functions on a datatype such as `Fin 2`: `Uncurry₂ (Curry₂ f) args` reduces to `f (pair (args 0F) (args 1F))`, and `pair (args 0F) (args 1F)` agrees with `args` at each index without being definitionally equal to it.  Nor can the two tuples be proved equal, since that would take function extensionality, which Agda cannot prove outside Cubical mode and `--safe` forbids postulating.  So the reverse direction holds *pointwise* only for an `f` that respects index-wise agreement of its arguments, as an algebra's interpretation of an operation symbol does, up to the carrier's equivalence.  This asymmetry is contained here and surfaced as the pointwise round-trip statement in per-structure bundle bridges (per [ADR-002 v2 §6](docs/adr/002-classical-layer-design.md)).
 
 ```agda
 -- Nullary

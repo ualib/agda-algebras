@@ -59,10 +59,10 @@ packaged congruences are *propositionally* equal.
 
 Upgrading `_≑_` to propositional equality would need function extensionality with
 propositional extensionality/univalence (and proof-irrelevance for the `IsCongruence`
-witness), and that's simply not available under   `--safe --cubical-compatible`; so we
-take `_≑_` as the equality of congruences, exactly as the `Setoid/` discipline
-dictates.  Classically `_≑_` collapses to propositional equality via propositional
-extensionality.
+witness), and none of these is available here: Agda cannot prove them outside Cubical
+mode, and `--safe` forbids postulating them; so we take `_≑_` as the equality of
+congruences, exactly as the `Setoid/` discipline dictates.  Classically `_≑_`
+collapses to propositional equality via propositional extensionality.
 
 ```agda
 module _ {𝑨 : Algebra {𝑆 = 𝑆} α ρ} where

@@ -92,18 +92,18 @@ The "file" filed is redundant with the file's location on disk, but having it in
 Every Agda source file begins with the following pragma:
 
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 ```
 
 The flags, in order, mean the following:
 
-+  `--cubical-compatible` requires definitions to be compatible with `Cubical/`'s canonical-target semantics; replaces the historical `--without-K`.
++  `--without-K` disables the reasoning principles incompatible with univalent type theory, most importantly Streicher's axiom K, so nothing in the library depends on uniqueness of identity proofs.  The library used `--cubical-compatible` for a time and returned to `--without-K`; [ADR-011](./adr/011-without-k.md) gives the reasons and what they mean for the Cubical port.
 +  `--safe` prohibits `postulate`, `primitive`, unsafe `TERMINATING` pragmas, and other escape hatches; the library's theorems rest on a specific foundation; `--safe` ensures they're not silently dependent on ambient assumptions.
 +  `--exact-split` requires every clause matches the type of the function being defined, preventing definitional-equality surprises that trip up proof automation and the training-corpus consumers.
 
-**Exceptions**.  
-+  `src/Legacy/Base/`, will retain its historical `--without-K` pragma; new contributions do not land in `Legacy/` (see [Milestone 2][ROADMAP]).
-+  Generated files (`src/Everything.agda`); the pragma is still required, but the file is written by the Makefile and should not be hand-edited.
+The frozen `src/Legacy/Base/` tree carries the same pragma as the rest of `src/`, although new contributions do not land there (see [Milestone 2][ROADMAP]).  It could not have kept `--cubical-compatible`: its modules import `Setoid/` modules, and a `--cubical-compatible` module cannot import a `--without-K` one.
+
+**Exception**.  The generated aggregators, `src/Everything.agda` and `src/EverythingLegacy.agda`, carry `{-# OPTIONS --without-K --safe #-}`.  They omit `--exact-split`, which constrains definitions, and an aggregator holds nothing but imports.  The Makefile writes them; do not edit them by hand.
 
 ### Module header
 
@@ -116,7 +116,7 @@ Immediately after the pragma (possibly separated by imports required by the modu
 The generic `Setoid/` core does *not* fix the signature as a module parameter.  Instead `𝑆` is a public generalized `variable` — declared once in `Overture.Signatures` and imported by name — so a generic definition ranges over an arbitrary signature by mentioning `𝑆` in its type and letting Agda generalize it.  A core module header therefore takes no signature parameter:
 
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 open import Overture using ( 𝓞 ; 𝓥 ; Signature ; 𝑆 )
 
@@ -173,7 +173,7 @@ A module named `Congruences` is about congruences.  A module named `Products` is
 A module whose name has no final segment past the conceptual theme (e.g. `Base.Homomorphisms`, `Setoid.Algebras`) acts as a barrel of submodules, which it re-exports (using the `public` keyword); e.g.,
 
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 open import Overture using ( 𝓞 ; 𝓥 ; Signature ; 𝑆 )
 
@@ -212,7 +212,7 @@ Every non-trivial module should have a prose comment block near the top.  In a l
 and only then the opening fence:
 
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 open import Overture using ( 𝓞 ; 𝓥 ; Signature ; 𝑆 )
 

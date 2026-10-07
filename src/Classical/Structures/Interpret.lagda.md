@@ -13,10 +13,12 @@ This is the [Classical.Structures.Interpret][] module of the [Agda Universal Alg
 Every `<Structure>-Op` module must bridge two views of an operation applied to
 arguments: the *term-interpretation* form `⟦ node f args ⟧ ⟨$⟩ η`, in which the
 arguments arrive as a tuple `ArityOf 𝑆 f → 𝕌`, and the *curried* form
-`(⟦ s ⟧ ⟨$⟩ η) ∙ (⟦ t ⟧ ⟨$⟩ η)`, in which they arrive one at a time.  Under
-`--cubical-compatible` the two argument-tuples agree pointwise but not
-definitionally (no η on `Fin n`-pattern lambdas), so the bridge is a `cong` over
-the interpretation function with a pointwise witness.
+`(⟦ s ⟧ ⟨$⟩ η) ∙ (⟦ t ⟧ ⟨$⟩ η)`, in which they arrive one at a time.  The two
+argument-tuples agree pointwise but not definitionally (Agda has no η-rule for
+functions on `Fin n`), and proving them equal as functions would take function
+extensionality, which Agda cannot prove outside Cubical mode and `--safe` forbids
+postulating; so the bridge is a `cong` over the interpretation function with a
+pointwise witness.
 
 The *only* signature-generic content of that bridge is the congruence step itself:
 `interp-cong` below.  It is symbol-agnostic and arity-agnostic, takes no arity

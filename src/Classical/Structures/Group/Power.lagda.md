@@ -174,8 +174,10 @@ _^ᵍ_ : Group α ρ → ℕ → Group α ρ
 
 [^2]:  This bridges the `Fin`-tuple η-gap exactly as in the binary module; the curried
        accessors route arguments through a canonical `pair` tuple, and `Fin`-indexed
-       tuples lack η under `--cubical-compatible`; each bridge is one
-       `interp-cong`{.AgdaFunction} per use.
+       tuples have no η-rule (a tuple is not definitionally the `pair` of its
+       entries, and proving the two equal would take function extensionality,
+       which Agda cannot prove outside Cubical mode and `--safe` forbids
+       postulating); each bridge is one `interp-cong`{.AgdaFunction} per use.
 
 [^3]:  Following the planned-Cubical-port discipline, the underlying equivalence of
        the product is not redefined here; it is the pointwise equivalence of
@@ -184,5 +186,5 @@ _^ᵍ_ : Group α ρ → ℕ → Group α ρ
 
 [^4]:  They are not definitionally equal, for the same reason as in the binary
        module: the curried form routes the arguments through a canonical `pair`
-       tuple, and `Fin`-indexed tuples lack η under `--cubical-compatible`; each
-       bridge is one `interp-cong`{.AgdaFunction}.
+       tuple, and `Fin`-indexed tuples have no η-rule; each bridge is one
+       `interp-cong`{.AgdaFunction}.
