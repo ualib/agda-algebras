@@ -29,7 +29,7 @@ Thus interpretation of a term is defined by structural induction.
 ```agda
 
 
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Legacy.Base.Structures.Terms where
 

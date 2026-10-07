@@ -43,7 +43,7 @@ triples — exactly the case where a hand-written proof would be unreasonable an
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Examples.Classical.Groups.SymmetricGroup3 where
 

@@ -36,7 +36,7 @@ complete with respect to `ℓ₀`-small families — the usual predicative readi
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Setoid.Congruences.CompleteLattice where
 

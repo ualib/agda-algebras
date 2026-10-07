@@ -29,7 +29,7 @@ left and a right law.
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Classical.Structures.Lattice.DistributiveLattice where
 

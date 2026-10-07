@@ -35,7 +35,7 @@ and is deferred to a follow-up.
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Setoid.Congruences.Generation where
 

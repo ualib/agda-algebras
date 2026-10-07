@@ -24,7 +24,7 @@ clause of the reverse interpretation, and the `inverse`/`⁻¹-cong` fields of
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Classical.Bundles.Group where
 

@@ -28,7 +28,7 @@ An important class of functors for our domain is the class of so called *polynom
 * `(F × G) A = F A × G A`
 
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Legacy.Base.Categories.Functors where
 

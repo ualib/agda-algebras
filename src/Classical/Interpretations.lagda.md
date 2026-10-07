@@ -15,7 +15,7 @@ into specific classical structures.  The inaugural instance is the Maltsev condi
 groups.
 
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Classical.Interpretations where
 

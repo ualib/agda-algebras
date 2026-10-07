@@ -44,7 +44,7 @@ objects are as follows: `∀ A B` (objects), `∀ F G` (functors),
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Examples.PolynomialFunctors.Functors where
 

@@ -28,7 +28,7 @@ flavour, as follows:
    structures of the frozen Legacy tree.
 
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Examples where
 

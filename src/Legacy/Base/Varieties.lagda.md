@@ -15,7 +15,7 @@ and we prove properties of these types.
 ```agda
 
 
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 open import Overture using ( Signature ; 𝓞 ; 𝓥 )
 

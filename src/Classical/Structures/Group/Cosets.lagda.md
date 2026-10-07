@@ -29,7 +29,7 @@ left translation by any group element preserves the coset equality
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Classical.Structures.Group.Cosets where
 

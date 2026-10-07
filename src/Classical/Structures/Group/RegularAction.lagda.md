@@ -69,7 +69,7 @@ so its result reduces without forcing the argument open.
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Classical.Structures.Group.RegularAction where
 

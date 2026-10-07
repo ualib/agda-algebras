@@ -20,7 +20,7 @@ See [ADR-002 v2 §1](../../docs/adr/002-classical-layer-design.md) for the desig
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Classical.Operations where
 

@@ -69,7 +69,7 @@ Every hypothesis is decidable, and each decider is a bounded sweep of
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Setoid.Congruences.Certificates.Congruence where
 

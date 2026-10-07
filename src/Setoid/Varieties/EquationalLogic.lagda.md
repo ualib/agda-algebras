@@ -15,7 +15,7 @@ Because a class of structures has a different type than a single structure, we m
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Setoid.Varieties.EquationalLogic where
 

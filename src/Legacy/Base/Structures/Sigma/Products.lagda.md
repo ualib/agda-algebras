@@ -11,7 +11,7 @@ author: "agda-algebras development team"
 ```agda
 
 
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Legacy.Base.Structures.Sigma.Products where
 

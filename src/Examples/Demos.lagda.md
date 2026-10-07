@@ -17,7 +17,7 @@ theorem; and [Examples.Demos.ContraX][] is a cautionary counterexample from an
 early formalization attempt.
 
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Examples.Demos where
 

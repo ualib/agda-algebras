@@ -42,7 +42,7 @@ level envisioned by Birkhoff.
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Setoid.Homomorphisms.Noether where
 

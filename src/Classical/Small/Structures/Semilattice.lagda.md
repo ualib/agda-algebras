@@ -15,7 +15,7 @@ the veneers of `Magma`, `Semigroup`, `CommutativeSemigroup`, etc.
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 module Classical.Small.Structures.Semilattice where
 open import Agda.Primitive                          using () renaming ( Set to Type )
 open import Level                                   using ( 0ℓ ; suc )

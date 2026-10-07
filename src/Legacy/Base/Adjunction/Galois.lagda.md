@@ -11,7 +11,7 @@ This is the [Legacy.Base.Adjunction.Galois][] module of the [Agda Universal Alge
 
 
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Legacy.Base.Adjunction.Galois where
 

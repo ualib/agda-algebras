@@ -16,7 +16,7 @@ signatures come from [Examples.Structures.Signatures][].
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Examples.Structures.Basic where
 

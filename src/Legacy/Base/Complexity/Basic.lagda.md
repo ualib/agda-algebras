@@ -10,7 +10,7 @@ author: "agda-algebras development team"
 > **Deprecated**.  Canonical home is now [`Setoid.Complexity.Basic`](/Setoid/Complexity/Basic/), ported under #307 (M2-7c).  This module has no Agda exports of its own, so no `WARNING_ON_USAGE` pragmas are attached; the deprecation lives at the documentation level.  See [`src/Legacy/Base/DEPRECATED.md`](../../DEPRECATED.md) for migration guidance.  Removal is planned for v3.1.
 
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Legacy.Base.Complexity.Basic where
 ```

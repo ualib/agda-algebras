@@ -49,7 +49,7 @@ satisfaction and lives in [Setoid.Varieties.Interpretation][], the analogue of
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Overture.Terms.Interpretation where
 

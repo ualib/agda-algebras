@@ -28,7 +28,7 @@ for the eight shared equations.
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Classical.Bundles.DistributiveLattice where
 

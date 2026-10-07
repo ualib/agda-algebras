@@ -66,7 +66,7 @@ The kit also has a *semantic* face, used by the converse Maltsev conditions:
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Setoid.Varieties.FreeSubstitution where
 

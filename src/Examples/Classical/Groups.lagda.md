@@ -24,7 +24,7 @@ nothing to gain (and names to clash) from re-exporting them through a barrel.
 + `AlternatingGroup5` is the alternating group `A₅`, the smallest nonabelian simple group, certified simple by finite computation (with its generated `Tables` companion).
 
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Examples.Classical.Groups where
 

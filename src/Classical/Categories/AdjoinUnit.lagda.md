@@ -45,7 +45,7 @@ bundles and its right adjoint's object map is `reduct`.
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Classical.Categories.AdjoinUnit where
 

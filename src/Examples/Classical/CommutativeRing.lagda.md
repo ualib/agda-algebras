@@ -21,7 +21,7 @@ The ring's curried accessors are opened under fresh names (`_⊕_`, `_⊗_`, `�
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Examples.Classical.CommutativeRing where
 

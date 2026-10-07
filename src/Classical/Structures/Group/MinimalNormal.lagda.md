@@ -50,7 +50,7 @@ This module collects the following facts about these notions:
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Classical.Structures.Group.MinimalNormal where
 

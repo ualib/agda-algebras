@@ -28,7 +28,7 @@ of this in [Setoid.Subalgebras.Subdirect][]; nothing here assumes it.
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Setoid.Congruences.Monolith where
 

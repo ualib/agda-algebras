@@ -36,7 +36,7 @@ distinctness (`Unique`{.AgdaFunction}) of the deduplicated list.
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Setoid.Algebras.Finite.Irredundant where
 

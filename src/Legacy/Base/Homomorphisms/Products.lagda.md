@@ -13,7 +13,7 @@ This is the [Legacy.Base.Homomorphisms.Products] module of the [Agda Universal A
 ```agda
 
 
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 open import Overture using (Signature ; 𝓞 ; 𝓥 )
 

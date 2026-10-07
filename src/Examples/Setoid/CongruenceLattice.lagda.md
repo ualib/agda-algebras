@@ -22,7 +22,7 @@ We instantiate the `Lattice`, `BoundedLattice`, and `CompleteLattice` bundles fo
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Examples.Setoid.CongruenceLattice where
 

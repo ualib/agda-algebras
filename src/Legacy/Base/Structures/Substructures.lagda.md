@@ -13,7 +13,7 @@ This is the [Legacy.Base.Structures.Substructures][] module of the [Agda Univers
 ```agda
 
 
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Legacy.Base.Structures.Substructures where
 

@@ -15,7 +15,7 @@ Two other presentations of Birkhoff's theorem live in the source tree, and both 
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Setoid.Varieties.HSP where
 

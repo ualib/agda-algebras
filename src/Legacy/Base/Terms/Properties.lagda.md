@@ -14,7 +14,7 @@ This is the [Legacy.Base.Terms.Properties][] module of the [Agda Universal Algeb
 ```agda
 
 
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 open import Overture using ( 𝓞 ; 𝓥 ; Signature )
 

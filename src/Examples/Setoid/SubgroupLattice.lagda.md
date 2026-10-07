@@ -34,7 +34,7 @@ five are the only subgroups.
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Examples.Setoid.SubgroupLattice where
 

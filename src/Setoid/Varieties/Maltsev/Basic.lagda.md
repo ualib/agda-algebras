@@ -40,7 +40,7 @@ lives one layer up, in [Classical.Interpretations.Maltsev][].
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Setoid.Varieties.Maltsev.Basic where
 

@@ -35,7 +35,7 @@ proved *relative to* a precisely-stated assumption and nothing is postulated.[^1
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Setoid.Subalgebras.Subdirect.BirkhoffSI where
 

@@ -39,7 +39,7 @@ The underlying equivalence of the product is not redefined here.[^3]
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Classical.Structures.Group.Power where
 

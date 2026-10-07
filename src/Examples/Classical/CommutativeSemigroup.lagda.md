@@ -16,7 +16,7 @@ operation, now additionally witnessing commutativity via stdlib's `+-comm`.
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 module Examples.Classical.CommutativeSemigroup where
 
 open import Data.Nat                               using ( ℕ ; _+_ )

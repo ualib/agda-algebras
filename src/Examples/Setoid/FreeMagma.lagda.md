@@ -21,7 +21,7 @@ generators into a concrete magma extends uniquely to a homomorphism, computed by
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Examples.Setoid.FreeMagma where
 

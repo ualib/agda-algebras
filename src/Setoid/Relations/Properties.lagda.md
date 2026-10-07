@@ -19,7 +19,7 @@ Differences from the legacy module:
 +  The legacy module bundled its own `curry` / `uncurry` definitions; stdlib's `Data.Product.curry` / `Data.Product.uncurry` cover the same ground and are not re-exported here.  Consumers who need the bridge should import from `Data.Product` directly.
 
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Setoid.Relations.Properties where
 

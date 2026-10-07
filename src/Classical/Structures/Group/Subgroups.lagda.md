@@ -44,7 +44,7 @@ full subgroup close the module.
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Classical.Structures.Group.Subgroups where
 

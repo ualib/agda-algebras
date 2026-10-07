@@ -30,7 +30,7 @@ the hypothesis coordinatewise, and folds back.[^1]
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Classical.Structures.Group.Diagonal where
 

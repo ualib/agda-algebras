@@ -37,7 +37,7 @@ per signature.  See [ADR-002 v2 §1, §5](../../docs/adr/002-classical-layer-des
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Classical.Structures.Interpret where
 

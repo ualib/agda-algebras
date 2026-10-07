@@ -12,7 +12,7 @@ This is the [Legacy.Base.Adjunction][] module of the [Agda Universal Algebra Lib
 
 ```agda
 
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Legacy.Base.Adjunction where
 

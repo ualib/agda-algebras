@@ -52,7 +52,7 @@ directly in terms of the `_≤_`{.AgdaFunction} introduced here.
    finite algebras.
 
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Setoid.Subalgebras where
 

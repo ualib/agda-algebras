@@ -76,7 +76,7 @@ instance whose hom-equality is pointwise (the algebra categories of
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Setoid.Categories.Adjunction where
 

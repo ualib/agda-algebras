@@ -53,7 +53,7 @@ theory and a proof assistant like [Agda][]. On the other hand, this paper is pro
 To best emulate [MLTT][], we use
 
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 ```
 
  disables [Streicher's K axiom](https://ncatlab.org/nlab/show/axiom+K+%28type+theory%29); 

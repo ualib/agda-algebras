@@ -30,7 +30,7 @@ names carry a per-structure suffix (`-ma`, `-sg`, `-mn`, `-gr`, …), precisely 
 umbrellas can `public`-export every structure's witnesses without collision.
 
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Classical.Bundles where
 

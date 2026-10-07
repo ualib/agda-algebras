@@ -16,7 +16,7 @@ group; built directly from stdlib's
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Examples.Classical.Groups.CyclicGroup where
 

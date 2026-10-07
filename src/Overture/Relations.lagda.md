@@ -23,7 +23,7 @@ This module is a Category-A relocation under #303 (M2-6).  See [`src/Legacy/Base
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Overture.Relations where
 

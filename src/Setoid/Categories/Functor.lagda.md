@@ -48,7 +48,7 @@ record does when it types its unit `Id ⟹ T` and multiplication `T ∘ T ⟹ T`
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Setoid.Categories.Functor where
 
