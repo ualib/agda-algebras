@@ -69,7 +69,7 @@ default: Everything.agda EverythingLegacy.agda
 Everything.agda:
 	@echo "target: $@"
 	@{ \
-	  echo "{-# OPTIONS --cubical-compatible --safe #-}"; \
+	  echo "{-# OPTIONS --without-K --safe #-}"; \
 	  echo ""; \
 	  echo "module Everything where"; \
 	  echo ""; \
@@ -95,7 +95,7 @@ Everything.agda:
 EverythingLegacy.agda:
 	@echo "target: $@"
 	@{ \
-	  echo "{-# OPTIONS --cubical-compatible --safe #-}"; \
+	  echo "{-# OPTIONS --without-K --safe #-}"; \
 	  echo ""; \
 	  echo "-- This file exists to gate CI on the Legacy/ tree."; \
 	  echo "-- It is NOT part of the canonical library and is NOT rendered to HTML."; \

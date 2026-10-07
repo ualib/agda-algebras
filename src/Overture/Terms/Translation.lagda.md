@@ -57,7 +57,7 @@ relabelling by substitution into the chosen derived term.
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Overture.Terms.Translation where
 

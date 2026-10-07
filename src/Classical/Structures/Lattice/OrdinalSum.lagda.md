@@ -60,7 +60,7 @@ congruence lattices of finite algebras is again so representable.
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Classical.Structures.Lattice.OrdinalSum where
 

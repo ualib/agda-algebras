@@ -16,7 +16,7 @@ vocabulary are the subuniverses and the congruences of an algebra.
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Overture.Adjunction.Closure where
 

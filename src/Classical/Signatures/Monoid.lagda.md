@@ -21,7 +21,7 @@ established by `Classical.Signatures.Magma`.
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Classical.Signatures.Monoid where
 

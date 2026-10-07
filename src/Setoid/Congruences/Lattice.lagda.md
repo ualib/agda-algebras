@@ -19,7 +19,7 @@ partially ordered set which, with the meet operation, forms a semilattice.
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Setoid.Congruences.Lattice where
 

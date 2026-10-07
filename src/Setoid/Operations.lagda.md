@@ -16,7 +16,7 @@ law-checkers of [Overture.Operations.Properties][] to an arbitrary decidable set
 equipped with an exhaustive-search witness for its carrier.
 
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Setoid.Operations where
 

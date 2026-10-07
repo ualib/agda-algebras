@@ -16,7 +16,7 @@ universal algebra, such as *signatures*, *algebras*, *product algebras*,
 ```agda
 
 
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 open import Overture  using ( 𝓞 ; 𝓥 ; Signature )
 

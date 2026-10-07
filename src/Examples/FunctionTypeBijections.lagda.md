@@ -17,7 +17,7 @@ The content was relocated here under #310 from `Legacy.Base.Functions.Transforme
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Examples.FunctionTypeBijections where
 

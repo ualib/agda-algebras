@@ -17,7 +17,7 @@ from `Legacy.Base.Categories.*`; nothing in the canonical `Setoid/`, `Classical/
 planned `Cubical/` development depends on it.
 
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Examples.PolynomialFunctors where
 

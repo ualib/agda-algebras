@@ -20,7 +20,7 @@ the level-fixed specialization out keeps the polymorphic core unencumbered.
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Classical.Small.Structures.Semigroup where
 

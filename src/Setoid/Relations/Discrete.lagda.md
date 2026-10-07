@@ -27,7 +27,7 @@ with the operations, are in [Setoid.Homomorphisms.Kernels][].
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Setoid.Relations.Discrete where
 

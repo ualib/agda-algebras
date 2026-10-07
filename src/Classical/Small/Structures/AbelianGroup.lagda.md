@@ -15,7 +15,7 @@ mirroring the veneers of `Monoid`, `CommutativeMonoid`, `Group`, etc.
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Classical.Small.Structures.AbelianGroup where
 

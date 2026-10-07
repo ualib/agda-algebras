@@ -30,7 +30,7 @@ rely on them at every change of level.
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Setoid.Homomorphisms.Properties  where
 

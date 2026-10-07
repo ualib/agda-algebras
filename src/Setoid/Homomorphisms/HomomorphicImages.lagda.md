@@ -11,7 +11,7 @@ This is the [Setoid.Homomorphisms.HomomorphicImages][] module of the [Agda Unive
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Setoid.Homomorphisms.HomomorphicImages where
 

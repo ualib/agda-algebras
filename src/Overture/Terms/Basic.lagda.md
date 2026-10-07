@@ -22,7 +22,7 @@ similarly.[^1]
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 open import Overture.Signatures using ( 𝓞 ; 𝓥 ; Signature )
 

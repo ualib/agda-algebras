@@ -27,7 +27,7 @@ definitionally to `a` and `b` respectively.
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Classical.Bundles.Magma where
 

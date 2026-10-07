@@ -15,7 +15,7 @@ certificate schema (normal-form parent vectors and Freese traces) and the
 search-free checkers that turn a certificate into a theorem.
 
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Setoid.Congruences.Certificates where
 

@@ -13,7 +13,7 @@ This is the [Legacy.Base.Structures.Products][] module of the [Agda Universal Al
 ```agda
 
 
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Legacy.Base.Structures.Products where
 

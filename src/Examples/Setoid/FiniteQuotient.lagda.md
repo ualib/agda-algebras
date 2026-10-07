@@ -24,7 +24,7 @@ group `ℤ/2ℤ`.
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Examples.Setoid.FiniteQuotient where
 

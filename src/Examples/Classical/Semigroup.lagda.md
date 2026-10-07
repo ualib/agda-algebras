@@ -19,7 +19,7 @@ Subsequent additions should land here rather than alongside the core structure f
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Examples.Classical.Semigroup where
 

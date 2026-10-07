@@ -38,7 +38,7 @@ functions.  See `function-equality`{.AgdaFunction} of
    injective-and-surjective, with the inverse `BijInv`{.AgdaFunction}.
 
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Setoid.Functions where
 

@@ -21,7 +21,7 @@ A note on `compatible-REL`. The legacy `Legacy.Base.Relations.Continuous.compati
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Setoid.Relations.Continuous where
 

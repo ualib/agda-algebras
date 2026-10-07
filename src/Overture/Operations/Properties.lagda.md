@@ -30,7 +30,7 @@ checkers — absorption and distributivity — serve the finite-lattice examples
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Overture.Operations.Properties where
 

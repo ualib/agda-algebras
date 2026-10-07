@@ -24,7 +24,7 @@ uniqueness of inverses in Group and `0 · x ≈ 0` in Ring.
 This file is the umbrella for the subtree.
 
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Classical.Properties where
 

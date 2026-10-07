@@ -15,7 +15,7 @@ Specializes [`Classical.Structures.CommutativeMonoid`][Classical.Structures.Comm
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 module Classical.Small.Structures.CommutativeMonoid where
 open import Agda.Primitive                          using () renaming ( Set to Type )
 open import Level                                   using ( 0ℓ ; suc )

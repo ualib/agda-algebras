@@ -41,7 +41,7 @@ parameterize the equation builder `Associative` from `Classical.Equations`.
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Classical.Theories.Semigroup where
 

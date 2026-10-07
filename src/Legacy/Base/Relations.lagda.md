@@ -21,7 +21,7 @@ Finally, in [Legacy.Base.Relations.Quotients][] we define quotient types.
 ```agda
 
 
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Legacy.Base.Relations where
 

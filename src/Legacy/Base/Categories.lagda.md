@@ -16,7 +16,7 @@ The purpose of this effort twofold. First, we hope it makes the types defined in
 
 
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Legacy.Base.Categories where
 

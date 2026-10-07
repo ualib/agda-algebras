@@ -13,7 +13,7 @@ This module is based on [Andreas Abel's Agda formalization of Birkhoff's complet
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Setoid.Varieties.SoundAndComplete where
 

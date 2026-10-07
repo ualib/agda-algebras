@@ -64,7 +64,7 @@ function extensionality.
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Setoid.Categories.NaturalTransformation where
 

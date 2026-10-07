@@ -51,7 +51,7 @@ proved outright; nothing here is assumed.
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Classical.Structures.Group.IndexAction where
 

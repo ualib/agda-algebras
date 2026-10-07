@@ -33,7 +33,7 @@ constructor call, with no per-example boilerplate:
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Classical.Structures.Unary where
 

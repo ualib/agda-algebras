@@ -31,7 +31,7 @@ This module is pure congruence theory: it depends only on the congruence record 
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Setoid.Congruences.Permutability where
 

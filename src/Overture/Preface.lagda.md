@@ -16,7 +16,7 @@ what the 3.0 reconstruction changed, and where to go next.
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 module Overture.Preface where
 ```
 -->

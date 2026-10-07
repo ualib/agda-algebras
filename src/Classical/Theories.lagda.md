@@ -27,7 +27,7 @@ under milestone M3, each paired with a corresponding
 `Classical/Signatures/X.lagda.md` and consumed by `Classical/Structures/X.lagda.md`.
 
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Classical.Theories where
 

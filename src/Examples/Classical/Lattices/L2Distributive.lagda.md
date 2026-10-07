@@ -24,7 +24,7 @@ new ones are the *left* distributivity laws, supplied directly by stdlib's
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 module Examples.Classical.Lattices.L2Distributive where
 
 -- Imports from the Agda Standard Library -------------------------------------

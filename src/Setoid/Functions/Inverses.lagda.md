@@ -12,7 +12,7 @@ This is the [Setoid.Functions.Inverses][] module of the [agda-algebras][] librar
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Setoid.Functions.Inverses where
 

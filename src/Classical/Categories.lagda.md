@@ -26,7 +26,7 @@ modules that give the classical structures their categorical face.
    explicit universal property.
 
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Classical.Categories where
 

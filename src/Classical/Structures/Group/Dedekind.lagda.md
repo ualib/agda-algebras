@@ -26,7 +26,7 @@ arguments need.  The heart of both proofs is the observation that if `x â‰ˆ h âˆ
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Classical.Structures.Group.Dedekind where
 

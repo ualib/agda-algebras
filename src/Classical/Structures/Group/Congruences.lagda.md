@@ -117,7 +117,7 @@ ingredient the monolith transport will need beyond the isomorphism itself.
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Classical.Structures.Group.Congruences where
 

@@ -10,7 +10,7 @@ author: "the agda-algebras development team"
 This is the [Legacy.Base.Relations.Discrete][] module of the [Agda Universal Algebra Library][].
 
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Legacy.Base.Relations.Discrete where
 

@@ -41,7 +41,7 @@ identity- and composition-preservation, both holding by `refl`.
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Setoid.Algebras.Reduct where
 

@@ -14,7 +14,7 @@ This is the [Legacy.Base.Functions.Transformers][] module of the [agda-algebras]
 Here we define functions for translating from one type to another.
 
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Legacy.Base.Functions.Transformers where
 

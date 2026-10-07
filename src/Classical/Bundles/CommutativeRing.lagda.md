@@ -17,7 +17,7 @@ The round-trip on `ℤ` of this bridge is exercised in
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Classical.Bundles.CommutativeRing where
 

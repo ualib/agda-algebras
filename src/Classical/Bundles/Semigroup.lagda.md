@@ -28,7 +28,7 @@ content (the curried associativity law) is supplied ready-made by
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Classical.Bundles.Semigroup where
 

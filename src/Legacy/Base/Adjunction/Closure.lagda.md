@@ -11,7 +11,7 @@ This is the [Legacy.Base.Adjunction.Closure][] module of the [Agda Universal Alg
 
 
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Legacy.Base.Adjunction.Closure where
 

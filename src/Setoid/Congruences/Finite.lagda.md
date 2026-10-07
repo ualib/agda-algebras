@@ -17,7 +17,7 @@ a finite list of `DecCon`{.AgdaFunction}s that is complete — every
 *decidable* congruence is `≑` to a listed one — with **no classical axiom**.
 
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Setoid.Congruences.Finite where
 

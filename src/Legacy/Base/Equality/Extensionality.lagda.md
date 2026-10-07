@@ -13,7 +13,7 @@ This is the [Legacy.Base.Equality.Extensionality][] module of the [Agda Universa
 ```agda
 
 
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Legacy.Base.Equality.Extensionality where
 

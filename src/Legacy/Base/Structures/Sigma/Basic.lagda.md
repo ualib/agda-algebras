@@ -10,7 +10,7 @@ author: "agda-algebras development team"
 This is the [Legacy.Base.Structures.Sigma.Basic][] module of the [Agda Universal Algebra Library][].
 
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Legacy.Base.Structures.Sigma.Basic where
 

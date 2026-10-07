@@ -23,7 +23,7 @@ the meet `_∧_`, so both are operations on `Con 𝑨 (𝐋 ℓ₀)` and the equ
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Setoid.Congruences.Properties where
 

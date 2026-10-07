@@ -29,7 +29,7 @@ normalizing `Fin`-pattern lambdas.  See ADR-006 for the decision and its rationa
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Overture.Signatures.Morphisms where
 

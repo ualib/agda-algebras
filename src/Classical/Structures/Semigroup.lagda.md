@@ -79,7 +79,7 @@ Specifically, the conventions documented and embodied here are as follows.
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Classical.Structures.Semigroup where
 

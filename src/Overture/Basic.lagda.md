@@ -23,7 +23,7 @@ Each module in the library begins with a pragma line of the form
 
 
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 ```
 
 +  The `--cubical-compatible` flag asks Agda to rule out reasoning principles incompatible with univalent type theory — in particular, Streicher's axiom K and uniqueness of identity proofs — and to generate the internal support code that lets Cubical Agda import this module. It implies `--without-K` (which forbids K outright) and strengthens it by additionally preparing each definition for interaction with Cubical's path-based notion of equality.

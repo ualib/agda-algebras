@@ -16,7 +16,7 @@ commutative, associative.  Built directly from stdlib's `∧-assoc`, `∧-comm`,
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 module Examples.Classical.Semilattice where
 
 open import Data.Bool                              using ( Bool ; _∧_ )

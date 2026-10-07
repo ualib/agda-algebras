@@ -25,7 +25,7 @@ constructor- and arity-naming conventions are those established by
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Classical.Signatures.Ring where
 
