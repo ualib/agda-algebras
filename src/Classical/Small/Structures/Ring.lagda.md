@@ -17,7 +17,7 @@ propositional or set-truncated equivalence), mirroring the analogous veneers for
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Classical.Small.Structures.Ring where
 

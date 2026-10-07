@@ -32,7 +32,7 @@ per-structure pivots are instances of one lemma.
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Classical.Categories.Forgetful where
 

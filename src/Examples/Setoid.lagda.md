@@ -19,7 +19,7 @@ cross-structure and "richer" examples requested in
 [issue #266](https://github.com/ualib/agda-algebras/issues/266).
 
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Examples.Setoid where
 

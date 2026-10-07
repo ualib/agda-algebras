@@ -23,7 +23,7 @@ transported explicitly before it can be used at another.
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Setoid.Subalgebras.Properties where
 

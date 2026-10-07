@@ -85,7 +85,7 @@ subgroups land at exactly the quantified level, with no lifting.[^2]
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Classical.Structures.Group.Simple where
 

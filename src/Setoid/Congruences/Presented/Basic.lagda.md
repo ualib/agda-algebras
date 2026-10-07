@@ -42,7 +42,7 @@ to soundness of the list.[^3]
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Setoid.Congruences.Presented.Basic where
 

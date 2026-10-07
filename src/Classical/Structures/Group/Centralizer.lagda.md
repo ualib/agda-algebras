@@ -23,7 +23,7 @@ hence is trivial, which is exactly `n m = m n`.
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Classical.Structures.Group.Centralizer where
 

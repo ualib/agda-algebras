@@ -23,23 +23,47 @@ Each module in the library begins with a pragma line of the form
 
 
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 ```
 
-+  The `--cubical-compatible` flag asks Agda to rule out reasoning principles incompatible with univalent type theory — in particular, Streicher's axiom K and uniqueness of identity proofs — and to generate the internal support code that lets Cubical Agda import this module. It implies `--without-K` (which forbids K outright) and strengthens it by additionally preparing each definition for interaction with Cubical's path-based notion of equality.
++  The `--without-K` flag disables the reasoning principles that are
+   incompatible with univalent type theory, most importantly
+   [Streicher's axiom K](https://ncatlab.org/nlab/show/axiom+K+%28type+theory%29)
+   and with it uniqueness of identity proofs; see the
+   [section on axiom K](https://agda.readthedocs.io/en/v2.8.0/language/without-k.html)
+   in the Agda manual.  No proof in the library can appeal to K, so the library
+   is compatible with type theories in which K fails, such as homotopy type
+   theory.
 
-   Earlier versions of the library used `--without-K` directly, which disables
-   [Streicher's K axiom](https://ncatlab.org/nlab/show/axiom+K+%28type+theory%29);
-   see also the [section on axiom K](https://agda.readthedocs.io/en/v2.6.1/language/without-k.html)
-   in the [Agda Language Reference Manual](https://agda.readthedocs.io/en/v2.6.1.3/language).
+   For a time the library used the stronger flag `--cubical-compatible`, which
+   implies `--without-K` and in addition makes Agda generate the
+   [internal support code](https://agda.readthedocs.io/en/v2.8.0/language/cubical-compatible.html)
+   that a module checked under `--cubical` needs in order to import this one.
+   We returned to `--without-K` for three reasons.
 
-   However, `--cubical-compatible` superseded `--without-K` in Agda 2.6.3 (see [Agda issue #5843](https://github.com/agda/agda/issues/5843) for the rationale). The practical difference is that a module with only `--without-K` cannot be imported from a `--cubical` module, but one with `--cubical-compatible` can. Since we intend to port this library to Cubical Agda (see the project roadmap), `--cubical-compatible` is the correct choice.
+   +  Version 3.0 of the Agda standard library is checked under `--without-K`,
+      and a `--cubical-compatible` module cannot import a module that is not
+      `--cubical-compatible` too.  (Both flags are *coinfective*: a module
+      checked under one may import only modules checked under it.  A
+      `--without-K` module may import a `--cubical-compatible` one, since the
+      latter flag implies the former.)  Keeping `--cubical-compatible` would
+      have held the library to the 2.x standard library.
+   +  Nothing imports the library from a `--cubical` module.  The Cubical
+      development planned for version 4.0 is to derive its modules from this
+      library's by substitution, not to import them.
+   +  The support code costs time and space.  Checked from source, the library
+      takes about 11% less time under `--without-K` than under
+      `--cubical-compatible`, and its interface files take about 10% less space.
+
+   The price is that a `--cubical` module cannot import this library, just as it
+   cannot import version 3.0 of the standard library.  A future Cubical tree may
+   import modules checked under `--cubical` or `--cubical-compatible`, such as
+   those of the `cubical` library, but not this library's.  [ADR-011][] records
+   the decision and its measurements.
 
 +  The `--exact-split` flag requires every case in a definition by pattern matching to hold *definitionally*, not merely propositionally. This keeps the operational behavior of our definitions in lockstep with their intended mathematical meaning and catches accidental reliance on with-abstractions.
 
 +  Finally, `--safe` forbids postulates, `trustMe`, and unsafe FFI — everything in agda-algebras is a genuine proof.
-
-(Readers familiar with the standard library will notice occasional `-W[no]UnsupportedIndexedMatch` warnings on our pattern-matching definitions. These warnings come from `--cubical-compatible` and indicate that the flagged definition will not compute when applied to a `--cubical` transport. They are suppressed at the library level via the `flags:` field in `agda-algebras.agda-lib`. Every such site is a candidate for cleanup when we eventually port to Cubical; see the project's Milestone 5.)
 
 
 #### Agda modules

@@ -27,7 +27,7 @@ index types, the customary predicative reading of "complete."
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Order.CompleteLattice where
 

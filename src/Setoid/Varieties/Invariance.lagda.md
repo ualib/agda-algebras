@@ -97,7 +97,7 @@ two-signature `Setoid/Varieties/` area that M4-5g (reduct classes of varieties) 
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Setoid.Varieties.Invariance where
 

@@ -13,7 +13,7 @@ This is the [Legacy.Base.Structures.Homs][] module of the [Agda Universal Algebr
 ```agda
 
 
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Legacy.Base.Structures.Homs where
 

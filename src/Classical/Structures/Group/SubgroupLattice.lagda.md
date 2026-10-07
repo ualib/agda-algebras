@@ -39,7 +39,7 @@ exact elements rather than ≈-classes; a respecting join would take the ≈-sat
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Classical.Structures.Group.SubgroupLattice where
 

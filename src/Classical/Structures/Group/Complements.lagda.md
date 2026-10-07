@@ -51,7 +51,7 @@ normal (`normal-∙ᶜ-isSubgroup`{.AgdaFunction}).
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Classical.Structures.Group.Complements where
 

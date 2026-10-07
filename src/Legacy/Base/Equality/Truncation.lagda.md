@@ -18,7 +18,7 @@ Readers who want to learn more about "proof-relevant mathematics" and other conc
 ```agda
 
 
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Legacy.Base.Equality.Truncation where
 

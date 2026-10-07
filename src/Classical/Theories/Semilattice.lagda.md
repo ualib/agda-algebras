@@ -17,7 +17,7 @@ of [`Classical.Equations`][Classical.Equations].
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Classical.Theories.Semilattice where
 

@@ -35,7 +35,7 @@ This file is the umbrella for the subtree.  The concrete `Magma` and `Semigroup`
 submodules are the initial, pattern-setting structures.
 
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Classical.Structures where
 

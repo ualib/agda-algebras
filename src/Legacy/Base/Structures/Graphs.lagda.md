@@ -14,7 +14,7 @@ N.B. This module differs from 0Graphs.lagda in that this module is universe poly
 **Definition** (Graph of a structure). Let `𝑨` be an `(𝑅, 𝐹)`-structure (relations from `𝑅` and operations from `𝐹`). The *graph* of `𝑨` is the structure `Gr 𝑨` with the same domain as `𝑨` with relations from `𝑅` together with a (`k+1`)-ary relation symbol `G 𝑓` for each `𝑓 ∈ 𝐹` of arity `k`, which is interpreted in `Gr 𝑨` as all tuples `(t , y) ∈ Aᵏ⁺¹` such that `𝑓 t ≡ y`. (See also Definition 2 of https://arxiv.org/pdf/2010.04958v2.pdf)
 
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Legacy.Base.Structures.Graphs where
 

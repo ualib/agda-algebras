@@ -36,7 +36,7 @@ two single-symbol `interp-cong` compositions, exactly as Lattice's absorption la
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Classical.Structures.Ring where
 

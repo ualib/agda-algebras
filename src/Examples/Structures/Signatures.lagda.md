@@ -18,7 +18,7 @@ nullary, one unary, and one binary.  They give the structure examples of
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Examples.Structures.Signatures where
 

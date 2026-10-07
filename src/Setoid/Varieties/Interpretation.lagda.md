@@ -67,7 +67,7 @@ A worked Maltsev-term instance is in [Classical.Interpretations.Maltsev][].
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Setoid.Varieties.Interpretation where
 

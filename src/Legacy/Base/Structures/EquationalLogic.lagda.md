@@ -13,7 +13,7 @@ This is the [Legacy.Base.Structures.EquationalLogic][] module of the [Agda Unive
 ```agda
 
 
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Legacy.Base.Structures.EquationalLogic where
 

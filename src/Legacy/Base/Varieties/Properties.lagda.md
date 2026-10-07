@@ -23,7 +23,7 @@ we prove the following facts (which we use later in our proof of Birkhoff's HSP 
 ```agda
 
 
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 open import Overture using ( 𝓞 ; 𝓥 ; Signature )
 

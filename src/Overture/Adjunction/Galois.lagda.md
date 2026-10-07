@@ -16,7 +16,7 @@ for such connections.
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Overture.Adjunction.Galois where
 

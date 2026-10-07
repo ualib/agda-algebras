@@ -14,7 +14,7 @@ Mirror of the Monoid bridge with the added `comm` field; over `Sig-Monoid`.
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Classical.Bundles.CommutativeMonoid where
 

@@ -24,7 +24,7 @@ domain `I → A` (the type of "tuples") and codomain `A`.
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Overture.Operations where
 

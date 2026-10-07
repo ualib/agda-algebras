@@ -38,7 +38,7 @@ Semigroup, Monoid, Group, Lattice, and Ring all follow this template.
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Classical.Structures.Magma where
 

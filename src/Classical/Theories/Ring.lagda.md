@@ -31,7 +31,7 @@ symbols, which is what makes the two forgetful reducts of
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Classical.Theories.Ring where
 

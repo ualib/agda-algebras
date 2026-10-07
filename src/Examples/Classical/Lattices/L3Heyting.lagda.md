@@ -32,7 +32,7 @@ the corresponding decision compute to `no`, and the example would fail to compil
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 module Examples.Classical.Lattices.L3Heyting where
 
 -- Imports from Agda and the Agda Standard Library -----------------------------

@@ -14,7 +14,7 @@ Adds commutativity to the monoid theory over the same `Sig-Monoid` signature.
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Classical.Theories.CommutativeMonoid where
 

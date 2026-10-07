@@ -80,7 +80,7 @@ algebra, 𝑨(R) := (A , ∣: ⃖ R).
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Setoid.Complexity.CSP where
 

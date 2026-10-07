@@ -18,7 +18,7 @@ commutative, in contrast to the `(ℕ, +, 0)` commutative monoid of
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Examples.Classical.Monoid where
 

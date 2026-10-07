@@ -41,7 +41,7 @@ Every module's leading scaffolding block â€” the `OPTIONS` pragma, the `module â
 ~~~markdown
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Setoid.Homomorphisms.Noether where
 

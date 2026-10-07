@@ -24,7 +24,7 @@ coordinatewise from the factors, because that is how `⨅`{.AgdaFunction} of
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Setoid.Homomorphisms.Products where
 

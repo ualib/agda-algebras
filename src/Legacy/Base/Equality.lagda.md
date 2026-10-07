@@ -13,7 +13,7 @@ This is the [Legacy.Base.Equality][] module of the [Agda Universal Algebra Libra
 
 ```agda
 
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Legacy.Base.Equality where
 

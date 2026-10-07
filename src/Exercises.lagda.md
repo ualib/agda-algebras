@@ -13,7 +13,7 @@ The exercise tree has one set at present, [Exercises.Complexity][]: exercises at
 the border of universal algebra and computational complexity.
 
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Exercises where
 

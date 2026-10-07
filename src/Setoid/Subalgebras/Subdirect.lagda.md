@@ -44,7 +44,7 @@ This is a barrel module, re-exporting the following:
    to be pinned down with some care, and that module opens by doing so.
 
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Setoid.Subalgebras.Subdirect where
 

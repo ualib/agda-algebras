@@ -41,7 +41,7 @@ is transitive: any coset is reached from any other by some group element.
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Classical.Structures.Group.GSet where
 

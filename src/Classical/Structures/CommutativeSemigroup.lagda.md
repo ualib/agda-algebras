@@ -22,7 +22,7 @@ predecessor's `<Weaker>-Op` accessors go through unchanged.
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Classical.Structures.CommutativeSemigroup where
 

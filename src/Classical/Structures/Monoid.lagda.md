@@ -47,7 +47,7 @@ This module provides a model for signature-growing structures (like `Group`,
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Classical.Structures.Monoid where
 

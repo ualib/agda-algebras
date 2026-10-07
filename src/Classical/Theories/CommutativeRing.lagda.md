@@ -16,7 +16,7 @@ signature, exactly as `Th-CommutativeMonoid` adds it to `Th-Monoid` and
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Classical.Theories.CommutativeRing where
 

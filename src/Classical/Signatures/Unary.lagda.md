@@ -36,7 +36,7 @@ definitionally to a concrete `Fin`, so finiteness witnesses need no case split
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Classical.Signatures.Unary where
 

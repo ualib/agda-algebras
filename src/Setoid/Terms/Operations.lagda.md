@@ -14,7 +14,7 @@ particular algebra, and we prove some compatibility properties of term operation
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Setoid.Terms.Operations where
 

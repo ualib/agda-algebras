@@ -16,7 +16,7 @@ veneer in `Classical/Small/Structures/X.lagda.md` as those land under milestone
 M3.  See [ADR-002][] for the design rationale.
 
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Classical.Small.Structures where
 

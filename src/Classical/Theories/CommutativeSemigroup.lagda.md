@@ -16,7 +16,7 @@ equations, both composed from the generic builders of [`Classical.Equations`][Cl
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Classical.Theories.CommutativeSemigroup where
 

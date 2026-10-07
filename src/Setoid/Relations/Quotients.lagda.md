@@ -25,7 +25,7 @@ quotient must respect the operations as well, is `_╱_`{.AgdaFunction} of
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Setoid.Relations.Quotients where
 

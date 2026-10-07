@@ -55,7 +55,7 @@ structure, e.g. terms-with-substitution).
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Setoid.Categories.Category where
 

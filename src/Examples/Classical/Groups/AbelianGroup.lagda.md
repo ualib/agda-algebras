@@ -16,7 +16,7 @@ witnessing commutativity via stdlib's `+-comm`.
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Examples.Classical.Groups.AbelianGroup where
 

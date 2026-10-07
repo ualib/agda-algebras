@@ -80,7 +80,7 @@ of L2 on the matrix-derived list rather than transport its theorem.[^4]
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Setoid.Congruences.Finite.Decidable where
 

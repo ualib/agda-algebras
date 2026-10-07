@@ -20,7 +20,7 @@ equational algebras* over `Sig-Lattice`.  The congruence lattice
 ([Setoid.Subalgebras.CompleteLattice][]) are the motivating instances.
 
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Order where
 

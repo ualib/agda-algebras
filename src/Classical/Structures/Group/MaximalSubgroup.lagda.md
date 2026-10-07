@@ -36,7 +36,7 @@ not defined here because no present consumer needs it.
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Classical.Structures.Group.MaximalSubgroup where
 

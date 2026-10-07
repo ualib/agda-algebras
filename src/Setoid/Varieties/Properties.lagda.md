@@ -19,7 +19,7 @@ We prove some closure and invariance properties of the relation `⊧`.  In parti
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Setoid.Varieties.Properties where
 

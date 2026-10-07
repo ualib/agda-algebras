@@ -21,7 +21,7 @@ theory-reindex (`proj₁` on the underlying algebra), and `AbelianGroup-Op` inhe
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Classical.Structures.Group.AbelianGroup where
 

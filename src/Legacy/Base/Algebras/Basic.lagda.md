@@ -11,7 +11,7 @@ This is the [Legacy.Base.Algebras.Basic][] module of the [Agda Universal Algebra
 
 
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 open import Overture using ( 𝓞 ; 𝓥 ; Signature )
 

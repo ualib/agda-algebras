@@ -14,7 +14,7 @@ Mirror of the Semigroup bridge with the added `comm` field; over `Sig-Magma`.
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Classical.Bundles.CommutativeSemigroup where
 

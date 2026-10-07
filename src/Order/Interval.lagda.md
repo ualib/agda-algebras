@@ -30,7 +30,7 @@ components only), so no proof-irrelevance assumptions are needed.
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Order.Interval where
 

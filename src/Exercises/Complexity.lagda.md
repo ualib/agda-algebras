@@ -14,7 +14,7 @@ exercises over small finite relational structures, created by Libor Barto for
 students at Charles University and formalized here.
 
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Exercises.Complexity where
 

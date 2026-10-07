@@ -11,7 +11,7 @@ This is the [Legacy.Base.Functions.Surjective][] module of the [agda-algebras][]
 
 
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 module Legacy.Base.Functions.Surjective where
 
 -- Imports from Agda and the Agda Standard Library --------------------------------

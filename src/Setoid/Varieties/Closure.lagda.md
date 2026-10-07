@@ -15,7 +15,7 @@ Fix a signature 𝑆, let 𝒦 be a class of 𝑆-algebras, and define
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Setoid.Varieties.Closure where
 
