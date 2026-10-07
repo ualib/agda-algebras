@@ -740,6 +740,85 @@ Do the independent CI cache fix and option A now; open a data-driven follow-up f
 
 Related: ualib/agda-algebras#439 (profile type-checking times), ualib/agda-flrp#13 and ualib/agda-flrp#15 (the census that produces these certificates), ualib/agda-flrp#2 (FLRP program).
 
+---
+
+### Issue M1-14: agda-algebras and its standard library under Agda 2.9.0 (#586)
+
+**Labels**: `milestone-1-infra`
+
+## Description
+
+Agda 2.9.0 is not released, but Agda's master declares it and the `nightly` prerelease builds it.  Agda accepts an interface only from the same Agda, so anyone who ships this library's interfaces for 2.9.0 (an IDE, a package set) needs the library, and the standard library it depends on, to check under 2.9.0.  Today the library is on Agda 2.8.0 and standard-library 2.3 ([#250], whose last acceptance criterion asked for a look at the next Agda), every module `--cubical-compatible --safe`.
+
+This issue finds out whether, and with which standard library, the library checks under Agda 2.9.0, and records the answer.  It fixes here only what is small and checks under both 2.8.0 and 2.9.0.  It does not move the pins (`flake.nix`, `flake.lock`, `depend:`); moving the library to 2.9.0, and to which standard library, is a separate decision once the findings are in.
+
+## What is known before the run
+
++  **The Agda**.  The nightly for commit `da66a8c75f11d10699a6b38b261efdf244b66f2a` (2026-10-05), release asset `Agda-da66a8c-linux.tar.xz` (SHA-256 `fd58ff5cc94c910a129d7fe083e0cd9d8e93b277bf89d2155a040ddc3c91ce7d`), a static x86-64 Linux binary that reports `Agda version 2.9.0`.  The nightly tag moves, so the commit is the pin.
++  **No standard-library release is tested against 2.9.0**.  Agda's CI tests the standard library pinned as its `std-lib` submodule: agda-stdlib's branch `agda-master` at `1b7f26af` (`standard-library-3.0`).  That branch carries three fixes Agda's master needed that agda-stdlib's CHANGELOG does not record: `1896499f` (eta equality is no longer inferred), `39631ce9` (`irrelevant-recompute` now needs `--irrelevant-projections`, an option Agda marks inconsistent, so unusable under `--safe`) and `1b7f26af` (fixity declarations removed from non-operators).  The construct `39631ce9` removes is in v2.3's `Relation.Nullary.Recomputable` and in v2.4's `Data.Irrelevant`, both in the import closure of `Setoid.Varieties.HSP`.
++  **3.0 may not serve this library**: the first highlight of its CHANGELOG moves standard-library modules from `--cubical-compatible` back to `--without-K`, and a `--cubical-compatible` module cannot import a `--without-K` one (`CoInfectiveImport`).
+
+## The matrix
+
+Each row records the command, exit code, wall time, peak memory, how many standard-library and library modules it checked, and every error and warning by kind.  The rows are as follows:
+
+1.  The library's master with standard-library 2.3, under 2.9.0, as `make check` runs it (the standard library checked from source along the way).
+2.  Standard-library 2.4 under 2.9.0; then the library against 2.4 with the three commits applied, on a branch of its own, recording what breaks (a port only as far as it takes to know the size of the change).
+3.  (2b) Standard-library 2.3 with `1896499f` and `1b7f26af` cherry-picked and `39631ce9` ported by hand, then the library against it.
+4.  Standard-library 3.0 (`1b7f26af`): whether one library module can import it.
+5.  The control: the flake's Agda 2.8.0 with the same flags, every module checked from source.
+
+On the configuration that checks, under 2.9.0 and under the control: the interface sizes of `Setoid.Varieties.HSP`'s import closure, a warm check of a module importing it, and whether the interfaces are reproducible.
+
+Findings follow in a comment.  The plan file, `docs/GITHUB_PROJECT.md`, needs `make project-plan` to pick this issue up.
+
+[#250]: https://github.com/ualib/agda-algebras/issues/250
+
+---
+
+### Issue M1-15: Upgrade to Agda 2.9.0 and a standard library that supports it (#588)
+
+**Labels**: `milestone-1-infra`
+
+## Description
+
+Move the library from Agda 2.8.0 and standard-library 2.3 to Agda 2.9.0 and a standard library that supports it, as [#250] moved it to 2.8.0.  The investigation is [#586]: under the 2.9.0 nightly the library's own sources need nothing but the removal of two fixity declarations for closed operators ([#587]), so this upgrade is mostly the standard library and the pins.
+
+**The plan** (decided 2026-10-06): the library's modules move from `--cubical-compatible` back to `--without-K`, as a change of their own, before this one ([#279] tracks the flag strategy).  That makes standard-library 3.0 the target: 3.0 is `--without-K` again ([agda/agda-stdlib#2967], merged 2026-06-17), which a `--cubical-compatible` module cannot import (Agda reports `CoInfectiveImport`; [#586], row 4) and a `--without-K` module can.
+
+**The preconditions**, which this issue assumes, are as follows:
+
++  **The switch to `--without-K` is on master**.
++  **Standard-library 3.0 is released and type-checks under the released Agda 2.9.0**.  As of 2026-10-06 neither is released.  3.0's development head, on agda-stdlib's `agda-master` branch, checks under the 2.9.0 nightly (Agda's own CI); no released standard library does (2.3 and 2.4 both fail at `irrelevant-recompute`; [#586], rows 1 and 2).
++  **nixpkgs packages both**, since the flake takes Agda and the standard library from one nixpkgs input; otherwise an `overrideAttrs` pin, if William chooses it.
+
+If one is missing when this issue is picked up, record that here and stop; a patched or unreleased standard library is a downstream workaround, never this library's pin.
+
+**The size** is not measured against 3.0 yet.  It is 3.0's breaking changes (the `Function` hierarchy, `_≟_` deprecated for `_≡?_` and `_≈?_`, the components of `_Respects₂_` swapped, the v1.x deprecations removed), plus the 2.4 deprecations 3.0 inherits: against 2.4 with the three `agda-master` fixes the library checked after changing only `depend:`, with 80 new deprecation warnings (five names, 16 modules; [#586], row 2).
+
+## Tasks
+
++  [ ] Confirm the preconditions with a run: standard-library 3.0 checks under the released Agda 2.9.0, and a library module, under `--without-K`, imports it.
++  [ ] `flake.nix` and `flake.lock`: a nixpkgs that provides Agda 2.9.0 and that standard library (or an `overrideAttrs` pinning the standard library's `src`, as the flake's header describes); update the header comment and the shell hook's version guards (`2.8.*`, `2.3*`).
++  [ ] `agda-algebras.agda-lib`: `depend: standard-library-X.Y`; keep `-WnoUnsupportedIndexedMatch` only if it is still needed.
++  [ ] Fix what breaks, errors first; then the warnings 2.9.0 and the new standard library add, each addressed properly (a rename to the documented replacement, not a suppression).  Known today: one `FixityDeclarationForNonOperator` remains, in `Legacy.Base.Relations.Quotients`, whose `Legacy/` tree is frozen.
++  [ ] Port to 3.0: its breaking changes, then its deprecations, each to the documented replacement.
++  [ ] Every place that names the toolchain: `README.md` (badges, status, requirements), `INSTALL.md`, `CONTRIBUTING.md` (including the agda-mode version), `mkdocs.yml` (`agda_version`, `stdlib_version`), `docs/index.md`'s figures (`make corpus-stats`), `scripts/python/test_corpus_stats.py`'s fixtures if they must follow, `.github/workflows/ci.yml`'s header, `.github/ISSUE_TEMPLATE/bug_report.yml`, and a `CHANGELOG.md` entry.
++  [ ] CI: the Agda lane passes on the new pins; the interface cache's key follows `flake.lock`, so it turns over by itself.
+
+## Acceptance criteria
+
++  [ ] `nix develop --command make check` passes under Agda 2.9.0 and the chosen standard library, every module checked from source, locally and in CI.
++  [ ] The warnings are the library's own deprecations and nothing else: no warning kind that 2.8.0 did not report, and none of the standard library's deprecations.
++  [ ] No file names Agda 2.8.0 or standard-library 2.3 as the current target (dated records, such as the CHANGELOG and the audits, excepted).
++  [ ] `make corpus-stats-check` and the docs lanes pass.
+
+[#250]: https://github.com/ualib/agda-algebras/issues/250
+[#279]: https://github.com/ualib/agda-algebras/issues/279
+[#586]: https://github.com/ualib/agda-algebras/issues/586
+[#587]: https://github.com/ualib/agda-algebras/pull/587
+[agda/agda-stdlib#2967]: https://github.com/agda/agda-stdlib/pull/2967
+
 <!-- END GENERATED: milestone-1 -->
 
 ### Milestone 1 Dependencies
@@ -1983,6 +2062,191 @@ The `Examples/` directory is thin.  Add worked examples that exercise the Classi
 
 - [ ] At least five new example files in `Examples/Classical/`.
 - [ ] Each example type-checks and is documented in a prose header.
+
+---
+
+### Issue M3-10: Free lattices: lattice terms and Whitman's solution to the word problem (#589)
+
+**Labels**: `milestone-3-classical`
+
+## Description
+
+The library has lattices (`Classical.Structures.Lattice`), their equational theory (`Classical.Theories.Lattice`), and the relatively free algebra `𝔽[ X ]` of `Setoid.Varieties.SoundAndComplete`, whose carrier equality is derivable equality `Th-Lattice ⊢ X ▹ s ≈ t`.  What it lacks is any way to *compute* in a free lattice: derivable equality is a relation, not a procedure.  Whitman's 1941 solution to the word problem ([FJN], Theorem 1.11) is a structural recursion on a pair of terms that decides `s ≤ t` in `FL(X)`, and so decides equality.  This issue adds it, with soundness and completeness proved, so that `FL(X)` becomes a lattice the library can both reason about and evaluate in.
+
+This is the first of four issues building a free-lattice layer ([#590], [#591], [#592]).  Together they supply the tools that McNulty's free-lattice Nullstellensatz problem and Dean's problem (whether a free lattice has an ascending chain of sublattices isomorphic to `FL(3)`) both need, and that nothing in the library provides today.
+
+**Whitman's rules** ([FJN], Theorem 1.11), for terms over a generator type `X` with decidable equality, are the following:
+
++  `x ≤ y` for generators `x`, `y` iff `x = y`;
++  `s₁ ∨ s₂ ≤ t` iff `s₁ ≤ t` and `s₂ ≤ t`;
++  `s ≤ t₁ ∧ t₂` iff `s ≤ t₁` and `s ≤ t₂`;
++  `x ≤ t₁ ∨ t₂`, for a generator `x`, iff `x ≤ t₁` or `x ≤ t₂`;
++  `s₁ ∧ s₂ ≤ y`, for a generator `y`, iff `s₁ ≤ y` or `s₂ ≤ y`;
++  `s₁ ∧ s₂ ≤ t₁ ∨ t₂` iff `s₁ ≤ t₁ ∨ t₂` or `s₂ ≤ t₁ ∨ t₂` or `s₁ ∧ s₂ ≤ t₁` or `s₁ ∧ s₂ ≤ t₂` (this is Whitman's condition (W)).
+
+The rules overlap (a join on the left and a meet on the right), so the procedure fixes a dispatch order: a join on the left is split first, then a meet on the right, and only then do the remaining four shapes apply.  Every recursive call keeps one argument and replaces the other by a proper subterm, so the recursion is structural in the lexicographic sense Agda's termination checker accepts; no well-founded induction on rank is needed.
+
+**Two routes to correctness**.  [FJN] prove Theorem 1.11 through Day's doubling construction (Theorem 1.8).  The direct syntactic route is shorter to mechanize and is the one recommended here: prove that the relation `_≤ʷ_` the rules define is reflexive and transitive and that formal join and meet are its suprema and infima.  The quotient of terms by `s ≤ʷ t × t ≤ʷ s` is then a lattice generated by `X`; every map `X → L` into a lattice extends to a homomorphism out of it (evaluation), and that extension respects `_≤ʷ_` because each rule is valid in every lattice (soundness).  Completeness of the rules, that `⟦ s ⟧ ≤ ⟦ t ⟧` in every lattice implies `s ≤ʷ t`, is then immediate by evaluating in the quotient itself.  Transitivity is the one substantial proof: an induction on the triple `(s, t, u)` that case-splits on the shape of `t`, with two inversion lemmas (`s₁ ∨ s₂ ≤ʷ t` gives `sᵢ ≤ʷ t`; `s ≤ʷ t₁ ∧ t₂` gives `s ≤ʷ tᵢ`, by induction on `s`) and two weakening lemmas (`sᵢ ≤ʷ u` gives `s₁ ∧ s₂ ≤ʷ u`, by induction on `u`, and dually `s ≤ʷ tⱼ` gives `s ≤ʷ t₁ ∨ t₂`, by induction on `s`).
+
+**Term representation**.  The algorithm, and the canonical forms of [#590], want a dedicated inductive type of lattice terms (a generator, a binary meet, a binary join) with structural recursion on it.  The library's generic `Term X` over `Sig-Lattice` has function-valued children (`node ∧-Op (pair s t)`), whose equality is the setoid `_≐_` rather than `_≡_`; keep it as the bridge, not the workhorse.  Translate in both directions and prove the round trips up to `_≐_`, so that the results here apply to `Th-Lattice`, to `𝔽[ X ]`, and to every `Lattice` of `Classical.Structures.Lattice`.
+
+## Tasks
+
++  [ ] A module for lattice terms (`Classical.Structures.Lattice.Free.Term`, or as `docs/STYLE_GUIDE.md` directs): the inductive type over a generator type with decidable equality, rank, evaluation in any `Lattice α ρ` through `Lattice-Op`, and the translation to and from `Term X` over `Sig-Lattice` with round-trip lemmas up to `_≐_`.
++  [ ] `Classical.Structures.Lattice.Free.Whitman`: the decision procedure as a `Dec`-valued structural recursion, or as a Boolean function with a reflection lemma; reflexivity, the inversion and weakening lemmas, transitivity; formal join and meet as supremum and infimum.
++  [ ] `FL X : Lattice _ _`, the setoid quotient of terms by mutual `_≤ʷ_`, with the eight equations of `Th-Lattice` discharged from the order (order first, as CLAUDE.md advises), and the generator map `X → FL X`.
++  [ ] Soundness: `s ≤ʷ t` implies `⟦ s ⟧ η ≤ ⟦ t ⟧ η` in every lattice and every environment `η`, for the order of `Classical.Properties.Lattice`.
++  [ ] Completeness and the universal property: for a lattice `L` and `f : X → L`, evaluation `FL X → L` is the unique homomorphism extending `f`; hence `s ≤ʷ t` iff `⟦ s ⟧ ≤ ⟦ t ⟧` holds in every lattice.
++  [ ] The bridge to derivability: `Th-Lattice ⊢ X ▹ s ≈ t` iff `s ≤ʷ t` and `t ≤ʷ s`, through the soundness and completeness theorems of `Setoid.Varieties.SoundAndComplete`; so equality in `𝔽[ X ]` over `Th-Lattice` is decidable.
++  [ ] A worked example (`Examples.Classical.Lattices.FreeLattice3`, or beside `Examples.Setoid.FreeSemigroup`): in `FL (Fin 3)`, decide a handful of inequalities by evaluation, among them a failure of distributivity (`x ∧ (y ∨ z) ≰ (x ∧ y) ∨ (x ∧ z)`) and the two absorption identities.
++  [ ] Prose for every fence, as ADR-010 requires; `make gen-links` and `make corpus-stats` for the new modules; `make check` from source.
+
+## Acceptance criteria
+
++  [ ] `make check` passes with the new modules; no postulate, no `TERMINATING` pragma, `--safe` throughout.
++  [ ] `_≤ʷ_` is decidable, sound, and complete for the order of `FL X`, and `FL X` is a `Lattice` with the universal property above, all as theorems with explicit types.
++  [ ] Derivable equality under `Th-Lattice` is shown decidable through the bridge.
++  [ ] The example module decides the stated inequalities by evaluation and the verdicts are the expected ones.
++  [ ] The field report on agda-mcp that CLAUDE.md asks for is filed.
+
+## References
+
++  [FJN] R. Freese, J. Ježek, J. B. Nation, *Free Lattices*, Mathematical Surveys and Monographs 42, American Mathematical Society, 1995: Theorem 1.11 (Whitman's solution), Theorem 1.8 and Corollary 1.9 ((W) in free lattices and their sublattices), Chapter XI, Section 8 (the algorithms as a computer runs them).
++  P. M. Whitman, "Free lattices", Annals of Mathematics 42 (1941) 325–330.
+
+[#590]: https://github.com/ualib/agda-algebras/issues/590
+[#591]: https://github.com/ualib/agda-algebras/issues/591
+[#592]: https://github.com/ualib/agda-algebras/issues/592
+
+---
+
+### Issue M3-11: Free lattices: canonical form and canonical joinands (#590)
+
+**Labels**: `milestone-3-classical`
+
+## Description
+
+Whitman's procedure ([#589]) decides whether two terms name the same element of `FL(X)`; it does not choose a name.  [FJN], Theorem 1.17, does: every element of a free lattice has a term of minimal rank representing it, unique up to commutativity and associativity, called its *canonical form*, and Theorem 1.18 characterizes that form syntactically.  A join `t = t₁ ∨ ⋯ ∨ tₙ` with `n > 1` is in canonical form iff the following four conditions hold:
+
++  each `tᵢ` is a generator or a formal meet;
++  each `tᵢ` is in canonical form;
++  the `tᵢ` form an antichain (`tᵢ ≰ tⱼ` for `i ≠ j`);
++  if `tᵢ = ⋀ⱼ tᵢⱼ` then `tᵢⱼ ≰ t` for every `j`.
+
+Dually for a meet, and a generator is always in canonical form.  The elements the `tᵢ` represent are the *canonical joinands* of `w`, and Theorem 1.19 says they refine every join representation of `w`: if `w = ⋁ uⱼ` then every canonical joinand of `w` is below some `uⱼ`.  Canonical joinands are the vocabulary of everything that follows this issue.  Semidistributivity ([#591]) is three lines from Theorem 1.19, and the embedding lemma of [#592] ([FJN], Lemma 9.13) is a statement about them.
+
+**Representation**.  Canonical form needs flattened, n-ary joins and meets: a canonical term is a generator, or a nonempty list of canonical meets-or-generators under a join, or dually.  "Unique up to commutativity" is then a permutation of the list.  Two formalizations are reasonable: a `CanonicalTerm` type with list-valued children and uniqueness stated up to `Data.List.Relation.Binary.Permutation`; or the same type with children sorted by a decidable total order on terms, which turns uniqueness into `_≡_`.  Start with the first; the second is a refinement for a later consumer that needs decidable `_≡_` on normal forms.
+
+**The algorithm**.  Canonicalize bottom-up.  For a join, canonicalize the two children, flatten any child that is itself a join, delete every joinand that lies below another joinand, and while some meet-joinand `tᵢ = ⋀ⱼ tᵢⱼ` has a `tᵢⱼ ≤ t`, replace `tᵢ` by that `tᵢⱼ` (which is already canonical, being a subterm) and repeat; dually for a meet.  Each replacement lowers the rank, which is the termination measure for that loop: a well-founded recursion on rank, or a fuel argument with a proof that the fuel suffices.  [FJN], Chapter XI, Section 8, presents the procedure as a computer runs it.
+
+## Tasks
+
++  [ ] `Classical.Structures.Lattice.Free.Canonical`: the canonical-term type, its embedding `⌊_⌋` back into the lattice terms of [#589], and `IsCanonical` as the four conditions of [FJN], Theorem 1.18, stated with the decidable order `_≤ʷ_`.
++  [ ] `canonical : LatTerm X → CanonicalTerm X` with `⌊ canonical t ⌋` equal to `t` in `FL X` and `IsCanonical (canonical t)`.
++  [ ] Uniqueness ([FJN], Theorem 1.17, reached through Theorem 1.18): two canonical terms representing the same element are equal up to permutation of joinands and meetands, by the argument of Lemma 1.16 and induction.  Minimality of rank itself is a stretch goal.
++  [ ] `canonicalJoinands : LatTerm X → List (LatTerm X)` and `canonicalMeetands`, with Theorem 1.19: if `w = ⋁ uⱼ` in `FL X` then every canonical joinand of `w` is below some `uⱼ`.  As a stretch goal, Theorem 1.20: a join-irreducible `u` is a canonical joinand of `w` iff `w = u ∨ a` for some `a` with `w > v ∨ a` for every `v < u`.
++  [ ] Decidable equality of elements of `FL X` by comparison of canonical forms, and its agreement with the decision of [#589].
++  [ ] Worked examples in the example module of [#589]: canonical forms of a few terms over three generators, among them one where the fourth condition of Theorem 1.18 fires.
++  [ ] Prose for every fence; `make gen-links` and `make corpus-stats`; `make check` from source.
+
+## Acceptance criteria
+
++  [ ] `canonical` is total and `--safe`, without `TERMINATING`; its soundness and the `IsCanonical` property are theorems.
++  [ ] Uniqueness up to permutation is a theorem.
++  [ ] Theorem 1.19 is a theorem, stated for the canonical joinands the function computes.
++  [ ] The examples check, and the field report on agda-mcp is filed.
+
+## References
+
++  [FJN] R. Freese, J. Ježek, J. B. Nation, *Free Lattices*, Mathematical Surveys and Monographs 42, American Mathematical Society, 1995: Chapter I, Section 3 (Lemma 1.16, Theorems 1.17 to 1.20); Chapter XI, Section 8.
+
+[#589]: https://github.com/ualib/agda-algebras/issues/589
+[#591]: https://github.com/ualib/agda-algebras/issues/591
+[#592]: https://github.com/ualib/agda-algebras/issues/592
+
+---
+
+### Issue M3-12: Semidistributivity and Whitman's condition: predicates, free lattices, finite decision, and the examples M₃ and N₅ (#591)
+
+**Labels**: `milestone-3-classical`
+
+## Description
+
+A lattice is *join semidistributive* (SD∨) if `a ∨ b = a ∨ c` implies `a ∨ b = a ∨ (b ∧ c)`, *meet semidistributive* (SD∧) dually, and *semidistributive* if both.  It satisfies *Whitman's condition* (W) if `s₁ ∧ s₂ ≤ t₁ ∨ t₂` implies `s₁ ≤ t₁ ∨ t₂` or `s₂ ≤ t₁ ∨ t₂` or `s₁ ∧ s₂ ≤ t₁` or `s₁ ∧ s₂ ≤ t₂`.  All three are universal Horn sentences, so sublattices inherit them.  Free lattices satisfy all three: (W) is [FJN], Theorem 1.8 (in the development of [#589] it is the sixth rule, read through the supremum and infimum characterizations), and semidistributivity is the Jónsson–Kiefer theorem, [FJN], Theorem 1.21, whose proof is three lines from Theorem 1.19 of [#590].  Conversely, Nation's theorem ([FJN], Theorem 5.55) says that a *finite* lattice is a sublattice of a free lattice iff it is semidistributive and satisfies (W).  Nation's theorem is deep and is not to be formalized here.  What this issue delivers is everything around it: the predicates, the theorem that free lattices (hence their sublattices) satisfy them, decision procedures for them on finite lattices, and two worked examples that separate the conditions.
+
+The two examples are the following:
+
++  `M₃`, the five-element modular nondistributive lattice with atoms `a`, `b`, `c`: it satisfies (W), since its only proper meets are `0`, which lies below everything, and a comparable pair meets to one of its members; but it fails SD∨ (`a ∨ b = 1 = a ∨ c`, yet `a ∨ (b ∧ c) = a`) and, dually, SD∧.
++  `N₅`, the pentagon (`0 < a < c < 1` and `0 < b < 1`): it satisfies SD∨, SD∧, and (W), so by Nation's theorem it is a sublattice of a free lattice.
+
+A table-driven constructor for finite lattices on `Fin n`, with the eight lattice equations discharged by exhaustive decision (`from-yes` over `all?`, as `Examples.Classical.Lattices.L3Heyting` and the Cayley-table groups of `Examples.Classical.Groups` already do), makes each example a pair of tables and keeps the examples cheap.  At five elements each equation is at most 125 cases.
+
+## Tasks
+
++  [ ] `Classical.Properties.Lattice.Semidistributive` (or a name `docs/STYLE_GUIDE.md` prefers): `IsJoinSemidistributive`, `IsMeetSemidistributive`, `IsSemidistributive`, and `SatisfiesW` over `Lattice α ρ`, stated with the order of `Classical.Properties.Lattice`; preservation under sublattices and under lattice isomorphism.
++  [ ] For `FL X` of [#589]: `SatisfiesW (FL X)` ([FJN], Theorem 1.8 and Corollary 1.9) and, from the canonical joinands of [#590], `IsSemidistributive (FL X)` ([FJN], Theorem 1.21).  Record in prose that the equivalent form (3) of SD∨ in [FJN], Theorem 1.21, is not needed for the free-lattice case.
++  [ ] Decision procedures: for a lattice whose carrier is a `FiniteAlgebra` (`Setoid.Algebras.Finite`), `isJoinSemidistributive?`, `isMeetSemidistributive?`, and `satisfiesW?` as `Dec` values, by enumeration of triples and quadruples.
++  [ ] A table-driven finite lattice constructor on `Fin n` (`Classical.Structures.Lattice.Table`, after `Classical.Structures.Group.TableGroup`), the lattice laws decided exhaustively.
++  [ ] `Examples.Classical.Lattices.M3` and `Examples.Classical.Lattices.N5` as tables, with the decision procedures evaluated to the verdicts above, and the module list of `Examples.Classical.Lattices` extended.
++  [ ] Prose for every fence; `make gen-links` and `make corpus-stats`; `make check` from source.
+
+## Acceptance criteria
+
++  [ ] The four predicates and their preservation lemmas type-check with explicit types.
++  [ ] `FL X` is proved to satisfy (W) and both semidistributive laws.
++  [ ] On `M₃` the procedures return "satisfies (W)", "fails SD∨", and "fails SD∧"; on `N₅` all three return "satisfies"; each by evaluation, not by a hand proof.
++  [ ] The field report on agda-mcp is filed.
+
+## References
+
++  [FJN] R. Freese, J. Ježek, J. B. Nation, *Free Lattices*, Mathematical Surveys and Monographs 42, American Mathematical Society, 1995: Theorem 1.8, Corollary 1.9, Theorem 1.21 (Jónsson and Kiefer), Theorem 5.55 (Nation).
++  B. Jónsson and J. E. Kiefer, "Finite sublattices of a free lattice", Canadian Journal of Mathematics 14 (1962) 487–497.
++  J. B. Nation, "Finite sublattices of a free lattice", Transactions of the American Mathematical Society 269 (1982) 311–337.
+
+[#589]: https://github.com/ualib/agda-algebras/issues/589
+[#590]: https://github.com/ualib/agda-algebras/issues/590
+
+---
+
+### Issue M3-13: Free lattices: substitutions, endomorphisms, free generating sets, and embeddings (#592)
+
+**Labels**: `milestone-3-classical`
+
+## Description
+
+The problems this layer is built for are statements about maps between free lattices.  McNulty's free-lattice Nullstellensatz problem asks, for a congruence `θ` of `FL(n)`, which equations hold under every *solution* of `θ`, where a solution is an `n`-tuple of elements of `FL(n)`, that is, an endomorphism of `FL(n)`; the answer is the intersection of the kernels of the endomorphisms whose kernel contains `θ`.  Dean's problem asks whether a free lattice has an infinite strictly ascending chain of sublattices each isomorphic to `FL(3)`; the known partial results (Freese's 1997 notes) rest on [FJN], Corollary 1.13, which decides when a finite subset of a free lattice generates a free sublattice freely, and on [FJN], Lemma 9.13, which says that a lattice embedding `σ : FL(X) ↣ FL(Y)` sends every canonical joinand of `w` that is not a generator to a canonical joinand of `σ(w)`.  This issue supplies those tools on top of [#589], [#590], and [#591].
+
+**Corollary 1.13**: a subset `S` of a free lattice generates a sublattice isomorphic to a free lattice, freely generated by `S`, iff for every `s ∈ S` and every finite `Y ⊆ S`, `s ≤ ⋁ Y` implies `s ∈ Y`, and dually.  For finite `S` the condition quantifies over finitely many `Y`, and each instance is one Whitman decision, so the criterion is decidable.  Its proof goes through Corollary 1.12 (a lattice that satisfies (W) and is generated by a set `X` on which the join and meet conditions hold is isomorphic to `FL(X)`) and Theorem 1.11.
+
+**The first Nullstellensatz datum** falls out of [#591].  The pair `(x ∧ y, x ∧ (y ∨ z))` lies in the closure of the congruence generated by `(x ∧ y, x ∧ z)`, because every solution of `x ∧ y ≈ x ∧ z` satisfies `x ∧ y ≈ x ∧ (y ∨ z)` by SD∧ in `FL(3)`.  It does not lie in that congruence, because the homomorphism `FL(3) → M₃` sending the generators to the three atoms identifies `x ∧ y` with `x ∧ z` (both go to `0`) and separates `x ∧ y` from `x ∧ (y ∨ z)` (`0` and `a`).  So the closure operator of the problem is strictly larger than congruence generation, and the two semidistributive laws are its first entries.
+
+## Tasks
+
++  [ ] `Classical.Structures.Lattice.Free.Substitution`: substitutions `X → LatTerm Y`, their action on terms, and the induced homomorphism `FL X → FL Y`; the evaluation lemma (evaluating `t` under `⟦_⟧ ∘ σ` equals evaluating `t [ σ ]`), as `Setoid.Varieties.SoundAndComplete` states it for `𝔽[ X ]`; endomorphisms of `FL X` as the case `Y = X`; and the theorem that every homomorphism `FL X → FL Y` is the one induced by its restriction to the generators.
++  [ ] Kernels: the kernel of an induced homomorphism as a congruence of `FL X` (through `Setoid.Homomorphisms` and `Setoid.Congruences`), and `solves? : Sub X Y → List (LatTerm X × LatTerm X) → Dec _`, deciding whether a substitution's kernel contains a finite list of pairs.
++  [ ] The closure of a finite list of pairs under all solutions, as a predicate; a refutation certificate (a substitution that solves `Σ` and not `s ≈ t`) with its checker; and the `M₃` example above as a theorem: `(x ∧ y, x ∧ (y ∨ z))` is in the closure of `(x ∧ y, x ∧ z)` and not in the congruence it generates.
++  [ ] Free generating sets: `FreelyGenerates S` as the condition of Corollary 1.13, `freelyGenerates? : (S : List (LatTerm X)) → Dec (FreelyGenerates S)`, and the theorem that the condition is sufficient (the sublattice generated by `S` is isomorphic to `FL S`, through Corollary 1.12 and Theorem 1.11); necessity is a stretch goal.
++  [ ] [FJN], Lemma 9.13, for embeddings `FL X ↣ FL Y` (injective homomorphisms): a canonical joinand of `w` that is not a generator is sent to a canonical joinand of `σ w`; and the consequence Freese's notes use, that the term expressing `w` in the images of the generators is a truncation of the canonical form of `w`.
++  [ ] A worked example: Freese's one-step example from "Notes on Dean's problem", two triples `{a, b, c}` and `{a', b', c'}` in the free lattice on nine generators, each freely generating, with `⟨a, b, c⟩` properly contained in `⟨a', b', c'⟩`, checked by `freelyGenerates?` and by Whitman's procedure.  Measure the cost of the decisions on terms of that size before committing to it; [FJN], Chapter XI, Section 8, has the polynomial-time formulation if the naive recursion is too slow.  As a further stretch goal, [FJN], Theorem 1.28 (`FL(ω)` embeds in `FL(3)`) for the first few of Whitman's elements.
++  [ ] Prose for every fence; `make gen-links` and `make corpus-stats`; `make check` from source.
+
+## Acceptance criteria
+
++  [ ] Substitution, the induced homomorphism, the evaluation lemma, and the characterization of homomorphisms between free lattices by their values on generators are theorems.
++  [ ] The `M₃` closure example is a theorem.
++  [ ] `freelyGenerates?` is a decision procedure whose positive answers are proved sufficient.
++  [ ] Lemma 9.13 is a theorem.
++  [ ] The field report on agda-mcp is filed.
+
+## References
+
++  [FJN] R. Freese, J. Ježek, J. B. Nation, *Free Lattices*, Mathematical Surveys and Monographs 42, American Mathematical Society, 1995: Theorem 1.11, Corollaries 1.12 and 1.13, Theorem 1.28, Lemma 9.13, Chapter XI, Section 8.
++  R. Freese, "Notes on Dean's problem", 1997, https://math.hawaii.edu/~ralph/Notes/DeansProb/dean.pdf.
++  G. F. McNulty, "A juggler's dozen of easy problems", Algebra Universalis 74 (2015) 17–34, the section "The Free Lattice Nullstellen Problem".
+
+[#589]: https://github.com/ualib/agda-algebras/issues/589
+[#590]: https://github.com/ualib/agda-algebras/issues/590
+[#591]: https://github.com/ualib/agda-algebras/issues/591
 
 <!-- END GENERATED: milestone-3 -->
 
