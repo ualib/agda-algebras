@@ -95,7 +95,7 @@ rather than leaving it distributed over its consumers.
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Classical.Structures.Group.MinimalNormalDescent where
 

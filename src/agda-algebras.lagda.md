@@ -76,7 +76,7 @@ top-level aggregator below imports each layer in turn.
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 ```
 -->
 

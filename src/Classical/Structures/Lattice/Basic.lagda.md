@@ -58,7 +58,7 @@ This module's adds the following conventions beyond the
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Classical.Structures.Lattice.Basic where
 

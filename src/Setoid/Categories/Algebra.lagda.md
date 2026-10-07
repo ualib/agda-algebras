@@ -30,7 +30,7 @@ maps are definitionally equal; `⊙-hom` is function composition, `𝒾𝒹` the
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Setoid.Categories.Algebra where
 

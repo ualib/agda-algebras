@@ -24,7 +24,7 @@ is also what the congruence proof of `φ` is built from.
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Setoid.Homomorphisms.Factor where
 

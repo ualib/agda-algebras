@@ -74,7 +74,7 @@ closure matrix.  `Cg-DecCon`{.AgdaFunction} packages the result as a
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Setoid.Congruences.Presented.Decidable where
 

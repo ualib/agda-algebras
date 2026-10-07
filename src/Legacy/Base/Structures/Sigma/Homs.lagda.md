@@ -8,7 +8,7 @@ author: "agda-algebras development team"
 #### <a id="homomorphisms-of-general-structures">Homomorphisms of general structures</a>
 
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Legacy.Base.Structures.Sigma.Homs where
 

@@ -21,7 +21,7 @@ views for stdlib interop — is recorded in [ADR-002][ADR-002].
 This file is the umbrella for the subtree.
 
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Classical.Signatures where
 

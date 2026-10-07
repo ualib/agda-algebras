@@ -22,7 +22,7 @@ the identity and inverse equations use `0F` and ignore `1F`, `2F`.
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Classical.Theories.Group where
 

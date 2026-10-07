@@ -31,7 +31,7 @@ it lands in [Overture][] rather than beside either consumer.
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Overture.Counting where
 

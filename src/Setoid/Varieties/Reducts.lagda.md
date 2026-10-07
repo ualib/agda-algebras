@@ -67,7 +67,7 @@ though it need not equal one.  That containment is `reduct-⊧` below.
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Setoid.Varieties.Reducts where
 

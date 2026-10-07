@@ -61,7 +61,7 @@ theorem is *false* for a one-point index set, where `D Ḡ` is all of `S ≀ G`.
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Classical.Structures.Group.Wreath where
 

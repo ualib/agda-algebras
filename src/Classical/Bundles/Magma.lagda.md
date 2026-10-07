@@ -20,14 +20,17 @@ representation without manual record-shuffling.
 The round-trip is stated *pointwise* on the carrier, in the magma's underlying
 setoid equivalence, per
 [ADR-002 v2 §6](../../docs/adr/002-classical-layer-design.md).  The Fin 2
-η-failure under `--cubical-compatible` would obstruct any propositional
-`_≡_`-on-the-Σ-type formulation; the pointwise statement sidesteps it cleanly,
-discharged by `Setoid.refl` because `pair a b 0F` and `pair a b 1F` reduce
-definitionally to `a` and `b` respectively.
+η-failure would obstruct any propositional `_≡_`-on-the-Σ-type formulation: a
+function on `Fin 2` is not definitionally the pattern-matching lambda of its two
+values, since Agda has no η-rule for functions on a datatype, and proving the
+two equal would take function extensionality, which Agda cannot prove outside
+Cubical mode and `--safe` forbids postulating.  The pointwise statement
+sidesteps it cleanly, discharged by `Setoid.refl` because `pair a b 0F` and
+`pair a b 1F` reduce definitionally to `a` and `b` respectively.
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Classical.Bundles.Magma where
 

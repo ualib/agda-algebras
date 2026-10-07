@@ -18,7 +18,7 @@ carriers with propositional or set-truncated equivalence), mirroring the veneers
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 module Classical.Small.Structures.DistributiveLattice where
 open import Agda.Primitive                          using () renaming ( Set to Type )
 open import Level                                   using ( 0ℓ ; suc )

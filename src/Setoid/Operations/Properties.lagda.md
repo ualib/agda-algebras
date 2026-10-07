@@ -52,7 +52,7 @@ this module only fixes the interface they would implement.
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Setoid.Operations.Properties where
 

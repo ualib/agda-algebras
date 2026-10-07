@@ -30,7 +30,7 @@ The construction that does work is explained below and in
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Setoid.Varieties.Maltsev.Modularity where
 

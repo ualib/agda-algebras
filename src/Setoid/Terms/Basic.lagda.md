@@ -34,7 +34,7 @@ the soundness proof in [Setoid.Varieties.SoundAndComplete][].
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Setoid.Terms.Basic where
 

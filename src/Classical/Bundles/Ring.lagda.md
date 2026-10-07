@@ -19,7 +19,7 @@ direction is one `Func` plus the eleven equation clauses.
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Classical.Bundles.Ring where
 

@@ -50,7 +50,7 @@ with emitted word certificates can use it.
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Classical.Structures.Group.SubgroupClassification where
 

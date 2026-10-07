@@ -37,7 +37,7 @@ theory), so the record now lives in `Order/`.
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Order.Iso where
 

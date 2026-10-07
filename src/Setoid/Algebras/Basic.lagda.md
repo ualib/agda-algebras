@@ -19,9 +19,10 @@ setoid an operation is not a bare function but a `Func`{.AgdaRecord}, that is, a
 function bundled with a proof that it sends related arguments to related results.
 Carrying the proof inside the structure yields quotients: a quotient algebra is
 the *same* carrier under a coarser equivalence, so forming one needs neither
-quotient types nor an axiom.  That matters here, because the library is
-`--safe --cubical-compatible`, where function extensionality is unavailable; see
-the discussion at `mkAlgebra`{.AgdaFunction} below for where the cost reappears.
+quotient types nor an axiom.  That matters here, because the library is checked
+under `--safe` and outside Cubical mode, where function extensionality can be
+neither proved nor postulated; see the discussion at `mkAlgebra`{.AgdaFunction}
+below for where the cost reappears.
 
 This module is the canonical entry point for the `Setoid/` tree.  It defines the
 `Algebra`{.AgdaRecord} record, two smart constructors for building one from an
@@ -39,7 +40,7 @@ Modules most closely related to this one are the following:
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Setoid.Algebras.Basic where
 
@@ -174,7 +175,8 @@ builders below package that destructuring once.
 A *fully automatic* congruence is not derivable at this layer, and deliberately so.
 Passing from the pointwise hypothesis `∀ i → u i ≈ v i` to `f o u ≈ f o v` is exactly an
 application of function extensionality, which the Setoid development avoids on principle
-and which is in any case unavailable under `--safe --cubical-compatible`.
+and which is in any case unavailable here: Agda cannot prove it outside Cubical mode,
+and `--safe` forbids postulating it.
 
 So each constructor still requires a per-operation, pointwise congruence `cong-f`;
 it removes only the `(refl , args≈)` boilerplate, never the mathematical content.

@@ -16,7 +16,7 @@ what the 3.0 reconstruction changed, and where to go next.
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 module Overture.Preface where
 ```
 -->
@@ -40,7 +40,7 @@ The proof-assistant landscape of 2026 offers several mature choices — Lean 4, 
 
 **A clear path to cubical type theory**.  Agda has a mature cubical mode with computational univalence and the structure identity principle.  The 3.0 canonical development uses setoids rather than cubical paths, partly because the cubical ecosystem is still stabilizing and partly because setoids are a lingua franca that readers from many traditions can approach without a tutorial.  But the development is written *with cubical portability in mind*: definitions are stated in terms of the algebra's own equivalence relation (`Algebra.Domain`) rather than propositional equality, so that when v4.0 swaps setoids for paths the substitution is substantively mechanical.  The appeal for a universal algebraist is direct: in the cubical mode, isomorphism *is* equality, which is what the informal practice has always pretended.  The structure identity principle turns that pretence into computation.
 
-**A constructive substrate well-matched to universal algebra**.  Universal algebra has historically been set-theoretic, but its core constructions are constructive by nature.  Free algebras are inductive; subalgebra closures are least fixed points of monotone operators, which are computable when the operators are; homomorphic images, quotient algebras, and subdirect products are concretely describable without invoking ambient set-theoretic machinery.  Agda under `--safe --cubical-compatible --exact-split` is a setting where one cannot cheat without the checker noticing, and where the resulting developments are guaranteed consistent with a constructive universe.  Much of classical universal algebra does not need classical logic; the subset that does — ultrafilter-based compactness arguments, Birkhoff-style completeness relying on Zorn — can be isolated, made explicit, and if need be postulated cleanly at the boundary rather than absorbed invisibly into the ambient logic.
+**A constructive substrate well-matched to universal algebra**.  Universal algebra has historically been set-theoretic, but its core constructions are constructive by nature.  Free algebras are inductive; subalgebra closures are least fixed points of monotone operators, which are computable when the operators are; homomorphic images, quotient algebras, and subdirect products are concretely describable without invoking ambient set-theoretic machinery.  Agda under `--safe --without-K --exact-split` is a setting where one cannot cheat without the checker noticing, and where the resulting developments are guaranteed consistent with a constructive universe.  Much of classical universal algebra does not need classical logic; the subset that does (ultrafilter-based compactness arguments, Birkhoff-style completeness relying on Zorn) can be isolated, made explicit, and if need be postulated cleanly at the boundary rather than absorbed invisibly into the ambient logic.
 
 These three reasons are not independent: the constructive substrate makes the proof terms meaningful, and the cubical trajectory keeps the constructive substrate future-proof against the eventual migration of foundations to path-based equality.
 

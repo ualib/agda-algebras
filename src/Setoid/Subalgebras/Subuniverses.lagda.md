@@ -48,7 +48,7 @@ the term operations implies membership in `Subuniverses`{.AgdaFunction}.
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Setoid.Subalgebras.Subuniverses where
 

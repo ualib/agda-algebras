@@ -13,7 +13,7 @@ This is the [Legacy.Base.Terms.Basic][] module of the [Agda Universal Algebra Li
 ```agda
 
 
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 open import Overture using (Signature ; 𝓞 ; 𝓥 )
 

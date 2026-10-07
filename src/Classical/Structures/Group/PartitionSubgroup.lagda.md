@@ -37,7 +37,7 @@ partition lattice `Eq(n)` into the interval `[D , Gⁿ]` of the subgroup lattice
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Classical.Structures.Group.PartitionSubgroup where
 

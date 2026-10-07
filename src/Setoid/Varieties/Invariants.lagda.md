@@ -15,7 +15,7 @@ The canonical example available in this library is the modelling relation `𝑨 
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Setoid.Varieties.Invariants where
 

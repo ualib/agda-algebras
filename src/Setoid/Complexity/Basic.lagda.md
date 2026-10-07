@@ -13,7 +13,7 @@ This module is the canonical home for the content previously developed in `Legac
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Setoid.Complexity.Basic where
 ```

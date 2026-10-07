@@ -33,7 +33,7 @@ quotienting by it is well defined.
    that opens the barrel.
 
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Setoid.Relations where
 

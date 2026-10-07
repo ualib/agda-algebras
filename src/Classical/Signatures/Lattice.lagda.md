@@ -22,7 +22,7 @@ that participates in the variety's equations gets its own signature symbol.
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Classical.Signatures.Lattice where
 

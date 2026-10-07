@@ -14,7 +14,7 @@ Mirror of the Group bridge with the added `comm` field; over `Sig-Group`.
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Classical.Bundles.AbelianGroup where
 

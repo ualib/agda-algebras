@@ -33,7 +33,7 @@ congruence-lattice statement about separating families, where the monolith argum
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Setoid.Subalgebras.Subdirect.Irreducible where
 

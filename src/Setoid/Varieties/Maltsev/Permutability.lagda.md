@@ -21,7 +21,7 @@ The present module connects that to the *lattice* side (built in
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Setoid.Varieties.Maltsev.Permutability where
 

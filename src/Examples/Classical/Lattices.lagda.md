@@ -18,7 +18,7 @@ Each submodule is the home of one concrete lattice.
 + `L3Heyting` is the three-element chain as a Heyting algebra.
 
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Examples.Classical.Lattices where
 

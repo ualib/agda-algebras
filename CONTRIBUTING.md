@@ -147,12 +147,12 @@ This section describes only the most important conventions contributors are expe
 Every `.agda` source file begins with:
 
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 ```
 
 plus `module X.Y.Z where` on the next non-comment line.
 
-As of the 3.0 reconstruction, all of `src/` uses `--cubical-compatible`.  When the 3.0 consolidation freezes pre-reconstruction content as `Legacy/Base/` (see M2), the frozen tree will retain its historical `--without-K` pragma for stability, but new contributions will not land there.
+All of `src/` uses this pragma, the frozen `Legacy/Base/` tree included, though new contributions do not land there (see M2).  The library used `--cubical-compatible` for part of the 3.0 development and returned to `--without-K`; [ADR-011](./docs/adr/011-without-k.md) records why.
 
 
 ### Naming

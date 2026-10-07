@@ -24,7 +24,7 @@ the presentation itself and [Setoid.Congruences.Presented.Decidable][] for the
 decision procedure.
 
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Setoid.Congruences.Presented where
 

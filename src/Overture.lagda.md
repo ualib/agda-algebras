@@ -34,7 +34,7 @@ The Overture is the foundation layer: the vocabulary every later tree (`Setoid/`
    translation along signature morphisms.
 
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Overture where
 

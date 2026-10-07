@@ -72,8 +72,8 @@ mechanized version has to make.
 +  **Equality on each side is mutual containment, not propositional equality**.  On the
    congruence side this is `_≑_`{.AgdaFunction} of [Setoid.Congruences.Lattice][], for
    the reasons given there (upgrading it would need propositional extensionality, which
-   `--safe --cubical-compatible` does not provide); on the subgroup side we take the
-   matching `_≈ⁿ_`{.AgdaFunction}.  So `to∘from`{.AgdaField} and `from∘to`{.AgdaField}
+   Agda cannot prove outside Cubical mode and `--safe` forbids postulating); on the
+   subgroup side we take the matching `_≈ⁿ_`{.AgdaFunction}.  So `to∘from`{.AgdaField} and `from∘to`{.AgdaField}
    are *bi-implications of membership*, not equalities of predicates.
 
 +  **The round trip on subgroups uses the `respects`{.AgdaField} field**.  Recovering
@@ -117,7 +117,7 @@ ingredient the monolith transport will need beyond the isomorphism itself.
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Classical.Structures.Group.Congruences where
 

@@ -23,7 +23,7 @@ underlying algebra), and `CommutativeRing-Op` inherits the additive `(_+_, 0R,
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Classical.Structures.CommutativeRing where
 

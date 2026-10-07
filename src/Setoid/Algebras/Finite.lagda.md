@@ -39,7 +39,7 @@ independent interface is `FiniteCongruences`{.AgdaRecord}, defined in
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Setoid.Algebras.Finite  where
 

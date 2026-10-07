@@ -15,7 +15,7 @@ This module collects all submodules the library that use "bare" types, as oppose
 ```agda
 
 
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Legacy.Base where
 

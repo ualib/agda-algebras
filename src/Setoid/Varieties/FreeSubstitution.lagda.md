@@ -24,8 +24,8 @@ a freshly *rebuilt* term
     s [ σ ] · t [ σ ] = node ∙-Op (λ { 0F → s [ σ ] ; 1F → t [ σ ] }),
 
 since a pattern-matching lambda does not reduce under a variable index `i`, and
-bridging the two position functions needs function extensionality, which is
-unavailable under `--safe` / `--cubical-compatible`.[^1]
+bridging the two position functions needs function extensionality, which Agda
+cannot prove outside Cubical mode and `--safe` forbids postulating.[^1]
 
 The practical bite is that the obvious way to instantiate an equation at *compound*
 terms fails: `sub (hyp i) σ` produces a goal in `_[ σ ]`-form that will not match a
@@ -66,7 +66,7 @@ The kit also has a *semantic* face, used by the converse Maltsev conditions:
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Setoid.Varieties.FreeSubstitution where
 

@@ -38,7 +38,7 @@ The conclusion is that the core is the greatest normal subgroup below `H`.[^1]
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Classical.Structures.Group.NormalCore where
 

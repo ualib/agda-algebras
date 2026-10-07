@@ -17,7 +17,7 @@ the codomain. The following type manifests this property.
 ```agda
 
 
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Legacy.Base.Functions.Injective where
 

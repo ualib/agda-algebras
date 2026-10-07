@@ -29,7 +29,7 @@ one place, rather than being re-derived wherever a level has to change.
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Setoid.Functions.Basic where
 

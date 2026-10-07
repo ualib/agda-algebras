@@ -25,7 +25,7 @@ two-step derivation from absorption, the absorbʳ form is one ∨-comm step.
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Classical.Bundles.Lattice where
 

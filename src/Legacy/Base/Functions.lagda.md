@@ -18,7 +18,7 @@ source code inhabits the file [Legacy/Base/Functions.lagda][], which resides in 
 ```agda
 
 
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Legacy.Base.Functions where
 

@@ -43,7 +43,7 @@ extending or reusing as appropriate.
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Classical.Signatures.Magma where
 

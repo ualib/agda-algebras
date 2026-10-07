@@ -32,7 +32,7 @@ the identity (hence the operation is idempotent).
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Examples.Classical.CommutativeIdempotentMagma where
 

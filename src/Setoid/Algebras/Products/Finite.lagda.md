@@ -33,7 +33,7 @@ algebra on `Sᵐ/D` inherits finiteness through
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Setoid.Algebras.Products.Finite where
 

@@ -20,7 +20,7 @@ example with each structure issue is established in M3-3 ([`Examples.Classical.M
 and continues issue-by-issue under milestone M3.
 
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Examples.Classical where
 

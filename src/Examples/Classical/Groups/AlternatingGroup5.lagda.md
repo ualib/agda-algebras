@@ -56,7 +56,7 @@ group.  The certificate witnesses this in two stages decided by
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Examples.Classical.Groups.AlternatingGroup5 where
 

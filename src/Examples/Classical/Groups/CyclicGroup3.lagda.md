@@ -31,7 +31,7 @@ The addition table (rows indexed by the left summand, columns by the right; entr
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Examples.Classical.Groups.CyclicGroup3 where
 

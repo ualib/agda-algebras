@@ -40,7 +40,7 @@ of representable lattices is closed under dualization, which can be *stated* ove
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Classical.Structures.Lattice.Dual where
 

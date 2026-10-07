@@ -15,7 +15,7 @@ mirroring the veneers of `Ring`, `CommutativeMonoid`, `AbelianGroup`, etc.
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Classical.Small.Structures.CommutativeRing where
 

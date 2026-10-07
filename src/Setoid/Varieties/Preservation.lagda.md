@@ -15,7 +15,7 @@ This module proves that the classes `H`{.AgdaFunction}` 𝒦`{.AgdaBound},
 
 <!--
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Setoid.Varieties.Preservation where
 

@@ -15,7 +15,7 @@ This is the [Legacy.Base.Varieties.FreeAlgebras][] module of the [Agda Universal
 First we will define the relatively free algebra in a variety, which is the "freest" algebra among (universal for) those algebras that model all identities holding in the variety. Then we give a formal proof of Birkhoff's theorem which says that a variety is an equational class. In other terms, a class `𝒦` of algebras is closed under the operators `H`, `S`, and `P` if and only if `𝒦` is the class of algebras that satisfy some set of identities.
 
 ```agda
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 open import Level            using ( Level )
 open import Overture  using ( 𝓞 ; 𝓥 ; Signature )

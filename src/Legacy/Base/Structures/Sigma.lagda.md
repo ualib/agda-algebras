@@ -13,7 +13,7 @@ This is the [Legacy.Base.Structures.Sigma][] module of the [Agda Universal Algeb
 ```agda
 
 
-{-# OPTIONS --cubical-compatible --exact-split --safe #-}
+{-# OPTIONS --without-K --exact-split --safe #-}
 
 module Legacy.Base.Structures.Sigma where
 
