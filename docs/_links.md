@@ -767,6 +767,7 @@
 [Escardó]: https://www.cs.bham.ac.uk/~mhe
 [Escardó's notes]: https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes
 [Formalization of Universal Algebra in Agda]: http://www.sciencedirect.com/science/article/pii/S1571066118300768
+[Freese, Ježek, and Nation (1995)]: https://doi.org/10.1090/surv/042
 [function extensionality]: https://ncatlab.org/nlab/show/function+extensionality
 [git repository of the Agda UALib]: https://github.com/ualib/agda-algebras
 [git repository of the agda-algebras library]: https://github.com/ualib/agda-algebras
