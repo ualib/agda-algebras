@@ -378,6 +378,8 @@ Plain-text `A`, `B` denote carrier types; mathematical bold italic `𝑨`, `𝑩
 | `_≥_` | Superalgebra / reversed partial order |
 | `⊥`, `⊤` | Lattice bottom and top |
 | `_∧_`, `_∨_` | Lattice meet and join |
+| `_∧̇_`, `_∨̇_` | Formal meet and join, the constructors of the lattice terms `LatTerm X`; the dot marks the syntactic operation, as it does in `_≈̇_` |
+| `_≤ʷ_`, `_≈ʷ_` | Whitman's order on lattice terms, and the equality of the free lattice `FL X` that it induces |
 
 ### Set-theoretic
 
@@ -410,6 +412,7 @@ Plain-text `A`, `B` denote carrier types; mathematical bold italic `𝑨`, `𝑩
 |---|---|
 | `𝑻 X` | The term algebra over generators `X` |
 | `Term X` | The type of `𝑆`-terms over generators `X` |
+| `LatTerm X` | The type of lattice terms over generators `X`, with binary children (`Classical.Structures.Lattice.Free.Term`) |
 
 ### When to introduce new notation
 
