@@ -14,6 +14,7 @@ The 3.0 release is a major reconstruction of agda-algebras building on the Setoi
 
 ### Added
 
++  **Free lattices and Whitman's solution to the word problem** (M3-10, #589).  Four modules under [`src/Classical/Structures/Lattice/Free/`](src/Classical/Structures/Lattice/Free/), with their barrel `Classical.Structures.Lattice.Free`, give the library a free lattice it can compute in.  `LatTerm X` is a dedicated type of lattice terms, translated to and from `Term X` over `Sig-Lattice` with round trips up to `_≐_`.  Whitman's rules are the inductive relation `_≤ʷ_`, one constructor per rule in the dispatch order, with a `Dec`-valued decision procedure, reflexivity, and transitivity, all by structural recursion and without a `TERMINATING` pragma.  `FL X` is built order first; the rules are proved sound and complete for the order of every lattice (Whitman's theorem; Freese, Ježek, and Nation, *Free Lattices*, Theorem 1.11), evaluation is the unique homomorphism extending a map of generators, and a bridge to `Setoid.Varieties.SoundAndComplete` makes derivable equality under `Th-Lattice`, hence equality in `𝔽[ X ]`, decidable.  [`Examples.Classical.Lattices.FreeLattice3`](src/Examples/Classical/Lattices/FreeLattice3.lagda.md) decides inequalities in `FL(3)` by evaluation, among them the failure of distributivity and the underivability of the distributive law from the lattice axioms.
 +  **ADR-001 — `Setoid/` as canonical development tree**.
    `docs/adr/001-setoid-as-canonical.md` records the architectural decision
    and the alternatives considered.

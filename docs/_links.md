@@ -216,6 +216,11 @@
 [Classical.Structures.Lattice.DistributiveLattice]: /Classical/Structures/Lattice/DistributiveLattice/
 [Classical.Structures.Lattice.Dual]: /Classical/Structures/Lattice/Dual/
 [Classical.Structures.Lattice.FilterIdeal]: /Classical/Structures/Lattice/FilterIdeal/
+[Classical.Structures.Lattice.Free]: /Classical/Structures/Lattice/Free/
+[Classical.Structures.Lattice.Free.Derivability]: /Classical/Structures/Lattice/Free/Derivability/
+[Classical.Structures.Lattice.Free.Term]: /Classical/Structures/Lattice/Free/Term/
+[Classical.Structures.Lattice.Free.Universal]: /Classical/Structures/Lattice/Free/Universal/
+[Classical.Structures.Lattice.Free.Whitman]: /Classical/Structures/Lattice/Free/Whitman/
 [Classical.Structures.Lattice.OrdinalSum]: /Classical/Structures/Lattice/OrdinalSum/
 [Classical.Structures.Lattice.Partitions]: /Classical/Structures/Lattice/Partitions/
 [Classical.Structures.Lattice.Product]: /Classical/Structures/Lattice/Product/
@@ -258,6 +263,7 @@
 [Examples.Classical.Groups.KleinFourGroup]: /Examples/Classical/Groups/KleinFourGroup/
 [Examples.Classical.Groups.SymmetricGroup3]: /Examples/Classical/Groups/SymmetricGroup3/
 [Examples.Classical.Lattices]: /Examples/Classical/Lattices/
+[Examples.Classical.Lattices.FreeLattice3]: /Examples/Classical/Lattices/FreeLattice3/
 [Examples.Classical.Lattices.L2]: /Examples/Classical/Lattices/L2/
 [Examples.Classical.Lattices.L2Distributive]: /Examples/Classical/Lattices/L2Distributive/
 [Examples.Classical.Lattices.L3Heyting]: /Examples/Classical/Lattices/L3Heyting/
@@ -569,6 +575,11 @@
 [Classical/Structures/Lattice/DistributiveLattice.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Lattice/DistributiveLattice.lagda.md
 [Classical/Structures/Lattice/Dual.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Lattice/Dual.lagda.md
 [Classical/Structures/Lattice/FilterIdeal.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Lattice/FilterIdeal.lagda.md
+[Classical/Structures/Lattice/Free.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Lattice/Free.lagda.md
+[Classical/Structures/Lattice/Free/Derivability.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Lattice/Free/Derivability.lagda.md
+[Classical/Structures/Lattice/Free/Term.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Lattice/Free/Term.lagda.md
+[Classical/Structures/Lattice/Free/Universal.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Lattice/Free/Universal.lagda.md
+[Classical/Structures/Lattice/Free/Whitman.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Lattice/Free/Whitman.lagda.md
 [Classical/Structures/Lattice/OrdinalSum.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Lattice/OrdinalSum.lagda.md
 [Classical/Structures/Lattice/Partitions.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Lattice/Partitions.lagda.md
 [Classical/Structures/Lattice/Product.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Lattice/Product.lagda.md
@@ -611,6 +622,7 @@
 [Examples/Classical/Groups/KleinFourGroup.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Examples/Classical/Groups/KleinFourGroup.lagda.md
 [Examples/Classical/Groups/SymmetricGroup3.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Examples/Classical/Groups/SymmetricGroup3.lagda.md
 [Examples/Classical/Lattices.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Examples/Classical/Lattices.lagda.md
+[Examples/Classical/Lattices/FreeLattice3.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Examples/Classical/Lattices/FreeLattice3.lagda.md
 [Examples/Classical/Lattices/L2.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Examples/Classical/Lattices/L2.lagda.md
 [Examples/Classical/Lattices/L2Distributive.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Examples/Classical/Lattices/L2Distributive.lagda.md
 [Examples/Classical/Lattices/L3Heyting.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Examples/Classical/Lattices/L3Heyting.lagda.md
@@ -767,6 +779,7 @@
 [Escardó]: https://www.cs.bham.ac.uk/~mhe
 [Escardó's notes]: https://www.cs.bham.ac.uk/~mhe/HoTT-UF-in-Agda-Lecture-Notes
 [Formalization of Universal Algebra in Agda]: http://www.sciencedirect.com/science/article/pii/S1571066118300768
+[Freese, Ježek, and Nation (1995)]: https://doi.org/10.1090/surv/042
 [function extensionality]: https://ncatlab.org/nlab/show/function+extensionality
 [git repository of the Agda UALib]: https://github.com/ualib/agda-algebras
 [git repository of the agda-algebras library]: https://github.com/ualib/agda-algebras
