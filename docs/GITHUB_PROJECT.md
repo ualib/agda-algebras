@@ -784,11 +784,11 @@ Findings follow in a comment.  The plan file, `docs/GITHUB_PROJECT.md`, needs `m
 
 Move the library from Agda 2.8.0 and standard-library 2.3 to Agda 2.9.0 and a standard library that supports it, as [#250] moved it to 2.8.0.  The investigation is [#586]: under the 2.9.0 nightly the library's own sources need nothing but the removal of two fixity declarations for closed operators ([#587]), so this upgrade is mostly the standard library and the pins.
 
-**The plan** (decided 2026-10-06): the library's modules move from `--cubical-compatible` back to `--without-K`, as a change of their own, before this one ([#279] tracks the flag strategy).  That makes standard-library 3.0 the target: 3.0 is `--without-K` again ([agda/agda-stdlib#2967], merged 2026-06-17), which a `--cubical-compatible` module cannot import (Agda reports `CoInfectiveImport`; [#586], row 4) and a `--without-K` module can.
+**The plan** (decided 2026-10-06): the library's modules move from `--cubical-compatible` back to `--without-K`, as a change of their own, before this one ([#594]; [#279] holds the flag strategy).  That makes standard-library 3.0 the target: 3.0 is `--without-K` again ([agda/agda-stdlib#2967], merged 2026-06-17), which a `--cubical-compatible` module cannot import (Agda reports `CoInfectiveImport`; [#586], row 4) and a `--without-K` module can.
 
 **The preconditions**, which this issue assumes, are as follows:
 
-+  **The switch to `--without-K` is on master**.
++  **The switch to `--without-K` ([#594]) is on master**.
 +  **Standard-library 3.0 is released and type-checks under the released Agda 2.9.0**.  As of 2026-10-06 neither is released.  3.0's development head, on agda-stdlib's `agda-master` branch, checks under the 2.9.0 nightly (Agda's own CI); no released standard library does (2.3 and 2.4 both fail at `irrelevant-recompute`; [#586], rows 1 and 2).
 +  **nixpkgs packages both**, since the flake takes Agda and the standard library from one nixpkgs input; otherwise an `overrideAttrs` pin, if William chooses it.
 
@@ -817,6 +817,66 @@ If one is missing when this issue is picked up, record that here and stop; a pat
 [#279]: https://github.com/ualib/agda-algebras/issues/279
 [#586]: https://github.com/ualib/agda-algebras/issues/586
 [#587]: https://github.com/ualib/agda-algebras/pull/587
+[#594]: https://github.com/ualib/agda-algebras/issues/594
+[agda/agda-stdlib#2967]: https://github.com/agda/agda-stdlib/pull/2967
+
+---
+
+### Issue M1-16: Switch every module from --cubical-compatible to --without-K (#594, closed)
+
+**Labels**: `milestone-1-infra`, `cubical`
+
+## Description
+
+Move every module of the library from `--cubical-compatible` back to `--without-K`, reversing that part of [#250] (decision: William, 2026-10-06).  The reasons are as follows:
+
++  **Standard-library 3.0 is `--without-K`** ([agda/agda-stdlib#2967], merged 2026-06-17), and a `--cubical-compatible` module cannot import a `--without-K` one: Agda reports `CoInfectiveImport`, under 2.8.0 as under 2.9.0 ([#586], row 4).  So the library cannot take 3.0, or any later standard library, until it switches; [#588] (the move to Agda 2.9.0 and standard-library 3.0) depends on this issue.
++  **The flag has no consumer**.  It exists to let a `--cubical` module import this one, and nothing does; the Cubical track of ADR-003 derives its modules by substitution, not by import, and a `--cubical` tree would build on agda/cubical, not on the standard library's `--without-K` modules.  [#279] holds the flag strategy and the import-firewall discussion.
++  **It costs time and bytes**.  Measured below: the whole library checks faster and its interfaces are smaller under `--without-K`, which matters for a browser IDE that ships the interfaces.
+
+The switch is independent of any Agda or standard-library release: it checks today under the pinned Agda 2.8.0 and standard-library 2.3 (which is `--cubical-compatible`; a `--without-K` module may import a `--cubical-compatible` one, as every `--without-K` module of the standard library imports Agda's `--cubical-compatible` builtins).
+
+## What is known, 2026-10-06
+
+A probe on a scratch branch (`22f67aa5`, [#587]'s head, plus the sweep below) under the flake's Agda 2.8.0 and standard-library 2.3, every module from source, measured against the unswept tree in the same sitting:
+
++  **The sweep is the whole change**: 344 module pragmas and the Makefile's two aggregator pragmas.  `make check` then passes with the same 346 `Checking` lines (344 modules and two aggregators) and the same 951 `UserWarning` positions (the library's own deprecations), and no other warning or error.  The probe kept `flags: -WnoUnsupportedIndexedMatch` in `agda-algebras.agda-lib`, so the figures are the sweep's alone.
++  **Time**, the library's 346 modules from source with the standard library's interfaces accepted, alternating runs in one sitting at a 1-minute load average of 1.95 to 1.99 before each: `--cubical-compatible` 85.3 and 87.7 s; `--without-K` 74.9 and 75.6 s, 12 to 14% less.  (For scale, the same check with the standard library from source too: 157.9 s at a load average of 1.00; the afternoon's runs of it took 176 to 198 s at about 2.)
++  **Peak RSS rose**: 2,095,228 and 2,095,516 KiB (about 2.0 GiB) under `--cubical-compatible`, 2,713,104 and 2,713,168 KiB (about 2.6 GiB) under `--without-K`, both at `+RTS -M6G -A128M`.  Not diagnosed; the pull request measures it again, with `+RTS -s` if it persists.
++  **Interfaces are smaller**: the whole `_build` of 346 interfaces went from 60,581,757 to 54,255,026 bytes (10.4% smaller; gzipped as one stream, 50,978,625 to 45,683,072).  326 shrank, 2 are the same size, 18 grew (those in the HSP closure by 2 to 50 bytes).  The largest change: `Setoid.Congruences.ChainJoin`, 954,341 to 452,292 bytes.
++  **The import closure of `Setoid.Varieties.HSP`** (314 modules, from `agda --dependency-graph`): the library's 92 interfaces went from 18,110,993 to 15,585,129 bytes (13.9% smaller; gzipped 15,592,745 to 13,460,527), so the closure's total from 63,714,368 to 61,188,501 bytes (gzipped 54,290,430 to 52,158,240), the standard library's 212 modules being unchanged.
+
+The runs: `make AGDA=<wrapper> check` in each worktree, the wrapper being the flake's Agda 2.8.0 binary with `--no-default-libraries --library-file <file> --library standard-library --library agda-algebras`, the file naming a from-source checkout of standard-library 2.3 and the worktree; GNU time for wall and peak RSS; `Checking` lines counted unanchored.  The logs are kept outside the repository (`$S/logs/probe-*`).
+
+The sweep itself is mechanical: all 344 modules carry the one line `{-# OPTIONS --cubical-compatible --exact-split --safe #-}`, and the Makefile's two aggregator pragmas (`Everything.agda`, `EverythingLegacy.agda`) are the only others.  `Legacy/` must switch with the rest, frozen or not: its modules import `Setoid/` modules, and a `--cubical-compatible` module importing a `--without-K` one is exactly the failing direction.
+
+## Tasks
+
++  [ ] The sweep: the 344 module pragmas to `{-# OPTIONS --without-K --exact-split --safe #-}`, and the two `echo` lines in the Makefile's aggregator targets.
++  [ ] `agda-algebras.agda-lib`: drop `flags: -WnoUnsupportedIndexedMatch`, since that warning exists only under `--cubical-compatible`.
++  [ ] The prose that explains or names the flag, each claim checked rather than search-and-replaced: `Overture.Basic`'s paragraph on the pragma (it argues for `--cubical-compatible` over `--without-K`; it now argues the reverse, with the reasons above), `Overture.Preface`, and the ten modules whose prose says `Fin`-indexed tuples "lack η under `--cubical-compatible`" or that something is "unavailable under `--safe --cubical-compatible`" (`Classical.Bundles.Magma`, `Classical.Bundles.Semigroup`, `Classical.Operations`, `Classical.Structures.Group.Congruences`, `.Power`, `.Product`, `Classical.Structures.Interpret`, `Setoid.Algebras.Basic`, `Setoid.Congruences.Lattice`, `Setoid.Varieties.FreeSubstitution`): those are facts about `--safe` without function extensionality, true under either flag, so name the right cause.
++  [ ] The documents that state the rule: `docs/STYLE_GUIDE.md` (four pragma listings and the bullet explaining the flag), `CONTRIBUTING.md` (the pragma and the paragraph saying all of `src/` uses `--cubical-compatible`), `INSTALL.md` (the `UnsupportedIndexedMatch` note and the "implies full unfolding" sentence), `docs/site-guide.md`, `scripts/audit_lagda_migration.sh`'s smoke-test template, `scripts/python/groups/a5_simple_cert.py`'s generated pragma, and `scripts/python/test_corpus_stats.py`'s fixtures (the stats read only `--safe`, so they pass either way; change the fixtures for consistency).
++  [ ] A decision record, `docs/adr/011-*.md`, in the form of the others: the decision, the three reasons, the measurements, and what it means for ADR-003 (the portability discipline stays; a future `--cubical` tree cannot import this one, which is [#279]'s firewall and was the case for 3.0's standard library in any event).  Leave ADR-003 as it is, with a one-line pointer to the new record.
++  [ ] `CHANGELOG.md`: an entry under the unreleased version.
++  [ ] On [#279]: a comment that the strategy is decided here, with a link to the record; whether it closes is William's call.
+
+## Acceptance criteria
+
++  [ ] `nix develop --command make check` passes under the current pins, every module checked from source, locally and in CI, with no new warning kind (the library's own `UserWarning` deprecations are the only warnings before and after).
++  [ ] No pragma in `src/` and no generated aggregator names `--cubical-compatible`; `git grep -e cubical-compatible` finds only dated records (the CHANGELOG, ADR-003, the audits and notes, the papers) and the new ADR.
++  [ ] The pull request's description records the time and interface-size figures of a from-source check before and after, with the load average of each run.
++  [ ] `make corpus-stats-check`, `make docstrings` and the docs lanes pass.
+
+## Non-goals
+
++  Not the move to Agda 2.9.0 or to standard-library 3.0; that is [#588], which needs this issue first.
++  Not the Cubical track; ADR-003's discipline is unchanged, and the consequence for a future `src/Cubical/` is recorded, not acted on.
+
+[#250]: https://github.com/ualib/agda-algebras/issues/250
+[#279]: https://github.com/ualib/agda-algebras/issues/279
+[#586]: https://github.com/ualib/agda-algebras/issues/586
+[#587]: https://github.com/ualib/agda-algebras/pull/587
+[#588]: https://github.com/ualib/agda-algebras/issues/588
 [agda/agda-stdlib#2967]: https://github.com/agda/agda-stdlib/pull/2967
 
 <!-- END GENERATED: milestone-1 -->
