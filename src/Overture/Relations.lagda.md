@@ -66,8 +66,6 @@ If `R` is a binary relation on `A`, the *`R`-block containing* `u : A` is the pr
 ```agda
 [_] : {A : Type a} → A → {ρ : Level} → BinaryRel A ρ → Pred A ρ
 [ u ] R = R u
-
-infix 60 [_]
 ```
 
 ### The identity relation
