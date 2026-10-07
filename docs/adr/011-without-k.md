@@ -158,7 +158,10 @@ which also drops `-WnoUnsupportedIndexedMatch`):
 | 5 | 1.43, 1.57 | 96.80 s | 85.70 s | 11.5% less |
 
 Peak RSS was 1,788,612 to 1,803,552 KiB in every `--cubical-compatible` run and
-2,764,548 to 2,765,360 KiB in every `--without-K` run.
+2,764,548 to 2,765,360 KiB in every `--without-K` run.  A last run of this
+change's final commit, whose sources differ from those measured only in the
+prose of three modules, took 84.98 s at a load of 1.07 and peaked at
+2,665,964 KiB, about 100 MB lower (see *Peak memory*).
 
 Every run exited 0 with 346 `Checking` lines (344 modules and the two
 aggregators) and the same 951 `UserWarning` positions, the library's own
@@ -191,7 +194,8 @@ peaks at 1,213 MB of live data under `--cubical-compatible` (281 samples) and
 1,198 MB under `--without-K` (251 samples).  GHC's copying collector sizes the
 heap from the largest live set it has seen, so a whole run's peak RSS depends on
 whether a major collection happens to land on that module's peak, under either
-flag.
+flag.  The final commit's run is a control of that reading: prose alone, which
+changes no definition, moved the peak by about 100 MB.
 
 ## Consequences
 
