@@ -10,7 +10,7 @@ author: "the agda-algebras development team"
 
 This is the [Classical.Structures.Lattice][] module of the [Agda Universal Algebra Library][].
 
-This is a barrel module: it declares nothing of its own and re-exports the seven
+This is a barrel module: it declares nothing of its own and re-exports the eight
 modules that develop lattices in the `Classical/` tree.  A lattice here is an
 algebra over `Sig-Lattice`{.AgdaFunction} satisfying `Th-Lattice`{.AgdaFunction},
 that is, the *equational* presentation; the order-theoretic presentation, in which
@@ -29,6 +29,10 @@ build instead.
    Dualizing twice recovers each operation *pointwise*, but the involution is not
    formalized there, because stating it as an equality of `Lattice`{.AgdaFunction}
    values would need function extensionality and no consumer has required it;
++  [Classical.Structures.Lattice.Free][]: the free lattice `FL(X)`, with
+   Whitman's decision procedure for its order, its universal property, and the
+   bridge that makes derivable equality under `Th-Lattice`{.AgdaFunction}
+   decidable;
 +  [Classical.Structures.Lattice.FilterIdeal][]: principal filters and principal
    ideals, and the fact that the union of a principal filter and a principal ideal
    is again a sublattice universe;
@@ -49,6 +53,7 @@ open import Classical.Structures.Lattice.Basic                public
 open import Classical.Structures.Lattice.DistributiveLattice  public
 open import Classical.Structures.Lattice.Dual                 public
 open import Classical.Structures.Lattice.FilterIdeal          public
+open import Classical.Structures.Lattice.Free                 public
 open import Classical.Structures.Lattice.OrdinalSum           public
 open import Classical.Structures.Lattice.Partitions           public
 open import Classical.Structures.Lattice.Product              public
