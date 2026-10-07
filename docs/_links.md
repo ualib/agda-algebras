@@ -726,6 +726,7 @@
 [ADR-008]: /adr/008-two-layer-congruence-discipline/
 [ADR-009]: /adr/009-signature-genericity-generalized-variables/
 [ADR-010]: /adr/010-documentation-coverage-policy/
+[ADR-011]: /adr/011-without-k/
 
 <!-- ===== External links ===== -->
 [Classical.Structures.DistributiveLattice]: /Classical/Structures/Lattice/DistributiveLattice/

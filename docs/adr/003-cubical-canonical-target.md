@@ -3,6 +3,7 @@
 ## Status
 
 Accepted — 2026-04-24.  Implementation deferred to 4.0.
+Qualified by [ADR-011](011-without-k.md) (2026-10-06): the library is checked under `--without-K`, so a `--cubical` tree derives its modules from this one and cannot import them.
 
 ## Context
 
