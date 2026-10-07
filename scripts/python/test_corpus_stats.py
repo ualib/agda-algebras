@@ -24,7 +24,7 @@ import corpus_stats as cs  # noqa: E402
 _TMP = tempfile.TemporaryDirectory(prefix="corpus-stats-test-")
 
 
-def module(*blocks: str, pragma: str = "--cubical-compatible --exact-split --safe") -> str:
+def module(*blocks: str, pragma: str = "--without-K --exact-split --safe") -> str:
     """A minimal literate module: a hidden preamble fence carrying the OPTIONS
     pragma, then one visible fence per extra block."""
     head = ("<!--\n"
@@ -61,7 +61,7 @@ def test_safe_pragma_is_detected() -> None:
 
 
 def test_module_without_safe_is_not_counted_as_checked() -> None:
-    assert cs.module_stats(module(pragma="--cubical-compatible"))[1] is False
+    assert cs.module_stats(module(pragma="--without-K"))[1] is False
 
 
 def test_safe_is_matched_as_a_whole_option() -> None:
@@ -73,7 +73,7 @@ def test_options_pragma_quoted_in_prose_is_ignored() -> None:
     # The pragma is read from the fenced code, so prose showing an example
     # cannot make an unsafe module look safe.
     text = ("Modules in this library open with `{-# OPTIONS --safe #-}`.\n"
-            + module(pragma="--cubical-compatible"))
+            + module(pragma="--without-K"))
     assert cs.module_stats(text)[1] is False
 
 
@@ -81,7 +81,7 @@ def test_a_commented_out_safe_pragma_does_not_count() -> None:
     # Agda applies the pragma on the next line, not the disabled one; a raw
     # search over the fence body would take the first and call this safe.
     text = ("<!--\n```agda\n-- {-# OPTIONS --safe #-}\n"
-            "{-# OPTIONS --cubical-compatible #-}\nmodule M where\n```\n-->\n")
+            "{-# OPTIONS --without-K #-}\nmodule M where\n```\n-->\n")
     assert cs.module_stats(text)[1] is False
 
 
@@ -105,7 +105,7 @@ def test_a_pragma_behind_another_pragma_still_counts() -> None:
 
 
 def test_a_pragma_split_across_lines_still_counts() -> None:
-    text = ("<!--\n```agda\n{-# OPTIONS --cubical-compatible\n"
+    text = ("<!--\n```agda\n{-# OPTIONS --without-K\n"
             "            --safe #-}\nmodule M where\n```\n-->\n")
     assert cs.module_stats(text)[1] is True
 
@@ -114,7 +114,7 @@ def test_a_pragma_split_across_lines_still_counts() -> None:
 # corpus: the aggregate over the tree.
 # --------------------------------------------------------------------------- #
 def test_corpus_aggregates_modules_loc_and_safe() -> None:
-    texts = [module("f = ?"), module("g = ?", pragma="--cubical-compatible")]
+    texts = [module("f = ?"), module("g = ?", pragma="--without-K")]
     assert cs.corpus(texts) == cs.Corpus(modules=2, loc=6, safe=1)
 
 

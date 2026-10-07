@@ -20,10 +20,11 @@ representation without manual record-shuffling.
 The round-trip is stated *pointwise* on the carrier, in the semigroup's underlying
 setoid equivalence, per
 [ADR-002 v2 §6](../../docs/adr/002-classical-layer-design.md).  The same
-Fin 2 η-failure under `--cubical-compatible` that motivated the pointwise
-round-trip for Magma applies here unchanged — the equation-witness layer adds
-nothing new to the bridge's obstruction analysis, only to its content, and that
-content (the curried associativity law) is supplied ready-made by
+Fin 2 η-failure that motivated the pointwise round-trip for Magma (no η-rule
+for functions on `Fin 2`, and no function extensionality to bridge the gap)
+applies here unchanged; the equation-witness layer adds nothing new to the
+bridge's obstruction analysis, only to its content, and that content (the
+curried associativity law) is supplied ready-made by
 `Semigroup-Op.assoc-law`, so the bridge itself stays a thin record-shuffle.
 
 <!--

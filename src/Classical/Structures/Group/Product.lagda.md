@@ -211,9 +211,11 @@ refold.  No case analysis on the equation is needed.
 
 The curried accessors of `Group-Op`{.AgdaModule} applied to the product agree, up to
 `≈ₓ`, with the pairs of the component accessors.  (They are not definitionally equal:
-the curried form routes the arguments through a canonical `pair` tuple, and `Fin`-
-indexed tuples lack η under `--cubical-compatible`; each bridge is one
-`interp-cong`{.AgdaFunction} per component, the standard resolution.)
+the curried form routes the arguments through a canonical `pair` tuple, and
+`Fin`-indexed tuples have no η-rule, so a tuple is not definitionally the `pair` of
+its entries, and proving the two equal would take function extensionality, which
+Agda cannot prove outside Cubical mode and `--safe` forbids postulating; each bridge
+is one `interp-cong`{.AgdaFunction} per component, the standard resolution.)
 
 ```agda
   open Group-Op 𝒢 using ()
