@@ -30,7 +30,7 @@ body:
     attributes:
       label: Agda version
       description: Output of `agda --version`.
-      placeholder: "Agda version 2.8.0"
+      placeholder: "Agda version 2.9.0"
     validations:
       required: true
 
