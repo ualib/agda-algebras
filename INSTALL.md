@@ -4,6 +4,7 @@ This document describes how to set up a development environment for the agda-alg
 
 ## Requirements
 
++  [Nix](https://nixos.org) 2.28 or later, with flakes enabled, until Agda 2.9.0 is released (Option 1)
 +  [Agda](https://agda.readthedocs.io) 2.9.0, not yet released: the flake pins agda/agda at commit [`da66a8c`](https://github.com/agda/agda/commit/da66a8c75f11d10699a6b38b261efdf244b66f2a), the `nightly` of 2026-10-05, and builds it from source
 +  [standard-library](https://github.com/agda/agda-stdlib) 2.3 with the five changes it needs under Agda 2.9.0: [formalverification/agda-stdlib](https://github.com/formalverification/agda-stdlib), tag [`v2.3-agda-2.9.0`](https://github.com/formalverification/agda-stdlib/releases/tag/v2.3-agda-2.9.0), whose release notes list them
 +  GNU Make
@@ -15,7 +16,7 @@ Agda versions before 2.8.0, and standard libraries before 2.3, are not supported
 
 ## Option 1 (required for now): Nix
 
-Install Nix from [https://nixos.org/download.html](https://nixos.org/download.html), then enable flakes by adding the following to `~/.config/nix/nix.conf`:
+Install Nix 2.28 or later from [https://nixos.org/download.html](https://nixos.org/download.html) (`nix --version` says which you have), then enable flakes by adding the following to `~/.config/nix/nix.conf`:
 
 ```
 experimental-features = nix-command flakes
@@ -144,6 +145,8 @@ make check               # should run to completion without errors
 ---
 
 ## Troubleshooting
+
+**`NAR hash mismatch in input 'github:agda/agda/…'`**.  Your Nix is probably older than 2.28.  Agda's tree holds six empty directories, the paths of its submodules, and Nix 2.26.3 drops them when it unpacks the tree, so it computes another hash than the one `flake.lock` records (Nix 2.28.6 and later keep them).  Upgrade Nix to 2.28 or later: for an installation made by the official installer, `nix upgrade-nix` does it.
 
 **Agda can't find standard-library**.  Inside `nix develop`, the shell writes a project-local libraries file that should Just Work. Outside the Nix shell, verify that `~/.config/agda/libraries` references your standard-library 2.3 installation (note that older Agda versions used `~/.agda/libraries`; 2.8.0 uses `~/.config/agda/` but falls back to `~/.agda/` for backward compatibility).
 

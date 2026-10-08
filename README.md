@@ -22,7 +22,7 @@ The **previous** version (called `UALib`, built against [TypeTopology](https://g
 
 ## Quickstart
 
-From a clean checkout to a green build, assuming [Nix][] with flakes enabled (see [`INSTALL.md`](INSTALL.md) for installation and flake-activation instructions):
+From a clean checkout to a green build, assuming [Nix][] 2.28 or later with flakes enabled (see [`INSTALL.md`](INSTALL.md) for installation and flake-activation instructions):
 
 ```bash
 git clone https://github.com/ualib/agda-algebras.git
