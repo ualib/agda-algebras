@@ -135,8 +135,6 @@ i.e., blocks of a partition (recall partitions correspond to equivalence relatio
 -- Alternative notation
 Block : {A : Type a} → A → {ρ : Level} → Equivalence A{ρ} → Pred A ρ
 Block u {ρ} R = ∣ R ∣ u
-
-infix 60 [_]
 ```
 
 

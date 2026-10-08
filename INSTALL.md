@@ -1,21 +1,22 @@
 # Installing agda-algebras
 
-This document describes how to set up a development environment for the agda-algebras library. The **recommended** path is Nix, which pins Agda 2.8.0 and standard-library 2.3 automatically. The alternative paths are for contributors who cannot or prefer not to use Nix.
+This document describes how to set up a development environment for the agda-algebras library.  Until Agda 2.9.0 and its standard library are released, the toolchain is available only through `nix develop`: the flake pins a pre-release Agda and a patched standard library 2.3.  Options 2 to 4 below install the previous toolchain, Agda 2.8.0 and standard-library 2.3, under which the library still checks today; CI no longer tests it.
 
 ## Requirements
 
-+  [Agda](https://agda.readthedocs.io) 2.8.0 or later (2.8.0 is what we pin)
-+  [standard-library](https://github.com/agda/agda-stdlib) 2.3
++  [Nix](https://nixos.org) 2.28 or later, with flakes enabled, until Agda 2.9.0 is released (Option 1)
++  [Agda](https://agda.readthedocs.io) 2.9.0, not yet released: the flake pins agda/agda at commit [`da66a8c`](https://github.com/agda/agda/commit/da66a8c75f11d10699a6b38b261efdf244b66f2a), the `nightly` of 2026-10-05, and builds it from source
++  [standard-library](https://github.com/agda/agda-stdlib) 2.3 with the five changes it needs under Agda 2.9.0: [formalverification/agda-stdlib](https://github.com/formalverification/agda-stdlib), tag [`v2.3-agda-2.9.0`](https://github.com/formalverification/agda-stdlib/releases/tag/v2.3-agda-2.9.0), whose release notes list them
 +  GNU Make
 +  A text editor with Agda support (Emacs with `agda-mode`, VSCode with `banacorn.agda-mode`, or equivalent)
 
-Older versions of Agda or the standard library are not supported on `master`. If you must work with an older configuration, check out a pre-2.0 tag.
+Agda versions before 2.8.0, and standard libraries before 2.3, are not supported on `master`.  If you must work with an older configuration, check out a pre-2.0 tag.
 
 ---
 
-## Option 1 (recommended): Nix
+## Option 1 (required for now): Nix
 
-Install Nix from [https://nixos.org/download.html](https://nixos.org/download.html), then enable flakes by adding the following to `~/.config/nix/nix.conf`:
+Install Nix 2.28 or later from [https://nixos.org/download.html](https://nixos.org/download.html) (`nix --version` says which you have), then enable flakes by adding the following to `~/.config/nix/nix.conf`:
 
 ```
 experimental-features = nix-command flakes
@@ -31,9 +32,16 @@ nix develop
 
 The `nix develop` command will download and build (on first invocation) the pinned versions of Agda and the standard library, and drop you in a shell where:
 
-+  `agda` is on `PATH` and points to 2.8.0
-+  standard-library 2.3 is registered via a project-local `AGDA_DIR` at `.agda/`
++  `agda` is on `PATH` and points to 2.9.0
++  the patched standard-library 2.3 is registered via a project-local `AGDA_DIR` at `.agda/`
 +  any `~/.config/agda/libraries` entries on the host are ignored for the duration of the shell
+
+The first `nix develop` builds Agda 2.9.0 from source, and checks the standard library with it, unless Nix can fetch them from the formalverification binary cache on [Cachix](https://www.cachix.org/), which this repository's CI uses.  Built here, they took about six and a half minutes on a 20-core workstation, with the build's memory peaking near 8 GiB (2026-10-07); a machine with fewer cores takes longer.  To fetch them instead, run `cachix use formalverification`, or add the following lines to your Nix configuration (`/etc/nix/nix.conf`, or `~/.config/nix/nix.conf` if you are a trusted user):
+
+```
+extra-substituters = https://formalverification.cachix.org
+extra-trusted-public-keys = formalverification.cachix.org-1:KG/AJuuli2F4/bA56rUYC9V8ZE/Zw6iZjxJEf40cQOo=
+```
 
 Inside the shell:
 
@@ -45,6 +53,22 @@ make clean   # remove build artifacts
 ```
 
 To exit the shell, type `exit` or Ctrl-D.
+
+### The pins, and moving them
+
+`flake.lock` pins nixpkgs and Agda's own flake, whose URL in `flake.nix` names a commit of agda/agda, so `nix flake update` moves nixpkgs but never Agda.  The standard library is pinned in `flake.nix` by `stdlibRev` and `stdlibHash`.  To move it, set `stdlibRev` to the new commit, put `nixpkgs.lib.fakeHash` in `stdlibHash`'s place, run `nix build`, and copy the hash the error prints after `got:`; or ask Nix for the hash directly:
+
+```bash
+nix flake prefetch --json github:formalverification/agda-stdlib/<commit> | jq -r .hash
+```
+
+A `hash mismatch in fixed-output derivation` error on a pin you did not move means the source is not the one pinned: check the commit before you accept another hash.  Move Agda and the standard library together, since each standard library checks under a narrow range of Agda versions, and once both are released, return to the nixpkgs packages, as the comment at the top of `flake.nix` says.
+
+No public cache holds the pinned Agda, which Agda's own flake builds from source, so after moving either pin, push the dev shell's closure to the formalverification cache before CI runs, or CI's type-check job has to build Agda within its 30 minutes.  The push needs the cache's write token (`cachix authtoken`):
+
+```bash
+nix develop --profile /tmp/aa-dev -c true && cachix push formalverification /tmp/aa-dev
+```
 
 ### Editor integration under Nix
 
@@ -58,6 +82,8 @@ one) need one more step: see
 [Emacs with several checkouts](CONTRIBUTING.md#emacs-with-several-checkouts).
 
 ---
+
+> **Options 2 to 4 install the previous toolchain**, Agda 2.8.0 and standard-library 2.3, unpatched.  They stay here until Agda 2.9.0 and a standard library for it are released, when they will move to those versions.  The library still checks under 2.8.0 today, but CI tests only the toolchain the flake pins.
 
 ## Option 2: Agda's official Python installer
 
@@ -116,7 +142,7 @@ Set up the standard library as in Option 2.
 From a clone of agda-algebras:
 
 ```bash
-agda --version           # should print "Agda version 2.8.0"
+agda --version           # "Agda version 2.9.0" in nix develop; 2.8.0 after Options 2 to 4
 make check               # should run to completion without errors
 ```
 
@@ -125,6 +151,8 @@ make check               # should run to completion without errors
 ---
 
 ## Troubleshooting
+
+**`NAR hash mismatch in input 'github:agda/agda/…'`**.  Your Nix is probably older than 2.28.  Agda's tree holds six empty directories, the paths of its submodules, and Nix 2.26.3 drops them when it unpacks the tree, so it computes another hash than the one `flake.lock` records (Nix 2.28.6 and later keep them).  Upgrade Nix to 2.28 or later: for an installation made by the official installer, `nix upgrade-nix` does it.
 
 **Agda can't find standard-library**.  Inside `nix develop`, the shell writes a project-local libraries file that should Just Work. Outside the Nix shell, verify that `~/.config/agda/libraries` references your standard-library 2.3 installation (note that older Agda versions used `~/.agda/libraries`; 2.8.0 uses `~/.config/agda/` but falls back to `~/.agda/` for backward compatibility).
 

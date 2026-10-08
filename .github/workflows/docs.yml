@@ -70,9 +70,9 @@ jobs:
             **/*.agdai
             .agda-html
             html
-          key: agda-${{ runner.os }}-${{ hashFiles('flake.lock') }}-${{ github.sha }}
+          key: agda-${{ runner.os }}-${{ hashFiles('flake.lock', 'flake.nix') }}-${{ github.sha }}
           restore-keys: |
-            agda-${{ runner.os }}-${{ hashFiles('flake.lock') }}-
+            agda-${{ runner.os }}-${{ hashFiles('flake.lock', 'flake.nix') }}-
 
       - name: Build the site
         run: |

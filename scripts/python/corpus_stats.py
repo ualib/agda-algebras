@@ -48,9 +48,10 @@ Design Principles:
        guards, which state the series the dev shell expects.  Bumping the
        toolchain without updating the docs therefore fails the check, with one
        limit worth stating plainly: the stdlib comparison is exact, the Agda one
-       is by series, because ``flake.nix`` deliberately guards ``2.8.*`` and no
-       file in this repository states a patch level.  A move from Agda 2.8.0 to
-       2.8.1 shows in the dev shell's banner and is checked nowhere; pinning it
+       is by series, because ``flake.nix`` deliberately guards ``2.9.*`` and no
+       file in this repository states a patch level.  A move from Agda 2.9.0 to
+       2.9.1 shows in the dev shell's banner and is checked nowhere (nor is a
+       move of the flake's ``agda`` input to another commit); pinning it
        would mean tightening the flake's own guard, which is a decision about
        the toolchain, not about the docs.
 
@@ -236,9 +237,9 @@ def _guard(var: str) -> re.Pattern[str]:
     warns when the realized toolchain leaves the expected series::
 
         case "${agdaVer}" in
-          2.8.*) : ;;
+          2.9.*) : ;;
 
-    and this captures that series (``2.8``), which the version the docs declare
+    and this captures that series (``2.9``), which the version the docs declare
     must belong to."""
     return re.compile(r'case\s+"\$\{' + var + r'\}"\s+in\s+([0-9][0-9.]*?)\.?\*\)')
 
@@ -259,7 +260,7 @@ def _field(text: str, pattern: re.Pattern[str], what: str,
 
 
 def _in_series(version: str, series: str) -> bool:
-    """Whether ``version`` (2.8.0) belongs to ``series`` (2.8)."""
+    """Whether ``version`` (2.9.0) belongs to ``series`` (2.9)."""
     return version == series or version.startswith(series + ".")
 
 

@@ -30,7 +30,7 @@ nix develop
 make check        # the library and the frozen Legacy tree
 ```
 
-This pins Agda 2.8.0 and standard-library 2.3 automatically via the repository's flake.  See [`INSTALL.md`](INSTALL.md) for a walkthrough and non-Nix alternatives.
+This pins Agda 2.9.0, which is not yet released, and standard-library 2.3 patched for it, via the repository's flake; until both are released, `nix develop` is the only way to get that toolchain.  See [`INSTALL.md`](INSTALL.md) for a walkthrough, the binary cache that spares you building Agda, and the paths without Nix, which install the previous toolchain.
 
 ### Editor
 
@@ -101,12 +101,13 @@ the running process was started for.  Emacs need not be started inside
 A few facts complete the setup, as follows:
 
 +  Enter `nix develop` once in each new worktree, and again when its
-   `flake.lock` moves, to write the wrapper.
+   pins move (`flake.lock`, or the standard library's in `flake.nix`), to
+   write the wrapper.
 +  The wrapper calls an Agda in the Nix store by its path.  If garbage
    collection removes that Agda, agda-mode reports its version as "unknown";
    entering `nix develop` there again restores it.
 +  agda-mode refuses an Agda whose version differs from its own
-   (`agda2-version`), so use agda-mode 2.8.0, the version this repository
+   (`agda2-version`), so use agda-mode 2.9.0, the version this repository
    pins; inside `nix develop`, `agda-mode locate` prints the path of its
    `agda2.el`.
 +  The same snippet with one more clause, for checkouts of

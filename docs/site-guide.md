@@ -277,10 +277,11 @@ into the `<!-- ualib:stat:NAME -->…<!-- /ualib:stat:NAME -->` marker pairs in
    reconciled against the two pins that bind them: the `depend:` line of
    `agda-algebras.agda-lib`, whose stdlib version Agda enforces exactly, and the
    version-floor guards in `flake.nix`.  The stdlib half is therefore exact; the
-   Agda half is by *series*, because `flake.nix` deliberately guards `2.8.*` and
-   nothing in the repository states a patch level.  A move from Agda 2.8.0 to
-   2.8.1 is thus visible in the dev shell's banner on entry, but no check in this
-   repository fails on it.
+   Agda half is by *series*, because `flake.nix` deliberately guards `2.9.*` and
+   nothing in the repository states a patch level.  A move from Agda 2.9.0 to
+   2.9.1 is thus visible in the dev shell's banner on entry, and a move of the
+   flake's `agda` input to another commit only in `flake.nix`, but no check in
+   this repository fails on either.
 
 Three commands, one gate:
 

@@ -135,7 +135,7 @@ grep -rn '\.lagda\b' \
 REF_COUNT=$(wc -l < "$OUT_DIR/lagda-references.txt" | tr -d ' ')
 printf '%s\n' "  external .lagda references: $REF_COUNT  (list: $OUT_DIR/lagda-references.txt)"
 
-banner "Agda 2.8.0 .lagda.md smoke test"
+banner "Agda .lagda.md smoke test"
 # Verify the minimal .lagda.md round-trips under the project's flags.
 # Use --no-libraries so the project's include path doesn't try to
 # resolve the temp module against stdlib or src/.
