@@ -4,12 +4,14 @@
 [![CI](https://github.com/ualib/agda-algebras/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/ualib/agda-algebras/actions/workflows/ci.yml)
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](./LICENSE)
 [![Docs License: CC BY 4.0](https://img.shields.io/badge/Docs-CC_BY_4.0-lightgrey.svg)](./LICENSE-docs)
-[![Agda 2.8.0](https://img.shields.io/badge/Agda-2.8.0-purple.svg)](https://github.com/agda/agda/releases/tag/v2.8.0)
-[![stdlib 2.3](https://img.shields.io/badge/stdlib-2.3-orange.svg)](https://github.com/agda/agda-stdlib/releases/tag/v2.3)
+[![Agda 2.9.0, pre-release](https://img.shields.io/badge/Agda-2.9.0_pre--release-purple.svg)](https://github.com/agda/agda/commit/da66a8c75f11d10699a6b38b261efdf244b66f2a)
+[![stdlib 2.3, patched for Agda 2.9.0](https://img.shields.io/badge/stdlib-2.3_patched-orange.svg)](https://github.com/formalverification/agda-stdlib/releases/tag/v2.3-agda-2.9.0)
 
 A formalization of universal algebra in [Agda][], built on the [Agda standard library][].  The library defines algebras, homomorphisms, congruences, terms, varieties, and the equational logic that underlies them, with a fully constructive proof of [Birkhoff's HSP theorem](https://agda-algebras.universalalgebra.org/Setoid/Varieties/HSP/#proof-of-the-hsp-theorem) at the centre.  It is being developed both as a working substrate for research in universal algebra and as a high-quality training corpus of Agda proofs for machine learning on formal mathematics.
 
-> **Status**.  Version 3.0 is under active reconstruction on `master`.  The library currently targets Agda 2.8.0 and standard-library 2.3.  Expect breaking changes until 3.0 is released; see [`docs/GITHUB_PROJECT.md`](docs/GITHUB_PROJECT.md) for the milestone plan and [`CHANGELOG.md`](CHANGELOG.md) for what has landed so far.
+> **Status**.  Version 3.0 is under active reconstruction on `master`.  The library currently targets Agda 2.9.0, which is not yet released (agda/agda at commit `da66a8c`), and standard-library 2.3 with the five changes it needs under Agda 2.9.0.  Expect breaking changes until 3.0 is released; see [`docs/GITHUB_PROJECT.md`](docs/GITHUB_PROJECT.md) for the milestone plan and [`CHANGELOG.md`](CHANGELOG.md) for what has landed so far.
+>
+> **Nix only, for now**.  Until Agda 2.9.0 and its standard library are released, the toolchain is available only through `nix develop`: the flake pins a pre-release Agda and a patched standard library 2.3.
 
 The **previous** version (called `UALib`, built against [TypeTopology](https://github.com/martinescardo/TypeTopology)) is no longer maintained but remains available:
 
@@ -25,7 +27,7 @@ From a clean checkout to a green build, assuming [Nix][] with flakes enabled (se
 ```bash
 git clone https://github.com/ualib/agda-algebras.git
 cd agda-algebras
-nix develop          # pins Agda 2.8.0 + standard-library 2.3 automatically
+nix develop          # pins Agda 2.9.0 + standard-library 2.3, patched for it
 make check           # type-check the library and the frozen Legacy tree
 make site            # (optional) build the documentation site under ./site
 ```
@@ -72,14 +74,14 @@ The recommended development environment is [Nix][] (Option 1 in [`INSTALL.md`](I
 nix develop
 ```
 
-inside a clone of the repository.  This pins Agda 2.8.0 and standard-library 2.3 automatically, writes a project-local Agda library configuration under `.agda/`, and bypasses any Agda or standard-library versions registered elsewhere on the host machine.
+inside a clone of the repository.  This pins Agda 2.9.0 and standard-library 2.3, patched for it, writes a project-local Agda library configuration under `.agda/`, and bypasses any Agda or standard-library versions registered elsewhere on the host machine.
 
-For contributors who cannot or prefer not to use Nix, [`INSTALL.md`](INSTALL.md) walks through three alternative paths: Agda's official Python installer (`pipx install agda==2.8.0`), a prebuilt binary from the Agda 2.8.0 release page, and a `cabal` build from source.  All three require manually installing standard-library 2.3 and registering it in `~/.config/agda/libraries`.
+Until Agda 2.9.0 and its standard library are released, Nix is the only way to get the toolchain the library targets.  [`INSTALL.md`](INSTALL.md) keeps three paths without Nix (Agda's official Python installer, a prebuilt binary, and a `cabal` build from source), which install the previous toolchain, Agda 2.8.0 and standard-library 2.3; the library still checks under it today, but CI no longer tests it.
 
 ### Requirements
 
-+  [Agda](https://agda.readthedocs.io) 2.8.0 (released 2025-07)
-+  [standard-library](https://github.com/agda/agda-stdlib) 2.3 (released 2025-08)
++  [Agda](https://agda.readthedocs.io) 2.9.0, not yet released: agda/agda at commit [`da66a8c`](https://github.com/agda/agda/commit/da66a8c75f11d10699a6b38b261efdf244b66f2a), the `nightly` of 2026-10-05, which the flake builds from source
++  [standard-library](https://github.com/agda/agda-stdlib) 2.3 with the five changes it needs under Agda 2.9.0: [formalverification/agda-stdlib](https://github.com/formalverification/agda-stdlib), tag [`v2.3-agda-2.9.0`](https://github.com/formalverification/agda-stdlib/releases/tag/v2.3-agda-2.9.0)
 +  GNU Make
 
 Older versions of either component are **not** supported on the `master` branch.  To work against the v2.0.1 archival release (which targets Agda 2.6.2 / stdlib 1.7), check out the [`v2.0.1` tag](https://github.com/ualib/agda-algebras/releases/tag/v2.0.1).

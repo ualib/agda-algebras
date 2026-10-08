@@ -182,7 +182,7 @@ validation:
 
 # -- Site variables (available to macros as [[[ … ]]]) ------------------------
 extra:
-  agda_version: "2.8.0"
+  agda_version: "2.9.0"
   stdlib_version: "2.3"
   social:
     - icon: fontawesome/brands/github

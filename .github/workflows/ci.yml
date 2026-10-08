@@ -8,7 +8,8 @@
 #
 #  The workflow reuses the project's Nix flake, so CI runs exactly the same
 #  command a developer runs locally: `nix develop --command make check`.
-#  Agda 2.8.0 and standard-library 2.3 are pinned by flake.lock.
+#  Agda 2.9.0 (unreleased: agda/agda at da66a8c) and standard-library 2.3,
+#  patched for it, are pinned by flake.nix and flake.lock.
 #
 #  Design notes.
 #

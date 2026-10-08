@@ -30,7 +30,7 @@ nix develop
 make check        # the library and the frozen Legacy tree
 ```
 
-This pins Agda 2.8.0 and standard-library 2.3 automatically via the repository's flake.  See [`INSTALL.md`](INSTALL.md) for a walkthrough and non-Nix alternatives.
+This pins Agda 2.9.0, which is not yet released, and standard-library 2.3 patched for it, via the repository's flake; until both are released, `nix develop` is the only way to get that toolchain.  See [`INSTALL.md`](INSTALL.md) for a walkthrough, the binary cache that spares you building Agda, and the paths without Nix, which install the previous toolchain.
 
 ### Editor
 
@@ -106,7 +106,7 @@ A few facts complete the setup, as follows:
    collection removes that Agda, agda-mode reports its version as "unknown";
    entering `nix develop` there again restores it.
 +  agda-mode refuses an Agda whose version differs from its own
-   (`agda2-version`), so use agda-mode 2.8.0, the version this repository
+   (`agda2-version`), so use agda-mode 2.9.0, the version this repository
    pins; inside `nix develop`, `agda-mode locate` prints the path of its
    `agda2.el`.
 +  The same snippet with one more clause, for checkouts of
