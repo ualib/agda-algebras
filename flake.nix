@@ -45,13 +45,15 @@
 #     - `depend: standard-library-2.3` — exact match required
 #
 #   Division of responsibilities:
-#     - flake.lock               pins the stdlib source of truth.
-#     - --library standard-library (wrapper) tracks whatever the lock pins.
+#     - stdlibRev and stdlibHash (below) pin the stdlib source of truth.
+#     - --library standard-library (wrapper) tracks whatever the flake pins.
 #     - depend: standard-library-2.3 (.agda-lib) enforces the minimum.
 #
 #   Upgrading past 2.3 is a two-step process: bump the .agda-lib floor first,
-#   then `nix flake update`. Skipping the first step produces a clear
-#   dependency-resolution error at `make check` time, not a silent upgrade.
+#   then move stdlibRev and stdlibHash (or, once nixpkgs packages a standard
+#   library for Agda 2.9.0 and the override is gone, `nix flake update`).
+#   Skipping the first step produces a clear dependency-resolution error at
+#   `make check` time, not a silent upgrade.
 # =============================================================================
 {
   description = "agda-algebras — a formalization of Universal Algebra in Agda";
@@ -230,9 +232,10 @@ EOF
               echo "   repo     : $ROOT"
               echo ""
 
-              # Version-floor sanity checks. These are warnings, not errors —
-              # a higher stdlib/Agda may still work, and the user has opted
-              # into it via `nix flake update`.
+              # Version-floor sanity checks.  These are warnings, not errors:
+              # a higher stdlib or Agda may still work, and whoever moved the
+              # pins (flake.lock, or the `agda` input's URL and stdlibRev in
+              # this file) has opted into it.
               case "${agdaVer}" in
                 2.9.*) : ;;
                 *) echo "⚠  expected Agda 2.9.x, got ${agdaVer}" ;;
