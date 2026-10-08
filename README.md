@@ -80,6 +80,7 @@ Until Agda 2.9.0 and its standard library are released, Nix is the only way to g
 
 ### Requirements
 
++  [Nix][] 2.28 or later, with flakes enabled, until Agda 2.9.0 is released
 +  [Agda](https://agda.readthedocs.io) 2.9.0, not yet released: agda/agda at commit [`da66a8c`](https://github.com/agda/agda/commit/da66a8c75f11d10699a6b38b261efdf244b66f2a), the `nightly` of 2026-10-05, which the flake builds from source
 +  [standard-library](https://github.com/agda/agda-stdlib) 2.3 with the five changes it needs under Agda 2.9.0: [formalverification/agda-stdlib](https://github.com/formalverification/agda-stdlib), tag [`v2.3-agda-2.9.0`](https://github.com/formalverification/agda-stdlib/releases/tag/v2.3-agda-2.9.0)
 +  GNU Make

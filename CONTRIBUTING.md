@@ -101,7 +101,8 @@ the running process was started for.  Emacs need not be started inside
 A few facts complete the setup, as follows:
 
 +  Enter `nix develop` once in each new worktree, and again when its
-   `flake.lock` moves, to write the wrapper.
+   pins move (`flake.lock`, or the standard library's in `flake.nix`), to
+   write the wrapper.
 +  The wrapper calls an Agda in the Nix store by its path.  If garbage
    collection removes that Agda, agda-mode reports its version as "unknown";
    entering `nix develop` there again restores it.

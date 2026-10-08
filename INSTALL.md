@@ -64,6 +64,12 @@ nix flake prefetch --json github:formalverification/agda-stdlib/<commit> | jq -r
 
 A `hash mismatch in fixed-output derivation` error on a pin you did not move means the source is not the one pinned: check the commit before you accept another hash.  Move Agda and the standard library together, since each standard library checks under a narrow range of Agda versions, and once both are released, return to the nixpkgs packages, as the comment at the top of `flake.nix` says.
 
+No public cache holds the pinned Agda, which Agda's own flake builds from source, so after moving either pin, push the dev shell's closure to the formalverification cache before CI runs, or CI's type-check job has to build Agda within its 30 minutes.  The push needs the cache's write token (`cachix authtoken`):
+
+```bash
+nix develop --profile /tmp/aa-dev -c true && cachix push formalverification /tmp/aa-dev
+```
+
 ### Editor integration under Nix
 
 `agda-mode` is available inside the Nix shell. The simplest pattern is to launch your editor from within `nix develop`. If you use Emacs, `M-x load-library RET agda2-mode RET` will pick up the wrapped Agda. If you use VSCode with the `banacorn.agda-mode` extension, the extension's "Agda Path" setting can be pointed at the `agda` inside the Nix shell (use `which agda` to find the absolute path).
