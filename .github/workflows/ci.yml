@@ -82,8 +82,12 @@ jobs:
           # unavailable.  See cachix/cachix-action docs.
           authToken: ${{ secrets.CACHIX_AUTH_TOKEN }}
 
+      # Agda's flake builds its Haskell packages with callCabal2nix, which
+      # imports a Nix expression from a derivation built during evaluation.
+      # `--no-build` forbids that build on a runner's empty store, and this
+      # flake has no checks for the flag to skip, so the check may build.
       - name: Validate flake
-        run: nix flake check --no-build
+        run: nix flake check
 
       # Agda 2.7+ writes interface files to _build/<version>/agda/src/…, not
       # beside the sources: the previous `src/**/*.agdai` path matched nothing,
