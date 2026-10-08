@@ -60,7 +60,10 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     # Agda 2.9.0, unreleased: agda/agda at the commit of the `nightly` of
     # 2026-10-05.  Agda's flake builds it with its own nixpkgs; do not make
-    # it follow ours.
+    # it follow ours.  Its tree holds six empty directories (the paths of
+    # its submodules), which Nix 2.26.3 drops when it unpacks the tree, so
+    # that it computes another hash than the one flake.lock records: this
+    # flake needs Nix 2.28 or later (2.28.6 and 2.35.2 agree on the hash).
     agda.url = "github:agda/agda/da66a8c75f11d10699a6b38b261efdf244b66f2a";
   };
 
