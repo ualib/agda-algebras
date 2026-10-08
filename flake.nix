@@ -8,26 +8,39 @@
 #   1. `nix develop` from the repo root drops you in a shell with exactly the
 #      Agda / stdlib versions agda-algebras 3.0 targets. No ~/.config/agda
 #      configuration required (or consulted).
-#   2. Reproducibility via flake.lock. The nixpkgs input pin *is* the Agda/
-#      stdlib pin.
+#   2. Reproducibility: flake.lock pins nixpkgs and Agda's own flake, and the
+#      standard library is pinned below by commit and hash.
 #   3. The shell writes a project-local AGDA_DIR that overrides anything in
 #      the user's ~/.config/agda/ (e.g. a globally-registered stdlib 2.2).
 #
 # Pinning Policy:
 #
-#   A single nixpkgs input on nixos-unstable supplies both Agda (2.8.0) and
-#   its standard library (2.3). `nix flake update` pulls in whatever
-#   nixos-unstable has at update time — use deliberately.
+#   Agda 2.9.0 is not released yet, and no released standard library
+#   type-checks under it, so until both are released the flake pins them
+#   itself, as follows:
 #
-#   If/when nixpkgs moves its Agda or stdlib past our target versions before
-#   agda-algebras is ready to follow, the right fix is to either
-#   (a) stop calling `nix flake update`, or
-#   (b) add `overrideAttrs` block here pinning stdlib's `src` to a specific v2.3 tag.
+#     +  Agda comes from the `agda` input: agda/agda at a fixed commit, the
+#        `nightly` of 2026-10-05, built from source by Agda's own flake (its
+#        `base` package, without the `debug` flag of its default build).
+#        nixpkgs' Agda package set is rebuilt around it (mkAgdaPackages).
+#        The input's URL names the commit, so `nix flake update` cannot
+#        move it; to move it, edit the URL and the standard library together.
+#     +  The standard library is nixpkgs' derivation with its `src` moved to
+#        formalverification/agda-stdlib's tag v2.3-agda-2.9.0: v2.3 with the
+#        five changes it needs to type-check under Agda 2.9.0, which that
+#        tag's release notes list (stdlibRev and stdlibHash, below).
+#
+#   The nixpkgs input still supplies the package-set machinery and the rest
+#   of the shell.  Once Agda 2.9.0 and a standard library for it are
+#   released and nixpkgs packages them, drop the `agda` input and the
+#   standard library's override, and return to one nixpkgs input on
+#   nixos-unstable supplying both.
 #
 # Library Resolution:
 #
 #   agda-stdlib's own standard-library.agda-lib at tag v2.3 declares
-#   `name: standard-library-2.3`.  Agda resolves library dependencies as:
+#   `name: standard-library-2.3`, and so does the patched v2.3 the flake
+#   pins.  Agda resolves library dependencies as:
 #     - `depend: standard-library`     — any version
 #     - `depend: standard-library-2.3` — exact match required
 #
@@ -45,9 +58,13 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    # Agda 2.9.0, unreleased: agda/agda at the commit of the `nightly` of
+    # 2026-10-05.  Agda's flake builds it with its own nixpkgs; do not make
+    # it follow ours.
+    agda.url = "github:agda/agda/da66a8c75f11d10699a6b38b261efdf244b66f2a";
   };
 
-  outputs = { self, nixpkgs }:
+  outputs = { self, nixpkgs, agda }:
     let
       # ---- Supported systems ----------------------------------------------
       systems = [
@@ -57,16 +74,44 @@
         "aarch64-darwin"
       ];
 
-      # Per-system attrset: { system = f { pkgs }; }.
+      # Per-system attrset: { system = f { system, pkgs }; }.
       # Matches the pattern used in the agda-native-air flake.
       forAllSystems = f:
         nixpkgs.lib.genAttrs systems (system:
-          f { pkgs = import nixpkgs { inherit system; }; });
+          f { inherit system; pkgs = import nixpkgs { inherit system; }; });
 
       # ---- Agda + stdlib --------------------------------------------------
-      # Agda and its stdlib MUST be resolved from the same package set;
-      # agdaPackages.standard-library is built against pkgs.agda.
-      mkAgdaEnv = pkgs: pkgs.agda.withPackages (p: [ p.standard-library ]);
+      # Agda and its stdlib MUST be resolved from the same package set:
+      # nixpkgs' Agda package set, rebuilt around the `agda` input's Agda,
+      # with the standard library's source moved to the patched v2.3 (see
+      # the header).
+      #
+      # To move the standard library, set stdlibRev, put nixpkgs.lib.fakeHash
+      # in stdlibHash's place, run `nix build`, and copy the hash the error
+      # prints after `got:`; or ask Nix for it directly:
+      #   nix flake prefetch --json github:formalverification/agda-stdlib/<rev> | jq -r .hash
+      stdlibRev  = "fb5d1840d26909038b5ae1459733b0db425a7488";
+      stdlibHash = "sha256-ZF+/2bUhKggpGY0WtHqKkOstRTGe8LOhK4lD+4T3xSc=";
+
+      mkAgdaPackages = system: pkgs:
+        let
+          agdaPackages = pkgs.agdaPackages.override {
+            Agda = agda.packages.${system}.base;
+          };
+        in {
+          inherit (agdaPackages) agda;
+          standard-library = agdaPackages.standard-library.overrideAttrs (_: {
+            version = "2.3-agda-2.9.0";
+            src = pkgs.fetchFromGitHub {
+              owner = "formalverification";
+              repo = "agda-stdlib";
+              rev = stdlibRev;
+              hash = stdlibHash;
+            };
+          });
+        };
+
+      mkAgdaEnv = ap: ap.agda.withPackages [ ap.standard-library ];
 
       # ---- Python environment (docs pipeline + script tooling) ------------
       # ONE python3.withPackages environment serves the whole repo, and it
@@ -144,15 +189,16 @@ EOF
       '';
     in {
       # ---- Formatter -------------------------------------------------------
-      formatter = forAllSystems ({ pkgs }: pkgs.nixpkgs-fmt);
+      formatter = forAllSystems ({ pkgs, ... }: pkgs.nixpkgs-fmt);
 
       # ---- Dev shell -------------------------------------------------------
-      devShells = forAllSystems ({ pkgs }:
+      devShells = forAllSystems ({ system, pkgs }:
         let
-          agdaEnv = mkAgdaEnv pkgs;
+          agdaPkgs = mkAgdaPackages system pkgs;
+          agdaEnv = mkAgdaEnv agdaPkgs;
           pythonEnv = mkPythonEnv pkgs;
-          stdlibVer = pkgs.agdaPackages.standard-library.version;
-          agdaVer = pkgs.agda.version;
+          stdlibVer = agdaPkgs.standard-library.version;
+          agdaVer = agdaPkgs.agda.version;
           mkdocsVer = pkgs.python3Packages.mkdocs.version;
           materialVer = pkgs.python3Packages.mkdocs-material.version;
         in {
@@ -170,7 +216,7 @@ EOF
             LC_ALL = "C.UTF-8";
 
             shellHook = ''
-              ${mkAgdaShellSetup pkgs.agdaPackages.standard-library}
+              ${mkAgdaShellSetup agdaPkgs.standard-library}
 
               echo ""
               echo "✅ agda-algebras dev shell"
@@ -185,8 +231,8 @@ EOF
               # a higher stdlib/Agda may still work, and the user has opted
               # into it via `nix flake update`.
               case "${agdaVer}" in
-                2.8.*) : ;;
-                *) echo "⚠  expected Agda 2.8.x, got ${agdaVer}" ;;
+                2.9.*) : ;;
+                *) echo "⚠  expected Agda 2.9.x, got ${agdaVer}" ;;
               esac
               case "${stdlibVer}" in
                 2.3*) : ;;
@@ -197,13 +243,14 @@ EOF
         });
 
       # ---- Packages (handy for CI and downstream flakes) -------------------
-      packages = forAllSystems ({ pkgs }: {
-        default = mkAgdaEnv pkgs;
+      packages = forAllSystems ({ system, pkgs }: {
+        default = mkAgdaEnv (mkAgdaPackages system pkgs);
       });
 
       # ---- Minimal overlay for downstream consumers ------------------------
       overlays.default = final: _prev: {
-        agda-algebras-agda = mkAgdaEnv final;
+        agda-algebras-agda =
+          mkAgdaEnv (mkAgdaPackages final.stdenv.hostPlatform.system final);
       };
     };
 }
