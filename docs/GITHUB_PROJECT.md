@@ -813,12 +813,18 @@ If one is missing when this issue is picked up, record that here and stop; a pat
 +  [ ] No file names Agda 2.8.0 or standard-library 2.3 as the current target (dated records, such as the CHANGELOG and the audits, excepted).
 +  [ ] `make corpus-stats-check` and the docs lanes pass.
 
+## Decision, 2026-10-07: the interim pins
+
+William overrode this issue's rule that a patched or unreleased standard library is never this library's pin, so that all of his Agda projects run one Agda now.  The library moves to a pre-release Agda 2.9.0 (agda/agda at `da66a8c`, the `nightly` of 2026-10-05) and standard-library 2.3 with the five changes it needs under 2.9.0 (formalverification/agda-stdlib, tag `v2.3-agda-2.9.0`), both pinned by the flake, and the README, INSTALL.md and CONTRIBUTING.md say that the toolchain is available only through `nix develop` until the releases.  This issue closes with that move, [#598], whose description records the evidence: every module checked from source, with the same 352 `Checking` lines and the same 951 `UserWarning` positions as under 2.8.0.  The plan above, the released Agda 2.9.0 with standard-library 3.0 from nixpkgs and the port to 3.0, moves to [#597].
+
 [#250]: https://github.com/ualib/agda-algebras/issues/250
 [#279]: https://github.com/ualib/agda-algebras/issues/279
 [#586]: https://github.com/ualib/agda-algebras/issues/586
 [#587]: https://github.com/ualib/agda-algebras/pull/587
 [#594]: https://github.com/ualib/agda-algebras/issues/594
 [agda/agda-stdlib#2967]: https://github.com/agda/agda-stdlib/pull/2967
+[#597]: https://github.com/ualib/agda-algebras/issues/597
+[#598]: https://github.com/ualib/agda-algebras/pull/598
 
 ---
 
@@ -878,6 +884,53 @@ The sweep itself is mechanical: all 344 modules carry the one line `{-# OPTIONS 
 [#587]: https://github.com/ualib/agda-algebras/pull/587
 [#588]: https://github.com/ualib/agda-algebras/issues/588
 [agda/agda-stdlib#2967]: https://github.com/agda/agda-stdlib/pull/2967
+
+---
+
+### Issue M1-17: Move to the released Agda 2.9.0 and standard-library 3.0 (#597)
+
+**Labels**: `milestone-1-infra`
+
+## Description
+
+[#588] moved the library to a pre-release Agda 2.9.0 (agda/agda at [`da66a8c`][agda], the `nightly` of 2026-10-05) and standard-library 2.3 with the five changes it needs under 2.9.0 ([formalverification/agda-stdlib][fork], tag [`v2.3-agda-2.9.0`][tag]), both pinned by the flake, by William's decision of 2026-10-07 that his Agda projects run one Agda now rather than wait for the releases.  [#588]'s own plan moves here: the released Agda 2.9.0 with standard-library 3.0, both from nixpkgs.
+
+**The preconditions** are as follows:
+
++  **The switch to `--without-K` ([#594]) is on master**: done on 2026-10-07 ([#595]).  Standard-library 3.0 is `--without-K` again, which a `--cubical-compatible` module could not import.
++  **Agda 2.9.0 and standard-library 3.0 are released, and 3.0 type-checks whole under the released 2.9.0**: `agda --build-library` in its root, as nixpkgs' derivation runs it.  Neither is released as of 2026-10-07.
++  **nixpkgs packages both**, so that the flake can drop its `agda` input and the standard library's override and return to one nixpkgs input, as the comment at the top of `flake.nix` says.
+
+**What the port will take**, from a trial of 2026-10-07 under Agda master (`8430299e`) and the standard library its `std-lib` submodule pinned (3.0's development head, `1b7f26af`), with the library under `--without-K`: 25 files (the flake, `agda-algebras.agda-lib` and 22 modules), changed as follows:
+
++  a record that built `IsDecEquivalence` with the field `_≟_`, now `_≈?_` (`TooManyFields`, then `UnsolvedMetaVariables`);
++  a named implicit `{i = p}` to `Transitive`, whose binders 3.0 renamed to `x y z` (`WrongNamedArgument`);
++  170 renames to 3.0's names: 3.0's `_≟_` for `_≡?_` (the `Data.Fin`, `Data.Nat` and `Data.Bool` properties), and 2.4's `_×-dec_`, `_→-dec_`, `_⊎-dec_` and `¬∀⟶∃¬` for `_×?_`, `_→?_`, `_⊎?_` and `¬∀⇒∃¬`, whose fixities are unchanged, so that every rename is textual.
+
+The trial's patch is kept outside the repository; redo the port against the released 3.0 rather than apply it.  One trap it met: a deprecation reached through a bundle raises no warning (uses of `_≟_` after `open DecSetoid S using ( _≟_ )` raised none), so counting warnings does not finish the port; grep for the renamed names where they arrive through a record or bundle module.
+
+## Tasks
+
++  [ ] Confirm the preconditions with a run: standard-library 3.0 checks whole under the released Agda 2.9.0.
++  [ ] `flake.nix` and `flake.lock`: drop the `agda` input and the standard library's `overrideAttrs`, take both from one nixpkgs input, and update the header and the standard library's guard (`2.3*`).
++  [ ] `agda-algebras.agda-lib`: `depend: standard-library-3.0`.
++  [ ] Port to 3.0: its breaking changes, then its deprecations, each to the documented replacement.
++  [ ] Every place that names the toolchain, as [#588] listed them.  The "Nix only, for now" caveat in `README.md`, `INSTALL.md` and `CONTRIBUTING.md` goes, and `INSTALL.md`'s three paths without Nix move to the released versions.
++  [ ] CI: the Agda lane passes on the new pins.
+
+## Acceptance criteria
+
++  [ ] `nix develop --command make check` passes under the released Agda 2.9.0 and standard-library 3.0, every module checked from source, locally and in CI.
++  [ ] The warnings are the library's own deprecations and nothing else.
++  [ ] No file names the pre-release Agda or the patched standard library as the current target (dated records, such as the CHANGELOG and the audits, excepted).
++  [ ] `make corpus-stats-check` and the docs lanes pass.
+
+[agda]: https://github.com/agda/agda/commit/da66a8c75f11d10699a6b38b261efdf244b66f2a
+[fork]: https://github.com/formalverification/agda-stdlib
+[tag]: https://github.com/formalverification/agda-stdlib/releases/tag/v2.3-agda-2.9.0
+[#588]: https://github.com/ualib/agda-algebras/issues/588
+[#594]: https://github.com/ualib/agda-algebras/issues/594
+[#595]: https://github.com/ualib/agda-algebras/pull/595
 
 <!-- END GENERATED: milestone-1 -->
 
@@ -2125,7 +2178,7 @@ The `Examples/` directory is thin.  Add worked examples that exercise the Classi
 
 ---
 
-### Issue M3-10: Free lattices: lattice terms and Whitman's solution to the word problem (#589)
+### Issue M3-10: Free lattices: lattice terms and Whitman's solution to the word problem (#589, closed)
 
 **Labels**: `milestone-3-classical`
 

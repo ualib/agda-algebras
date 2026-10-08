@@ -8,7 +8,8 @@
 #
 #  The workflow reuses the project's Nix flake, so CI runs exactly the same
 #  command a developer runs locally: `nix develop --command make check`.
-#  Agda 2.8.0 and standard-library 2.3 are pinned by flake.lock.
+#  Agda 2.9.0 (unreleased: agda/agda at da66a8c) and standard-library 2.3,
+#  patched for it, are pinned by flake.nix and flake.lock.
 #
 #  Design notes.
 #
@@ -21,7 +22,8 @@
 #      falls back to read-only public cache — still a fast install.
 #
 #    + Agda interface files are cached separately via actions/cache, keyed
-#      on flake.lock + the hash of the sources and agda-algebras.agda-lib.
+#      on flake.lock and flake.nix (which pins the standard library) + the
+#      hash of the sources and agda-algebras.agda-lib.
 #      Agda 2.7+ writes them under _build/<version>/agda/, not beside the
 #      sources, and the library is literate (.lagda.md), so both the path
 #      and the key must account for that — see issue #515, where the old
@@ -81,8 +83,12 @@ jobs:
           # unavailable.  See cachix/cachix-action docs.
           authToken: ${{ secrets.CACHIX_AUTH_TOKEN }}
 
+      # Agda's flake builds its Haskell packages with callCabal2nix, which
+      # imports a Nix expression from a derivation built during evaluation.
+      # `--no-build` forbids that build on a runner's empty store, and this
+      # flake has no checks for the flag to skip, so the check may build.
       - name: Validate flake
-        run: nix flake check --no-build
+        run: nix flake check
 
       # Agda 2.7+ writes interface files to _build/<version>/agda/src/…, not
       # beside the sources: the previous `src/**/*.agdai` path matched nothing,
@@ -93,9 +99,9 @@ jobs:
         with:
           path: |
             _build/
-          key: agdai-lib-${{ runner.os }}-${{ hashFiles('flake.lock') }}-${{ hashFiles('src/**/*.lagda.md', 'src/**/*.agda', 'agda-algebras.agda-lib') }}
+          key: agdai-lib-${{ runner.os }}-${{ hashFiles('flake.lock', 'flake.nix') }}-${{ hashFiles('src/**/*.lagda.md', 'src/**/*.agda', 'agda-algebras.agda-lib') }}
           restore-keys: |
-            agdai-lib-${{ runner.os }}-${{ hashFiles('flake.lock') }}-
+            agdai-lib-${{ runner.os }}-${{ hashFiles('flake.lock', 'flake.nix') }}-
 
       - name: Show toolchain versions
         run: |
