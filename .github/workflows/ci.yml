@@ -22,7 +22,8 @@
 #      falls back to read-only public cache — still a fast install.
 #
 #    + Agda interface files are cached separately via actions/cache, keyed
-#      on flake.lock + the hash of the sources and agda-algebras.agda-lib.
+#      on flake.lock and flake.nix (which pins the standard library) + the
+#      hash of the sources and agda-algebras.agda-lib.
 #      Agda 2.7+ writes them under _build/<version>/agda/, not beside the
 #      sources, and the library is literate (.lagda.md), so both the path
 #      and the key must account for that — see issue #515, where the old
@@ -98,9 +99,9 @@ jobs:
         with:
           path: |
             _build/
-          key: agdai-lib-${{ runner.os }}-${{ hashFiles('flake.lock') }}-${{ hashFiles('src/**/*.lagda.md', 'src/**/*.agda', 'agda-algebras.agda-lib') }}
+          key: agdai-lib-${{ runner.os }}-${{ hashFiles('flake.lock', 'flake.nix') }}-${{ hashFiles('src/**/*.lagda.md', 'src/**/*.agda', 'agda-algebras.agda-lib') }}
           restore-keys: |
-            agdai-lib-${{ runner.os }}-${{ hashFiles('flake.lock') }}-
+            agdai-lib-${{ runner.os }}-${{ hashFiles('flake.lock', 'flake.nix') }}-
 
       - name: Show toolchain versions
         run: |
