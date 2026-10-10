@@ -10,7 +10,7 @@ author: "the agda-algebras development team"
 
 This is the [Classical.Structures.Group.SubgroupLattice][] module of the [Agda Universal Algebra Library][].
 
-For a group `𝑮`{.AgdaBound} over [`Sig-Group`][Classical.Signatures.Group], the
+For a group `𝑮`{.AgdaFunction} over [`Sig-Group`][Classical.Signatures.Group], the
 subuniverses of the underlying algebra form a complete lattice under inclusion — this
 is exactly the `Sublattice`{.AgdaModule} construction of
 [Setoid.Subalgebras.CompleteLattice][], instantiated at the group algebra.  Because

@@ -18,7 +18,7 @@ group laws.  The library's indexed product `⨅`{.AgdaFunction} of
 [Setoid.Algebras.Products][] would give a product with a *function-typed* carrier
 `∀ i → 𝕌[ 𝒜 i ]`; the binary product here instead has the pair carrier `G × K`, which
 is the form fattening arguments consume (a fattened subgroup is literally a
-predicate composed with `proj₁`{.AgdaFunction}).  The construction is
+predicate composed with `proj₁`{.AgdaField}).  The construction is
 level-general (`Group α ρ → Group β σ → Group (α ⊔ β) (ρ ⊔ σ)`), since full
 generality costs nothing here.
 

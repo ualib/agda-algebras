@@ -145,6 +145,57 @@ jobs:
           make check-links
 
   # ---------------------------------------------------------------------------
+  # Span classes.  Validates the kramdown attribute spans on inline Agda names
+  # in the prose (`Algebra`{.AgdaRecord} and kin) against Agda's own
+  # classification, read from the `agda --html --html-highlight=code` render
+  # (issue #553).  Needs the Nix toolchain for the render (unlike the other
+  # docs lanes); with a warm interface cache the render takes under a minute
+  # and the checker itself under a second.  See `make span-classes` and
+  # scripts/python/span_classes.py.
+  # ---------------------------------------------------------------------------
+  span-classes:
+    name: Span classes
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Install Nix
+        uses: cachix/install-nix-action@v31
+        with:
+          nix_path: nixpkgs=channel:nixos-unstable
+
+      - name: Set up Cachix
+        uses: cachix/cachix-action@v16
+        with:
+          name: formalverification
+          authToken: ${{ secrets.CACHIX_AUTH_TOKEN }}
+
+      - name: Cache Agda interface files
+        uses: actions/cache@v4
+        with:
+          path: |
+            _build/
+          key: agdai-lib-${{ runner.os }}-${{ hashFiles('flake.lock', 'flake.nix') }}-${{ hashFiles('src/**/*.lagda.md', 'src/**/*.agda', 'agda-algebras.agda-lib') }}
+          restore-keys: |
+            agdai-lib-${{ runner.os }}-${{ hashFiles('flake.lock', 'flake.nix') }}-
+
+      - name: Render the corpus (Agda's own classification)
+        run: |
+          set -euxo pipefail
+          nix develop --command make agda-md
+
+      - name: Every span's class agrees with Agda
+        run: |
+          set -euxo pipefail
+          nix develop --command bash -c '
+            make span-classes-test
+            make span-classes
+          '
+
+  # ---------------------------------------------------------------------------
   # Docstring coverage.  Pure-Python, like the link check.  STYLE_GUIDE
   # § "Every public definition has a prose comment block" is the rule; because
   # the corpus documents definitions in Markdown *outside* the ```agda fences,
@@ -214,12 +265,12 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 2
     if: always()
-    needs: [check, link-check, docstrings, landing-stats]
+    needs: [check, link-check, span-classes, docstrings, landing-stats]
     steps:
       - name: Verify all required jobs passed
         run: |
           set -euxo pipefail
-          results=( "${{ needs.check.result }}" "${{ needs.link-check.result }}" "${{ needs.docstrings.result }}" "${{ needs.landing-stats.result }}" )
+          results=( "${{ needs.check.result }}" "${{ needs.link-check.result }}" "${{ needs.span-classes.result }}" "${{ needs.docstrings.result }}" "${{ needs.landing-stats.result }}" )
           for r in "${results[@]}"; do
             if [ "$r" = "failure" ] || [ "$r" = "cancelled" ]; then
               echo "A required job ended with result: $r"

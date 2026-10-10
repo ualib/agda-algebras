@@ -98,7 +98,7 @@ level by hand or leaving unsolved level metavariables.
 
 `V`{.AgdaFunction} is expansive, so `(ℕ, +, 0)` belongs to the variety
 it generates.  We obtain the membership from `V-expa′`{.AgdaFunction}, the
-explicit-class form of expansiveness: the class `𝒦₀`{.AgdaFunction} is passed
+explicit-class form of expansiveness: the class `𝒦₀`{.AgdaDatatype} is passed
 positionally, so nothing has to be inferred and the intermediate levels are pinned
 by unification with the `V′`{.AgdaFunction} goal `𝕍`{.AgdaFunction}.
 
