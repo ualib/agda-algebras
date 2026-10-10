@@ -26,7 +26,7 @@ enumerated carrier elements, and the minimal-normal descent of
 enumerated elements themselves.
 
 The module is signature- and setoid-agnostic; it mentions only
-`List`{.AgdaDatatype}, `Dec`{.AgdaDatatype}, and `ℕ`{.AgdaDatatype}.  This is why
+`List`{.AgdaDatatype}, `Dec`{.AgdaRecord}, and `ℕ`{.AgdaDatatype}.  This is why
 it lands in [Overture][] rather than beside either consumer.
 
 <!--

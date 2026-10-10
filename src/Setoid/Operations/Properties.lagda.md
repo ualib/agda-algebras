@@ -20,15 +20,15 @@ carrier, and *neither is special to* `Fin`{.AgdaDatatype}` n` *or to*
     `∀ x → Dec (P x)` can be turned into a decision `Dec (∀ x → P x)` for the
     universally-quantified statement (this is what `all?`{.AgdaFunction} provides).
 2.  The carrier has **decidable equality** — supplied here by the decidable
-    `_≈_`{.AgdaFunction} of a `DecSetoid`{.AgdaRecord}.
+    `_≈_`{.AgdaField} of a `DecSetoid`{.AgdaRecord}.
 
 This module restates the eleven checkers over an arbitrary `DecSetoid`{.AgdaRecord}
-`S` — deciding `_≈_`{.AgdaFunction} through the decidable equality relation
+`S` — deciding `_≈_`{.AgdaField} through the decidable equality relation
 `_≟_`{.AgdaFunction} of `S` — together with an exhaustive-search witness for its
-carrier, writing each law with `_≈_`{.AgdaFunction} in place of `_≡_`{.AgdaDatatype}.
+carrier, writing each law with `_≈_`{.AgdaField} in place of `_≡_`{.AgdaDatatype}.
 
 The operation remains a bare function `Carrier → Carrier → Carrier`; the decision
-never needs it to respect `_≈_`{.AgdaFunction}, exactly as in the concrete versions.
+never needs it to respect `_≈_`{.AgdaField}, exactly as in the concrete versions.
 The finite `Fin`{.AgdaDatatype}` n` / `_≡_`{.AgdaDatatype} checkers are then recovered
 as a single instance: take `S` to be the propositional `DecSetoid`{.AgdaRecord} on
 `Fin`{.AgdaDatatype}` n` and the search witness to be the `all?`{.AgdaFunction} of
@@ -108,8 +108,8 @@ record Exhaustible {c} (A : Type c) : Typeω where
 Throughout, `S` is a decidable setoid, `E` an exhaustive-search witness for its
 carrier, and `_·_` a bare binary operation on that carrier.
 
-+  Opening `S` exposes the carrier, its setoid equality `_≈_`{.AgdaFunction}, and the
-   decidable equality `_≟_`{.AgdaFunction} for `_≈_`{.AgdaFunction};
++  Opening `S` exposes the carrier, its setoid equality `_≈_`{.AgdaField}, and the
+   decidable equality `_≟_`{.AgdaFunction} for `_≈_`{.AgdaField};
 +  opening `E` exposes the search functional `all?`{.AgdaFunction}.
 
 Each law is then decided by nesting `all?`{.AgdaFunction} over `_≟_`{.AgdaFunction},
@@ -160,7 +160,7 @@ module _ {c ℓ} (S : DecSetoid c ℓ) (E : Exhaustible (DecSetoid.Carrier S)) w
 These take two bare operations `_∧_` and `_∨_` over the same decidable setoid; e.g.,
 the meet and join of a lattice.  The shapes match the two-operation checkers
 of [Overture.Operations.Properties][] — absorption and distributivity — now stated
-over `_≈_`{.AgdaFunction}.
+over `_≈_`{.AgdaField}.
 
 ```agda
 module _ {c ℓ} (S : DecSetoid c ℓ) (E : Exhaustible (DecSetoid.Carrier S)) where
@@ -201,7 +201,7 @@ Fin-Exhaustible = record { all? = FinAll? }
 #### The finite checkers as the propositional instance
 
 Take `S` to be `≡-decSetoid n` — the propositional decidable setoid on
-`Fin`{.AgdaDatatype}` n`, whose `_≈_`{.AgdaFunction} is `_≡_`{.AgdaDatatype} and whose
+`Fin`{.AgdaDatatype}` n`, whose `_≈_`{.AgdaField} is `_≡_`{.AgdaDatatype} and whose
 `_≟_`{.AgdaFunction} is `Data.Fin.Properties._≟_` — and `E` to be
 `Fin-Exhaustible`{.AgdaFunction}.
 
