@@ -92,6 +92,29 @@ def test_spans_skip_single_line_comment() -> None:
         [("C", "AgdaRecord")]
 
 
+def test_scanning_resumes_after_a_same_line_comment_close() -> None:
+    # A multi-line comment whose `-->` shares its line with prose: the span on
+    # that suffix is still markup and must be checked (Copilot review on #599).
+    text = "hidden <!--\nstill hidden `A`{.AgdaFunction}\n--> `B`{.AgdaRecord} visible"
+    assert spans(text) == [("B", "AgdaRecord")]
+
+
+def test_columns_survive_a_same_line_comment_close() -> None:
+    # Line 2 is `--> `B`{.AgdaRecord}`: after the close, the opening backtick
+    # sits at column 5, and blanking the comment prefix must not shift it.
+    text = "<!--\n--> `B`{.AgdaRecord}"
+    found, _ = sc.spans_in_text(text)
+    assert [(f.line, f.column) for f in found] == [(2, 5)]
+
+
+def test_columns_survive_an_inline_comment() -> None:
+    # Blanking is length-preserving, so a comment mid-line does not shift the
+    # columns of what follows it.
+    text = "ab <!-- hidden --> `C`{.AgdaRecord}"
+    found, _ = sc.spans_in_text(text)
+    assert [(f.line, f.column) for f in found] == [(1, 20)]
+
+
 def test_line_and_column_point_into_source() -> None:
     found, _ = sc.spans_in_text("one\n\ntwo `𝒦₀`{.AgdaDatatype} tail")
     assert [(f.line, f.column) for f in found] == [(3, 5)]
@@ -199,6 +222,16 @@ def test_record_and_its_module_are_one_declaration() -> None:
                          frozenset({"Module", "Record"})) is sc.Verdict.OK
     assert sc.verdict_of(mk("IsSubgroup", "AgdaModule"),
                          frozenset({"Module", "Record"})) is sc.Verdict.OK
+
+
+def test_record_claim_requires_a_record_aspect() -> None:
+    # The issue's `Lattice-Order` defect class: a name that is only ever a
+    # module in this file does not justify `.AgdaRecord`; the sibling aspect
+    # may accompany the claimed one, never replace it.
+    assert sc.verdict_of(mk("Lattice-Order", "AgdaRecord"),
+                         frozenset({"Module"})) is sc.Verdict.DISAGREEMENT
+    assert sc.verdict_of(mk("R", "AgdaModule"), frozenset({"Record"})) \
+        is sc.Verdict.DISAGREEMENT
 
 
 def test_module_function_mix_stays_ambiguous() -> None:

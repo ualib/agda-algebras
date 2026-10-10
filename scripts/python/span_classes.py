@@ -197,7 +197,10 @@ def spans_in_text(text: str) -> tuple[tuple[Span, ...], tuple[tuple[int, str], .
 
     Fenced code and HTML comments render literally (or not at all), so spans
     there are not markup; both are skipped, threading the two states across
-    lines the way ``check_links.py`` does.
+    lines.  Commented-out text is blanked *length-preservingly* — never
+    removed — so a column in the report is the column in the source even on a
+    line that carries a comment, and prose following a mid-line ``-->`` is
+    still scanned (the shape of ``_utils.literate.visible_prose``).
     """
     spans: list[Span] = []
     anomalies: list[tuple[int, str]] = []
@@ -205,17 +208,19 @@ def spans_in_text(text: str) -> tuple[tuple[Span, ...], tuple[tuple[int, str], .
     in_comment = False
     for lineno, line in enumerate(text.splitlines(), 1):
         if in_comment:
-            if "-->" in line:
-                in_comment = False
-            continue
+            close = line.find("-->")
+            if close < 0:
+                continue
+            in_comment = False
+            line = " " * (close + 3) + line[close + 3:]
         if _FENCE.match(line):
             in_fence = not in_fence
             continue
         if in_fence:
             continue
-        # Drop fully-closed comments; a comment that opens and does not close
-        # swallows the rest of the line.
-        line = re.sub(r"<!--.*?-->", "", line)
+        # Blank fully-closed comments in place; a comment that opens and does
+        # not close swallows the rest of the line.
+        line = re.sub(r"<!--.*?-->", lambda m: " " * len(m.group(0)), line)
         if "<!--" in line:
             in_comment = True
             line = line[: line.index("<!--")]
@@ -299,8 +304,10 @@ _ASPECT_VALUES = frozenset(SPAN_TO_ASPECT.values())
 # +  RECORD/MODULE: a record declaration gives its name two aspects, the type
 #    (Record) and the module Agda spawns with it (Module), so a file that both
 #    opens the module and mentions the type yields {Module, Record}.  Both are
-#    one declaration; a prose reference to the name is correct under either
-#    class.
+#    one declaration, so the sibling aspect may *accompany* the claimed one —
+#    but the claimed aspect itself must be present: a name that is only ever a
+#    module here does not justify `.AgdaRecord` (the issue's `Lattice-Order`
+#    defect class), nor a bare record `.AgdaModule`.
 _LOCAL_CLAIMS = frozenset({"AgdaBound", "AgdaGeneralizable", "AgdaArgument"})
 _LOCAL_ASPECTS = frozenset({"Bound", "Argument", "Generalizable"})
 _RECORD_MODULE_CLAIMS = frozenset({"AgdaRecord", "AgdaModule"})
@@ -319,7 +326,13 @@ def verdict_of(span: Span, aspects: Optional[frozenset[str]]) -> Verdict:
     if (span.claimed in _LOCAL_CLAIMS
             and aspects <= _LOCAL_ASPECTS):
         return Verdict.OK
+    # The claimed aspect must be among the name's aspects: a plain module
+    # (aspects {Module}) does not justify an `.AgdaRecord` claim — that is the
+    # issue's `Lattice-Order` defect class — nor a bare record an
+    # `.AgdaModule` one.  The sibling aspect is *allowed* (a record and its
+    # spawned module are one declaration), never sufficient alone.
     if (span.claimed in _RECORD_MODULE_CLAIMS
+            and SPAN_TO_ASPECT[span.claimed] in aspects
             and aspects <= _RECORD_MODULE_ASPECTS):
         return Verdict.OK
     if len(aspects) != 1:
