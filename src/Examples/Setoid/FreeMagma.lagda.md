@@ -88,10 +88,10 @@ deliberately pick a *non-associative* operation so that the syntactic distinctio
 between the two trees becomes a numerical one.
 
 We assemble the algebra with the `mkAlgebraₚ`{.AgdaFunction} smart constructor of
-[Setoid.Algebras.Basic][]: it takes the interpretation `f`{.AgdaBound} of each operation
-symbol and a pointwise congruence `cong-f`{.AgdaBound}, and discharges the
+[Setoid.Algebras.Basic][]: it takes the interpretation `f`{.AgdaFunction} of each operation
+symbol and a pointwise congruence `cong-f`{.AgdaFunction}, and discharges the
 `⟨ Sig-Magma ⟩`-congruence boilerplate (`{∙-Op , _} {.∙-Op , _} (refl , args≈)`) internally.
-Only `f`{.AgdaBound} and `cong-f`{.AgdaBound} remain of the longhand
+Only `f`{.AgdaFunction} and `cong-f`{.AgdaFunction} remain of the longhand
 `record { Domain = ≡.setoid ℕ ; Interp = … }` this replaces.
 
 ```agda

@@ -64,7 +64,7 @@ Two further consequences shape the code below: the coset relation is written out
 directly instead of through a `Coset`{.AgdaModule} module application (a module
 application at a concrete subgroup re-instantiates that module, and
 `Algebra.Properties.Group` with it), and every function taking a subgroup reads it
-through `proj₁`{.AgdaFunction} / `proj₂`{.AgdaFunction} rather than a pattern match,
+through `proj₁`{.AgdaField} / `proj₂`{.AgdaField} rather than a pattern match,
 so its result reduces without forcing the argument open.
 
 <!--

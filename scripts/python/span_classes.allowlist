@@ -1,0 +1,6 @@
+# Allowlist for scripts/python/span_classes.py: disagreements that are
+# legitimate markup the checker cannot tell apart, each recorded with its
+# reason (issue #553; "ratchet rather than silence").  Tab-separated columns:
+# path, name, claimed class, Agda's aspect, reason.  An entry that no longer
+# matches a live disagreement fails the run, so the list cannot rot.
+src/Setoid/Congruences/Presented/Basic.lagda.md	_≟_	AgdaField	Bound	The referent is FiniteAlgebra's `_≟_` field (src/Setoid/Algebras/Finite.lagda.md:80), named in a footnote about which of its fields are used; in this module's code `_≟_` is only ever a bound hypothesis (the argument of `fromPairs?`), so Agda classifies it Bound here.
