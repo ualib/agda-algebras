@@ -32,7 +32,7 @@
 #      where a path segment happens to contain the substring `agda`.
 # =============================================================================
 
-.PHONY: default all check test clean site serve serve-full html agda-md site-full profile project-plan unused-imports unused-imports-test check-links check-links-test gen-links corpus-stats corpus-stats-check corpus-stats-test docstrings docstrings-test docstrings-list docstrings-unused docstrings-json groups-test Everything.agda EverythingLegacy.agda
+.PHONY: default all check test clean site serve serve-full html agda-md site-full profile project-plan unused-imports unused-imports-test check-links check-links-test gen-links span-classes span-classes-test corpus-stats corpus-stats-check corpus-stats-test docstrings docstrings-test docstrings-list docstrings-unused docstrings-json groups-test Everything.agda EverythingLegacy.agda
 
 # -- Configuration -----------------------------------------------------------
 SRCDIR    := src
@@ -240,6 +240,28 @@ check-links-test:
 gen-links:
 	@echo "target: $@"
 	python3 scripts/python/gen_links.py
+
+# Validate the kramdown attribute spans on inline Agda names in the prose
+# (`` `Algebra`{.AgdaRecord} `` and kin) against Agda's own classification
+# (issue #553).  Nothing else checks that the class is the right one: a wrong
+# class only changes how the name is coloured, so it sails through every other
+# gate.  The ground truth is the `agda --html --html-highlight=code` render
+# (`make agda-md`): its anchors carry Agda's per-occurrence classification,
+# resolved in the scope of the file, which is what a global name table cannot
+# do.  The checker reads the spans from the sources and the aspects from the
+# render, joins on (module, name), and fails on any disagreement; legitimate
+# markup it cannot resolve is recorded in scripts/python/span_classes.allowlist
+# (stale entries fail, so the list cannot rot).
+#   span-classes        the CI gate; needs a render (run `make agda-md` first)
+#   span-classes-test   the checker's own test suite (pure Python, no Agda)
+span-classes:
+	@echo "target: $@"
+	@test -d $(AGDA_HTML)/md || { echo "  error: $(AGDA_HTML)/md missing; run 'make agda-md' first (the checker diffs against Agda's own render)."; exit 2; }
+	python3 scripts/python/span_classes.py --html-dir $(AGDA_HTML)/md $(SRCDIR)
+
+span-classes-test:
+	@echo "target: $@"
+	python3 scripts/python/test_span_classes.py
 
 # The landing page's headline figures (issue #575).  docs/index.md advertises a
 # module count, a line count, a machine-checked share, and the pinned toolchain;
