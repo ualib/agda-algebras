@@ -68,6 +68,8 @@ Inline references to Agda terms in prose use kramdown attribute spans, which rec
 
 The five attribute classes carried over from the legacy corpus are `{.AgdaBound}`, `{.AgdaFunction}`, `{.AgdaRecord}`, `{.AgdaSymbol}`, and `{.AgdaArgument}`.  The canonical mapping lives in `admin/agda-algebras-macros.json` and is the input to bulk operations on the corpus (corpus extraction, future format migrations).
 
+Whatever class a name carries must match what Agda thinks the name is: `make span-classes` (issue [#553](https://github.com/ualib/agda-algebras/issues/553)) diffs every span in the prose against the `agda --html` render, whose anchors carry Agda's own per-occurrence classification, and CI fails on a disagreement.  Legitimate markup the checker cannot resolve (a name whose prose referent is not the one the module's code has in scope) is recorded in `scripts/python/span_classes.allowlist`, never silently skipped.
+
 Files under `docs/papers/` retain LaTeX-literate (`.lagda`) shape — they are co-built with external paper PDFs and are out of scope for the Markdown-literate rule.  No other `.lagda` files exist in the repository.
 
 
