@@ -184,7 +184,7 @@ carries nothing down.
 
 The three operations come first, curried out of their interpretations:
 `_∙_`{.AgdaFunction}, `ε`{.AgdaFunction} and `_⁻¹`{.AgdaFunction}.
-`equations`{.AgdaFunction} is the satisfaction witness projected out of the Σ.
+`equations`{.AgdaBound} is the satisfaction witness projected out of the Σ.
 Then come the two congruences, `∙-cong`{.AgdaFunction} and
 `⁻¹-cong`{.AgdaFunction}, and the three containment lemmas
 `interp-node-∙`{.AgdaFunction}, `interp-node-ε`{.AgdaFunction} and

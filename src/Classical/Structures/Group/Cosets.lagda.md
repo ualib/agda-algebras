@@ -127,7 +127,7 @@ in the same coset.  `∼-congˡ`{.AgdaFunction} says left translation by any gro
 element preserves the coset relation, which is what lets `g ∙_` descend to the
 coset space.
 
-Both are proved the same way, by supplying `respects`{.AgdaFunction} with an
+Both are proved the same way, by supplying `respects`{.AgdaField} with an
 equality between the relevant `x ⁻¹ ∙ y` witnesses: for `≈⇒∼`{.AgdaFunction} that
 witness reduces to `ε` and membership follows from `ε-closed`{.AgdaFunction}, and for
 `∼-congˡ`{.AgdaFunction} the `g` cancels, so the translated witness equals the

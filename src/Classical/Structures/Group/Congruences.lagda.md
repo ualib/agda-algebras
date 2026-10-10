@@ -480,7 +480,7 @@ The forward map of the correspondence packages the relation with its congruence 
 
 In the other direction the ingredients are the curried consequences of a congruence's
 compatibility: it is preserved by multiplication, by inversion, and hence by
-conjugation.  These are read off from `is-compatible`{.AgdaFunction} at the canonical
+conjugation.  These are read off from `is-compatible`{.AgdaField} at the canonical
 tuples, with no interpretation bridge needed — the curried accessors of
 `Group-Op`{.AgdaModule} are *defined* by applying the interpreted symbol to exactly
 those tuples.

@@ -47,7 +47,7 @@ re-runs it on grid pairs) gives
 
     proj₁ d ≑ Cg (fromPairs (carrierPairs (relatedIdx d)))
 
-and a fold of the certificate's `prin`{.AgdaField} and `join`{.AgdaField} tables over
+and a fold of the certificate's `prin`{.AgdaFunction} and `join`{.AgdaFunction} tables over
 that pair list (`foldIdx`{.AgdaFunction}) lands on a listed entry provably `≑` to the
 same generated congruence, one `Cg`-of-cons step at a time (`Cg-++-∨`{.AgdaFunction}).
 
