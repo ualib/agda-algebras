@@ -43,7 +43,10 @@ construction as in the book.
    Whitman's condition (Theorem 1.8) and are semidistributive (Theorem 1.21);
 +  [Classical.Structures.Lattice.Free.Substitution][]: substitutions, the
    homomorphisms `FL(X) → FL(Y)` they induce, the evaluation lemma, and the
-   theorem that every such homomorphism is induced by a substitution.
+   theorem that every such homomorphism is induced by a substitution;
++  [Classical.Structures.Lattice.Free.Closure][]: the kernel of a substitution,
+   solutions of a list of equations, and the closure of McNulty's free-lattice
+   Nullstellensatz problem, with refutation certificates.
 
 The worked example [Examples.Classical.Lattices.FreeLattice3][] decides a few
 inequalities in `FL(3)` by evaluation and computes some canonical forms.
@@ -54,6 +57,7 @@ inequalities in `FL(3)` by evaluation and computes some canonical forms.
 module Classical.Structures.Lattice.Free where
 
 open import Classical.Structures.Lattice.Free.Canonical         public
+open import Classical.Structures.Lattice.Free.Closure           public
 open import Classical.Structures.Lattice.Free.Derivability      public
 open import Classical.Structures.Lattice.Free.Duality           public
 open import Classical.Structures.Lattice.Free.Semidistributive  public
