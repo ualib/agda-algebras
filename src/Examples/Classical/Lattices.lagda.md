@@ -23,6 +23,9 @@ Each submodule is the home of one concrete lattice.
   neither semidistributive law.
 + `N5` is the pentagon `N₅`, given by its tables, which is semidistributive and
   satisfies Whitman's condition.
++ `Nullstellen` is the first datum of McNulty's free-lattice Nullstellensatz
+  problem: an equation over `FL(3)` in the closure of another, by meet
+  semidistributivity, and outside the congruence it generates, by `M₃`.
 
 ```agda
 {-# OPTIONS --without-K --exact-split --safe #-}
@@ -35,4 +38,5 @@ open import Examples.Classical.Lattices.L3Heyting
 open import Examples.Classical.Lattices.FreeLattice3
 open import Examples.Classical.Lattices.M3
 open import Examples.Classical.Lattices.N5
+open import Examples.Classical.Lattices.Nullstellen
 ```
