@@ -18,8 +18,10 @@ than part of the structure's definition.  Each per-structure file
 proves further facts about a parameterized `(𝑿 : X α ρ)`.
 
 The inaugural inhabitant is `Classical.Properties.Lattice`, which proves the
-order-theoretic view of a lattice.  Future inhabitants include, for example,
-uniqueness of inverses in Group and `0 · x ≈ 0` in Ring.
+order-theoretic view of a lattice; `Classical.Properties.Lattice.Semidistributive`
+adds the semidistributive laws and Whitman's condition, the conditions that
+characterize the finite sublattices of free lattices.  Future inhabitants include,
+for example, uniqueness of inverses in Group and `0 · x ≈ 0` in Ring.
 
 This file is the umbrella for the subtree.
 
@@ -28,5 +30,6 @@ This file is the umbrella for the subtree.
 
 module Classical.Properties where
 
-open import Classical.Properties.Lattice public
+open import Classical.Properties.Lattice                   public
+open import Classical.Properties.Lattice.Semidistributive  public
 ```
