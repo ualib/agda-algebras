@@ -153,6 +153,7 @@
 [Classical.Operations]: /Classical/Operations/
 [Classical.Properties]: /Classical/Properties/
 [Classical.Properties.Lattice]: /Classical/Properties/Lattice/
+[Classical.Properties.Lattice.Semidistributive]: /Classical/Properties/Lattice/Semidistributive/
 [Classical.Signatures]: /Classical/Signatures/
 [Classical.Signatures.Finite]: /Classical/Signatures/Finite/
 [Classical.Signatures.Group]: /Classical/Signatures/Group/
@@ -224,12 +225,14 @@
 [Classical.Structures.Lattice.Free.Canonical.Uniqueness]: /Classical/Structures/Lattice/Free/Canonical/Uniqueness/
 [Classical.Structures.Lattice.Free.Derivability]: /Classical/Structures/Lattice/Free/Derivability/
 [Classical.Structures.Lattice.Free.Duality]: /Classical/Structures/Lattice/Free/Duality/
+[Classical.Structures.Lattice.Free.Semidistributive]: /Classical/Structures/Lattice/Free/Semidistributive/
 [Classical.Structures.Lattice.Free.Term]: /Classical/Structures/Lattice/Free/Term/
 [Classical.Structures.Lattice.Free.Universal]: /Classical/Structures/Lattice/Free/Universal/
 [Classical.Structures.Lattice.Free.Whitman]: /Classical/Structures/Lattice/Free/Whitman/
 [Classical.Structures.Lattice.OrdinalSum]: /Classical/Structures/Lattice/OrdinalSum/
 [Classical.Structures.Lattice.Partitions]: /Classical/Structures/Lattice/Partitions/
 [Classical.Structures.Lattice.Product]: /Classical/Structures/Lattice/Product/
+[Classical.Structures.Lattice.Table]: /Classical/Structures/Lattice/Table/
 [Classical.Structures.Magma]: /Classical/Structures/Magma/
 [Classical.Structures.Monoid]: /Classical/Structures/Monoid/
 [Classical.Structures.Ring]: /Classical/Structures/Ring/
@@ -273,6 +276,8 @@
 [Examples.Classical.Lattices.L2]: /Examples/Classical/Lattices/L2/
 [Examples.Classical.Lattices.L2Distributive]: /Examples/Classical/Lattices/L2Distributive/
 [Examples.Classical.Lattices.L3Heyting]: /Examples/Classical/Lattices/L3Heyting/
+[Examples.Classical.Lattices.M3]: /Examples/Classical/Lattices/M3/
+[Examples.Classical.Lattices.N5]: /Examples/Classical/Lattices/N5/
 [Examples.Classical.Magma]: /Examples/Classical/Magma/
 [Examples.Classical.Monoid]: /Examples/Classical/Monoid/
 [Examples.Classical.Semigroup]: /Examples/Classical/Semigroup/
@@ -518,6 +523,7 @@
 [Classical/Operations.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Operations.lagda.md
 [Classical/Properties.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Properties.lagda.md
 [Classical/Properties/Lattice.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Properties/Lattice.lagda.md
+[Classical/Properties/Lattice/Semidistributive.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Properties/Lattice/Semidistributive.lagda.md
 [Classical/Signatures.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Signatures.lagda.md
 [Classical/Signatures/Finite.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Signatures/Finite.lagda.md
 [Classical/Signatures/Group.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Signatures/Group.lagda.md
@@ -589,12 +595,14 @@
 [Classical/Structures/Lattice/Free/Canonical/Uniqueness.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Lattice/Free/Canonical/Uniqueness.lagda.md
 [Classical/Structures/Lattice/Free/Derivability.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Lattice/Free/Derivability.lagda.md
 [Classical/Structures/Lattice/Free/Duality.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Lattice/Free/Duality.lagda.md
+[Classical/Structures/Lattice/Free/Semidistributive.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Lattice/Free/Semidistributive.lagda.md
 [Classical/Structures/Lattice/Free/Term.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Lattice/Free/Term.lagda.md
 [Classical/Structures/Lattice/Free/Universal.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Lattice/Free/Universal.lagda.md
 [Classical/Structures/Lattice/Free/Whitman.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Lattice/Free/Whitman.lagda.md
 [Classical/Structures/Lattice/OrdinalSum.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Lattice/OrdinalSum.lagda.md
 [Classical/Structures/Lattice/Partitions.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Lattice/Partitions.lagda.md
 [Classical/Structures/Lattice/Product.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Lattice/Product.lagda.md
+[Classical/Structures/Lattice/Table.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Lattice/Table.lagda.md
 [Classical/Structures/Magma.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Magma.lagda.md
 [Classical/Structures/Monoid.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Monoid.lagda.md
 [Classical/Structures/Ring.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Ring.lagda.md
@@ -638,6 +646,8 @@
 [Examples/Classical/Lattices/L2.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Examples/Classical/Lattices/L2.lagda.md
 [Examples/Classical/Lattices/L2Distributive.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Examples/Classical/Lattices/L2Distributive.lagda.md
 [Examples/Classical/Lattices/L3Heyting.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Examples/Classical/Lattices/L3Heyting.lagda.md
+[Examples/Classical/Lattices/M3.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Examples/Classical/Lattices/M3.lagda.md
+[Examples/Classical/Lattices/N5.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Examples/Classical/Lattices/N5.lagda.md
 [Examples/Classical/Magma.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Examples/Classical/Magma.lagda.md
 [Examples/Classical/Monoid.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Examples/Classical/Monoid.lagda.md
 [Examples/Classical/Semigroup.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Examples/Classical/Semigroup.lagda.md
