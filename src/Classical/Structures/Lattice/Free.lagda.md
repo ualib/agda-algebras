@@ -46,7 +46,10 @@ construction as in the book.
    theorem that every such homomorphism is induced by a substitution;
 +  [Classical.Structures.Lattice.Free.Closure][]: the kernel of a substitution,
    solutions of a list of equations, and the closure of McNulty's free-lattice
-   Nullstellensatz problem, with refutation certificates.
+   Nullstellensatz problem, with refutation certificates;
++  [Classical.Structures.Lattice.Free.Generation][]: free generating sets
+   (Corollaries 1.12 and 1.13, with Lemma 1.3), their decision procedure, and the
+   irreducibility of free generators (Corollary 1.6).
 
 The worked example [Examples.Classical.Lattices.FreeLattice3][] decides a few
 inequalities in `FL(3)` by evaluation and computes some canonical forms.
@@ -60,6 +63,7 @@ open import Classical.Structures.Lattice.Free.Canonical         public
 open import Classical.Structures.Lattice.Free.Closure           public
 open import Classical.Structures.Lattice.Free.Derivability      public
 open import Classical.Structures.Lattice.Free.Duality           public
+open import Classical.Structures.Lattice.Free.Generation        public
 open import Classical.Structures.Lattice.Free.Semidistributive  public
 open import Classical.Structures.Lattice.Free.Substitution      public
 open import Classical.Structures.Lattice.Free.Term              public
