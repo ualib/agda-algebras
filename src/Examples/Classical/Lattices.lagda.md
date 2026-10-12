@@ -26,6 +26,9 @@ Each submodule is the home of one concrete lattice.
 + `Nullstellen` is the first datum of McNulty's free-lattice Nullstellensatz
   problem: an equation over `FL(3)` in the closure of another, by meet
   semidistributivity, and outside the congruence it generates, by `M₃`.
++ `DeansProblem` checks Freese's example toward Dean's problem: two triples in
+  `FL(9)`, each freely generating a copy of `FL(3)`, the first sublattice properly
+  inside the second.
 
 ```agda
 {-# OPTIONS --without-K --exact-split --safe #-}
@@ -39,4 +42,5 @@ open import Examples.Classical.Lattices.FreeLattice3
 open import Examples.Classical.Lattices.M3
 open import Examples.Classical.Lattices.N5
 open import Examples.Classical.Lattices.Nullstellen
+open import Examples.Classical.Lattices.DeansProblem
 ```
