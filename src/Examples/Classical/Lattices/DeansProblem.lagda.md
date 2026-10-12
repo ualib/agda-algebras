@@ -4,6 +4,7 @@ file: "src/Examples/Classical/Lattices/DeansProblem.lagda.md"
 title: "Examples.Classical.Lattices.DeansProblem module"
 date: "2026-10-11"
 author: "the agda-algebras development team"
+check-cost: heavy
 ---
 
 ### Worked example: Freese's step toward Dean's problem
@@ -55,7 +56,11 @@ So the decisions run on smaller terms equal to the defined ones: the canonical f
 of `a`, and the notes' own simplification `a' = a ∧ (a₁ ∨ b₂₁ ∨ c₂₂)`.  Each
 replacement is checked equal to the original, and free generation and containment
 carry over along equality.  The cases of `b` and `c` follow from the case of `a`
-by applying the permutation, an automorphism of `FL(9)`.
+by applying the permutation, an automorphism of `FL(9)`.  Even so the module
+checks in about 12 seconds (measured from an empty build directory under the
+build's heap limit, 2026-10-12), the most of any module in the library.  It is
+therefore marked `check-cost: heavy` in its front matter and left out of the
+[Examples.Classical.Lattices][] barrel; `make check` checks it all the same.
 
 <!--
 ```agda
