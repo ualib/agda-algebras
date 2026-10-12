@@ -33,17 +33,24 @@ construction as in the book.
 +  [Classical.Structures.Lattice.Free.Derivability][]: the bridge to equational
    logic, which makes derivable equality under `Th-Lattice`{.AgdaFunction}, and
    hence equality in the relatively free algebra `𝔽[ X ]`{.AgdaFunction},
-   decidable.
+   decidable;
++  [Classical.Structures.Lattice.Free.Duality][]: the involution of lattice terms
+   that exchanges meet and join and reverses Whitman's order;
++  [Classical.Structures.Lattice.Free.Canonical][]: canonical forms (Theorems 1.17
+   and 1.18), the algorithm that computes them, their uniqueness up to
+   commutativity, and the canonical joinands of an element (Theorem 1.19).
 
 The worked example [Examples.Classical.Lattices.FreeLattice3][] decides a few
-inequalities in `FL(3)` by evaluation.
+inequalities in `FL(3)` by evaluation and computes some canonical forms.
 
 ```agda
 {-# OPTIONS --without-K --exact-split --safe #-}
 
 module Classical.Structures.Lattice.Free where
 
+open import Classical.Structures.Lattice.Free.Canonical     public
 open import Classical.Structures.Lattice.Free.Derivability  public
+open import Classical.Structures.Lattice.Free.Duality       public
 open import Classical.Structures.Lattice.Free.Term          public
 open import Classical.Structures.Lattice.Free.Universal     public
 open import Classical.Structures.Lattice.Free.Whitman       public
