@@ -21,6 +21,11 @@ expectation fails to compile.  By Whitman's theorem
 lattices: an inequality the procedure accepts holds in every lattice, and one it
 rejects fails in some lattice, namely in `FL(3)` itself.
 
+The last sections compute canonical forms
+([Classical.Structures.Lattice.Free.Canonical][]) in the same way: each claimed
+canonical form is an equation that holds by `refl`, so Agda runs the
+canonicalization algorithm while checking the module.
+
 <!--
 ```agda
 {-# OPTIONS --without-K --exact-split --safe #-}
@@ -31,12 +36,17 @@ module Examples.Classical.Lattices.FreeLattice3 where
 open import Data.Fin.Base                        using ( Fin )
 open import Data.Fin.Patterns                    using ( 0F ; 1F ; 2F )
 open import Data.Fin.Properties                  using ( _≟_ )
+open import Data.List.Base                       using ( [] ; _∷_ )
 open import Relation.Binary.Definitions          using ( DecidableEquality )
-open import Relation.Binary.PropositionalEquality  using ( refl )
+open import Relation.Binary.PropositionalEquality  using ( _≡_ ; refl )
 open import Relation.Nullary                     using ( ¬_ )
 open import Relation.Nullary.Decidable.Core      using ( from-yes ; from-no )
 
 -- Imports from the Agda Universal Algebra Library -----------------------------
+open import Classical.Structures.Lattice.Free.Canonical     using ( genᶜ ; joinᶜ ; meetᶜ ; jgen
+                                                                  ; jmeet ; mgen ; mjoin ; _≈ᶜ_
+                                                                  ; module Canonicalization
+                                                                  ; module Comparison )
 open import Classical.Structures.Lattice.Free.Derivability  using ( E-Lattice ; ⊢? )
 open import Classical.Structures.Lattice.Free.Term          using ( LatTerm ; ℊ ; _∧̇_ ; _∨̇_
                                                                   ; toTerm )
@@ -149,4 +159,81 @@ distrib-underivable = from-no (⊢? _≟₃_ (toTerm (x ∧̇ (y ∨̇ z))) (toT
 
 absorbˡ-derivable : E-Lattice ⊢ Fin 3 ▹ toTerm (x ∧̇ (x ∨̇ y)) ≈ toTerm x
 absorbˡ-derivable = from-yes (⊢? _≟₃_ (toTerm (x ∧̇ (x ∨̇ y))) (toTerm x))
+```
+
+#### Canonical forms
+
+The canonical form of a term is computed by `canonical`{.AgdaFunction}, opened here
+at the decidable equality of `Fin 3`.  The second absorption law reappears as a
+computation: the canonical form of `(x ∧ y) ∨ x` is the generator `x`
+(`canonical-absorbʳ`{.AgdaFunction}), since the joinand `x ∧ y` lies below the
+joinand `x` and is deleted.
+
+In `(x ∧ (y ∨ z)) ∨ y ∨ (x ∧ z)` the joinand `x ∧ z` lies below the joinand
+`x ∧ (y ∨ z)` and is deleted, which leaves the join `(x ∧ (y ∨ z)) ∨ y`
+(`canonical-delete`{.AgdaFunction}).  In `(x ∧ (y ∨ z)) ∨ y ∨ z` no joinand lies
+below another, but the meetand `y ∨ z` of the joinand `x ∧ (y ∨ z)` lies below
+the whole join, so condition 4 of Theorem 1.18 fails; the algorithm replaces the
+meet by the joinands `y` and `z` of that meetand, and deleting the repeated
+joinands leaves `y ∨ z` (`canonical-condition4`{.AgdaFunction}).  A join can also
+collapse to a meet: `y ∧ z` lies below `(x ∨ y) ∧ (x ∨ z)`, so the canonical form
+of their join is the meet (`canonical-meet`{.AgdaFunction}).
+
+```agda
+open Canonicalization _≟₃_ using ( canonical ; canonical-isCanonical )
+
+canonical-absorbʳ : canonical ((x ∧̇ y) ∨̇ x) ≡ genᶜ 0F
+canonical-absorbʳ = refl
+
+canonical-delete :
+  canonical ((x ∧̇ (y ∨̇ z)) ∨̇ (y ∨̇ (x ∧̇ z)))
+  ≡ joinᶜ (jmeet (mgen 0F) (mjoin (jgen 1F) (jgen 2F ∷ []) ∷ [])) (jgen 1F ∷ [])
+canonical-delete = refl
+
+canonical-condition4 : canonical ((x ∧̇ (y ∨̇ z)) ∨̇ (y ∨̇ z)) ≡ joinᶜ (jgen 1F) (jgen 2F ∷ [])
+canonical-condition4 = refl
+
+canonical-meet :
+  canonical (((x ∨̇ y) ∧̇ (x ∨̇ z)) ∨̇ (y ∧̇ z))
+  ≡ meetᶜ (mjoin (jgen 0F) (jgen 1F ∷ [])) (mjoin (jgen 0F) (jgen 2F ∷ []) ∷ [])
+canonical-meet = refl
+```
+
+#### Unique up to commutativity
+
+Canonical forms are unique only up to the order of joinands and meetands
+(Theorem 1.17).  The terms `x ∨ y` and `y ∨ x` have different canonical forms,
+which list the same joinands in different orders (`canonical-x∨y`{.AgdaFunction},
+`canonical-y∨x`{.AgdaFunction}), and the two forms are related by
+`_≈ᶜ_`{.AgdaDatatype}, as the comparison of canonical forms decides
+(`x∨y≈ᶜy∨x`{.AgdaFunction}).
+
+```agda
+open Comparison _≟₃_ using ( ≈ᶜ? ; _≈ᶠ?_ )
+
+canonical-x∨y : canonical (x ∨̇ y) ≡ joinᶜ (jgen 0F) (jgen 1F ∷ [])
+canonical-x∨y = refl
+
+canonical-y∨x : canonical (y ∨̇ x) ≡ joinᶜ (jgen 1F) (jgen 0F ∷ [])
+canonical-y∨x = refl
+
+x∨y≈ᶜy∨x : canonical (x ∨̇ y) ≈ᶜ canonical (y ∨̇ x)
+x∨y≈ᶜy∨x = from-yes (≈ᶜ? (canonical (x ∨̇ y)) (canonical (y ∨̇ x))
+                         (canonical-isCanonical (x ∨̇ y)) (canonical-isCanonical (y ∨̇ x)))
+```
+
+#### Deciding equality by canonical forms
+
+Comparing canonical forms is a second decision procedure for equality in `FL(3)`,
+`_≈ᶠ?_`{.AgdaFunction}, which never runs Whitman's procedure on the two terms.  It
+confirms the first absorption law (`absorbˡ-canonical`{.AgdaFunction}) and refutes
+the distributive law (`distrib-≉-canonical`{.AgdaFunction}), as Whitman's
+procedure did above.
+
+```agda
+absorbˡ-canonical : x ∧̇ (x ∨̇ y) ≈ʷ x
+absorbˡ-canonical = from-yes (x ∧̇ (x ∨̇ y) ≈ᶠ? x)
+
+distrib-≉-canonical : ¬ (x ∧̇ (y ∨̇ z) ≈ʷ (x ∧̇ y) ∨̇ (x ∧̇ z))
+distrib-≉-canonical = from-no (x ∧̇ (y ∨̇ z) ≈ᶠ? (x ∧̇ y) ∨̇ (x ∧̇ z))
 ```

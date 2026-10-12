@@ -217,7 +217,13 @@
 [Classical.Structures.Lattice.Dual]: /Classical/Structures/Lattice/Dual/
 [Classical.Structures.Lattice.FilterIdeal]: /Classical/Structures/Lattice/FilterIdeal/
 [Classical.Structures.Lattice.Free]: /Classical/Structures/Lattice/Free/
+[Classical.Structures.Lattice.Free.Canonical]: /Classical/Structures/Lattice/Free/Canonical/
+[Classical.Structures.Lattice.Free.Canonical.Algorithm]: /Classical/Structures/Lattice/Free/Canonical/Algorithm/
+[Classical.Structures.Lattice.Free.Canonical.Basic]: /Classical/Structures/Lattice/Free/Canonical/Basic/
+[Classical.Structures.Lattice.Free.Canonical.Joinands]: /Classical/Structures/Lattice/Free/Canonical/Joinands/
+[Classical.Structures.Lattice.Free.Canonical.Uniqueness]: /Classical/Structures/Lattice/Free/Canonical/Uniqueness/
 [Classical.Structures.Lattice.Free.Derivability]: /Classical/Structures/Lattice/Free/Derivability/
+[Classical.Structures.Lattice.Free.Duality]: /Classical/Structures/Lattice/Free/Duality/
 [Classical.Structures.Lattice.Free.Term]: /Classical/Structures/Lattice/Free/Term/
 [Classical.Structures.Lattice.Free.Universal]: /Classical/Structures/Lattice/Free/Universal/
 [Classical.Structures.Lattice.Free.Whitman]: /Classical/Structures/Lattice/Free/Whitman/
@@ -576,7 +582,13 @@
 [Classical/Structures/Lattice/Dual.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Lattice/Dual.lagda.md
 [Classical/Structures/Lattice/FilterIdeal.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Lattice/FilterIdeal.lagda.md
 [Classical/Structures/Lattice/Free.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Lattice/Free.lagda.md
+[Classical/Structures/Lattice/Free/Canonical.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Lattice/Free/Canonical.lagda.md
+[Classical/Structures/Lattice/Free/Canonical/Algorithm.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Lattice/Free/Canonical/Algorithm.lagda.md
+[Classical/Structures/Lattice/Free/Canonical/Basic.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Lattice/Free/Canonical/Basic.lagda.md
+[Classical/Structures/Lattice/Free/Canonical/Joinands.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Lattice/Free/Canonical/Joinands.lagda.md
+[Classical/Structures/Lattice/Free/Canonical/Uniqueness.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Lattice/Free/Canonical/Uniqueness.lagda.md
 [Classical/Structures/Lattice/Free/Derivability.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Lattice/Free/Derivability.lagda.md
+[Classical/Structures/Lattice/Free/Duality.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Lattice/Free/Duality.lagda.md
 [Classical/Structures/Lattice/Free/Term.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Lattice/Free/Term.lagda.md
 [Classical/Structures/Lattice/Free/Universal.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Lattice/Free/Universal.lagda.md
 [Classical/Structures/Lattice/Free/Whitman.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Lattice/Free/Whitman.lagda.md
