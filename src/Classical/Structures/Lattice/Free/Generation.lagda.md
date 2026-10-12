@@ -90,12 +90,13 @@ import Data.List.Relation.Unary.Any.Properties  as Any
 open import Classical.Structures.Lattice.Free.Canonical.Basic
                                                     using ( ⋁⁺ ; ⋀⁺ ; ⋁⁺-upper ; ⋁⁺-least
                                                           ; ⋀⁺-lower ; ⋀⁺-greatest
-                                                          ; gen-⋁⁺-prime ; ⋀⁺-gen-below )
+                                                          ; gen-⋁⁺-prime ; ⋀⁺-gen-below
+                                                          ; ≈ʷ-sym ; ≈ʷ-trans )
 open import Classical.Structures.Lattice.Free.Duality  using ( dual ; dual-antitone ; dual-reflects )
 open import Classical.Structures.Lattice.Free.Substitution
-                                                    using ( Sub ; _[_] ; _⨟_ ; []-⨟ ; ⋁⁺-[] ; ⋀⁺-[]
-                                                          ; dual-[] ; subst-hom ; injective→reflects
-                                                          ; reflects→injective )
+                                                    using ( Sub ; _[_] ; _⨟_ ; []-⨟ ; []-congʳ ; ⋁⁺-[]
+                                                          ; ⋀⁺-[] ; dual-[] ; subst-hom
+                                                          ; injective→reflects ; reflects→injective )
 open import Classical.Structures.Lattice.Free.Term     using ( LatTerm ; ℊ ; _∧̇_ ; _∨̇_ )
 open import Classical.Structures.Lattice.Free.Universal using ( FL )
 open import Classical.Structures.Lattice.Free.Whitman
@@ -527,6 +528,21 @@ module _ {I : Type ι} {X : Type χ} (σ : Sub I X) where
 
   freelyGenerates⇔injective : FreelyGenerates σ ⇔ IsInjective (proj₁ (subst-hom σ))
   freelyGenerates⇔injective = mk⇔ (freelyGenerates→injective σ) injective→freelyGenerates
+```
+
+Free generation depends only on the elements of the family, not on the terms
+that name them: if `σ i` and `τ i` are equal in `FL(X)` for every `i`, and `σ`
+freely generates, so does `τ` (`freelyGenerates-resp`{.AgdaFunction}).  The
+substitutions agree on every term up to equality (`[]-congʳ`{.AgdaFunction}), so
+injectivity passes from one to the other.  This lets a computation decide free
+generation for a family of small terms and conclude it for equal but larger ones.
+
+```agda
+freelyGenerates-resp : {I : Type ι} {X : Type χ} {σ τ : Sub I X} → (∀ i → σ i ≈ʷ τ i)
+                     → FreelyGenerates σ → FreelyGenerates τ
+freelyGenerates-resp {σ = σ} {τ} e fg = injective→freelyGenerates τ λ {s} {t} p →
+  freelyGenerates→injective σ fg
+    (≈ʷ-trans ([]-congʳ s e) (≈ʷ-trans p (≈ʷ-sym ([]-congʳ t e))))
 ```
 
 #### Deciding free generation
