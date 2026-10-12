@@ -40,7 +40,10 @@ construction as in the book.
    and 1.18), the algorithm that computes them, their uniqueness up to
    commutativity, and the canonical joinands of an element (Theorem 1.19);
 +  [Classical.Structures.Lattice.Free.Semidistributive][]: free lattices satisfy
-   Whitman's condition (Theorem 1.8) and are semidistributive (Theorem 1.21).
+   Whitman's condition (Theorem 1.8) and are semidistributive (Theorem 1.21);
++  [Classical.Structures.Lattice.Free.Substitution][]: substitutions, the
+   homomorphisms `FL(X) → FL(Y)` they induce, the evaluation lemma, and the
+   theorem that every such homomorphism is induced by a substitution.
 
 The worked example [Examples.Classical.Lattices.FreeLattice3][] decides a few
 inequalities in `FL(3)` by evaluation and computes some canonical forms.
@@ -54,6 +57,7 @@ open import Classical.Structures.Lattice.Free.Canonical         public
 open import Classical.Structures.Lattice.Free.Derivability      public
 open import Classical.Structures.Lattice.Free.Duality           public
 open import Classical.Structures.Lattice.Free.Semidistributive  public
+open import Classical.Structures.Lattice.Free.Substitution      public
 open import Classical.Structures.Lattice.Free.Term              public
 open import Classical.Structures.Lattice.Free.Universal         public
 open import Classical.Structures.Lattice.Free.Whitman           public
