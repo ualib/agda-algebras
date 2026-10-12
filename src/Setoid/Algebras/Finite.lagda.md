@@ -46,14 +46,16 @@ module Setoid.Algebras.Finite  where
 open import Agda.Primitive using () renaming ( Set to Type )
 
 -- Imports from the Agda Standard Library -----------------------------------
-open import Data.Fin.Base     using ( Fin ; zero )
-open import Data.Nat.Base     using ( ℕ )
-open import Data.Product      using ( _,_  ; ∃-syntax )
-open import Data.Unit.Base    using ( ⊤ ; tt )
-open import Function          using ( Func )
-open import Level             using ( Level ; _⊔_ ; 0ℓ )
-open import Relation.Binary   using ( Setoid )
-open import Relation.Nullary  using ( Dec ; yes )
+open import Data.Fin.Base         using ( Fin ; zero )
+open import Data.Fin.Properties   using ( all? )
+open import Data.Nat.Base         using ( ℕ )
+open import Data.Product          using ( _,_  ; ∃-syntax ; proj₁ ; proj₂ )
+open import Data.Unit.Base        using ( ⊤ ; tt )
+open import Function              using ( Func )
+open import Level                 using ( Level ; _⊔_ ; 0ℓ )
+open import Relation.Binary       using ( Setoid )
+open import Relation.Nullary      using ( Dec ; yes )
+open import Relation.Nullary.Decidable.Core  using ( map′ )
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
 open import Overture               using ( 𝓞 ; 𝓥 ; Signature )
@@ -63,7 +65,7 @@ open Algebra  using ( Domain ; Interp )
 open Func     using ( cong ) renaming ( to to _⟨$⟩_ )
 open Relation.Binary.IsEquivalence
 
-private variable α ρ : Level
+private variable α ρ ℓ : Level
 ```
 -->
 
@@ -110,6 +112,58 @@ is immediate.[^1]
   𝟏-FiniteAlgebra .card      = 1
   𝟏-FiniteAlgebra .enum      = λ _ → tt
   𝟏-FiniteAlgebra .enum-sur  = λ _ → zero , tt
+```
+
+#### Deciding a universal statement by sweeping the enumeration
+
+The enumeration is what turns a universally quantified property of a finite algebra
+into a finite computation.  Let `P`{.AgdaBound} be a property of triples of elements
+that *respects* `≈`: whenever `a ≈ a'`, `b ≈ b'`, and `c ≈ c'`, the instance
+`P a b c` implies `P a' b' c'`.  If `P`{.AgdaBound} holds at every triple of
+enumerated elements, then it holds at every triple, since every element is equal
+to an enumerated one (`enum-all³`{.AgdaFunction}).  Conversely, a property that
+holds everywhere holds at the enumerated elements.  So when each instance of
+`P`{.AgdaBound} is decidable, the universal statement is decided by a sweep of
+`card³` instances (`all³?`{.AgdaFunction}), three nested calls of the standard
+library's `all?`{.AgdaFunction} on `Fin card`, whose answer is transported along
+the two implications.  The quadruple forms `enum-all⁴`{.AgdaFunction} and
+`all⁴?`{.AgdaFunction} are the same with one more quantifier; they decide, for
+instance, Whitman's condition on a finite lattice in
+[Classical.Properties.Lattice.Semidistributive][].  Because surjectivity is all
+the sweep uses, an enumeration that repeats elements only repeats work.
+
+```agda
+module _ {𝑆 : Signature 𝓞 𝓥} {𝑨 : Algebra {𝑆 = 𝑆} α ρ} (𝑭 : FiniteAlgebra 𝑨) where
+  open FiniteAlgebra 𝑭  using ( card ; enum ; enum-sur )
+  open Setoid 𝔻[ 𝑨 ]    using ( _≈_ )
+
+  enum-all³ : (P : 𝕌[ 𝑨 ] → 𝕌[ 𝑨 ] → 𝕌[ 𝑨 ] → Type ℓ)
+    → (∀ {a a' b b' c c'} → a ≈ a' → b ≈ b' → c ≈ c' → P a b c → P a' b' c')
+    → (∀ i j k → P (enum i) (enum j) (enum k)) → ∀ a b c → P a b c
+  enum-all³ P resp h a b c =
+    resp (proj₂ (enum-sur a)) (proj₂ (enum-sur b)) (proj₂ (enum-sur c))
+         (h (proj₁ (enum-sur a)) (proj₁ (enum-sur b)) (proj₁ (enum-sur c)))
+
+  all³? : (P : 𝕌[ 𝑨 ] → 𝕌[ 𝑨 ] → 𝕌[ 𝑨 ] → Type ℓ)
+    → (∀ {a a' b b' c c'} → a ≈ a' → b ≈ b' → c ≈ c' → P a b c → P a' b' c')
+    → (∀ a b c → Dec (P a b c)) → Dec (∀ a b c → P a b c)
+  all³? P resp P? =
+    map′ (enum-all³ P resp) (λ h i j k → h (enum i) (enum j) (enum k))
+         (all? λ i → all? λ j → all? λ k → P? (enum i) (enum j) (enum k))
+
+  enum-all⁴ : (P : 𝕌[ 𝑨 ] → 𝕌[ 𝑨 ] → 𝕌[ 𝑨 ] → 𝕌[ 𝑨 ] → Type ℓ)
+    → (∀ {a a' b b' c c' d d'} → a ≈ a' → b ≈ b' → c ≈ c' → d ≈ d' → P a b c d → P a' b' c' d')
+    → (∀ i j k l → P (enum i) (enum j) (enum k) (enum l)) → ∀ a b c d → P a b c d
+  enum-all⁴ P resp h a b c d =
+    resp (proj₂ (enum-sur a)) (proj₂ (enum-sur b)) (proj₂ (enum-sur c)) (proj₂ (enum-sur d))
+         (h (proj₁ (enum-sur a)) (proj₁ (enum-sur b)) (proj₁ (enum-sur c)) (proj₁ (enum-sur d)))
+
+  all⁴? : (P : 𝕌[ 𝑨 ] → 𝕌[ 𝑨 ] → 𝕌[ 𝑨 ] → 𝕌[ 𝑨 ] → Type ℓ)
+    → (∀ {a a' b b' c c' d d'} → a ≈ a' → b ≈ b' → c ≈ c' → d ≈ d' → P a b c d → P a' b' c' d')
+    → (∀ a b c d → Dec (P a b c d)) → Dec (∀ a b c d → P a b c d)
+  all⁴? P resp P? =
+    map′ (enum-all⁴ P resp) (λ h i j k l → h (enum i) (enum j) (enum k) (enum l))
+         (all? λ i → all? λ j → all? λ k → all? λ l → P? (enum i) (enum j) (enum k) (enum l))
 ```
 
 --------------------------------------

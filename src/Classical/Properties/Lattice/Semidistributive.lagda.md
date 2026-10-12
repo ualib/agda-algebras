@@ -53,6 +53,7 @@ open import Data.Sum.Base                    using ( _⊎_ ) renaming ( map to �
 open import Function                         using ( Func )
 open import Level                            using ( Level ; _⊔_ )
 open import Relation.Binary                  using ( Setoid )
+open import Relation.Nullary.Decidable.Core  using ( Dec ; _×-dec_ ; _⊎-dec_ ; _→-dec_ )
 
 import Relation.Binary.Reasoning.Setoid as SetoidReasoning
 
@@ -63,6 +64,7 @@ open import Classical.Signatures.Lattice        using ( ∧-Op ; ∨-Op )
 open import Classical.Structures.Interpret      using ( interp-cong )
 open import Classical.Structures.Lattice.Basic  using ( Lattice ; module Lattice-Op )
 open import Setoid.Algebras.Basic               using ( 𝔻[_] ; 𝕌[_] )
+open import Setoid.Algebras.Finite              using ( FiniteAlgebra ; all³? ; all⁴? )
 open import Setoid.Functions                    using ( IsInjective )
 open import Setoid.Homomorphisms.Basic          using ( hom ; IsHom )
 open import Setoid.Homomorphisms.Isomorphisms   using ( _≅_ ; ≅-sym )
@@ -307,4 +309,95 @@ module _ (𝑲 : Lattice α ρᵃ) (𝑳 : Lattice β ρᵇ) (φ : proj₁ 𝑲 
 
   SatisfiesW-I-invar : SatisfiesW 𝑲 → SatisfiesW 𝑳
   SatisfiesW-I-invar = SatisfiesW-S-invar 𝑳 𝑲 sub
+```
+
+#### Deciding the conditions in a finite lattice
+
+In a finite lattice with decidable equality the three conditions are decidable, by
+a sweep over the elements: triples for the semidistributive laws, quadruples for
+(W).  The lattice's carrier is given as a `FiniteAlgebra`{.AgdaRecord} of
+[Setoid.Algebras.Finite][], a surjective enumeration `enum : Fin card → 𝕌`
+together with a decision procedure `_≟_`{.AgdaField} for `≈`, and the meet order
+inherits a decision procedure from it, since `x ≤ y` is the equation
+`x ∧ y ≈ x` (`_≤?_`{.AgdaFunction}).  Each condition is a universal statement
+about an instance `SD∨-at a b c`{.AgdaFunction}, `SD∧-at a b c`{.AgdaFunction},
+or `W-at s₁ s₂ t₁ t₂`{.AgdaFunction} that is decidable and respects `≈` in each
+argument (`SD∨-resp`{.AgdaFunction}, `SD∧-resp`{.AgdaFunction},
+`W-resp`{.AgdaFunction}, each a rewriting by the congruence of the operations).
+So `all³?`{.AgdaFunction} and `all⁴?`{.AgdaFunction} of [Setoid.Algebras.Finite][]
+decide them: the sweep runs over the enumerated elements, and the surjectivity of
+the enumeration carries a positive verdict to every element.  The answers have
+the predicates themselves as their types, so in a concrete lattice `from-yes` or
+`from-no` of a decision is a proof of the condition or of its negation, obtained
+by evaluation; [Examples.Classical.Lattices.M3][] and
+[Examples.Classical.Lattices.N5][] are worked examples.  A lattice with `n`
+enumerated elements costs `n³` instances for each semidistributive law and `n⁴`
+for (W).
+
+```agda
+module _ (𝑳 : Lattice α ρ) (𝑭 : FiniteAlgebra (proj₁ 𝑳)) where
+  open FiniteAlgebra 𝑭      using ( _≟_ )
+  open Lattice-Op 𝑳         using ( _∧_ ; _∨_ ; ∧-cong ; ∨-cong )
+  open Lattice-Order 𝑳      using ( _≤_ ; ≤-respˡ-≈ ; ≤-respʳ-≈ )
+  open Setoid 𝔻[ proj₁ 𝑳 ]  using ( _≈_ ; sym ; trans )
+  open SetoidReasoning 𝔻[ proj₁ 𝑳 ]
+
+  private
+    infix 4 _≤?_
+
+    _≤?_ : ∀ x y → Dec (x ≤ y)
+    x ≤? y = (x ∧ y) ≟ x
+
+    ≤-resp : ∀ {x x' y y'} → x ≈ x' → y ≈ y' → x ≤ y → x' ≤ y'
+    ≤-resp x≈ y≈ p = ≤-respʳ-≈ y≈ (≤-respˡ-≈ x≈ p)
+
+    SD∨-at SD∧-at : 𝕌[ proj₁ 𝑳 ] → 𝕌[ proj₁ 𝑳 ] → 𝕌[ proj₁ 𝑳 ] → Type ρ
+    SD∨-at a b c = a ∨ b ≈ a ∨ c → a ∨ b ≈ a ∨ (b ∧ c)
+    SD∧-at a b c = a ∧ b ≈ a ∧ c → a ∧ b ≈ a ∧ (b ∨ c)
+
+    W-at : 𝕌[ proj₁ 𝑳 ] → 𝕌[ proj₁ 𝑳 ] → 𝕌[ proj₁ 𝑳 ] → 𝕌[ proj₁ 𝑳 ] → Type ρ
+    W-at s₁ s₂ t₁ t₂ = s₁ ∧ s₂ ≤ t₁ ∨ t₂
+      → (s₁ ≤ t₁ ∨ t₂ ⊎ s₂ ≤ t₁ ∨ t₂) ⊎ (s₁ ∧ s₂ ≤ t₁ ⊎ s₁ ∧ s₂ ≤ t₂)
+
+    SD∨-resp : ∀ {a a' b b' c c'} → a ≈ a' → b ≈ b' → c ≈ c' → SD∨-at a b c → SD∨-at a' b' c'
+    SD∨-resp {a} {a'} {b} {b'} {c} {c'} a≈ b≈ c≈ h e' = begin
+      a' ∨ b'         ≈˘⟨ ∨-cong a≈ b≈ ⟩
+      a ∨ b           ≈⟨ h (trans (∨-cong a≈ b≈) (trans e' (sym (∨-cong a≈ c≈)))) ⟩
+      a ∨ (b ∧ c)     ≈⟨ ∨-cong a≈ (∧-cong b≈ c≈) ⟩
+      a' ∨ (b' ∧ c')  ∎
+
+    SD∧-resp : ∀ {a a' b b' c c'} → a ≈ a' → b ≈ b' → c ≈ c' → SD∧-at a b c → SD∧-at a' b' c'
+    SD∧-resp {a} {a'} {b} {b'} {c} {c'} a≈ b≈ c≈ h e' = begin
+      a' ∧ b'         ≈˘⟨ ∧-cong a≈ b≈ ⟩
+      a ∧ b           ≈⟨ h (trans (∧-cong a≈ b≈) (trans e' (sym (∧-cong a≈ c≈)))) ⟩
+      a ∧ (b ∨ c)     ≈⟨ ∧-cong a≈ (∨-cong b≈ c≈) ⟩
+      a' ∧ (b' ∨ c')  ∎
+
+    W-resp : ∀ {s₁ s₁' s₂ s₂' t₁ t₁' t₂ t₂'} → s₁ ≈ s₁' → s₂ ≈ s₂' → t₁ ≈ t₁' → t₂ ≈ t₂'
+      → W-at s₁ s₂ t₁ t₂ → W-at s₁' s₂' t₁' t₂'
+    W-resp {s₁} {s₁'} {s₂} {s₂'} {t₁} {t₁'} {t₂} {t₂'} s₁≈ s₂≈ t₁≈ t₂≈ h p' =
+      ⊎-map (⊎-map (≤-resp s₁≈ t≈) (≤-resp s₂≈ t≈)) (⊎-map (≤-resp s≈ t₁≈) (≤-resp s≈ t₂≈))
+            (h (≤-resp (sym s≈) (sym t≈) p'))
+      where
+      s≈ : s₁ ∧ s₂ ≈ s₁' ∧ s₂'
+      s≈ = ∧-cong s₁≈ s₂≈
+
+      t≈ : t₁ ∨ t₂ ≈ t₁' ∨ t₂'
+      t≈ = ∨-cong t₁≈ t₂≈
+
+  isJoinSemidistributive? : Dec (IsJoinSemidistributive 𝑳)
+  isJoinSemidistributive? =
+    all³? 𝑭 SD∨-at SD∨-resp λ a b c → (a ∨ b) ≟ (a ∨ c) →-dec (a ∨ b) ≟ (a ∨ (b ∧ c))
+
+  isMeetSemidistributive? : Dec (IsMeetSemidistributive 𝑳)
+  isMeetSemidistributive? =
+    all³? 𝑭 SD∧-at SD∧-resp λ a b c → (a ∧ b) ≟ (a ∧ c) →-dec (a ∧ b) ≟ (a ∧ (b ∨ c))
+
+  isSemidistributive? : Dec (IsSemidistributive 𝑳)
+  isSemidistributive? = isJoinSemidistributive? ×-dec isMeetSemidistributive?
+
+  satisfiesW? : Dec (SatisfiesW 𝑳)
+  satisfiesW? = all⁴? 𝑭 W-at W-resp λ s₁ s₂ t₁ t₂ →
+    s₁ ∧ s₂ ≤? t₁ ∨ t₂ →-dec ((s₁ ≤? t₁ ∨ t₂ ⊎-dec s₂ ≤? t₁ ∨ t₂)
+                              ⊎-dec (s₁ ∧ s₂ ≤? t₁ ⊎-dec s₁ ∧ s₂ ≤? t₂))
 ```
