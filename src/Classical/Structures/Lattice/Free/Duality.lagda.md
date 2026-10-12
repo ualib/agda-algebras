@@ -81,7 +81,8 @@ meet on the right), the conclusions are rebuilt with the general introduction
 and weakening lemmas `≤∧`{.AgdaFunction}, `≤∨ˡ`{.AgdaFunction}, and
 `∧ˡ≤`{.AgdaFunction}, rather than with the constructors themselves.  With the
 involution, the dual also reflects the order (`dual-reflects`{.AgdaFunction}),
-and it preserves equality in the free lattice (`dual-cong`{.AgdaFunction}).
+and it preserves and reflects equality in the free lattice
+(`dual-cong`{.AgdaFunction}, `dual-reflects-≈`{.AgdaFunction}).
 
 ```agda
 dual-antitone : s ≤ʷ t → dual t ≤ʷ dual s
@@ -104,4 +105,7 @@ dual-reflects {t = t} {s = s} p =
 
 dual-cong : s ≈ʷ t → dual s ≈ʷ dual t
 dual-cong (p , q) = dual-antitone q , dual-antitone p
+
+dual-reflects-≈ : dual s ≈ʷ dual t → s ≈ʷ t
+dual-reflects-≈ (p , q) = dual-reflects q , dual-reflects p
 ```

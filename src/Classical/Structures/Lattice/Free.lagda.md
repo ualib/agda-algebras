@@ -38,7 +38,9 @@ construction as in the book.
    that exchanges meet and join and reverses Whitman's order;
 +  [Classical.Structures.Lattice.Free.Canonical][]: canonical forms (Theorems 1.17
    and 1.18), the algorithm that computes them, their uniqueness up to
-   commutativity, and the canonical joinands of an element (Theorem 1.19).
+   commutativity, and the canonical joinands of an element (Theorem 1.19);
++  [Classical.Structures.Lattice.Free.Semidistributive][]: free lattices satisfy
+   Whitman's condition (Theorem 1.8) and are semidistributive (Theorem 1.21).
 
 The worked example [Examples.Classical.Lattices.FreeLattice3][] decides a few
 inequalities in `FL(3)` by evaluation and computes some canonical forms.
@@ -48,10 +50,11 @@ inequalities in `FL(3)` by evaluation and computes some canonical forms.
 
 module Classical.Structures.Lattice.Free where
 
-open import Classical.Structures.Lattice.Free.Canonical     public
-open import Classical.Structures.Lattice.Free.Derivability  public
-open import Classical.Structures.Lattice.Free.Duality       public
-open import Classical.Structures.Lattice.Free.Term          public
-open import Classical.Structures.Lattice.Free.Universal     public
-open import Classical.Structures.Lattice.Free.Whitman       public
+open import Classical.Structures.Lattice.Free.Canonical         public
+open import Classical.Structures.Lattice.Free.Derivability      public
+open import Classical.Structures.Lattice.Free.Duality           public
+open import Classical.Structures.Lattice.Free.Semidistributive  public
+open import Classical.Structures.Lattice.Free.Term              public
+open import Classical.Structures.Lattice.Free.Universal         public
+open import Classical.Structures.Lattice.Free.Whitman           public
 ```

@@ -42,7 +42,9 @@ build instead.
    the top of the lower glued to the bottom of the upper, written `L ⊕ₐ M`;
 +  [Classical.Structures.Lattice.Partitions][]: the partition lattice
    `Eq(n)`{.AgdaFunction}, the equivalence relations on an `n`-element set ordered
-   by refinement.
+   by refinement;
++  [Classical.Structures.Lattice.Table][]: a finite lattice on `Fin n` from its two
+   operation tables, with the lattice laws decided exhaustively.
 
 ```agda
 {-# OPTIONS --without-K --exact-split --safe #-}
@@ -57,5 +59,6 @@ open import Classical.Structures.Lattice.Free                 public
 open import Classical.Structures.Lattice.OrdinalSum           public
 open import Classical.Structures.Lattice.Partitions           public
 open import Classical.Structures.Lattice.Product              public
+open import Classical.Structures.Lattice.Table                public
 
 ```
