@@ -51,7 +51,6 @@ open import Data.List.Base                         using ( List )
 open import Data.List.Membership.Propositional     using ( _∈_ ; find )
 open import Data.List.Relation.Unary.All           using ( All ; all? ; lookup ; tabulate )
 open import Data.Product                           using ( _×_ ; _,_ ; proj₁ ; proj₂ )
-open import Function                               using ( Func )
 open import Level                                  using ( Level ; _⊔_ )
 open import Relation.Binary                        using ( Setoid )
 open import Relation.Binary.Definitions            using ( DecidableEquality )
@@ -75,8 +74,6 @@ open import Setoid.Congruences.Basic                       using ( Con )
 open import Setoid.Congruences.Generation                  using ( Gen ; Cg-least )
 open import Setoid.Congruences.Presented.Basic             using ( fromPairs )
 open import Setoid.Homomorphisms.Kernels                   using ( kercon )
-
-open Func using () renaming ( to to _⟨$⟩_ )
 
 private variable
   α ρ χ υ : Level

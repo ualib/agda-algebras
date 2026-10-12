@@ -56,7 +56,6 @@ module Classical.Structures.Lattice.Free.Generation where
 open import Agda.Primitive  using () renaming ( Set to Type )
 
 -- Imports from the Agda Standard Library ---------------------------------------
-open import Data.Empty                             using ( ⊥-elim )
 open import Data.Empty.Polymorphic                 using ( ⊥ )
 open import Data.List.Base                         using ( List ; [] ; _∷_ ; _++_ ; map ; filter )
 open import Data.List.Membership.Propositional     using ( _∈_ )
