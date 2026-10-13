@@ -32,6 +32,10 @@ make check        # the library and the frozen Legacy tree
 
 This pins Agda 2.9.0, which is not yet released, and standard-library 2.3 patched for it, via the repository's flake; until both are released, `nix develop` is the only way to get that toolchain.  See [`INSTALL.md`](INSTALL.md) for a walkthrough, the binary cache that spares you building Agda, and the paths without Nix, which install the previous toolchain.
 
+### Slow modules stay out of barrels
+
+`make check` checks every module through the generated aggregators (`src/Everything.agda`, and `src/EverythingLegacy.agda` for the frozen tree), so a slow module costs the build what it costs; it must not also cost every reader who imports a barrel (a module that only imports others, such as the root `agda-algebras` or `Examples.Classical.Groups`).  If a module you add takes 3 seconds or more to check on its own, as `make PROFILE=modules profile` reports after `make clean` (pinned to a performance core, if your processor has efficiency cores too), mark it `check-cost: heavy` in its front matter, say what it costs in its prose, and leave it out of its barrel, whose prose should link to it instead.  `make barrels` enforces this from the markers; [Barrels and slow modules](docs/STYLE_GUIDE.md#barrels-and-slow-modules) in the style guide has the details.
+
 ### Editor
 
 We recommend Emacs with `agda-mode` or VSCode with the `banacorn.agda-mode` extension.  Launch your editor from inside `nix develop` so the pinned Agda is on `PATH`; if you keep several checkouts, read the next section.
