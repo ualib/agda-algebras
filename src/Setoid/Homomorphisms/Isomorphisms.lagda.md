@@ -28,6 +28,7 @@ Beyond the definition, this module proves the following:
 +  `≅fromInjective`{.AgdaFunction}: the inverse map of an isomorphism is injective;
 +  `Bijective→≅`{.AgdaFunction}: a bijective homomorphism is an isomorphism;
 +  `⨅≅`{.AgdaFunction}: products of isomorphic families are isomorphic;
++  `×ᴬ-≅`{.AgdaFunction}: binary products of isomorphic algebras are isomorphic;
 +  `Lift-≅`{.AgdaFunction}: an algebra is isomorphic to each of its universe
    liftings.
 
@@ -58,7 +59,7 @@ open import Overture                         using  ( OperationSymbolsOf ; Arity
 open import Overture.Operations              using  ( Op )
 open import Setoid.Algebras                  using  ( Algebra ; Lift-Alg ; _^_ ; 𝔻[_]
                                                     ; 𝕌[_] ; mkAlgebra ; Lift-Algˡ
-                                                    ; Lift-Algʳ ; ⨅ )
+                                                    ; Lift-Algʳ ; ⨅ ; _×ᴬ_ )
 
 open import Setoid.Functions                 using  ( eq ; IsInjective ; IsSurjective
                                                     ; SurjInv ; SurjInvIsInverseʳ )
@@ -70,7 +71,7 @@ open import Setoid.Homomorphisms.Properties  using  ( ⊙-hom ; ToLiftˡ ; FromL
 
 open _⟶_ using ( cong ) renaming ( to to _⟨$⟩_ )
 
-private variable  α ρᵃ β ρᵇ γ ρᶜ ι : Level
+private variable  α ρᵃ β ρᵇ γ ρᶜ δ ρᵈ ι : Level
 ```
 -->
 
@@ -343,6 +344,29 @@ module _ {𝓘 : Level}{I : Type 𝓘} {𝒜 : I → Algebra {𝑆 = 𝑆} α ρ
 
     ψ∼ϕ : ∀ a → 𝔻[ ⨅ 𝒜 ] ._≈_ (ψ ⟨$⟩ (ϕ ⟨$⟩ a)) a
     ψ∼ϕ a = λ i → from∼to (AB i)(a i)
+```
+
+The same holds for binary products, coordinate by coordinate.
+
+```agda
+module _ {𝑨 : Algebra {𝑆 = 𝑆} α ρᵃ}{𝑨′ : Algebra {𝑆 = 𝑆} β ρᵇ}
+         {𝑩 : Algebra {𝑆 = 𝑆} γ ρᶜ}{𝑩′ : Algebra {𝑆 = 𝑆} δ ρᵈ} where
+  -- Binary products of isomorphic algebras are isomorphic.
+  ×ᴬ-≅ : 𝑨 ≅ 𝑨′ → 𝑩 ≅ 𝑩′ → (𝑨 ×ᴬ 𝑩) ≅ (𝑨′ ×ᴬ 𝑩′)
+  ×ᴬ-≅ AA′ BB′ = mkiso (ϕ , ϕhom) (ψ , ψhom) (λ (a , b) → to∼from AA′ a , to∼from BB′ b)
+                                          (λ (a , b) → from∼to AA′ a , from∼to BB′ b)
+    where
+    ϕ : 𝔻[ 𝑨 ×ᴬ 𝑩 ] ⟶ 𝔻[ 𝑨′ ×ᴬ 𝑩′ ]
+    ϕ ⟨$⟩ (a , b) = to AA′ .proj₁ ⟨$⟩ a , to BB′ .proj₁ ⟨$⟩ b
+    ϕ .cong (a , b) = to AA′ .proj₁ .cong a , to BB′ .proj₁ .cong b
+    open IsHom
+    ϕhom : IsHom (𝑨 ×ᴬ 𝑩) (𝑨′ ×ᴬ 𝑩′) ϕ
+    ϕhom .compatible = to AA′ .proj₂ .compatible , to BB′ .proj₂ .compatible
+    ψ : 𝔻[ 𝑨′ ×ᴬ 𝑩′ ] ⟶ 𝔻[ 𝑨 ×ᴬ 𝑩 ]
+    ψ ⟨$⟩ (a , b) = from AA′ .proj₁ ⟨$⟩ a , from BB′ .proj₁ ⟨$⟩ b
+    ψ .cong (a , b) = from AA′ .proj₁ .cong a , from BB′ .proj₁ .cong b
+    ψhom : IsHom (𝑨′ ×ᴬ 𝑩′) (𝑨 ×ᴬ 𝑩) ψ
+    ψhom .compatible = from AA′ .proj₂ .compatible , from BB′ .proj₂ .compatible
 ```
 
 A nearly identical proof goes through for isomorphisms of lifted products.

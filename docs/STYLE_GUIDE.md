@@ -411,6 +411,7 @@ Plain-text `A`, `B` denote carrier types; mathematical bold italic `𝑨`, `𝑩
 | Symbol | Meaning |
 |---|---|
 | `⨅_` | Indexed product of algebras |
+| `_×ᴬ_` | Binary product of algebras (pair carrier) |
 | `_×_` | Binary Cartesian product of types |
 | `_^_` | Natural-number-indexed power (rare; prefer `⨅`) |
 

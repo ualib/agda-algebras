@@ -56,9 +56,10 @@ open import Relation.Binary.PropositionalEquality      using ( refl )
 -- Imports from agda-algebras ------------------------------------------------
 open import Overture                      using ( proj₁ ; proj₂ ; 𝓞 ; 𝓥 ; Signature)
 open import Setoid.Algebras               using ( Algebra ; 𝔻[_] )
-open import Setoid.Functions              using ( IsInjective )
-open import Setoid.Homomorphisms.Basic    using ( hom ; IsHom )
-open import Setoid.Homomorphisms.Kernels  using ( kerquo ; πker )
+open import Setoid.Functions              using ( IsInjective ; IsSurjective ; Image_∋_ )
+open import Setoid.Homomorphisms.Basic          using ( hom ; IsHom )
+open import Setoid.Homomorphisms.Isomorphisms  using ( _≅_ ; Bijective→≅ )
+open import Setoid.Homomorphisms.Kernels        using ( kerquo ; πker )
 
 private variable α ρᵃ β ρᵇ γ ρᶜ ι : Level
 ```
@@ -117,6 +118,28 @@ Now we prove that the homomorphism whose existence is guaranteed by `FirstHomThe
     → ∀ [a] → f ⟨$⟩ [a] ≈ g ⟨$⟩ [a]
 
   FirstHomUnique hfk hgk a = ≈trans (≈sym (hfk a)) (hgk a)
+```
+
+#### The first isomorphism theorem
+
+When `h`{.AgdaFunction} is onto, the injective homomorphism `φ` of
+`FirstHomTheorem`{.AgdaFunction} is onto as well, since it sends the class of `a`
+to `h a`; so it is a bijective homomorphism, which `Bijective→≅`{.AgdaFunction} of
+[Setoid.Homomorphisms.Isomorphisms][] turns into an isomorphism.  This is the
+**first isomorphism theorem**: the image of a surjective homomorphism is
+isomorphic to the quotient of its domain by the kernel, `𝑨 ╱ ker h ≅ 𝑩`.  (McKenzie,
+McNulty, and Taylor call it the Homomorphism Theorem, *Algebras, Lattices,
+Varieties* I, Theorem 1.16.)  It is how a direct factor `𝑩` of `𝑨` is recovered
+as a quotient `𝑨 ╱ θ` in [Setoid.Decompositions][].
+
+```agda
+  -- The first isomorphism theorem: 𝑨 modulo the kernel of an onto h is isomorphic to 𝑩.
+  FirstIsoTheorem : IsSurjective hfunc → kerquo hh ≅ 𝑩
+  FirstIsoTheorem hE = Bijective→≅ (proj₁ FirstHomTheorem) (proj₂ (proj₂ FirstHomTheorem)) onto
+    where
+    onto : IsSurjective (proj₁ (proj₁ FirstHomTheorem))
+    onto {b} with hE {b}
+    ... | Image_∋_.eq a b≈ha = Image_∋_.eq a b≈ha
 ```
 
 ---

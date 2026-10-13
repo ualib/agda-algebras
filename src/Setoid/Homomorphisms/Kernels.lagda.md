@@ -19,7 +19,9 @@ the quotient by the kernel is again an algebra.
 
 `HomKerComp`{.AgdaFunction} is the compatibility proof, `kercon`{.AgdaFunction} is
 the congruence, and `kerquo`{.AgdaFunction}, also written `ker[ 𝑨 ⇒ 𝑩 ] h`, is the
-quotient.
+quotient.  The kernel is the inverse image of the diagonal of `𝑩`, and the inverse
+image of any congruence of `𝑩` is again a congruence of `𝑨`
+(`pullbackCon`{.AgdaFunction}).
 
 This module also supplies the homomorphisms that go with a quotient:
 
@@ -43,14 +45,15 @@ module Setoid.Homomorphisms.Kernels where
 open  import Data.Product                           using ( _,_ ;  proj₁ ; proj₂ )
 open  import Function   renaming ( Func to _⟶_ )    using ( _∘_ ; id )
 open  import Level                                  using ( Level )
-open  import Relation.Binary                        using ( Setoid )
+open  import Relation.Binary                        using ( Setoid ; IsEquivalence )
 open  import Relation.Binary.PropositionalEquality  using (refl)
 
 -- Imports from the Agda Universal Algebra Library ------------------------------------------
 open  import Overture                    using ( kerRel ; kerRelOfEquiv ; 𝓞 ; 𝓥 ; Signature)
 open  import Setoid.Functions            using ( Image_∋_ )
 open  import Setoid.Algebras             using ( Algebra ; _^_ ; 𝔻[_] )
-open  import Setoid.Congruences          using ( _∣≈_ ; Con ; mkcon ; _╱_ ; IsCongruence )
+open  import Setoid.Congruences          using ( _∣≈_ ; Con ; mkcon ; _╱_ ; IsCongruence
+                                               ; reflexive ; is-equivalence ; is-compatible )
 open  import Setoid.Homomorphisms.Basic  using ( hom ; IsHom ; epi ; IsEpi ; epi→hom ; 𝒾𝒹 )
 
 private variable  α β ρᵃ ρᵇ ℓ : Level
@@ -102,6 +105,36 @@ Now that we have a congruence, we can construct the quotient relative to the ker
 
 ker[_⇒_]_ :  {𝑆 : Signature 𝓞 𝓥} (𝑨 : Algebra {𝑆 = 𝑆} α ρᵃ) (𝑩 : Algebra β ρᵇ) → hom 𝑨 𝑩 → Algebra _ _
 ker[ 𝑨 ⇒ 𝑩 ] h = kerquo h
+```
+
+#### The inverse image of a congruence
+
+More generally, a homomorphism `h : 𝑨 → 𝑩` pulls every congruence `θ` of `𝑩` back
+to the congruence `pullbackCon h θ`{.AgdaFunction} of `𝑨`, which relates `x` and
+`y` when `h x θ h y`; the kernel is the case where `θ` is the diagonal.  It
+contains the equality of `𝑨` because `h` respects equality, and it is compatible
+with the operations because `h` commutes with them up to the equality of `𝑩`,
+which `θ` contains.  Pulling factor pairs back along isomorphisms is how
+[Setoid.Decompositions.Indecomposable][] shows that direct indecomposability is
+invariant under isomorphism.
+
+```agda
+module _ {𝑆 : Signature 𝓞 𝓥} {𝑨 : Algebra {𝑆 = 𝑆} α ρᵃ}{𝑩 : Algebra β ρᵇ} where
+  open Setoid 𝔻[ 𝑩 ] using () renaming ( sym to symᵇ )
+
+  -- The inverse image of the congruence θ of 𝑩 under h : 𝑨 → 𝑩.
+  pullbackCon : hom 𝑨 𝑩 → Con 𝑩 ℓ → Con 𝑨 ℓ
+  pullbackCon (h , hhom) (_θ_ , θc) = (λ x y → (h ⟨$⟩ x) θ (h ⟨$⟩ y))
+                                    , mkcon (λ e → reflexive θc (cong h e)) equiv compat
+    where
+    open IsEquivalence (is-equivalence θc) using () renaming ( refl to θrefl ; sym to θsym ; trans to θtrans )
+    equiv : IsEquivalence (λ x y → (h ⟨$⟩ x) θ (h ⟨$⟩ y))
+    equiv = record { refl = θrefl ; sym = θsym ; trans = θtrans }
+
+    compat : 𝑨 ∣≈ (λ x y → (h ⟨$⟩ x) θ (h ⟨$⟩ y))
+    compat f {u} {v} uv = θtrans  (reflexive θc (IsHom.compatible hhom))
+                                  (θtrans  (is-compatible θc f uv)
+                                           (reflexive θc (symᵇ (IsHom.compatible hhom))))
 ```
 
 
