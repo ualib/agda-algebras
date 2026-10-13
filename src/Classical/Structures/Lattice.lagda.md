@@ -10,7 +10,7 @@ author: "the agda-algebras development team"
 
 This is the [Classical.Structures.Lattice][] module of the [Agda Universal Algebra Library][].
 
-This is a barrel module: it declares nothing of its own and re-exports the eight
+This is a barrel module: it declares nothing of its own and re-exports the seven
 modules that develop lattices in the `Classical/` tree.  A lattice here is an
 algebra over `Sig-Lattice`{.AgdaFunction} satisfying `Th-Lattice`{.AgdaFunction},
 that is, the *equational* presentation; the order-theoretic presentation, in which
@@ -29,10 +29,6 @@ build instead.
    Dualizing twice recovers each operation *pointwise*, but the involution is not
    formalized there, because stating it as an equality of `Lattice`{.AgdaFunction}
    values would need function extensionality and no consumer has required it;
-+  [Classical.Structures.Lattice.Free][]: the free lattice `FL(X)`, with
-   Whitman's decision procedure for its order, its universal property, and the
-   bridge that makes derivable equality under `Th-Lattice`{.AgdaFunction}
-   decidable;
 +  [Classical.Structures.Lattice.FilterIdeal][]: principal filters and principal
    ideals, and the fact that the union of a principal filter and a principal ideal
    is again a sublattice universe;
@@ -42,9 +38,12 @@ build instead.
    the top of the lower glued to the bottom of the upper, written `L ⊕ₐ M`;
 +  [Classical.Structures.Lattice.Partitions][]: the partition lattice
    `Eq(n)`{.AgdaFunction}, the equivalence relations on an `n`-element set ordered
-   by refinement;
-+  [Classical.Structures.Lattice.Table][]: a finite lattice on `Fin n` from its two
-   operation tables, with the lattice laws decided exhaustively.
+   by refinement.
+
+The free lattice `FL(X)`, with Whitman's solution to its word problem and its
+canonical forms, and the finite lattices built from operation tables, which
+this barrel re-exported until October 2026, continue in the
+latticetheory/agda-lattices repository, which builds on this library.
 
 ```agda
 {-# OPTIONS --without-K --exact-split --safe #-}
@@ -55,10 +54,8 @@ open import Classical.Structures.Lattice.Basic                public
 open import Classical.Structures.Lattice.DistributiveLattice  public
 open import Classical.Structures.Lattice.Dual                 public
 open import Classical.Structures.Lattice.FilterIdeal          public
-open import Classical.Structures.Lattice.Free                 public
 open import Classical.Structures.Lattice.OrdinalSum           public
 open import Classical.Structures.Lattice.Partitions           public
 open import Classical.Structures.Lattice.Product              public
-open import Classical.Structures.Lattice.Table                public
 
 ```
