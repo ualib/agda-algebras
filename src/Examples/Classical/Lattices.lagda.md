@@ -16,13 +16,11 @@ Each submodule is the home of one concrete lattice.
 + `L2` is the two-element Boolean lattice.
 + `L2Distributive` is the two-element Boolean lattice as a `DistributiveLattice`.
 + `L3Heyting` is the three-element chain as a Heyting algebra.
-+ `FreeLattice3` is the free lattice on three generators, in which Whitman's
-  procedure decides inequalities by evaluation.
-+ `M3` is the diamond `M₃`, the five-element modular lattice that is not
-  distributive, given by its tables; it satisfies Whitman's condition and
-  neither semidistributive law.
-+ `N5` is the pentagon `N₅`, given by its tables, which is semidistributive and
-  satisfies Whitman's condition.
+
+The free lattice on three generators, the diamond `M₃` and the pentagon `N₅`
+from their tables, and two further free-lattice examples, which this barrel
+held until October 2026, continue in the latticetheory/agda-lattices
+repository, which builds on this library.
 
 ```agda
 {-# OPTIONS --without-K --exact-split --safe #-}
@@ -32,7 +30,4 @@ module Examples.Classical.Lattices where
 open import Examples.Classical.Lattices.L2
 open import Examples.Classical.Lattices.L2Distributive
 open import Examples.Classical.Lattices.L3Heyting
-open import Examples.Classical.Lattices.FreeLattice3
-open import Examples.Classical.Lattices.M3
-open import Examples.Classical.Lattices.N5
 ```
