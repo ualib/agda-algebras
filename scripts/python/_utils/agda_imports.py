@@ -85,8 +85,14 @@ class ImportStmt:
 # Used only for taking import statements apart, hence not in _utils.agda_names.
 _WORD = re.compile(r"[^\s(){};]+")
 
-_IMPORT_START = re.compile(r"\s*(?:open\s+import|import|open)\b")
-_CLAUSE_CONT = re.compile(r"\s*(?:using|renaming|hiding|public|as)\b")
+# Where a keyword ends.  Agda names may contain `-` and `'`, so `\b` is not
+# enough: `open-ended` and `as-set` are names, not `open` and `as`.  A keyword
+# ends where a name could not continue (whitespace, a delimiter, the end).
+_END = r"(?![^\s(){};])"
+
+_IMPORT_START = re.compile(r"\s*(?:open\s+import|import|open)" + _END)
+_CLAUSE_CONT = re.compile(r"\s*(?:using|renaming|hiding|public|as)" + _END)
+_PUBLIC = re.compile(r"public" + _END)
 
 
 def _is_import_start(line: str) -> bool:
@@ -102,12 +108,32 @@ def _paren_depth(text: str) -> int:
     return text.count("(") - text.count(")")
 
 
+def _indent(line: str) -> int:
+    """The column of a line's first non-blank character."""
+    return len(line) - len(line.lstrip())
+
+
+def _continues(text: str, column: int, gap: bool, nxt: str) -> bool:
+    """Does ``nxt`` continue the statement ``text``, which begins at ``column``?
+
+    By Agda's layout rule a line indented past the statement's first column
+    does, even across blank lines (module arguments wrapped onto the next line,
+    ``{𝑆 = 𝑆} public``, are the common case).  Without a blank line between,
+    so does a line inside a clause list still open (unbalanced ``(``) or one
+    that begins a further clause (``using`` / ``renaming`` / …).  A blank line
+    ends those two, which bounds the damage if an upstream edit ever leaves a
+    parenthesis unbalanced.
+    """
+    if _indent(nxt) > column:
+        return True
+    return not gap and (_paren_depth(text) > 0 or _is_clause_cont(nxt))
+
+
 def collect_statements(code_lines: list[str]) -> list[tuple[int, list[int], str]]:
     """Find every ``import`` / ``open`` statement, joining the physical lines a
-    statement spans.  A statement continues onto the next line while a clause
-    list is still open (unbalanced ``(``) or the next line begins a further
-    clause (``using`` / ``renaming`` / …).  Returns, per statement, its 1-based
-    start line, the indices of every physical line it occupies, and its text.
+    statement spans (see :func:`_continues`).  Returns, per statement, its
+    1-based start line, the indices of every physical line it occupies, and its
+    text.
 
     Deliberately an index loop: bounded, O(n), and free of recursion limits.
     """
@@ -118,17 +144,14 @@ def collect_statements(code_lines: list[str]) -> list[tuple[int, list[int], str]
         if not _is_import_start(code_lines[i]):
             i += 1
             continue
-        text = code_lines[i]
-        j = i
+        text, column, j = code_lines[i], _indent(code_lines[i]), i
         while True:
-            nxt = code_lines[j + 1] if j + 1 < n else None
-            # A statement never continues across a blank line; this also bounds
-            # the damage if some upstream edit ever leaves a paren unbalanced.
-            if nxt is not None and nxt.strip() != "" and (
-                _paren_depth(text) > 0 or _is_clause_cont(nxt)
-            ):
-                text = text + "\n" + nxt
-                j += 1
+            k = j + 1
+            while k < n and code_lines[k].strip() == "":
+                k += 1
+            if k < n and _continues(text, column, k > j + 1, code_lines[k]):
+                text = text + "\n" + "\n".join(code_lines[j + 1 : k + 1])
+                j = k
             else:
                 break
         out.append((i + 1, list(range(i, j + 1)), text))
@@ -194,7 +217,7 @@ def parse_clauses(rest: str, acc: Clauses) -> Clauses:
         m = _WORD.match(after)
         alias = m.group(0) if m else None
         return parse_clauses(after[m.end() :] if m else "", replace(acc, alias=alias))
-    if rest.startswith("public"):
+    if _PUBLIC.match(rest):
         return parse_clauses(rest[len("public") :], replace(acc, public=True))
     if rest[0] in "({":
         inner, tail = take_balanced(rest)
@@ -227,11 +250,11 @@ def parse_rename_item(raw: str) -> Optional[ImportItem]:
 def parse_statement(line: int, text: str) -> Optional[ImportStmt]:
     """Parse one statement (a single top-level piece, comments already removed)."""
     stripped = text.strip()
-    if (m := re.match(r"open\s+import\b", stripped)):
+    if (m := re.match(r"open\s+import" + _END, stripped)):
         keyword, opened = "open import", True
-    elif (m := re.match(r"import\b", stripped)):
+    elif (m := re.match(r"import" + _END, stripped)):
         keyword, opened = "import", False
-    elif (m := re.match(r"open\b", stripped)):
+    elif (m := re.match(r"open" + _END, stripped)):
         keyword, opened = "open", True
     else:
         return None
