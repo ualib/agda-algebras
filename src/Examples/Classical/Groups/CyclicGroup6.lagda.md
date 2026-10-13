@@ -45,10 +45,10 @@ module Examples.Classical.Groups.CyclicGroup6 where
 -- Imports from Agda and the Agda Standard Library ----------------------------
 open import Data.Fin.Base                           using ( Fin )
 open import Data.Fin.Patterns                       using ( 0F ; 1F ; 2F ; 3F ; 4F ; 5F )
-open import Data.Fin.Properties                     using ( _≟_ ; all? )
+open import Data.Fin.Properties                     using ( _≟_ ; all? ; 0≢1+n )
 open import Data.Nat.Properties                     using () renaming ( _≤?_ to _≤ⁿ?_ )
 open import Data.Product                            using ( _,_ ; proj₁ )
-open import Data.Sum.Base                           using ( inj₁ ; inj₂ )
+open import Data.Sum.Base                           using ( [_,_]′ )
 open import Data.Vec.Base                           using ( _∷_ ; [] )
 open import Function                                using ( Func )
 open import Level                                   using ( 0ℓ )
@@ -269,18 +269,14 @@ indecomposable: `0` and `1` differ mod 2, and `0` and `1` differ mod 3.
 ```agda
 -- Neither factor is trivial.
 θ₂-proper : ¬ Trivial (𝒁₆ ╱ θ₂)
-θ₂-proper t with t 0F 1F
-... | ()
+θ₂-proper t = 0≢1+n (t 0F 1F)
 
 θ₃-proper : ¬ Trivial (𝒁₆ ╱ θ₃)
-θ₃-proper t with t 0F 1F
-... | ()
+θ₃-proper t = 0≢1+n (t 0F 1F)
 
 -- So ℤ/6ℤ is not directly indecomposable.
 z6-decomposable : ¬ IsDirectlyIndecomposable 0ℓ 𝒁₆
-z6-decomposable di with factor-trivial di θ₂ θ₃ θ₂θ₃-factorPair
-... | inj₁ t = θ₂-proper t
-... | inj₂ t = θ₃-proper t
+z6-decomposable di = [ θ₂-proper , θ₃-proper ]′ (factor-trivial di θ₂ θ₃ θ₂θ₃-factorPair)
 ```
 
 #### The decomposition `ℤ/6ℤ ≅ ℤ/2ℤ × ℤ/3ℤ`
