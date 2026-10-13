@@ -1,4 +1,4 @@
-n---
+---
 layout: default
 title : "Setoid.Homomorphisms.HomomorphicImages module (The Agda Universal Algebra Library)"
 date : "2021-09-14"
@@ -8,6 +8,16 @@ author: "agda-algebras development team"
 #### Homomorphic images of setoid algebras
 
 This is the [Setoid.Homomorphisms.HomomorphicImages][] module of the [Agda Universal Algebra Library][].
+
+An algebra `𝑩` is a **homomorphic image** of an algebra `𝑨` when there is a
+surjective homomorphism from `𝑨` onto `𝑩`.  This module defines that relation,
+`_IsHomImageOf_`{.AgdaFunction}, the type `HomImages`{.AgdaFunction} of all
+homomorphic images of an algebra, and the image algebra
+`HomImageOf[_]`{.AgdaFunction} of a homomorphism.  It then extends the relation
+to a class of algebras (`IsHomImageOfClass`{.AgdaFunction} and
+`HomImageOfClass`{.AgdaFunction}), and closes with lemmas, used on the way to
+Birkhoff's HSP theorem, showing that being a homomorphic image survives lifting
+an algebra to higher universe levels and replacing it by an isomorphic one.
 
 <!--
 ```agda
