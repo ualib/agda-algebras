@@ -20,6 +20,7 @@ them through a barrel.
 
 + `CyclicGroup` and `AbelianGroup` present `(ℤ, +, 0, -)` — the infinite cyclic group — as a group and as an abelian group.
 + `CyclicGroup3` is the cyclic group `ℤ/3ℤ`, built from a Cayley table.
++ `CyclicGroup6` is the cyclic group `ℤ/6ℤ`, checked to be the direct product `ℤ/2ℤ × ℤ/3ℤ` with the theory of direct decompositions.
 + `KleinFourGroup` is the Klein four-group `V₄`.
 + `SymmetricGroup3` is the symmetric group `S₃`, the smallest non-abelian group.
 + [Examples.Classical.Groups.AlternatingGroup5][] is the alternating group `A₅`,
@@ -38,6 +39,7 @@ module Examples.Classical.Groups where
 open import Examples.Classical.Groups.AbelianGroup
 open import Examples.Classical.Groups.CyclicGroup
 open import Examples.Classical.Groups.CyclicGroup3
+open import Examples.Classical.Groups.CyclicGroup6
 open import Examples.Classical.Groups.KleinFourGroup
 open import Examples.Classical.Groups.SymmetricGroup3
 ```
