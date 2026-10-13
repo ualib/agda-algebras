@@ -742,7 +742,7 @@ Related: ualib/agda-algebras#439 (profile type-checking times), ualib/agda-flrp#
 
 ---
 
-### Issue M1-14: agda-algebras and its standard library under Agda 2.9.0 (#586)
+### Issue M1-14: agda-algebras and its standard library under Agda 2.9.0 (#586, closed)
 
 **Labels**: `milestone-1-infra`
 
@@ -776,7 +776,7 @@ Findings follow in a comment.  The plan file, `docs/GITHUB_PROJECT.md`, needs `m
 
 ---
 
-### Issue M1-15: Upgrade to Agda 2.9.0 and a standard library that supports it (#588)
+### Issue M1-15: Upgrade to Agda 2.9.0 and a standard library that supports it (#588, closed)
 
 **Labels**: `milestone-1-infra`
 
@@ -931,6 +931,59 @@ The trial's patch is kept outside the repository; redo the port against the rele
 [#588]: https://github.com/ualib/agda-algebras/issues/588
 [#594]: https://github.com/ualib/agda-algebras/issues/594
 [#595]: https://github.com/ualib/agda-algebras/pull/595
+
+---
+
+### Issue M1-18: Keep slow-to-check modules out of barrels (#603)
+
+**Labels**: `enhancement`, `milestone-1-infra`, `ci`
+
+## Description
+
+A barrel module re-exports its submodules so a reader can import a whole family at once.  The full build does not depend on barrels: `make check` type-checks the generated `src/Everything.agda`, which imports every module directly.  So a barrel's cost falls only on whoever imports it: a person loading the root module `agda-algebras.lagda.md` in Emacs, an agda-mcp load, a scratch file, a downstream library.  A slow module in a barrel taxes all of them, usually for an example they did not ask for.
+
+Copilot raised this on [#602] ([finding][copilot-finding]) for `Examples.Classical.Lattices.DeansProblem`, a computation-heavy check of Freese's example toward Dean's problem.  The policy below was decided on 2026-10-12, and [#602] already applies it to that module.
+
+**Measurements** (Agda 2.9.0, `make PROFILE=modules profile` from an empty `_build/`, the Makefile's `+RTS -M6G -A128M`, 2026-10-12, whole library 62.4 s):
+
+| module | own check time |
+| --- | --- |
+| `Examples.Classical.Lattices.DeansProblem` | 12.1 s |
+| `Examples.Classical.Groups.AlternatingGroup5.Tables` | 3.9 s |
+| `Examples.Classical.Groups.AlternatingGroup5` (imports `Tables`) | 2.9 s |
+| the next slowest, `Examples.Demos.HSP` | 1.4 s |
+
+Importing the barrel `Examples.Classical.Lattices` from a scratch module, before [#602] removed `DeansProblem` from it, cost 4.3 s and 0.9 GB with every interface cached, and 23.6 s and 3.9 GB with `DeansProblem`'s interface stale.  That interface goes stale after any edit to a module it depends on.
+
+## Policy
+
++  **A module is *heavy*** if its own check time is at least 3 s in `make PROFILE=modules profile` from an empty build directory, under the Makefile's RTS options.  A module that imports a heavy module, directly or transitively, is treated as heavy too; it needs no marker of its own.
++  **Heavy modules stay in the build and out of barrels.**  They remain in `Everything.agda`, so `make check` and CI check them exactly as before; no barrel imports them.  The barrel's prose keeps a link to each one and says why it is not imported.
++  **The author declares it.**  A heavy module carries `check-cost: heavy` in its front matter and states its measured cost in its prose.  The checker reads the marker; it never times anything, so CI stays deterministic.  A profile run is the evidence for adding a marker or removing one.
+
+## Options considered
+
++  **A.  Keep barrels complete and document the slow modules.**  No machinery, but every importer of a barrel pays for its slowest member.
++  **B.  This policy.**  Chosen: no coverage is lost, and barrels stay cheap.  Its costs are that a barrel no longer means "everything below it", that the 3 s threshold is a judgment call measured on one machine, and that a marker can outlive the slowness it records.
++  **C.  A separate slow tier** (`EverythingHeavy.agda`, `make check-heavy`, its own CI lane).  It would cut the local `make check` by about 30 %, at the price of two aggregators and failures that show up only in CI.  Revisit it if heavy modules pass about 20 % of the build.
++  **D.  Make the modules cheaper** (for `DeansProblem`, the polynomial Whitman procedure of Freese, Ježek, and Nation, Chapter XI, Section 8).  It complements the policy and belongs in an issue of its own.
+
+## Tasks
+
++  [ ] State the policy in `docs/STYLE_GUIDE.md` (a section on barrels and slow modules) and in `CONTRIBUTING.md` beside the build instructions.
++  [ ] `Examples.Classical.Groups.AlternatingGroup5.Tables`: add the marker and a sentence giving its measured cost.  Remove `AlternatingGroup5` from the `Examples.Classical.Groups` barrel, keeping a prose link.  ([#602] does the same for `DeansProblem`.)
++  [ ] A checker, `scripts/python/barrels.py`, with tests beside it, in the style of the existing corpus checkers.  It finds the barrels (modules whose code is only the options pragma, the module header, and imports, including the root `agda-algebras.lagda.md`) and the marked modules, and computes each module's transitive imports within `src/`.  It fails when a barrel imports a heavy module, naming the barrel, the import, and the chain that makes it heavy.  It also fails when a marked module is missing from the generated `Everything.agda`.
++  [ ] `make barrels` and `make barrels-test` targets, and a CI job required by `all-green`.
++  [ ] A control: re-adding `AlternatingGroup5` to the `Groups` barrel in a scratch copy must make `make barrels` exit non-zero with that chain in its message.
+
+## Acceptance criteria
+
++  [ ] `make barrels` exits 0 on master after the change, and the control above fails it.
++  [ ] `make check` still checks every module: `Everything.agda` imports the same number of modules as before.
++  [ ] The policy is written down where contributors read it, and every heavy module states its cost in prose.
+
+[#602]: https://github.com/ualib/agda-algebras/pull/602
+[copilot-finding]: https://github.com/ualib/agda-algebras/pull/602#discussion_r4244922414
 
 <!-- END GENERATED: milestone-1 -->
 
@@ -2233,7 +2286,7 @@ The rules overlap (a join on the left and a meet on the right), so the procedure
 
 ---
 
-### Issue M3-11: Free lattices: canonical form and canonical joinands (#590)
+### Issue M3-11: Free lattices: canonical form and canonical joinands (#590, closed)
 
 **Labels**: `milestone-3-classical`
 
@@ -2279,7 +2332,7 @@ Dually for a meet, and a generator is always in canonical form.  The elements th
 
 ---
 
-### Issue M3-12: Semidistributivity and Whitman's condition: predicates, free lattices, finite decision, and the examples M₃ and N₅ (#591)
+### Issue M3-12: Semidistributivity and Whitman's condition: predicates, free lattices, finite decision, and the examples M₃ and N₅ (#591, closed)
 
 **Labels**: `milestone-3-classical`
 
@@ -2321,7 +2374,7 @@ A table-driven constructor for finite lattices on `Fin n`, with the eight lattic
 
 ---
 
-### Issue M3-13: Free lattices: substitutions, endomorphisms, free generating sets, and embeddings (#592)
+### Issue M3-13: Free lattices: substitutions, endomorphisms, free generating sets, and embeddings (#592, closed)
 
 **Labels**: `milestone-3-classical`
 
@@ -3753,7 +3806,7 @@ still appears outside the start of the module, which is unnecessary when there's
 
 ---
 
-### Issue M4-20: Validate kramdown attribute-span classes against Agda's own classification (#553)
+### Issue M4-20: Validate kramdown attribute-span classes against Agda's own classification (#553, closed)
 
 **Labels**: `documentation`, `milestone-4-style`, `ci`
 
