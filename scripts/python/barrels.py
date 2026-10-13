@@ -150,7 +150,7 @@ class Shape(Enum):
     """What a module's code consists of, apart from comments and pragmas."""
 
     BARREL = "barrel"              # the header and imports
-    HEADER_ONLY = "header only"    # the header alone: a prose page, nothing to check
+    HEADER_ONLY = "header only"    # defines and imports nothing: nothing to check
     MODULE = "module"              # anything more
 
 
@@ -328,7 +328,14 @@ def _shape(residual: str, statements: _Statements) -> Shape:
     A barrel defines nothing: what is left once its import and ``open``
     statements are gone is module headers, and no other code shares a
     statement's line.  (An ``open`` defines nothing either: ``import M`` and
-    ``open M public`` re-export what ``open import M public`` does.)"""
+    ``open M public`` re-export what ``open import M public`` does.)
+
+    Such a module that imports nothing is header-only rather than a barrel,
+    whatever it opens: Agda refuses ``open M`` unless ``M`` is imported
+    (``NoSuchModule``), except for ``Agda.Primitive``, which it imports
+    implicitly and which lies outside the tree.  Every edge of the graph is
+    an import, so a module without one reaches nothing, and the gate has
+    nothing to hold it to."""
     if not (_headers_only(residual) and statements.others == 0):
         return Shape.MODULE
     return Shape.BARREL if statements.imports else Shape.HEADER_ONLY

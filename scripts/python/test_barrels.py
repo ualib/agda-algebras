@@ -168,6 +168,15 @@ def test_header_only_module() -> None:
     assert shape("P", module("P", "module P where")) is b.Shape.HEADER_ONLY
 
 
+def test_a_module_that_opens_but_imports_nothing_is_header_only() -> None:
+    # Agda refuses `open M` for an M not imported (NoSuchModule), except its
+    # implicit Agda.Primitive; with no import there is no edge to follow.
+    text = module("A", "module A where", "open Agda.Primitive public")
+    report = report_of({**HEAVY, "A": text})
+    assert report.tree.modules["A"].shape is b.Shape.HEADER_ONLY
+    assert report.tree.graph["A"] == () and report.problems == ()
+
+
 def test_definition_makes_a_module() -> None:
     assert shape("A", leaf("A", "A.B")) is b.Shape.MODULE
 
