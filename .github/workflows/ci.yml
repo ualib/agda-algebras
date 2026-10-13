@@ -2,8 +2,9 @@
 #  ci.yml — CI Pipeline for agda-algebras
 #  ----------------------------------------------------------------------------
 #
-#  One Agda lane plus three pure-Python docs lanes: the library (and the frozen
-#  Legacy tree), the reference-link check, the docstring-coverage ratchet, and
+#  One Agda lane, the library (and the frozen Legacy tree); the span-class lane,
+#  which renders the corpus with Agda; and four pure-Python lanes: the
+#  reference-link check, the barrel check, the docstring-coverage ratchet, and
 #  the landing page's corpus stats.
 #
 #  The workflow reuses the project's Nix flake, so CI runs exactly the same
@@ -145,6 +146,36 @@ jobs:
           make check-links
 
   # ---------------------------------------------------------------------------
+  # Barrels and slow modules.  Pure-Python, like the link check.  A module whose
+  # own check takes 3 s or more is marked `check-cost: heavy` in its front matter
+  # and imported by no barrel, so that importing a barrel stays cheap; the full
+  # build still checks it through Everything.agda (STYLE_GUIDE § "Barrels and
+  # slow modules", issue #603).  The job reads the markers and never times
+  # anything, so it is deterministic.  It fails when a barrel reaches a marked
+  # module, naming the chain, or when a marked module leaves the aggregators.
+  # See `make barrels` and scripts/python/barrels.py.
+  # ---------------------------------------------------------------------------
+  barrels:
+    name: Barrels and slow modules
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: No barrel imports a heavy module, and the build keeps every one
+        run: |
+          set -euxo pipefail
+          make barrels-test
+          make barrels
+
+  # ---------------------------------------------------------------------------
   # Span classes.  Validates the kramdown attribute spans on inline Agda names
   # in the prose (`Algebra`{.AgdaRecord} and kin) against Agda's own
   # classification, read from the `agda --html --html-highlight=code` render
@@ -224,10 +255,11 @@ jobs:
           make docstrings
 
   # ---------------------------------------------------------------------------
-  # Landing-page stats.  Pure-Python, like the two checks above.  docs/index.md
-  # advertises a module count, a line count, a machine-checked share and the
-  # pinned toolchain; all of them are facts about this repository, and all of
-  # them are counted by scripts/python/corpus_stats.py.  The MkDocs hook already
+  # Landing-page stats.  Pure-Python, like the link, barrel, and docstring
+  # checks.  docs/index.md advertises a module count, a line count, a
+  # machine-checked share and the pinned toolchain; all of them are facts about
+  # this repository, and all of them are counted by
+  # scripts/python/corpus_stats.py.  The MkDocs hook already
   # substituted the counted values into the *rendered* page, but never wrote
   # them back, so the values committed in the source (the ones GitHub renders)
   # went stale for six weeks and were quoted elsewhere as current (issue #575).
@@ -265,12 +297,12 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 2
     if: always()
-    needs: [check, link-check, span-classes, docstrings, landing-stats]
+    needs: [check, link-check, barrels, span-classes, docstrings, landing-stats]
     steps:
       - name: Verify all required jobs passed
         run: |
           set -euxo pipefail
-          results=( "${{ needs.check.result }}" "${{ needs.link-check.result }}" "${{ needs.span-classes.result }}" "${{ needs.docstrings.result }}" "${{ needs.landing-stats.result }}" )
+          results=( "${{ needs.check.result }}" "${{ needs.link-check.result }}" "${{ needs.barrels.result }}" "${{ needs.span-classes.result }}" "${{ needs.docstrings.result }}" "${{ needs.landing-stats.result }}" )
           for r in "${results[@]}"; do
             if [ "$r" = "failure" ] || [ "$r" = "cancelled" ]; then
               echo "A required job ended with result: $r"

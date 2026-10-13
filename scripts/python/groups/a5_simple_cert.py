@@ -299,6 +299,7 @@ file: "src/Examples/Classical/Groups/AlternatingGroup5/Tables.lagda.md"
 title: "Examples.Classical.Groups.AlternatingGroup5.Tables module"
 date: "{EMITTED_DATE}"
 author: "the agda-algebras development team"
+check-cost: heavy
 ---
 
 ### Generated tables for the alternating group `A₅`
@@ -321,6 +322,14 @@ conjugates of `x` and of its inverse, and `a5-gen-words`{{.AgdaFunction}}
 expresses every element as a word in the generators.  Every claim in this data
 is replayed by decision procedures in the consuming module; nothing rests on
 the generator's authority.
+
+**Check cost**.  The module's own check takes about 5 seconds in a profile of
+the whole library (`make PROFILE=modules profile`) run on a performance core,
+and about twice that on an efficiency core.  That is over the 3 seconds at which
+the library keeps a module out of its barrels, so the front matter above says
+`check-cost: heavy`, and no barrel imports this module or
+[Examples.Classical.Groups.AlternatingGroup5][], which imports it.  `make check`
+checks both.
 
 <!--
 ```agda

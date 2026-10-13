@@ -4,6 +4,7 @@ file: "src/Examples/Classical/Groups/AlternatingGroup5.lagda.md"
 title: "Examples.Classical.Groups.AlternatingGroup5 module"
 date: "2026-08-30"
 author: "the agda-algebras development team"
+check-cost: heavy
 ---
 
 ### Worked example: the alternating group `A₅`, certified simple
@@ -37,7 +38,11 @@ faithfully on its five points: the action tables are data.
 `assoc-from-action`{.AgdaFunction} of [Overture.Cayley][] derives associativity
 from two quadratic decisions: `ActionHom?`{.AgdaFunction} and
 `ActionFaithful?`{.AgdaFunction} of [Overture.Operations.Properties][].
-The whole module type-checks in under ten seconds at under a gigabyte.
+The whole module type-checks in under ten seconds at under a gigabyte.  In a
+profile of the whole library its own check takes about 3.3 seconds on a
+performance core (the tables it imports take about 5), which is over the 3
+seconds at which the library keeps a module out of its barrels, so its front
+matter says `check-cost: heavy`.
 
 #### The simplicity certificate
 

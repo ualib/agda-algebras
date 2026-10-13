@@ -88,6 +88,8 @@ author: "agda-algebras development team"
 
 The "file" filed is redundant with the file's location on disk, but having it inline makes the file self-identifying when shared as a snippet — and YAML frontmatter is open-by-design, so unknown fields are silently ignored by both pipelines.
 
+One further field is read: a module that is slow to check carries `check-cost: heavy`, which keeps it out of every barrel (see [Barrels and slow modules](#barrels-and-slow-modules)).  Unlike the others, a misspelling of this one is not silently ignored; `make barrels` reports it.
+
 
 ### Pragma
 
@@ -190,6 +192,21 @@ open import Setoid.Algebras.Reduct         public
 Because the core is uniformly generalized over `𝑆` (see [ADR-009](./adr/009-signature-genericity-generalized-variables.md)), the barrel neither parametrizes its own header nor threads `{𝑆 = 𝑆}` into each re-export; `open import Sub public` is uniform across the chain.
 
 Downstream modules `open import Setoid.Algebras` to get the whole theme and `open import Setoid.Algebras.Basic` to get a specific submodule, but we strongly *prefer modules that import precisely what they need* — see [Imports](#imports) below. 
+
+A barrel leaves out any module that is slow to check; the next section says which modules those are and how the rule is enforced.
+
+### Barrels and slow modules
+
+The build does not need barrels: `make check` type-checks the generated aggregators, `src/Everything.agda` and `src/EverythingLegacy.agda`, which import every module directly.  So whatever a barrel imports is paid for only by whoever imports the barrel (a reader loading the root module `agda-algebras.lagda.md` in Emacs, an agda-mcp load, a scratch file, a downstream library), and usually for an example that reader did not ask for.  The library therefore keeps slow modules out of barrels.  The policy is as follows:
+
++  **A barrel** is a module whose code defines nothing.  Once its comments, pragmas, import statements, and `open` statements are set aside, what remains is module headers: its own, perhaps parameterized, and perhaps a `module _ {α : Level} where` around an import that needs a parameter.  Whether its imports are `public` does not matter; a barrel that only opens its submodules, as the root does, costs its importers the same.
++  **A heavy module** is one whose own check takes 3 seconds or more in `make PROFILE=modules profile` from an empty build (`make clean` first), under the Makefile's RTS options.  A module that imports a heavy module, directly or through others, is heavy too, and needs no marker of its own.
++  **The marker**.  A heavy module says so in its front matter, with the entry `check-cost: heavy`, and states its measured cost in its prose.  The `A₅` modules, `Examples.Classical.Groups.AlternatingGroup5` and its tables, are the examples; a generated module, as the tables are, carries the marker and the sentence in its generator's template.
++  **The rule**.  No barrel imports a heavy module.  A heavy module stays in the aggregators, so `make check` and CI check it exactly as before, and the barrel it would have belonged to keeps a prose link to it and says why it does not import it, as `Examples.Classical.Groups` does for `AlternatingGroup5`.
++  **The gate**.  `make barrels` (CI's *Barrels and slow modules* job) reads the markers and never a clock, so it is deterministic.  It fails when a barrel reaches a marked module, naming the barrel, the import, and the chain between them; when a marked module is missing from the generated aggregators; and when it cannot read a module's front matter, header, or imports, since each of those could hide a barrel, a marker, or an import.  The barrels of the frozen `Legacy/` tree are reported, not gated.
++  **The evidence**.  A profile is what justifies adding a marker or removing one, and `python3 scripts/python/barrels.py --audit LOG …` compares profile logs with the markers, listing the modules at or over the line without a marker and the marked ones under it.  The figures are CPU seconds, but they depend on the core that ran the check.  On a processor with performance and efficiency cores, one module's check took 4.3 to 4.9 s on a performance core and 9.3 to 10.3 s on an efficiency core, and in unpinned profiles another module measured 2.4, 5.4, and 2.0 s in three runs of the same build.  So pin the profile to a performance core (`taskset -c 2 make PROFILE=modules profile` on Linux; two such runs agreed within 3 percent), and otherwise judge a module near the line by its least time over several runs, which is what the audit takes when it is given several logs.
+
+The line is a judgment call, drawn on 2026-10-12 from a profile of the whole library under Agda 2.9.0.  Measured again on 2026-10-13, pinned to a performance core of a laptop with 6 performance and 8 efficiency cores (Intel i9-12900H), the two `A₅` modules were the only ones over it: 5.1 s for the tables and 3.3 s for `AlternatingGroup5`, against 1.7 s for the next slowest, `Examples.Demos.HSP`, and 47 s for the whole profile.  Together they are about 18 percent of that; if heavy modules ever grow past about a fifth of the build, revisit the alternative the policy set aside: a separate aggregator for them, checked by its own target and CI lane.
 
 ### Classical structures quintuple
 
@@ -688,6 +705,7 @@ Deprecate a public definition as follows:
 +  [ ] `make check` passes locally under `nix develop`.
 +  [ ] Every new public definition has a prose comment block.
 +  [ ] Every new module has a module-header comment block.
++  [ ] A new module whose own check takes 3 s or more carries `check-cost: heavy`, states its cost, and is in no barrel (`make barrels` passes; see [Barrels and slow modules](#barrels-and-slow-modules)).
 +  [ ] No new synonyms for concepts already named elsewhere.
 +  [ ] New notation is added to the [Notation and symbol table](#notation-and-symbol-table) section of this document.
 +  [ ] Commit messages are coherent and explain the "why," not just the "what."
