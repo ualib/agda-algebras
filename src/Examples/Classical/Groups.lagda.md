@@ -11,17 +11,24 @@ author: "the agda-algebras development team"
 This is the [Examples.Classical.Groups][] module of the [Agda Universal Algebra Library][].
 
 Index of the worked group examples under `Examples/Classical/Groups/`.  This
-module merely `import`s each submodule, so that the whole family type-checks at once
-from a single entry point; it deliberately does *not* `open` or re-export their
-contents.  The finite examples each introduce a local operation `_·_` and their own
-characteristic lemmas, which are meaningful only within their own module, so there is
-nothing to gain (and names to clash) from re-exporting them through a barrel.
+module opens each submodule it imports (`open import`, without `public`), so that
+the family type-checks from a single entry point, and it deliberately does *not*
+re-export their contents.  The finite examples each introduce a local operation
+`_·_` and their own characteristic lemmas, which are meaningful only within their
+own module, so there is nothing to gain (and names to clash) from re-exporting
+them through a barrel.
 
 + `CyclicGroup` and `AbelianGroup` present `(ℤ, +, 0, -)` — the infinite cyclic group — as a group and as an abelian group.
 + `CyclicGroup3` is the cyclic group `ℤ/3ℤ`, built from a Cayley table.
 + `KleinFourGroup` is the Klein four-group `V₄`.
 + `SymmetricGroup3` is the symmetric group `S₃`, the smallest non-abelian group.
-+ `AlternatingGroup5` is the alternating group `A₅`, the smallest nonabelian simple group, certified simple by finite computation (with its generated `Tables` companion).
++ [Examples.Classical.Groups.AlternatingGroup5][] is the alternating group `A₅`,
+  the smallest nonabelian simple group, certified simple by finite computation
+  from its generated companion [Examples.Classical.Groups.AlternatingGroup5.Tables][].
+  This barrel does not import it.  The two modules take several seconds each to
+  check, longer than any other module of the library, and a barrel leaves out
+  such slow modules so that importing it stays cheap.  `make check` still checks
+  both, and either can be imported directly.
 
 ```agda
 {-# OPTIONS --without-K --exact-split --safe #-}
@@ -29,7 +36,6 @@ nothing to gain (and names to clash) from re-exporting them through a barrel.
 module Examples.Classical.Groups where
 
 open import Examples.Classical.Groups.AbelianGroup
-open import Examples.Classical.Groups.AlternatingGroup5
 open import Examples.Classical.Groups.CyclicGroup
 open import Examples.Classical.Groups.CyclicGroup3
 open import Examples.Classical.Groups.KleinFourGroup
