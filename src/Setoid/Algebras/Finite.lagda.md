@@ -128,9 +128,10 @@ holds everywhere holds at the enumerated elements.  So when each instance of
 library's `all?`{.AgdaFunction} on `Fin card`, whose answer is transported along
 the two implications.  The quadruple forms `enum-all⁴`{.AgdaFunction} and
 `all⁴?`{.AgdaFunction} are the same with one more quantifier; they decide, for
-instance, Whitman's condition on a finite lattice in
-[Classical.Properties.Lattice.Semidistributive][].  Because surjectivity is all
-the sweep uses, an enumeration that repeats elements only repeats work.
+instance, Whitman's condition on a finite lattice (in the
+latticetheory/agda-lattices repository, which builds on this library).  Because
+surjectivity is all the sweep uses, an enumeration that repeats elements only
+repeats work.
 
 ```agda
 module _ {𝑆 : Signature 𝓞 𝓥} {𝑨 : Algebra {𝑆 = 𝑆} α ρ} (𝑭 : FiniteAlgebra 𝑨) where
