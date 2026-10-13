@@ -69,6 +69,12 @@
 [Setoid.Congruences.Presented.Decidable]: /Setoid/Congruences/Presented/Decidable/
 [Setoid.Congruences.Properties]: /Setoid/Congruences/Properties/
 [Setoid.Congruences.Simple]: /Setoid/Congruences/Simple/
+[Setoid.Decompositions]: /Setoid/Decompositions/
+[Setoid.Decompositions.FactorPairs]: /Setoid/Decompositions/FactorPairs/
+[Setoid.Decompositions.Finite]: /Setoid/Decompositions/Finite/
+[Setoid.Decompositions.Indecomposable]: /Setoid/Decompositions/Indecomposable/
+[Setoid.Decompositions.Products]: /Setoid/Decompositions/Products/
+[Setoid.Decompositions.StrictRefinement]: /Setoid/Decompositions/StrictRefinement/
 [Setoid.Functions]: /Setoid/Functions/
 [Setoid.Functions.Basic]: /Setoid/Functions/Basic/
 [Setoid.Functions.Bijective]: /Setoid/Functions/Bijective/
@@ -255,6 +261,7 @@
 [Examples.Classical.Groups.AlternatingGroup5.Tables]: /Examples/Classical/Groups/AlternatingGroup5/Tables/
 [Examples.Classical.Groups.CyclicGroup]: /Examples/Classical/Groups/CyclicGroup/
 [Examples.Classical.Groups.CyclicGroup3]: /Examples/Classical/Groups/CyclicGroup3/
+[Examples.Classical.Groups.CyclicGroup6]: /Examples/Classical/Groups/CyclicGroup6/
 [Examples.Classical.Groups.KleinFourGroup]: /Examples/Classical/Groups/KleinFourGroup/
 [Examples.Classical.Groups.SymmetricGroup3]: /Examples/Classical/Groups/SymmetricGroup3/
 [Examples.Classical.Lattices]: /Examples/Classical/Lattices/
@@ -422,6 +429,12 @@
 [Setoid/Congruences/Presented/Decidable.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Congruences/Presented/Decidable.lagda.md
 [Setoid/Congruences/Properties.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Congruences/Properties.lagda.md
 [Setoid/Congruences/Simple.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Congruences/Simple.lagda.md
+[Setoid/Decompositions.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Decompositions.lagda.md
+[Setoid/Decompositions/FactorPairs.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Decompositions/FactorPairs.lagda.md
+[Setoid/Decompositions/Finite.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Decompositions/Finite.lagda.md
+[Setoid/Decompositions/Indecomposable.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Decompositions/Indecomposable.lagda.md
+[Setoid/Decompositions/Products.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Decompositions/Products.lagda.md
+[Setoid/Decompositions/StrictRefinement.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Decompositions/StrictRefinement.lagda.md
 [Setoid/Functions.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Functions.lagda.md
 [Setoid/Functions/Basic.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Functions/Basic.lagda.md
 [Setoid/Functions/Bijective.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Setoid/Functions/Bijective.lagda.md
@@ -608,6 +621,7 @@
 [Examples/Classical/Groups/AlternatingGroup5/Tables.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Examples/Classical/Groups/AlternatingGroup5/Tables.lagda.md
 [Examples/Classical/Groups/CyclicGroup.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Examples/Classical/Groups/CyclicGroup.lagda.md
 [Examples/Classical/Groups/CyclicGroup3.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Examples/Classical/Groups/CyclicGroup3.lagda.md
+[Examples/Classical/Groups/CyclicGroup6.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Examples/Classical/Groups/CyclicGroup6.lagda.md
 [Examples/Classical/Groups/KleinFourGroup.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Examples/Classical/Groups/KleinFourGroup.lagda.md
 [Examples/Classical/Groups/SymmetricGroup3.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Examples/Classical/Groups/SymmetricGroup3.lagda.md
 [Examples/Classical/Lattices.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Examples/Classical/Lattices.lagda.md
