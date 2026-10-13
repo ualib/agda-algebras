@@ -35,6 +35,8 @@ import re
 from dataclasses import dataclass
 from itertools import accumulate
 from pathlib import Path
+from types import MappingProxyType
+from typing import Mapping, Sequence
 
 
 # =============================================================================
@@ -104,6 +106,19 @@ def visible_prose(line: str, inside: bool) -> tuple[str, bool]:
     return "".join(out), inside
 
 
+def front_matter_end(lines: Sequence[str]) -> int:
+    """How many leading lines a YAML front-matter block (``---`` … ``---``)
+    occupies, delimiters included: ``0`` when there is none.
+
+    A block opens only on the file's first line and needs a closing ``---``;
+    without one there is no block, and nothing is metadata.
+    """
+    if not lines or lines[0].strip() != "---":
+        return 0
+    return next((index + 1 for index, line in enumerate(lines[1:], 1)
+                 if line.strip() == "---"), 0)
+
+
 def strip_front_matter(lines: tuple[str, ...]) -> tuple[str, ...]:
     """Drop a leading YAML front-matter block (``---`` … ``---``).
 
@@ -116,12 +131,35 @@ def strip_front_matter(lines: tuple[str, ...]) -> tuple[str, ...]:
     trees; treating one as an opening delimiter would silently swallow the prose
     up to the next rule.
     """
-    if not lines or lines[0].strip() != "---":
-        return lines
-    for index, line in enumerate(lines[1:], 1):
-        if line.strip() == "---":
-            return lines[index + 1:]
-    return lines
+    return lines[front_matter_end(lines):]
+
+
+# A front-matter entry: a key, a colon, a value.  YAML allows space before the
+# colon, and 149 modules write `title :` and `date :` that way, so this must too.
+_FRONT_MATTER_ENTRY = re.compile(r"([A-Za-z][\w-]*)\s*:\s*(.*?)\s*")
+
+
+def _unquote(value: str) -> str:
+    """A YAML scalar without its surrounding quotes, if it has a matching pair."""
+    if len(value) >= 2 and value[0] == value[-1] and value[0] in "\"'":
+        return value[1:-1]
+    return value
+
+
+def front_matter(text: str) -> Mapping[str, str]:
+    """The ``key: value`` entries of a module's front matter, values unquoted.
+
+    The corpus writes flat entries only (``layout``, ``file``, ``title``,
+    ``date``, ``author``, and ``check-cost`` on a slow module), so this reads
+    those and nothing else: a line that is not a flat entry is skipped rather
+    than guessed at, and a repeated key keeps its last value, as YAML loaders
+    do.  A file with no block (see :func:`front_matter_end`) has no entries.
+    """
+    lines = text.split("\n")
+    end = front_matter_end(lines)
+    entries = (match.groups() for line in lines[1:max(end - 1, 1)]
+               if (match := _FRONT_MATTER_ENTRY.fullmatch(line)))
+    return MappingProxyType({key: _unquote(value) for key, value in entries})
 
 
 def fences(text: str) -> tuple[Fence, ...]:
