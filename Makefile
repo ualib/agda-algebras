@@ -32,7 +32,7 @@
 #      where a path segment happens to contain the substring `agda`.
 # =============================================================================
 
-.PHONY: default all check test clean site serve serve-full html agda-md site-full profile project-plan unused-imports unused-imports-test check-links check-links-test gen-links span-classes span-classes-test corpus-stats corpus-stats-check corpus-stats-test docstrings docstrings-test docstrings-list docstrings-unused docstrings-json groups-test Everything.agda EverythingLegacy.agda
+.PHONY: default all check test clean site serve serve-full html agda-md site-full profile project-plan unused-imports unused-imports-test check-links check-links-test gen-links barrels barrels-test span-classes span-classes-test corpus-stats corpus-stats-check corpus-stats-test docstrings docstrings-test docstrings-list docstrings-unused docstrings-json groups-test Everything.agda EverythingLegacy.agda
 
 # -- Configuration -----------------------------------------------------------
 SRCDIR    := src
@@ -240,6 +240,33 @@ check-links-test:
 gen-links:
 	@echo "target: $@"
 	python3 scripts/python/gen_links.py
+
+# Keep slow-to-check modules out of barrels (issue #603; STYLE_GUIDE § "Barrels
+# and slow modules").  A barrel imports a family of modules for the reader's
+# convenience.  The build does not need it, since the two aggregators import
+# every module directly, so whatever a barrel imports is paid for by whoever
+# imports the barrel: Emacs on the root module, an agda-mcp load, a downstream
+# library.
+# A module whose own check takes 3 s or more carries `check-cost: heavy` in its
+# front matter, stays in the build, and is imported by no barrel.  The checker
+# reads the markers and never a clock, so the gate is deterministic: it fails
+# when a barrel reaches a marked module (naming the chain) or when a marked
+# module is missing from the aggregators.  Pure Python; no Agda needed.
+#   barrels        the CI gate
+#   barrels-test   the checker's own test suite
+# Whether the markers still match the costs is a separate, advisory question,
+# answered from a profile of an empty build, pinned to a performance core on a
+# processor that also has efficiency cores (where the same check takes twice as
+# long, so an unpinned profile varies from run to run):
+#   make clean && taskset -c 2 make PROFILE=modules profile > profile.log 2>&1
+#   python3 scripts/python/barrels.py --audit profile.log
+barrels: Everything.agda EverythingLegacy.agda
+	@echo "target: $@"
+	python3 scripts/python/barrels.py $(SRCDIR)
+
+barrels-test:
+	@echo "target: $@"
+	python3 scripts/python/test_barrels.py
 
 # Validate the kramdown attribute spans on inline Agda names in the prose
 # (`` `Algebra`{.AgdaRecord} `` and kin) against Agda's own classification
