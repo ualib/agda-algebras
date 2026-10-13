@@ -5,7 +5,8 @@ Description: Literate-Agda (``.lagda.md``) front end shared by the corpus tools.
 
   Every module under ``src/`` is literate Markdown (ADR-004): Agda code lives
   inside ```` ```agda ```` fenced blocks and everything outside a fence is
-  prose.  Three tools now read that structure: ``unused_imports.py`` (which
+  prose.  What counts as a fence is what Agda's own reader says (see
+  :func:`_md_step`), so the tools see the code Agda checks.  Three tools now read that structure: ``unused_imports.py`` (which
   needs the Agda code with comments blanked), ``docstring_audit.py`` (which
   needs the *prose* attached to each fence as well), and ``corpus_stats.py``
   (which counts the code and reads each module's pragma), so the front end
@@ -43,9 +44,36 @@ from typing import Mapping, Sequence
 # Fences:  where the Agda code blocks are, and what prose precedes them
 # =============================================================================
 
-# A fence opener: ```agda, or an attribute form such as ```{.agda .hidden}.
-_FENCE_OPEN = re.compile(r"^```\s*(?:agda\b|\{[^}]*\.agda[^}]*\})\s*$")
-_FENCE_CLOSE = re.compile(r"^```\s*$")
+# Agda's reader of literate Markdown (``literateMd`` in
+# ``Agda.Syntax.Parser.Literate``, at the pinned revision) decides what is code,
+# so the tools follow it exactly.  Each of its three patterns must match a whole
+# line, as follows:
+#
+#   +  a line that *ends* in ``` or ```agda opens an Agda block, whatever comes
+#      before it on the line (`<!-- ```agda` opens one, and so does an indented
+#      fence, and so does a bare ```: the Makefile does not pass
+#      --literate-markdown-only-agda-blocks);
+#   +  any other fence, such as ```text, opens a block that is not Agda and runs
+#      to its closer, so an ```agda line shown inside it opens nothing;
+#   +  a closer is ``` alone on its line, indented or not.
+#
+# An attribute form such as ```{.agda .hidden} matches neither opener: Agda reads
+# that line as prose, and the ``` that closes it as an opener.
+_MD_BEGIN = re.compile(r"(?P<pre>.*?)\s*```(?:agda)?\s*")
+_MD_BEGIN_OTHER = re.compile(r"\s*```[a-zA-Z0-9-]*\s*")
+_MD_END = re.compile(r"\s*```\s*")
+
+# The reader's three states: prose, an Agda block, a block of something else.
+_PROSE, _CODE, _OTHER = "prose", "code", "other"
+
+
+def _md_step(state: str, line: str) -> str:
+    """The reader's state after ``line``, given its state before it."""
+    if state != _PROSE:
+        return _PROSE if _MD_END.fullmatch(line) else state
+    if _MD_BEGIN.fullmatch(line):
+        return _CODE
+    return _OTHER if _MD_BEGIN_OTHER.fullmatch(line) else _PROSE
 
 # HTML comment delimiters.  The corpus writes them on their own lines around a
 # hidden preamble fence, but single-line `<!-- … -->` also occurs in prose.
@@ -173,13 +201,13 @@ def fences(text: str) -> tuple[Fence, ...]:
     lines = text.split("\n")
     out: list[Fence] = []
     in_comment = False
-    in_fence = False
+    state = _PROSE
     open_line = 0
     hidden = False
     pending: list[str] = []
     for index, line in enumerate(lines):
-        if in_fence:
-            if _FENCE_CLOSE.match(line):
+        if state == _CODE:
+            if _MD_END.fullmatch(line):
                 out.append(Fence(
                     open_line=open_line + 1,
                     close_line=index + 1,
@@ -190,11 +218,19 @@ def fences(text: str) -> tuple[Fence, ...]:
                     prose=(strip_front_matter(tuple(pending)) if not out
                            else tuple(pending)),
                 ))
-                in_fence, pending = False, []
+                state, pending = _PROSE, []
             continue
-        if _FENCE_OPEN.match(line):
-            in_fence, open_line, hidden = True, index, in_comment
+        opener = _MD_BEGIN.fullmatch(line) if state == _PROSE else None
+        if opener:
+            # Text before the fence on its line is prose, and may open the
+            # HTML comment that hides the fence (`<!-- ```agda`).
+            rendered, in_comment = visible_prose(opener.group("pre"), in_comment)
+            if rendered.strip():
+                pending.append(rendered)
+            state, open_line, hidden = _CODE, index, in_comment
             continue
+        # Prose, or a block of something else, which renders as text.
+        state = _md_step(state, line)
         rendered, in_comment = visible_prose(line, in_comment)
         pending.append(rendered)
     return tuple(out)
@@ -204,25 +240,18 @@ def fences(text: str) -> tuple[Fence, ...]:
 # Literate extraction:  .lagda.md text -> one Agda line per source line
 # =============================================================================
 
-def _fence_step(inside: bool, line: str) -> bool:
-    """State transition for the code-fence scanner: are we inside a code block
-    *after* this line?  HTML comments are invisible to Agda, so blocks hidden
-    inside ``<!-- … -->`` are treated as code, exactly as Agda type-checks them."""
-    if inside:
-        return not bool(_FENCE_CLOSE.match(line))
-    return bool(_FENCE_OPEN.match(line))
-
-
 def extract_agda_lines(text: str) -> list[str]:
     """Return one entry per source line: the line's Agda code, or ``''`` for
     prose and fence lines.  Numbering is preserved so diagnostics point at the
-    real line in the ``.lagda.md`` file."""
+    real line in the ``.lagda.md`` file.  HTML comments are invisible to Agda,
+    so blocks hidden inside ``<!-- … -->`` are code, exactly as Agda checks
+    them."""
     lines = text.split("\n")
-    # inside_before[i] = were we inside a code block before processing line i?
-    inside_before = list(accumulate(lines, _fence_step, initial=False))[:-1]
+    # before[i] = the reader's state before line i.
+    before = list(accumulate(lines, _md_step, initial=_PROSE))[:-1]
     return [
-        line if (inside and not _FENCE_CLOSE.match(line)) else ""
-        for inside, line in zip(inside_before, lines)
+        line if (state == _CODE and not _MD_END.fullmatch(line)) else ""
+        for state, line in zip(before, lines)
     ]
 
 
@@ -230,22 +259,20 @@ def extract_agda_lines(text: str) -> list[str]:
 # Lexer:  blank out comments and string literals, preserving layout
 # =============================================================================
 
-# Characters that may continue an operator token after ``--``; if the run of
-# dashes is followed by one of these, ``--`` is part of an operator, not a
-# comment (e.g. ``-->``).  Otherwise ``--`` starts a line comment.
-_SYMBOL_CHARS = frozenset("-!#$%&*+./<=>?@\\^|~:")
+# Characters after which a new token begins, besides whitespace.
+_TOKEN_ENDS = frozenset('(){};@"')
 
 
 def _line_comment_at(line: str, i: int) -> bool:
-    """Does a line comment start at position ``i``?  Mirrors Agda's rule: a
-    maximal run of ``-`` (length >= 2) followed by a non-symbol char or EOL."""
+    """Does a line comment start at position ``i``?  Agda's lexer reads ``--``
+    as the start of a comment wherever a token begins (at the start of a line,
+    after whitespace, or after a delimiter), whatever follows the dashes: its
+    rule for a comment, ``"--" .*``, is longer than any operator it could
+    begin, so ``-->`` and ``--|`` open comments.  Inside a name, as in
+    ``_--_``, the dashes are part of the name."""
     if line[i : i + 2] != "--":
         return False
-    j = i
-    while j < len(line) and line[j] == "-":
-        j += 1
-    nxt = line[j] if j < len(line) else ""
-    return nxt == "" or nxt not in _SYMBOL_CHARS
+    return i == 0 or line[i - 1].isspace() or line[i - 1] in _TOKEN_ENDS
 
 
 def scan_line(block_depth: int, line: str) -> tuple[int, str]:
