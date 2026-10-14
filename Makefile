@@ -158,9 +158,13 @@ serve-full:
 # Classic agda --html site: full-page HTML with token highlighting + per-token
 # hyperlinks, Everything.html as the index.  Standalone in ./html (gitignored);
 # gen-files also publishes it at /classic/ and points the highlighted code's
-# stdlib links there.  Type-checks (warm .agdai cache makes it quick).
+# stdlib links there.  Type-checks (warm .agdai cache makes it quick).  The
+# directory is cleared first, as agda-md clears its own, so that a module no
+# longer in the library leaves no page behind (CI restores ./html from its
+# cache).
 html: Everything.agda EverythingLegacy.agda
 	@echo "target: $@"
+	rm -rf html
 	$(AGDA) $(RTS_OPTS) $(AGDA_OPTS) --html --html-dir=html $(SRCDIR)/Everything.agda
 	$(AGDA) $(RTS_OPTS) $(AGDA_OPTS) --html --html-dir=html $(SRCDIR)/EverythingLegacy.agda
 
