@@ -27,7 +27,8 @@ this is the property that the classical *Maltsev condition* characterizes by a s
 ternary term ([Setoid.Varieties.Maltsev][]).
 
 This module is pure congruence theory: it depends only on the congruence record of
-[Setoid.Congruences.Basic][], not on terms, interpretations, or the lattice bundles.
+[Setoid.Congruences.Basic][] and on the join of [Setoid.Congruences.Generation][],
+not on terms, interpretations, or the lattice bundles.
 
 <!--
 ```agda
@@ -37,15 +38,18 @@ module Setoid.Congruences.Permutability where
 
 -- Imports from Agda and the Agda Standard Library ----------------------------
 open import Agda.Primitive   using () renaming ( Set to Type )
-open import Data.Product     using ( _×_ ; _,_ ; proj₁ )
+open import Data.Product     using ( _×_ ; _,_ ; proj₁ ; proj₂ )
+open import Data.Sum.Base    using ( [_,_] ; inj₁ ; inj₂ )
 open import Level            using ( Level ; _⊔_ )
 open import Relation.Binary  using ( Setoid ; IsEquivalence )
                              renaming ( Rel to BinaryRel ; _⇒_ to _⊆_ )
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
-open import Overture                  using ( 𝑆 ; ∃-syntax )
-open import Setoid.Algebras.Basic     using ( ov ; Algebra ; 𝕌[_] )
-open import Setoid.Congruences.Basic  using ( Con ; is-equivalence )
+open import Overture                       using ( 𝑆 ; ∃-syntax )
+open import Setoid.Algebras.Basic          using ( ov ; Algebra ; 𝕌[_] ; 𝔻[_] ; _^_ )
+open import Setoid.Congruences.Basic       using ( Con ; mkcon ; reflexive ; _∣≈_
+                                                 ; is-equivalence ; is-compatible )
+open import Setoid.Congruences.Generation  using ( _∨_ ; Cg-least ; base ; transitive )
 
 private variable α ρ ℓ : Level
 ```
@@ -120,4 +124,98 @@ module _ {𝑨 : Algebra {𝑆 = 𝑆} α ρ} where
   permutable⇒commute : CongruencePermutable 𝑨 ℓ
     → (θ φ : Con 𝑨 ℓ) → (θ ∘ φ) ⊆ (φ ∘ θ) × (φ ∘ θ) ⊆ (θ ∘ φ)
   permutable⇒commute cp θ φ = cp θ φ , cp φ θ
+```
+
+#### Permutation is symmetric
+
+`Permutes`{.AgdaFunction} asks for one inclusion, `θ ∘ φ ⊆ φ ∘ θ`, while the
+textbook definition asks for the equation `θ ∘ φ = φ ∘ θ` (McKenzie, McNulty, and
+Taylor, *Algebras, Lattices, Varieties* I, Definition 4.28).  The two agree,
+because congruences are symmetric: the converse of `θ ∘ φ` is `φ ∘ θ`, so the
+inclusion for one order gives the inclusion for the other.  Thus
+`Permutes-sym`{.AgdaFunction} recovers the textbook equation from a single
+inclusion.
+
+```agda
+module _ {𝑨 : Algebra {𝑆 = 𝑆} α ρ} where
+  open IsEquivalence using ( sym )
+
+  -- One inclusion suffices: θ ∘ φ ⊆ φ ∘ θ implies φ ∘ θ ⊆ θ ∘ φ.
+  Permutes-sym : (θ φ : Con 𝑨 ℓ) → Permutes θ φ → Permutes φ θ
+  Permutes-sym (_ , θc) (_ , φc) θφ (z , xφz , zθy) =
+    let (w , yφw , wθx) = θφ (z , θsym zθy , φsym xφz) in w , θsym wθx , φsym yφw
+    where
+    θsym = sym (is-equivalence θc)
+    φsym = sym (is-equivalence φc)
+```
+
+#### The join of permuting congruences is their composite
+
+The composite `θ ∘ φ` is always contained in the join `θ ∨ φ` of
+[Setoid.Congruences.Generation][], since the join is transitive and contains both
+factors.  When `θ` and `φ` permute the two coincide: the composite is then itself
+a congruence (`∘-Con`{.AgdaFunction}), so the least congruence containing `θ` and
+`φ` is below it.  This is the remark after Definition 4.28 of *Algebras, Lattices,
+Varieties* I, that equivalence relations `α` and `β` permute iff `α ∨ β = α ∘ β`,
+and it is what lets a factor pair be stated with the composite in place of the
+join (see [Setoid.Decompositions.FactorPairs][]).
+
+The composite of a permuting pair is symmetric because its converse `φ ∘ θ` is
+contained in it, and transitive because a chain `θ ∘ φ ∘ θ ∘ φ` can be regrouped
+as `θ ∘ θ ∘ φ ∘ φ` by permuting the middle pair; compatibility with the basic
+operations is pointwise, the operation applied to the middle elements of the
+argument chains.
+
+```agda
+module _ {𝑨 : Algebra {𝑆 = 𝑆} α ρ} where
+  open IsEquivalence using ( refl ; sym ; trans )
+  open Setoid 𝔻[ 𝑨 ] using ( _≈_ )
+
+  -- The composite is contained in the join (no permutability needed).
+  ∘⊆∨ : (θ φ : Con 𝑨 ℓ) → θ ∘ φ ⊆ proj₁ (θ ∨ φ)
+  ∘⊆∨ θ φ (z , xθz , zφy) = transitive (base (inj₁ xθz)) (base (inj₂ zφy))
+
+  -- The composite of a permuting pair is a congruence.
+  ∘-Con : (θ φ : Con 𝑨 ℓ) → Permutes θ φ → Con 𝑨 (α ⊔ ℓ)
+  ∘-Con (_θ_ , θc) (_φ_ , φc) θφ =
+    _∘_ {𝑨 = 𝑨} (_θ_ , θc) (_φ_ , φc) , mkcon ∘-reflexive ∘-isEquivalence ∘-compatible
+    where
+    θe = is-equivalence θc
+    φe = is-equivalence φc
+    θ∘φ : BinaryRel 𝕌[ 𝑨 ] _
+    θ∘φ = _∘_ {𝑨 = 𝑨} (_θ_ , θc) (_φ_ , φc)
+
+    ∘-reflexive : ∀ {x y} → x ≈ y → θ∘φ x y
+    ∘-reflexive {x} e = x , refl θe , reflexive φc e
+
+    -- φ ∘ θ ⊆ θ ∘ φ, the other half of the permutation.
+    φθ : _∘_ {𝑨 = 𝑨} (_φ_ , φc) (_θ_ , θc) ⊆ θ∘φ
+    φθ = Permutes-sym (_θ_ , θc) (_φ_ , φc) θφ
+
+    ∘-sym : ∀ {x y} → θ∘φ x y → θ∘φ y x
+    ∘-sym (z , xθz , zφy) = φθ (z , sym φe zφy , sym θe xθz)
+
+    -- x θ z φ y θ z′ φ w: permute the middle φ ∘ θ, then compose in θ and in φ.
+    ∘-trans : ∀ {x y w} → θ∘φ x y → θ∘φ y w → θ∘φ x w
+    ∘-trans {y = y} (z , xθz , zφy) (z′ , yθz′ , z′φw) =
+      let (m , zθm , mφz′) = φθ (y , zφy , yθz′) in m , trans θe xθz zθm , trans φe mφz′ z′φw
+
+    ∘-isEquivalence : IsEquivalence θ∘φ
+    ∘-isEquivalence = record { refl = ∘-reflexive (Setoid.refl 𝔻[ 𝑨 ])
+                             ; sym = ∘-sym ; trans = ∘-trans }
+
+    ∘-compatible : 𝑨 ∣≈ θ∘φ
+    ∘-compatible f h = (f ^ 𝑨) (λ i → proj₁ (h i))
+                     , is-compatible θc f (λ i → proj₁ (proj₂ (h i)))
+                     , is-compatible φc f (λ i → proj₂ (proj₂ (h i)))
+```
+
+With `∘-Con`{.AgdaFunction} in hand the join is below the composite, by the
+universal property `Cg-least`{.AgdaFunction} of the generated congruence; so for a
+permuting pair the join and the composite relate the same pairs.
+
+```agda
+  -- For a permuting pair, the join is contained in the composite.
+  permutes→∨⊆∘ : (θ φ : Con 𝑨 ℓ) → Permutes θ φ → proj₁ (θ ∨ φ) ⊆ θ ∘ φ
+  permutes→∨⊆∘ θ φ θφ = Cg-least (∘-Con θ φ θφ) [ ∘-inˡ θ φ , ∘-inʳ θ φ ]
 ```

@@ -16,7 +16,11 @@ This module defines some of the homomorphisms associated with a product.
    from `𝑨` to the product;
 +  `⨅-hom`{.AgdaFunction} takes a family of homomorphisms `𝒜 i → ℬ i` to their
    product, `⨅ 𝒜 → ⨅ ℬ`;
-+  `⨅-proj`{.AgdaFunction} is the coordinate projection `⨅ 𝒜 → 𝒜 i`.
++  `⨅-proj`{.AgdaFunction} is the coordinate projection `⨅ 𝒜 → 𝒜 i`;
++  `×-proj₁`{.AgdaFunction}, `×-proj₂`{.AgdaFunction}, and
+   `×-hom-co`{.AgdaFunction} are the same constructions for the binary product
+   `_×ᴬ_`{.AgdaFunction}: the two projections, and the pairing of two
+   homomorphisms out of `𝑨`.
 
 All three are defined coordinatewise, and their compatibility proofs are inherited
 coordinatewise from the factors, because that is how `⨅`{.AgdaFunction} of
@@ -37,13 +41,13 @@ open import Relation.Binary             using ( Setoid )
 
 -- Imports from the Agda Universal Algebras Library ----------------------
 open import Overture                    using ( proj₁ ; proj₂ ; 𝓞 ; 𝓥 ; Signature)
-open import Setoid.Algebras             using ( Algebra ; ⨅ ; 𝔻[_] )
+open import Setoid.Algebras             using ( Algebra ; ⨅ ; 𝔻[_] ; _×ᴬ_ )
 open import Setoid.Homomorphisms.Basic  using ( hom ; IsHom )
 
 open _⟶_ using ( cong )  renaming ( to to _⟨$⟩_ )
 open IsHom
 
-private variable α ρ β ρᵇ 𝓘 : Level
+private variable α ρ β ρᵇ γ ρᶜ 𝓘 : Level
 ```
 -->
 
@@ -106,6 +110,58 @@ The projection of a product algebra onto its `i`-th factor is a homomorphism.
 
 We could prove a more general result involving projections onto multiple factors, but
 so far the single-factor result has sufficed.
+
+#### Homomorphisms of binary products
+
+The two projections out of a binary product `𝑩 ×ᴬ 𝑪`{.AgdaFunction} are
+homomorphisms, `×-proj₁`{.AgdaFunction} onto `𝑩` and `×-proj₂`{.AgdaFunction} onto
+`𝑪`; the setoid equality of the product is the conjunction of the two coordinate
+equalities, so each projection respects it by taking one conjunct.
+
+```agda
+module _ {𝑆 : Signature 𝓞 𝓥} {𝑩 : Algebra {𝑆 = 𝑆} β ρᵇ} {𝑪 : Algebra {𝑆 = 𝑆} γ ρᶜ} where
+  -- The first projection 𝑩 × 𝑪 → 𝑩.
+  ×-proj₁ : hom (𝑩 ×ᴬ 𝑪) 𝑩
+  ×-proj₁ = F , isHom
+    where
+    F : 𝔻[ 𝑩 ×ᴬ 𝑪 ] ⟶ 𝔻[ 𝑩 ]
+    F ⟨$⟩ x = proj₁ x
+    F .cong xy = proj₁ xy
+
+    isHom : IsHom (𝑩 ×ᴬ 𝑪) 𝑩 F
+    isHom .compatible = Setoid.refl 𝔻[ 𝑩 ]
+
+  -- The second projection 𝑩 × 𝑪 → 𝑪.
+  ×-proj₂ : hom (𝑩 ×ᴬ 𝑪) 𝑪
+  ×-proj₂ = F , isHom
+    where
+    F : 𝔻[ 𝑩 ×ᴬ 𝑪 ] ⟶ 𝔻[ 𝑪 ]
+    F ⟨$⟩ x = proj₂ x
+    F .cong xy = proj₂ xy
+
+    isHom : IsHom (𝑩 ×ᴬ 𝑪) 𝑪 F
+    isHom .compatible = Setoid.refl 𝔻[ 𝑪 ]
+```
+
+Two homomorphisms `g : 𝑨 → 𝑩` and `h : 𝑨 → 𝑪` out of one algebra pair to the
+homomorphism `×-hom-co g h : 𝑨 → 𝑩 ×ᴬ 𝑪`{.AgdaFunction}, `a ↦ (g a , h a)`; it is
+the binary case of `⨅-hom-co`{.AgdaFunction}, and composing it with either
+projection gives back `g` or `h` on the nose.
+
+```agda
+module _ {𝑆 : Signature 𝓞 𝓥} {𝑨 : Algebra {𝑆 = 𝑆} α ρ}
+         {𝑩 : Algebra {𝑆 = 𝑆} β ρᵇ} {𝑪 : Algebra {𝑆 = 𝑆} γ ρᶜ} where
+  -- The pairing a ↦ (g a , h a) of two homomorphisms out of 𝑨.
+  ×-hom-co : hom 𝑨 𝑩 → hom 𝑨 𝑪 → hom 𝑨 (𝑩 ×ᴬ 𝑪)
+  ×-hom-co g h = F , isHom
+    where
+    F : 𝔻[ 𝑨 ] ⟶ 𝔻[ 𝑩 ×ᴬ 𝑪 ]
+    F ⟨$⟩ a = g .proj₁ ⟨$⟩ a , h .proj₁ ⟨$⟩ a
+    F .cong xy = g .proj₁ .cong xy , h .proj₁ .cong xy
+
+    isHom : IsHom 𝑨 (𝑩 ×ᴬ 𝑪) F
+    isHom .compatible = g .proj₂ .compatible , h .proj₂ .compatible
+```
 
 ---
 

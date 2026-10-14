@@ -47,7 +47,7 @@ open import Agda.Primitive using () renaming ( Set to Type )
 
 -- Imports from the Agda Standard Library -----------------------------------
 open import Data.Fin.Base         using ( Fin ; zero )
-open import Data.Fin.Properties   using ( all? )
+open import Data.Fin.Properties   using ( all? ; any? )
 open import Data.Nat.Base         using ( ℕ )
 open import Data.Product          using ( _,_  ; ∃-syntax ; proj₁ ; proj₂ )
 open import Data.Unit.Base        using ( ⊤ ; tt )
@@ -126,7 +126,11 @@ holds everywhere holds at the enumerated elements.  So when each instance of
 `P`{.AgdaBound} is decidable, the universal statement is decided by a sweep of
 `card³` instances (`all³?`{.AgdaFunction}), three nested calls of the standard
 library's `all?`{.AgdaFunction} on `Fin card`, whose answer is transported along
-the two implications.  The quadruple forms `enum-all⁴`{.AgdaFunction} and
+the two implications.  The binary form `all²?`{.AgdaFunction} decides a
+universal statement about pairs, and `exists?`{.AgdaFunction} decides an
+existential one, `∃ a, P a`, by the standard library's `any?`{.AgdaFunction}:
+a witness among the enumerated elements is a witness, and any witness `a` has an
+enumerated stand-in `enum i ≈ a`.  The quadruple forms `enum-all⁴`{.AgdaFunction} and
 `all⁴?`{.AgdaFunction} are the same with one more quantifier; they decide, for
 instance, Whitman's condition on a finite lattice (in the
 latticetheory/agda-lattices repository, which builds on this library).  Because
@@ -136,7 +140,25 @@ repeats work.
 ```agda
 module _ {𝑆 : Signature 𝓞 𝓥} {𝑨 : Algebra {𝑆 = 𝑆} α ρ} (𝑭 : FiniteAlgebra 𝑨) where
   open FiniteAlgebra 𝑭  using ( card ; enum ; enum-sur )
-  open Setoid 𝔻[ 𝑨 ]    using ( _≈_ )
+  open Setoid 𝔻[ 𝑨 ]    using ( _≈_ ) renaming ( sym to ≈sym )
+
+  enum-all² : (P : 𝕌[ 𝑨 ] → 𝕌[ 𝑨 ] → Type ℓ)
+    → (∀ {a a' b b'} → a ≈ a' → b ≈ b' → P a b → P a' b')
+    → (∀ i j → P (enum i) (enum j)) → ∀ a b → P a b
+  enum-all² P resp h a b =
+    resp (proj₂ (enum-sur a)) (proj₂ (enum-sur b)) (h (proj₁ (enum-sur a)) (proj₁ (enum-sur b)))
+
+  all²? : (P : 𝕌[ 𝑨 ] → 𝕌[ 𝑨 ] → Type ℓ)
+    → (∀ {a a' b b'} → a ≈ a' → b ≈ b' → P a b → P a' b')
+    → (∀ a b → Dec (P a b)) → Dec (∀ a b → P a b)
+  all²? P resp P? =
+    map′ (enum-all² P resp) (λ h i j → h (enum i) (enum j)) (all? λ i → all? λ j → P? (enum i) (enum j))
+
+  exists? : (P : 𝕌[ 𝑨 ] → Type ℓ) → (∀ {a a'} → a ≈ a' → P a → P a')
+    → (∀ a → Dec (P a)) → Dec (∃[ a ] P a)
+  exists? P resp P? =
+    map′ (λ (i , p) → enum i , p) (λ (a , p) → proj₁ (enum-sur a) , resp (≈sym (proj₂ (enum-sur a))) p)
+         (any? λ i → P? (enum i))
 
   enum-all³ : (P : 𝕌[ 𝑨 ] → 𝕌[ 𝑨 ] → 𝕌[ 𝑨 ] → Type ℓ)
     → (∀ {a a' b b' c c'} → a ≈ a' → b ≈ b' → c ≈ c' → P a b c → P a' b' c')

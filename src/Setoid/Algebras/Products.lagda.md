@@ -14,9 +14,11 @@ carrier is the dependent function type over the index, its equality is pointwise
 and each operation symbol is interpreted by applying the corresponding operation
 in every factor.
 
-This module defines that product, `⨅`{.AgdaFunction}; the machinery for taking the
-product of a *class* of algebras rather than of an indexed family; and the one
-nontrivial fact about products proved here, which is the following:
+This module defines that product, `⨅`{.AgdaFunction}; the binary product
+`_×ᴬ_`{.AgdaFunction} of two algebras, whose carrier is the type of pairs; the
+machinery for taking the product of a *class* of algebras rather than of an
+indexed family; and the one nontrivial fact about products proved here, which is
+the following:
 
 > The coordinate projections out of a product are surjective when the index type
 > has decidable equality and every factor is nonempty.
@@ -37,8 +39,10 @@ module Setoid.Algebras.Products where
 
 -- Imports from Agda and the Agda Standard Library --------------------------------
 open import Agda.Primitive                         using  () renaming ( Set to Type )
-open import Data.Product                           using  ( _,_ ; Σ-syntax )
-open import Function                               using  ( flip ; Func )
+open import Data.Product                           using  ( _,_ ; Σ-syntax ; proj₁ ; proj₂ )
+open import Data.Product.Relation.Binary.Pointwise.NonDependent
+                                                   using  ( ×-setoid )
+open import Function                               using  ( flip ; Func ; _∘_ )
 open import Level                                  using  ( _⊔_ ; Level )
 open import Relation.Binary                        using  ( Setoid ; IsEquivalence
                                                           ; Decidable )
@@ -58,7 +62,7 @@ open import Overture               using ( proj ; projIsOnto ; 𝓞 ; 𝓥 ; Sig
                                    renaming ( IsSurjective to onto )
 open import Setoid.Algebras.Basic  using ( Algebra ; _^_ ; ov ; 𝔻[_] ; 𝕌[_])
 
-private variable α ρ ι : Level
+private variable α ρ β ρᵇ ι : Level
 
 open Algebra
 ```
@@ -109,6 +113,32 @@ levels with the level of its index.  Correspondingly, the operator
 `P`{.AgdaFunction} of [Setoid.Varieties.Closure][], defining the class of products
 of a class, states membership up to isomorphism, `𝑩 ≅ ⨅ 𝒜`, which leaves `𝑩` with
 its own pair of levels.
+
+#### Binary products
+
+`𝑨 ×ᴬ 𝑩`{.AgdaFunction} is the **binary product** of two algebras: its carrier is
+the type `𝕌[ 𝑨 ] × 𝕌[ 𝑩 ]` of pairs, two pairs are equal when they agree in both
+coordinates (the standard library's `×-setoid`{.AgdaFunction}), and an operation
+symbol acts coordinatewise.  It is the product `A × B` of the textbooks, the one
+in which a *direct decomposition* `𝑨 ≅ 𝑩 × 𝑪` is stated (McKenzie, McNulty, and
+Taylor, *Algebras, Lattices, Varieties* I, Definition 4.37 and §5.1); see
+[Setoid.Decompositions][].
+
+The indexed product `⨅`{.AgdaFunction} over a two-element index type would serve
+mathematically, but it asks both factors to live at the same universe levels,
+while the pair carrier lets them differ; the coordinates are also projected with
+`proj₁`{.AgdaField} and `proj₂`{.AgdaField} rather than by evaluation at an
+index.  Its projections and the pairing of two homomorphisms are in
+[Setoid.Homomorphisms.Products][].
+
+```agda
+_×ᴬ_ : Algebra {𝑆 = 𝑆} α ρ → Algebra {𝑆 = 𝑆} β ρᵇ → Algebra {𝑆 = 𝑆} (α ⊔ β) (ρ ⊔ ρᵇ)
+Domain (𝑨 ×ᴬ 𝑩) = ×-setoid 𝔻[ 𝑨 ] 𝔻[ 𝑩 ]
+Interp (𝑨 ×ᴬ 𝑩) ⟨$⟩ (f , a) = (f ^ 𝑨) (proj₁ ∘ a) , (f ^ 𝑩) (proj₂ ∘ a)
+cong (Interp (𝑨 ×ᴬ 𝑩)) (refl , a≈b) =  cong (Interp 𝑨) (refl , proj₁ ∘ a≈b)
+                                     , cong (Interp 𝑩) (refl , proj₂ ∘ a≈b)
+infixr 2 _×ᴬ_
+```
 
 #### Products of classes of Algebras
 
