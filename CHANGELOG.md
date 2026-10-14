@@ -117,6 +117,11 @@ Migration recipe for the M2-7 destinations: replace `open import Legacy.Base.Rel
 
 ### Fixed
 
++  **The classic site no longer keeps pages of removed modules**.  The `html`
+   target wrote the `agda --html` output into `html/` without clearing it, and
+   CI restores that directory from its cache, so a module deleted from the
+   library kept its page under `/classic/`.  The target now clears the
+   directory first, as `agda-md` already does for its own output.
 +  **The landing page's corpus stats no longer rot** (#575).  `docs/index.md`
    advertises how many literate modules the library holds and how many lines of
    Agda they contain.  Those two figures were recomputed by the MkDocs hook on
