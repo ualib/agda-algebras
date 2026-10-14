@@ -146,7 +146,7 @@ shrank, 2 kept their size and 18 grew by a few bytes.  The library's share of th
 import closure of `Setoid.Varieties.HSP` (92 of its 314 modules) went from
 18,110,993 to 15,585,129 bytes (13.9% less).
 
-**This change** (2026-10-07, base `4b4b16db` against the branch of [#594],
+**This change** (2026-10-07, base `d70f86d5` against the branch of [#594],
 which also drops `-WnoUnsupportedIndexedMatch`):
 
 | pair | load before (each flag) | `--cubical-compatible` | `--without-K` | change |
