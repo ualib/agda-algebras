@@ -19,8 +19,8 @@ Each submodule is the home of one concrete lattice.
 
 The free lattice on three generators, the diamond `M₃` and the pentagon `N₅`
 from their tables, and two further free-lattice examples, which this barrel
-held until October 2026, continue in the latticetheory/agda-lattices
-repository, which builds on this library.
+held until October 2026, continue in a separate repository, which builds
+on this library.
 
 ```agda
 {-# OPTIONS --without-K --exact-split --safe #-}
