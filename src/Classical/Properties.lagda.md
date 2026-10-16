@@ -20,7 +20,7 @@ proves further facts about a parameterized `(𝑿 : X α ρ)`.
 The inaugural inhabitant is `Classical.Properties.Lattice`, which proves the
 order-theoretic view of a lattice.  (The semidistributive laws and Whitman's
 condition, the conditions that characterize the finite sublattices of free
-lattices, continue in the latticetheory/agda-lattices repository.)  Future
+lattices, continue in a separate repository.)  Future
 inhabitants include, for example, uniqueness of inverses in Group and
 `0 · x ≈ 0` in Ring.
 

@@ -42,8 +42,8 @@ build instead.
 
 The free lattice `FL(X)`, with Whitman's solution to its word problem and its
 canonical forms, and the finite lattices built from operation tables, which
-this barrel re-exported until October 2026, continue in the
-latticetheory/agda-lattices repository, which builds on this library.
+this barrel re-exported until October 2026, continue in a separate
+repository, which builds on this library.
 
 ```agda
 {-# OPTIONS --without-K --exact-split --safe #-}

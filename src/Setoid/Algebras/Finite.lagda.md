@@ -132,8 +132,8 @@ existential one, `∃ a, P a`, by the standard library's `any?`{.AgdaFunction}:
 a witness among the enumerated elements is a witness, and any witness `a` has an
 enumerated stand-in `enum i ≈ a`.  The quadruple forms `enum-all⁴`{.AgdaFunction} and
 `all⁴?`{.AgdaFunction} are the same with one more quantifier; they decide, for
-instance, Whitman's condition on a finite lattice (in the
-latticetheory/agda-lattices repository, which builds on this library).  Because
+instance, Whitman's condition on a finite lattice (in a separate repository,
+which builds on this library).  Because
 surjectivity is all the sweep uses, an enumeration that repeats elements only
 repeats work.
 
