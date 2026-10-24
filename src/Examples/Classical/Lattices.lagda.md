@@ -14,13 +14,12 @@ Barrel for the worked `Lattice` examples under `Examples/Classical/Lattices/`.
 Each submodule is the home of one concrete lattice.
 
 + `L2` is the two-element Boolean lattice.
-+ `L2Distributive` is the two-element Boolean lattice as a `DistributiveLattice`.
-+ `L3Heyting` is the three-element chain as a Heyting algebra.
 
 The free lattice on three generators, the diamond `M₃` and the pentagon `N₅`
-from their tables, and two further free-lattice examples, which this barrel
-held until October 2026, continue in a separate repository, which builds
-on this library.
+from their tables, the two-element lattice as a distributive lattice, and the
+three-element chain as a Heyting algebra, which this barrel held until October
+2026, are worked examples of the library ualib/agda-lattices, which builds on
+this one.
 
 ```agda
 {-# OPTIONS --without-K --exact-split --safe #-}
@@ -28,6 +27,4 @@ on this library.
 module Examples.Classical.Lattices where
 
 open import Examples.Classical.Lattices.L2
-open import Examples.Classical.Lattices.L2Distributive
-open import Examples.Classical.Lattices.L3Heyting
 ```

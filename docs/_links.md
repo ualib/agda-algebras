@@ -142,7 +142,6 @@
 [Classical.Bundles.CommutativeMonoid]: /Classical/Bundles/CommutativeMonoid/
 [Classical.Bundles.CommutativeRing]: /Classical/Bundles/CommutativeRing/
 [Classical.Bundles.CommutativeSemigroup]: /Classical/Bundles/CommutativeSemigroup/
-[Classical.Bundles.DistributiveLattice]: /Classical/Bundles/DistributiveLattice/
 [Classical.Bundles.Group]: /Classical/Bundles/Group/
 [Classical.Bundles.Lattice]: /Classical/Bundles/Lattice/
 [Classical.Bundles.Magma]: /Classical/Bundles/Magma/
@@ -173,7 +172,6 @@
 [Classical.Small.Structures.CommutativeMonoid]: /Classical/Small/Structures/CommutativeMonoid/
 [Classical.Small.Structures.CommutativeRing]: /Classical/Small/Structures/CommutativeRing/
 [Classical.Small.Structures.CommutativeSemigroup]: /Classical/Small/Structures/CommutativeSemigroup/
-[Classical.Small.Structures.DistributiveLattice]: /Classical/Small/Structures/DistributiveLattice/
 [Classical.Small.Structures.Group]: /Classical/Small/Structures/Group/
 [Classical.Small.Structures.Lattice]: /Classical/Small/Structures/Lattice/
 [Classical.Small.Structures.Magma]: /Classical/Small/Structures/Magma/
@@ -219,12 +217,7 @@
 [Classical.Structures.Interpret]: /Classical/Structures/Interpret/
 [Classical.Structures.Lattice]: /Classical/Structures/Lattice/
 [Classical.Structures.Lattice.Basic]: /Classical/Structures/Lattice/Basic/
-[Classical.Structures.Lattice.DistributiveLattice]: /Classical/Structures/Lattice/DistributiveLattice/
-[Classical.Structures.Lattice.Dual]: /Classical/Structures/Lattice/Dual/
-[Classical.Structures.Lattice.FilterIdeal]: /Classical/Structures/Lattice/FilterIdeal/
-[Classical.Structures.Lattice.OrdinalSum]: /Classical/Structures/Lattice/OrdinalSum/
 [Classical.Structures.Lattice.Partitions]: /Classical/Structures/Lattice/Partitions/
-[Classical.Structures.Lattice.Product]: /Classical/Structures/Lattice/Product/
 [Classical.Structures.Magma]: /Classical/Structures/Magma/
 [Classical.Structures.Monoid]: /Classical/Structures/Monoid/
 [Classical.Structures.Ring]: /Classical/Structures/Ring/
@@ -236,7 +229,6 @@
 [Classical.Theories.CommutativeMonoid]: /Classical/Theories/CommutativeMonoid/
 [Classical.Theories.CommutativeRing]: /Classical/Theories/CommutativeRing/
 [Classical.Theories.CommutativeSemigroup]: /Classical/Theories/CommutativeSemigroup/
-[Classical.Theories.DistributiveLattice]: /Classical/Theories/DistributiveLattice/
 [Classical.Theories.Group]: /Classical/Theories/Group/
 [Classical.Theories.Lattice]: /Classical/Theories/Lattice/
 [Classical.Theories.Monoid]: /Classical/Theories/Monoid/
@@ -266,8 +258,6 @@
 [Examples.Classical.Groups.SymmetricGroup3]: /Examples/Classical/Groups/SymmetricGroup3/
 [Examples.Classical.Lattices]: /Examples/Classical/Lattices/
 [Examples.Classical.Lattices.L2]: /Examples/Classical/Lattices/L2/
-[Examples.Classical.Lattices.L2Distributive]: /Examples/Classical/Lattices/L2Distributive/
-[Examples.Classical.Lattices.L3Heyting]: /Examples/Classical/Lattices/L3Heyting/
 [Examples.Classical.Magma]: /Examples/Classical/Magma/
 [Examples.Classical.Monoid]: /Examples/Classical/Monoid/
 [Examples.Classical.Semigroup]: /Examples/Classical/Semigroup/
@@ -502,7 +492,6 @@
 [Classical/Bundles/CommutativeMonoid.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Bundles/CommutativeMonoid.lagda.md
 [Classical/Bundles/CommutativeRing.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Bundles/CommutativeRing.lagda.md
 [Classical/Bundles/CommutativeSemigroup.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Bundles/CommutativeSemigroup.lagda.md
-[Classical/Bundles/DistributiveLattice.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Bundles/DistributiveLattice.lagda.md
 [Classical/Bundles/Group.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Bundles/Group.lagda.md
 [Classical/Bundles/Lattice.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Bundles/Lattice.lagda.md
 [Classical/Bundles/Magma.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Bundles/Magma.lagda.md
@@ -533,7 +522,6 @@
 [Classical/Small/Structures/CommutativeMonoid.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Small/Structures/CommutativeMonoid.lagda.md
 [Classical/Small/Structures/CommutativeRing.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Small/Structures/CommutativeRing.lagda.md
 [Classical/Small/Structures/CommutativeSemigroup.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Small/Structures/CommutativeSemigroup.lagda.md
-[Classical/Small/Structures/DistributiveLattice.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Small/Structures/DistributiveLattice.lagda.md
 [Classical/Small/Structures/Group.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Small/Structures/Group.lagda.md
 [Classical/Small/Structures/Lattice.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Small/Structures/Lattice.lagda.md
 [Classical/Small/Structures/Magma.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Small/Structures/Magma.lagda.md
@@ -579,12 +567,7 @@
 [Classical/Structures/Interpret.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Interpret.lagda.md
 [Classical/Structures/Lattice.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Lattice.lagda.md
 [Classical/Structures/Lattice/Basic.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Lattice/Basic.lagda.md
-[Classical/Structures/Lattice/DistributiveLattice.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Lattice/DistributiveLattice.lagda.md
-[Classical/Structures/Lattice/Dual.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Lattice/Dual.lagda.md
-[Classical/Structures/Lattice/FilterIdeal.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Lattice/FilterIdeal.lagda.md
-[Classical/Structures/Lattice/OrdinalSum.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Lattice/OrdinalSum.lagda.md
 [Classical/Structures/Lattice/Partitions.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Lattice/Partitions.lagda.md
-[Classical/Structures/Lattice/Product.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Lattice/Product.lagda.md
 [Classical/Structures/Magma.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Magma.lagda.md
 [Classical/Structures/Monoid.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Monoid.lagda.md
 [Classical/Structures/Ring.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Structures/Ring.lagda.md
@@ -596,7 +579,6 @@
 [Classical/Theories/CommutativeMonoid.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Theories/CommutativeMonoid.lagda.md
 [Classical/Theories/CommutativeRing.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Theories/CommutativeRing.lagda.md
 [Classical/Theories/CommutativeSemigroup.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Theories/CommutativeSemigroup.lagda.md
-[Classical/Theories/DistributiveLattice.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Theories/DistributiveLattice.lagda.md
 [Classical/Theories/Group.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Theories/Group.lagda.md
 [Classical/Theories/Lattice.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Theories/Lattice.lagda.md
 [Classical/Theories/Monoid.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Classical/Theories/Monoid.lagda.md
@@ -626,8 +608,6 @@
 [Examples/Classical/Groups/SymmetricGroup3.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Examples/Classical/Groups/SymmetricGroup3.lagda.md
 [Examples/Classical/Lattices.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Examples/Classical/Lattices.lagda.md
 [Examples/Classical/Lattices/L2.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Examples/Classical/Lattices/L2.lagda.md
-[Examples/Classical/Lattices/L2Distributive.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Examples/Classical/Lattices/L2Distributive.lagda.md
-[Examples/Classical/Lattices/L3Heyting.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Examples/Classical/Lattices/L3Heyting.lagda.md
 [Examples/Classical/Magma.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Examples/Classical/Magma.lagda.md
 [Examples/Classical/Monoid.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Examples/Classical/Monoid.lagda.md
 [Examples/Classical/Semigroup.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Examples/Classical/Semigroup.lagda.md
@@ -743,7 +723,6 @@
 [ADR-011]: /adr/011-without-k/
 
 <!-- ===== External links ===== -->
-[Classical.Structures.DistributiveLattice]: /Classical/Structures/Lattice/DistributiveLattice/
 [A Machine-checked proof of Birkhoff's Variety Theorem in Martin-Löf Type Theory]: https://arxiv.org/abs/2101.10166
 [absolute value]: https://en.wikipedia.org/wiki/Absolute_value
 [ADR-dir]: https://github.com/ualib/agda-algebras/tree/master/docs/adr
