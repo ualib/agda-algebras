@@ -934,7 +934,7 @@ The trial's patch is kept outside the repository; redo the port against the rele
 
 ---
 
-### Issue M1-18: Keep slow-to-check modules out of barrels (#603)
+### Issue M1-18: Keep slow-to-check modules out of barrels (#603, closed)
 
 **Labels**: `enhancement`, `milestone-1-infra`, `ci`
 
@@ -5313,6 +5313,67 @@ Values that keep the hue and clear AA:
 These are the values that palette is running under on williamdemeo.github.io, where it is kept as a switchable alternative system — so the adjusted set is already checked on every build by an audit that walks every text element in both themes and composites the background up the ancestor chain.
 
 Everything above comes from `stylesheets/custom.css` and the served HTML as of 2026-08-02; I was not able to run a network trace against the live site from my environment, so the request-level claims are read from the source rather than measured.
+
+---
+
+### Issue M10-8: Restyle the documentation site after williamdemeo.org, and link it with the agda-lattices site (#621)
+
+**Labels**: `documentation`, `milestone-10-polish`
+
+## Description
+
+The documentation site at [agda-algebras.universalalgebra.org] is MkDocs Material built from the `.lagda.md` sources, as ADR-007 decides: Agda's own highlighting, the generated module tree, `/classic/`, the constellation, and a landing page with live statistics and the coverage table.  Its look is the "Aurora" palette of `docs/stylesheets/custom.css`.
+
+[williamdemeo.org] is MkDocs Material too, and its design system, Constellation, was derived from this site's palette and display face and then refined.  The refinements are the following:
+
++  every font self-hosted, with `theme.font: false`;
++  three color values corrected to clear WCAG AA (the findings of [#531]);
++  a page-colored header with a hairline rule instead of a colored bar, and no shadows;
++  dark first, with the light theme a toggle away;
++  a typographic scale and measure tuned for long prose;
++  a 404 page set as an unfilled Agda goal.
+
+This issue brings that design back to this site, so that the library's site and williamdemeo.org read as one family, and so that the new site of ualib/agda-lattices ([ualib/agda-lattices#6]) can take the same theme unchanged.  The two library sites promote each other: each links the other from its navigation, its landing page and its footer.
+
+How pages are generated does not change, and neither do their URLs (`/Module/Sub/`, `/classic/`, the anchors), since links from outside depend on them; only the look and the links between the sites change.
+
+## Tasks
+
++  [ ] The design system: Constellation's tokens in both themes and their mapping onto Material's variables, with its typography, code blocks, tables, admonitions, header, search and footer, replacing the palette sections of `custom.css`.
++  [ ] The theme's shareable part kept in files of its own (the tokens, the colors of Agda's token classes, the font faces), apart from this site's own components, so that a sibling site can copy them unchanged.
++  [ ] Agda's token classes (`.Agda*` spans and `pre.Agda`), with colors derived from the tokens, and every one clearing WCAG AA on the code-block surface in both themes, checked by a script rather than by eye.
++  [ ] Fonts: `theme.font: false`, JuliaMono self-hosted in place of the jsDelivr import (split by Unicode range, so that a page pays only for the notation it shows), unused faces removed, and every glyph Agda's notation needs present (the subsetting trap [#531] describes).
++  [ ] A check that no built page requests anything from another origin, run in CI.
++  [ ] The landing page's components (hero, statistics, carousel, coverage table, cards) restyled on the tokens; the statistics markers that `make corpus-stats-check` gates keep working.
++  [ ] Navigation: keep `navigation.tabs` or adopt williamdemeo.org's left navigation, decided for this site's module tree and recorded with the reason.
++  [ ] A 404 page, and `overrides/` for what CSS cannot reach.
++  [ ] MkDocs Material pinned to a stated version (the flake takes it unversioned from nixpkgs today), with the reason in ADR-007.
++  [ ] Links between the library sites: a navigation entry, a landing-page card and a footer link to agda-lattices (its repository until its site is live, then the site).  The `[William DeMeo]` and `[williamdemeo.org]` definitions in `docs/_links.md`, which point at an old address, point at https://williamdemeo.org.
++  [ ] Comments made stale by ADR-007's amendments, in the files this touches: the headers of `mkdocs.yml`, `.github/workflows/docs.yml` and `flake.nix` say there is no `agda --html` step, and the header of `custom.css` describes faces it no longer uses.
++  [ ] The decisions taken from williamdemeo.org and the ones left, each with its reason, in the pull request; an ADR if any changes ADR-007.
+
+## Acceptance criteria
+
++  [ ] `nix develop --command make site-full` builds under `--strict`, and every CI job passes.
++  [ ] Every text color, Agda's token classes included, clears WCAG AA in both themes, by a script over the built pages.
++  [ ] No page requests a font, a script or a stylesheet from another origin.
++  [ ] The landing page, a module page, a long Agda page, the constellation and the 404 page render in both themes at phone and desktop widths, with no sideways scroll, and the theme toggle survives instant navigation.
++  [ ] No page URL or anchor changes.
++  [ ] The live site links to agda-lattices, and the two library sites look like one design.
+
+## References
+
++  [#531]: the font and contrast findings this issue absorbs; the pull request that closes this issue closes it too.
++  ADR-007 (`docs/adr/007-mkdocs-rendering-pipeline.md`) and ADR-010 (`docs/adr/010-documentation-coverage-policy.md`).
++  [williamdemeo.org]: the design.
++  [formalverification/agda-native-air pull request 181][air-181]: the same design taken for another project's MkDocs site, with a record of what it took, what it left, and the traps on the way.
++  [ualib/agda-lattices#6]: the sibling site, which takes this site's theme.
+
+[#531]: https://github.com/ualib/agda-algebras/issues/531
+[agda-algebras.universalalgebra.org]: https://agda-algebras.universalalgebra.org
+[williamdemeo.org]: https://williamdemeo.org
+[air-181]: https://github.com/formalverification/agda-native-air/pull/181
+[ualib/agda-lattices#6]: https://github.com/ualib/agda-lattices/issues/6
 
 <!-- END GENERATED: milestone-10 -->
 
