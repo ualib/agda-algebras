@@ -35,8 +35,13 @@ Design Principles:
 
 Provenance:
   Ported from the build script of williamdemeo.org's design system
-  ("Constellation"), with the same pins, blocks and instance locations, so the
-  two sites ship byte-for-byte the same JuliaMono, Inter and Space Grotesk.
+  ("Constellation"), with the same pins and instance locations.  Its block
+  lists gained the blocks this library's pages use, each found by `make
+  font-audit` (Latin Extended Additional and Combining Diacritical Marks in
+  the text faces; Miscellaneous Symbols, Miscellaneous Symbols and Arrows,
+  Latin Extended Additional and Specials in JuliaMono), so the faces are a
+  superset of that site's.  The combining marks moved into JuliaMono's text
+  file, beside the letters they sit on (see MONO_TEXT_BLOCKS).
   Dropped in the port: the Newsreader face (the alternative system's display
   face, which this site does not have) and the static TTFs for social cards
   (this site generates none).  Its exits on a hash mismatch became Results.
@@ -105,8 +110,15 @@ PROSE: frozenset[str] = frozenset("‘’“”–—…†‡•·′″⁄←�
 # Blocks every text face carries in full.  Latin Extended-A is not decoration:
 # names such as Jónsson and Ježek appear in this library's prose, and one
 # missing letter renders in another face mid-word.  Greek is the same argument
-# one step out: prose about λ-terms should not change font mid-word.
-TEXT_BLOCKS: tuple[str, ...] = ("Latin Extended-A", "Greek and Coptic", "General Punctuation")
+# one step out: prose about λ-terms should not change font mid-word.  Latin
+# Extended Additional is this site's addition to the upstream list: the library
+# names a module construction Ḡ (U+1E20), and its page title, in Inter, fell to
+# a system face mid-word until `make font-audit` found it (#621).  So are the
+# Combining Diacritical Marks: prose writes Agda's `_̇_` as `𝑝 ̇ 𝑨`, a dot
+# above a space, and the reader got it in Arimo.
+TEXT_BLOCKS: tuple[str, ...] = ("Latin Extended-A", "Latin Extended Additional",
+                                "Combining Diacritical Marks",
+                                "Greek and Coptic", "General Punctuation")
 
 # Blocks Agda notation draws on.  Split in two only to keep the download
 # granular: the mathematical alphanumerics are 997 of JuliaMono's glyphs and
@@ -139,6 +151,14 @@ SYMBOL_BLOCKS: tuple[str, ...] = (
     "Geometric Shapes",
     "Box Drawing",
     "Dingbats",                        # ✓, the coverage table's mark
+    # This site's additions to the upstream list, each found by `make
+    # font-audit` on a real page (#621): ⚠ in the site guide's build log, ⬻
+    # in the standard library's reasoning syntax on /classic/, Ḡ in a module
+    # name, and U+FFFD in Agda.Builtin.Char.
+    "Miscellaneous Symbols",
+    "Miscellaneous Symbols and Arrows",
+    "Latin Extended Additional",
+    "Specials",
 )
 MATHALPHA_BLOCKS: tuple[str, ...] = ("Mathematical Alphanumeric Symbols",)
 
@@ -226,13 +246,23 @@ def block_chars(cmap: frozenset[int], names: tuple[str, ...]) -> frozenset[str]:
     return frozenset(chr(cp) for cp in cmap if block(chr(cp)) in names)
 
 
-def text_charset(cmap: frozenset[int]) -> frozenset[str]:
+def text_charset(cmap: frozenset[int], blocks: tuple[str, ...] = TEXT_BLOCKS) -> frozenset[str]:
     """The prose repertoire: a fixed core, plus whole blocks where present.
 
     The core is requested from every face whether or not the face has it, so
     that a gap is reported rather than quietly dropped.
     """
-    return ASCII | LATIN1 | PROSE | block_chars(cmap, TEXT_BLOCKS)
+    return ASCII | LATIN1 | PROSE | block_chars(cmap, blocks)
+
+
+# JuliaMono's text file is the one every page with code downloads, so Latin
+# Extended Additional, which one module name uses, rides in the symbols file
+# instead (it is in SYMBOL_BLOCKS).  The combining marks must not: a browser
+# picks one face per grapheme cluster, and a face split by unicode-range is
+# several faces, so `g` followed by U+0302 needs the letter and the mark in
+# the same file, or the cluster falls to a system face (`make font-audit`
+# found ̂, ̇ and ̄ in DejaVu Sans Mono in three modules' code).
+MONO_TEXT_BLOCKS: tuple[str, ...] = tuple(b for b in TEXT_BLOCKS if b != "Latin Extended Additional")
 
 
 def agda_repertoire(source: str) -> frozenset[str]:
@@ -369,16 +399,18 @@ def build() -> Result[list[Subset], PipelineError]:
     """Fetch every source and subset every face."""
     def with_mono(mono: bytes, agda_src: bytes) -> Result[list[Subset], PipelineError]:
         cmap = cmap_of(mono)
-        text = text_charset(cmap)
+        text = text_charset(cmap, MONO_TEXT_BLOCKS)
         mathalpha = block_chars(cmap, MATHALPHA_BLOCKS) - text
         agda = frozenset(c for c in agda_repertoire(agda_src.decode("utf-8")) if ord(c) in cmap)
         symbols = (block_chars(cmap, SYMBOL_BLOCKS) | agda) - text - mathalpha
         charsets = {"symbols": symbols, "mathalpha": mathalpha}
 
         def one(face: Face) -> Result[Subset, PipelineError]:
-            return fetch(face.url, face.sha256).map(lambda data: subset(
-                face, data, text_charset(cmap_of(data)) if face.charset == "text"
-                else charsets[face.charset]))
+            def chars(data: bytes) -> frozenset[str]:
+                if face.charset != "text":
+                    return charsets[face.charset]
+                return text if face.family == "JuliaMono" else text_charset(cmap_of(data))
+            return fetch(face.url, face.sha256).map(lambda data: subset(face, data, chars(data)))
         return sequence_results([one(f) for f in FACES])
 
     return fetch(FACES[0].url, FACES[0].sha256).and_then(
