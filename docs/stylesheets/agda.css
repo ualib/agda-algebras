@@ -1,0 +1,146 @@
+/* ==========================================================================
+   File: docs/stylesheets/agda.css
+
+   Agda's highlighting, on the tokens of tokens.css (#621).  Two kinds of
+   markup carry Agda's token classes, and both are colored here:
+
+     +  code blocks, `<pre class="Agda">`, which `agda --html
+        --html-highlight=code` emits with every token an `<a>` classed by its
+        aspect (`Keyword`, `Symbol`) and its name kind (`Function`,
+        `InductiveConstructor`), and hyperlinked to its definition;
+     +  inline names in prose, kramdown attribute spans such as
+        `Algebra`{.AgdaRecord}, which attr_list turns into
+        `<code class="AgdaRecord">`.
+
+   Agda's own stylesheet uses Emacs' defaults, chosen for a white Emacs
+   buffer, and several of them fail WCAG AA as text (#531).  Every color here
+   is a token instead, and each clears AA on the code-block surface,
+   `--c-bg-raised`, in both schemes; tokens.css lists the ratios, and `make
+   contrast-audit` measures them on the rendered pages.
+
+   The assignment keeps Agda's conventions where they carry meaning:
+   keywords orange (the coral), constructors green, fields pink (the rose),
+   modules purple (the violet).  Functions take the site's indigo accent,
+   types and records a blue beside it, literals the amber, and comments and
+   pragmas the faint gray, which is how williamdemeo.org sets them: color
+   only, never italic, since only JuliaMono's regular face ships.  Bound and
+   generalizable variables, and everything unclassed, stay in the text color.
+
+   Part of the shareable theme (tokens.css, theme.css, agda.css,
+   docs/assets/fonts/, overrides/): a sibling site copies it unchanged.
+   ========================================================================== */
+
+/* -- The colors --------------------------------------------------------------
+   Each class sets one custom property, `--agda-ink`, and one rule below turns
+   it into the color.  That indirection is what keeps a token's color when the
+   token is also a link: Material's `.md-typeset a` and `a:hover` rules would
+   otherwise out-specify a bare class selector, and every function would turn
+   link-colored, or coral under the pointer. */
+
+.Agda {
+  --agda-ink: var(--c-fg);
+}
+
+.AgdaKeyword,                pre.Agda .Keyword        { --agda-ink: var(--c-accent-hover); }
+.AgdaComment,                pre.Agda .Comment,
+.AgdaPragma,                 pre.Agda .Pragma         { --agda-ink: var(--c-fg-faint); }
+.AgdaString,                 pre.Agda .String,
+.AgdaNumber,                 pre.Agda .Number,
+.AgdaCoinductiveConstructor, pre.Agda .CoinductiveConstructor { --agda-ink: var(--c-amber); }
+.AgdaSymbol,                 pre.Agda .Symbol         { --agda-ink: var(--c-fg-muted); }
+.AgdaInductiveConstructor,   pre.Agda .InductiveConstructor   { --agda-ink: var(--c-green); }
+.AgdaDatatype,               pre.Agda .Datatype,
+.AgdaRecord,                 pre.Agda .Record,
+.AgdaPrimitiveType,          pre.Agda .PrimitiveType,
+.AgdaPrimitive,              pre.Agda .Primitive      { --agda-ink: var(--c-blue); }
+.AgdaField,                  pre.Agda .Field          { --agda-ink: var(--c-rose); }
+.AgdaFunction,               pre.Agda .Function,
+.AgdaMacro,                  pre.Agda .Macro,
+.AgdaPostulate,              pre.Agda .Postulate      { --agda-ink: var(--c-accent); }
+.AgdaModule,                 pre.Agda .Module         { --agda-ink: var(--c-violet); }
+.AgdaBound,                  pre.Agda .Bound,
+.AgdaGeneralizable,          pre.Agda .Generalizable,
+.AgdaArgument,               pre.Agda .Argument,
+.AgdaMarkup,                 pre.Agda .Markup         { --agda-ink: var(--c-fg); }
+
+/* The problem aspects never reach a page of a library checked under --safe
+   with no warnings, but a page that shows one should show it plainly. */
+pre.Agda .Hole,
+pre.Agda .UnsolvedMeta,
+pre.Agda .UnsolvedConstraint {
+  background-color: var(--c-accent-wash);
+}
+pre.Agda .Error,
+pre.Agda .TerminationProblem,
+pre.Agda .IncompletePattern {
+  --agda-ink: var(--c-error);
+  text-decoration: underline wavy;
+}
+
+/* The one rule that applies the color.  The `.md-typeset` prefix and this
+   file's place after theme.css in mkdocs.yml are what beat Material's link
+   rules; the unprefixed form reaches the copies of a block outside the
+   article (a hover tooltip, the /classic/ pages). */
+.Agda a,
+.md-typeset .Agda a,
+.md-typeset .Agda a:is(:hover, :focus-visible),
+.md-typeset code[class*="Agda"],
+.md-typeset a code[class*="Agda"] {
+  color: var(--agda-ink);
+}
+
+/* -- Code blocks -------------------------------------------------------------
+   The block itself: no inner <code>, its children are the token links.  It
+   wears the hairline box and the code surface every fenced block wears
+   (theme.css), so an Agda block and a shell block read as one kind of
+   thing. */
+.md-typeset pre.Agda {
+  font-family: var(--font-mono), monospace;
+  font-size: var(--type-code);
+  font-weight: 400;
+  font-variant-ligatures: none;
+  line-height: var(--leading-code);
+  color: var(--c-fg);
+  background-color: var(--c-bg-raised);
+  border: var(--border-width) solid var(--c-line);
+  border-radius: var(--radius-md);
+  padding: var(--space-4);
+  margin: var(--space-6) 0;
+  overflow-x: auto;
+  white-space: pre;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Tokens are links to their definitions: keep the token's color, no rule
+   underneath at rest (a block of Agda with every name underlined is
+   unreadable), and an underline on hover so the affordance is
+   discoverable. */
+.Agda a {
+  text-decoration: none;
+  border-bottom: none;
+}
+
+.Agda a[href]:hover {
+  text-decoration: underline;
+  text-decoration-thickness: var(--border-width);
+  text-underline-offset: 0.18em;
+}
+
+/* -- Inline names in prose ---------------------------------------------------
+   A reference such as `Algebra`{.AgdaRecord} reads as a colored mathematical
+   name woven into the sentence, not as a boxed code chip, so the chip's
+   background and padding go.  Plain inline code, with no Agda class, keeps
+   the chip, so shell snippets still stand out. */
+.md-typeset code[class*="Agda"] {
+  background-color: transparent;
+  padding: 0;
+  white-space: pre-wrap;
+  word-break: keep-all;
+}
+
+/* A whisper of a surface on hover helps when scanning a dense paragraph for
+   one name, without coloring the page at rest. */
+.md-typeset code[class*="Agda"]:hover {
+  background-color: var(--c-bg-raised);
+  border-radius: var(--radius-sm);
+}

@@ -29,5 +29,3 @@ module.
   built upon.
 </p>
 
-<script src="/assets/js/d3.v7.min.js"></script>
-<script src="/assets/js/constellation.js"></script>

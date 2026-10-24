@@ -1,0 +1,27 @@
+{#-
+  File: overrides/partials/source.html
+
+  The header's repository chip, without the request it used to make (#621).
+
+  Material's own partial (9.7.6) differs from this one by a single
+  attribute: `data-md-component="source"` on the link.  That attribute is
+  what makes Material's bundle fetch https://api.github.com/repos/<owner>/<repo>
+  (and its latest release) on every page load, to print a version, a star
+  count and a fork count under the repository name.  A page of this site
+  then contacts a third party for every reader, which is what the site's
+  no-off-origin rule forbids, and it does so from a script, so the check
+  over the built HTML cannot see it; only a browser can (`make
+  offline-audit`).
+
+  Without the attribute the chip is a plain link to the repository, which is
+  the useful part.  Part of the shareable theme.
+-#}
+<a href="{{ config.repo_url }}" title="{{ lang.t('source') }}" class="md-source">
+  <div class="md-source__icon md-icon">
+    {% set icon = config.theme.icon.repo or "fontawesome/brands/git-alt" %}
+    {% include ".icons/" ~ icon ~ ".svg" %}
+  </div>
+  <div class="md-source__repository">
+    {{ config.repo_name }}
+  </div>
+</a>

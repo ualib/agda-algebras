@@ -17,7 +17,9 @@ Run by ``mkdocs-gen-files`` during ``mkdocs build`` / ``mkdocs serve``.  It
 
   2.  copies the classic ``agda --html`` site from ``html/`` to ``/classic/``
       (#1) — ``Everything.html`` as the index — so it works under both build and
-      serve, and serves as the stdlib link target for the highlighted code; and
+      serve, and serves as the stdlib link target for the highlighted code.
+      Agda's own ``Agda.css`` is replaced by the site's token colors (#621),
+      so the classic pages clear WCAG AA as the rest of the site does; and
 
   3.  emits ``SUMMARY.md``, the literate-nav file that becomes the navigation.
 
@@ -48,6 +50,7 @@ DOCS_DIR = Path("docs")
 ADR_DIR = DOCS_DIR / "adr"
 AGDA_MD_DIR = Path(".agda-html/md")     # agda --html --html-highlight=code output
 CLASSIC_DIR = Path("html")              # agda --html (classic full-page) output
+STYLESHEETS = DOCS_DIR / "stylesheets"
 
 TOP_LEVEL_ORDER: list[str] = [
     "Overture", "Setoid", "Classical", "Order",
@@ -120,7 +123,7 @@ def reveal_hidden_agda(body: str) -> str:
     ``<!-- … -->`` so GitHub and other plain-Markdown renderers collapse it.
     On the site the block becomes *toggleable* instead of lost: the comment is
     unwrapped and the block tagged ``hidden-source`` — hidden by
-    docs/stylesheets/custom.css until the reader flips the header's
+    docs/stylesheets/site.css until the reader flips the header's
     "Show more Agda" control (docs/assets/js/agda-toggle.js).
     """
     body = HIDDEN_PRE_RE.sub(
@@ -240,12 +243,47 @@ for src_path in modules:
 log.info(f"✅  Mounted {len(modules)} modules ({n_high} highlighted, {n_plain} plain)")
 
 # ---- Classic agda --html site at /classic/ (#1) ---------------------------
+# The pages are Agda's, byte for byte; their stylesheet is not.  Agda's
+# Agda.css colors tokens with Emacs' defaults, several of which fail WCAG AA
+# as text (#531), and names no font, so a page of 𝑨s fell back to whatever the
+# reader's system offers.  /classic/Agda.css is therefore the site's own
+# tokens and token colors (the light scheme, since these pages carry no
+# scheme switch), with JuliaMono from the site's fonts (#621).
+# An @import must precede every other rule, so it heads the file, ahead of the
+# two stylesheets the rest is concatenated with.
+CLASSIC_IMPORT = '@import url("../assets/fonts/fonts.css");\n'
+CLASSIC_GLUE = """
+/* -- /classic/ only (scripts/python/mkdocs_gen_library.py) -------------------
+   Agda's plain HTML pages: the light tokens from :root, the faces from the
+   site's fonts, and the page and block surfaces. */
+body {
+  margin: 0;
+  background-color: var(--c-bg);
+  color: var(--c-fg);
+}
+pre.Agda {
+  margin: 0;
+  padding: 1.5rem;
+  font-family: var(--font-mono), monospace;
+  line-height: 1.5;
+}
+"""
+
+
+def classic_stylesheet() -> bytes:
+    """/classic/Agda.css: the fonts, tokens.css, agda.css, then the glue."""
+    sheets = [(STYLESHEETS / name).read_text(encoding="utf-8")
+              for name in ("tokens.css", "agda.css")]
+    return "\n".join([CLASSIC_IMPORT, *sheets, CLASSIC_GLUE]).encode("utf-8")
+
+
 n_classic = 0
 if CLASSIC_DIR.is_dir():
     for f in sorted(CLASSIC_DIR.iterdir()):
         if f.suffix in (".html", ".css"):
+            data = classic_stylesheet() if f.name == "Agda.css" else f.read_bytes()
             with mkdocs_gen_files.open(f"classic/{f.name}", "wb") as fh:
-                fh.write(f.read_bytes())
+                fh.write(data)
             n_classic += 1
     log.info(f"📦  /classic/: published {n_classic} agda --html pages (index: Everything.html)")
 else:
@@ -303,6 +341,11 @@ if everything_page is not None:
     nav.append(f"    - [Everything (module index)]({everything_page})")
 if CLASSIC_DIR.is_dir():
     nav.append("    - [Classic Agda HTML ↗](classic/Everything.html)")
+# The sibling library (#621), from mkdocs.yml's extra.agda_lattices, which the
+# footer and the landing page's card point at too.
+SIBLING = (mkdocs_gen_files.config.get("extra") or {}).get("agda_lattices")
+if SIBLING:
+    nav.append(f"    - [agda-lattices ↗]({SIBLING})")
 nav.append("- [Constellation](constellation.md)")
 
 nav += [

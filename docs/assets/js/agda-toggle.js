@@ -1,7 +1,7 @@
 /* "Show all Agda" switch for the hidden scaffolding blocks (#431, M10-5).
    Module sources wrap their leading OPTIONS/module/import scaffolding in
    HTML comments; mkdocs_gen_library.py re-surfaces those blocks with the
-   `hidden-source` class, which docs/stylesheets/custom.css hides.  This
+   `hidden-source` class, which docs/stylesheets/site.css hides.  This
    script injects a sliding switch into the Material header that flips
    the `reveal-agda-source` class on <body>, showing or re-hiding every
    `hidden-source` block at once; the choice persists across pages and

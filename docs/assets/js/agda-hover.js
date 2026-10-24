@@ -222,7 +222,7 @@
       if (dom) {
         // Find the definition anchor, then its closest Agda <pre> (works for
         // both mkdocs-wrapped library pages and raw classic Agda pages; blocks
-        // that custom.css hides as `hidden-source` are still in the DOM).
+        // that site.css hides as `hidden-source` are still in the DOM).
         var target = dom.getElementById(info.anchor);
         var pre = target ? target.closest('pre.Agda') : null;
         if (pre) {

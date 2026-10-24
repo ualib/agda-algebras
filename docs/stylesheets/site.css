@@ -1,0 +1,662 @@
+/* ==========================================================================
+   File: docs/stylesheets/site.css
+
+   This site's own components, on the tokens of tokens.css (#621): the
+   landing page (hero, statistics, featured-results carousel, coverage table,
+   cards), the module constellation, and the controls the site's scripts add
+   to Agda's code (the copy button, the "Show all Agda" and "Tooltips" header
+   switches, the hidden-scaffolding notes, the type-on-hover tooltips).
+
+   Not part of the shareable theme: a sibling site copies tokens.css,
+   theme.css, agda.css, docs/assets/fonts/ and overrides/, and writes its own
+   file in this one's place.  Like the shareable files, this one names no raw
+   color except the constellation's night sky, which is dark in both schemes
+   by design and says so where it is set.
+
+   Sections:
+     1.  Landing page: hero, statistics, the featured-results carousel, the
+         coverage table, and Material's card grid.
+     2.  Navigation.
+     3.  The module constellation.
+     4.  Controls on Agda's code: the copy button, the hidden scaffolding,
+         and the header switches.
+     5.  Type-on-hover tooltips.
+   ========================================================================== */
+
+/* -- 1. Landing page ---------------------------------------------------------
+   The hero is set on the page rather than in a colored panel: a display
+   title, the claim in the muted gray, the theorem in the accent, and the
+   actions.  A hairline closes it off from the figures below, which is the
+   design's depth idiom (no shadows, no gradients). */
+
+.md-typeset .ualib-hero {
+  text-align: center;
+  padding: var(--space-12) 0 var(--space-8);
+  margin: 0 0 var(--space-8);
+  border-bottom: var(--border-width) solid var(--c-line);
+}
+
+.md-typeset .ualib-hero h1 {
+  font-size: calc(var(--type-h1) * 1.2);
+  margin: 0 auto var(--space-4);
+}
+
+.md-typeset .ualib-hero .ualib-tagline {
+  color: var(--c-fg-muted);
+  max-width: var(--measure);
+  margin: 0 auto var(--space-6);
+}
+
+@media screen and (max-width: 44.9375em) {
+  .md-typeset .ualib-hero h1 {
+    font-size: var(--type-h1);
+  }
+}
+
+/* The theorem, in the face the library is written in. */
+.md-typeset .ualib-hero .ualib-formula {
+  font-family: var(--font-mono), monospace;
+  font-size: var(--type-h2);
+  color: var(--c-accent);
+  margin: 0 0 var(--space-8);
+}
+
+.md-typeset .ualib-cta {
+  display: flex;
+  gap: var(--space-3);
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.md-typeset .ualib-cta .md-button {
+  margin: 0;
+}
+
+/* The statistics: four cells separated by hairlines made of the grid's gap
+   over a line-colored background, the strip williamdemeo.org uses for its
+   own figures.  The numbers are written by scripts/python/corpus_stats.py
+   into `<!-- ualib:stat:... -->` markers; nothing here touches them. */
+.ualib-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--border-width);
+  background-color: var(--c-line);
+  border: var(--border-width) solid var(--c-line);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  margin: 0 0 var(--space-12);
+  text-align: center;
+}
+
+.ualib-stat {
+  background-color: var(--c-bg-raised);
+  padding: var(--space-4) var(--space-2) var(--space-3);
+}
+
+.ualib-stat__num {
+  display: block;
+  font-family: var(--font-display), var(--font-body), sans-serif;
+  font-size: var(--type-h2);
+  font-weight: var(--display-weight);
+  letter-spacing: var(--tracking-display);
+  line-height: var(--leading-heading);
+  font-variant-numeric: tabular-nums;
+  color: var(--c-accent);
+}
+
+.ualib-stat__label {
+  font-size: var(--type-small);
+  font-weight: var(--strong-weight);
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+  color: var(--c-fg-muted);
+}
+
+@media (max-width: 44em) {
+  .ualib-stats { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* Featured results: one card per landmark theorem, a portrait beside it.  A
+   card is a whole link, so its rule is the card's border, not an underline. */
+.ualib-figure {
+  display: flex;
+  gap: var(--space-4);
+  align-items: center;
+  padding: var(--space-4);
+  border: var(--border-width) solid var(--c-line);
+  border-radius: var(--radius-md);
+  background-color: var(--c-bg-raised);
+  transition: border-color var(--motion-quick);
+}
+
+.md-typeset a.ualib-figure {
+  color: inherit;
+  border-bottom: var(--border-width) solid var(--c-line);
+}
+
+.md-typeset a.ualib-figure:hover,
+.md-typeset a.ualib-figure:focus-visible {
+  border-color: var(--c-accent);
+}
+
+.ualib-portrait {
+  flex: 0 0 auto;
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  border: var(--border-width) solid var(--c-line-strong);
+  background-color: var(--c-bg-sunken);
+}
+
+/* The photographs ease from a little gray to full color on hover, which
+   keeps the gallery cohesive at rest. */
+.ualib-portrait img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  filter: grayscale(0.35) contrast(1.02);
+  transition: filter var(--motion-quick);
+}
+
+.ualib-figure:hover .ualib-portrait img {
+  filter: grayscale(0);
+}
+
+.ualib-figure__body {
+  min-width: 0;
+}
+
+.ualib-figure__result {
+  display: block;
+  font-family: var(--font-display), var(--font-body), sans-serif;
+  font-weight: var(--display-weight);
+  font-size: var(--type-h4);
+  line-height: var(--leading-heading);
+  letter-spacing: var(--tracking-display);
+  color: var(--c-fg);
+  transition: color var(--motion-quick);
+}
+
+.md-typeset a.ualib-figure:hover .ualib-figure__result {
+  color: var(--c-accent-hover);
+}
+
+.ualib-figure__who {
+  display: block;
+  font-size: var(--type-small);
+  color: var(--c-fg-muted);
+  margin-top: var(--space-1);
+}
+
+/* The carousel: one card in focus on a phone, two on a tablet, three on a
+   wide screen, advancing every few seconds (docs/assets/js/carousel.js,
+   which reads `--per` and sizes the step from the measured card).  With
+   JavaScript off it is a row of cards; autoplay yields to
+   prefers-reduced-motion. */
+.ualib-carousel {
+  --per: 1;
+  --gap: var(--space-4);
+  position: relative;
+  margin: var(--space-3) 0 var(--space-8);
+}
+@media (min-width: 720px)  { .ualib-carousel { --per: 2; } }
+@media (min-width: 1024px) { .ualib-carousel { --per: 3; } }
+
+.ualib-carousel__viewport { overflow: hidden; }
+
+.ualib-carousel__track {
+  display: flex;
+  gap: var(--gap);
+  will-change: transform;       /* the transform and its transition are set by JS */
+}
+
+.md-typeset .ualib-carousel .ualib-figure {
+  flex: 0 0 calc((100% - (var(--per) - 1) * var(--gap)) / var(--per));
+  box-sizing: border-box;
+  margin: 0;
+  min-height: 7.4rem;
+}
+
+.ualib-carousel .ualib-figure.is-clone { pointer-events: none; }
+
+.ualib-carousel__dots {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-2);
+  margin-top: var(--space-4);
+}
+
+.ualib-carousel__dot {
+  width: 0.36rem;
+  height: 0.36rem;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background-color: var(--c-line-strong);
+  cursor: pointer;
+  transition: background-color var(--motion-quick);
+}
+
+.ualib-carousel__dot:hover { background-color: var(--c-fg-faint); }
+.ualib-carousel__dot.is-active { background-color: var(--c-accent); }
+
+@media (prefers-reduced-motion: reduce) {
+  .ualib-carousel__track { transition: none; }
+}
+
+/* The coverage table: structures down the side, axioms across the top. */
+.ualib-matrix-wrap {
+  overflow-x: auto;
+  margin: var(--space-3) 0 var(--space-6);
+}
+
+.md-typeset table.ualib-matrix {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--type-small);
+}
+
+.md-typeset .ualib-matrix th,
+.md-typeset .ualib-matrix td {
+  border: var(--border-width) solid var(--c-line);
+  padding: var(--space-1) var(--space-3);
+  text-align: center;
+  white-space: nowrap;
+}
+
+.md-typeset .ualib-matrix thead th {
+  background-color: var(--c-bg-raised);
+  color: var(--c-fg);
+  font-weight: var(--strong-weight);
+}
+
+.md-typeset .ualib-matrix tbody th {
+  text-align: left;
+  font-weight: var(--strong-weight);
+}
+
+.md-typeset .ualib-matrix tbody th a {
+  color: var(--c-fg);
+  border-bottom: none;
+}
+
+.md-typeset .ualib-matrix tbody th a:hover {
+  color: var(--c-accent-hover);
+}
+
+.md-typeset .ualib-matrix .yes   { color: var(--c-accent); font-weight: var(--strong-weight); }
+.md-typeset .ualib-matrix .yes-2,
+.md-typeset .ualib-coral         { color: var(--c-accent-hover); font-weight: var(--strong-weight); }
+
+.md-typeset .ualib-matrix tbody tr:hover td,
+.md-typeset .ualib-matrix tbody tr:hover th {
+  background-color: var(--c-accent-wash);
+}
+
+/* Material's card grid (`<div class="grid cards">`), on the card surface
+   with a hairline that darkens under the pointer; no lift, no shadow. */
+.md-typeset .grid.cards > ul > li,
+.md-typeset .grid > .card {
+  background-color: var(--c-bg-raised);
+  border: var(--border-width) solid var(--c-line);
+  border-radius: var(--radius-md);
+  box-shadow: none;
+  transition: border-color var(--motion-quick);
+}
+
+.md-typeset .grid.cards > ul > li:hover,
+.md-typeset .grid.cards > ul > li:focus-within,
+.md-typeset .grid > .card:hover {
+  border-color: var(--c-line-strong);
+  box-shadow: none;
+}
+
+.md-typeset .grid.cards > ul > li > hr {
+  border-bottom-color: var(--c-line);
+  margin: var(--space-3) 0;
+}
+
+/* -- 2. Navigation ------------------------------------------------------------
+   A clickable section-index page (a barrel module) carries a small weight
+   cue that it is an overview of what sits under it. */
+.md-nav__item--section > .md-nav__link {
+  font-weight: var(--strong-weight);
+}
+
+/* -- 3. The module constellation ----------------------------------------------
+   A night sky in both schemes: the stars are the bright group colors
+   docs/assets/js/constellation.js assigns, which need a dark ground to read.
+   So the sky's colors are the dark scheme's own surfaces, set here once
+   rather than taken from the active scheme. */
+:root {
+  --sky-top: #15172e;            /* the dark scheme's --c-bg-raised */
+  --sky-bottom: #08091a;         /* the dark scheme's --c-bg-sunken */
+  --sky-line: #333757;           /* the dark scheme's --c-line-strong */
+  --sky-fg: #c3c8de;             /* the dark scheme's --c-fg */
+  --sky-fg-muted: #9197b6;       /* the dark scheme's --c-fg-muted */
+}
+
+#constellation {
+  position: relative;
+  height: 640px;
+  border-radius: var(--radius-md);
+  /* The color under the gradient is the sky's darkest stop, which is also
+     what the contrast audit measures the labels against (it reads
+     background-color, not images). */
+  background-color: var(--sky-bottom);
+  background-image: radial-gradient(1100px 520px at 50% -10%, var(--sky-top), var(--sky-bottom) 75%);
+  border: var(--border-width) solid var(--sky-line);
+  margin: var(--space-3) 0 var(--space-4);
+  overflow: hidden;
+  touch-action: none;
+}
+
+.constellation-readout {
+  position: absolute;
+  left: var(--space-3);
+  bottom: var(--space-3);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity var(--motion-quick);
+  background-color: var(--sky-bottom);
+  border: var(--border-width) solid var(--sky-line);
+  border-radius: var(--radius-md);
+  padding: var(--space-2) var(--space-3);
+  max-width: 72%;
+}
+
+.constellation-readout b {
+  display: block;
+  color: var(--sky-fg);
+  font-size: var(--type-ui);
+  font-weight: var(--strong-weight);
+  font-family: var(--font-mono), monospace;
+}
+
+.constellation-readout span {
+  color: var(--sky-fg-muted);
+  font-size: var(--type-ui-small);
+}
+
+.constellation-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-6);
+  font-size: var(--type-small);
+  margin: var(--space-2) 0;
+  color: var(--c-fg-muted);
+}
+
+.constellation-legend span { display: inline-flex; align-items: center; gap: var(--space-2); }
+.constellation-legend i { width: 0.7rem; height: 0.7rem; border-radius: 50%; display: inline-block; }
+.constellation-note { font-size: var(--type-small); color: var(--c-fg-muted); }
+
+/* -- 4. Controls on Agda's code -------------------------------------------------
+   The copy button docs/assets/js/agda-copy.js adds to each highlighted
+   block: Material's content.code.copy reaches only its own `.highlight`
+   blocks, and the agda --html output is a bare `<pre class="Agda">`.  Quiet
+   until the block is hovered or the button has keyboard focus. */
+.md-typeset pre.Agda {
+  position: relative;
+}
+
+.ualib-agda-copy {
+  position: absolute;
+  top: var(--space-2);
+  right: var(--space-2);
+  width: 1.6em;
+  height: 1.6em;
+  padding: 0;
+  display: grid;
+  place-items: center;
+  border: var(--border-width) solid var(--c-line);
+  border-radius: var(--radius-md);
+  background-color: var(--c-bg-raised);
+  color: var(--c-fg-muted);
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity var(--motion-quick), color var(--motion-quick),
+              border-color var(--motion-quick);
+}
+
+.md-typeset pre.Agda:hover .ualib-agda-copy,
+.ualib-agda-copy:focus-visible { opacity: 1; }
+.ualib-agda-copy:hover { color: var(--c-accent-hover); border-color: var(--c-accent-hover); }
+.ualib-agda-copy svg { width: 0.95em; height: 0.95em; }
+.ualib-agda-copy.ualib-copied { color: var(--c-accent); border-color: var(--c-accent); }
+
+/* "Show all Agda" (#431, M10-5).  Module sources wrap their leading
+   OPTIONS, module and import scaffolding in HTML comments, and
+   mkdocs_gen_library.py re-surfaces those blocks tagged `hidden-source`:
+   `<pre class="Agda">` on the highlighted path, a fenced block inside a
+   `<div>` on the plain path.  They stay hidden until
+   docs/assets/js/agda-toggle.js puts `reveal-agda-source` on <body>, a
+   global choice persisted in localStorage like the palette toggle. */
+.md-typeset pre.Agda.hidden-source,
+.md-typeset div.hidden-source {
+  display: none;
+}
+
+body.reveal-agda-source .md-typeset pre.Agda.hidden-source,
+body.reveal-agda-source .md-typeset div.hidden-source {
+  display: block;
+}
+
+/* Click-to-definition must keep working while the scaffolding is hidden:
+   the binders a `private variable` block introduces live inside it.  When
+   the URL fragment targets an anchor in a hidden block, the block shows, so
+   the browser can scroll to it. */
+.md-typeset pre.Agda.hidden-source:has(:target),
+.md-typeset div.hidden-source:has(:target) {
+  display: block;
+}
+
+/* A block revealed locally by its own `▸ hidden code (n lines)` note. */
+.md-typeset pre.Agda.hidden-source.revealed,
+.md-typeset div.hidden-source.revealed {
+  display: block;
+}
+
+/* The note itself: small and quiet, where the hidden block would be, so a
+   page never looks silently truncated; redundant, and hidden, while the
+   global switch already shows everything. */
+.md-typeset .ualib-hidden-note {
+  display: block;
+  margin: var(--space-3) 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--c-fg-muted);
+  font-family: var(--font-mono), monospace;
+  font-size: var(--type-small);
+  cursor: pointer;
+}
+
+.md-typeset .ualib-hidden-note:hover {
+  color: var(--c-accent-hover);
+}
+
+body.reveal-agda-source .md-typeset .ualib-hidden-note {
+  display: none;
+}
+
+/* The header switches (agda-toggle.js "Show all Agda", agda-hover.js
+   "Tooltips").  A label and an icon, then a track whose thumb slides right
+   and takes the accent when the feature is on; `role="switch"` and
+   aria-checked carry the state.  `currentColor` is the header's text color,
+   so the off track reads in both schemes. */
+.ualib-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+  flex-shrink: 0;
+  padding: 0.2em 0.4em;
+  border: 0;
+  background: none;
+  color: inherit;
+  font-family: var(--font-body), sans-serif;
+  font-size: var(--type-ui);
+  line-height: 1.2;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.ualib-switch__label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35em;
+}
+
+.ualib-switch__track {
+  position: relative;
+  flex-shrink: 0;
+  width: 1.85em;
+  height: 1.02em;
+  border-radius: 999px;
+  background-color: color-mix(in srgb, currentColor 24%, transparent);
+  transition: background-color var(--motion-quick);
+}
+
+.ualib-switch__thumb {
+  position: absolute;
+  top: 50%;
+  left: 0.13em;
+  width: 0.76em;
+  height: 0.76em;
+  border-radius: 50%;
+  background-color: var(--c-bg);
+  transform: translateY(-50%);
+  transition: transform var(--motion-quick);
+}
+
+.ualib-switch[aria-checked="true"] .ualib-switch__track {
+  background-color: var(--c-accent);
+}
+
+.ualib-switch[aria-checked="true"] .ualib-switch__thumb {
+  transform: translate(0.83em, -50%);
+}
+
+.ualib-switch:hover .ualib-switch__track {
+  background-color: color-mix(in srgb, currentColor 36%, transparent);
+}
+
+.ualib-switch[aria-checked="true"]:hover .ualib-switch__track {
+  background-color: var(--c-accent-hover);
+}
+
+.ualib-switch:focus-visible {
+  outline: 2px solid var(--c-accent);
+  outline-offset: 3px;
+  border-radius: var(--radius-md);
+}
+
+.agda-logo-icon { width: 1.15em; height: 1.15em; }
+.agda-tip-icon  { width: 1.05em; height: 1.05em; }
+
+/* On narrow headers (menu, title, palette, search) an unshrinkable control
+   would crush the page title, so both switches leave below the breakpoint
+   at which Material hides its repository chip.  Phones keep the defaults,
+   which is the right reading mode there anyway. */
+@media screen and (max-width: 59.9844em) {
+  .ualib-switch {
+    display: none;
+  }
+}
+
+/* -- 5. Type-on-hover tooltips (#429, M10-3) -------------------------------------
+   docs/assets/js/agda-hover.js pairs each linked token with the `<a id>` at
+   its definition and, on hover, shows a popover with a snippet of that
+   definition.  The popover is a raised surface with a hairline, like every
+   other layer here.  The snippet carries `class="Agda"` too, so agda.css
+   colors its tokens. */
+:root {
+  --agda-tip-width: min(34rem, 90vw);
+  --agda-tip-ch: 68ch;
+}
+
+.agda-tooltip {
+  position: absolute;
+  z-index: 2000;
+  max-width: var(--agda-tip-width);
+  background-color: var(--c-bg);
+  color: var(--c-fg);
+  border: var(--border-width) solid var(--c-line-strong);
+  border-radius: var(--radius-md);
+  opacity: 1;
+  pointer-events: none;
+}
+
+.agda-tooltip.hidden {
+  opacity: 0;
+  visibility: hidden;   /* also drop it from hit-testing and the a11y tree */
+}
+
+.agda-tooltip .agda-tooltip-inner {
+  padding: var(--space-2) var(--space-3);
+  font-size: var(--type-ui);
+  line-height: 1.4;
+}
+
+.agda-tip-head {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+  margin-bottom: var(--space-1);
+  font-weight: var(--strong-weight);
+}
+
+.agda-kind {
+  font-size: var(--type-ui-small);
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+  color: var(--c-fg-muted);
+}
+
+.agda-name {
+  font-family: var(--font-mono), monospace;
+  font-weight: 400;
+  color: inherit;
+}
+
+.agda-module {
+  margin-left: auto;
+  font-size: var(--type-ui-small);
+  color: var(--c-fg-muted);
+}
+
+/* The snippet: cloned from the target page's tokens, so it is set in the
+   code surface; `white-space: pre` keeps Agda's spacing, and long types
+   scroll rather than wrap or clip. */
+.agda-tip-snippet {
+  margin: var(--space-1) 0 0;
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-sm);
+  background-color: var(--c-bg-raised);
+  font-family: var(--font-mono), monospace;
+  font-size: var(--type-ui);
+  line-height: 1.5;
+  white-space: pre;
+  max-width: var(--agda-tip-ch);
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.agda-tip-snippet a {
+  cursor: inherit;
+}
+
+.agda-tip-empty {
+  margin: var(--space-1) 0 0;
+  font-size: var(--type-ui-small);
+  color: var(--c-fg-muted);
+}
+
+.agda-tip-loading {
+  font-style: italic;
+  color: var(--c-fg-muted);
+}

@@ -114,7 +114,7 @@ def _cache_bust(entry, docs_dir: Path):
 def on_config(config):
     """Cache-bust the site's own CSS/JS (#429).
 
-    The deployed assets carry a multi-hour ``max-age``, so when custom.css or a
+    The deployed assets carry a multi-hour ``max-age``, so when a stylesheet or a
     ``docs/assets/js/*.js`` file changes, a returning visitor can render a stale
     mix — e.g. an updated script against a cached older stylesheet — until the
     cache expires.  Appending an 8-char content hash to each local extra_css /

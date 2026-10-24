@@ -147,7 +147,7 @@ column an equational axiom it satisfies.
 
 </div>
 
-<small>Rings carry two operations; <span style="color:var(--chalk-coral)">coral ✓</span> marks an axiom of the additive group, plain ✓ the shared/multiplicative axioms.</small>
+<small>Rings carry two operations; <span class="ualib-coral">coral ✓</span> marks an axiom of the additive group, plain ✓ the shared/multiplicative axioms.</small>
 
 ## Explore
 
@@ -184,6 +184,14 @@ column an equational axiom it satisfies.
     The 3.0 reconstruction in milestones M1–M10 — classical structures, the Cubical track, corpus artifacts.
 
     [:octicons-arrow-right-24: Roadmap](GITHUB_PROJECT.md)
+
+-   :material-graph-outline:{ .lg .middle } &nbsp; **The sibling library**
+
+    ---
+
+    Lattice theory built on this library: free lattices, Whitman's solution of the word problem, Nation's theorem, projective lattices.
+
+    [:octicons-arrow-right-24: agda-lattices][agda-lattices]
 
 </div>
 
