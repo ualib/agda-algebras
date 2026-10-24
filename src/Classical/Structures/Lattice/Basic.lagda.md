@@ -491,10 +491,8 @@ eqsToLattice A _∧'_ _∨'_ ∧-assoc-≡ ∧-comm-≡ ∧-idem-≡ ∨-assoc-�
 
 `eqsToLattice`{.AgdaFunction} covers carriers with propositional equality; the
 constructions that build one lattice out of others (the binary product, the dual,
-and the ordinal sum of [Classical.Structures.Lattice.Product][],
-[Classical.Structures.Lattice.Dual][], and
-[Classical.Structures.Lattice.OrdinalSum][]) produce *setoid* carriers, so they
-need the general form.
+and the ordinal sum, which the library ualib/agda-lattices builds on this one)
+produce *setoid* carriers, so they need the general form.
 
 `setoidOpsToBareLattice`{.AgdaFunction} assembles the `Sig-Lattice` algebra from a
 carrier setoid, two binary operations, and their congruence proofs (which the

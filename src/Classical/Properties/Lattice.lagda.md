@@ -198,9 +198,8 @@ through absorption twice.
 **Extrema**.  `IsTop t` says `t` is a greatest element of the meet order, and
 `IsBottom b` that `b` is a least one.  An arbitrary lattice need not have either; the
 predicates state the universal property of a *chosen* extremum, and by antisymmetry
-any two choices are `≈`-equal.  Constructions that glue lattices at their ends — the
-ordinal sum of [Classical.Structures.Lattice.OrdinalSum][] — consume exactly this
-data.
+any two choices are `≈`-equal.  Constructions that glue lattices at their ends, such
+as an ordinal sum, consume exactly this data.
 
 ```agda
   -- t is a top (greatest) element of the meet order.

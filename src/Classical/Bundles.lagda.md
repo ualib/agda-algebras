@@ -38,7 +38,6 @@ open import Classical.Bundles.AbelianGroup public
 open import Classical.Bundles.CommutativeMonoid public
 open import Classical.Bundles.CommutativeRing public
 open import Classical.Bundles.CommutativeSemigroup public
-open import Classical.Bundles.DistributiveLattice public
 open import Classical.Bundles.Group public
 open import Classical.Bundles.Lattice public
 open import Classical.Bundles.Magma public

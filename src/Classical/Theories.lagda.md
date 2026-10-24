@@ -35,7 +35,6 @@ open import Classical.Theories.CommutativeMonoid public
 open import Classical.Theories.CommutativeSemigroup public
 open import Classical.Theories.AbelianGroup public
 open import Classical.Theories.CommutativeRing public
-open import Classical.Theories.DistributiveLattice public
 open import Classical.Theories.Group public
 open import Classical.Theories.Lattice public
 open import Classical.Theories.Monoid public
