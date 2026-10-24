@@ -1,0 +1,3 @@
+# The fonts' OFL licenses are kept byte for byte as their upstreams ship them
+# (CRLF line endings), so that `make fonts`, which writes them, leaves no diff.
+docs/assets/fonts/OFL-*.txt -text
