@@ -265,6 +265,7 @@ pre.Agda {
   margin: 0;
   padding: 1.5rem;
   font-family: var(--font-mono), monospace;
+  font-variant-ligatures: none;  /* JuliaMono would draw `-->` as one arrow */
   line-height: 1.5;
 }
 """

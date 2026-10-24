@@ -638,6 +638,7 @@ body.reveal-agda-source .md-typeset .ualib-hidden-note {
   border-radius: var(--radius-sm);
   background-color: var(--c-bg-raised);
   font-family: var(--font-mono), monospace;
+  font-variant-ligatures: none;
   font-size: var(--type-ui);
   line-height: 1.5;
   white-space: pre;
