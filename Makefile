@@ -231,11 +231,15 @@ offline-check-test:
 	@echo "target: $@"
 	python3 scripts/python/theme/test_check_offline.py
 
+AUDIT_SCRIPT_contrast-audit := audit_contrast.mjs
+AUDIT_SCRIPT_font-audit     := audit_fonts.mjs
+AUDIT_SCRIPT_offline-audit  := audit_offline.mjs
+
 contrast-audit font-audit offline-audit:
 	@echo "target: $@"
 	@command -v $(NODE) >/dev/null || { echo "  error: node 22 or later is required for $@"; exit 2; }
 	@test -f $(SITE_DIR)/index.html || { echo "  error: $(SITE_DIR)/index.html missing; run 'make site-full' first."; exit 2; }
-	$(NODE) scripts/js/audit_$(subst -audit,,$@).mjs $(SITE_DIR) $(AUDIT_PAGES)
+	$(NODE) scripts/js/$(AUDIT_SCRIPT_$@) $(SITE_DIR) $(AUDIT_PAGES)
 
 design-audit: contrast-audit font-audit offline-audit
 
