@@ -190,7 +190,13 @@ licenses and `fonts.css`; `make fonts-check` reports whether the committed files
 still match.  Subset by block, never by a list of characters: a list from
 `agda-input.el` misses ℓ, Π and the subscript digits, which Agda's input method
 inherits from Emacs.  `make font-audit` asks a browser which face drew every
-character on every page, and fails on any system font.
+character on every page, and fails on any system font.  The block lists are
+williamdemeo.org's plus the blocks this site's pages turned out to use (the
+script's comments name each and the page that needed it); a new character
+outside them shows up there first.  Emoji are left to the system's emoji face,
+and one gap is known and allowed: the fullwidth braces (U+FF5B, U+FF5D) of the standard
+library's singleton notation, which no face here carries, on /classic/ and in
+the frozen `Legacy/` tree (`KNOWN_GAPS` in `scripts/js/audit_fonts.mjs`).
 
 ### The audits
 

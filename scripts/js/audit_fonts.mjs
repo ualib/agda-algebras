@@ -48,12 +48,23 @@ function pages(dir) {
   return out;
 }
 
-// Runs in the page.  For every (font properties, character) pair not in
+// Runs in the page.  First it loads every declared face: a face split by
+// unicode-range loads only when a character in its range is laid out, and a
+// probe laid out before its file arrives keeps reporting the system fallback
+// for a glyph that ships, even after the file has loaded (the first
+// mathematical letter on a page did, whichever letter it was, in the first
+// full runs).  With every face loaded first, a fallback means the glyph is
+// missing.  (It is serialized into the page, so it can call nothing defined
+// out here.)  Then, for every (font properties, character) pair not in
 // `seen`, append a probe span holding only that character to an element that
 // has it, and return the new pairs.  Material's icons are SVG and carry no
 // text; the screen-reader-only and display:none parts are skipped because
 // nothing rasterizes them.
-const PLANT = seen => {
+const PLANT = seen => Promise.all([...document.fonts].map(f => f.load().catch(() => null)))
+    .then(() => document.fonts.ready).then(() => {
+  // Pictographs with a text presentation that the code face carries, so they
+  // are measured like any other character.
+  const TEXT_PRESENTATION = new Set([...'⚠✓✔✗✘☐☑★☆♠♣♥♦⚙']);
   const known = new Set(seen);
   const planted = [];
   document.body.classList.add('reveal-agda-source');
@@ -67,12 +78,21 @@ const PLANT = seen => {
     const props = `${cs.fontFamily}|${cs.fontWeight}|${cs.fontStyle}`;
     for (const ch of new Set(t.nodeValue)) {
       if (/\s/u.test(ch) || ch.codePointAt(0) < 0x21) continue;
+      // Emoji are drawn by the system's emoji face by design: no webfont
+      // here ships pictographs, and none should.
+      if (/\p{Extended_Pictographic}/u.test(ch) && !TEXT_PRESENTATION.has(ch)) continue;
       const key = props + '\u0000' + ch;
       if (known.has(key)) continue;
       known.add(key);
+      // Each probe is set off by a space, and a combining mark gets a
+      // no-break space as its base.  Side by side, a mark's probe fused with
+      // the probe before it into one cluster (𝑨 with U+0307, from `𝑝 ̇ 𝑨`),
+      // which only a system math face could draw as a pair, and the audit
+      // blamed 𝑨.
       const span = document.createElement('span');
-      span.textContent = ch;
+      span.textContent = /\p{M}/u.test(ch) ? '\u00A0' + ch : ch;
       span.setAttribute('data-fontprobe', String(planted.length));
+      el.appendChild(document.createTextNode(' '));
       el.appendChild(span);
       planted.push({ key, ch, family: cs.fontFamily.split(',')[0].trim(),
                      where: (el.tagName + (el.className && typeof el.className === 'string'
@@ -80,7 +100,7 @@ const PLANT = seen => {
     }
   }
   return document.fonts.ready.then(() => planted);
-};
+});
 
 const server = await serve(SITE);
 const browser = await launch();
@@ -112,6 +132,15 @@ const files = pages(SITE).sort().filter(f => {
   const rel = path.relative(SITE, f);
   return PREFIXES.length === 0 || PREFIXES.some(p => rel.startsWith(p));
 });
+// Characters no face here carries, allowed on the pages that use them, each
+// with its reason.  An entry must name a page prefix: a gap that spreads to a
+// new page fails until it is looked at.
+const KNOWN_GAPS = [
+  { chars: '｛｝', prefix: 'Legacy/', why: 'fullwidth braces in the frozen Legacy tree; JuliaMono has no fullwidth forms' },
+  { chars: '｛｝', prefix: 'classic/', why: "the standard library's singleton notation ｛_｝ (Relation.Unary), and the Legacy tree's, on the classic pages" },
+];
+const knownGap = (ch, page) => KNOWN_GAPS.some(g => g.chars.includes(ch) && page.startsWith(g.prefix));
+const allowed = [];
 const seen = [];
 const faces = new Map();       // familyName -> { custom, glyphs, pages: Set }
 const failures = [];
@@ -131,13 +160,19 @@ for (const file of files) {
   const reports = await probeFonts();
   planted.forEach((p, i) => {
     if (!reports.has(i)) { lost.push(p); return; }
-    seen.push(p.key);
+    // A pair allowed as a known gap here stays unseen, so the same character
+    // on a page outside the gap's prefix is probed again, and fails there.
+    const gap = reports.get(i).some(f => !f.isCustomFont) && knownGap(p.ch, rel);
+    if (!gap) seen.push(p.key);
     for (const f of reports.get(i)) {
       const rec = faces.get(f.familyName) || { custom: f.isCustomFont, glyphs: 0, pages: new Set() };
       rec.glyphs += f.glyphCount;
       rec.pages.add(rel);
       faces.set(f.familyName, rec);
-      if (!f.isCustomFont) failures.push({ page: rel, ch: p.ch, stack: p.family, where: p.where, face: f.familyName });
+      if (!f.isCustomFont) {
+        const rec = { page: rel, ch: p.ch, stack: p.family, where: p.where, face: f.familyName };
+        (knownGap(p.ch, rel) ? allowed : failures).push(rec);
+      }
     }
   });
 }
@@ -186,6 +221,10 @@ for (const [family, rec] of [...faces].sort((a, b) => b[1].glyphs - a[1].glyphs)
 const unmeasured = lost.filter(p => !seen.includes(p.key));
 console.log(`unmeasured    : ${unmeasured.length} pair(s) whose every probe was re-rendered away` +
             (unmeasured.length ? ` (${[...new Set(unmeasured.map(p => p.where))].join(', ')})` : ''));
+if (allowed.length) {
+  console.log(`known gaps    : ${allowed.length} allowed (${[...new Set(allowed.map(a => a.ch))].join(' ')}), ` +
+              `on ${[...new Set(allowed.map(a => a.page))].length} page(s); see KNOWN_GAPS`);
+}
 console.log(`\nAgda probe: ${PROBE.length - probeBad.length}/${PROBE.length} characters rendered in JuliaMono`);
 if (failures.length) {
   console.log(`\n--- characters rendered in a system font (${failures.length}) ---`);
