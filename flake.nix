@@ -124,26 +124,51 @@
       # each other rather than merge, so every Python dependency of the repo
       # belongs in this list.
       #
-      # The list is the MkDocs rendering pipeline (ADR-007).  `make site` and
-      # `make serve` build the documentation site directly from the
-      # `.lagda.md` sources, with no `agda --html` step, relying on kramdown
-      # attribute spans and custom CSS for inline Agda highlighting.  Pinning
-      # the whole stack here makes `nix develop --command make site`
-      # reproduce CI's site build exactly, the same way the Agda env
-      # reproduces `make check`.  mkdocs-material transitively supplies
-      # pymdown-extensions (attr_list / snippets), but we list it explicitly
-      # to document intent.  The rest of the script tooling under
-      # scripts/python/ is stdlib-only by design, so it adds nothing here.
+      # Most of the list is the MkDocs rendering pipeline (ADR-007).  `make
+      # site` builds the documentation site from the `.lagda.md` sources, with
+      # code blocks plain; `make site-full` first runs `agda --html` twice
+      # (`make html` for /classic/, `make agda-md` for the highlighted,
+      # hyperlinked code blocks) and is what CI publishes.  Pinning the whole
+      # stack here makes `nix develop --command make site-full` reproduce CI's
+      # site build exactly, the same way the Agda env reproduces `make check`.
+      # mkdocs-material transitively supplies pymdown-extensions (attr_list /
+      # snippets), but we list it explicitly to document intent.  fonttools and
+      # brotli are `make fonts`' (scripts/python/theme/build_fonts.py), which
+      # regenerates the committed webfonts; nothing else in scripts/python/
+      # needs a package outside the standard library.
+      #
+      # Material is pinned to a stated version rather than taken as whatever
+      # nixpkgs ships (ADR-007, Decision 8, #621).  The version is the one this
+      # site already rendered with when the pin was set, so the pin changes no
+      # output; it means a `nix flake update` can no longer move the theme as a
+      # side effect.  To move it, change materialVersion and materialHash
+      # together (`nix store prefetch-file` on the sdist URL prints the hash),
+      # in a change of its own.  The PyPI sdist carries the prebuilt
+      # `material/` tree, so the override is a pure-Python build of seconds.
+      materialVersion = "9.7.6";
+      materialHash = "sha256-AL3eUFdPd20yixhi/mXa6vWB7DCb0VD3v/NFoJjGSmk=";
+      mkMaterial = p: p.mkdocs-material.overridePythonAttrs (_: {
+        version = materialVersion;
+        src = p.fetchPypi {
+          pname = "mkdocs_material";
+          version = materialVersion;
+          hash = materialHash;
+        };
+      });
+
       mkPythonEnv = pkgs: pkgs.python3.withPackages (p: [
         # -- documentation site (ADR-007) --
         p.mkdocs                  # static-site generator
-        p.mkdocs-material         # Material theme
+        (mkMaterial p)            # Material theme, pinned above
         p.mkdocs-macros           # {{ vars }} / Jinja2 site variables
         p.mkdocs-redirects        # legacy Module.Submodule.html → new URLs
         p.mkdocs-gen-files        # mount src/**/*.lagda.md as site pages
         p.mkdocs-literate-nav     # library nav from a generated SUMMARY.md
         p.mkdocs-section-index    # clickable section-landing pages
         p.pymdown-extensions      # attr_list companions + snippets auto_append
+        # -- self-hosted webfonts (make fonts) --
+        p.fonttools               # subsetting and variable-font instancing
+        p.brotli                  # WOFF2 compression
       ]);
 
       # ---- Project-local AGDA_DIR + agda() wrapper ------------------------
@@ -205,7 +230,7 @@ EOF
           stdlibVer = agdaPkgs.standard-library.version;
           agdaVer = agdaPkgs.agda.version;
           mkdocsVer = pkgs.python3Packages.mkdocs.version;
-          materialVer = pkgs.python3Packages.mkdocs-material.version;
+          materialVer = (mkMaterial pkgs.python3Packages).version;
         in {
           default = pkgs.mkShell {
             name = "agda-algebras-dev";
