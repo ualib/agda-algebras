@@ -44,13 +44,25 @@ let current = '';
 const external = [];
 const byType = new Map();
 
+// Same-origin is a property of the parsed URL, not of its spelling: a URL
+// that merely starts with the origin can name another host
+// (`http://127.0.0.1:<port>@example.invalid/x.css` is a request to
+// example.invalid, and Chromium sends it), so a prefix test passed it.
+// data: and blob: are inline content, and count as local.
+const sameOrigin = url => {
+  try {
+    const u = new URL(url);
+    return u.origin === server.origin || u.protocol === 'data:' || u.protocol === 'blob:'
+      || url === 'about:blank';
+  } catch {
+    return false;                 // an unparsable URL is not proven local
+  }
+};
+
 page.on('Network.requestWillBeSent', ({ request, type }) => {
   const url = request.url;
   byType.set(type || 'Other', (byType.get(type || 'Other') || 0) + 1);
-  if (url.startsWith(server.origin) || url.startsWith('data:') || url.startsWith('blob:')
-      || url === 'about:blank') {
-    return;
-  }
+  if (sameOrigin(url)) return;
   external.push({ page: current, url, type: type || 'Other' });
 });
 
