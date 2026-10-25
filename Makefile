@@ -32,7 +32,7 @@
 #      where a path segment happens to contain the substring `agda`.
 # =============================================================================
 
-.PHONY: default all check test clean site serve serve-full html agda-md site-full fonts fonts-check offline-check offline-check-test contrast-audit font-audit offline-audit design-audit profile project-plan unused-imports unused-imports-test check-links check-links-test gen-links barrels barrels-test span-classes span-classes-test corpus-stats corpus-stats-check corpus-stats-test docstrings docstrings-test docstrings-list docstrings-unused docstrings-json groups-test Everything.agda EverythingLegacy.agda
+.PHONY: default all check test clean site serve serve-full html agda-md site-full fonts fonts-check fonts-test offline-check offline-check-test contrast-audit font-audit offline-audit design-audit profile project-plan unused-imports unused-imports-test check-links check-links-test gen-links barrels barrels-test span-classes span-classes-test corpus-stats corpus-stats-check corpus-stats-test docstrings docstrings-test docstrings-list docstrings-unused docstrings-json groups-test Everything.agda EverythingLegacy.agda
 
 # -- Configuration -----------------------------------------------------------
 SRCDIR    := src
@@ -195,8 +195,9 @@ site-full:
 #
 #   fonts               regenerate docs/assets/fonts/ from the pinned sources
 #                       (needs the network once; the outputs are committed)
-#   fonts-check         fail if the committed fonts differ from what the pins
-#                       produce; writes nothing
+#   fonts-check         fail if a committed font, fonts.css or license differs
+#                       from what the pins produce; writes nothing
+#   fonts-test          the check's own tests (needs fontTools: nix develop)
 #   offline-check       fail if a built page or stylesheet references another
 #                       origin (the CI gate, run after the site is built)
 #   offline-check-test  the checker's own test suite (pure Python)
@@ -222,6 +223,10 @@ fonts:
 fonts-check:
 	@echo "target: $@"
 	python3 scripts/python/theme/build_fonts.py --check
+
+fonts-test:
+	@echo "target: $@"
+	python3 scripts/python/theme/test_build_fonts.py
 
 offline-check:
 	@echo "target: $@"

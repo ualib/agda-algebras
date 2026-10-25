@@ -206,10 +206,16 @@ FACES: tuple[Face, ...] = (
          SPACE_GROTESK_SHA, weight=600, axes={"wght": 600}),
 )
 
-LICENSES: tuple[tuple[str, str], ...] = (
-    ("OFL-JuliaMono.txt", f"{JM}/LICENSE"),
-    ("OFL-Inter.txt", f"{GF}/inter/OFL.txt"),
-    ("OFL-SpaceGrotesk.txt", f"{GF}/spacegrotesk/OFL.txt"),
+# Each face's license, copied verbatim beside it, and pinned by SHA-256 like
+# the faces: the URLs name branches, and a license that changed upstream
+# should stop the build for a reader, not slip into the next commit.
+LICENSES: tuple[tuple[str, str, str], ...] = (
+    ("OFL-JuliaMono.txt", f"{JM}/LICENSE",
+     "bae3beff9e15f1a680c2764c4bbdb25b995b9bf539aeaf8467482a495c75ad0c"),
+    ("OFL-Inter.txt", f"{GF}/inter/OFL.txt",
+     "5b9321a4298cfeb6b34354164a1c3afc3db114569984c502b9b35d988fd58c57"),
+    ("OFL-SpaceGrotesk.txt", f"{GF}/spacegrotesk/OFL.txt",
+     "564ce565c371c5e5bbf286006565a7c9aa55a9f56e7ca58d56e05d649dd61a72"),
 )
 
 
@@ -418,26 +424,42 @@ def build() -> Result[list[Subset], PipelineError]:
             lambda agda_src: with_mono(mono, agda_src)))
 
 
-def stale(subsets: list[Subset], css: str) -> list[str]:
-    """The committed files that differ from what the pins produce."""
-    def differs(path: Path, content: bytes) -> bool:
-        return not path.exists() or path.read_bytes() != content
-    return ([s.face.out for s in subsets if differs(OUT / s.face.out, s.blob)]
-            + (["fonts.css"] if differs(OUT / "fonts.css", css.encode()) else []))
+def outputs(subsets: list[Subset], css: str, licenses: Mapping[str, bytes]) -> dict[str, bytes]:
+    """Every file `make fonts` writes, by name under docs/assets/fonts/.
+
+    The one list both modes use, so `--check` compares exactly what a run
+    would write: the faces, the stylesheet, and the licenses.  (The check once
+    compared only the first two, and passed an edited license.)
+    """
+    return ({s.face.out: s.blob for s in subsets}
+            | {"fonts.css": css.encode("utf-8")}
+            | dict(licenses))
 
 
-def write(subsets: list[Subset], css: str) -> Result[list[str], PipelineError]:
-    """Write the faces, the stylesheet and the licences."""
-    def licence(name: str, url: str) -> Result[str, PipelineError]:
-        def save(data: bytes) -> str:
-            (OUT / name).write_bytes(data)
-            return name
-        return fetch(url).map(save)
-    OUT.mkdir(parents=True, exist_ok=True)
-    for s in subsets:
-        (OUT / s.face.out).write_bytes(s.blob)
-    (OUT / "fonts.css").write_text(css, encoding="utf-8")
-    return sequence_results([licence(n, u) for n, u in LICENSES])
+def stale(out: Path, expected: Mapping[str, bytes]) -> list[str]:
+    """The names under `out` whose bytes differ from `expected`, or are missing."""
+    def differs(name: str) -> bool:
+        path = out / name
+        return not path.is_file() or path.read_bytes() != expected[name]
+    return sorted(name for name in expected if differs(name))
+
+
+def fetch_licenses() -> Result[dict[str, bytes], PipelineError]:
+    """The pinned licenses, by output name."""
+    def one(name: str, url: str, sha: str) -> Result[tuple[str, bytes], PipelineError]:
+        return fetch(url, sha).map(lambda data: (name, data))
+    return sequence_results([one(*lic) for lic in LICENSES]).map(dict)
+
+
+def write(out: Path, files: Mapping[str, bytes]) -> Result[list[str], PipelineError]:
+    """Write every output file under `out`."""
+    try:
+        out.mkdir(parents=True, exist_ok=True)
+        for name, data in files.items():
+            (out / name).write_bytes(data)
+    except OSError as e:
+        return Result.err(PipelineError(ErrorType.COMMAND_FAILED, f"cannot write {out}", cause=e))
+    return Result.ok(sorted(files))
 
 
 def main() -> int:
@@ -445,18 +467,18 @@ def main() -> int:
     ap.add_argument("--check", action="store_true", help="report what would change; write nothing")
     args = ap.parse_args()
 
-    built = build()
-    if built.is_err:
-        print(f"error: {built.unwrap_err()}", file=sys.stderr)
+    planned = build().and_then(lambda subsets: fetch_licenses().map(
+        lambda licenses: (subsets, outputs(subsets, stylesheet(subsets), licenses))))
+    if planned.is_err:
+        print(f"error: {planned.unwrap_err()}", file=sys.stderr)
         return 1
-    subsets = built.unwrap()
-    css = stylesheet(subsets)
+    subsets, files = planned.unwrap()
     print(report(subsets))
     if args.check:
-        old = stale(subsets, css)
+        old = stale(OUT, files)
         print("\nstale: " + ", ".join(old) + "\nrun `make fonts`" if old else "\nup to date")
         return 1 if old else 0
-    wrote = write(subsets, css)
+    wrote = write(OUT, files)
     if wrote.is_err:
         print(f"error: {wrote.unwrap_err()}", file=sys.stderr)
         return 1

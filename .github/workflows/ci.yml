@@ -331,6 +331,13 @@ jobs:
           nix develop --command make site
           nix develop --command make offline-check
 
+      # Pure, and needs only fontTools from the shell: the check that keeps
+      # the committed fonts, fonts.css and licenses what the pins produce.
+      - name: The font check compares every file it writes
+        run: |
+          set -euxo pipefail
+          nix develop --command make fonts-test
+
   # ---------------------------------------------------------------------------
   # Aggregate status: a single stable required-check name for branch
   # protection.  Uses `if: always()` so that skipped/conditional jobs added
