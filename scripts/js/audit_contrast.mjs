@@ -70,14 +70,24 @@ const MEASURE = () => {
   });
 
   // The effective background: the first opaque ancestor color, with any
-  // translucent layers above it composited back down in order.
+  // translucent layers above it composited back down in order.  A
+  // background image (a gradient, a picture) cannot be composited from
+  // computed style, so text that sits over one, on an element whose own
+  // color is not opaque beneath it, is reported as unmeasured instead of
+  // being measured against whatever color lies further up the tree, which
+  // can give a false pass as easily as a false failure.  An image laid over
+  // an opaque color is measured against that color, so give such a panel the
+  // color of its darkest (or lightest) stop.
   const background = el => {
     const stack = [];
     for (let n = el; n; n = n.parentElement) {
-      const c = parse(getComputedStyle(n).backgroundColor);
+      const cs = getComputedStyle(n);
+      const c = parse(cs.backgroundColor);
+      const opaque = c && c.a === 1;
+      if (cs.backgroundImage !== 'none' && !opaque) return null;
       if (!c || c.a === 0) continue;
       stack.push(c);
-      if (c.a === 1) break;
+      if (opaque) break;
     }
     let acc = stack.pop() || { r: 255, g: 255, b: 255, a: 1 };
     while (stack.length) acc = over(stack.pop(), acc);
@@ -112,6 +122,11 @@ const MEASURE = () => {
     fg.a *= op;
     if (fg.a === 0) continue;            // invisible on purpose
     const bg = background(el);
+    if (!bg) {
+      out.push({ ratio: 0, need: 0, unmeasured: true, px: 0, tag: el.tagName.toLowerCase(),
+                 cls: String(el.className || '').slice(0, 40), fg: paint, bg: 'image', text: text.slice(0, 44) });
+      continue;
+    }
     const composited = fg.a < 1 ? over(fg, bg) : fg;
     const [hi, lo] = [lum(composited), lum(bg)].sort((a, b) => b - a);
     const ratio = (hi + 0.05) / (lo + 0.05);
@@ -177,9 +192,21 @@ await server.close();
 
 let failed = 0;
 for (const scheme of ['default', 'slate']) {
-  const rows = results[scheme];
+  const unmeasured = results[scheme].filter(r => r.unmeasured);
+  const rows = results[scheme].filter(r => !r.unmeasured);
   const bad = rows.filter(r => r.ratio < r.need);
-  failed += bad.length;
+  failed += bad.length + unmeasured.length;
+  if (unmeasured.length) {
+    console.log(`\n${scheme}: ${unmeasured.length} text element(s) over a background image, not measured ` +
+                `(give the panel an opaque background-color):`);
+    const seen = new Set();
+    for (const r of unmeasured) {
+      const key = `${r.page} ${r.tag}.${r.cls}`;
+      if (seen.has(key)) continue;
+      seen.add(key);
+      console.log(`    ${r.page}  <${r.tag}${r.cls ? ' class="' + r.cls + '"' : ''}>  "${r.text}"`);
+    }
+  }
   if (!rows.length) continue;
   const min = rows.reduce((a, b) => (a.ratio <= b.ratio ? a : b), rows[0]);
   console.log(`\n${scheme === 'default' ? 'light' : 'dark'} (${scheme}): ${rows.length} text elements, ` +
@@ -218,5 +245,5 @@ for (const scheme of ['default', 'slate']) {
 const n = files.length - stubs;
 console.log(`\n${n} page(s): ${n - unthemed} in both themes, ${unthemed} without a scheme switch ` +
             `in light only; ${stubs} redirect stub(s) skipped`);
-console.log(failed ? `\nFAIL: ${failed} element(s) below WCAG AA` : `\nOK: every text element meets WCAG AA`);
+console.log(failed ? `\nFAIL: ${failed} element(s) below WCAG AA or not measurable` : `\nOK: every text element meets WCAG AA`);
 process.exit(failed ? 1 : 0);
