@@ -2,10 +2,14 @@
 #  docs.yml — build and deploy the MkDocs documentation site (ADR-007)
 #  ----------------------------------------------------------------------------
 #
-#  The site is built directly from the `.lagda.md` sources — no `agda --html`
-#  step — by `nix develop --command make site`, the same command a developer
-#  runs locally.  mkdocs-material and the plugins are pinned by flake.nix, so
-#  CI and local builds are identical.
+#  The site is built from the `.lagda.md` sources by `nix develop --command
+#  make site-full`, the same command a developer runs locally: `make html` (the
+#  classic agda --html site, published at /classic/), `make agda-md` (the
+#  highlighted, hyperlinked code blocks the pages embed), then `make site`.
+#  MkDocs, Material (at a stated version) and the plugins are pinned by
+#  flake.nix, so CI and local builds are identical.  The built site is checked
+#  for requests to another origin (`make offline-check`, #621) before anything
+#  deploys.
 #
 #  On push to master the freshly built ./site is cross-deployed to the
 #  `gh-pages` branch of the new-home repository `universalalgebra/agda-algebras`
@@ -78,6 +82,13 @@ jobs:
         run: |
           set -euxo pipefail
           nix develop --command make site-full
+
+      # The published build, every page and stylesheet, including /classic/
+      # and the highlighted pages the fast build in ci.yml does not render.
+      - name: No page requests anything from another origin
+        run: |
+          set -euxo pipefail
+          nix develop --command make offline-check
 
       - name: Cross-deploy to universalalgebra/agda-algebras gh-pages
         if: github.event_name == 'push' && github.ref == 'refs/heads/master'

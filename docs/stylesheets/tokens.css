@@ -1,0 +1,166 @@
+/* ==========================================================================
+   File: docs/stylesheets/tokens.css
+
+   Design tokens: the one place color, type and spacing are decided (#621).
+   theme.css, agda.css and site.css consume these and define no raw colors of
+   their own, so a change here moves the whole site and nothing else has to
+   know.
+
+   The system is Constellation, the design of williamdemeo.org, which was
+   itself derived from this site's earlier palette ("Aurora") and display face
+   and then refined.  This file is that system's tokens, as that site ships
+   them, with two kinds of difference, both deliberate:
+
+     +  Its alternative system (Meridian) and the tokens of components this
+        site does not have (its hero, its lattice drawings, its proof
+        terminal, its demo clocks) are left out.
+     +  Six hues are added, `--c-blue` to `--c-amber` below, for the colors of
+        Agda's token classes (agda.css).  Each clears WCAG AA as text on the
+        code-block surface, `--c-bg-raised`, in its scheme; `make
+        contrast-audit` measures them on the rendered pages.
+
+   This file is part of the shareable theme (with theme.css, agda.css,
+   docs/assets/fonts/ and overrides/): a sibling site, such as agda-lattices,
+   copies it unchanged.  Site-specific rules belong in that site's own
+   stylesheet.
+
+   Scheme selectors.  Material puts `data-md-color-scheme` on <body>, so the
+   color tokens are declared on that attribute; a token declared only on
+   :root would be read from an element that does not carry the scheme.  The
+   light values are also declared on :root, so that a page with no scheme
+   attribute at all (the /classic/ pages, which are Agda's own HTML) gets the
+   light scheme rather than no color.
+
+   Units: Material sets `html { font-size: 125% }`, so 1rem is 20px, and
+   `.md-typeset` sizes in em relative to its own base.  The scale below
+   follows that convention rather than fighting it.
+   ========================================================================== */
+
+/* -- Scale, spacing and shape ----------------------------------------------
+   System-independent.  A 1.25 modular scale, tightened at the display sizes
+   where a straight geometric progression gets shouty, and a 4px grid. */
+
+:root {
+  /* Type scale, em-relative to the typeset base.  h1 lands at 38px, body 17px. */
+  --type-base: 0.85rem;      /* 17px */
+  --type-h1: 2.25em;
+  --type-h2: 1.5em;
+  --type-h3: 1.1875em;
+  --type-h4: 1em;
+  --type-small: 0.8125em;
+  --type-code: 0.875em;
+  /* Interface chrome sizes in rem, not em: the nav and the table of contents
+     are outside .md-typeset, so an em there resolves against the root and
+     compounds down the tree. */
+  --type-ui: 0.7rem;
+  --type-ui-small: 0.62rem;
+
+  --leading-body: 1.7;
+  --leading-heading: 1.25;
+  --leading-code: 1.6;
+  --tracking-display: -0.02em;   /* large type needs to be pulled in */
+  --tracking-body: 0;
+  --tracking-caps: 0.06em;
+
+  /* Line length.  Prose is capped; code blocks, tables and figures are not,
+     because an 80-column Agda block that wraps is worse than a wide one. */
+  --measure: 33rem;              /* about 74 characters at the body size */
+  --measure-heading: 38rem;
+
+  /* 4px grid at a 20px root. */
+  --space-1: 0.2rem;
+  --space-2: 0.4rem;
+  --space-3: 0.6rem;
+  --space-4: 0.8rem;
+  --space-6: 1.2rem;
+  --space-8: 1.6rem;
+  --space-12: 2.4rem;
+  --space-16: 3.2rem;
+  --space-24: 4.8rem;
+
+  --radius-sm: 2px;
+  --radius-md: 4px;
+  --border-width: 1px;
+
+  /* Motion.  Every transition here is a short color or border change in
+     answer to a pointer; nothing moves on its own except the landing page's
+     carousel, which yields to prefers-reduced-motion (site.css). */
+  --motion-quick: 120ms;
+  --motion-ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+
+  /* The faces, declared in docs/assets/fonts/fonts.css. */
+  --font-body: "Inter";
+  --font-display: "Space Grotesk";
+  --font-mono: "JuliaMono";
+  /* Only these weights ship (fonts.css): Inter 400 and 600, 400 italic;
+     Space Grotesk 600; JuliaMono 400.  A rule asking for any other weight
+     gets a synthesized one, so the weights are tokens too. */
+  --display-weight: 600;
+  --strong-weight: 600;
+}
+
+/* -- Colors, light ----------------------------------------------------------
+   The neutral ramp and the indigo accent are this site's Aurora values, as
+   williamdemeo.org took them, with the three corrections #531 reported (each
+   failed AA as text, and each keeps its hue):
+
+     --c-fg-faint      light  #818bab -> #626b88   3.29:1 -> 5.15:1 on paper
+     --c-fg-faint      dark   #6a7197 -> #8189af   3.70:1 -> 5.14:1 on raised
+     --c-accent-hover  light  #fb6a00 -> #b34b00   2.86:1 -> 5.22:1 on paper
+
+   The coral needs no change in dark, where it is 7.34:1; it is only on paper
+   that a saturated orange cannot carry text. */
+
+:root,
+[data-md-color-scheme="default"] {
+  --c-bg: #fbfcff;
+  --c-bg-raised: #f2f5fb;        /* code blocks, cards, table heads         */
+  --c-bg-sunken: #eef0fc;        /* the footer band                         */
+  --c-fg: #181c2c;
+  --c-fg-muted: #535d75;
+  --c-fg-faint: #626b88;
+  --c-line: #e2e4f6;
+  --c-line-strong: #ccd0ec;
+  --c-accent: #5b54e6;
+  --c-accent-hover: #b34b00;
+  --c-accent-wash: #ecebfd;
+  --c-on-accent: #ffffff;
+  --c-error: #b3261e;
+
+  /* Hues for Agda's token classes.  Ratios on --c-bg-raised: blue 6.14,
+     green 6.05, rose 5.76, violet 5.22, amber 5.43 (and the accent 4.99,
+     the coral 4.90, the faint gray 4.83).  The amber is deeper and yellower
+     than the coral keywords beside it, so the two stay apart. */
+  --c-blue: #1d4ed8;
+  --c-green: #136b34;
+  --c-rose: #be123c;
+  --c-violet: #7c3aed;
+  --c-amber: #8a5a00;
+}
+
+/* -- Colors, dark ------------------------------------------------------------
+   The default scheme: mkdocs.yml lists `slate` first, with no `media:` key. */
+
+[data-md-color-scheme="slate"] {
+  --c-bg: #0c0e1d;
+  --c-bg-raised: #15172e;
+  --c-bg-sunken: #08091a;
+  --c-fg: #c3c8de;
+  --c-fg-muted: #9197b6;
+  --c-fg-faint: #8189af;
+  --c-line: #22253f;
+  --c-line-strong: #333757;
+  --c-accent: #8b88ff;
+  --c-accent-hover: #ff7a1a;
+  --c-accent-wash: #16183a;
+  --c-on-accent: #0c0e1d;
+  --c-error: #ff8a80;
+
+  /* Ratios on --c-bg-raised: blue 9.75, green 12.53, rose 9.30, violet 9.53,
+     amber 12.20 (the accent 5.92, the coral 6.74, the faint gray 5.14). */
+  --c-blue: #93c5fd;
+  --c-green: #86efac;
+  --c-rose: #fda4af;
+  --c-violet: #c4b5fd;
+  --c-amber: #fcd34d;
+}

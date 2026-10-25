@@ -735,6 +735,7 @@
 [Agda Wiki]: https://wiki.portal.chalmers.se/agda/pmwiki.php
 [agda2-mode]: https://agda.readthedocs.io/en/v2.6.1.3/tools/emacs-mode.html
 [agda-algebras development team]: https://github.com/ualib/agda-algebras#credits
+[agda-lattices]: https://github.com/ualib/agda-lattices
 [Algebraic Effects and Handlers]: https://www.cs.uoregon.edu/research/summerschool/summer18/topics.php#Bauer
 [Andreas Abel]: http://www.cse.chalmers.se/~abela/
 [Andrej Bauer]: http://www.andrej.com/index.html
@@ -841,8 +842,8 @@
 [UniversalAlgebra repository]: https://github.com/ualib/agda-universal-algebra
 [Venanzio Capretta]: https://www.duplavis.com/venanzio/
 [vscode]: https://code.visualstudio.com/
-[William DeMeo]: https://williamdemeo.gitlab.io/
-[williamdemeo.org]: https://williamdemeo.gitlab.io/
+[William DeMeo]: https://williamdemeo.org
+[williamdemeo.org]: https://williamdemeo.org
 [williamdemeo@gitlab]: https://gitlab.com/williamdemeo
 [williamdemeo@github]: https://github.com/williamdemeo
 [UALib]: /

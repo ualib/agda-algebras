@@ -35,6 +35,7 @@ src/EverythingLegacy.agda
 scripts/python/__pycache__/
 scripts/python/_utils/__pycache__/
 scripts/python/groups/__pycache__/
+scripts/python/theme/__pycache__/
 
 # -- LaTeX build artifacts ---------------------------------------------------------
 *.aux
@@ -78,6 +79,8 @@ source.zip
 # MkDocs site build (ADR-007) and its caches.
 site/
 .cache/
+# The upstream font sources `make fonts` downloads, content-addressed (#621).
+/.fonts-cache/
 # agda --html artifacts: highlighted Markdown embedded into the MkDocs site
 # (#3a) and the classic clickable-HTML site published at /classic/ (#1).
 .agda-html/

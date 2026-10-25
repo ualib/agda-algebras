@@ -32,7 +32,7 @@
 #      where a path segment happens to contain the substring `agda`.
 # =============================================================================
 
-.PHONY: default all check test clean site serve serve-full html agda-md site-full profile project-plan unused-imports unused-imports-test check-links check-links-test gen-links barrels barrels-test span-classes span-classes-test corpus-stats corpus-stats-check corpus-stats-test docstrings docstrings-test docstrings-list docstrings-unused docstrings-json groups-test Everything.agda EverythingLegacy.agda
+.PHONY: default all check test clean site serve serve-full html agda-md site-full fonts fonts-check fonts-test offline-check offline-check-test contrast-audit font-audit offline-audit design-audit profile project-plan unused-imports unused-imports-test check-links check-links-test gen-links barrels barrels-test span-classes span-classes-test corpus-stats corpus-stats-check corpus-stats-test docstrings docstrings-test docstrings-list docstrings-unused docstrings-json groups-test Everything.agda EverythingLegacy.agda
 
 # -- Configuration -----------------------------------------------------------
 SRCDIR    := src
@@ -135,10 +135,14 @@ check test: Everything.agda EverythingLegacy.agda
 MKDOCS    ?= mkdocs
 AGDA_HTML := .agda-html
 
+# The Nix shell sets SOURCE_DATE_EPOCH to 1980-01-01 (for reproducible
+# derivations), and MkDocs stamps that date into every sitemap <lastmod>, so
+# the variable is unset for the site build: the sitemap then carries the date
+# the site was built.
 site:
 	@echo "target: $@"
 	@test -d $(AGDA_HTML)/md || echo "  note: code blocks will be PLAIN — run 'make site-full' for agda --html highlighting + /classic/."
-	$(MKDOCS) build --strict --clean
+	env -u SOURCE_DATE_EPOCH $(MKDOCS) build --strict --clean
 
 # Live-reloading local preview at http://127.0.0.1:8000 (Ctrl-C to stop).
 # Plain code blocks unless the agda --html output already exists; use
@@ -183,6 +187,67 @@ site-full:
 	$(MAKE) agda-md
 	$(MAKE) site
 
+# -- The theme (#621) -----------------------------------------------------------
+# The site's look is the Constellation theme (docs/site-guide.md, ADR-007
+# Decision 8), and three of its properties cannot be read off the CSS: every
+# font is self-hosted and covers Agda's notation, no page requests anything
+# from another origin, and every text color clears WCAG AA in both schemes.
+#
+#   fonts               regenerate docs/assets/fonts/ from the pinned sources
+#                       (needs the network once; the outputs are committed)
+#   fonts-check         fail if a committed font, fonts.css or license differs
+#                       from what the pins produce; writes nothing
+#   fonts-test          the check's own tests (needs fontTools: nix develop)
+#   offline-check       fail if a built page or stylesheet references another
+#                       origin (the CI gate, run after the site is built)
+#   offline-check-test  the checker's own test suite (pure Python)
+#
+# The three audits load the built site in a real browser (node 22 and a
+# Chromium; set CHROME=/path/to/chrome if none is found), so they are local
+# targets, run before a pull request that touches the theme.  They read
+# ./site as it stands: build it first with `make site-full`.  AUDIT_PAGES
+# restricts a run to pages whose path starts with one of its words, for
+# example `make contrast-audit AUDIT_PAGES="index.html Setoid/Algebras"`.
+#   contrast-audit      WCAG contrast of every text element, both schemes
+#   font-audit          the face Chromium rasterized every character with
+#   offline-audit       every request every page makes
+#   design-audit        all three
+SITE_DIR    ?= site
+AUDIT_PAGES ?=
+NODE        ?= node
+
+fonts:
+	@echo "target: $@"
+	python3 scripts/python/theme/build_fonts.py
+
+fonts-check:
+	@echo "target: $@"
+	python3 scripts/python/theme/build_fonts.py --check
+
+fonts-test:
+	@echo "target: $@"
+	python3 scripts/python/theme/test_build_fonts.py
+
+offline-check:
+	@echo "target: $@"
+	python3 scripts/python/theme/check_offline.py $(SITE_DIR)
+
+offline-check-test:
+	@echo "target: $@"
+	python3 scripts/python/theme/test_check_offline.py
+
+AUDIT_SCRIPT_contrast-audit := audit_contrast.mjs
+AUDIT_SCRIPT_font-audit     := audit_fonts.mjs
+AUDIT_SCRIPT_offline-audit  := audit_offline.mjs
+
+contrast-audit font-audit offline-audit:
+	@echo "target: $@"
+	@command -v $(NODE) >/dev/null || { echo "  error: node 22 or later is required for $@"; exit 2; }
+	@test -f $(SITE_DIR)/index.html || { echo "  error: $(SITE_DIR)/index.html missing; run 'make site-full' first."; exit 2; }
+	$(NODE) scripts/js/$(AUDIT_SCRIPT_$@) $(SITE_DIR) $(AUDIT_PAGES)
+
+design-audit: contrast-audit font-audit offline-audit
+
 # Profile a whole-library type-check.  Agda accepts one profiling mode at a time,
 # so override PROFILE to choose:
 #   internal     phases (Coverage, Serialization, InterfaceInstantiateFull, ...)
@@ -203,7 +268,7 @@ clean:
 	@echo "target: $@"
 	find . -name '*.agdai' -delete
 	rm -f $(SRCDIR)/Everything.agda $(SRCDIR)/EverythingLegacy.agda
-	rm -rf site html .agda-html .cache
+	rm -rf site html .agda-html .cache .fonts-cache
 
 # Regenerate the issue listings in docs/GITHUB_PROJECT.md from current
 # GitHub state.  Hand-edited prose outside the BEGIN/END GENERATED markers

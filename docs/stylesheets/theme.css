@@ -1,0 +1,463 @@
+/* ==========================================================================
+   File: docs/stylesheets/theme.css
+
+   The Constellation theme on Material for MkDocs (#621): Material's own
+   variables expressed in the tokens of tokens.css, then the typography, code,
+   chrome (header, tabs, navigation, search, footer), tables, admonitions and
+   buttons.  Ported from williamdemeo.org's stylesheet, which is the design's
+   home; the rules are that site's, less the ones for KaTeX, which this site
+   does not load.
+
+   Everything here is expressed in tokens; there are no raw colors or sizes
+   below this comment.  Material is restyled through its custom properties
+   rather than by overriding its rules, which is the supported route and
+   survives a theme upgrade; where a rule is unavoidable it is because
+   Material hard-codes a value that has no variable.
+
+   Part of the shareable theme (tokens.css, theme.css, agda.css,
+   docs/assets/fonts/, overrides/): a sibling site copies it unchanged.
+
+   Load order matters and is set in mkdocs.yml: fonts.css declares the faces,
+   tokens.css declares the values, this file and agda.css apply them, and the
+   site's own stylesheet comes last.
+   ========================================================================== */
+
+/* -- Material's variables, expressed in ours ---------------------------------
+   The selector is `[data-md-color-scheme]` rather than `:root` because that
+   attribute lives on <body>, which is also where tokens.css puts the color
+   tokens.  Mapping on :root would read them from an element that does not
+   have them. */
+
+[data-md-color-scheme] {
+  /* JuliaMono is the last self-hosted entry in the text stack, not an
+     afterthought: no text face carries ∀, ⊢ or ⨅, and a mathematical symbol
+     that reaches prose should come from a font this site ships rather than
+     from whatever the reader's machine offers.  Material appends its own
+     system fallbacks after whatever this names. */
+  --md-text-font: var(--font-body), var(--font-mono);
+  --md-code-font: var(--font-mono);
+
+  --md-default-bg-color: var(--c-bg);
+  --md-default-bg-color--light: color-mix(in srgb, var(--c-bg) 70%, transparent);
+  --md-default-bg-color--lighter: color-mix(in srgb, var(--c-bg) 30%, transparent);
+  --md-default-bg-color--lightest: color-mix(in srgb, var(--c-bg) 12%, transparent);
+
+  --md-default-fg-color: var(--c-fg);
+  --md-default-fg-color--light: var(--c-fg-muted);
+  --md-default-fg-color--lighter: var(--c-fg-faint);
+  --md-default-fg-color--lightest: var(--c-line);
+
+  --md-typeset-color: var(--c-fg);
+  --md-typeset-a-color: var(--c-accent);
+  --md-typeset-mark-color: var(--c-accent-wash);
+  --md-typeset-del-color: color-mix(in srgb, var(--c-accent) 18%, transparent);
+  --md-typeset-ins-color: color-mix(in srgb, var(--c-accent) 18%, transparent);
+  --md-typeset-table-color: var(--c-line);
+  --md-typeset-kbd-color: var(--c-bg-raised);
+  --md-typeset-kbd-border-color: var(--c-line-strong);
+  --md-typeset-kbd-accent-color: var(--c-bg);
+
+  /* The header is paper with a hairline under it, not a block of color.
+     That is most of what separates a 2026 documentation site from a 2016
+     one. */
+  --md-primary-fg-color: var(--c-bg);
+  --md-primary-fg-color--light: var(--c-bg-raised);
+  --md-primary-fg-color--dark: var(--c-bg-sunken);
+  --md-primary-bg-color: var(--c-fg);
+  --md-primary-bg-color--light: var(--c-fg-muted);
+
+  --md-accent-fg-color: var(--c-accent-hover);
+  --md-accent-fg-color--transparent: var(--c-accent-wash);
+  --md-accent-bg-color: var(--c-on-accent);
+  --md-accent-bg-color--light: var(--c-on-accent);
+
+  --md-code-bg-color: var(--c-bg-raised);
+  --md-code-fg-color: var(--c-fg);
+
+  --md-footer-bg-color: var(--c-bg-sunken);
+  --md-footer-bg-color--dark: var(--c-bg-sunken);
+  --md-footer-fg-color: var(--c-fg);
+  --md-footer-fg-color--light: var(--c-fg-muted);
+  /* Material puts the "Made with ..." line in --lighter.  The faint token is
+     tuned to clear AA on the page surfaces, not on the darker footer band, so
+     the footer gets the muted one instead of a fourth gray. */
+  --md-footer-fg-color--lighter: var(--c-fg-muted);
+
+  /* No drop shadows anywhere.  Depth is carried by a one-pixel line and a
+     change of surface, which reads the same in both themes and does not need
+     a different color for each. */
+  --md-shadow-z1: 0 0 0 1px var(--c-line);
+  --md-shadow-z2: 0 0 0 1px var(--c-line);
+  --md-shadow-z3: 0 0 0 1px var(--c-line-strong);
+
+  /* Pygments, for the fenced blocks that are not Agda (shell sessions, CSS,
+     Nix).  Material's defaults are tuned to its own palettes and lose
+     contrast on these surfaces.  Keywords and strings carry the hue;
+     everything else is a gray, because a code block where nine things are
+     colored is a code block where nothing stands out.  The hues are the ones
+     Agda's token classes use (tokens.css), so the two kinds of block share a
+     palette. */
+  --md-code-hl-color: var(--c-accent-wash);
+  --md-code-hl-color--light: var(--c-accent-wash);
+  --md-code-hl-keyword-color: var(--c-violet);
+  --md-code-hl-function-color: var(--c-blue);
+  --md-code-hl-string-color: var(--c-green);
+  --md-code-hl-number-color: var(--c-amber);
+  --md-code-hl-constant-color: var(--c-amber);
+  --md-code-hl-special-color: var(--c-rose);
+  --md-code-hl-operator-color: var(--c-fg-muted);
+  --md-code-hl-punctuation-color: var(--c-fg-muted);
+  --md-code-hl-name-color: var(--c-fg);
+  --md-code-hl-variable-color: var(--c-fg);
+  --md-code-hl-comment-color: var(--c-fg-faint);
+  --md-code-hl-generic-color: var(--c-fg-muted);
+}
+
+/* -- Typography ------------------------------------------------------------- */
+
+.md-typeset {
+  font-size: var(--type-base);
+  line-height: var(--leading-body);
+  letter-spacing: var(--tracking-body);
+}
+
+.md-typeset h1,
+.md-typeset h2,
+.md-typeset h3,
+.md-typeset h4 {
+  font-family: var(--font-display), var(--font-body), var(--font-mono), sans-serif;
+  color: var(--c-fg);
+  letter-spacing: var(--tracking-display);
+  line-height: var(--leading-heading);
+  text-wrap: balance;
+}
+
+.md-typeset h1 {
+  font-size: var(--type-h1);
+  font-weight: var(--display-weight);
+  margin: 0 0 var(--space-8);
+}
+
+.md-typeset h2 {
+  font-size: var(--type-h2);
+  font-weight: var(--display-weight);
+  margin: var(--space-16) 0 var(--space-4);
+  padding-bottom: var(--space-2);
+  border-bottom: var(--border-width) solid var(--c-line);
+}
+
+.md-typeset h3 {
+  font-size: var(--type-h3);
+  font-weight: var(--strong-weight);
+  margin: var(--space-12) 0 var(--space-3);
+}
+
+.md-typeset h4 {
+  font-size: var(--type-h4);
+  font-weight: var(--strong-weight);
+  letter-spacing: var(--tracking-body);
+  margin: var(--space-8) 0 var(--space-2);
+}
+
+.md-typeset h5 {
+  font-size: var(--type-small);
+  font-weight: var(--strong-weight);
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+  color: var(--c-fg-muted);
+}
+
+.md-typeset strong,
+.md-typeset b {
+  font-weight: var(--strong-weight);
+}
+
+/* Material dims <small> with `opacity: .75`, which dims every color inside
+   it, a link or a colored mark included, below AA.  The muted token is the
+   dimming instead, and the colors inside keep their ratios. */
+.md-typeset small {
+  opacity: 1;
+  color: var(--c-fg-muted);
+}
+
+/* Line length.  Only the prose blocks are capped, and only where they are
+   direct children of the article: a paragraph inside a table cell or an
+   admonition already has a container deciding its width. */
+.md-typeset > p,
+.md-typeset > ul,
+.md-typeset > ol,
+.md-typeset > dl,
+.md-typeset > blockquote {
+  max-width: var(--measure);
+}
+
+.md-typeset > h1,
+.md-typeset > h2,
+.md-typeset > h3,
+.md-typeset > h4 {
+  max-width: var(--measure-heading);
+}
+
+.md-typeset p {
+  margin: 0 0 var(--space-6);
+}
+
+.md-typeset blockquote {
+  border-left: 2px solid var(--c-line-strong);
+  color: var(--c-fg-muted);
+  padding-left: var(--space-4);
+}
+
+.md-typeset hr {
+  border-bottom: var(--border-width) solid var(--c-line);
+  margin: var(--space-16) 0;
+}
+
+/* Links: colored, and underlined only on hover.  A page of prose with a
+   permanent underline under every citation is noisier than it is helpful,
+   but color alone is not a sufficient affordance, so a faint rule sits under
+   every link and darkens on hover and focus, and the color clears AA on its
+   own. */
+.md-typeset a {
+  text-decoration: none;
+  border-bottom: var(--border-width) solid color-mix(in srgb, var(--c-accent) 35%, transparent);
+  transition: border-color var(--motion-quick), color var(--motion-quick);
+}
+
+.md-typeset a:hover,
+.md-typeset a:focus-visible {
+  color: var(--c-accent-hover);
+  border-bottom-color: var(--c-accent);
+}
+
+/* Headings own their permalinks, and the edit and view buttons are icons;
+   neither should read as a body link. */
+.md-typeset .headerlink,
+.md-typeset .md-content__button {
+  border-bottom: none;
+}
+
+:focus-visible {
+  outline: 2px solid var(--c-accent);
+  outline-offset: 2px;
+}
+
+/* -- Code ------------------------------------------------------------------- */
+
+.md-typeset code,
+.md-typeset pre > code,
+.md-typeset kbd {
+  font-family: var(--font-mono), monospace;
+  font-size: var(--type-code);
+  /* Only JuliaMono Regular is shipped: every syntax palette here is
+     color-only, so no bold or italic code face is ever needed.  Pinning the
+     weight stops a `code` inside a heading asking for 600 and getting a
+     synthesized bold. */
+  font-weight: 400;
+  font-variant-ligatures: none;
+}
+
+.md-typeset code {
+  background-color: var(--c-bg-raised);
+  border-radius: var(--radius-sm);
+  padding: 0.1em 0.3em;
+}
+
+.md-typeset pre > code {
+  padding: var(--space-4);
+  line-height: var(--leading-code);
+}
+
+.md-typeset .highlight,
+.md-typeset .highlighttable {
+  border: var(--border-width) solid var(--c-line);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.md-typeset .highlight code {
+  background: transparent;
+}
+
+/* -- Chrome ----------------------------------------------------------------- */
+
+.md-header {
+  box-shadow: none;
+  border-bottom: var(--border-width) solid var(--c-line);
+}
+
+.md-header--shadow {
+  box-shadow: none;
+}
+
+.md-tabs {
+  border-bottom: var(--border-width) solid var(--c-line);
+}
+
+/* Material dims the inactive tabs with opacity, which the contrast audit
+   folds into the color; the muted token is the dimming instead, and it
+   clears AA on its own. */
+.md-tabs__link {
+  opacity: 1;
+  color: var(--c-fg-muted);
+}
+
+.md-tabs__item--active .md-tabs__link,
+.md-tabs__link:hover,
+.md-tabs__link:focus {
+  color: var(--c-fg);
+}
+
+.md-nav {
+  font-size: var(--type-ui);
+}
+
+.md-nav__title {
+  color: var(--c-fg-muted);
+  font-weight: var(--strong-weight);
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+  font-size: var(--type-ui-small);
+}
+
+/* Search.  Material builds the field out of hsla(0,0%,100%,.12) over the
+   primary color, which assumes the header is a block of color.  Against
+   paper it is a gray slab, so the field is restated as a bordered surface. */
+.md-search__form {
+  background-color: var(--c-bg-raised);
+  border: var(--border-width) solid var(--c-line);
+  border-radius: var(--radius-md);
+  box-shadow: none;
+}
+
+.md-search__form:hover {
+  background-color: var(--c-bg-sunken);
+}
+
+.md-search__input,
+.md-search__icon {
+  color: var(--c-fg);
+}
+
+.md-search__input::placeholder {
+  color: var(--c-fg-muted);
+}
+
+[data-md-toggle="search"]:checked ~ .md-header .md-search__form {
+  background-color: var(--c-bg);
+  border-color: var(--c-line-strong);
+}
+
+.md-search__output {
+  border: var(--border-width) solid var(--c-line);
+  border-radius: var(--radius-md);
+  box-shadow: none;
+}
+
+.md-footer-meta {
+  border-top: var(--border-width) solid var(--c-line);
+}
+
+/* The copyright line may carry links (mkdocs.yml); they read as links in the
+   footer's own colors rather than in the typeset accent. */
+.md-copyright a {
+  color: var(--c-fg-muted);
+  border-bottom: var(--border-width) solid var(--c-line-strong);
+}
+
+.md-copyright a:hover,
+.md-copyright a:focus-visible {
+  color: var(--c-fg);
+}
+
+.md-typeset table:not([class]) {
+  border: var(--border-width) solid var(--c-line);
+  border-radius: var(--radius-md);
+  font-size: var(--type-small);
+}
+
+.md-typeset table:not([class]) th {
+  background-color: var(--c-bg-raised);
+  font-weight: var(--strong-weight);
+}
+
+/* Admonitions, details and buttons. */
+.md-typeset .admonition,
+.md-typeset details {
+  border: var(--border-width) solid var(--c-line);
+  border-radius: var(--radius-md);
+  box-shadow: none;
+  font-size: var(--type-small);
+}
+
+.md-typeset .md-button {
+  /* Material builds its buttons out of --md-primary-fg-color, which here is
+     the paper color, so the default rule is white on white.  They are
+     restated from the palette rather than patched. */
+  color: var(--c-fg);
+  border: var(--border-width) solid var(--c-line-strong);
+  border-radius: var(--radius-md);
+  font-weight: var(--strong-weight);
+  padding: var(--space-2) var(--space-4);
+  transition: background-color var(--motion-quick), color var(--motion-quick),
+              border-color var(--motion-quick);
+}
+
+.md-typeset .md-button--primary,
+.md-typeset .md-button:hover,
+.md-typeset .md-button:focus-visible {
+  background-color: var(--c-accent);
+  border-color: var(--c-accent);
+  color: var(--c-on-accent);
+}
+
+/* Material gives each of its dozen admonition types a hard-coded hue, which
+   is a lot of color for a page that is meant to have one.  The informational
+   types are folded onto the accent; the ones that mean "be careful" keep
+   their semantic color, because that is what they are for. */
+.md-typeset .admonition.note,
+.md-typeset .admonition.info,
+.md-typeset .admonition.abstract,
+.md-typeset .admonition.tip,
+.md-typeset .admonition.example,
+.md-typeset .admonition.quote,
+.md-typeset details.note,
+.md-typeset details.info,
+.md-typeset details.abstract,
+.md-typeset details.tip,
+.md-typeset details.example,
+.md-typeset details.quote {
+  border-color: var(--c-line);
+  border-left: 2px solid var(--c-accent);
+}
+
+.md-typeset .note > .admonition-title,
+.md-typeset .info > .admonition-title,
+.md-typeset .abstract > .admonition-title,
+.md-typeset .tip > .admonition-title,
+.md-typeset .example > .admonition-title,
+.md-typeset .quote > .admonition-title,
+.md-typeset .note > summary,
+.md-typeset .info > summary,
+.md-typeset .abstract > summary,
+.md-typeset .tip > summary,
+.md-typeset .example > summary,
+.md-typeset .quote > summary {
+  background-color: var(--c-accent-wash);
+  color: var(--c-fg);
+}
+
+.md-typeset .note > .admonition-title::before,
+.md-typeset .info > .admonition-title::before,
+.md-typeset .abstract > .admonition-title::before,
+.md-typeset .tip > .admonition-title::before,
+.md-typeset .example > .admonition-title::before,
+.md-typeset .quote > .admonition-title::before,
+.md-typeset .note > summary::before,
+.md-typeset .info > summary::before,
+.md-typeset .abstract > summary::before,
+.md-typeset .tip > summary::before,
+.md-typeset .example > summary::before,
+.md-typeset .quote > summary::before {
+  background-color: var(--c-accent);
+}
