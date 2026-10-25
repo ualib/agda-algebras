@@ -12,15 +12,40 @@
 (function () {
   var D3 = "/assets/js/d3.v7.min.js";
 
+  // One load of d3 per page session, shared by every visit to the page: a
+  // reader who leaves and comes back before it arrives waits on the same
+  // request rather than starting a second.  A failed load is forgotten, so
+  // the next visit tries again.
+  var d3Ready = null;
+  function loadD3() {
+    if (window.d3) return Promise.resolve(window.d3);
+    if (!d3Ready) {
+      d3Ready = new Promise(function (resolve, reject) {
+        var s = document.createElement("script");
+        s.src = D3;
+        s.onload = function () { resolve(window.d3); };
+        s.onerror = function () { s.remove(); d3Ready = null; reject(new Error("d3 did not load")); };
+        document.head.appendChild(s);
+      });
+    }
+    return d3Ready;
+  }
+
+  // The running force simulation, if any.  Instant navigation replaces the
+  // page's body but not the window, so a simulation left running would keep
+  // ticking on a detached sky until it cooled; each navigation stops it.
+  var running = null;
+
   function install() {
+    if (running) { running.stop(); running = null; }
     var el = document.getElementById("constellation");
     if (!el || el.getAttribute("data-drawn")) return;
     el.setAttribute("data-drawn", "1");
-    if (window.d3) { draw(el, window.d3); return; }
-    var s = document.createElement("script");
-    s.src = D3;
-    s.onload = function () { draw(el, window.d3); };
-    document.head.appendChild(s);
+    loadD3().then(function (d3) {
+      if (el.isConnected) draw(el, d3);
+    }, function () {
+      el.removeAttribute("data-drawn");
+    });
   }
 
   if (window.document$ && typeof window.document$.subscribe === "function") {
@@ -71,7 +96,8 @@
     d3.json("/assets/constellation.json").then(function (data) {
       var radius = function (d) { return 3 + Math.sqrt(d.deg) * 1.7; };
 
-      var sim = d3.forceSimulation(data.nodes)
+      if (!el.isConnected) return;      // the reader left while the data loaded
+      var sim = running = d3.forceSimulation(data.nodes)
         .force("link", d3.forceLink(data.links).id(function (d) { return d.id; })
           .distance(36).strength(0.22))
         .force("charge", d3.forceManyBody().strength(-60))
