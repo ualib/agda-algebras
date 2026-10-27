@@ -25,13 +25,13 @@ edits to those regions will be overwritten on the next render.
 
 ## Summary
 
-Modernization of agda-algebras in 10 milestones: tooling upgrade/infra (M1), consolidate Base/Setoid (M2), classical structures (M3), style/naming uniformity (M4), Cubical Agda (M5), FLRP (M6), complexity/CSP module (M7), training corpus/LLM (M8), novel-research apps of `Continuous` relation API (M9), and post-3.0 polish — rendering pipeline, organization transfer, and Nix packaging (M10).
+Modernization of agda-algebras in eight active milestones: tooling upgrade/infra (M1), consolidate Base/Setoid (M2), classical structures (M3), style/naming uniformity (M4), Cubical Agda (M5), FLRP (M6), training corpus/LLM (M8), and post-3.0 polish — rendering pipeline, organization transfer, and Nix packaging (M10).  Milestones 7 (finite-template CSP) and 9 (applications of continuous relations) were retired on October 27, 2026; their content continues in a downstream library's plan.
 
 ---
 
 ## Description
 
-A structured plan to modernize the agda-algebras library.  The work is organized into ten milestones: tooling upgrade and infrastructure (M1), consolidation of the Base/Setoid fork (M2), introduction of the long-missing classical structures layer (M3), style and naming uniformity (M4), a Cubical Agda proof-of-concept as the canonical long-term target (M5), prerequisites for work on the Finite Lattice Representation Problem (M6), an extension of the existing algebraic complexity / CSP module for finite templates (M7), publication of a training corpus for language-model work (M8), novel-research applications of the `Continuous` relation API (M9), and a post-3.0 polish layer — rendering-pipeline modernization, transfer to the official `agda` GitHub organization, and first-class distribution through nixpkgs (M10).  After M1 lands, the remaining milestones run largely in parallel; M10 in particular requires only M1, M2, and M4 to be complete and runs alongside M5–M9 rather than after them.
+A structured plan to modernize the agda-algebras library.  The work is organized into eight active milestones (7 and 9 retired): tooling upgrade and infrastructure (M1), consolidation of the Base/Setoid fork (M2), introduction of the long-missing classical structures layer (M3), style and naming uniformity (M4), a Cubical Agda proof-of-concept as the canonical long-term target (M5), prerequisites for work on the Finite Lattice Representation Problem (M6), publication of a training corpus for language-model work (M8), and a post-3.0 polish layer — rendering-pipeline modernization, transfer to the official `agda` GitHub organization, and first-class distribution through nixpkgs (M10).  After M1 lands, the remaining milestones run largely in parallel; M10 in particular requires only M1, M2, and M4 to be complete and runs alongside M5, M6, and M8 rather than after them.
 
 ---
 
@@ -49,9 +49,7 @@ agda-algebras was released as v2.0.1 in December 2021 ([Zenodo DOI 10.5281/zenod
 - `milestone-4-style` (0075ca) — Milestone 4: Style and naming uniformity.
 - `milestone-5-cubical` (5319e7) — Milestone 5: Cubical track.
 - `milestone-6-flrp` (5319e7) — Milestone 6: FLRP prerequisites.
-- `milestone-7-csp` (5319e7) — Milestone 7: Algebraic complexity / CSP.
 - `milestone-8-llm` (5319e7) — Milestone 8: LLM readiness.
-- `milestone-9-apps` (5319e7) — Milestone 9: Applications of continuous relations.
 - `milestone-10-polish` (5319e7) — Milestone 10: Post-3.0 polish (rendering, organization transfer, packaging).
 - `stdlib-bridge` (fbca04) — Bridges to the Agda standard library.
 - `breaking-change` (d93f0b) — Breaking change to the public API.
@@ -117,11 +115,11 @@ Phase 2: Ring, CommutativeRing, Field, Module, DistributiveLattice, BooleanAlgeb
 
 ---
 
-### Milestone 7 — Algebraic complexity / CSP extensions (finite templates)
+### Milestone 7 — Algebraic complexity / CSP extensions (retired)
 
-**Description**.  Extend the existing `Base.Complexity` / `Exercises.Complexity.FiniteCSP` work into a proper algebraic-complexity development of **finite-template** constraint satisfaction.  This is a separate research program from Milestone 6 (the FLRP is about lattice representation theory; finite CSP is about the complexity of constraint satisfaction with a fixed finite template over the algebraic approach of Bulatov, Zhuk, Barto, and others).  Candidate content includes polymorphism clones, the Jeavons Galois connection, Post's lattice, and a statement of the Bulatov–Zhuk algebraic dichotomy.  The infinite-template / ω-categorical extension is covered separately under Milestone 9.
+**Description**.  Retired on October 27, 2026.  The finite-template algebraic CSP program (polymorphism clones, the Galois connection, Post's lattice, the dichotomy statement) continues in a downstream library's plan, which depends on this one.  agda-algebras keeps the `Setoid.Complexity` definitions it already has and receives general universal-algebra improvements that program needs.
 
-**Exit criterion**.  At least one substantial algebraic-CSP theorem is formalized (e.g. the Jeavons Galois connection for a fixed finite domain); polymorphism clones are available as a first-class type.
+**Exit criterion**.  None; the milestone is closed.
 
 ---
 
@@ -133,11 +131,11 @@ Phase 2: Ring, CommutativeRing, Field, Module, DistributiveLattice, BooleanAlgeb
 
 ---
 
-### Milestone 9 — Applications of continuous relations
+### Milestone 9 — Applications of continuous relations (retired)
 
-**Description**.  Explore substantive mathematical applications of the `Continuous` relation API — the generalization of classical relations to arbitrary arity types, developed in `Base.Relations.Continuous` and carried forward into `Setoid/`.  Three directions are in scope, each intrinsically interesting and independent of the FLRP and finite-CSP programs.  M9-1 formalizes Scott-continuous relations on directed-complete partial orders (DCPOs), connecting to domain theory and Escardó's work on searchable sets in the constructive-mathematics tradition.  M9-2 formalizes infinitary CSP over ω-categorical templates in the Bodirsky–Pinsker program, where relations of countably infinite arity arise naturally.  M9-3 is exploratory rather than deliverable-oriented: a reading-and-writing investigation into whether coalgebraic bisimulation has an under-exploited angle at the intersection with universal algebra in the Birkhoff sense.
+**Description**.  Retired on October 27, 2026.  The three applications (Scott-continuous relations on DCPOs, infinitary CSP over omega-categorical templates, and the exploratory reading on coalgebraic bisimulation) continue in the same downstream plan as Milestone 7.  The continuous-relation API itself stays here in `Setoid.Relations.Continuous`.
 
-**Exit criterion**.  At least one of M9-1 or M9-2 produces a formalized non-trivial example accompanied by a short public write-up (blog post, arXiv note, or similar); M9-3 produces a design-discussion document summarizing what was learned from the reading, with a concrete verdict ("pursue" or "saturated") regardless of whether formalization work follows.
+**Exit criterion**.  None; the milestone is closed.
 
 ---
 
@@ -165,9 +163,7 @@ graph TD
   M4["M4 — Style sweep"]
   M5["M5 — Cubical"]
   M6["M6 — FLRP prerequisites"]
-  M7["M7 — CSP (finite templates)"]
   M8["M8 — LLM corpus"]
-  M9["M9 — Continuous-relation apps"]
   M10["M10 — Post-3.0 polish"]
 
   M1 --> M2
@@ -175,16 +171,11 @@ graph TD
   M1 --> M5
   M1 --> M10
   M2 --> M3
-  M2 --> M7
-  M2 --> M9
   M2 --> M10
   M3 --> M5
   M3 --> M6
-  M3 --> M7
-  M3 --> M9
   M4 --> M8
   M4 --> M10
-  M7 -.-> M9
 ```
 
 ---
@@ -4628,7 +4619,7 @@ graph TD
 
 <!-- BEGIN GENERATED: milestone-7 -->
 
-### Issue M7-1: Extend Complexity module beyond Basic and CSP (#274)
+### Issue M7-1: Extend Complexity module beyond Basic and CSP (#274, closed)
 
 **Labels**: `milestone-7-csp`, `design-discussion`
 
@@ -4658,7 +4649,7 @@ Candidate content, to be prioritized:
 
 ### Milestone 7 Dependencies
 
-M7-1 (#274) depends on M2-7c (#307) for the canonical-path Complexity content.  Sequencing: #307 ports the existing module; this issue extends it.
+Retired on October 27, 2026; the issue is closed and its content continues downstream.
 
 ---
 ---
@@ -4719,7 +4710,7 @@ Once `Setoid/` and `Classical/` are stable post-M4, publish a training and retri
 
 <!-- BEGIN GENERATED: milestone-9 -->
 
-### Issue M9-1: Scott-continuous relations on DCPOs using `Relations.Continuous` (#282)
+### Issue M9-1: Scott-continuous relations on DCPOs using `Relations.Continuous` (#282, closed)
 
 **Labels**: `design-discussion`, `milestone-9-apps`
 
@@ -4758,7 +4749,7 @@ Universal algebra and order theory have a long shared history: every algebra wit
 
 ---
 
-### Issue M9-2: Infinitary CSP over ω-categorical templates via continuous relations (#281)
+### Issue M9-2: Infinitary CSP over ω-categorical templates via continuous relations (#281, closed)
 
 **Labels**: `design-discussion`, `milestone-9-apps`
 
@@ -4801,7 +4792,7 @@ This is a design-discussion issue, not an implementation plan.
 
 ---
 
-### Issue M9-3: Exploratory: coalgebraic bisimulation as a continuous relation (#283)
+### Issue M9-3: Exploratory: coalgebraic bisimulation as a continuous relation (#283, closed)
 
 **Labels**: `design-discussion`, `milestone-9-apps`
 
@@ -5239,7 +5230,7 @@ Wire `agda-deps` (or the agda-html-derived approach) into the dev environment, r
 
 ---
 
-### Issue M10-7: Self-host the remaining webfonts, and three colour tokens that miss WCAG AA (#531)
+### Issue M10-7: Self-host the remaining webfonts, and three colour tokens that miss WCAG AA (#531, closed)
 
 **Labels**: `documentation`, `milestone-10-polish`
 
@@ -5316,7 +5307,7 @@ Everything above comes from `stylesheets/custom.css` and the served HTML as of 2
 
 ---
 
-### Issue M10-8: Restyle the documentation site after williamdemeo.org, and link it with the agda-lattices site (#621)
+### Issue M10-8: Restyle the documentation site after williamdemeo.org, and link it with the agda-lattices site (#621, closed)
 
 **Labels**: `documentation`, `milestone-10-polish`
 

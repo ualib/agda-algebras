@@ -10,12 +10,11 @@ author: "the agda-algebras development team"
 This is the [Setoid.Complexity.CSP][] module of the [Agda Universal Algebra Library][].
 
 This module is the canonical home for the content previously developed in
-`Legacy.Base.Complexity.CSP`, ported under #307 (M2-7c).  The relational formulation
-of CSP and the Galois connection to polymorphism clones (Jeavons) are stated below;
-substantive theorems — most importantly the Jeavons Galois connection itself for a
-fixed finite domain, and a statement of the Bulatov–Zhuk algebraic dichotomy — are
-scheduled under #274 (M7-1).  The infinite-template / ω-categorical extension is
-covered separately under #281 (M9-2), which depends on this canonical-path version.
+`Legacy.Base.Complexity.CSP`.  The relational formulation of CSP and the Galois
+connection to polymorphism clones (Jeavons) are stated below.  The substantive
+theorems (the Galois connection for a fixed finite domain, the algebraic dichotomy
+statement) and the infinite-template extension are developed in a downstream
+library that depends on this module; this library keeps the definitions.
 
 #### The relational formulation of CSP
 
@@ -149,10 +148,9 @@ module  _        -- levels for...
 rather than parameterizing each `Constraint` independently.  This matches the
 universal-algebraic CSP literature, where every constraint of an instance typically
 lives at the same relation level (in practice `0ℓ`).  Lifting `ρʳ` to a
-per-record parameter is a mechanical refactor that may become warranted when later
-content (e.g., the M7-1 polymorphism-clone development under #274 or the M9-2
-infinitary CSP work under #281) needs to mix relation levels across constraints in
-a single instance.
+per-record parameter is a mechanical refactor that may become warranted when a
+downstream development (polymorphism clones, or infinitary CSP) needs to mix
+relation levels across constraints in a single instance.
 
 
 #### CSP templates and instances
