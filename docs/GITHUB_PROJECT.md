@@ -25,13 +25,13 @@ edits to those regions will be overwritten on the next render.
 
 ## Summary
 
-Modernization of agda-algebras in eight active milestones: tooling upgrade/infra (M1), consolidate Base/Setoid (M2), classical structures (M3), style/naming uniformity (M4), Cubical Agda (M5), FLRP (M6), training corpus/LLM (M8), and post-3.0 polish — rendering pipeline, organization transfer, and Nix packaging (M10).  Milestones 7 (finite-template CSP) and 9 (applications of continuous relations) were retired on October 27, 2026; their content continues in a downstream library's plan.
+Modernization of agda-algebras in nine active milestones: tooling upgrade/infra (M1), consolidate Base/Setoid (M2), classical structures (M3), style/naming uniformity (M4), Cubical Agda (M5), FLRP (M6), training corpus/LLM (M8), post-3.0 polish — rendering pipeline, organization transfer, and Nix packaging (M10), and commutator theory (M11).  Milestones 7 (finite-template CSP) and 9 (applications of continuous relations) were retired on October 27, 2026; their content continues in a downstream library's plan.
 
 ---
 
 ## Description
 
-A structured plan to modernize the agda-algebras library.  The work is organized into eight active milestones (7 and 9 retired): tooling upgrade and infrastructure (M1), consolidation of the Base/Setoid fork (M2), introduction of the long-missing classical structures layer (M3), style and naming uniformity (M4), a Cubical Agda proof-of-concept as the canonical long-term target (M5), prerequisites for work on the Finite Lattice Representation Problem (M6), publication of a training corpus for language-model work (M8), and a post-3.0 polish layer — rendering-pipeline modernization, transfer to the official `agda` GitHub organization, and first-class distribution through nixpkgs (M10).  After M1 lands, the remaining milestones run largely in parallel; M10 in particular requires only M1, M2, and M4 to be complete and runs alongside M5, M6, and M8 rather than after them.
+A structured plan to modernize the agda-algebras library.  The work is organized into nine active milestones (7 and 9 retired): tooling upgrade and infrastructure (M1), consolidation of the Base/Setoid fork (M2), introduction of the long-missing classical structures layer (M3), style and naming uniformity (M4), a Cubical Agda proof-of-concept as the canonical long-term target (M5), prerequisites for work on the Finite Lattice Representation Problem (M6), publication of a training corpus for language-model work (M8), and a post-3.0 polish layer — rendering-pipeline modernization, transfer to the official `agda` GitHub organization, and first-class distribution through nixpkgs (M10), and commutator theory on the setoid foundation, from the term condition to the Fundamental Theorem on Abelian Algebras and the theory of varieties with a weak difference term (M11, added on October 27, 2026).  After M1 lands, the remaining milestones run largely in parallel; M10 in particular requires only M1, M2, and M4 to be complete and runs alongside M5, M6, and M8 rather than after them.
 
 ---
 
@@ -51,6 +51,7 @@ agda-algebras was released as v2.0.1 in December 2021 ([Zenodo DOI 10.5281/zenod
 - `milestone-6-flrp` (5319e7) — Milestone 6: FLRP prerequisites.
 - `milestone-8-llm` (5319e7) — Milestone 8: LLM readiness.
 - `milestone-10-polish` (5319e7) — Milestone 10: Post-3.0 polish (rendering, organization transfer, packaging).
+- `milestone-11-commutator` (5319e7): Milestone 11, Commutator theory.
 - `stdlib-bridge` (fbca04) — Bridges to the Agda standard library.
 - `breaking-change` (d93f0b) — Breaking change to the public API.
 - `good first issue` (7057ff) — Good for newcomers.
@@ -153,6 +154,14 @@ M10-2 and M10-3 are governance/packaging tasks with no hard structural prerequis
 
 ---
 
+### Milestone 11 — Commutator theory
+
+**Description**.  Build commutator theory on the setoid foundation, from the term condition up.  First the general theory, with no Mal'tsev hypothesis: the centralizing relation C(S, T; δ) and the commutator [S, T] of tolerances, the centralizer, abelian and solvable congruences, and the center (Freese and McKenzie, Chapter 3; Kearnes and Kiss, Section 2.5), checked against the commutator of normal subgroups on groups.  Then the modular theory, where Day's theorem (M6-6 and M6-7) supplies the Day terms: symmetry and join-additivity of the commutator, Gumm's difference term and Gumm terms, the Fundamental Theorem on Abelian Algebras (abelian algebras are affine), nilpotent algebras and centerless varieties (Freese and McKenzie, Chapters 4 to 8).  Then the theory past modularity that Kearnes and Kiss develop for varieties with a Taylor term or a weak difference term (Chapters 3, 6, and 8), which is where finite algebras with a Taylor term live, closing with a decision procedure for difference terms in finite idempotent algebras.  Tame congruence theory (Hobby and McKenzie) is out of scope; its theorems enter, when a result needs one, as named hypothesis records.  The reading map from the two books to the issues is [`docs/notes/milestone-commutator-theory.md`](notes/milestone-commutator-theory.md).
+
+**Exit criterion**.  The term condition, commutator, centralizer, abelian congruences, and center are defined without Mal'tsev hypotheses and agree with the group-theoretic notions on groups (M11-1 to M11-3); in varieties with Day terms the commutator is symmetric and join-additive and the Fundamental Theorem on Abelian Algebras is proved (M11-4 to M11-7); Theorem 3.27 of Kearnes and Kiss is proved for varieties with a Taylor term (M11-9).
+
+---
+
 ### Milestone Dependencies
 
 ```mermaid
@@ -165,6 +174,7 @@ graph TD
   M6["M6 — FLRP prerequisites"]
   M8["M8 — LLM corpus"]
   M10["M10 — Post-3.0 polish"]
+  M11["M11: Commutator theory"]
 
   M1 --> M2
   M1 --> M4
@@ -176,6 +186,8 @@ graph TD
   M3 --> M6
   M4 --> M8
   M4 --> M10
+  M3 --> M11
+  M6 --> M11
 ```
 
 ---
@@ -5389,6 +5401,381 @@ graph TD
 ---
 ---
 
+## Milestone 11 — Commutator theory
+
+<!-- BEGIN GENERATED: milestone-11 -->
+
+### Issue M11-1: The term condition and the centralizing relation for tolerances (#624)
+
+**Labels**: `milestone-11-commutator`
+
+## Description
+
+Define the term condition, the first notion of commutator theory, on setoid algebras.  For tolerances S and T on an algebra 𝑨 (reflexive, symmetric, compatible binary relations; the transitive ones are the congruences), the S, T-matrices are the 2 × 2 arrays with rows t(a, u), t(a, v) and t(b, u), t(b, v), where t is a term operation, a is related to b coordinatewise by S, and u to v by T (Freese and McKenzie, Definition 3.2; Kearnes and Kiss, Definition 2.18).  S centralizes T modulo a congruence δ, written C(S, T; δ), when every such matrix whose top row is δ-related has a δ-related bottom row.  The commutator, abelian and solvable congruences, the center, and the difference-term theory are all defined from this relation, so its API decides the shape of the milestone.
+
+Two definitions of the matrix set are available: by term operations, as above, and as the subalgebra of 𝑨⁴ generated by the matrices with constant rows and constant columns (Freese and McKenzie, Proposition 3.3 (1)).  Choose the one that makes the closure arguments of Theorem 2.19 structural, and prove the two equivalent.
+
+## Tasks
+
+- [ ] Tolerances on a setoid algebra: `Tolerance 𝑨`, the congruence a tolerance generates (through `Setoid.Congruences.Generation`), and the view of a congruence as a tolerance.
+- [ ] The matrix set `M(S, T)` and the predicate `C(S, T; δ)` in a new module `Setoid.Commutator.TermCondition`, with the equivalence of the two definitions of `M(S, T)`.
+- [ ] The properties of Kearnes and Kiss, Theorem 2.19: monotonicity in the first two arguments; C(S, T; δ) iff C(Cg(S), T; δ); C(S, T; δ) iff C(S, δ ∘ T ∘ δ; δ); dependence on δ only through T ∩ δ; a join of congruences each centralizing T modulo δ centralizes T modulo δ; closure under meets in δ; the two sufficient conditions (7) and (8); restriction to subalgebras and transport to quotients.
+- [ ] Freese and McKenzie's Proposition 3.3 and the exercises after Proposition 3.4, where they add to the list.
+- [ ] Checked examples: in an abelian group every pair of congruences centralizes modulo the zero congruence; in the two-element semilattice the two-element congruence does not centralize itself modulo zero.
+
+## Acceptance criteria
+
+- [ ] The modules type-check under `--safe --without-K` with no postulates; every property of Theorem 2.19 stated for congruences is proved for congruences, and the tolerance forms are proved where the generated-congruence equivalence makes them follow.
+- [ ] The definitions live at the universe-level conventions of `Setoid.Congruences.CompleteLattice`, so that M11-2 can take meets and joins over all δ.
+- [ ] A design note `docs/notes/m11-1-term-condition.md` records the choice of matrix definition and the level decision.
+
+## Sources
+
++  Ralph Freese and Ralph McKenzie, *Commutator Theory for Congruence Modular Varieties*, London Mathematical Society Lecture Note Series 125 (1987), Chapter 3.
++  Keith A. Kearnes and Emil W. Kiss, *The Shape of Congruence Lattices*, Memoirs of the American Mathematical Society 222 (2013), Section 2.5.
+
+---
+
+### Issue M11-2: The commutator, the centralizer, abelian congruences, the center, and the derived series (#625)
+
+**Labels**: `milestone-11-commutator`
+
+## Description
+
+Define the commutator [S, T] of two tolerances as the least congruence δ with C(S, T; δ), which exists because the centralizing δ are closed under complete meets (Kearnes and Kiss, Theorem 2.19 (6), with the complete lattice of M6-1), and the centralizer (δ : T) as the largest congruence α with C(α, T; δ), which exists by closure under complete joins (Theorem 2.19 (5)); Freese and McKenzie call (θ : ψ) residuation (Definition 4.12).  From these define abelian tolerances and congruences ([T, T] = 0), abelian algebras ([1, 1] = 0), the center ζ(𝑨) = (0 : 1), the largest congruence α with [α, 1] = 0 (Freese and McKenzie, Definition 5.1 and Lemma 5.2), the symmetric commutator [α, β]ₛ (Definition 3.2 (4)), and the series of Definition 6.1: [α]⁰ = α, [α]ⁿ⁺¹ = [[α]ⁿ, [α]ⁿ] and (β, α]ⁿ⁺¹ = [β, (β, α]ⁿ], with k-step solvable and k-step nilpotent congruences and algebras.  None of this needs a Mal'tsev condition, and these are the definitions other developments quote.
+
+## Tasks
+
+- [ ] `[S, T]`, `(δ : T)`, and their characterizations as least and largest, in `Setoid.Commutator.Basic`.
+- [ ] [α, β] ≤ [α, β]ₛ = [β, α]ₛ ≤ α ∧ β, and monotonicity of both in both arguments (Freese and McKenzie, Proposition 3.4 (2) and (3)).
+- [ ] Abelian tolerances, congruences, and algebras; the equivalence of "𝑨 is abelian" with "the diagonal of 𝑨 × 𝑨 is a class of a congruence of 𝑨 × 𝑨" (the remark after Kearnes and Kiss, Definition 2.20); the center and Lemma 5.2.
+- [ ] The derived and lower central series, k-step solvable and nilpotent congruences and algebras (Freese and McKenzie, Definition 6.1), with the elementary facts (an abelian congruence is 1-step solvable; nilpotent implies solvable).
+- [ ] Checked examples: an abelian group is abelian; the two-element semilattice and the two-element lattice are not; the center of a group is its group-theoretic center (the full comparison is M11-3).
+
+## Acceptance criteria
+
+- [ ] The least and largest characterizations are proved, with the complete lattice of congruences supplying the meet and the join.
+- [ ] The definitions of abelian congruence and abelian algebra are stated once, in the form later issues and other libraries can quote, with the diagonal characterization proved.
+- [ ] The examples type-check under `Examples.*`.
+
+## Sources
+
++  Freese and McKenzie, Chapter 3, Definition 4.12, Definitions 5.1 to 5.3 and Lemma 5.2, and Definition 6.1.
++  Kearnes and Kiss, Definitions 2.20 and 2.21.
+
+---
+
+### Issue M11-3: The commutator of a group is the commutator of normal subgroups (#626)
+
+**Labels**: `milestone-11-commutator`
+
+## Description
+
+Congruences of a group correspond to normal subgroups, and Freese and McKenzie's Chapter 1 shows that the term-condition commutator of two congruences corresponds to the commutator subgroup [M, N] of the corresponding normal subgroups.  Under that correspondence an abelian congruence is an abelian normal subgroup, the center ζ(𝑨) is the center of the group, an abelian algebra is an abelian group, and the derived series of M11-2 is the group's derived series, so the solvability that [#512] asks for is the general notion specialized.  `Classical.Structures.Group.Commutator` already defines the commutator of two elements, the commuting relation and the absorption laws, and `Classical.Structures.Group.Centralizer` the group-theoretic centralizer; this issue connects them to `Setoid.Commutator.*`.
+
+## Tasks
+
+- [ ] The correspondence between congruences of a group, as an algebra over the signature of `Classical.Structures.Group`, and its normal subgroups, unless `Classical.Structures.Group.MinimalNormal` or `Simple` already provides it.
+- [ ] C(θ_M, θ_N; θ_K) iff [M, N] ≤ K, hence [θ_M, θ_N] = θ_[M, N] (Freese and McKenzie, Chapter 1).
+- [ ] Abelian congruences are the abelian normal subgroups; ζ(𝑨) is the center; the derived series and the lower central series are the group-theoretic ones; a group is solvable or nilpotent in the sense of M11-2 iff in the usual sense.
+- [ ] Optional: rings, where [I, J] corresponds to IJ + JI (Freese and McKenzie, Chapter 1), over `Classical.Structures.Ring`, if ideals are available.
+
+## Acceptance criteria
+
+- [ ] The comparison theorems are proved and exercised on at least one nonabelian group in `Examples.Classical.Groups.*`.
+- [ ] The solvability task of [#512] can be discharged by the general definition specialized to groups, and that issue is updated to say so.
+
+## Sources
+
++  Freese and McKenzie, Chapter 1.
+
+[#512]: https://github.com/ualib/agda-algebras/issues/512
+
+---
+
+### Issue M11-4: The modular commutator: symmetry, join-additivity, and behavior under homomorphisms (#627)
+
+**Labels**: `milestone-11-commutator`
+
+## Description
+
+In a congruence modular variety the commutator is well behaved: it is symmetric, distributes over joins, is preserved by surjective homomorphisms and by restriction to subalgebras, and is computed coordinatewise on products (Freese and McKenzie, Propositions 4.2 to 4.5).  The proofs use Day terms, which Day's theorem in `Setoid.Varieties.Maltsev.Modularity` (M6-6 and M6-7) supplies, through the Shifting Lemma (Lemma 2.4) and the Cube Lemma (Theorem 2.5), and the relation X(α, β) of Definition 4.1, the pairs ⟨mᵢ(a, b, d, c), mᵢ(a, a, c, c)⟩ over matrices in M(α, β); Proposition 4.2 shows that in a modular variety X(α, β) ⊆ δ, X(β, α) ⊆ δ, and C(α, β; δ) are equivalent, which is where the symmetry comes from.
+
+## Tasks
+
+- [ ] The Shifting Lemma and the Cube Lemma from Day terms, beside Day's theorem.
+- [ ] X(α, β) and Proposition 4.2.
+- [ ] Proposition 4.3: [θ, ψ] = [ψ, θ] ≤ θ ∧ ψ, and [θ, ⋁ γᵢ] = ⋁ [θ, γᵢ].
+- [ ] Proposition 4.4: for a surjective homomorphism f with kernel π, [θ, ψ] ∨ π = f⁻¹[f(θ ∨ π), f(ψ ∨ π)]; and the restriction of the commutator to a subalgebra.
+- [ ] Proposition 4.5 for binary products, on `Setoid.Algebras.Products`.
+- [ ] Theorem 4.10, that the commutator is the largest operation satisfying the two conditions of Definition 3.1: optional; record the decision.
+
+## Acceptance criteria
+
+- [ ] Every result is proved under the hypothesis that the algebra's variety has Day terms, phrased with the existing interpretation `Th-Day n ≼ ℰ`, in a module `Setoid.Commutator.Modular`.
+- [ ] Propositions 4.3 and 4.4 are proved in full; what is skipped from 4.5 and 4.10 is recorded in the module's prose.
+
+## Sources
+
++  Freese and McKenzie, Lemma 2.4, Theorem 2.5, and Chapter 4.
+
+---
+
+### Issue M11-5: Gumm's difference term and the characterization of abelian congruences (#628)
+
+**Labels**: `milestone-11-commutator`
+
+## Description
+
+Every modular variety has a difference term (Freese and McKenzie, Theorem 5.5): a ternary term d with d(x, x, y) ≈ y, with d(x, y, y) [θ, θ] x whenever ⟨x, y⟩ ∈ θ, and with the shifting implication of Figure 1 for α ∧ β ≤ γ.  The proof constructs d from Day terms by the inductive definition of the terms qᵢ.  With d in hand, Proposition 5.7 characterizes [α, β] = 0 for α ≥ β by two identities saying that d commutes with every basic operation on β-related and α-related triples, and Corollary 5.8 says a congruence β is abelian iff each block u/β carries the ternary-group structure M(β, u), with every term operation affine between blocks.  These are the tools of the Fundamental Theorem on Abelian Algebras (M11-7).
+
+## Tasks
+
+- [ ] A record `DifferenceTerm` for a term d over a class of algebras, with the three clauses of Theorem 5.5; it is not an equational Mal'tsev condition, since clause (ii) mentions the commutator.
+- [ ] The construction of d from Day terms and the proof of Theorem 5.5 (i) to (iii).
+- [ ] Proposition 5.7, both directions.
+- [ ] Corollary 5.8: the ternary group M(β, u) with x − y + z := d(x, y, z), and affineness of term operations between blocks.
+
+## Acceptance criteria
+
+- [ ] Theorem 5.5, Proposition 5.7, and Corollary 5.8 are proved for algebras whose variety has Day terms, in `Setoid.Commutator.DifferenceTerm`.
+- [ ] The difference term of a group (x y⁻¹ z) and of a module (x − y + z) are checked instances.
+
+## Sources
+
++  Freese and McKenzie, Chapter 5 through Corollary 5.8.
+
+---
+
+### Issue M11-6: Gumm terms, and the permutability of solvable congruences (#629)
+
+**Labels**: `milestone-11-commutator`
+
+## Description
+
+Gumm's theorem (Freese and McKenzie, Theorem 6.4, from Gumm 1981) characterizes modularity by terms p, q₀, …, qₙ with q₀(x, y, z) ≈ x, qᵢ(x, y, x) ≈ x, alternating identities linking qᵢ and qᵢ₊₁ at (x, y, y) and (x, x, y), and p joining qₙ to a Mal'tsev-like term with p(x, x, y) ≈ y; Theorem 6.5 restates modularity as the relation (α ∘ β) ∧ γ ≤ ((γ ∧ α) ∨ (γ ∧ β)) ∘ β ∘ α on congruences.  This is the second term characterization of modularity after Day's, and the one commutator arguments use.  The chapter also proves that solvable congruences permute: α ∘ β ⊆ [α]ᵏ ∘ β ∘ α for all k (Theorem 6.2), so a solvable congruence permutes with every congruence and a solvable algebra has permuting congruences, and α permutes with β iff [α]ᵐ permutes with [β]ⁿ for some, equivalently all, m and n (Theorem 6.3).
+
+## Tasks
+
+- [ ] A theory `Th-Gumm n` beside `Th-Day n` in `Setoid.Varieties.Maltsev`, with the identities of Theorem 6.4.
+- [ ] Gumm terms from Day terms, as in the proof of Theorem 6.4; and Gumm terms imply Day terms or modularity directly, so that `HasGummTerms` and `HasDayTerms` are equivalent.
+- [ ] Theorem 6.5.
+- [ ] Theorem 6.2, and Theorem 6.3 as far as its exercises sketch it; record what is left.
+
+## Acceptance criteria
+
+- [ ] Both directions of Gumm's theorem are proved, and the equivalence with Day's theorem is a checked corollary.
+- [ ] Theorem 6.2 is proved, with the permutability layer of `Setoid.Congruences.Permutability`.
+
+## Sources
+
++  Freese and McKenzie, Chapter 6.
+
+---
+
+### Issue M11-7: The Fundamental Theorem on Abelian Algebras: abelian is affine in a modular variety (#630)
+
+**Labels**: `milestone-11-commutator`
+
+## Description
+
+An algebra is affine (Freese and McKenzie, Definition 5.4) when its carrier has an abelian group structure and a ternary term operation t with t(x, y, z) = x − y + z, such that every term operation f satisfies f(x − y + z) = f(x) − f(y) + f(z) coordinatewise.  Herrmann's theorem, Corollary 5.9, says that in a modular variety an algebra is abelian iff it is affine.  The proof applies Proposition 5.7 and Corollary 5.8 with β = 1: for any u the ternary group M(1, u) gives the abelian group with zero u, the difference term is x − y + z, and term operations are affine; the converse is direct from the definitions.  This is the milestone's first capstone, and the form in which abelian algebras are used everywhere after it.  Chapter 9's refinement, that an abelian algebra is polynomially equivalent to a module over the ring R(𝒱) of the variety, is a stretch goal to state.
+
+## Tasks
+
+- [ ] `Affine 𝑨`, over `Classical.Structures.AbelianGroup` for the group structure on the carrier.
+- [ ] Affine implies abelian, directly.
+- [ ] Abelian implies affine in a variety with Day terms, through M11-5.
+- [ ] Stretch: state the module structure of Chapter 9 (Theorem 9.9 or the form the prose of Chapter 9 gives) as a hypothesis record, with its exact statement.
+
+## Acceptance criteria
+
+- [ ] Corollary 5.9 is proved in both directions for algebras whose variety has Day terms, in `Setoid.Commutator.Abelian`.
+- [ ] The affine algebra of an abelian group (with x − y + z) and a nonabelian example are checked.
+
+## Sources
+
++  Freese and McKenzie, Definition 5.4, Corollary 5.9, and Chapter 9.
+
+---
+
+### Issue M11-8: Nilpotent algebras and centerless varieties in the modular case (#631)
+
+**Labels**: `milestone-11-commutator`
+
+## Description
+
+With the center and the series of M11-2 in place, the modular theory describes nilpotent algebras and the varieties without abelian members.  Freese and McKenzie's Proposition 7.1 represents an algebra as Q ⊗_T B over its center, with Q abelian and B = 𝑨/ζ(𝑨); Corollary 7.2 characterizes 2-step nilpotent algebras as such products of two abelian algebras; Corollaries 7.5 and 7.7 give nilpotent algebras uniform and regular congruences.  Theorem 8.5 lists five equivalent conditions on a modular variety: the congruence identities [x, 1] ≈ x and [1, 1] ≈ 1, the absence of nontrivial abelian algebras, every algebra centerless, and Con(𝑨 × 𝑩) ≅ Con 𝑨 × Con 𝑩 naturally.  The ⊗_T construction is heavy; target Theorem 8.5 and Corollaries 7.5 and 7.7 first, and record what Proposition 7.1 needs.
+
+## Tasks
+
+- [ ] Theorem 8.5, with the product-of-congruence-lattices clause through M11-4's Proposition 4.5.
+- [ ] Uniform and regular congruences as predicates; Corollaries 7.5 and 7.7 for nilpotent algebras, or the exact statements as hypothesis records with the ⊗_T prerequisite named.
+- [ ] Proposition 7.1 and Corollary 7.2: statements first; proofs if the construction is tractable.
+- [ ] The group case: for a group, nilpotence and solvability in this sense are the usual ones (through M11-3), checked on an example.
+
+## Acceptance criteria
+
+- [ ] Theorem 8.5 is proved for varieties with Day terms.
+- [ ] Each of Corollaries 7.5 and 7.7 is proved or stated as a hypothesis record with its prerequisite named in the dependency prose.
+
+## Sources
+
++  Freese and McKenzie, Chapter 7 and Theorem 8.5.
+
+---
+
+### Issue M11-9: Strong term conditions and the term condition under a Taylor term (#632)
+
+**Labels**: `milestone-11-commutator`
+
+## Description
+
+Kearnes and Kiss's Chapter 3 develops the term condition in varieties that satisfy a nontrivial idempotent Mal'tsev condition, equivalently (by Taylor's theorem) have a Taylor term, which covers every finite algebra whose clone is not essentially unary on a two-element quotient.  Its results that later chapters use are the following: Theorem 3.13, that such a variety has no member with a nonzero strongly abelian congruence or tolerance, and conversely; Theorem 3.24, that an abelian tolerance generates an abelian congruence, C(T, T; δ) implying C(Cg(T), Cg(T); δ); and Theorem 3.27, that C(α, α; α ∧ β) holds iff C(α ∨ β, α ∨ β; β) does.  The proof of 3.27 from 3.24 and the properties of Theorem 2.19 is a dozen lines; 3.24 is the substantial argument.
+
+## Tasks
+
+- [ ] Taylor terms as a theory interpretation beside `Th-Maltsev`, `Th-Jonsson`, and `Th-Day`: an idempotent n-ary term with, for each coordinate, one identity whose two sides differ in that coordinate.
+- [ ] The strongly abelian and strongly rectangular term conditions (Definition 3.1) and the properties of Theorem 3.4.
+- [ ] Theorem 3.13, at least the direction from a Taylor term to the absence of nonzero strongly abelian congruences, whose proof uses only the Taylor identities.
+- [ ] Theorem 3.24.
+- [ ] Theorem 3.27, from Theorem 3.24 and Theorem 2.19.
+
+## Acceptance criteria
+
+- [ ] Theorem 3.27 is proved in `Setoid.Commutator.Taylor` for varieties with a Taylor term, with Theorem 3.24 proved or, failing that, stated as a hypothesis record with its exact statement and discharged later.
+- [ ] The Taylor-term interpretation is reusable by any development that needs it.
+
+## Sources
+
++  Kearnes and Kiss, Chapter 3, in particular Definition 3.1, Theorems 3.4, 3.13, 3.24, and 3.27.
+
+---
+
+### Issue M11-10: Weak difference terms and the solvability theory of Kearnes and Kiss, Chapter 6 (#633)
+
+**Labels**: `milestone-11-commutator`
+
+## Description
+
+A weak difference term for a variety (Kearnes and Kiss, Definition 6.1) is a ternary term d with d(a, a, b) ≡ b ≡ d(b, a, a) modulo [θ, θ] whenever ⟨a, b⟩ ∈ θ; a difference term (M11-5) and a Mal'tsev term are weak difference terms.  Theorem 6.2 says the class of varieties with a weak difference term is definable by a nontrivial idempotent Mal'tsev condition, and that this condition is the weakest one under which homomorphic images of solvable algebras are solvable and abelian algebras are affine; the first and third parts are Theorem 4.8 of Kearnes and Szendrei (1998), and Corollary 6.3 adds that a Hobby–McKenzie term gives a weak difference term.  Section 6.1 then builds the solvability theory under a weak difference term, through Theorem 6.13, and Theorem 6.17 describes the congruence lattices: a variety has a weak difference term iff the congruence lattice of each of its algebras has an SD∧/Modular factorization.  For locally finite varieties a weak difference term is the same as a Taylor term (Hobby and McKenzie, through the type-omitting theorem; Bergman and DeMeo quote this as their Lemma 3.4), which is why finite algebras with a Taylor term fall under this chapter.
+
+## Tasks
+
+- [ ] `WeakDifferenceTerm` as a record, with the instances given by difference terms and Mal'tsev terms.
+- [ ] Theorem 6.2 and Corollary 6.3 as frozen statements with hypothesis records; prove the direction of 6.2 that the proof in the book gives (homomorphic images of solvable algebras are solvable under a weak difference term, through Lemma 6.8).
+- [ ] The solvability theory of Section 6.1: Lemmas 6.7 to 6.10 and Theorems 6.11 and 6.13, in order, with the exact hypotheses of each.
+- [ ] Abelian algebras are affine under a weak difference term (Kearnes and Szendrei, Theorem 4.8, as cited in the proof of Theorem 6.2): the statement as a hypothesis record, and the proof if the chapter's tools reach it; this generalizes M11-7 beyond modularity.
+- [ ] Theorem 6.17: statement, and the proof of the direction from a weak difference term to the factorization as far as the meet-continuous lattice theory of Chapter 2 is available.
+
+## Acceptance criteria
+
+- [ ] The definitions and the proved parts of Section 6.1 type-check in `Setoid.Commutator.WeakDifferenceTerm`; every unproved theorem is a frozen statement with a hypothesis record, named in the module's prose.
+- [ ] The relation between difference terms, weak difference terms, Mal'tsev terms, and Taylor terms is recorded with the proved implications marked.
+
+## Sources
+
++  Kearnes and Kiss, Chapter 6.
++  Keith A. Kearnes and Ágnes Szendrei, The relationship between two commutators, International Journal of Algebra and Computation 8 (1998), 497–531.
++  Clifford Bergman and William DeMeo, Universal algebraic methods for constraint satisfaction problems, Logical Methods in Computer Science 18 (2022), Section 3, for the locally finite comparison.
+
+---
+
+### Issue M11-11: Congruence meet-semidistributivity and the trivial commutator (#634)
+
+**Labels**: `milestone-11-commutator`
+
+## Description
+
+Kearnes and Kiss's Theorem 8.1 lists conditions equivalent to congruence meet-semidistributivity of a variety, among them that [α, β] = α ∧ β for all congruences of all members, that no member has a nontrivial abelian congruence, that no member has a nontrivial abelian tolerance, and that C(α, β; δ) holds iff β ∧ (α ∨ (β ∧ δ)) ≤ δ.  The commutator-theoretic conditions are statements about the term condition alone and belong with M11-1 and M11-2; the equivalence with meet-semidistributivity itself is the chapter's theorem and rests on the lattice theory of the earlier chapters.  This issue proves the implications among the commutator-theoretic conditions that the term condition supports and freezes the rest.
+
+## Tasks
+
+- [ ] `CongruenceMeetSemidistributive`, beside `CongruenceDistributive` and `CongruenceModular` in `Setoid.Congruences.Properties`.
+- [ ] The implications among conditions (3) to (6) of Theorem 8.1 that follow from Theorem 2.19 and the definitions, each as a named lemma, with the ones that need more recorded.
+- [ ] Theorem 8.1 (1) iff (3) as a frozen statement with a hypothesis record, and its proof route through the book recorded.
+
+## Acceptance criteria
+
+- [ ] The proved implications type-check in `Setoid.Commutator.Semidistributive`; the statement of Theorem 8.1 is frozen with every hypothesis explicit.
+- [ ] The two-element semilattice and the two-element lattice are checked to have trivial commutators, and an abelian group not to.
+
+## Sources
+
++  Kearnes and Kiss, Theorem 8.1.
+
+---
+
+### Issue M11-12: Deciding difference terms for finite idempotent algebras (#635)
+
+**Labels**: `milestone-11-commutator`
+
+## Description
+
+DeMeo, Freese, and Valeriote (2019) give a polynomial-time test deciding whether the variety generated by a finite idempotent algebra has a difference term, and algorithms constructing one (Corollary 3.7, Theorem 3.8, and Theorem 5.1 there).  The test examines small subalgebras of 𝑨² for difference term operations; its correctness rests on Kearnes's characterization of varieties with a difference term by tame congruence theory (their Theorem 1.1), which is outside this milestone's scope and enters as a hypothesis record.  What the library can do unconditionally is check a certificate: given a term d, decide over `Setoid.Algebras.Finite` whether d is a difference term operation of a finite algebra, and whether every 3-generated subalgebra of 𝑨² has one.
+
+## Tasks
+
+- [ ] Difference term operations of a finite algebra as a decidable predicate, with the commutator of a finite algebra computed from `Setoid.Congruences.Finite`.
+- [ ] The checker for the test's condition on subalgebras of 𝑨², and a certificate format naming the term for each.
+- [ ] The theorem of DeMeo, Freese, and Valeriote as a frozen statement with a hypothesis record, so that a certificate plus the record yields a difference term for the variety.
+- [ ] Worked examples on small algebras, including one that has no difference term.
+
+## Acceptance criteria
+
+- [ ] The checker type-checks and runs on the examples by evaluation inside Agda.
+- [ ] The hypothesis record states exactly the theorem the paper proves, with its source and theorem number.
+
+## Sources
+
++  William DeMeo, Ralph Freese, and Matthew Valeriote, Polynomial-time tests for difference terms in idempotent varieties, International Journal of Algebra and Computation 29 (2019), DOI 10.1142/S021819671950036X.
+
+<!-- END GENERATED: milestone-11 -->
+
+### Milestone 11 Dependencies
+
+The general theory (M11-1 and M11-2) needs only the congruence lattice of M6-1; the modular theory (M11-4 to M11-8) needs Day's theorem (M6-6 and M6-7); the group comparison (M11-3) needs the classical group layer (M3-6); the Kearnes and Kiss chapters (M11-9 to M11-11) need only the general theory, and the difference-term decision procedure (M11-12) needs the weak difference terms of M11-10.
+
+```mermaid
+graph TD
+  M3_6["M3-6: Groups"]:::ext
+  M6_1["M6-1: Con as a complete lattice"]:::ext
+  M6_7["M6-6, M6-7: Day's theorem"]:::ext
+  M11_1["M11-1: Term condition"]
+  M11_2["M11-2: Commutator, center, series"]
+  M11_3["M11-3: Groups"]
+  M11_4["M11-4: Modular commutator"]
+  M11_5["M11-5: Difference term"]
+  M11_6["M11-6: Gumm terms, solvable permute"]
+  M11_7["M11-7: Abelian is affine"]
+  M11_8["M11-8: Nilpotent, centerless"]
+  M11_9["M11-9: Taylor term, Theorem 3.27"]
+  M11_10["M11-10: Weak difference terms"]
+  M11_11["M11-11: Meet-semidistributivity"]
+  M11_12["M11-12: Deciding difference terms"]
+  M6_1 --> M11_1
+  M11_1 --> M11_2
+  M3_6 --> M11_3
+  M11_2 --> M11_3
+  M6_7 --> M11_4
+  M11_2 --> M11_4
+  M11_4 --> M11_5
+  M11_5 --> M11_6
+  M11_5 --> M11_7
+  M11_2 --> M11_8
+  M11_6 --> M11_8
+  M11_7 --> M11_8
+  M11_2 --> M11_9
+  M11_9 --> M11_10
+  M11_5 --> M11_10
+  M11_2 --> M11_11
+  M11_10 --> M11_12
+  classDef ext fill:#f0f0f0,stroke:#999,stroke-dasharray: 4 3,color:#555
+```
+
+---
+---
+
 ## Dependency Graph (Mermaid)
 
 ```mermaid
@@ -5446,6 +5833,20 @@ graph TD
     M10_1["M10-1: MkDocs rendering"]
     M10_2["M10-2: agda org transfer"]
     M10_3["M10-3: nixpkgs distribution"]
+  end
+  subgraph "M11 — Commutator theory"
+    M11_1["M11-1: Term condition"]
+    M11_2["M11-2: Commutator, center, series"]
+    M11_3["M11-3: Groups"]
+    M11_4["M11-4: Modular commutator"]
+    M11_5["M11-5: Difference term"]
+    M11_6["M11-6: Gumm terms, solvable permute"]
+    M11_7["M11-7: Abelian is affine"]
+    M11_8["M11-8: Nilpotent, centerless"]
+    M11_9["M11-9: Taylor term, Theorem 3.27"]
+    M11_10["M11-10: Weak difference terms"]
+    M11_11["M11-11: Meet-semidistributivity"]
+    M11_12["M11-12: Deciding difference terms"]
   end
 
   %% M1 internal
@@ -5511,6 +5912,20 @@ graph TD
   M1_8 --> M10_1
   M2_1 --> M10_1
   M4_1 --> M10_1
+  M11_1 --> M11_2
+  M11_2 --> M11_3
+  M11_2 --> M11_4
+  M11_4 --> M11_5
+  M11_5 --> M11_6
+  M11_5 --> M11_7
+  M11_2 --> M11_8
+  M11_6 --> M11_8
+  M11_7 --> M11_8
+  M11_2 --> M11_9
+  M11_9 --> M11_10
+  M11_5 --> M11_10
+  M11_2 --> M11_11
+  M11_10 --> M11_12
 ```
 
 ---
