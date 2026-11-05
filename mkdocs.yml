@@ -161,6 +161,10 @@ extra_javascript:
   - assets/js/agda-hover.js
   # Auto-advancing carousel for the landing's Featured-results cards.
   - assets/js/carousel.js
+  # The landing page's figures count up from zero when the strip comes into
+  # view.  The counted values are in the HTML already; with this script
+  # absent, off, or under reduced motion, the page simply shows them.
+  - assets/js/stats-count.js
   # The module constellation; on every page so that instant navigation runs
   # it, and it fetches d3 only on the page that draws (see the script).
   - assets/js/constellation.js
