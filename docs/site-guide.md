@@ -36,6 +36,9 @@ separate copy of the documentation.  The decision record is
    `<pre class="Agda">` blocks (Material's own copy button only covers its
    `.highlight` blocks, which the `agda --html` output is not).
 +  **`docs/assets/js/agda-toggle.js`** — the header's "Show more Agda" control ([#431](https://github.com/ualib/agda-algebras/issues/431)).  Module sources wrap their leading OPTIONS/module/import scaffolding in `<!-- … -->` comments; `mkdocs_gen_library.py` re-surfaces those blocks tagged `hidden-source`, and this control shows or re-hides them all at once, with the choice persisted in `localStorage` like the palette toggle.
++  **`docs/assets/js/stats-count.js`**: the landing page's figures count up
+   from zero the first time the stat strip scrolls into view (see
+   [Corpus stats](#corpus-stats)).
 
 ### Hiding a module's import scaffolding
 
@@ -309,6 +312,16 @@ The MkDocs hook substitutes the same values into the rendered page at build
 time, but that is a convenience, not the mechanism: it rewrites only the built
 HTML, so before the gate existed the committed values, which are the ones GitHub
 renders, sat six weeks behind the tree and were quoted elsewhere as current.
+
+On the page, `docs/assets/js/stats-count.js` counts each numeric figure up
+from zero, eased over 0.9 s, the first time the strip scrolls into view, and
+lands on the value the page already holds; the toolchain's version is not a
+quantity and stays still.  The script only ever animates toward the counted
+value, so with JavaScript off, under reduced motion, or in a browser with no
+`IntersectionObserver`, the page shows the figures unchanged.  It subscribes
+to Material's `document$`, so it runs again after an instant navigation back
+to the landing page.
+
 `corpus_stats.py --json` prints the figures as one record for anything outside
 this repository that wants to cite them.
 

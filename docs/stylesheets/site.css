@@ -75,7 +75,10 @@
 /* The statistics: four cells separated by hairlines made of the grid's gap
    over a line-colored background, the strip williamdemeo.org uses for its
    own figures.  The numbers are written by scripts/python/corpus_stats.py
-   into `<!-- ualib:stat:... -->` markers; nothing here touches them. */
+   into `<!-- ualib:stat:... -->` markers; nothing here touches them.  The
+   count-up in assets/js/stats-count.js rewrites a figure's text as it
+   arrives; these rules style the resting state, which is also the state with
+   no JavaScript or reduced motion. */
 .ualib-stats {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
