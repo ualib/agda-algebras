@@ -10,10 +10,9 @@ hide:
 # The Agda Universal Algebra Library
 
 <p class="ualib-tagline" markdown>
-A constructive formalization of **universal algebra** in dependent type theory —
+A constructive formalization of **universal algebra** in dependent type theory,
 from signatures, algebras, and homomorphisms to a machine-checked proof of
-**Birkhoff's variety theorem** — written in literate [Agda][] and type-checked on
-every commit.
+**Birkhoff's variety theorem**.
 </p>
 
 <div class="ualib-formula">𝖵(𝒦) = 𝖧𝖲𝖯(𝒦)</div>
@@ -39,8 +38,9 @@ every commit.
 
 ## Featured results
 
-Landmark theorems of universal algebra, each formalized and type-checked here —
-follow a face to the proof.
+Landmark theorems of universal algebra, each formalized in literate Agda and type-checked under `--without-K --exact-split --safe`.
+
+Follow a face to the proof.
 
 <div class="ualib-carousel" data-autoplay="4000" aria-roledescription="carousel" aria-label="Featured results">
 <div class="ualib-carousel__viewport">
