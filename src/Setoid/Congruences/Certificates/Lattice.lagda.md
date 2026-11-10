@@ -72,9 +72,11 @@ module Setoid.Congruences.Certificates.Lattice where
 open import Agda.Primitive using () renaming ( Set to Type )
 
 -- Imports from the Agda Standard Library -----------------------------------
+open import Data.Bool.Base        using  ( Bool ; true ; T )
 open import Data.Fin.Base         using  ( Fin ; _≤_ )
 open import Data.Fin.Properties   using  ( all? ; ≤-antisym )
                                   renaming ( _≟_ to _≟ᶠ_ )
+open import Data.Bool.ListAction  using  ( and )
 open import Data.List.Base        using  ( List ; [] ; _∷_ ; map ; _++_
                                          ; filter ; allFin ; cartesianProduct )
 open import Data.List.Membership.Propositional
@@ -100,10 +102,18 @@ open import Relation.Binary       using  ( Setoid )
 open import Relation.Binary.PropositionalEquality
                                   using  ( _≡_ ; sym ; trans ; subst )
 open import Relation.Nullary.Decidable
-                                  using  ( Dec ; map′ ; _×-dec_ ; _→-dec_ )
+                                  using  ( Dec ; _→-dec_ )
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
 open import Overture                                    using  ( 𝓞 ; 𝓥 ; Signature )
+open import Overture.BooleanFolds                       using  ( allᵈ ; allᵈ-sound
+                                                               ; allᵈ-complete
+                                                               ; all²ᵈ ; all²ᵈ-sound
+                                                               ; all²ᵈ-complete
+                                                               ; all⁴ᵈ ; all⁴ᵈ-sound
+                                                               ; all⁴ᵈ-complete
+                                                               ; and-sound ; and-complete
+                                                               ; ≡true→T ; decideᵇ )
 open import Setoid.Algebras.Basic                       using  ( Algebra ; 𝕌[_] ; 𝔻[_] )
 open import Setoid.Algebras.Finite                      using  ( FiniteAlgebra )
 open import Setoid.Congruences.Basic                    using  ( Con )
@@ -156,10 +166,10 @@ module LatticeCheck {𝑆 : Signature 𝓞 𝓥} {𝑨 : Algebra {𝑆 = 𝑆} �
 #### The checked conditions
 
 `LatticeCertOK`{.AgdaRecord} bundles every checked condition of one
-whole-lattice certificate; `latticeCertOK?`{.AgdaFunction} decides the whole
-bundle at once, so a concrete emitted certificate is discharged by a single
-`from-yes`{.AgdaFunction}.  Each field is a bounded sweep built from the
-deciders of [Setoid.Congruences.Certificates.Congruence][] and Schema.
+whole-lattice certificate.  Each field is a bounded sweep built from the
+deciders of [Setoid.Congruences.Certificates.Congruence][] and Schema.  The
+bundle is decided through one Boolean (the next section), and a concrete
+emitted certificate is accepted by `latticeCertOK-sound lc refl`.
 
 ```agda
   module _ {m : ℕ} (lc : LatticeCert card opCard arOf m) where
@@ -201,41 +211,172 @@ deciders of [Setoid.Congruences.Certificates.Congruence][] and Schema.
                              → SameBlock (partAt l) i j
                              → SameBlock (partAt (meet k l)) i j
 
-    -- One decision for the whole bundle.
+```
+
+Each condition is a sweep over one, two or four indices, and each case of a
+sweep is a decision of its own.  Those per-case decisions are named once
+here: the Boolean of the next section folds their Booleans, and its soundness
+lemma reads each condition back through them.
+
+```agda
+    -- Each listed vector is in normal form, coherent, and edge-compatible.
+    nf? : ∀ k → Dec (NormalForm (partAt k))
+    nf? k = normalForm? (partAt k)
+
+    coh? : ∀ k → Dec (Coherent (partAt k))
+    coh? k = coherent? (partAt k)
+
+    ec? : ∀ k → Dec (EdgeCompat (partAt k))
+    ec? k = edgeCompat? (partAt k)
+
+    -- Two positions carrying pointwise-equal vectors are equal.
+    inj? : ∀ k l → Dec ((∀ i → parent (partAt k) i ≡ parent (partAt l) i) → k ≡ l)
+    inj? k l = all? (λ i → parent (partAt k) i ≟ᶠ parent (partAt l) i) →-dec (k ≟ᶠ l)
+
+    -- The bot entry relates two indices only if their elements are ≈.
+    bot? : ∀ i j → Dec (SameBlock (partAt bot) i j → enum i ≈ enum j)
+    bot? i j = sameBlock? (partAt bot) i j →-dec (enum i ≟ enum j)
+
+    -- The principal entry of a pair: containment, trace validity, coverage.
+    prinResp? : ∀ i j → Dec (Respects (partAt (prin i j)) ((i , j) ∷ []))
+    prinResp? i j = respects? (partAt (prin i j)) ((i , j) ∷ [])
+
+    prinTr? : ∀ i j → Dec (TraceValid ((i , j) ∷ []) (prinTrace i j))
+    prinTr? i j = traceValid? ((i , j) ∷ []) (prinTrace i j)
+
+    prinCov? : ∀ i j
+      →  Dec (Covers (partAt (prin i j)) (replayRoots (merges (prinTrace i j))))
+    prinCov? i j = covers? (partAt (prin i j)) (replayRoots (merges (prinTrace i j)))
+
+    -- The join entry of two positions: containment, trace validity, coverage.
+    joinResp? : ∀ k l → Dec (Respects (partAt (join k l)) (joinSeeds k l))
+    joinResp? k l = respects? (partAt (join k l)) (joinSeeds k l)
+
+    joinTr? : ∀ k l → Dec (TraceValid (joinSeeds k l) (joinTrace k l))
+    joinTr? k l = traceValid? (joinSeeds k l) (joinTrace k l)
+
+    joinCov? : ∀ k l
+      →  Dec (Covers (partAt (join k l)) (replayRoots (merges (joinTrace k l))))
+    joinCov? k l = covers? (partAt (join k l)) (replayRoots (merges (joinTrace k l)))
+
+    -- The meet entry of two positions, at two indices: below the left
+    -- argument, below the right one, and above anything below both.
+    meetˡ? : ∀ k l i j
+      →  Dec (SameBlock (partAt (meet k l)) i j → SameBlock (partAt k) i j)
+    meetˡ? k l i j = sameBlock? (partAt (meet k l)) i j →-dec sameBlock? (partAt k) i j
+
+    meetʳ? : ∀ k l i j
+      →  Dec (SameBlock (partAt (meet k l)) i j → SameBlock (partAt l) i j)
+    meetʳ? k l i j = sameBlock? (partAt (meet k l)) i j →-dec sameBlock? (partAt l) i j
+
+    meet²? : ∀ k l i j
+      →  Dec (SameBlock (partAt k) i j → SameBlock (partAt l) i j
+              → SameBlock (partAt (meet k l)) i j)
+    meet²? k l i j =
+      sameBlock? (partAt k) i j
+        →-dec (sameBlock? (partAt l) i j →-dec sameBlock? (partAt (meet k l)) i j)
+```
+
+#### The Boolean route
+
+The bundle is decided through one Boolean.  `conditionsᵇ`{.AgdaFunction}
+folds the Booleans of each condition's per-case decisions with the folds of
+[Overture.BooleanFolds][], and `latticeCertOKᵇ`{.AgdaFunction} conjoins the
+fourteen folds.  `latticeCertOKᵇ-sound`{.AgdaFunction} reads the bundle back
+from the Boolean, condition by condition, by lemmas proved once for every
+certificate; `latticeCertOKᵇ-complete`{.AgdaFunction} is the converse, so the
+decision `latticeCertOK?`{.AgdaFunction} is re-derived from the Boolean and
+keeps its type.
+
+**Which route a concrete certificate takes**.  A certificate is accepted by
+`latticeCertOK-sound lc refl`.  To check `refl` against the equation
+`latticeCertOKᵇ ≡ true`, the type checker evaluates the Boolean once and
+compares the result with `true`.  Because the decision is derived from the
+same Boolean, `from-yes (latticeCertOK? lc)` costs about the same, so a
+certificate emitted against the decision needs no change.
+
+The figures behind this design were measured on the benchmark of
+[Examples.Setoid.Certificates.Cyclic30][], the eight congruences of a unary
+algebra on 30 points, under Agda 2.9.0 on 2026-11-09: each module checked
+alone from no interface under the build's `+RTS -M6G -A128M`, with `-s`, on one
+performance core.
+
+| How the certificate is accepted | Maximum residency | Memory in use | Time |
+| :--- | ---: | ---: | ---: |
+| (the data alone, with no check) | 0.71 GB | 1547 MiB | 9 s |
+| `latticeCertOK-sound lc refl` | 1.40 GB | 2577 MiB | 31 s |
+| `from-yes (latticeCertOK? lc)` | 1.46 GB | 2671 MiB | 31 s |
+| `latticeCertOKᵇ-sound lc tt` | 1.49 GB | 3988 MiB | 136 s |
+| `from-yes` of the former decision | 5.87 GB | 11 120 MiB | 55 s |
+| `refl` on the former decision's Boolean | 2.61 GB | 5273 MiB | 305 s |
+
+The former decision is the one this section replaces: a product of the
+standard library's `all?`{.AgdaFunction} sweeps.  Under the build's 6 GB heap
+it exhausted the heap after 53 s, so its row was measured under `-M14G`.  Two
+findings shaped the design, as follows:
+
++  **The fold**.  `from-yes`{.AgdaFunction} of the former decision held
+   5.87 GB.  Accepting only its Boolean, by `refl`, still took 305 s and
+   2.61 GB, so it is the `all?`{.AgdaFunction} sweeps themselves, and not only
+   the proof `from-yes`{.AgdaFunction} returns, that cost what the folds save.
+   The folds take 31 s and 1.40 GB, of which the data account for 9 s and
+   0.71 GB.
++  **The acceptance**.  The folds' Boolean, accepted by `tt` against
+   `T latticeCertOKᵇ` instead of by `refl` against the equation, took 136 s.
+   So the soundness lemma a concrete certificate uses takes the equation, and
+   the form taking `T` is kept for abstract use.
+
+```agda
+    -- The fourteen conditions, each a Boolean fold of its per-case decisions.
+    conditionsᵇ : List Bool
+    conditionsᵇ =
+        allᵈ nf? ∷ allᵈ coh? ∷ allᵈ ec?
+      ∷ all²ᵈ inj? ∷ all²ᵈ bot?
+      ∷ all²ᵈ prinResp? ∷ all²ᵈ prinTr? ∷ all²ᵈ prinCov?
+      ∷ all²ᵈ joinResp? ∷ all²ᵈ joinTr? ∷ all²ᵈ joinCov?
+      ∷ all⁴ᵈ meetˡ? ∷ all⁴ᵈ meetʳ? ∷ all⁴ᵈ meet²?
+      ∷ []
+
+    -- Every condition holds, as one Boolean.
+    latticeCertOKᵇ : Bool
+    latticeCertOKᵇ = and conditionsᵇ
+
+    -- The bundle, read back from the Boolean, condition by condition ...
+    latticeCertOKᵇ-sound : T latticeCertOKᵇ → LatticeCertOK
+    latticeCertOKᵇ-sound t = fromConditions (and-sound conditionsᵇ t)
+      where
+      fromConditions : All T conditionsᵇ → LatticeCertOK
+      fromConditions (nf ∷ coh ∷ ec ∷ inj ∷ bt ∷ pr ∷ pt ∷ pc ∷ jr ∷ jt ∷ jc
+                         ∷ m₁ ∷ m₂ ∷ m₃ ∷ []) =
+        mkLatticeCertOK
+          (allᵈ-sound nf? nf) (allᵈ-sound coh? coh) (allᵈ-sound ec? ec)
+          (all²ᵈ-sound inj? inj) (all²ᵈ-sound bot? bt)
+          (all²ᵈ-sound prinResp? pr) (all²ᵈ-sound prinTr? pt)
+          (all²ᵈ-sound prinCov? pc)
+          (all²ᵈ-sound joinResp? jr) (all²ᵈ-sound joinTr? jt)
+          (all²ᵈ-sound joinCov? jc)
+          (all⁴ᵈ-sound meetˡ? m₁) (all⁴ᵈ-sound meetʳ? m₂) (all⁴ᵈ-sound meet²? m₃)
+
+    -- ... and the Boolean, from the bundle.
+    latticeCertOKᵇ-complete : LatticeCertOK → T latticeCertOKᵇ
+    latticeCertOKᵇ-complete ok = and-complete conditionsᵇ
+      (  allᵈ-complete nf? nfOK ∷ allᵈ-complete coh? cohOK ∷ allᵈ-complete ec? ecOK
+      ∷  all²ᵈ-complete inj? injOK ∷ all²ᵈ-complete bot? botOK
+      ∷  all²ᵈ-complete prinResp? prinRespOK ∷ all²ᵈ-complete prinTr? prinTrOK
+      ∷  all²ᵈ-complete prinCov? prinCovOK
+      ∷  all²ᵈ-complete joinResp? joinRespOK ∷ all²ᵈ-complete joinTr? joinTrOK
+      ∷  all²ᵈ-complete joinCov? joinCovOK
+      ∷  all⁴ᵈ-complete meetˡ? meetOKˡ ∷ all⁴ᵈ-complete meetʳ? meetOKʳ
+      ∷  all⁴ᵈ-complete meet²? meetOK² ∷ [] )
+      where open LatticeCertOK ok
+
+    -- A concrete certificate is accepted by latticeCertOK-sound lc refl.
+    latticeCertOK-sound : latticeCertOKᵇ ≡ true → LatticeCertOK
+    latticeCertOK-sound e = latticeCertOKᵇ-sound (≡true→T latticeCertOKᵇ e)
+
+    -- One decision for the whole bundle, re-derived from the Boolean.
     latticeCertOK? : Dec LatticeCertOK
-    latticeCertOK? = map′
-      (λ (nf , coh , ec , inj , bot′ , pr , pt , pc , jr , jt , jc , m₁ , m₂ , m₃)
-         → mkLatticeCertOK nf coh ec inj bot′ pr pt pc jr jt jc m₁ m₂ m₃)
-      (λ ok → let open LatticeCertOK ok in
-         nfOK , cohOK , ecOK , injOK , botOK , prinRespOK , prinTrOK , prinCovOK
-              , joinRespOK , joinTrOK , joinCovOK , meetOKˡ , meetOKʳ , meetOK²)
-      (     all? (λ k → normalForm? (partAt k))
-      ×-dec all? (λ k → coherent? (partAt k))
-      ×-dec all? (λ k → edgeCompat? (partAt k))
-      ×-dec all? (λ k → all? (λ l →
-              all? (λ i → parent (partAt k) i ≟ᶠ parent (partAt l) i)
-                →-dec (k ≟ᶠ l)))
-      ×-dec all? (λ i → all? (λ j →
-              (parent (partAt bot) i ≟ᶠ parent (partAt bot) j)
-                →-dec (enum i ≟ enum j)))
-      ×-dec all? (λ i → all? (λ j → respects? (partAt (prin i j)) ((i , j) ∷ [])))
-      ×-dec all? (λ i → all? (λ j → traceValid? ((i , j) ∷ []) (prinTrace i j)))
-      ×-dec all? (λ i → all? (λ j → covers? (partAt (prin i j))
-                                      (replayRoots (merges (prinTrace i j)))))
-      ×-dec all? (λ k → all? (λ l → respects? (partAt (join k l)) (joinSeeds k l)))
-      ×-dec all? (λ k → all? (λ l → traceValid? (joinSeeds k l) (joinTrace k l)))
-      ×-dec all? (λ k → all? (λ l → covers? (partAt (join k l))
-                                      (replayRoots (merges (joinTrace k l)))))
-      ×-dec all? (λ k → all? (λ l → all? (λ i → all? (λ j →
-              (parent (partAt (meet k l)) i ≟ᶠ parent (partAt (meet k l)) j)
-                →-dec (parent (partAt k) i ≟ᶠ parent (partAt k) j)))))
-      ×-dec all? (λ k → all? (λ l → all? (λ i → all? (λ j →
-              (parent (partAt (meet k l)) i ≟ᶠ parent (partAt (meet k l)) j)
-                →-dec (parent (partAt l) i ≟ᶠ parent (partAt l) j)))))
-      ×-dec all? (λ k → all? (λ l → all? (λ i → all? (λ j →
-              (parent (partAt k) i ≟ᶠ parent (partAt k) j)
-                →-dec ((parent (partAt l) i ≟ᶠ parent (partAt l) j)
-                →-dec (parent (partAt (meet k l)) i ≟ᶠ parent (partAt (meet k l)) j)))))))
+    latticeCertOK? = decideᵇ latticeCertOKᵇ latticeCertOKᵇ-sound latticeCertOKᵇ-complete
 ```
 
 #### The certified entries
