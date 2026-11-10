@@ -434,9 +434,11 @@ groups-test:
 # Test the generator of the whole-lattice certificate benchmark
 # (scripts/python/certificates/): the partition primitives, the congruence
 # lattice against a brute-force oracle on small unary algebras, an engine-side
-# replay of the certificate with two rejection controls, and a golden test that
-# re-emits the committed src/Examples/Setoid/Certificates/Cyclic30.lagda.md byte
-# for byte.  As with groups-test, `make check` replays every claim in the module.
+# replay of the certificate with rejection controls (two changed entries and six
+# malformed certificates), a golden test that re-emits the committed
+# src/Examples/Setoid/Certificates/Cyclic30.lagda.md byte for byte, and the
+# decision route's rendering.  As with groups-test, `make check` replays every
+# claim in the module.
 certificates-test:
 	@echo "target: $@"
 	python3 scripts/python/certificates/test_unary_lattice_cert.py

@@ -1,23 +1,27 @@
 """
 File: scripts/python/certificates/unary_lattice_cert.py
 
-Description: Generate a whole-lattice congruence certificate for a finite
-  unary algebra given by its operation tables.
+Description: Generate the whole-lattice congruence certificate benchmark,
+  ``src/Examples/Setoid/Certificates/Cyclic30.lagda.md``.
 
   A whole-lattice certificate (`LatticeCert` of
   ``Setoid.Congruences.Certificates.Schema``) lists every congruence of a
   finite algebra as a parent vector in Freese normal form, and carries a
   principal-congruence pointer for every pair of carrier indices, the meet
   and join tables, and a Freese trace for every principal and every join
-  entry.  This script computes those data for a unary algebra on
-  ``{0, ..., n-1}`` whose operations are given by tables, in the formats of
-  the schema, and renders them as a literate Agda module that checks the
-  certificate with ``Setoid.Congruences.Certificates.Lattice``.
+  entry.
 
-  The algebra emitted by default is the benchmark of
-  ``src/Examples/Setoid/Certificates/Cyclic30.lagda.md``: the integers
-  modulo 30 with the successor map ``x -> x + 1``, whose eight congruences
-  are the congruences modulo the eight divisors of 30.
+  The script has two parts, of different scope:
+
+  + ``certificate`` computes those data, in the formats of the schema, for
+    any unary algebra on ``{0, ..., n-1}`` whose operations are given by
+    tables, and ``verify_certificate`` replays them; the tests run both on
+    small algebras against a brute-force oracle.
+  + The renderer, its template and the command line emit one module only:
+    the benchmark, the integers modulo 30 with the successor map
+    ``x -> x + 1``, whose eight congruences are the congruences modulo the
+    eight divisors of 30.  Its prose, its names and its one-operation
+    helpers are that algebra's; another algebra needs its own template.
 
   Per the library's certificate discipline, nothing enters the corpus on
   this script's authority: the Agda module re-checks every claim, and the
@@ -42,7 +46,8 @@ Usage:
   ``--route boolean`` (the default, and the committed module) accepts the
   certificate by ``latticeCertOK-sound``; ``--route decision`` emits the same
   module accepting it by ``from-yes (latticeCertOK? ...)`` instead, the
-  comparison arm of the measurements in the module's prose.
+  comparison arm of the measurements in the checker's prose, with the
+  module's prose about the check and its cost written for that route.
 """
 
 from __future__ import annotations
@@ -137,6 +142,10 @@ class LatticeCertificate:
 def cyclic_algebra(n: int) -> UnaryAlgebra:
     """The integers modulo n with the successor map x -> x + 1."""
     return UnaryAlgebra(n, (tuple((i + 1) % n for i in range(n)),))
+
+
+# The one algebra the renderer emits (see the Description above).
+BENCHMARK: UnaryAlgebra = cyclic_algebra(30)
 
 
 # ---------------------------------------------------------------------------
@@ -285,8 +294,66 @@ def certificate(alg: UnaryAlgebra) -> LatticeCertificate:
 
 
 # ---------------------------------------------------------------------------
+# Well-formedness: the constraints Agda's types put on a certificate.  In Agda
+# an index is a Fin, a vector has its length in its type, and a seed position
+# or an offset is a natural number, so a malformed certificate cannot even be
+# written down.  Here each of those is checked first, so that the replay below
+# never indexes out of range, and never lets Python's negative indices wrap a
+# pointer onto another entry (parts[-1] is the last congruence).
+
+def in_range(bound: int, x: int) -> bool:
+    """x is an element of Fin bound: a non-negative index below bound."""
+    return 0 <= x < bound
+
+
+def is_vector(bound: int, length: int, xs: Sequence[int]) -> bool:
+    """xs is a Vec (Fin bound) length."""
+    return len(xs) == length and all(in_range(bound, x) for x in xs)
+
+
+def is_matrix(bound: int, rows: int, cols: int,
+              xss: Sequence[Sequence[int]]) -> bool:
+    """xss is a Vec (Vec (Fin bound) cols) rows."""
+    return len(xss) == rows and all(is_vector(bound, cols, xs) for xs in xss)
+
+
+def merge_well_formed(n: int, ops: int, m: Merge) -> bool:
+    """m is a Merge: both indices in Fin n, a seed position a natural number,
+    and a translate's operation in Fin ops with a natural-number offset."""
+    why_ok = (m.why.position >= 0 if isinstance(m.why, Seed)
+              else in_range(ops, m.why.op) and m.why.offset >= 0)
+    return in_range(n, m.lhs) and in_range(n, m.rhs) and why_ok
+
+
+def traces_well_formed(n: int, ops: int, rows: int, cols: int,
+                       tss: Sequence[Sequence[Trace]]) -> bool:
+    """tss is a rows-by-cols matrix of traces of well-formed merges."""
+    return len(tss) == rows and all(
+        len(row) == cols and all(merge_well_formed(n, ops, m)
+                                 for trace in row for m in trace)
+        for row in tss)
+
+
+def malformations(alg: UnaryAlgebra, cert: LatticeCertificate) -> Tuple[str, ...]:
+    """The fields of the algebra and the certificate that Agda's types would
+    reject (none for a well-formed pair)."""
+    n, ops, m = alg.size, len(alg.tables), len(cert.parts)
+    shapes: Tuple[Tuple[str, bool], ...] = (
+        ("operation tables", all(is_vector(n, n, t) for t in alg.tables)),
+        ("parent vectors", is_matrix(n, m, n, cert.parts)),
+        ("bot", in_range(m, cert.bot)),
+        ("principal pointers", is_matrix(m, n, n, cert.prin)),
+        ("principal traces", traces_well_formed(n, ops, n, n, cert.prin_traces)),
+        ("meet table", is_matrix(m, m, m, cert.meet)),
+        ("join table", is_matrix(m, m, m, cert.join)),
+        ("join traces", traces_well_formed(n, ops, m, m, cert.join_traces)))
+    return tuple(name for name, ok in shapes if not ok)
+
+
+# ---------------------------------------------------------------------------
 # Verification pass (engine-side tripwire; the Agda checker is the authority).
-# Each function mirrors one family of the fields of LatticeCertOK.
+# Each function mirrors one family of the fields of LatticeCertOK, and assumes
+# a well-formed certificate (above).
 
 def same_block(pv: Parts, i: int, j: int) -> bool:
     """Two indices lie in the same claimed block."""
@@ -312,11 +379,13 @@ def trace_valid(alg: UnaryAlgebra, seeds: Pairs, trace: Trace) -> bool:
         m = trace[t]
         if isinstance(m.why, Seed):
             s = m.why.position
-            return s < len(seeds) and seeds[s] == (m.lhs, m.rhs)
-        r = t - 1 - m.why.offset
-        table = alg.tables[m.why.op]
-        return (0 <= r and m.why.op < len(alg.tables)
-                and (m.lhs, m.rhs) == (table[trace[r].lhs], table[trace[r].rhs]))
+            return in_range(len(seeds), s) and seeds[s] == (m.lhs, m.rhs)
+        # the source merge, r = t - 1 - offset, must come strictly before
+        # this one; both bounds are tested before either lookup
+        op, r = m.why.op, t - 1 - m.why.offset
+        return (in_range(len(alg.tables), op) and in_range(t, r)
+                and (m.lhs, m.rhs) == (alg.tables[op][trace[r].lhs],
+                                       alg.tables[op][trace[r].rhs]))
     return all(ok(t) for t in range(len(trace)))
 
 
@@ -341,7 +410,18 @@ def entry_ok(alg: UnaryAlgebra, pv: Parts, seeds: Pairs, trace: Trace) -> bool:
 
 def verify_certificate(alg: UnaryAlgebra,
                        cert: LatticeCertificate) -> Result[LatticeCertificate, PipelineError]:
-    """Replay the fourteen conditions of LatticeCertOK on the engine side."""
+    """Reject a malformed certificate, then replay the fourteen conditions of
+    LatticeCertOK on the engine side.  Either failure is an err value; no
+    input raises."""
+    malformed = malformations(alg, cert)
+    return (Result.err(PipelineError(ErrorType.VALIDATION_ERROR,
+                                     "certificate is malformed: " + ", ".join(malformed)))
+            if malformed else replay_conditions(alg, cert))
+
+
+def replay_conditions(alg: UnaryAlgebra,
+                      cert: LatticeCertificate) -> Result[LatticeCertificate, PipelineError]:
+    """The fourteen conditions of LatticeCertOK, for a well-formed certificate."""
     n, parts = alg.size, cert.parts
     m = len(parts)
     pairs = [(i, j) for i in range(n) for j in range(n)]
@@ -401,17 +481,17 @@ def vec_lines(name: str, items: Sequence[str], indent: int) -> str:
     return f"{head}{body}\n{pad}∷ []"
 
 
-def render_merge(alg: UnaryAlgebra, fin: Callable[[int], str], m: Merge) -> str:
-    """One merge, through the module's two helpers (sm and tm)."""
+def render_merge(fin: Callable[[int], str], m: Merge) -> str:
+    """One merge, through the module's two helpers: sm, and tm, the image
+    under the benchmark's one operation, which therefore takes none."""
     if isinstance(m.why, Seed):
         return f"sm {fin(m.lhs)} {fin(m.rhs)} {m.why.position}"
-    op = "" if len(alg.tables) == 1 else f"{m.why.op}F "
-    return f"tm {op}{fin(m.lhs)} {fin(m.rhs)} {m.why.offset}"
+    return f"tm {fin(m.lhs)} {fin(m.rhs)} {m.why.offset}"
 
 
-def render_trace(alg: UnaryAlgebra, fin: Callable[[int], str], tr: Trace) -> str:
+def render_trace(fin: Callable[[int], str], tr: Trace) -> str:
     """One trace, as a parenthesized List literal."""
-    return f"({vec(tuple(render_merge(alg, fin, m) for m in tr))})"
+    return f"({vec(tuple(render_merge(fin, m) for m in tr))})"
 
 
 def render_matrix(name: str, rows: Sequence[Sequence[str]]) -> str:
@@ -419,11 +499,11 @@ def render_matrix(name: str, rows: Sequence[Sequence[str]]) -> str:
     return vec_lines(name, tuple(f"({vec(r)})" for r in rows), len(name) + 1)
 
 
-def render_trace_matrix(name: str, alg: UnaryAlgebra, fin: Callable[[int], str],
+def render_trace_matrix(name: str, fin: Callable[[int], str],
                         rows: Sequence[Sequence[Trace]]) -> str:
     """A Vec of Vecs of traces: one row per block, one trace per line."""
     pad = " " * (len(name) + 3)
-    blocks = tuple(f"(" + f"\n{pad}∷ ".join(render_trace(alg, fin, t) for t in row)
+    blocks = tuple(f"(" + f"\n{pad}∷ ".join(render_trace(fin, t) for t in row)
                    + f"\n{pad}∷ [])" for row in rows)
     return vec_lines(name, blocks, len(name) + 1)
 
@@ -458,12 +538,12 @@ def render_data(alg: UnaryAlgebra, cert: LatticeCertificate, prefix: str) -> Ren
                             tuple(tuple(fin(x) for x in p) for p in cert.parts)),
         prin=render_matrix(f"{prefix}-prin",
                            tuple(tuple(pos(k) for k in row) for row in cert.prin)),
-        prin_traces=render_trace_matrix(f"{prefix}-prinTr", alg, fin, cert.prin_traces),
+        prin_traces=render_trace_matrix(f"{prefix}-prinTr", fin, cert.prin_traces),
         meet=render_matrix(f"{prefix}-meet",
                            tuple(tuple(pos(k) for k in row) for row in cert.meet)),
         join=render_matrix(f"{prefix}-join",
                            tuple(tuple(pos(k) for k in row) for row in cert.join)),
-        join_traces=render_trace_matrix(f"{prefix}-joinTr", alg, fin, cert.join_traces))
+        join_traces=render_trace_matrix(f"{prefix}-joinTr", fin, cert.join_traces))
 
 
 # ---------------------------------------------------------------------------
@@ -484,6 +564,12 @@ ROUTE_NAMES: Dict[str, str] = {
     "decision": "latticeCertOK?",
 }
 
+# The command that regenerates the module, as its header states it.
+ROUTE_COMMANDS: Dict[str, str] = {
+    "boolean": "python3 scripts/python/certificates/unary_lattice_cert.py",
+    "decision": "python3 scripts/python/certificates/unary_lattice_cert.py --route decision",
+}
+
 TEMPLATE: str = '''\
 ---
 layout: default
@@ -500,7 +586,7 @@ This is the [Examples.Setoid.Certificates.Cyclic30][] module of the [Agda Univer
 
 **Generated file: do not edit by hand.**  Regenerate with
 
-    python3 scripts/python/certificates/unary_lattice_cert.py
+    {command}
 
 {prose}
 
@@ -663,29 +749,53 @@ of the algebra is `≑` to one of them.
 The module is also the library's benchmark for the checker, a certificate
 large enough that the route by which it is accepted matters: each of the
 three meet conditions alone is a sweep of `8² · 30² = 57 600` cases, and the
-principal traces hold 22 950 merges.
+principal traces hold 22 950 merges."""
 
+# The module's check cost, as measured for each route (the checker's prose
+# has the table: 30.6 s and 1.40 GB, and 30.8 s and 1.46 GB).
+ROUTE_COSTS: Dict[str, str] = {
+    "boolean": """\
 **Check cost**.  Checked alone from no interface under the build's RTS
 options, on a performance core, the module takes about 31 seconds and 1.4 GB
 of maximum residency (9 seconds and 0.7 GB of which are its data), so the
 front matter above says `check-cost: heavy` and no barrel imports it.  `make
-check` checks it."""
+check` checks it.""",
+    "decision": """\
+**Check cost**.  Checked alone from no interface under the build's RTS
+options, on a performance core, this route's module takes about 31 seconds and
+1.5 GB of maximum residency (9 seconds and 0.7 GB of which are its data), so
+the front matter above says `check-cost: heavy`.""",
+}
 
-CHECK_PROSE: str = """\
+# How the certificate is accepted, for each route.
+ROUTE_CHECKS: Dict[str, str] = {
+    "boolean": """\
 The certificate is accepted by `latticeCertOK-sound`{.AgdaFunction} applied to
 `refl`: the type checker evaluates the Boolean `latticeCertOKᵇ`{.AgdaFunction}
 of the certificate once, compares it with `true`, and the soundness lemma reads
 the fourteen conditions back.  The checker's prose says why a concrete
-certificate takes this route, with the measurements made on this module."""
+certificate takes this route, with the measurements made on this module.""",
+    "decision": """\
+The certificate is accepted by `from-yes`{.AgdaFunction} applied to the
+decision `latticeCertOK?`{.AgdaFunction} of the certificate.  The decision is
+derived from the Boolean `latticeCertOKᵇ`{.AgdaFunction} by its soundness and
+completeness lemmas, so the type checker evaluates the Boolean once, and
+`from-yes`{.AgdaFunction} returns the proof the soundness lemma builds.  This
+is the comparison arm of the measurements in the checker's prose; the
+committed module is accepted by `latticeCertOK-sound`{.AgdaFunction} applied
+to `refl`.""",
+}
 
 
-def emitted_module(alg: UnaryAlgebra, cert: LatticeCertificate, route: str) -> str:
-    """The module text for the cyclic benchmark, accepted by the route."""
-    data = render_data(alg, cert, "cyclic30")
+def emitted_module(cert: LatticeCertificate, route: str) -> str:
+    """The module text for the benchmark's certificate, accepted by the route."""
+    data = render_data(BENCHMARK, cert, "cyclic30")
     return TEMPLATE.format(
-        date=EMITTED_DATE, prose=PROSE, check_prose=CHECK_PROSE,
-        route_import=ROUTE_IMPORTS[route], route_name=ROUTE_NAMES[route],
-        route_accept=ROUTE_ACCEPT[route], literals=data.literals,
+        date=EMITTED_DATE, command=ROUTE_COMMANDS[route],
+        prose=PROSE + "\n\n" + ROUTE_COSTS[route],
+        check_prose=ROUTE_CHECKS[route], route_import=ROUTE_IMPORTS[route],
+        route_name=ROUTE_NAMES[route], route_accept=ROUTE_ACCEPT[route],
+        literals=data.literals,
         tables=data.tables, parts=data.parts, prin=data.prin,
         prin_traces=data.prin_traces, meet=data.meet, join=data.join,
         join_traces=data.join_traces)
@@ -693,9 +803,8 @@ def emitted_module(alg: UnaryAlgebra, cert: LatticeCertificate, route: str) -> s
 
 def generate(route: str = "boolean") -> Result[str, PipelineError]:
     """Build, verify, and render the benchmark module."""
-    alg = cyclic_algebra(30)
-    return (verify_certificate(alg, certificate(alg))
-            .map(lambda cert: emitted_module(alg, cert, route)))
+    return (verify_certificate(BENCHMARK, certificate(BENCHMARK))
+            .map(lambda cert: emitted_module(cert, route)))
 
 
 # ---------------------------------------------------------------------------

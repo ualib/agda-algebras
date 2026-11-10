@@ -4,7 +4,7 @@ File: scripts/python/certificates/test_unary_lattice_cert.py
 Description: Tests for the whole-lattice certificate generator
   (`make certificates-test`).
 
-  Four things are checked:
+  Five things are checked:
 
   + the partition primitives: normal form, forest edges, and meets;
   + the congruence lattice, against an independent oracle: for small unary
@@ -13,8 +13,11 @@ Description: Tests for the whole-lattice certificate generator
     for the cyclic algebras they are the congruences modulo the divisors;
   + the certificate, replayed engine-side, including controls: a certificate
     with one table entry or one trace entry changed fails the replay;
-  + the golden round trip: regenerating reproduces the committed benchmark
-    module byte for byte.
+  + malformed certificates, which Agda's types would not admit (an index out
+    of range, a negative one Python would wrap, a vector of the wrong length),
+    are rejected as err values rather than raising or passing;
+  + the rendering: regenerating reproduces the committed benchmark module byte
+    for byte, and the decision route's module says how it accepts.
 
   The replay mirrors the Agda checker as a tripwire only; the Agda module
   remains the sole authority.
@@ -27,11 +30,11 @@ from dataclasses import replace
 from math import gcd
 from typing import FrozenSet, Iterator, List, Tuple
 
-from unary_lattice_cert import (DEFAULT_OUT, Merge, Parts, Seed, Translate,
-                                UnaryAlgebra, all_congruences, certificate,
-                                cyclic_algebra, forest_edges, generate,
-                                generated, meet_partition, normal_form,
-                                verify_certificate)
+from unary_lattice_cert import (DEFAULT_OUT, LatticeCertificate, Merge, Parts,
+                                Seed, Trace, Translate, UnaryAlgebra,
+                                all_congruences, certificate, cyclic_algebra,
+                                forest_edges, generate, generated,
+                                meet_partition, normal_form, verify_certificate)
 
 from _utils.file_ops import read_text
 
@@ -145,13 +148,93 @@ class Certificate(unittest.TestCase):
         self.assertEqual(trace[1], Merge(4, 10, Translate(0, 0)))
 
 
-class Golden(unittest.TestCase):
+def with_prin_trace(cert: LatticeCertificate, i: int, j: int,
+                    trace: Trace) -> LatticeCertificate:
+    """The certificate with the principal trace of (i, j) replaced."""
+    rows = tuple(tuple(trace if (a, b) == (i, j) else t for b, t in enumerate(row))
+                 for a, row in enumerate(cert.prin_traces))
+    return replace(cert, prin_traces=rows)
+
+
+def with_merge(cert: LatticeCertificate, i: int, j: int, t: int,
+               merge: Merge) -> LatticeCertificate:
+    """The certificate with merge t of the principal trace of (i, j) replaced."""
+    trace = cert.prin_traces[i][j]
+    return with_prin_trace(cert, i, j, trace[:t] + (merge,) + trace[t + 1:])
+
+
+class Malformed(unittest.TestCase):
+    """Each case is one field Agda's types would reject; the replay must
+    return an err value for it, neither raising nor accepting."""
+
+    def setUp(self) -> None:
+        self.alg = cyclic_algebra(30)
+        self.cert = certificate(self.alg)
+
+    def assertRejected(self, alg: UnaryAlgebra, cert: LatticeCertificate) -> None:
+        outcome = verify_certificate(alg, cert)
+        self.assertTrue(outcome.is_err)
+        self.assertIn("malformed", str(outcome.unwrap_err()))
+
+    def test_operation_out_of_range(self) -> None:
+        """A translate by an operation the algebra lacks is rejected."""
+        m = self.cert.prin_traces[0][1][1]
+        self.assertIsInstance(m.why, Translate)
+        bad = with_merge(self.cert, 0, 1, 1, replace(m, why=Translate(1, 0)))
+        self.assertRejected(self.alg, bad)
+
+    def test_negative_offset(self) -> None:
+        """A negative offset, pointing past the end of the trace, is rejected."""
+        trace = self.cert.prin_traces[0][1]
+        m = trace[1]
+        bad = with_merge(self.cert, 0, 1, 1,
+                         replace(m, why=Translate(0, -len(trace) - 1)))
+        self.assertRejected(self.alg, bad)
+
+    def test_negative_seed_position(self) -> None:
+        """Seed position -1, which Python would read as the last seed, is rejected."""
+        m = self.cert.prin_traces[0][1][0]
+        self.assertEqual(m.why, Seed(0))
+        bad = with_merge(self.cert, 0, 1, 0, replace(m, why=Seed(-1)))
+        self.assertRejected(self.alg, bad)
+
+    def test_negative_pointer(self) -> None:
+        """Pointer -1, which Python would read as the last congruence, is rejected."""
+        last = len(self.cert.parts) - 1
+        self.assertEqual(self.cert.prin[0][1], last)
+        row = self.cert.prin[0]
+        rows = (row[:1] + (-1,) + row[2:],) + self.cert.prin[1:]
+        self.assertRejected(self.alg, replace(self.cert, prin=rows))
+
+    def test_short_parent_vector(self) -> None:
+        """A parent vector one entry short is rejected."""
+        parts = (self.cert.parts[0], self.cert.parts[1][:-1]) + self.cert.parts[2:]
+        self.assertRejected(self.alg, replace(self.cert, parts=parts))
+
+    def test_table_out_of_range(self) -> None:
+        """An operation table with an entry outside the carrier is rejected."""
+        table = self.alg.tables[0]
+        alg = replace(self.alg, tables=(table[:-1] + (30,),))
+        self.assertRejected(alg, self.cert)
+
+
+class Rendering(unittest.TestCase):
 
     def test_round_trip(self) -> None:
         """Regenerating reproduces the committed benchmark module byte for byte."""
         committed = read_text(DEFAULT_OUT)
         self.assertTrue(committed.is_ok, f"missing {DEFAULT_OUT}")
         self.assertEqual(committed.unwrap(), generate().unwrap())
+
+    def test_decision_route(self) -> None:
+        """The decision route's module accepts by from-yes, and its prose says so."""
+        text = generate("decision").unwrap()
+        check = text.split("#### The check", 1)[1].split("```agda", 1)[0]
+        self.assertTrue(check.strip().startswith(
+            "The certificate is accepted by `from-yes`{.AgdaFunction}"))
+        self.assertIn("cyclic30-ok = from-yes (latticeCertOK? cyclic30-cert)", text)
+        self.assertNotIn("latticeCertOK-sound cyclic30-cert refl", text)
+        self.assertIn("unary_lattice_cert.py --route decision", text)
 
 
 class LoggingResult(unittest.TextTestResult):
