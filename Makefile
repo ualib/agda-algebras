@@ -32,7 +32,7 @@
 #      where a path segment happens to contain the substring `agda`.
 # =============================================================================
 
-.PHONY: default all check test clean site serve serve-full html agda-md site-full fonts fonts-check fonts-test offline-check offline-check-test contrast-audit font-audit offline-audit design-audit profile project-plan unused-imports unused-imports-test check-links check-links-test gen-links barrels barrels-test span-classes span-classes-test corpus-stats corpus-stats-check corpus-stats-test docstrings docstrings-test docstrings-list docstrings-unused docstrings-json groups-test Everything.agda EverythingLegacy.agda
+.PHONY: default all check test clean site serve serve-full html agda-md site-full fonts fonts-check fonts-test offline-check offline-check-test contrast-audit font-audit offline-audit design-audit profile project-plan unused-imports unused-imports-test check-links check-links-test gen-links barrels barrels-test span-classes span-classes-test corpus-stats corpus-stats-check corpus-stats-test docstrings docstrings-test docstrings-list docstrings-unused docstrings-json groups-test certificates-test Everything.agda EverythingLegacy.agda
 
 # -- Configuration -----------------------------------------------------------
 SRCDIR    := src
@@ -430,3 +430,13 @@ docstrings-test:
 groups-test:
 	@echo "target: $@"
 	python3 scripts/python/groups/test_a5_simple_cert.py
+
+# Test the generator of the whole-lattice certificate benchmark
+# (scripts/python/certificates/): the partition primitives, the congruence
+# lattice against a brute-force oracle on small unary algebras, an engine-side
+# replay of the certificate with two rejection controls, and a golden test that
+# re-emits the committed src/Examples/Setoid/Certificates/Cyclic30.lagda.md byte
+# for byte.  As with groups-test, `make check` replays every claim in the module.
+certificates-test:
+	@echo "target: $@"
+	python3 scripts/python/certificates/test_unary_lattice_cert.py
