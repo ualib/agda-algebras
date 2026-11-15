@@ -15,6 +15,7 @@
 [Overture.Adjunction.Galois]: /Overture/Adjunction/Galois/
 [Overture.Adjunction.Residuation]: /Overture/Adjunction/Residuation/
 [Overture.Basic]: /Overture/Basic/
+[Overture.BooleanFolds]: /Overture/BooleanFolds/
 [Overture.Cayley]: /Overture/Cayley/
 [Overture.Counting]: /Overture/Counting/
 [Overture.Functions]: /Overture/Functions/
@@ -270,6 +271,7 @@
 [Examples.PolynomialFunctors]: /Examples/PolynomialFunctors/
 [Examples.PolynomialFunctors.Functors]: /Examples/PolynomialFunctors/Functors/
 [Examples.Setoid]: /Examples/Setoid/
+[Examples.Setoid.Certificates.Cyclic30]: /Examples/Setoid/Certificates/Cyclic30/
 [Examples.Setoid.CongruenceLattice]: /Examples/Setoid/CongruenceLattice/
 [Examples.Setoid.FinitarySignatures]: /Examples/Setoid/FinitarySignatures/
 [Examples.Setoid.FiniteQuotient]: /Examples/Setoid/FiniteQuotient/
@@ -365,6 +367,7 @@
 [Overture/Adjunction/Galois.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Overture/Adjunction/Galois.lagda.md
 [Overture/Adjunction/Residuation.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Overture/Adjunction/Residuation.lagda.md
 [Overture/Basic.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Overture/Basic.lagda.md
+[Overture/BooleanFolds.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Overture/BooleanFolds.lagda.md
 [Overture/Cayley.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Overture/Cayley.lagda.md
 [Overture/Counting.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Overture/Counting.lagda.md
 [Overture/Functions.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Overture/Functions.lagda.md
@@ -620,6 +623,7 @@
 [Examples/PolynomialFunctors.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Examples/PolynomialFunctors.lagda.md
 [Examples/PolynomialFunctors/Functors.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Examples/PolynomialFunctors/Functors.lagda.md
 [Examples/Setoid.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Examples/Setoid.lagda.md
+[Examples/Setoid/Certificates/Cyclic30.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Examples/Setoid/Certificates/Cyclic30.lagda.md
 [Examples/Setoid/CongruenceLattice.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Examples/Setoid/CongruenceLattice.lagda.md
 [Examples/Setoid/FinitarySignatures.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Examples/Setoid/FinitarySignatures.lagda.md
 [Examples/Setoid/FiniteQuotient.lagda]: https://github.com/ualib/agda-algebras/blob/master/src/Examples/Setoid/FiniteQuotient.lagda.md

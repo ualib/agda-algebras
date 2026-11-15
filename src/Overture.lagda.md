@@ -18,6 +18,8 @@ The Overture is the foundation layer: the vocabulary every later tree (`Setoid/`
 
 +  [Overture.Adjunction][] is the order-theoretic adjunction toolkit: closure,
    Galois connections, residuation.
++  [Overture.BooleanFolds][] folds the Booleans of a family of decisions over
+   a finite index set, with the lemmas that read the universal statement back.
 +  [Overture.Cayley][] represents finite binary operations by Cayley tables, with
    decision procedures that discharge their laws.
 +  [Overture.Counting][] proves the two counting-by-filtering lemmas, monotone and
@@ -38,15 +40,16 @@ The Overture is the foundation layer: the vocabulary every later tree (`Setoid/`
 
 module Overture where
 
-open import Overture.Preface     public
-open import Overture.Basic       public
+open import Overture.Preface       public
+open import Overture.Basic         public
 
-open import Overture.Adjunction  public
-open import Overture.Cayley      public
-open import Overture.Counting    public
-open import Overture.Functions   public
-open import Overture.Operations  public
-open import Overture.Relations   public
-open import Overture.Signatures  public
-open import Overture.Terms       public
+open import Overture.Adjunction    public
+open import Overture.BooleanFolds  public
+open import Overture.Cayley        public
+open import Overture.Counting      public
+open import Overture.Functions     public
+open import Overture.Operations    public
+open import Overture.Relations     public
+open import Overture.Signatures    public
+open import Overture.Terms         public
 ```

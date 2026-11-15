@@ -988,6 +988,45 @@ Importing the barrel `Examples.Classical.Lattices` from a scratch module, before
 [#602]: https://github.com/ualib/agda-algebras/pull/602
 [copilot-finding]: https://github.com/ualib/agda-algebras/pull/602#discussion_r4244922414
 
+---
+
+### Issue M1-19: Decide whole-lattice certificates with Boolean folds (#639)
+
+**Labels**: `enhancement`, `milestone-1-infra`
+
+## Description
+
+`latticeCertOK?` in `Setoid.Congruences.Certificates.Lattice` decides the fourteen conditions of `LatticeCertOK` as one `Dec`: a product (`×-dec`) of standard-library `all?` sweeps over list positions and carrier indices.  A concrete certificate is accepted by `from-yes (latticeCertOK? lc)`.  The per-congruence deciders it calls (`normalForm?` in `Setoid.Congruences.Certificates.Schema`; `coherent?`, `edgeCompat?`, `respects?`, `traceValid?` and `covers?` in `Setoid.Congruences.Certificates.Congruence`) are sweeps of the same kind.
+
+To accept a certificate, Agda needs only the Boolean `does (latticeCertOK? lc)`, which is the plain `∧`-fold of the cases' Booleans (the standard library says so beside `all?` in `Data.Fin.Properties`).  But `all?` reaches each case through `decFinSubset`, a `with`-function, and a `map′`, and on a large certificate the decision dominates the memory of the module that checks it.
+
+**Measurement** (Agda 2.9.0, one module checked alone from no interface, `+RTS -s`).  In a downstream library, on one large whole-lattice certificate, replacing `from-yes (latticeCertOK? lc)` by a postulate, and nothing else, cut the module's maximum residency from 3.67 GB to 1.01 GB, its total memory in use from 6746 MiB to 2024 MiB, and its check time from 53 s to 20 s.  The same library had earlier brought another module under a 6 GB heap cap by the change proposed here, applied to a different family of `all?` sweeps (Boolean folds with soundness lemmas, the instance writing `tt`), at two to four times the time per case.
+
+## Proposal
+
++  **Boolean folds**.  `allᵇ : (Fin n → Bool) → Bool` by structural recursion, with `allᵇ-sound : T (allᵇ f) → ∀ i → T (f i)`, and the nested forms the sweeps need, in a small module of their own.
++  **The lattice check**.  `latticeCertOKᵇ`, the fourteen conditions as Boolean folds, and `latticeCertOK-sound : T latticeCertOKᵇ → LatticeCertOK`, both inside the module that fixes `lc`, so that a concrete certificate is accepted by `latticeCertOK-sound lc tt`.
++  **The per-congruence deciders**.  A Boolean twin, with its soundness lemma, for each decider that the profile shows to matter, rather than for all of them.
++  **No break**.  `latticeCertOK?` keeps its type.  Whether it is then re-derived from the Boolean, with a completeness lemma, or left as it is should follow the measurements.
++  **A benchmark**.  Nothing in `src/` applies the checker to a concrete certificate today.  Add one whole-lattice certificate of a classical example under `src/Examples/`, large enough to show the difference: for instance the unary algebra `(ℤ₃₀ , x ↦ x + 1)`, whose eight congruences make the three meet checks 172 800 cases, or the action of `A₅` on the 30 cosets of a subgroup of order 2, which also has eight congruences.  If the module is heavy in the sense of [#603], it carries the marker and stays out of barrels.
+
+## Tasks
+
++  [ ] Profile `from-yes (latticeCertOK? lc)` on the benchmark by field (`--profile=definitions`, or scratch copies that drop one field at a time, under `+RTS -s`), and record which sweeps carry the memory.
++  [ ] The Boolean folds and their soundness lemmas.
++  [ ] `latticeCertOKᵇ` and `latticeCertOK-sound`, and Boolean twins of the deciders that the profile names.
++  [ ] The benchmark certificate, accepted by the Boolean route, under `src/Examples/`.
++  [ ] The module's prose says which route a concrete certificate should take and why, with the measured figures.
+
+## Acceptance criteria
+
++  [ ] `make check` passes, and `latticeCertOK?` keeps its type.
++  [ ] No postulate: every Boolean decider comes with its soundness lemma.
++  [ ] The pull request reports the benchmark module's check time and maximum residency under each route (alone, from no interface, under the Makefile's RTS options plus `-s`).  The Boolean route is adopted only if it needs less memory; a null result is reported as the finding.
++  [ ] A control: in a scratch copy, the benchmark with one table entry changed is rejected by the Boolean route, as it is by `from-yes`.
+
+[#603]: https://github.com/ualib/agda-algebras/issues/603
+
 <!-- END GENERATED: milestone-1 -->
 
 ### Milestone 1 Dependencies

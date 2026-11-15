@@ -30,8 +30,8 @@ from signatures, algebras, and homomorphisms to a machine-checked proof of
        into the markers below (`make corpus-stats`), and CI fails when a
        committed value has drifted from the tree (`make corpus-stats-check`).
        Do not hand-tune them.  See docs/site-guide.md, "Corpus stats". -->
-  <div class="ualib-stat"><span class="ualib-stat__num"><!-- ualib:stat:modules -->273<!-- /ualib:stat:modules --></span><span class="ualib-stat__label">literate modules</span></div>
-  <div class="ualib-stat"><span class="ualib-stat__num"><!-- ualib:stat:loc -->26k<!-- /ualib:stat:loc --></span><span class="ualib-stat__label">lines of Agda</span></div>
+  <div class="ualib-stat"><span class="ualib-stat__num"><!-- ualib:stat:modules -->275<!-- /ualib:stat:modules --></span><span class="ualib-stat__label">literate modules</span></div>
+  <div class="ualib-stat"><span class="ualib-stat__num"><!-- ualib:stat:loc -->28k<!-- /ualib:stat:loc --></span><span class="ualib-stat__label">lines of Agda</span></div>
   <div class="ualib-stat"><span class="ualib-stat__num"><!-- ualib:stat:checked -->100%<!-- /ualib:stat:checked --></span><span class="ualib-stat__label">machine-checked</span></div>
   <div class="ualib-stat"><span class="ualib-stat__num"><!-- ualib:stat:agda -->2.9.0<!-- /ualib:stat:agda --></span><span class="ualib-stat__label">Agda · stdlib <!-- ualib:stat:stdlib -->2.3<!-- /ualib:stat:stdlib --></span></div>
 </div>

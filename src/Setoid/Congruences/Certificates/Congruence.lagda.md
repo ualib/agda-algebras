@@ -76,7 +76,7 @@ module Setoid.Congruences.Certificates.Congruence where
 open import Agda.Primitive using () renaming ( Set to Type )
 
 -- Imports from the Agda Standard Library -----------------------------------
-open import Data.Bool.Base                          using  ( if_then_else_ )
+open import Data.Bool.Base                          using  ( Bool ; T ; if_then_else_ )
 open import Data.Empty                              using  ( ⊥ )
 open import Data.Fin.Base                           using  ( Fin )
 open import Data.Fin.Properties                     using  ( all? )
@@ -118,6 +118,8 @@ open import Relation.Nullary.Decidable              using  ( Dec ; yes ; no ; do
 open import Overture                                using  ( 𝓞 ; 𝓥 ; Signature
                                                            ; OperationSymbolsOf
                                                            ; ArityOf )
+open import Overture.BooleanFolds                   using  ( allᵈ ; allᵈ-sound
+                                                           ; allᵈ-complete ; decideᵇ )
 open import Setoid.Algebras.Basic                   using  ( Algebra ; 𝕌[_]
                                                            ; 𝔻[_] ; _^_ )
 open import Setoid.Algebras.Finite                  using  ( FiniteAlgebra )
@@ -260,6 +262,10 @@ follows in general (`tableResp-≈`{.AgdaFunction}).
   -- Two indices lie in the same claimed block.
   SameBlock : ParentVec card → Fin card → Fin card → Type
   SameBlock pv i j = parent pv i ≡ parent pv j
+
+  -- Same-block is decidable: two lookups and one Fin comparison.
+  sameBlock? : (pv : ParentVec card) (i j : Fin card) → Dec (SameBlock pv i j)
+  sameBlock? pv i j = parent pv i ≟ᶠ parent pv j
 
   -- The claimed partition does not distinguish ≈-equal enumerated elements.
   Coherent : ParentVec card → Type ρ
@@ -807,14 +813,42 @@ share a replayed root, hence both are generated-related to it.  (No converse
 sweep is needed: the *other* inclusion is C3, and an over-merging trace would
 merely make the two checks jointly unsatisfiable, never unsound.)
 
+The sweep is decided through a Boolean fold of its comparisons
+(`coversᵇ`{.AgdaFunction}, with the folds of [Overture.BooleanFolds][]), and
+`covers?`{.AgdaFunction} is re-derived from that Boolean.  The whole-lattice
+checker runs this sweep for every pair of carrier indices and every join, and
+it was the most expensive of its conditions; through the fold it retains
+nothing of its comparisons (see [Setoid.Congruences.Certificates.Lattice][]
+for the measurements).
+
 ```agda
   -- The replayed roots are constant along the claimed parent pointers.
   Covers : ParentVec card → Vec (Fin card) card → Type
   Covers pv rr = ∀ i → lookup rr (parent pv i) ≡ lookup rr i
 
+  -- The comparison at one index, decided.
+  coversAt? : (pv : ParentVec card) (rr : Vec (Fin card) card) (i : Fin card)
+    →  Dec (lookup rr (parent pv i) ≡ lookup rr i)
+  coversAt? pv rr i = lookup rr (parent pv i) ≟ᶠ lookup rr i
+
+  -- Covers, as a Boolean fold of the comparisons ...
+  coversᵇ : ParentVec card → Vec (Fin card) card → Bool
+  coversᵇ pv rr = allᵈ (coversAt? pv rr)
+
+  -- ... which is sound ...
+  coversᵇ-sound : (pv : ParentVec card) (rr : Vec (Fin card) card)
+    →  T (coversᵇ pv rr) → Covers pv rr
+  coversᵇ-sound pv rr = allᵈ-sound (coversAt? pv rr)
+
+  -- ... and complete.
+  coversᵇ-complete : (pv : ParentVec card) (rr : Vec (Fin card) card)
+    →  Covers pv rr → T (coversᵇ pv rr)
+  coversᵇ-complete pv rr = allᵈ-complete (coversAt? pv rr)
+
+  -- The decision, re-derived from the Boolean.
   covers? : (pv : ParentVec card) (rr : Vec (Fin card) card)
     →  Dec (Covers pv rr)
-  covers? pv rr = all? (λ i → lookup rr (parent pv i) ≟ᶠ lookup rr i)
+  covers? pv rr = decideᵇ (coversᵇ pv rr) (coversᵇ-sound pv rr) (coversᵇ-complete pv rr)
 
   -- C2: the claimed congruence is contained in the generated one.
   table⊑Cg : (pv : ParentVec card) (ps : List IdxPair)
