@@ -890,50 +890,56 @@ The sweep itself is mechanical: all 344 modules carry the one line `{-# OPTIONS 
 
 ---
 
-### Issue M1-17: Move to the released Agda 2.9.0 and standard-library 3.0 (#597)
+### Issue M1-17: Move to the released Agda 2.9.0 and standard-library 2.4.1 (#597)
 
 **Labels**: `milestone-1-infra`
 
 ## Description
 
-[#588] moved the library to a pre-release Agda 2.9.0 (agda/agda at [`da66a8c`][agda], the `nightly` of 2026-10-05) and standard-library 2.3 with the five changes it needs under 2.9.0 ([formalverification/agda-stdlib][fork], tag [`v2.3-agda-2.9.0`][tag]), both pinned by the flake, by William's decision of 2026-10-07 that his Agda projects run one Agda now rather than wait for the releases.  [#588]'s own plan moves here: the released Agda 2.9.0 with standard-library 3.0, both from nixpkgs.
+[#598] moved the library to a pre-release Agda 2.9.0 (agda/agda at [`da66a8c`][nightly], the `nightly` of 2026-10-05) and standard-library 2.3 with the five changes it needs under 2.9.0 ([formalverification/agda-stdlib][fork], tag [`v2.3-agda-2.9.0`][tag]), both pinned by the flake.  This issue moves it to the releases.  It was first written for standard-library 3.0; on 2026-11-24 William chose 2.4.1, the release made for Agda 2.9.0, rather than wait for 3.0, which has no release date.
 
-**The preconditions** are as follows:
+**The releases**, checked 2026-11-24, are as follows:
 
-+  **The switch to `--without-K` ([#594]) is on master**: done on 2026-10-07 ([#595]).  Standard-library 3.0 is `--without-K` again, which a `--cubical-compatible` module could not import.
-+  **Agda 2.9.0 and standard-library 3.0 are released, and 3.0 type-checks whole under the released 2.9.0**: `agda --build-library` in its root, as nixpkgs' derivation runs it.  Neither is released as of 2026-10-07.
-+  **nixpkgs packages both**, so that the flake can drop its `agda` input and the standard library's override and return to one nixpkgs input, as the comment at the top of `flake.nix` says.
++  **Agda 2.9.0**, released 2026-11-13 ([v2.9.0][agda-release]): tag commit `da046d6903b7f587f5add669650e52f378f57834`, 67 commits after the nightly the flake pins.
++  **Standard-library 2.4.1**, released 2026-11-17 ([v2.4.1][stdlib-release]), "compatibility release with Agda 2.9.0"; its CHANGELOG says it was tested with 2.9.0.  Commit `ac7c79b24ecf16cf82decc872d2690c2ee9d8498`, source hash `sha256-7TFjdpqG6tv6qTtWdaGhVXXR7RJYL1R4QlKkYaWdVvI=` (`nix flake prefetch github:agda/agda-stdlib/v2.4.1`, which agrees with nixpkgs' derivation).  Its library name is `standard-library-2.4`.  Its one non-backwards-compatible change removes `_>>=_` and `recompute` from `Data.Irrelevant`.  The earlier 2.4 (2026-06-17) was tested with 2.8.0 and fails under 2.9.0 at `Data.Irrelevant:48` ([#586]'s row 2).
++  **nixpkgs** (nixos-unstable of 2026-11-21) packages standard-library 2.4.1 but still Agda 2.8.0.  So the flake keeps its `agda` input for now, moved to the release; returning to one nixpkgs input waits for nixpkgs to package Agda 2.9.0.
 
-**What the port will take**, from a trial of 2026-10-07 under Agda master (`8430299e`) and the standard library its `std-lib` submodule pinned (3.0's development head, `1b7f26af`), with the library under `--without-K`: 25 files (the flake, `agda-algebras.agda-lib` and 22 modules), changed as follows:
-
-+  a record that built `IsDecEquivalence` with the field `_≟_`, now `_≈?_` (`TooManyFields`, then `UnsolvedMetaVariables`);
-+  a named implicit `{i = p}` to `Transitive`, whose binders 3.0 renamed to `x y z` (`WrongNamedArgument`);
-+  170 renames to 3.0's names: 3.0's `_≟_` for `_≡?_` (the `Data.Fin`, `Data.Nat` and `Data.Bool` properties), and 2.4's `_×-dec_`, `_→-dec_`, `_⊎-dec_` and `¬∀⟶∃¬` for `_×?_`, `_→?_`, `_⊎?_` and `¬∀⇒∃¬`, whose fixities are unchanged, so that every rename is textual.
-
-The trial's patch is kept outside the repository; redo the port against the released 3.0 rather than apply it.  One trap it met: a deprecation reached through a bundle raises no warning (uses of `_≟_` after `open DecSetoid S using ( _≟_ )` raised none), so counting warnings does not finish the port; grep for the renamed names where they arrive through a record or bundle module.
+**What the port will take**, from [#586]'s row 2 (2026-10-06, under the nightly, with 2.4 and three fixes from agda-stdlib's `agda-master` branch): the library checked against 2.4 after changing only `depend:`, with 80 new deprecation warnings, five names in 16 modules (`_×-dec_`, `_→-dec_`, `_⊎-dec_`, `¬∀⟶∃¬`, `¬∀⟶∃¬-smallest`).  The library has changed since (the switch to `--without-K` in [#595] among others), so measure again rather than trust the count.  One trap from the 3.0 trial of 2026-10-07: a deprecation reached through a bundle raises no warning (uses of a name after `open DecSetoid S using ( … )` raised none), so a count of warnings does not finish the port; grep for the deprecated names where they arrive through a record or bundle module.
 
 ## Tasks
 
-+  [ ] Confirm the preconditions with a run: standard-library 3.0 checks whole under the released Agda 2.9.0.
-+  [ ] `flake.nix` and `flake.lock`: drop the `agda` input and the standard library's `overrideAttrs`, take both from one nixpkgs input, and update the header and the standard library's guard (`2.3*`).
-+  [ ] `agda-algebras.agda-lib`: `depend: standard-library-3.0`.
-+  [ ] Port to 3.0: its breaking changes, then its deprecations, each to the documented replacement.
-+  [ ] Every place that names the toolchain, as [#588] listed them.  The "Nix only, for now" caveat in `README.md`, `INSTALL.md` and `CONTRIBUTING.md` goes, and `INSTALL.md`'s three paths without Nix move to the released versions.
-+  [ ] CI: the Agda lane passes on the new pins.
++  [ ] `flake.nix`: the `agda` input to agda/agda at `da046d69` (the `v2.9.0` tag), and the standard library's override to agda/agda-stdlib at `v2.4.1` (commit and hash above), replacing the fork.  Alternatively, drop the override and take nixpkgs' own 2.4.1 by moving the nixpkgs lock (2026-08-10 today), which also moves the rest of the shell; choose on evidence and say why.  Update the header's pinning policy, its "Library Resolution" text and the shell hook's guards (`2.3*`).
++  [ ] `agda-algebras.agda-lib`: `depend: standard-library-2.4`.
++  [ ] The port: errors first, then each deprecation to its documented replacement, with the mathematics unchanged.
++  [ ] Every file that names the toolchain, as [#588] and [#598] listed them; `INSTALL.md`'s paths without Nix can now name released versions.
++  [ ] CI: the Agda lane passes on the new pins.  The cache holds the nightly's Agda, not the release's, so the first run builds Agda cold; record its time.
++  [ ] A follow-up issue: drop the `agda` input (and the override, if kept) once nixpkgs packages Agda 2.9.0.
 
 ## Acceptance criteria
 
-+  [ ] `nix develop --command make check` passes under the released Agda 2.9.0 and standard-library 3.0, every module checked from source, locally and in CI.
++  [ ] `nix develop --command make check` passes under the released Agda 2.9.0 and standard-library 2.4.1, every module checked from source, locally and in CI.
++  [ ] A second `make check` with `_build` kept checks nothing again.
 +  [ ] The warnings are the library's own deprecations and nothing else.
-+  [ ] No file names the pre-release Agda or the patched standard library as the current target (dated records, such as the CHANGELOG and the audits, excepted).
++  [ ] No file names the nightly or the patched standard library as the current target (dated records, such as the CHANGELOG and the audits, excepted).
 +  [ ] `make corpus-stats-check` and the docs lanes pass.
 
-[agda]: https://github.com/agda/agda/commit/da66a8c75f11d10699a6b38b261efdf244b66f2a
+## Downstream
+
+The projects that take their Agda and standard library from this flake follow in issues of their own once this merges; this issue's merge commit is the pin they move to.
+
+## Earlier plan
+
+Standard-library 3.0 is the next major version, `--without-K` and unreleased.  The trial of 2026-10-07 under its development head (25 files, about 170 textual renames) is in this issue's edit history; it belongs to a later issue, once 3.0 is released.
+
+[#586]: https://github.com/ualib/agda-algebras/issues/586
+[#588]: https://github.com/ualib/agda-algebras/issues/588
+[#595]: https://github.com/ualib/agda-algebras/pull/595
+[#598]: https://github.com/ualib/agda-algebras/pull/598
+[nightly]: https://github.com/agda/agda/commit/da66a8c75f11d10699a6b38b261efdf244b66f2a
 [fork]: https://github.com/formalverification/agda-stdlib
 [tag]: https://github.com/formalverification/agda-stdlib/releases/tag/v2.3-agda-2.9.0
-[#588]: https://github.com/ualib/agda-algebras/issues/588
-[#594]: https://github.com/ualib/agda-algebras/issues/594
-[#595]: https://github.com/ualib/agda-algebras/pull/595
+[agda-release]: https://github.com/agda/agda/releases/tag/v2.9.0
+[stdlib-release]: https://github.com/agda/agda-stdlib/releases/tag/v2.4.1
 
 ---
 
@@ -990,7 +996,7 @@ Importing the barrel `Examples.Classical.Lattices` from a scratch module, before
 
 ---
 
-### Issue M1-19: Decide whole-lattice certificates with Boolean folds (#639)
+### Issue M1-19: Decide whole-lattice certificates with Boolean folds (#639, closed)
 
 **Labels**: `enhancement`, `milestone-1-infra`
 
@@ -1026,6 +1032,40 @@ To accept a certificate, Agda needs only the Boolean `does (latticeCertOK? lc)`,
 +  [ ] A control: in a scratch copy, the benchmark with one table entry changed is rejected by the Boolean route, as it is by `from-yes`.
 
 [#603]: https://github.com/ualib/agda-algebras/issues/603
+
+---
+
+### Issue M1-20: Return to one nixpkgs input once nixpkgs packages Agda 2.9.0 (#641)
+
+**Labels**: `milestone-1-infra`
+
+## Description
+
+[#597] moved the library to the released Agda 2.9.0 and standard-library 2.4.1.  nixpkgs packages only one of them, so the flake still pins both itself, as follows:
+
++  **Agda**: the `agda` input, agda/agda at the commit of the tag `v2.9.0`, built from source by Agda's own flake (its `base` package), with nixpkgs' Agda package set rebuilt around it (`mkAgdaPackages` in `flake.nix`).
++  **The standard library**: nixpkgs' derivation with its `src` moved to agda/agda-stdlib at the tag `v2.4.1` (`stdlibRev`, `stdlibHash`), because the flake's nixpkgs is locked at 2026-08-10, whose derivation is 2.3's.
+
+**What nixpkgs has**, checked 2026-11-24 on nixos-unstable at `2786a2a7` (2026-11-21): `agda.version` is `2.8.0` and `agdaPackages.standard-library.version` is `2.4.1`, the latter's derivation identical to the locked one apart from the version and the hash.  A search of nixpkgs' issues and pull requests for "agda 2.9.0" in the title found none.
+
+Once nixpkgs packages Agda 2.9.0, the flake can return to one nixpkgs input on nixos-unstable supplying both, as its header's "Pinning Policy" says.  Until then the `agda` input costs every cold cache an Agda build from source (22 minutes on a 20-core workstation on 2026-11-24, including several of Agda's Haskell dependencies), and the projects that take their Agda from this flake inherit it.
+
+## Tasks
+
++  [ ] Confirm that nixos-unstable packages Agda 2.9.0 (`nix eval --raw github:NixOS/nixpkgs/nixos-unstable#agda.version`) and that its standard library is 2.4.1 or a later 2.4.x.
++  [ ] `flake.nix`: drop the `agda` input, `mkAgdaPackages`' override of `Agda`, and the standard library's override (`stdlibRev`, `stdlibHash`); take `pkgs.agdaPackages` as it is.  Rewrite the header's "Pinning Policy" and "Library Resolution" to say so.
++  [ ] `nix flake update nixpkgs`, which also moves the shell's Python, MkDocs and the rest; check that Material stays at its pinned version and that `make site-full` renders as before.
++  [ ] Check from source (`rm -rf _build`, then `nix develop --command make check`) and again with `_build` kept; compare the `Checking` lines and the warnings by kind with [#597]'s findings.  nixpkgs built Agda 2.8.0 with the `debug` cabal flag, which the flake's `base` build lacks ([#598]), so read the flags `agda --version` prints, time the check under both binaries, and say which binary each figure is.
++  [ ] Every file that names the `agda` input or says nixpkgs lacks Agda 2.9.0: README, `INSTALL.md` (the cache paragraph), `CONTRIBUTING.md`, the CI header, the CHANGELOG.
+
+## Acceptance criteria
+
++  [ ] `flake.lock` has one nixpkgs input and no `agda` node.
++  [ ] `nix develop --command make check` passes from source, locally and in CI, with the same `Checking` count as [#597] and no new warning kind.
++  [ ] A second `make check` with `_build` kept checks nothing again.
+
+[#597]: https://github.com/ualib/agda-algebras/issues/597
+[#598]: https://github.com/ualib/agda-algebras/pull/598
 
 <!-- END GENERATED: milestone-1 -->
 
