@@ -60,7 +60,7 @@ open import Data.Product                        using  ( _×_ ; _,_ ; proj₁ ; 
 open import Level                               using  ( Level ; _⊔_ )
 open import Relation.Binary                     using  ( Setoid ; IsEquivalence )
                                                 renaming ( Rel to BinaryRel )
-open import Relation.Nullary.Decidable          using  ( Dec ; _×-dec_ )
+open import Relation.Nullary.Decidable          using  ( Dec ; _×?_ )
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
 open import Overture                         using ( 𝓞 ; 𝓥 ; Signature )
@@ -94,7 +94,7 @@ module _ {𝑆 : Signature 𝓞 𝓥} {𝑨 : Algebra {𝑆 = 𝑆} α ρ} where
   -- The presented relation is decidable whenever ≈ is.
   fromPairs? : (∀ x y → Dec (x ≈ y)) → (ps : List (𝕌[ 𝑨 ] × 𝕌[ 𝑨 ]))
     → ∀ x y → Dec (fromPairs ps x y)
-  fromPairs? _≟_ ps x y = any? (λ p → x ≟ proj₁ p ×-dec y ≟ proj₂ p) ps
+  fromPairs? _≟_ ps x y = any? (λ p → x ≟ proj₁ p ×? y ≟ proj₂ p) ps
 ```
 
 A small helper used repeatedly below: a congruence relates `≈`-equal replacements

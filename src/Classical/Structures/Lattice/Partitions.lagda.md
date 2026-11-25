@@ -83,7 +83,7 @@ open import Relation.Binary.Lattice  using ( Supremum ; Infimum )
 open import Relation.Binary.PropositionalEquality
                                  using ( _≡_ ; refl ; sym ; trans ; cong )
 open import Relation.Nullary     using ( ¬_ ; Dec ; yes ; no )
-open import Relation.Nullary.Decidable  using ( does ; _×-dec_ ; dec-true )
+open import Relation.Nullary.Decidable  using ( does ; _×?_ ; dec-true )
 
 import Algebra.Lattice.Bundles                       as AlgLatticeBundles
 import Algebra.Lattice.Properties.Lattice            as AlgLatticeProperties
@@ -224,7 +224,7 @@ module MeetOf (pu pw : ParentVec n) where
     P i j = SameBlock pu j i × SameBlock pw j i
 
     P? : (i j : Fin n) → Dec (P i j)
-    P? i j = (parent pu j ≟ parent pu i) ×-dec (parent pw j ≟ parent pw i)
+    P? i j = (parent pu j ≟ parent pu i) ×? (parent pw j ≟ parent pw i)
 
     -- The search cannot fail: i itself is in the intersection block of i.
     found : (i : Fin n) → Σ[ j ∈ Fin n ] (P i j × ((k : Fin n) → P i k → j ≤ k))

@@ -59,7 +59,7 @@ open import Agda.Primitive using () renaming ( Set to Type )
 -- Imports from the Agda Standard Library ---------------------------------------
 open import Data.Empty                             using  ( ⊥-elim )
 open import Data.Fin.Base                          using  ( Fin )
-open import Data.Fin.Properties                    using  ( ¬∀⟶∃¬ )
+open import Data.Fin.Properties                    using  ( ¬∀⇒∃¬ )
                                                    renaming ( all? to allᶠ? ; _≟_ to _≟ᶠ_ )
 open import Data.List.Base                         using  ( List ; [] ; _∷_ )
 open import Data.List.Membership.Propositional     using  () renaming ( _∈_ to _∈ˡ_ )
@@ -80,7 +80,7 @@ open import Level                                  using  ( Level ; _⊔_ )
 open import Relation.Binary                        using  ( Setoid )
 open import Relation.Binary.PropositionalEquality  using  ( refl ; sym ; subst )
 open import Relation.Nullary                       using  ( ¬_ ; Dec ; yes ; no )
-open import Relation.Nullary.Decidable.Core        using  ( ¬? ; _×-dec_ ; _→-dec_ )
+open import Relation.Nullary.Decidable.Core        using  ( ¬? ; _×?_ ; _→?_ )
 open import Relation.Unary                         using  ( Pred ; _∈_ ; _⊆_ )
 
 -- Imports from the Agda Universal Algebra Library ------------------------------
@@ -130,7 +130,7 @@ indices.
     Table⊆ K L = ∀ i → enum i ∈ set K → enum i ∈ set L
 
     table⊆? : (K L : DecSubgroup 𝒢 ℓ) → Dec (Table⊆ K L)
-    table⊆? K L = allᶠ? (λ i → memb? K (enum i) →-dec memb? L (enum i))
+    table⊆? K L = allᶠ? (λ i → memb? K (enum i) →? memb? L (enum i))
 
     table→⊆ : (K L : DecSubgroup 𝒢 ℓ) → Table⊆ K L → set K ⊆ set L
     table→⊆ K L tbl {x} x∈K with enum-sur x
@@ -156,7 +156,7 @@ indices.
     ¬→-split (no ¬p) ¬imp  = ⊥-elim (¬imp (λ p → ⊥-elim (¬p p)))
 
     unpack : Σ[ i ∈ Fin card ] (enum i ∈ set K × ¬ (enum i ∈ set L))
-    unpack with ¬∀⟶∃¬ _ _ (λ i → memb? K (enum i) →-dec memb? L (enum i)) ¬tbl
+    unpack with ¬∀⇒∃¬ _ _ (λ i → memb? K (enum i) →? memb? L (enum i)) ¬tbl
     ... | i , ¬impᵢ = i , ¬→-split (memb? K (enum i)) ¬impᵢ
 ```
 
@@ -257,23 +257,23 @@ decision *is* the re-verification of every emitted word.
       expOK? : ∀ k → Dec (ExpOK k)
       expOK? k =
         allˡ? (λ l → memb? (sub k) (enum l)) (gens k)
-        ×-dec allᶠ? (λ i → memb? (sub k) (enum i) →-dec
+        ×? allᶠ? (λ i → memb? (sub k) (enum i) →?
                 (allˡ? (_∈ˡ? gens k) (expWords k i)
-                 ×-dec (evalWord (expWords k i) ≈? enum i)))
+                 ×? (evalWord (expWords k i) ≈? enum i)))
 
       stepOK? : ∀ k j → Dec (StepOK k j)
       stepOK? k j =
-        memb? top (enum j) →-dec (¬? (memb? (sub k) (enum j)) →-dec
+        memb? top (enum j) →? (¬? (memb? (sub k) (enum j)) →?
           (  (rank k <? rank (stepNext k j))
-           ×-dec PointwiseProps.decidable
-                   (λ l w → allˡ? (_∈ˡ? (j ∷ gens k)) w ×-dec (evalWord w ≈? enum l))
+           ×? PointwiseProps.decidable
+                   (λ l w → allˡ? (_∈ˡ? (j ∷ gens k)) w ×? (evalWord w ≈? enum l))
                    (gens (stepNext k j)) (stepWords k j)))
 
     escalationOK? : Dec EscalationOK
     escalationOK? =
             allᶠ? expOK?
-      ×-dec allᶠ? (λ k → allᶠ? (stepOK? k))
-      ×-dec allᶠ? (λ k → rank k <? m)
+      ×? allᶠ? (λ k → allᶠ? (stepOK? k))
+      ×? allᶠ? (λ k → rank k <? m)
 ```
 
 #### The classifier

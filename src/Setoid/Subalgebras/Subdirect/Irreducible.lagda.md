@@ -40,7 +40,7 @@ module Setoid.Subalgebras.Subdirect.Irreducible where
 -- Imports from Agda and the Agda Standard Library ----------------------------
 open import Agda.Primitive                         using () renaming ( Set to Type )
 open import Data.Fin.Base                          using ( Fin )
-open import Data.Fin.Properties                    using ( ¬∀⟶∃¬ )
+open import Data.Fin.Properties                    using ( ¬∀⇒∃¬ )
 open import Data.Nat.Base                          using ( ℕ )
 open import Data.Product                           using ( _,_ ; ∃-syntax ; proj₁ ; proj₂ )
 open import Function                               using ( id )
@@ -228,7 +228,7 @@ module _
 
     -- finite + decidable ⟹ some coordinate's kernel is (¬¬, hence) below the diagonal
     ex : ∃[ i ] ¬ Nonzero 𝑨 (kerfam 𝒜 h i)
-    ex = ¬∀⟶∃¬ n (λ i → Nonzero 𝑨 (kerfam 𝒜 h i)) (λ i → ¬? (dec i)) ¬all-nz
+    ex = ¬∀⇒∃¬ n (λ i → Nonzero 𝑨 (kerfam 𝒜 h i)) (λ i → ¬? (dec i)) ¬all-nz
 
     i : Fin n
     i = proj₁ ex

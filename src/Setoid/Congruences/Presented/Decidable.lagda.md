@@ -85,7 +85,7 @@ open import Data.Bool.Base        using  ( Bool ; true ; false ; T )
 open import Data.Bool.Properties  using  () renaming ( _≟_ to _≟ᵇ_ )
 open import Data.Empty            using  ( ⊥-elim )
 open import Data.Fin.Base         using  ( Fin ; zero ; suc )
-open import Data.Fin.Properties   using  ( any? ; all? ; ¬∀⟶∃¬ )
+open import Data.Fin.Properties   using  ( any? ; all? ; ¬∀⇒∃¬ )
 open import Data.List.Base        using  ( List ; [] ; _∷_ ; map ; concatMap ; allFin )
 open import Data.Nat.Base         using  ( ℕ ; zero ; suc ; _+_ ; _*_
                                          ; _≤_ ; _<_ ; z≤n ; s≤s )
@@ -104,7 +104,7 @@ open import Relation.Binary       using  ( Setoid )
 
 open import Relation.Nullary            using  ( ¬_ ; ofʸ ; ofⁿ )
 open import Relation.Nullary.Decidable  using  ( Dec ; yes ; no ; _because_ ; does ; map′
-                                               ; T? ; _⊎-dec_ ; _×-dec_ )
+                                               ; T? ; _⊎?_ ; _×?_ )
 
 open import Relation.Binary.PropositionalEquality  using  ( _≡_ ; refl ; sym ; cong
                                                           ; _≢_ ; trans ; subst ; subst₂ )
@@ -330,7 +330,7 @@ or presented.
   BaseHit i j = (enum i ≈ enum j) ⊎ R (enum i) (enum j)
 
   baseHit? : ∀ i j → Dec (BaseHit i j)
-  baseHit? i j = (enum i ≟ enum j) ⊎-dec R? (enum i) (enum j)
+  baseHit? i j = (enum i ≟ enum j) ⊎? R? (enum i) (enum j)
 
   -- The seed matrix.  (Private: it is internal machinery of the closure
   -- computation, and the name `seed` is the certificate-schema vocabulary of
@@ -379,8 +379,8 @@ compatibility hit at one enumerated operation symbol.
   opHit? : ∀ M fi i j → Dec (OpHit M fi i j)
   opHit? M fi i j =
     anyL? (λ t → anyL? (λ s → allRelated? M t s
-                        ×-dec ((enum i ≟ (f ^ 𝑨) (tupleOf f t))
-                        ×-dec (enum j ≟ (f ^ 𝑨) (tupleOf f s))))
+                        ×? ((enum i ≟ (f ^ 𝑨) (tupleOf f t))
+                        ×? (enum j ≟ (f ^ 𝑨) (tupleOf f s))))
                        (allVecs card (arCard f)))
           (allVecs card (arCard f))
     where f = opEnum fi
@@ -390,7 +390,7 @@ compatibility hit at one enumerated operation symbol.
   TransHit M i j = ∃[ k ] (T (M i k) × T (M k j))
 
   transHit? : ∀ M i j → Dec (TransHit M i j)
-  transHit? M i j = any? (λ k → T? (M i k) ×-dec T? (M k j))
+  transHit? M i j = any? (λ k → T? (M i k) ×? T? (M k j))
 
   -- All the ways an entry can be set by one closure step.
   StepHit : Matrix → Fin card → Fin card → Type ρ
@@ -398,7 +398,7 @@ compatibility hit at one enumerated operation symbol.
 
   stepHit? : ∀ M i j → Dec (StepHit M i j)
   stepHit? M i j =
-    T? (M i j) ⊎-dec T? (M j i) ⊎-dec transHit? M i j ⊎-dec any? (λ fi → opHit? M fi i j)
+    T? (M i j) ⊎? T? (M j i) ⊎? transHit? M i j ⊎? any? (λ fi → opHit? M fi i j)
 
   -- One closure step.
   step : Matrix → Matrix
@@ -462,9 +462,9 @@ with fuel `suc entries`, it always does.
   -- A non-fixpoint step strictly increases the count of set bits.
   step-strict : ∀ M → ¬ MatEq M (step M) → matCount M < matCount (step M)
   step-strict M ¬eq =
-    let (i₀ , ¬rowi₀) = ¬∀⟶∃¬ card (λ i → ∀ j → M i j ≡ step M i j)
+    let (i₀ , ¬rowi₀) = ¬∀⇒∃¬ card (λ i → ∀ j → M i j ≡ step M i j)
                               (λ i → all? (λ j → M i j ≟ᵇ step M i j)) ¬eq
-        (j₀ , ¬eqij)  = ¬∀⟶∃¬ card (λ j → M i₀ j ≡ step M i₀ j)
+        (j₀ , ¬eqij)  = ¬∀⇒∃¬ card (λ j → M i₀ j ≡ step M i₀ j)
                               (λ j → M i₀ j ≟ᵇ step M i₀ j) ¬rowi₀
         (¬mij , sij)  = bit-flip (step-inflate M i₀ j₀) ¬eqij
     in  matCount-strict (step-inflate M) i₀ j₀ ¬mij sij
