@@ -12,7 +12,7 @@ This is the [Classical.Equations][] module of the [Agda Universal Algebra Librar
 It is the syntactic dual of the standard library's `Algebra.Definitions` module.
 
 The standard library's
-[`Algebra.Definitions`](https://agda.github.io/agda-stdlib/v2.3/Algebra.Definitions.html)
+[`Algebra.Definitions`](https://agda.github.io/agda-stdlib/v2.4/Algebra.Definitions.html)
 provides a uniform inventory of equation predicates at the *evaluated* level.
 
 For example, given a carrier `A`, an equivalence `_≈_`, and an operation,

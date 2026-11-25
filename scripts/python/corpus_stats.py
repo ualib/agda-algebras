@@ -227,7 +227,7 @@ def measure(src: Path = SRC) -> Result[Corpus, PipelineError]:
 _EXTRA_AGDA = re.compile(r"^\s+agda_version:\s*\"?([0-9][0-9.]*)\"?\s*$", re.MULTILINE)
 _EXTRA_STDLIB = re.compile(r"^\s+stdlib_version:\s*\"?([0-9][0-9.]*)\"?\s*$", re.MULTILINE)
 
-# agda-algebras.agda-lib's `depend: standard-library-2.3`.  Agda resolves an
+# agda-algebras.agda-lib's `depend: standard-library-2.4`.  Agda resolves an
 # exact-version dependency exactly, so this is the pin that binds.
 _DEPEND_STDLIB = re.compile(r"^depend:.*\bstandard-library-([0-9][0-9.]*)", re.MULTILINE)
 

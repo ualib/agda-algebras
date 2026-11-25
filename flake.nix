@@ -42,9 +42,10 @@
 # Library Resolution:
 #
 #   agda-stdlib's own standard-library.agda-lib at tag v2.4.1 declares
-#   `name: standard-library-2.4`.  Agda resolves library dependencies as:
-#     - `depend: standard-library`     — any version
-#     - `depend: standard-library-2.4` — exact match required
+#   `name: standard-library-2.4`.  Agda resolves library dependencies as
+#   follows:
+#     - `depend: standard-library`: any version
+#     - `depend: standard-library-2.4`: exact match required
 #
 #   Division of responsibilities:
 #     - stdlibRev and stdlibHash (below) pin the stdlib source of truth.

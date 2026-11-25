@@ -259,7 +259,7 @@ extra:
   # (docs/_links.md).  Its repository until its site is live.
   agda_lattices: https://github.com/ualib/agda-lattices
   agda_version: "2.9.0"
-  stdlib_version: "2.3"
+  stdlib_version: "2.4"
   social:
     - icon: fontawesome/brands/github
       link: https://github.com/ualib/agda-algebras
