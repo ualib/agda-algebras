@@ -15,58 +15,59 @@
 #
 # Pinning Policy:
 #
-#   Agda 2.9.0 is not released yet, and no released standard library
-#   type-checks under it, so until both are released the flake pins them
+#   The flake pins the released Agda 2.9.0 (2026-11-13) and the released
+#   standard-library 2.4.1 (2026-11-17, its compatibility release for Agda
+#   2.9.0).  nixpkgs packages standard-library 2.4.1 but not yet Agda 2.9.0
+#   (nixos-unstable of 2026-11-21 has Agda 2.8.0), so the flake pins both
 #   itself, as follows:
 #
-#     +  Agda comes from the `agda` input: agda/agda at a fixed commit, the
-#        `nightly` of 2026-10-05, built from source by Agda's own flake (its
-#        `base` package, without the `debug` flag of its default build).
-#        nixpkgs' Agda package set is rebuilt around it (mkAgdaPackages).
-#        The input's URL names the commit, so `nix flake update` cannot
-#        move it; to move it, edit the URL and the standard library together.
+#     +  Agda comes from the `agda` input: agda/agda at the commit of the
+#        tag v2.9.0, built from source by Agda's own flake (its `base`
+#        package, without the `debug` flag of its default build).  nixpkgs'
+#        Agda package set is rebuilt around it (mkAgdaPackages).  The
+#        input's URL names the commit, so `nix flake update` cannot move it;
+#        to move it, edit the URL and the standard library together.
 #     +  The standard library is nixpkgs' derivation with its `src` moved to
-#        formalverification/agda-stdlib's tag v2.3-agda-2.9.0: v2.3 with the
-#        five changes it needs to type-check under Agda 2.9.0, which that
-#        tag's release notes list (stdlibRev and stdlibHash, below).
+#        agda/agda-stdlib's tag v2.4.1 (stdlibRev and stdlibHash, below).
+#        The locked nixpkgs (2026-08-10) builds 2.3; its derivation differs
+#        from nixos-unstable's 2.4.1 only in the version and the hash, so
+#        the override builds what nixpkgs builds, without moving the rest of
+#        the shell.
 #
 #   The nixpkgs input still supplies the package-set machinery and the rest
-#   of the shell.  Once Agda 2.9.0 and a standard library for it are
-#   released and nixpkgs packages them, drop the `agda` input and the
-#   standard library's override, and return to one nixpkgs input on
+#   of the shell.  Once nixpkgs packages Agda 2.9.0, drop the `agda` input
+#   and the standard library's override, and return to one nixpkgs input on
 #   nixos-unstable supplying both.
 #
 # Library Resolution:
 #
-#   agda-stdlib's own standard-library.agda-lib at tag v2.3 declares
-#   `name: standard-library-2.3`, and so does the patched v2.3 the flake
-#   pins.  Agda resolves library dependencies as:
+#   agda-stdlib's own standard-library.agda-lib at tag v2.4.1 declares
+#   `name: standard-library-2.4`.  Agda resolves library dependencies as:
 #     - `depend: standard-library`     — any version
-#     - `depend: standard-library-2.3` — exact match required
+#     - `depend: standard-library-2.4` — exact match required
 #
 #   Division of responsibilities:
 #     - stdlibRev and stdlibHash (below) pin the stdlib source of truth.
 #     - --library standard-library (wrapper) tracks whatever the flake pins.
-#     - depend: standard-library-2.3 (.agda-lib) enforces the minimum.
+#     - depend: standard-library-2.4 (.agda-lib) enforces the minimum.
 #
-#   Upgrading past 2.3 is a two-step process: bump the .agda-lib floor first,
-#   then move stdlibRev and stdlibHash (or, once nixpkgs packages a standard
-#   library for Agda 2.9.0 and the override is gone, `nix flake update`).
-#   Skipping the first step produces a clear dependency-resolution error at
-#   `make check` time, not a silent upgrade.
+#   Upgrading past 2.4 is a two-step process: bump the .agda-lib floor first,
+#   then move stdlibRev and stdlibHash (or, once the override is gone,
+#   `nix flake update`).  Skipping the first step produces a clear
+#   dependency-resolution error at `make check` time, not a silent upgrade.
 # =============================================================================
 {
   description = "agda-algebras — a formalization of Universal Algebra in Agda";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    # Agda 2.9.0, unreleased: agda/agda at the commit of the `nightly` of
-    # 2026-10-05.  Agda's flake builds it with its own nixpkgs; do not make
+    # Agda 2.9.0: agda/agda at the commit of the tag v2.9.0 (released
+    # 2026-11-13).  Agda's flake builds it with its own nixpkgs; do not make
     # it follow ours.  Its tree holds six empty directories (the paths of
     # its submodules), which Nix 2.26.3 drops when it unpacks the tree, so
     # that it computes another hash than the one flake.lock records: this
     # flake needs Nix 2.28 or later (2.28.6 and 2.35.2 agree on the hash).
-    agda.url = "github:agda/agda/da66a8c75f11d10699a6b38b261efdf244b66f2a";
+    agda.url = "github:agda/agda/da046d6903b7f587f5add669650e52f378f57834";
   };
 
   outputs = { self, nixpkgs, agda }:
@@ -88,15 +89,15 @@
       # ---- Agda + stdlib --------------------------------------------------
       # Agda and its stdlib MUST be resolved from the same package set:
       # nixpkgs' Agda package set, rebuilt around the `agda` input's Agda,
-      # with the standard library's source moved to the patched v2.3 (see
-      # the header).
+      # with the standard library's source moved to v2.4.1 (see the header).
       #
       # To move the standard library, set stdlibRev, put nixpkgs.lib.fakeHash
       # in stdlibHash's place, run `nix build`, and copy the hash the error
       # prints after `got:`; or ask Nix for it directly:
-      #   nix flake prefetch --json github:formalverification/agda-stdlib/<rev> | jq -r .hash
-      stdlibRev  = "fb5d1840d26909038b5ae1459733b0db425a7488";
-      stdlibHash = "sha256-ZF+/2bUhKggpGY0WtHqKkOstRTGe8LOhK4lD+4T3xSc=";
+      #   nix flake prefetch --json github:agda/agda-stdlib/<rev> | jq -r .hash
+      # stdlibRev is the commit of agda/agda-stdlib's tag v2.4.1.
+      stdlibRev  = "ac7c79b24ecf16cf82decc872d2690c2ee9d8498";
+      stdlibHash = "sha256-7TFjdpqG6tv6qTtWdaGhVXXR7RJYL1R4QlKkYaWdVvI=";
 
       mkAgdaPackages = system: pkgs:
         let
@@ -106,9 +107,9 @@
         in {
           inherit (agdaPackages) agda;
           standard-library = agdaPackages.standard-library.overrideAttrs (_: {
-            version = "2.3-agda-2.9.0";
+            version = "2.4.1";
             src = pkgs.fetchFromGitHub {
-              owner = "formalverification";
+              owner = "agda";
               repo = "agda-stdlib";
               rev = stdlibRev;
               hash = stdlibHash;
@@ -266,8 +267,8 @@ EOF
                 *) echo "⚠  expected Agda 2.9.x, got ${agdaVer}" ;;
               esac
               case "${stdlibVer}" in
-                2.3*) : ;;
-                *) echo "⚠  expected standard-library 2.3, got ${stdlibVer}" ;;
+                2.4*) : ;;
+                *) echo "⚠  expected standard-library 2.4, got ${stdlibVer}" ;;
               esac
             '';
           };
