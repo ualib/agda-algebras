@@ -90,8 +90,8 @@ open import Relation.Binary                         using ( Setoid ; IsEquivalen
                                                     renaming ( Rel to BinaryRel )
 open import Relation.Binary.PropositionalEquality   using ( refl ) renaming ( cong to ≡-cong )
 open import Relation.Nullary                        using ( ¬_ ; Dec ; yes ; no )
-open import Relation.Nullary.Decidable              using ( map′ ; _×-dec_ ; _⊎-dec_
-                                                          ; _→-dec_ ; ¬? ; decidable-stable )
+open import Relation.Nullary.Decidable              using ( map′ ; _×?_ ; _⊎?_
+                                                          ; _→?_ ; ¬? ; decidable-stable )
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
 open import Overture                            using ( 𝓞 ; 𝓥 ; Signature )
@@ -180,7 +180,7 @@ module _ {𝑆 : Signature 𝓞 𝓥} {𝑨 : Algebra {𝑆 = 𝑆} α ρ} (𝑭
   ∘? d e x y = exists? 𝑭 (λ z → ConRel d x z × ConRel e z y)
                        (λ z≈z′ (xz , zy) → con-resp (proj₁ d) (≈refl′ x) z≈z′ xz
                                          , con-resp (proj₁ e) z≈z′ (≈refl′ y) zy)
-                       (λ z → proj₂ d x z ×-dec proj₂ e z y)
+                       (λ z → proj₂ d x z ×? proj₂ e z y)
     where ≈refl′ = λ (a : 𝕌[ 𝑨 ]) → Setoid.refl 𝔻[ 𝑨 ] {a}
 
   -- "θ = 1": is the quotient 𝑨 ╱ θ trivial?
@@ -228,7 +228,7 @@ conjunction.
   isProduct₂? : {R : BinaryRel 𝕌[ 𝑨 ] ℓ′} → (∀ x y → Dec (R x y)) → RespectsEq {𝑨 = 𝑨} R
     → (d e : DecCon 𝑨 ℓ) → Dec (IsProduct₂ R (proj₁ d) (proj₁ e))
   isProduct₂? {R = R} R? R-resp d e =
-    map′ assemble disassemble (to? ×-dec from? ×-dec composite?)
+    map′ assemble disassemble (to? ×? from? ×? composite?)
     where
     θ = proj₁ d ; φ = proj₁ e
     d-resp = con-resp θ ; e-resp = con-resp φ
@@ -236,13 +236,13 @@ conjunction.
     to? : Dec (∀ x y → R x y → ConRel d x y × ConRel e x y)
     to? = all²? 𝑭 _ (λ a≈a′ b≈b′ h r′ → let (r₀ , r₁) = h (R-resp (≈sym a≈a′) (≈sym b≈b′) r′)
                                          in  d-resp a≈a′ b≈b′ r₀ , e-resp a≈a′ b≈b′ r₁)
-                    (λ x y → R? x y →-dec (proj₂ d x y ×-dec proj₂ e x y))
+                    (λ x y → R? x y →? (proj₂ d x y ×? proj₂ e x y))
 
     from? : Dec (∀ x y → ConRel d x y × ConRel e x y → R x y)
     from? = all²? 𝑭 _ (λ a≈a′ b≈b′ h (r₀ , r₁) →
                          R-resp a≈a′ b≈b′ (h ( d-resp (≈sym a≈a′) (≈sym b≈b′) r₀
                                              , e-resp (≈sym a≈a′) (≈sym b≈b′) r₁)))
-                      (λ x y → (proj₂ d x y ×-dec proj₂ e x y) →-dec R? x y)
+                      (λ x y → (proj₂ d x y ×? proj₂ e x y) →? R? x y)
 
     composite? : Dec (∀ x y → (θ ∘ φ) x y)
     composite? = all²? 𝑭 _ (λ a≈a′ b≈b′ (z , az , zb) → z , d-resp a≈a′ (≈refl′ z) az
@@ -353,7 +353,7 @@ module _ {𝑆 : Signature 𝓞 𝓥} {𝑨 : Algebra {𝑆 = 𝑆} α ρ}
   splitTrivial? : {R : BinaryRel 𝕌[ 𝑨 ] ℓ′} → (∀ x y → Dec (R x y)) → RespectsEq {𝑨 = 𝑨} R
     → (q : DecCon 𝑨 W × DecCon 𝑨 W) → Dec (SplitTrivial R q)
   splitTrivial? R? R-resp (d , e) =
-    isProduct₂? 𝑭 R? R-resp d e →-dec (trivial? 𝑭 d ⊎-dec trivial? 𝑭 e)
+    isProduct₂? 𝑭 R? R-resp d e →? (trivial? 𝑭 d ⊎? trivial? 𝑭 e)
 
   -- Decide whether every decomposition of R has a total factor.
   noProperSplit? : {R : BinaryRel 𝕌[ 𝑨 ] ℓ′} → (∀ x y → Dec (R x y)) → RespectsEq {𝑨 = 𝑨} R
@@ -367,14 +367,14 @@ module _ {𝑆 : Signature 𝓞 𝓥} {𝑨 : Algebra {𝑆 = 𝑆} α ρ}
     map′  (λ (nt , nps) → record  { nontrivial = nt
                                   ; factor-trivial = λ θ φ fp → nps θ φ (factorPair→product₂ fp) })
           (λ di → nontrivial di , λ θ φ p → factor-trivial di θ φ (product₂→factorPair p))
-          (nontrivial? 𝑭 ×-dec noProperSplit? _≟_ (≈-resp {𝑨 = 𝑨}))
+          (nontrivial? 𝑭 ×? noProperSplit? _≟_ (≈-resp {𝑨 = 𝑨}))
 
   -- Decide indecomposability of a listed (or any decidable) congruence.
   isIndecomposable? : (d : DecCon 𝑨 W) → Dec (IsIndecomposable (proj₁ d))
   isIndecomposable? d =
     map′  (λ (nt , nps) → record { quotient-nontrivial = nt ; product-trivial = nps })
           (λ ind → quotient-nontrivial ind , product-trivial ind)
-          (quotient-nontrivial? 𝑭 d ×-dec noProperSplit? (proj₂ d) (con-resp (proj₁ d)))
+          (quotient-nontrivial? 𝑭 d ×? noProperSplit? (proj₂ d) (con-resp (proj₁ d)))
 ```
 
 The existence theorem below needs more than a yes-or-no answer: when a
@@ -624,7 +624,7 @@ module _ {𝑆 : Signature 𝓞 𝓥} {𝑨 : Algebra {𝑆 = 𝑆} α ρ} (𝑭
   ⊆? : (d e : DecCon 𝑨 ℓ) → Dec (proj₁ d ⊆ proj₁ e)
   ⊆? d e = map′ (λ h {x} {y} → h x y) (λ h x y → h)
                 (all²? 𝑭 (λ x y → ConRel d x y → ConRel e x y) resp
-                         (λ x y → proj₂ d x y →-dec proj₂ e x y))
+                         (λ x y → proj₂ d x y →? proj₂ e x y))
     where
     resp : RespectsEq {𝑨 = 𝑨} (λ x y → ConRel d x y → ConRel e x y)
     resp a≈a′ b≈b′ h r = con-resp (proj₁ e) a≈a′ b≈b′ (h (con-resp (proj₁ d) (≈sym a≈a′) (≈sym b≈b′) r))

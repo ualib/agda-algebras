@@ -80,7 +80,7 @@ open import Data.Fin.Base                          using  ( Fin ; toℕ ; Fin′
 open import Data.Fin.Properties                    using  ( any? ; toℕ-injective
                                                           ; toℕ-inject ; all?
                                                           ; toℕ-fromℕ< ; toℕ<n
-                                                          ; ¬∀⟶∃¬ ; ¬∀⟶∃¬-smallest )
+                                                          ; ¬∀⇒∃¬ ; ¬∀⇒∃¬-smallest )
                                                    renaming ( _≟_ to _≟f_ )
 open import Data.List.Base                         using  ( List ; [] ; _∷_
                                                           ; filter ; allFin )
@@ -109,7 +109,7 @@ open import Relation.Binary.PropositionalEquality  using  ( _≡_ ; refl ; cong 
 open import Relation.Nullary                       using  ( ¬_ ; Dec ; yes ; no ; ¬?
                                                           ; decidable-stable )
 open import Relation.Nullary.Decidable             using  ( dec-true ; dec-false
-                                                          ; does ; map′ ; _→-dec_ )
+                                                          ; does ; map′ ; _→?_ )
 open import Relation.Unary                         using  ( Pred ; _∈_ ; _⊆_ )
 
 import Algebra.Properties.Group as GroupProperties
@@ -271,7 +271,7 @@ respects the pointwise equality.
   -- The joint kernel is decidable, by enumerating the power.
   ~-dec : ∀ {i j} → Dec (i ~ j)
   ~-dec {i} {j} = map′ toSem fromSem
-    (all? (λ ν → U-dec (enumᴾ ν) →-dec (enumᴾ ν i ≟ enumᴾ ν j)))
+    (all? (λ ν → U-dec (enumᴾ ν) →? (enumᴾ ν i ≟ enumᴾ ν j)))
     where
     toSem : (∀ ν → enumᴾ ν ∈ U → enumᴾ ν i ≈ enumᴾ ν j) → i ~ j
     toSem h u u∈U =
@@ -297,7 +297,7 @@ together with its minimality certificate.
   minRepΣ i = r , decidable-stable ~-dec r~~i , least
     where
     search : ∃[ r ∈ Fin n ] ¬ ¬ r ~ i × ((l : Fin′ r) → ¬ inject l ~ i)
-    search = ¬∀⟶∃¬-smallest n (λ k → ¬ k ~ i) (λ k → ¬? ~-dec)
+    search = ¬∀⇒∃¬-smallest n (λ k → ¬ k ~ i) (λ k → ¬? ~-dec)
                λ all¬ → all¬ i ~-refl
 
     r : Fin n
@@ -505,8 +505,8 @@ at `i`.
                        (surᴾ u .proj₂ j))
     open Setoid 𝔻[ 𝑺 ] using () renaming (_≈_ to _≈ˢ_)
     found : ∃[ w ∈ Fin Nᴾ ] ¬ (enumᴾ w ∈ U → enumᴾ w i ≈ˢ enumᴾ w j)
-    found = ¬∀⟶∃¬ Nᴾ  (λ ν → enumᴾ ν ∈ U → enumᴾ ν i ≈ enumᴾ ν j)
-                      (λ ν → U-dec (enumᴾ ν) →-dec (enumᴾ ν i ≟ enumᴾ ν j)) ¬all
+    found = ¬∀⇒∃¬ Nᴾ  (λ ν → enumᴾ ν ∈ U → enumᴾ ν i ≈ enumᴾ ν j)
+                      (λ ν → U-dec (enumᴾ ν) →? (enumᴾ ν i ≟ enumᴾ ν j)) ¬all
 
     u₀ : 𝕌[ Π𝑮 ]
     u₀ = enumᴾ (found .proj₁)
@@ -590,7 +590,7 @@ one, and the finite search finds it.
     ¬all h = d≉ε (center-trivial (≈-dec→Stable-≈ε _≟_) nas d (central h))
 
     found : ∃[ i ∈ Fin card ] ¬ Commutes d (enum i)
-    found = ¬∀⟶∃¬ card  (λ ν → Commutes d (enum ν))
+    found = ¬∀⇒∃¬ card  (λ ν → Commutes d (enum ν))
                         (λ ν → (d ∙ enum ν) ≟ (enum ν ∙ d)) ¬all
 ```
 

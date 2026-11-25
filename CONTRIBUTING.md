@@ -30,7 +30,7 @@ nix develop
 make check        # the library and the frozen Legacy tree
 ```
 
-This pins Agda 2.9.0, which is not yet released, and standard-library 2.3 patched for it, via the repository's flake; until both are released, `nix develop` is the only way to get that toolchain.  See [`INSTALL.md`](INSTALL.md) for a walkthrough, the binary cache that spares you building Agda, and the paths without Nix, which install the previous toolchain.
+This pins Agda 2.9.0 and standard-library 2.4.1 via the repository's flake, which builds Agda from the release's sources until nixpkgs packages it.  See [`INSTALL.md`](INSTALL.md) for a walkthrough, the binary cache that spares you building Agda, and the paths without Nix.
 
 ### Slow modules stay out of barrels
 

@@ -112,7 +112,7 @@ open import Relation.Binary                         using  ( Setoid )
 open import Relation.Binary.PropositionalEquality   using  ( _≡_ ; refl ; sym ; trans
                                                            ; cong ; subst ; subst₂ )
 open import Relation.Nullary.Decidable              using  ( Dec ; yes ; no ; does ; map′
-                                                           ; _×-dec_ ; _→-dec_ ; ¬? )
+                                                           ; _×?_ ; _→?_ ; ¬? )
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
 open import Overture                                using  ( 𝓞 ; 𝓥 ; Signature
@@ -273,7 +273,7 @@ follows in general (`tableResp-≈`{.AgdaFunction}).
 
   coherent? : (pv : ParentVec card) → Dec (Coherent pv)
   coherent? pv =
-    all? (λ i → all? (λ j → (enum i ≟ enum j) →-dec (parent pv i ≟ᶠ parent pv j)))
+    all? (λ i → all? (λ j → (enum i ≟ enum j) →? (parent pv i ≟ᶠ parent pv j)))
 
   -- The carrier-level relation presented by a parent vector.
   TableRel : ParentVec card → BinaryRel 𝕌[ 𝑨 ] (𝓞 ⊔ 𝓥 ⊔ α ⊔ ρ)
@@ -606,10 +606,10 @@ one justification against the seed list and the already-processed merges
   justOK? : (ps done : List IdxPair) (i j : Fin card)
     →  (ju : Justification card opCard arOf) → Dec (JustOK ps done i j ju)
   justOK? ps done i j (seed s) =
-    atPos? (λ p → (enum i ≟ enum (proj₁ p)) ×-dec (enum j ≟ enum (proj₂ p))) ps s
+    atPos? (λ p → (enum i ≟ enum (proj₁ p)) ×? (enum j ≟ enum (proj₂ p))) ps s
   justOK? ps done i j (translate fi c w r) =
     atPos? (λ p → (enum i ≟ (opEnum fi ^ 𝑨) (tupleOf fi (w [ c ]≔ proj₁ p)))
-             ×-dec (enum j ≟ (opEnum fi ^ 𝑨) (tupleOf fi (w [ c ]≔ proj₂ p))))
+             ×? (enum j ≟ (opEnum fi ^ 𝑨) (tupleOf fi (w [ c ]≔ proj₂ p))))
            done r
 ```
 
@@ -629,7 +629,7 @@ structural folds, as is the decider.
     →  Dec (TraceValidFrom ps done tr)
   traceValidFrom? ps done [] = yes (lift tt)
   traceValidFrom? ps done (mkMerge i j ju ∷ tr) =
-    justOK? ps done i j ju ×-dec traceValidFrom? ps ((i , j) ∷ done) tr
+    justOK? ps done i j ju ×? traceValidFrom? ps ((i , j) ∷ done) tr
 
   TraceValid : List IdxPair → Trace card opCard arOf → Type ρ
   TraceValid ps tr = TraceValidFrom ps [] tr
@@ -937,8 +937,8 @@ certificate), and the soundness theorem consuming it.
 
   cgCertOK? : (cc : CgCert card opCard arOf) → Dec (CgCertOK cc)
   cgCertOK? cc =
-    coherent? part ×-dec edgeCompat? part ×-dec respects? part seeds
-      ×-dec traceValid? seeds trace ×-dec covers? part (replayRoots (merges trace))
+    coherent? part ×? edgeCompat? part ×? respects? part seeds
+      ×? traceValid? seeds trace ×? covers? part (replayRoots (merges trace))
     where open CgCert cc
 
   -- The certificate's claim, from its checked conditions.

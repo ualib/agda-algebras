@@ -102,7 +102,7 @@ open import Relation.Binary       using  ( Setoid )
 open import Relation.Binary.PropositionalEquality
                                   using  ( _≡_ ; sym ; trans ; subst )
 open import Relation.Nullary.Decidable
-                                  using  ( Dec ; _→-dec_ )
+                                  using  ( Dec ; _→?_ )
 
 -- Imports from the Agda Universal Algebra Library ----------------------------
 open import Overture                                    using  ( 𝓞 ; 𝓥 ; Signature )
@@ -231,11 +231,11 @@ lemma reads each condition back through them.
 
     -- Two positions carrying pointwise-equal vectors are equal.
     inj? : ∀ k l → Dec ((∀ i → parent (partAt k) i ≡ parent (partAt l) i) → k ≡ l)
-    inj? k l = all? (λ i → parent (partAt k) i ≟ᶠ parent (partAt l) i) →-dec (k ≟ᶠ l)
+    inj? k l = all? (λ i → parent (partAt k) i ≟ᶠ parent (partAt l) i) →? (k ≟ᶠ l)
 
     -- The bot entry relates two indices only if their elements are ≈.
     bot? : ∀ i j → Dec (SameBlock (partAt bot) i j → enum i ≈ enum j)
-    bot? i j = sameBlock? (partAt bot) i j →-dec (enum i ≟ enum j)
+    bot? i j = sameBlock? (partAt bot) i j →? (enum i ≟ enum j)
 
     -- The principal entry of a pair: containment, trace validity, coverage.
     prinResp? : ∀ i j → Dec (Respects (partAt (prin i j)) ((i , j) ∷ []))
@@ -263,18 +263,18 @@ lemma reads each condition back through them.
     -- argument, below the right one, and above anything below both.
     meetˡ? : ∀ k l i j
       →  Dec (SameBlock (partAt (meet k l)) i j → SameBlock (partAt k) i j)
-    meetˡ? k l i j = sameBlock? (partAt (meet k l)) i j →-dec sameBlock? (partAt k) i j
+    meetˡ? k l i j = sameBlock? (partAt (meet k l)) i j →? sameBlock? (partAt k) i j
 
     meetʳ? : ∀ k l i j
       →  Dec (SameBlock (partAt (meet k l)) i j → SameBlock (partAt l) i j)
-    meetʳ? k l i j = sameBlock? (partAt (meet k l)) i j →-dec sameBlock? (partAt l) i j
+    meetʳ? k l i j = sameBlock? (partAt (meet k l)) i j →? sameBlock? (partAt l) i j
 
     meet²? : ∀ k l i j
       →  Dec (SameBlock (partAt k) i j → SameBlock (partAt l) i j
               → SameBlock (partAt (meet k l)) i j)
     meet²? k l i j =
       sameBlock? (partAt k) i j
-        →-dec (sameBlock? (partAt l) i j →-dec sameBlock? (partAt (meet k l)) i j)
+        →? (sameBlock? (partAt l) i j →? sameBlock? (partAt (meet k l)) i j)
 ```
 
 #### The Boolean route

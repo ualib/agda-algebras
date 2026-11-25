@@ -40,7 +40,7 @@ open import Data.Sum.Base                          using ( _⊎_ )
 open import Level                                  using ( Level ; _⊔_ )
 open import Relation.Binary                        using ( Setoid )
 open import Relation.Binary.PropositionalEquality  using ( _≡_ ; _≢_ )
-open import Relation.Nullary.Decidable.Core        using ( Dec ; ¬? ; _×-dec_ ; _→-dec_ ; _⊎-dec_ )
+open import Relation.Nullary.Decidable.Core        using ( Dec ; ¬? ; _×?_ ; _→?_ ; _⊎?_ )
 
 import Relation.Binary.Reasoning.Setoid as SetoidReasoning
 
@@ -262,8 +262,8 @@ module FiniteOrder {n : ℕ} (_∧_ : Fin n → Fin n → Fin n) where
     coatom a = (a ≢ ⊤) × (∀ b → a ≤ b → (b ≡ a) ⊎ (b ≡ ⊤))
 
     atom? : (a : Fin n) → Dec (atom a)
-    atom? a = ¬? (a ≟ ⊥) ×-dec all? (λ b → (b ≤? a) →-dec ((b ≟ ⊥) ⊎-dec (b ≟ a)))
+    atom? a = ¬? (a ≟ ⊥) ×? all? (λ b → (b ≤? a) →? ((b ≟ ⊥) ⊎? (b ≟ a)))
 
     coatom? : (a : Fin n) → Dec (coatom a)
-    coatom? a = ¬? (a ≟ ⊤) ×-dec all? (λ b → (a ≤? b) →-dec ((b ≟ a) ⊎-dec (b ≟ ⊤)))
+    coatom? a = ¬? (a ≟ ⊤) ×? all? (λ b → (a ≤? b) →? ((b ≟ a) ⊎? (b ≟ ⊤)))
 ```

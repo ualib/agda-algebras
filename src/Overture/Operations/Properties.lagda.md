@@ -39,7 +39,7 @@ open import Data.Nat                                using ( ℕ )
 open import Data.Fin                                using ( Fin )
 open import Data.Fin.Properties                     using ( _≟_ ; all? )
 open import Relation.Binary.PropositionalEquality   using ( _≡_ )
-open import Relation.Nullary.Decidable.Core         using ( Dec ; _→-dec_ )
+open import Relation.Nullary.Decidable.Core         using ( Dec ; _→?_ )
 ```
 -->
 
@@ -132,5 +132,5 @@ module _ {n m : ℕ} (act : Fin n → Fin m → Fin m) where
   -- Elements that act the same are equal.
   ActionFaithful? : Dec (∀ a b → (∀ q → act a q ≡ act b q) → a ≡ b)
   ActionFaithful? =
-    all? (λ a → all? (λ b → (all? (λ q → (act a q) ≟ (act b q))) →-dec (a ≟ b)))
+    all? (λ a → all? (λ b → (all? (λ q → (act a q) ≟ (act b q))) →? (a ≟ b)))
 ```

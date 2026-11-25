@@ -65,7 +65,7 @@ open import Data.Nat.Base                          using  ( ℕ )
 open import Data.Product                           using  ( _×_ ; _,_ )
 open import Data.Vec.Base                          using  ( Vec ; lookup )
 open import Relation.Binary.PropositionalEquality  using  ( _≡_ )
-open import Relation.Nullary.Decidable             using  ( Dec ; ¬? ; _×-dec_ )
+open import Relation.Nullary.Decidable             using  ( Dec ; ¬? ; _×?_ )
 ```
 -->
 
@@ -117,7 +117,7 @@ NormalForm : {n : ℕ} → ParentVec n → Type
 NormalForm pv = IdempotentParent pv × DecreasingParent pv
 
 normalForm? : {n : ℕ} (pv : ParentVec n) → Dec (NormalForm pv)
-normalForm? pv = idempotentParent? pv ×-dec decreasingParent? pv
+normalForm? pv = idempotentParent? pv ×? decreasingParent? pv
 ```
 
 #### Forest edges

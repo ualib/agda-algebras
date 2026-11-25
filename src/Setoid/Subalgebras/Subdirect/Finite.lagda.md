@@ -62,7 +62,7 @@ module Setoid.Subalgebras.Subdirect.Finite where
 open import Agda.Primitive                 using  () renaming ( Set to Type )
 open import Data.Empty                     using  ( ⊥-elim )
 open import Data.Fin.Base                  using  ( Fin )
-open import Data.Fin.Properties            using  ( all? ; ¬∀⟶∃¬ )
+open import Data.Fin.Properties            using  ( all? ; ¬∀⇒∃¬ )
 open import Data.List.Base                 using  ( List ; filter ; length
                                                   ; allFin ; cartesianProduct )
 open import Data.List.Extrema.Nat          using  ( argmax ; f[xs]≤f[argmax] ; argmax-sel )
@@ -75,7 +75,7 @@ open import Function                       using  ( _∘_ )
 open import Level                          using  ( Level ; _⊔_ ; 0ℓ ; lower )
 open import Relation.Binary                using  ( Setoid ; IsEquivalence )
 open import Relation.Nullary               using  ( ¬_ ; Dec ; yes ; no )
-open import Relation.Nullary.Decidable     using  ( _→-dec_ ; ¬? )
+open import Relation.Nullary.Decidable     using  ( _→?_ ; ¬? )
 
 open import Data.List.Membership.Propositional     using  ( _∈_ )
 open import Relation.Binary.PropositionalEquality  using  ( _≡_ ; refl ; subst ; sym )
@@ -162,7 +162,7 @@ module _ {𝓞 𝓥 : Level}{𝑆 : Signature 𝓞 𝓥}{𝑨 : Algebra {𝑆 = 
   d ⊆ᶜ e = ∀ i j → ConRel d (enum i) (enum j) → ConRel e (enum i) (enum j)
 
   _⊆ᶜ?_ : (d e : DecCon 𝑨 ℓ) → Dec (d ⊆ᶜ e)
-  d ⊆ᶜ? e = all? (λ i → all? (λ j → ((i , j) ∈? d) →-dec ((i , j) ∈? e)))
+  d ⊆ᶜ? e = all? (λ i → all? (λ j → ((i , j) ∈? d) →? ((i , j) ∈? e)))
 ```
 
 A congruence contained in another relates no more pairs (`count-mono`); if the
@@ -279,13 +279,13 @@ carrier-containment.
       where
       -- The two existential witnesses, each extracted once and shared.
       exi : ∃[ i ] ¬ (∀ j → ConRel d (enum i) (enum j) → ConRel Θ-dec (enum i) (enum j))
-      exi = ¬∀⟶∃¬ card _ (λ i → all? (λ j → (i , j) ∈? d →-dec (i , j) ∈? Θ-dec)) ¬h
+      exi = ¬∀⇒∃¬ card _ (λ i → all? (λ j → (i , j) ∈? d →? (i , j) ∈? Θ-dec)) ¬h
 
       i₀ : Fin card
       i₀ = exi .proj₁
 
       exj : ∃[ j ] ¬ (ConRel d (enum i₀) (enum j) → ConRel Θ-dec (enum i₀) (enum j))
-      exj = ¬∀⟶∃¬ card _ (λ j → (i₀ , j) ∈? d →-dec (i₀ , j) ∈? Θ-dec) (proj₂ exi)
+      exj = ¬∀⇒∃¬ card _ (λ j → (i₀ , j) ∈? d →? (i₀ , j) ∈? Θ-dec) (proj₂ exi)
 
       j₀ : Fin card
       j₀ = exj .proj₁

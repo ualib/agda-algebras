@@ -115,7 +115,7 @@ open import Induction.WellFounded       using  ( Acc ; acc )
 open import Level                       using  ( Level ; _⊔_ ) renaming ( suc to lsuc )
 open import Relation.Binary             using  ( Setoid )
 open import Relation.Nullary            using  ( ¬_ ; Dec ; yes ; no )
-open import Relation.Nullary.Decidable  using  ( ¬? ; _×-dec_ ; decidable-stable )
+open import Relation.Nullary.Decidable  using  ( ¬? ; _×?_ ; decidable-stable )
 open import Relation.Unary              using  ( Pred ; _∈_ ; _⊆_ ; _∩_ )
 
 open import Data.List.Membership.Propositional.Properties  using  ( ∈-allFin )
@@ -288,7 +288,7 @@ no-go below shows cannot exist for arbitrary predicates.
 ```agda
   -- On a finite group a decidably presented nontrivial normal subgroup has a witness.
   witness : (𝑵 : Normalᵈ) → Nontrivial (setᵈ 𝑵) → HasNontrivialWitness (setᵈ 𝑵)
-  witness 𝑵 nontriv = found (any? (λ i → (enum i ∈ᵈ? 𝑵) ×-dec ¬? (enum i ≟ ε)))
+  witness 𝑵 nontriv = found (any? (λ i → (enum i ∈ᵈ? 𝑵) ×? ¬? (enum i ≟ ε)))
     where
     -- Found: the enumerated element is the witness.  Not found: every member of 𝑵
     -- is ≈ ε, since its representative is, so 𝑵 was trivial after all.
@@ -330,7 +330,7 @@ finite search over the carrier enumeration.
 
   Step? : (𝑴 : Normalᵈ)(i : Fin card) → Dec (Step 𝑴 i)
   Step? 𝑴 i =  (enum i ∈ᵈ? 𝑴)
-               ×-dec (¬? (enum i ≟ ε) ×-dec (∥ ⟪ enum i ⟫ᵈ ∥ <? ∥ 𝑴 ∥))
+               ×? (¬? (enum i ≟ ε) ×? (∥ ⟪ enum i ⟫ᵈ ∥ <? ∥ 𝑴 ∥))
 ```
 
 When the search fails, the current subgroup is minimal.  A competitor `N`{.AgdaBound}

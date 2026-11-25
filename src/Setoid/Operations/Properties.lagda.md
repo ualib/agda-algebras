@@ -65,7 +65,7 @@ open import Data.Nat                               using ( ℕ )
 open import Data.Product                           using ( _×_ ; _,_ )
 open import Relation.Binary.Bundles                using ( DecSetoid )
 open import Relation.Binary.PropositionalEquality  using ( _≡_ ; refl )
-open import Relation.Nullary.Decidable.Core        using ( Dec ; map′ ; from-yes ; _×-dec_ )
+open import Relation.Nullary.Decidable.Core        using ( Dec ; map′ ; from-yes ; _×?_ )
 
 import Data.Bool.Properties as BoolP
 open import Data.Fin.Properties  using (≡-decSetoid) renaming (all? to FinAll?)
@@ -270,7 +270,7 @@ supply an exhaustive-search witness for `Bool`{.AgdaDatatype} directly and run t
 checkers over the propositional decidable setoid on `Bool`{.AgdaDatatype}.  Searching
 `Bool`{.AgdaDatatype} is immediate: `∀ b → P b` holds iff both `P false` and `P true`
 do, so a pointwise decider for `P` decides the universal by a single
-`_×-dec_`{.AgdaFunction}.  This both demonstrates the abstraction and previews, in
+`_×?_`{.AgdaFunction}.  This both demonstrates the abstraction and previews, in
 miniature, the kind of witness an M9-1 `Searchable` carrier would provide
 generically.  The section is `private`{.AgdaKeyword}: it validates the generalization
 without enlarging the module's public surface.
@@ -283,7 +283,7 @@ private
   Bool-Exhaustible = record { all? = bool-all? }
     where
     bool-all? : ∀ {p} {P : Bool → Type p} → (∀ b → Dec (P b)) → Dec (∀ b → P b)
-    bool-all? {P = P} P? = map′ to from (P? false ×-dec P? true)
+    bool-all? {P = P} P? = map′ to from (P? false ×? P? true)
       where
       to : P false × P true → (∀ b → P b)
       to (pf , _ ) false = pf

@@ -61,7 +61,7 @@ open import Relation.Binary.Definitions            using ( _Respects_ )
 open import Relation.Binary.PropositionalEquality  using ( _≡_ ; refl ; sym ; trans
                                                          ; cong ; subst )
 open import Relation.Nullary                       using ( Dec )
-open import Relation.Nullary.Decidable.Core        using ( _→-dec_ )
+open import Relation.Nullary.Decidable.Core        using ( _→?_ )
 open import Relation.Unary                         using ( Pred )
 
 -- Imports from the Agda Universal Algebra Library ------------------------------
@@ -105,7 +105,7 @@ module TableGroupBuilder
 
   -- Faithfulness of the action, as a decidable statement.
   elt-inj? : Dec (∀ i j → elt i ≡ elt j → i ≡ j)
-  elt-inj? = allᶠ? (λ i → allᶠ? (λ j → ≡-dec _≟ᶠ_ (elt i) (elt j) →-dec (i ≟ᶠ j)))
+  elt-inj? = allᶠ? (λ i → allᶠ? (λ j → ≡-dec _≟ᶠ_ (elt i) (elt j) →? (i ≟ᶠ j)))
 
   -- The table computes composition, as a decidable statement.
   mul-hom? : Dec (∀ i j → elt (mul i j) ≡ elt i ⨁ elt j)
@@ -164,13 +164,13 @@ membership test is one vector lookup.
 
       chi-∙? : Dec (∀ i j → chiPred i → chiPred j → chiPred (mul i j))
       chi-∙? = allᶠ? (λ i → allᶠ? (λ j →
-        T? (lookup chi i) →-dec (T? (lookup chi j) →-dec T? (lookup chi (mul i j)))))
+        T? (lookup chi i) →? (T? (lookup chi j) →? T? (lookup chi (mul i j)))))
 
       chi-ε? : Dec (chiPred e)
       chi-ε? = T? (lookup chi e)
 
       chi-⁻¹? : Dec (∀ i → chiPred i → chiPred (inv i))
-      chi-⁻¹? = allᶠ? (λ i → T? (lookup chi i) →-dec T? (lookup chi (inv i)))
+      chi-⁻¹? = allᶠ? (λ i → T? (lookup chi i) →? T? (lookup chi (inv i)))
 
       -- The subgroup *structure* is kept opaque, and this is load-bearing.
       -- It mentions the group bundle, whose law proofs are decision sweeps
